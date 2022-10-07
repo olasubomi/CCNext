@@ -1,0 +1,32 @@
+.admin-page {
+  width: 100% !important; }
+  .admin-page .admin-title-region {
+    background-color: lightgray;
+    border: 1px solid gray;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px 30px;
+    margin-top: 50px; }
+  .admin-page .admin-item-panel {
+    align-items: center;
+    cursor: pointer; }
+    .admin-page .admin-item-panel .item-card {
+      font-size: 12px;
+      border: 1px solid gray;
+      margin-top: 30px; }
+      .admin-page .admin-item-panel .item-card .admin-item-title {
+        text-align: center;
+        padding: 0px 30px;
+        background-color: #949494;
+        border: 1px solid gray;
+        color: white;
+        font-weight: 400;
+        height: 50px;
+        align-items: center;
+        width: 100%;
+        display: flex;
+        margin: auto; }
+      .admin-page .admin-item-panel .item-card .admin-item-img {
+        width: 100%; }

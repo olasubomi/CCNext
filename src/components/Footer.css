@@ -1,0 +1,23 @@
+.footer-wraper {
+  margin-top: 50px;
+  margin-bottom: 100px;
+  max-width: none !important;
+  width: 90% !important; }
+
+.footer-wraper p {
+  margin-bottom: 5px; }
+
+.footer-wraper .footer-colmun {
+  margin-top: 20px;
+  text-align: left;
+  font-size: 13px; }
+
+.footer-wraper .footer-colmun .logo-text {
+  margin-top: 10px; }
+
+.footer-wraper .footer-colmun img {
+  margin-top: 20px; }
+
+@media screen and (max-width: 767px) {
+  .footer-wraper .footer-colmun {
+    text-align: center; } }

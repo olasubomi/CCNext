@@ -1,0 +1,754 @@
+/* login page */
+@media only screen and (max-width: 1920px) {
+  .google_btn {
+    margin-left: 10px; }
+  .fa_btn {
+    margin-left: 10px; }
+  .login__label {
+    margin-right: 30px;
+    margin-left: -78px; }
+  .login__input {
+    margin-left: -84px;
+    width: 186px; }
+  .login__form__text-muted {
+    padding: 5px 0 40px;
+    text-align: center;
+    font-size: 15px;
+    opacity: .8;
+    margin-left: -202px !important; }
+  .link-forgot-password {
+    color: black !important;
+    font-weight: 500;
+    font-size: 16px;
+    text-decoration: none;
+    margin-left: 24rem; }
+  .link-signup-word {
+    color: #4c4646 !important;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none; }
+  .link-guest-word {
+    color: #423d3c !important;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    margin-left: 7px;
+    margin-right: -64px; }
+  .link-signup-word:hover {
+    text-decoration: none;
+    color: #104d58 !important; }
+  .content-login__input {
+    width: 275px;
+    margin-right: 37px;
+    margin-left: 24px;
+    align-items: center;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    letter-spacing: 0.03em;
+    color: black;
+    border-radius: 3px; }
+  .form-group {
+    margin-bottom: 2rem;
+    margin-left: 361px;
+    margin-right: 20px;
+    margin-top: 36px; }
+  .form-text {
+    display: block;
+    margin-left: -110px;
+    margin-right: -355px;
+    margin-top: 80px; }
+  .msg-err {
+    text-align: center;
+    margin-left: 9px;
+    color: red; }
+  .msg-success {
+    text-align: center;
+    padding: 0 22px;
+    margin-bottom: -6px;
+    margin-right: 30px;
+    color: green; }
+  .login__form {
+    width: 53%;
+    margin-left: 335px;
+    margin-top: 96px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 4px transparent; }
+  .login__form-title {
+    margin-top: -119px;
+    padding: 20px 0;
+    font-weight: 600;
+    align-items: center;
+    text-align: center;
+    letter-spacing: .04em;
+    color: #5d5756;
+    width: 91%;
+    margin-left: 17px;
+    background: #fff; }
+  .login__form-title {
+    padding: 20px 0;
+    font-weight: 600;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.04em;
+    color: #5d5756;
+    width: 91%;
+    margin-left: -84px;
+    background: #FFFFFF; }
+  .btn:hover {
+    opacity: 1; }
+  .login__form-btn {
+    width: 26% !important;
+    background-color: #c3bebe !important;
+    background: #e6e4e1;
+    border-radius: 7px;
+    border: 2px solid #54514d;
+    margin-top: 83px;
+    height: 40px;
+    border-radius: 21px;
+    font-size: 20px !important; }
+  .vl {
+    position: absolute;
+    left: 62%;
+    -webkit-transform: translate(-50%);
+    transform: translate(-50%);
+    border: 2px solid #ddd;
+    height: 175px;
+    margin-top: 27px; }
+  .col {
+    float: left;
+    margin: auto;
+    padding-bottom: 10px;
+    /* padding: 0 50px; */
+    /* margin-top: 6px; */ }
+  .vl {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    border: 2px solid #ddd;
+    height: 175px; }
+  .vl-innertext {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    padding: 8px 10px; }
+  .hide-md-lg {
+    display: none; } }
+
+@media screen and (max-width: 1024px) {
+  .google_btn {
+    margin-left: 10px; }
+  .fa_btn {
+    margin-left: 10px; }
+  .login__label {
+    margin-right: 30px;
+    margin-left: -78px; }
+  .login__input {
+    margin-left: -84px;
+    width: 186px; }
+  .login__form-div-title {
+    width: 470px;
+    margin-left: 113px; } }
+
+@media screen and (max-width: 600px) {
+  .login__form-title {
+    margin-left: -129px; }
+  .google {
+    background-color: #dd4b39;
+    color: #fff;
+    margin-top: 24px;
+    margin-left: 84px !important;
+    margin-right: 3px;
+    width: 201px !important; }
+  .fb {
+    margin-top: 72px;
+    margin-left: 84px;
+    width: 201px; }
+  .login__form__label {
+    margin-right: 60px;
+    margin-left: -1px; }
+  .login__form__input {
+    margin-left: -5px;
+    width: 145px; }
+  .login__form-div-title {
+    width: 470px;
+    margin-left: 113px; }
+  .login__form-btn {
+    margin-left: 287px !important; }
+  .link-forgot-password {
+    margin-left: 267px; } }
+
+@media screen and (max-width: 375px) {
+  .login__form__input {
+    margin-left: -5px;
+    width: 111px; }
+  .fb {
+    margin-top: 52px !important;
+    margin-left: 84px; }
+  .google {
+    margin-top: 72px;
+    margin-left: 84px; } }
+
+@media screen and (max-width: 360px) {
+  .login__form__input {
+    margin-left: -5px;
+    width: 94px; }
+  .fb {
+    margin-top: 66px;
+    margin-left: 84px; }
+  .google {
+    margin-top: 33px;
+    margin-left: 84px; } }
+
+@media screen and (max-width: 320px) {
+  .login__form-title {
+    margin-left: -52px; }
+  .login__form__input {
+    margin-left: -5px;
+    width: 63px; }
+  .fb {
+    margin-top: 66px;
+    margin-left: 70px !important; }
+  .google {
+    margin-top: 33px;
+    margin-left: 70px !important; } }
+
+/* grocery page */
+@media screen and (max-width: 1920px) {
+  .page__container {
+    margin-left: 0%;
+    margin-top: 1rem;
+    /* height: 393px; */
+    /* width: 73%; */ }
+  .create__msg-err {
+    margin-left: 585px;
+    color: red; }
+  .yourlist__card {
+    border: 1px solid rgba(234, 234, 234, 0.9) !important;
+    border-radius: 0.3rem !important;
+    cursor: pointer;
+    margin-left: -98px;
+    margin-top: 79px;
+    margin-bottom: 1rem;
+    padding: 44px;
+    width: 307px; }
+  .yourlist__card:hover {
+    box-shadow: 0 0 30px -15px rgba(0, 0, 0, 0.3); }
+  .card-img {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    height: 100%;
+    cursor: pointer; }
+  .dataTypeahead__buttonAdd {
+    margin-left: 10px; }
+  .dataTypeahead__card-div {
+    margin-left: 343px;
+    margin-top: 90px; }
+  .dataTypeahead__yourlist__card-header {
+    border-bottom: none !important;
+    background: rgba(243, 243, 116, 0.47) !important;
+    margin-left: -19px;
+    margin-top: -27px;
+    padding-left: 19px;
+    width: 257px; }
+  .dataTypeahead__card-img {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+    width: 160px;
+    height: 50%;
+    margin-top: 0px;
+    margin-bottom: -343px;
+    margin-left: 50px; }
+  .dataTypeahead__buttonAdd {
+    margin-left: 681px;
+    margin-top: 116px; }
+  .dataTypeahead__buttonDelete {
+    margin-left: 849px;
+    margin-top: -244px; }
+  .dataTypeahead__card-img-create {
+    width: 11%;
+    height: 115px;
+    margin-left: 221px;
+    margin-top: 236px; }
+  .dataTypeahead__card-div {
+    margin-left: 392px;
+    margin-top: 127px; }
+  .dataTypeahead__card-div-create {
+    margin-left: 426px;
+    margin-top: -135px; }
+  .yourlist__card-div {
+    margin-top: 7rem;
+    margin-left: 393px;
+    margin-bottom: 17rem; }
+  .yourlist__button-create-span {
+    margin-left: 10px; }
+  .modal-content {
+    width: 1346px;
+    pointer-events: auto;
+    background-clip: padding-box;
+    border-radius: -2.7rem;
+    outline: 0; }
+  .btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    margin-left: 70%;
+    border-radius: 37px;
+    height: 38px;
+    width: 140px; }
+  .create-input {
+    margin-left: 293px;
+    width: 349px;
+    margin-top: 4px; }
+  .create-button {
+    width: 74px;
+    height: 34px; }
+  .loginformmm .modal-body {
+    position: relative;
+    width: 221%;
+    margin-left: -350px;
+    width: 184%;
+    display: block;
+    background-color: #fff0;
+    margin-left: 28px; } }
+
+@media screen and (max-width: 1920px) and (min-width: 992px) {
+  .col-lg-12 {
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 2rem; } }
+
+@media screen and (max-width: 1920px) {
+  .yourlist__card-header {
+    border-bottom: none !important;
+    background: rgba(243, 243, 116, 0.47) !important;
+    margin-left: -19px;
+    margin-top: -27px;
+    padding-left: 19px;
+    width: 257px; }
+  .yourlist__card-header-create {
+    border-bottom: none !important;
+    background: rgba(243, 243, 116, 0.47) !important;
+    margin-left: -19px;
+    margin-top: -27px;
+    padding-left: 19px;
+    width: 257px; }
+  .modal.show .modal-dialog {
+    -webkit-transform: none;
+    transform: none; }
+  .yourlist__card-text {
+    margin-top: 24px; }
+  .yourlist__card-text-create {
+    margin-top: 24px; }
+  .btn-primary {
+    color: #2f2c2c;
+    margin-left: -25px;
+    background-color: #c1c5ca;
+    border-color: #525456;
+    /* border: 51px; */
+    border-radius: 33px;
+    width: 136px; }
+  .yourlist__buttonDelete {
+    margin-top: 10%;
+    margin-left: 10%;
+    cursor: pointer; }
+  .yourlist__buttonAdd {
+    /* margin-left: 10px */
+    width: 15%; }
+  .fa-remove:before, .fa-close:before, .fa-times:before {
+    content: "\f00d";
+    font-size: 255%;
+    margin-left: 9px; }
+  .login__form-btn {
+    width: 20%;
+    background-color: #c3bebe !important;
+    background: #e6e4e1;
+    border-radius: 7px;
+    border: 2px solid #54514d;
+    margin-top: 83px;
+    height: 40px;
+    border-radius: 21px;
+    font-size: 20px !important; }
+  .yourlist__button-create {
+    margin-top: 0px;
+    height: 48px; }
+  .yourlist__card-header-add {
+    margin-left: 0px; }
+  .yourlist__card-text-add {
+    margin-left: 370px; }
+  .yourlist__item-typeahead__word {
+    margin-left: 15px;
+    margin-top: 82px; }
+  .card-header {
+    padding: 0.75rem 1rem;
+    margin-bottom: 0;
+    color: inherit; }
+  .yourlist__item-typeahead__card-div {
+    margin-top: 10rem;
+    margin-left: 138px; }
+  .yourlist__item-typeahead__card-header {
+    margin-left: 10px; }
+  .yourlist__item-typeahead__card-img {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+    /* width: 160px; */
+    /* height: 109px; */
+    /* margin-top: 157px; */
+    /* margin-bottom: -312px; */
+    /* margin-left: -161px; */ }
+  .yourlist__item-typeahead__header__name-product {
+    border-bottom: none !important;
+    margin-left: -19px;
+    margin-top: 2px;
+    /* padding-left: 19px; */
+    width: 233px; }
+  .yourlist__item-typeahead__card-text {
+    margin-left: 29px;
+    margin-top: 23px; }
+  .modal-content {
+    width: 154%;
+    pointer-events: auto;
+    background-clip: padding-box;
+    border-radius: 1.3rem;
+    outline: 0; }
+  .login__form-div-title {
+    width: 649px;
+    margin-left: 134px; }
+  .loginformmm .modal-body {
+    position: relative;
+    width: 221%;
+    margin-left: 26px;
+    width: 184%;
+    display: block;
+    background-color: #fff0; }
+  .fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    margin-top: -38px;
+    margin-left: 2px;
+    -moz-osx-font-smoothing: grayscale; }
+  .fa-facebook-f:before, .fa-facebook:before {
+    content: "\f09a";
+    margin-left: -22px; }
+  .fa-google:before {
+    content: "\f1a0";
+    margin-left: -32px; }
+  .fa-close:before, .fa-remove:before, .fa-times:before {
+    content: "\F00D";
+    font-size: 255%;
+    margin-left: 9px;
+    /* margin-top: 91px; */
+    cursor: pointer; }
+  .yourlist__buttonAdd {
+    /* margin-top: -145px;
+    margin-left: 685px; */
+    width: 15%;
+    height: 15%;
+    cursor: pointer; }
+  .fa-remove {
+    margin-left: -36px;
+    /* margin-top: -11px; */ }
+  .loginformmm .modal-body {
+    position: relative;
+    width: 221%;
+    margin-left: -350px;
+    width: 184%;
+    display: block;
+    background-color: #fff0; }
+  .yourlist__button {
+    margin-top: 80px;
+    margin-left: -13px;
+    width: 154px;
+    height: 35px; }
+  .fa-remove {
+    margin-left: -22px;
+    /* margin-top: 3px; */ }
+  .card {
+    position: relative;
+    display: -ms-flexbox;
+    /* margin-left: 403px; */
+    /* width: 260px; */
+    /* margin-top: -135px; */
+    display: grid;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: .25rem; } }
+
+@media screen and (max-width: 1024px) {
+  .dataTypeahead__buttonDelete {
+    margin-left: 848px;
+    margin-top: -233px; }
+  .dataTypeahead__buttonAdd {
+    margin-left: 689px;
+    margin-top: 116px; }
+  .dataTypeahead__card-img {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+    width: 160px;
+    height: 50%;
+    margin-top: 0px;
+    margin-bottom: -249px;
+    margin-left: 50px; }
+  .dataTypeahead__card-div {
+    margin-left: 343px;
+    margin-top: 90px; }
+  .fa-remove {
+    margin-left: -21px;
+    /* margin-top: -7px; */ }
+  .yourlist__card-div {
+    margin-left: 23rem; }
+  .yourlist__button {
+    margin-top: 80px;
+    margin-left: 92px; } }
+
+@media screen and (max-width: 768px) {
+  .dataTypeahead__buttonDelete {
+    margin-left: 616px;
+    margin-top: -244px; }
+  .dataTypeahead__buttonAdd {
+    margin-left: 598px;
+    margin-top: 116px; }
+  .dataTypeahead__card-img {
+    width: 54px;
+    height: 108px;
+    margin-left: 144px; }
+  .dataTypeahead__card-div {
+    margin-left: 299px;
+    margin-top: 90px; }
+  .yourlist__buttonAdd {
+    /* margin-left: 605px;
+    margin-top: 19px; */
+    width: 15%;
+    height: 15%; }
+  .yourlist__buttonDelete {
+    margin-left: 10%;
+    margin-top: 10%; }
+  .card-img {
+    width: 100%;
+    height: 100%;
+    /* margin-left: 144px; */ }
+  .btn-danger {
+    margin-right: 77px; }
+  .fa-remove {
+    margin-left: 21px;
+    /* margin-top: 186px; */ }
+  .yourlist__card-div {
+    margin-left: 303px;
+    margin-right: -121px;
+    margin-bottom: 7rem; }
+  .yourlist__button {
+    margin-top: 80px;
+    margin-left: 159px;
+    width: 104px; }
+  .page__container {
+    /* width: 574px; */
+    margin-left: 0%; } }
+
+@media screen and (max-width: 375px) {
+  .dataTypeahead__buttonDelete {
+    margin-left: 616px;
+    margin-top: -244px; }
+  .dataTypeahead__buttonAdd {
+    margin-left: 598px;
+    margin-top: 116px; }
+  .dataTypeahead__card-img {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+    width: 160px;
+    height: 50%;
+    margin-top: 0px;
+    margin-bottom: -343px;
+    margin-left: 50px; }
+  .dataTypeahead__card-div {
+    margin-left: 343px;
+    margin-top: 90px; }
+  .yourlist__buttonDelete {
+    margin-left: 10%;
+    margin-top: 10%; }
+  .yourlist__card-div {
+    margin-left: 28px;
+    width: 114px; }
+  .yourlist__button {
+    margin-top: -375px;
+    margin-left: 156px;
+    width: 49px; }
+  .card-img {
+    width: 100%;
+    height: 100%;
+    /* margin-left: 71px; */ }
+  .yourlist__card-header {
+    width: 140px; }
+  .page__container {
+    /* width: 356px; */
+    margin-left: 0%; }
+  .btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    margin-left: 750px;
+    margin-right: 99px;
+    border-radius: 37px;
+    height: 38px;
+    width: 140px; } }
+
+@media screen and (max-width: 414px) {
+  .dataTypeahead__card-div {
+    margin-left: 233px !important;
+    margin-top: 90px;
+    width: 75px; }
+  .dataTypeahead__yourlist__card-header {
+    width: 140px; }
+  .dataTypeahead__card-img {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+    width: 108px;
+    height: 22%;
+    margin-top: 0px;
+    margin-bottom: -343px;
+    margin-left: 86px; }
+  .dataTypeahead__buttonAdd {
+    margin-left: 342px !important;
+    margin-top: 116px; }
+  .yourlist__buttonAdd {
+    /* margin-left: 342px;
+  margin-top: -86px; */
+    width: 15%;
+    height: 15%; }
+  .yourlist__card-div {
+    margin-left: 250px;
+    width: 27px; }
+  .yourlist__button {
+    margin-top: 80px;
+    margin-left: 0px;
+    width: 120px; }
+  .yourlist__buttonDelete {
+    margin-left: 10%;
+    margin-top: 10%; }
+  .card-img {
+    width: 100%;
+    height: 100%;
+    /* margin-left: 104px; */ }
+  .dataTypeahead__buttonDelete {
+    margin-left: 363px !important;
+    margin-top: -314px; }
+  .yourlist__card-header {
+    width: 140px; }
+  .btn-danger {
+    margin-left: 328px; }
+  .page__container {
+    /* width: 351px; */
+    margin-left: 0%; } }
+
+@media screen and (max-width: 360px) {
+  .dataTypeahead__buttonDelete {
+    margin-left: 616px;
+    margin-top: -244px; }
+  .dataTypeahead__buttonAdd {
+    margin-left: 598px;
+    margin-top: 116px; }
+  .dataTypeahead__card-img {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+    width: 99px;
+    height: 17%;
+    margin-top: 0px;
+    margin-bottom: -343px;
+    margin-left: 106px; }
+  .dataTypeahead__card-div {
+    margin-left: 343px;
+    margin-top: 90px; }
+  .page__container {
+    /* width: 303px; */
+    margin-left: 0%; } }
+
+@media screen and (max-width: 320px) {
+  .dataTypeahead__buttonDelete {
+    margin-left: 359px !important;
+    margin-top: -244px; }
+  .dataTypeahead__card-img {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+    width: 83px !important;
+    height: 17%;
+    margin-top: 0px;
+    margin-bottom: -343px;
+    margin-left: 119px !important; }
+  .dataTypeahead__card-div {
+    margin-left: 343px;
+    margin-top: 90px; }
+  .page__container {
+    margin-left: 0%; }
+  .yourlist__buttonDelete {
+    margin-left: 10%;
+    margin-top: 10%; }
+  .yourlist__card-div {
+    margin-left: 246px;
+    width: 83x;
+    height: 341px; }
+  .yourlist__button {
+    margin-top: 80px;
+    margin-left: -152px;
+    width: 106px; }
+  .card-img {
+    width: 100%;
+    height: 100%;
+    /* margin-left: 123px;
+    margin-top: 149px; */ }
+  .yourlist__card-header {
+    width: 109px; }
+  .page__container {
+    /* width: 310px; */
+    margin-left: 0%; }
+  .yourlist__buttonAdd {
+    /* margin-left: 344px;
+    margin-top: -116px; */
+    height: 15%; }
+  .yourlist__buttonDeleteList {
+    margin-right: 204px;
+    width: 81px;
+    margin-top: -3px;
+    height: 91px; } }
+
+@media screen and (max-width: 411px) {
+  .dataTypeahead__buttonDelete {
+    margin-left: 616px;
+    margin-top: -244px; }
+  .dataTypeahead__buttonAdd {
+    margin-left: 598px;
+    margin-top: 116px; }
+  .dataTypeahead__card-div {
+    margin-left: 343px;
+    margin-top: 90px; }
+  .page__container {
+    /* width: 351px; */
+    margin-left: 0%; } }
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+  margin-left: 121px; }
+
+@media screen and (max-width: 414px) {
+  .dataTypeahead__buttonDelete {
+    margin-left: 616px;
+    margin-top: -304px; }
+  .dataTypeahead__buttonAdd {
+    margin-left: 598px;
+    margin-top: 116px; }
+  .dataTypeahead__card-div {
+    margin-left: 343px;
+    margin-top: 90px; }
+  .page__container {
+    /* width: 351px; */
+    margin-left: 0%; }
+  .btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+    margin-right: 86px; } }

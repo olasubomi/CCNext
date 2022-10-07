@@ -1,0 +1,100 @@
+.custom-card1 {
+  padding-right: 0px !important; }
+
+.custom-card1 .modal-content {
+  border-radius: 30px !important; }
+
+.custom-card1 .text-center {
+  font-size: 18px; }
+
+.width100 {
+  width: 100% !important; }
+
+.login-button {
+  color: black !important;
+  width: 40% !important;
+  margin-left: 30% !important;
+  border: solid #bbbbbb 2px !important;
+  border-radius: 20px !important;
+  background-color: #d6d6d6 !important; }
+
+.carousel .carousel-status {
+  color: #1d1d1d;
+  text-shadow: none; }
+
+.lbl_text {
+  margin-left: 0px; }
+
+.forget,
+.signup,
+.continue {
+  color: black;
+  text-decoration: underline;
+  font-weight: 600 !important; }
+
+.forget {
+  font-size: 12px !important; }
+
+.fb-btn {
+  width: 70% !important;
+  margin-left: 20% !important;
+  color: black !important;
+  border-radius: 7px !important;
+  background-color: cornflowerblue !important; }
+
+.google-btn {
+  width: 70% !important;
+  margin-left: 20% !important;
+  color: black !important;
+  border-radius: 7px !important;
+  border: solid #b45029 2px !important;
+  background-color: #cf5c2f !important; }
+
+.or {
+  margin-top: 30px !important; }
+
+.right-panel {
+  padding-right: 50px !important; }
+
+.modal-title {
+  text-align: center !important;
+  /*<!-- HERE I AM!---*/ }
+
+button:focus {
+  outline: 0px dotted !important; }
+
+.login__form__input1 {
+  width: 100% !important;
+  margin-bottom: 20px; }
+
+@media (max-width: 767px) {
+  .custom-card1 {
+    width: 98% !important;
+    margin-left: 1% !important; }
+  .fb-btn,
+  .google-btn {
+    width: 100% !important;
+    margin-left: 0% !important; }
+  .or {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important; }
+  .right-panel {
+    padding-right: 15px !important; } }
+
+@media screen and (max-width: 900px) and (min-height: 500px) {
+  /* .modal-90w{
+          width: 85% !important;
+          max-width: 900px !important;
+          margin: auto !important;
+      }  */
+  .custom-card1 .modal-content {
+    overflow: overlay; } }
+
+@media screen and (max-height: 500px) and (max-width: 900px) {
+  /* .modal-90w{
+          width: 90% !important;
+          height: 100vh;
+          margin: auto !important;
+      }  */
+  .custom-card1 .modal-content {
+    overflow: overlay; } }

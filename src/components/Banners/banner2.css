@@ -1,0 +1,116 @@
+/* MOBILE FIRST DESIGN SMALLER SCREEN IS DEFAULT, */
+/* MEDIA QUERIES FOR LARGER SCREENS BELOW */
+/* USE MEDIA QUERIES TEMPLATE TO DETERMINE WHAT STYLING YOU WANT TO UPDATE */
+/* ONLY ADD STYLING IF CONFIRMED THAT IT WILL NOT AFFECT ANOUTHER STYLING */
+/* LANDSCAPE VIEW SHOULD MATCH DEKTOP VIEW PROPORTIONALLY */
+
+/* @media screen and (max-width: 429px) { */
+/* Potrait Mobile View */
+
+.banner_container{
+  height: 436px;
+  vertical-align: "top";
+  background-repeat: "no-repeat";
+  background-color: "transparent";
+  background-size: 100% 100%
+}
+
+.banner2_text {
+  width: 80%;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 49px;
+  line-height: 59px;
+  
+  color: #FFFFFF;
+  }
+  
+  .banner2_spacing{
+      height: 23%; overflow: hidden;
+  }
+  
+  .banner2_button{
+    width: 238px;
+    height: 61px;
+    left: 182px;
+    top: 3672px;
+
+    border: 2px solid #FFFFFF;
+    filter: drop-shadow(15px 15px 10px rgba(0, 0, 0, 0.23));
+    border-radius: 8px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+
+    color: #FFFFFF;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .banner2_button:hover{
+    text-decoration: none;
+    color: #FFFFFF;
+  }
+
+  .banner2container { 
+    height: 100%;
+    position: relative;
+    /* border: 3px solid green;  */
+    display: grid;
+    padding-left: 10rem;
+    align-content: center;
+    grid-gap: 2rem;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  /* MOBILE, TABLET AND ALL LANDSCAPE VIEW */
+  @media screen and (orientation: landscape) {
+
+  
+}
+  
+  /* TABLET  VIEW */
+  @media screen and (min-width: 567px) {
+  
+  }
+  
+  /* DESKTOP VIEW */
+  @media screen and (min-width: 768px) {
+  
+      .banner2_spacing{
+          height: 23%; overflow: hidden;
+      }
+  }
+
+a:hover{
+  text-decoration: none;
+  color: inherit;
+}
+
+@media screen and (max-width: 700px) {
+  .banner_container{
+    height: 267px;
+  }
+
+  .banner2container{
+    padding-left: 1rem;
+  }
+
+  .banner2_text{
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 23px;
+    margin-top: -5rem;
+  }
+
+  .banner2_button{
+    width: 141px;
+    height: 39px;
+    font-size: 14px;
+    margin-top: -3rem;
+  }
+}

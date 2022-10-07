@@ -1,0 +1,30 @@
+@media screen and (max-width: 1920px){
+    .cart-page__title__name-product {
+        margin-left: 178px;
+        margin-top: 32px;
+    }
+    .cart-page__title {
+        margin-left: 167px;
+        margin-top: 45px;
+    }
+
+    .cart-page__card-div {
+        margin-left: 466px;
+    }
+    .cart-page__name-product {
+        margin-left: -301px;
+        margin-top: 31px;
+    }
+    .cart-page__price-product {
+        margin-left: 10px;
+        margin-top: -38px;
+    }
+    .cart-page__size-product {
+        margin-left: -145px;
+        margin-top: -19px;
+    }
+    .cart-page__pice-per-ounce-product{
+        margin-left: -48px;
+        margin-top: -38px;
+    }
+}

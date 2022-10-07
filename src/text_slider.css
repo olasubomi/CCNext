@@ -1,0 +1,50 @@
+.instruction-slider .carousel-control-next, .instruction-slider .carousel-control-prev {
+  width: 7% !important; }
+
+/* .instruction-slider .carousel-control-prev-icon,
+.instruction-slider .carousel-control-next-icon { */
+/* height: 100px;
+  width: 100px; */
+/* outline: black;
+  background-size: 100%, 100%;
+  border-radius: 50%; */
+/* border: 1px solid black; */
+/* background-image: none;  } */
+.instruction-slider .carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important; }
+
+.instruction-slider .carousel-control-next-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important; }
+
+.instruction-slider .carousel-caption {
+  bottom: 5% !important;
+  right: 7% !important;
+  left: 7% !important; }
+
+.instruction-slider .mealPrepChunk {
+  color: #000000 !important;
+  font-size: 16px;
+  text-align: left;
+  font-weight: 400;
+  max-height: 260px !important;
+  width: 90%;
+  margin: auto; }
+
+.instruction-slider .MuiPaper-root {
+  background-color: #fff0 !important; }
+
+.instruction-slider .MuiPaper-elevation1 {
+  box-shadow: none !important; }
+
+.instruction-slider .instruction_slider_page {
+  background-color: aliceblue; }
+
+.instruction-slider .MuiList-root {
+  overflow-wrap: anywhere; }
+
+/* img.img-responsive.imageHeighgt {
+  height: 150px !important; } */
+@media screen and (max-width: 767px) {
+  .modal-content {
+    width: 100%;
+    margin-left: 0px; } }
