@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "next/link";
+import Link from "next/link";
 import img_logo from "../../../public/assets/CC_Logo_no_bg.png"
 import { useEffect } from 'react'
 
@@ -165,7 +165,11 @@ class Header extends Component {
     } else {
       login_on_desktop_navbar = (
         <li className="nav-item">
-          <Link href="/login" className="nav-link px-2">Log In / Register </Link>
+          <Link href="/login">
+            <a className="nav-link px-2">
+              Log In / Register
+            </a>
+          </Link>
         </li>
       );
 

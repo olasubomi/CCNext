@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Header from "../src/components/Header/Header";
 import Footer from "../src/components/Footer";
+import LandingPage from "./landingpage";
 import { useEffect } from 'react'
 
 // import { Route, Switch, Redirect } from "react-router-dom";
@@ -61,8 +62,7 @@ class App extends Component {
 
             <Header />
 
-            Welcome to Next.js!
-
+            <LandingPage />
             <Footer />
 
 

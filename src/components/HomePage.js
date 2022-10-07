@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import Banner from "./Banners/banner"
-import Banner2 from "./Banners/banner2"
+import Banner2 from "./Banners/banner2";
 // import HomePageButtons from "./HomePage/HomePageButtons"
 import './HomePage/home.css';
 import EastIcon from '@mui/icons-material/East';
