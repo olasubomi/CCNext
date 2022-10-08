@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-* {box-sizing:border-box}
+/* *{box-sizing:border-box} */
 
 /* Slideshow container */
 .slideshow_container {

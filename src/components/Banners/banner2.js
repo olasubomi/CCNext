@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import banner3 from "../../assets/images/homepage/banner-3.png";
-import './banner2.css';
-import { Link } from "next/link";
+import banner3 from "../../../public/assets/homepage/banner-3.png";
+import './banner2.module.css';
+import Link from "next/link";
 
 class Banner2 extends Component {
 

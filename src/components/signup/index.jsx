@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import { Form, Button, Container, Modal, Row, Col, ButtonToolbar } from 'react-bootstrap';
 
-import { Link } from 'next/link';
+import Link from 'next/link';
 // import { setTimeout } from 'timers';
 
 export default class SignUp extends React.Component {

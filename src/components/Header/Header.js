@@ -210,7 +210,7 @@ class Header extends Component {
                   <Link href="/grocery" className="nav-link px-3">Grocery List</Link>
                 </li>
                 <li className="nav-item">
-                  <Link href="/SuggestMeal" className="nav-link px-3">Suggest Meal</Link>
+                  <Link href="/suggestmeal" className="nav-link px-3">Suggest Meal</Link>
                 </li>
                 {login_on_desktop_navbar}
               </ul>

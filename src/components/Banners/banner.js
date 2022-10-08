@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import background from "../../assets/images/homepage/food_prep.jpg";
 import './banner.css';
-import { Link } from "next/link";
+import Link from "next/link";
 
 
 class Banner extends Component {

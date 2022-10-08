@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 // import Banner from "./Banners/banner"
-import Banner2 from "./Banners/banner2"
+import Banner2 from "../src/components/Banners/banner2"
 // import HomePageButtons from "./HomePage/HomePageButtons"
-import './HomePage/home.css';
+import '../src/components/HomePage/home.module.css';
 import EastIcon from '@mui/icons-material/East';
-import background from "../assets/images/homepage/grocery_bag.jpg";
-import foodImage from "../assets/images/homepage/food.png";
-import utensilImage from "../assets/images/homepage/utensil.png";
-import shopImage from "../assets/images/homepage/shop.png";
-import banner1 from "../assets/images/homepage/banner-1.png";
-import banner2 from "../assets/images/homepage/banner-2.png";
-import supplierImage from "../assets/images/homepage/supplier.png";
-import shoppingImage from "../assets/images/homepage/shopping.png";
-import chefImage from "../assets/images/homepage/chef.png";
+import background from "../public/assets/homepage/grocery_bag.jpg";
+import foodImage from "../public/assets/homepage/food.png";
+import utensilImage from "../public/assets/homepage/utensil.png";
+import shopImage from "../public/assets/homepage/shop.png";
+import banner1 from "../public/assets/homepage/banner-1.png";
+import banner2 from "../public/assets/homepage/banner-2.png";
+import supplierImage from "../public/assets/homepage/supplier.png";
+import shoppingImage from "../public/assets/homepage/shopping.png";
+import chefImage from "../public/assets/homepage/chef.png";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 

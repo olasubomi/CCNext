@@ -86,7 +86,7 @@
       }
   }
 
-a:hover{
+.a:hover{
   text-decoration: none;
   color: inherit;
 }
