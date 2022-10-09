@@ -138,18 +138,18 @@
     overflow: hidden;
 }
 
-table {
+.table {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
   }
   
-  th, td {
+  .th, .td {
     text-align: center;
     padding: 8px;
   }
 
-  th{
+  .th{
     font-style: normal;
     font-weight: 400;
     font-size: 11px;
@@ -158,7 +158,7 @@ table {
     color: #6D6D6D;
   }
 
-  td{
+  .td{
     font-style: normal;
     font-weight: 400;
     font-size: 13px;
@@ -169,7 +169,7 @@ table {
     color: #353535;
   }
   
-  tr:nth-child(even) {
+  .tr:nth-child(even) {
     background-color: #F1F1F1;
   }
 
@@ -508,7 +508,7 @@ table {
     
 }
 
-::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
-  }
+/* ::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space 
+    background: transparent;  /* Optional: just make scrollbar invisible 
+  } */

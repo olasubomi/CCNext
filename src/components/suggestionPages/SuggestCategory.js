@@ -7,10 +7,23 @@ import axios from '../../util/Api';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
-import "./suggestion.css";
+import "./suggestion.module.css";
 
 
 class SuggestCategoryForm extends Component {
+  allMealNames = [];
+  productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
+    "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
+    "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes", "Beef", "Green Pepper",
+    "Garlic", "Ginger", "Vegetable Oil", "Lemon", "Rosemary Powder"];
+  productImageLink = [];
+  categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
+  measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
+    "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
+  kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
+    "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
+    "Wire Mesh", "Zester"];
+
   ingredientsQuantityMeasurements = [];
 
   constructor(props) {
@@ -18,11 +31,11 @@ class SuggestCategoryForm extends Component {
     this.state = {
 
       // do we want to use current ingredient formats ? Yes.
-    //   currentIngredient: "",
-    //   currentIngredientMeasurement: "",
-    //   currentUtensilQuantity: "",
-    //   currentProductImgSrc: null,
-    //   currentProductDisplayIndex: 0,
+      //   currentIngredient: "",
+      //   currentIngredientMeasurement: "",
+      //   currentUtensilQuantity: "",
+      //   currentProductImgSrc: null,
+      //   currentProductDisplayIndex: 0,
 
       currentStore: "",
 
@@ -56,7 +69,7 @@ class SuggestCategoryForm extends Component {
       if (mealList && mealList.data.length !== 0) {
         console.log("returns GET of ALL MEALS ");
         for (var i = 0; i < mealList.data.length; i++) {
-          this.props.allMealNames.push(mealList.data[i].mealName);
+          this.allMealNames.push(mealList.data[i].mealName);
         }
       } else {
         console.log("get all meal names function does not return");
@@ -66,7 +79,7 @@ class SuggestCategoryForm extends Component {
         console.log(err);
       });
 
-    console.log(this.props.allMealNames);
+    console.log(this.allMealNames);
     // get all store names*, if NEW products section exists.
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
@@ -97,7 +110,7 @@ class SuggestCategoryForm extends Component {
     //     console.log("returns GET of ALL Categories ");
 
     //     for (var i = 0; i < categoriesFromDBList.data.length; i++) {
-    //       this.props.categories.push(categoriesFromDBList.data[i].category_name);
+    //       this.categories.push(categoriesFromDBList.data[i].category_name);
     //     }
     //     console.log("PRINTING UPDATED CATEGORIES LIST");
     //   } else {
@@ -107,7 +120,7 @@ class SuggestCategoryForm extends Component {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-    this.categories = this.props.categories;
+    this.categories = this.categories;
   }
 
   handleCategoryDropdownChange = (val) => {
@@ -144,65 +157,65 @@ class SuggestCategoryForm extends Component {
     // });
 
     return (
-          <div className="suggestion_section_2" >
-            <form className="suggestion_forms" noValidate autoComplete="off" encType="multipart/form-data" method="post" >
+      <div className="suggestion_section_2" >
+        <form className="suggestion_forms" noValidate autoComplete="off" encType="multipart/form-data" method="post" >
 
-              <h3> Categories</h3>
-              <div className="suggestion_form">
-                <div className="suggestion_form_group">
-                  <label htmlFor="tags-outlined" className="suggestion_form_label">
-                    Suggest category 
-                  </label>
-                  <div className="input_button">
-                    <Autocomplete
-                      multiple
-                      id="tags-outlined"
-                      freeSolo
-                      // filterSelectedOptions
-                      options={this.props.categories.map((option) => option)}
-                      // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
-                      onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
-                      // getOptionLabel={option => option}
-                      // renderTags={() => {}}
-                      value={this.state.suggestedCategories}
-                      renderInput={params => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Suggest categories.."
-                          fullWidth
-                        />                    )}
-                    />
-                    <Button variant="contained" disableRipple onClick={this.addCategory} className='ingredient_button' style={{ width: "max-content" }} > Add Category</Button>
-                  </div>
-
-                </div>
-                <Stack direction="row" spacing={1} className="stack">
-                {
-                  this.state.suggestedCategories.map((data, index) => (
-                    <Chip
-                      key={index}
-                      label={data}
-                      className='chip'
-                      onClick={() => this.handleDeleteCategoryChip(data)}
-                      onDelete={() => this.handleDeleteCategoryChip(data)}
-                    />
-                  ))
-                }
-                </Stack>
+          <h3> Categories</h3>
+          <div className="suggestion_form">
+            <div className="suggestion_form_group">
+              <label htmlFor="tags-outlined" className="suggestion_form_label">
+                Suggest category
+              </label>
+              <div className="input_button">
+                <Autocomplete
+                  multiple
+                  id="tags-outlined"
+                  freeSolo
+                  // filterSelectedOptions
+                  options={this.categories.map((option) => option)}
+                  // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
+                  onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
+                  // getOptionLabel={option => option}
+                  // renderTags={() => {}}
+                  value={this.state.suggestedCategories}
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      placeholder="Suggest categories.."
+                      fullWidth
+                    />)}
+                />
+                <Button variant="contained" disableRipple onClick={this.addCategory} className='ingredient_button' style={{ width: "max-content" }} > Add Category</Button>
               </div>
-              
-              {/* <Row>
+
+            </div>
+            <Stack direction="row" spacing={1} className="stack">
+              {
+                this.state.suggestedCategories.map((data, index) => (
+                  <Chip
+                    key={index}
+                    label={data}
+                    className='chip'
+                    onClick={() => this.handleDeleteCategoryChip(data)}
+                    onDelete={() => this.handleDeleteCategoryChip(data)}
+                  />
+                ))
+              }
+            </Stack>
+          </div>
+
+          {/* <Row>
                 <Col md={12}> */}
-                  {/* <ThemeProvider theme={theme}> */}
-                    <Button variant="contained" className='ingredient_button' style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Category</Button>
-                  {/* </ThemeProvider> */}
-                {/* </Col>
+          {/* <ThemeProvider theme={theme}> */}
+          <Button variant="contained" className='ingredient_button' style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Category</Button>
+          {/* </ThemeProvider> */}
+          {/* </Col>
                 
               </Row> */}
-              <u >View privacy policy</u>
-            </form>
-          </div>
+          <u >View privacy policy</u>
+        </form>
+      </div>
     );
   }
 }

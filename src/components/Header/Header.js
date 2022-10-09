@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Link from "next/link";
-import img_logo from "../../../public/assets/CC_Logo_no_bg.png"
+import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import { useEffect } from 'react'
 
 

@@ -5,11 +5,11 @@ import WestIcon from '@mui/icons-material/West';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import "../src/components/suggestionPages/suggestion.module.css";
-import { Link } from "react-router-dom";
-import SuggestMealForm from "./suggestionPages/SuggestMeal";
-import SuggestProductForm from "./suggestionPages/SuggestProduct";
-import SuggestKitchenUtensilForm from "./suggestionPages/SuggestKitchenUtensil";
-import SuggestCategoryForm from "./suggestionPages/SuggestCategory";
+import Link from "next/link";
+import SuggestMealForm from "../src/components/suggestionPages/SuggestMeal";
+import SuggestProductForm from "../src/components/suggestionPages/SuggestProduct";
+import SuggestKitchenUtensilForm from "../src/components/suggestionPages/SuggestKitchenUtensil";
+import SuggestCategoryForm from "../src/components/suggestionPages/SuggestCategory";
 
 class SuggestMeal extends Component {
     ingredientsQuantityMeasurements = [];

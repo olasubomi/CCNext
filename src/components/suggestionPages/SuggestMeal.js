@@ -10,7 +10,7 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import AddIcon from '@mui/icons-material/Add';
 // import MealPageModal from "../mealsPage/MealPageModal";
-import "./suggestion.css";
+import "./suggestion.module.css";
 import Popup2 from "../popups/popup2";
 // import ProductsPageModal from "./ProductsPageModal";
 var FormData = require('form-data');
@@ -18,6 +18,19 @@ var FormData = require('form-data');
 // var fs = require('fs');
 
 class SuggestMealForm extends Component {
+  allMealNames = [];
+  productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
+    "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
+    "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes", "Beef", "Green Pepper",
+    "Garlic", "Ginger", "Vegetable Oil", "Lemon", "Rosemary Powder"];
+  productImageLink = [];
+  categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
+  measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
+    "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
+  kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
+    "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
+    "Wire Mesh", "Zester"];
+
   ingredientsQuantityMeasurements = [];
 
   constructor(props) {
@@ -139,7 +152,7 @@ class SuggestMealForm extends Component {
       if (mealList && mealList.data.length !== 0) {
         console.log("returns GET of ALL MEALS ");
         for (var i = 0; i < mealList.data.length; i++) {
-          this.props.allMealNames.push(mealList.data[i].mealName);
+          this.allMealNames.push(mealList.data[i].mealName);
         }
       } else {
         console.log("get all meal names function does not return");
@@ -149,7 +162,7 @@ class SuggestMealForm extends Component {
         console.log(err);
       });
 
-    console.log(this.props.allMealNames);
+    console.log(this.allMealNames);
     // get all store names*, if NEW products section exists.
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
@@ -180,7 +193,7 @@ class SuggestMealForm extends Component {
     //     console.log("returns GET of ALL Categories ");
 
     //     for (var i = 0; i < categoriesFromDBList.data.length; i++) {
-    //       this.props.categories.push(categoriesFromDBList.data[i].category_name);
+    //       this.categories.push(categoriesFromDBList.data[i].category_name);
     //     }
     //     console.log("PRINTING UPDATED CATEGORIES LIST");
     //   } else {
@@ -190,7 +203,7 @@ class SuggestMealForm extends Component {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-    this.categories = this.props.categories;
+    this.categories = this.categories;
     if (typeof window !== 'undefined') {
 
       let doc = document.querySelector('#formmeal')
@@ -659,7 +672,7 @@ class SuggestMealForm extends Component {
     if (val !== undefined && val !== null) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.props.productNames.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.productNames.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrProductIndexInDBsProductsList);
 
@@ -741,7 +754,7 @@ class SuggestMealForm extends Component {
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.props.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
 
@@ -1100,7 +1113,7 @@ class SuggestMealForm extends Component {
 
     console.log("current state of product index at Add Ingredient To Meal is : \n" + this.state.currProductIndexInDBsProductsList);
 
-    const searchResult = this.props.productNames.map(function callback(element) { if (element.toLowerCase() === (ingredientValue.toLowerCase())) { return true; } else { return false; } });
+    const searchResult = this.productNames.map(function callback(element) { if (element.toLowerCase() === (ingredientValue.toLowerCase())) { return true; } else { return false; } });
     const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
     console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrProductIndexInDBsProductsList);
 
@@ -1222,7 +1235,7 @@ class SuggestMealForm extends Component {
 
       // get new_Measurements from inputted ingredient packets
       if (ingredientGroupList[i].measurement !== "") {
-        let index = this.props.measurements.indexOf(ingredientGroupList[i].measurement);
+        let index = this.measurements.indexOf(ingredientGroupList[i].measurement);
         if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
       }
     }
@@ -1232,7 +1245,7 @@ class SuggestMealForm extends Component {
     for (i = 0; i < suggestedCategories.length; i++) {
       // check if categories already exist, only add new categories to db,
       // though all will still be attached to meal, as mentioned
-      let index = this.props.categories.indexOf(suggestedCategories[i]);
+      let index = this.categories.indexOf(suggestedCategories[i]);
       if (index === -1) new_categories.push(suggestedCategories[i]);
     }
 
@@ -1240,7 +1253,7 @@ class SuggestMealForm extends Component {
     for (i = 0; i < suggestedUtensils.length; i++) {
       // check if categories already exist, only add new categories to db,
       // though all will still be attached to meal, as mentioned
-      let index = this.props.kitchenUtensils.indexOf(suggestedUtensils[i]);
+      let index = this.kitchenUtensils.indexOf(suggestedUtensils[i]);
       if (index === -1) new_kitchen_utensils.push(suggestedUtensils[i]);
     }
 
@@ -1493,7 +1506,7 @@ class SuggestMealForm extends Component {
               </label>
               <Autocomplete
                 id="mealName"
-                options={this.props.allMealNames.map((option) => option)}
+                options={this.allMealNames.map((option) => option)}
                 // onChange={(ev, val) => this.onInputChange(ev, val)}
                 onInputChange={(ev, val) => this.onInputChange(ev, val)}
                 freeSolo
@@ -1585,7 +1598,7 @@ class SuggestMealForm extends Component {
               </label>
               <Autocomplete
                 id="currentIngredient"
-                options={this.props.productNames.map((option) => option)}
+                options={this.productNames.map((option) => option)}
                 // onChange={(ev)=>this.onTextFieldChange(ev)}
                 value={this.state.currentIngredient}
                 onChange={(ev, val) => this.handleProductNameInput(ev, val)}
@@ -1616,7 +1629,7 @@ class SuggestMealForm extends Component {
                   </label>
                   <Autocomplete
                     id="currentIngredientMeasurement"
-                    options={this.props.measurements.map((option) => option)}
+                    options={this.measurements.map((option) => option)}
                     value={this.state.currentIngredientMeasurement}
                     onChange={this.handleIngredientMeasurement}
                     freeSolo
@@ -1691,7 +1704,7 @@ availableLocations,
                   freeSolo
                   clearOnBlur
                   onBlur={this.kitBlur}
-                  options={this.props.kitchenUtensils.map((option) => option)}
+                  options={this.kitchenUtensils.map((option) => option)}
                   // onChange={(ev,val)=>this.handleUtensilsDropdownChange(ev,val)}
                   onChange={(e, val) => this.handleKitchenUtensilInputName(val)}
                   renderInput={(params) => (<TextField {...params}
@@ -1968,7 +1981,7 @@ availableLocations,
                   clearOnBlur
                   onBlur={this.categoryBlur}
                   // filterSelectedOptions
-                  options={this.props.categories.map((option) => option)}
+                  options={this.categories.map((option) => option)}
                   // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
                   onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
                   // getOptionLabel={option => option}

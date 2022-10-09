@@ -1,11 +1,11 @@
-*,
+/* *,
 *::after,
 *::before {
   margin: 0;
   padding: 0;
-  box-sizing: inherit; }
+  box-sizing: inherit; } */
 
-html {
+.html {
   box-sizing: border-box; }
 
 .print_container {

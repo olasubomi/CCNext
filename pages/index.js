@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "../src/components/Header/Header";
-import Footer from "../src/components/Footer";
+import Footer from "../src/components/Footer/Footer";
 import LandingPage from "./landingpage";
 import { useEffect } from 'react'
 
@@ -61,7 +61,6 @@ class App extends Component {
         return <div>
 
             <Header />
-
             <LandingPage />
             <Footer />
 

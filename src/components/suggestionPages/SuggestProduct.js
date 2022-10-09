@@ -10,10 +10,23 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import AddIcon from '@mui/icons-material/Add';
 // import MealPageModal from "../mealsPage/MealPageModal";
-import "./suggestion.css";
+import "./suggestion.module.css";
 import Popup1 from "../popups/popup1";
 
 class SuggestProductForm extends Component {
+  allMealNames = [];
+  productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
+    "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
+    "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes", "Beef", "Green Pepper",
+    "Garlic", "Ginger", "Vegetable Oil", "Lemon", "Rosemary Powder"];
+  productImageLink = [];
+  categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
+  measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
+    "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
+  kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
+    "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
+    "Wire Mesh", "Zester"];
+
   ingredientsQuantityMeasurements = [];
 
   constructor(props) {
@@ -78,7 +91,7 @@ class SuggestProductForm extends Component {
       if (mealList && mealList.data.length !== 0) {
         console.log("returns GET of ALL MEALS ");
         for (var i = 0; i < mealList.data.length; i++) {
-          this.props.allMealNames.push(mealList.data[i].mealName);
+          this.allMealNames.push(mealList.data[i].mealName);
         }
       } else {
         console.log("get all meal names function does not return");
@@ -88,7 +101,7 @@ class SuggestProductForm extends Component {
         console.log(err);
       });
 
-    console.log(this.props.allMealNames);
+    console.log(this.allMealNames);
     // get all store names*, if NEW products section exists.
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
@@ -119,7 +132,7 @@ class SuggestProductForm extends Component {
     //     console.log("returns GET of ALL Categories ");
 
     //     for (var i = 0; i < categoriesFromDBList.data.length; i++) {
-    //       this.props.categories.push(categoriesFromDBList.data[i].category_name);
+    //       this.categories.push(categoriesFromDBList.data[i].category_name);
     //     }
     //     console.log("PRINTING UPDATED CATEGORIES LIST");
     //   } else {
@@ -129,7 +142,7 @@ class SuggestProductForm extends Component {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-    this.categories = this.props.categories;
+    this.categories = this.categories;
     if (typeof window !== 'undefined') {
 
       let doc = document.querySelector('#formproduct')
@@ -345,7 +358,7 @@ class SuggestProductForm extends Component {
     if (val !== undefined && val !== null) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.props.productNames.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.productNames.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrProductIndexInDBsProductsList);
 
@@ -379,7 +392,7 @@ class SuggestProductForm extends Component {
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.props.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
 
@@ -413,7 +426,7 @@ class SuggestProductForm extends Component {
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.props.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
 
@@ -584,7 +597,7 @@ class SuggestProductForm extends Component {
 
     console.log("current state of product index at Add Ingredient To Meal is : \n" + this.state.currProductIndexInDBsProductsList);
 
-    const searchResult = this.props.productNames.map(function callback(element) { if (element.toLowerCase() === (ingredientValue.toLowerCase())) { return true; } else { return false; } });
+    const searchResult = this.productNames.map(function callback(element) { if (element.toLowerCase() === (ingredientValue.toLowerCase())) { return true; } else { return false; } });
     const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
     console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrProductIndexInDBsProductsList);
 
@@ -751,7 +764,7 @@ class SuggestProductForm extends Component {
                   </label>
                   <Autocomplete
                     id="sizeMeasurement"
-                    options={this.props.measurements.map((option) => option)}
+                    options={this.measurements.map((option) => option)}
                     value={this.state.sizeMeasurement}
                     onChange={this.handleSizeMeasurement}
                     freeSolo
@@ -812,7 +825,7 @@ class SuggestProductForm extends Component {
                   clearOnBlur
                   onBlur={this.categoryBlur}
                   // filterSelectedOptions
-                  options={this.props.categories.map((option) => option)}
+                  options={this.categories.map((option) => option)}
                   // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
                   onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
                   // getOptionLabel={option => option}
@@ -853,7 +866,7 @@ class SuggestProductForm extends Component {
               </label>
               <Autocomplete
                 id="currentIngredient"
-                options={this.props.productNames.map((option) => option)}
+                options={this.productNames.map((option) => option)}
                 // onChange={(ev)=>this.onTextFieldChange(ev)}
                 value={this.state.currentIngredient}
                 onChange={(ev, val) => this.handleProductNameInput(ev, val)}
@@ -884,7 +897,7 @@ class SuggestProductForm extends Component {
                   </label>
                   <Autocomplete
                     id="currentIngredientMeasurement"
-                    options={this.props.measurements.map((option) => option)}
+                    options={this.measurements.map((option) => option)}
                     value={this.state.currentIngredientMeasurement}
                     onChange={this.handleIngredientMeasurement}
                     freeSolo

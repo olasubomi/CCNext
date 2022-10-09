@@ -1,10 +1,9 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import img_logo from "../../public/assets/CC_Logo_no_bg.png"
+import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 
-// import './Footer.css';
 
-const FooterPagePro = () => {
+const Footer = () => {
   return (
     <Container className="footer-wraper" >
       <Row style={{ width: "100%" }}>
@@ -70,4 +69,4 @@ const FooterPagePro = () => {
   );
 };
 
-export default FooterPagePro;
+export default Footer;
