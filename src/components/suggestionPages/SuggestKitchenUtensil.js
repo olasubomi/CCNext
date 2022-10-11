@@ -31,8 +31,9 @@ class SuggestKitchenUtensilForm extends Component {
 
   ingredientsQuantityMeasurements = [];
 
-  constructor(props) {
-    super(props);
+
+  constructor() {
+    super();
     this.state = {
       utensilName: "",
       utensilImage: "",
@@ -43,9 +44,9 @@ class SuggestKitchenUtensilForm extends Component {
 
       sizeNames: [],
       // do we need product group list AND strings ?
-      sizeGroupList: [],
+      descriptionGroupList: [],
       // store product names of inputted strings to compare with db products
-      sizeStrings: [],
+      descriptionStrings: [],
       // do we want to use current ingredient formats ? Yes.
       currentIngredient: "",
       measurement: "",
@@ -57,7 +58,7 @@ class SuggestKitchenUtensilForm extends Component {
 
       // we need to update how we create image paths
       productImg_path: "",
-      new_product_size: [],
+      new_product_description: [],
       suggested_stores: [],
       currProductIndexInDBsProductsList: -1,
       // currStoreIndexIfExistsInProductsList: -1,
@@ -142,97 +143,82 @@ class SuggestKitchenUtensilForm extends Component {
     //     console.log(err);
     //   });
     this.categories = this.categories;
-    if (typeof window !== 'undefined') {
 
-      let doc = document.querySelector('#formutensil')
+    let doc = document.querySelector('#formutensil')
+    if (doc) {
+      setInterval(() => {
+        localStorage.setItem('suggestUtensilForm', JSON.stringify(this.state))
 
-      if (doc) {
-        doc.addEventListener('keyup', (e) => {
-          localStorage.setItem('suggestUtensilForm', JSON.stringify(this.state))
-        })
+      }, 100)
+    }
 
-        doc.addEventListener('click', (e) => {
-          localStorage.setItem('suggestUtensilForm', JSON.stringify(this.state))
-        }, false)
-      }
+    if (localStorage.getItem('suggestUtensilForm')) {
+      let {
+        utensilName,
+        intro,
 
-      if (localStorage.getItem('suggestUtensilForm')) {
-        let {
-          utensilName,
-          utensilImage,
-          utensilImageName,
-          utensilImageData,
-          utensilImagesData,
-          intro,
+        sizeNames,
+        // do we need product group list AND strings ?
+        descriptionGroupList,
+        // store product names of inputted strings to compare with db products
+        descriptionStrings,
+        // do we want to use current ingredient formats ? Yes.
+        currentIngredient,
+        measurement,
+        quantity,
+        currentProductImgSrc,
+        currentProductDisplayIndex,
 
-          sizeNames,
-          // do we need product group list AND strings ?
-          sizeGroupList,
-          // store product names of inputted strings to compare with db products
-          sizeStrings,
-          // do we want to use current ingredient formats ? Yes.
-          currentIngredient,
-          measurement,
-          quantity,
-          currentProductImgSrc,
-          currentProductDisplayIndex,
+        currentStore,
 
-          currentStore,
+        // we need to update how we create image paths
+        productImg_path,
+        new_product_ingredients,
+        suggested_stores,
+        currProductIndexInDBsProductsList,
+        // currStoreIndexIfExistsInProductsList,
+        suggestedUtensils,
 
-          // we need to update how we create image paths
-          productImg_path,
-          new_product_ingredients,
-          suggested_stores,
-          currProductIndexInDBsProductsList,
-          // currStoreIndexIfExistsInProductsList,
-          suggestedUtensils,
+        suggestedCategories,
 
-          suggestedCategories,
+        booleanOfDisplayOfDialogBoxConfirmation
+      } = JSON.parse(localStorage.getItem('suggestUtensilForm'))
 
-          booleanOfDisplayOfDialogBoxConfirmation
-        } = JSON.parse(localStorage.getItem('suggestUtensilForm'))
 
-        if (utensilImageData !== '') {
-          var image = document.getElementById("UtensilsMainImages");
-          image.style.display = "block";
-          image.src = utensilImageData;
-        }
+      this.setState({
+        utensilName,
+        utensilImage: '',
+        utensilImageName: '',
+        utensilImageData: '',
+        utensilImagesData: [],
+        intro,
 
-        this.setState({
-          utensilName,
-          utensilImage,
-          utensilImageName,
-          utensilImageData,
-          utensilImagesData,
-          intro,
+        sizeNames,
+        // do we need product group list AND strings ?
+        descriptionGroupList,
+        // store product names of inputted strings to compare with db products
+        descriptionStrings,
+        // do we want to use current ingredient formats ? Yes.
+        currentIngredient,
+        measurement,
+        quantity,
+        currentProductImgSrc,
+        currentProductDisplayIndex,
 
-          sizeNames,
-          // do we need product group list AND strings ?
-          sizeGroupList,
-          // store product names of inputted strings to compare with db products
-          sizeStrings,
-          // do we want to use current ingredient formats ? Yes.
-          currentIngredient,
-          measurement,
-          quantity,
-          currentProductImgSrc,
-          currentProductDisplayIndex,
+        currentStore,
 
-          currentStore,
+        // we need to update how we create image paths
+        productImg_path,
+        new_product_ingredients,
+        suggested_stores,
+        currProductIndexInDBsProductsList,
+        // currStoreIndexIfExistsInProductsList,
+        suggestedUtensils,
 
-          // we need to update how we create image paths
-          productImg_path,
-          new_product_ingredients,
-          suggested_stores,
-          currProductIndexInDBsProductsList,
-          // currStoreIndexIfExistsInProductsList,
-          suggestedUtensils,
+        suggestedCategories,
 
-          suggestedCategories,
-
-          booleanOfDisplayOfDialogBoxConfirmation,
-        })
-      }
+        booleanOfDisplayOfDialogBoxConfirmation,
+      })
     }
   }
 
@@ -331,6 +317,15 @@ class SuggestKitchenUtensilForm extends Component {
     })
   }
 
+  handleDeleteCategoryChip(chip) {
+    var array = [...this.state.suggestedCategories]; // make a separate copy of the array
+    var index = array.indexOf(chip);
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ suggestedCategories: array });
+    }
+  }
+
   handleMeasurement = (event, val) => {
     // if (event.target.value) {
     //   this.setState({ measurement: event.target.value });
@@ -365,66 +360,60 @@ class SuggestKitchenUtensilForm extends Component {
     }
   }
 
-  addSize = (event) => {
-    console.log("COMES IN addIngredientToMeal");
+  addDescription = (event) => {
     event.preventDefault();
-    var properSizeStringSyntax;
-    // var ingredientValue = document.getElementById("currentIngredient").value;
+    var properDescriptionStringSyntax;
+    var descriptionValue = document.getElementById("descriptionName").value;
     var quantityValue = document.getElementById("quantity").value;
     // best to get the measurement from the state
     // perhaps becuse inner html is defined before state is updated
     // var measurementValue = this.state.currentIngredientMeasurement;
-    var sizeValue = document.getElementById("measurement").value;
+    var measurementValue = document.getElementById("measurement").value;
 
 
-    if (sizeValue === "") { window.alert("Enter measurement"); return; }
+    if (descriptionValue === "") { window.alert("Enter decription name"); return; }
+    if (quantityValue === "") { window.alert("Enter quantity"); return; }
     // update ingredient string syntax for no quantity or no measurement.
     if (quantityValue === "") {
-      properSizeStringSyntax = '';
-    } else if (sizeValue === "" && quantityValue !== "") {
+      properDescriptionStringSyntax = descriptionValue;
+    } else if (measurementValue === "" && quantityValue !== "") {
       // MAKE sure we are using the right and tested variables to display the right type of string at all times.
-      properSizeStringSyntax = "" + quantityValue;
+      properDescriptionStringSyntax = "" + quantityValue + "-" + descriptionValue;
     } else {
-      properSizeStringSyntax =
-        "" + quantityValue + " " + sizeValue;
+      properDescriptionStringSyntax =
+        "" + quantityValue + " " + measurementValue + "-" + descriptionValue;
     }
-    console.log(properSizeStringSyntax);
+    console.log(properDescriptionStringSyntax);
 
     // This is the Object for an Ingredient of a Known Product
-    var sizeObject = {
+    var descriptionObject = {
 
       // display: this.state.currProductIndexInDBsProductsList,
       // availableLocations: [],
-      measurement: sizeValue,
-      properSizeStringSyntax: properSizeStringSyntax
+      measurement: measurementValue,
+      properDescriptionStringSyntax: properDescriptionStringSyntax
     };
 
-    console.log("current state of product index at Add Ingredient To Meal is : \n" + this.state.currProductIndexInDBsProductsList);
-
-    console.log("ADDs to new_product_ingredients");
-
-    console.log("creating new product object");
-
     // edit product details for new product object
-    // sizeObject.productImgFile = null;
-    sizeObject.productIndex = 0;
-    // sizeObject.calories = 0;
+    // descriptionObject.productImgFile = null;
+    descriptionObject.productIndex = 0;
+    // descriptionObject.calories = 0;
 
     // append String to new Products array if not
     // var tmpNewProducts = [...this.state.new_product_ingredients];
     // var tmpNewProducts = this.state.new_product_ingredients;
-    // var updatedProductList = [tmpNewProducts, sizeObject];
+    // var updatedProductList = [tmpNewProducts, descriptionObject];
 
     // this.setState({ new_product_ingredients: updatedProductList })
-    this.setState({ new_product_size: [sizeObject] });
+    this.setState({ new_product_description: [...this.state.new_product_description, descriptionObject] });
 
-    this.setState({ sizeGroupList: [sizeObject] });
+    this.setState({ descriptionGroupList: [...this.state.descriptionGroupList, descriptionObject] });
     // after adding product to ingredient group list
     // reset current product img src and path to null, and same for current ingredient inputs
     // this.setState({ currentProductImgSrc: null, productImg_path: "" });
     this.setState({ quantity: '', measurement: "null" });
-    this.setState({ measurement: "" });
-    this.handleAddSizeChip(properSizeStringSyntax);
+    this.setState({ measurement: "", descriptionName: "" });
+    this.handleAddDescriptionChip(properDescriptionStringSyntax);
 
     //  Resetting inner html directly to clear ingredient inputs without changing state
     // document.getElementById("currentIngredient").value = 'NewPs';
@@ -433,29 +422,29 @@ class SuggestKitchenUtensilForm extends Component {
 
   }
 
-  handleAddSizeChip(chip) {
+  handleAddDescriptionChip(chip) {
     this.setState({
-      sizeStrings: [chip],
+      descriptionStrings: [...this.state.descriptionStrings, chip],
     });
   }
 
   handleDeleteSizeChip(chip) {
-    var array = this.state.sizeStrings; // make a separate copy of the array
-    var removeFromGroup = this.state.sizeGroupList;
+    var array = this.state.descriptionStrings; // make a separate copy of the array
+    var removeFromGroup = this.state.descriptionGroupList;
 
     var index = array.indexOf(chip);
     if (index !== -1) {
       array.splice(index, 1);
       removeFromGroup.splice(index, 1);
 
-      this.setState({ sizeStrings: array, sizeGroupList: removeFromGroup });
+      this.setState({ descriptionStrings: array, descriptionGroupList: removeFromGroup });
     }
   }
 
   closeModal() {
     this.setState({ openModal: false });
-    // this.props.openModal = false;
-    // this.props.func_removeutensilFlag();
+    // this.openModal = false;
+    // this.func_removeutensilFlag();
   }
 
   openMealDetailsModal = (index) => {
@@ -490,7 +479,7 @@ class SuggestKitchenUtensilForm extends Component {
     //   palette: { primary: green },
     // });
 
-    const { sizeStrings } = this.state;
+    const { descriptionStrings } = this.state;
 
     return (
       <div className="suggestion_section_2" >
@@ -542,9 +531,15 @@ class SuggestKitchenUtensilForm extends Component {
               <TextField value={this.state.intro} multiline id="intro" fullWidth onChange={this.onTextFieldChange} variant="outlined" />
             </div>
           </div>
-          <h3>Utensil Size</h3>
+          <h3>Utensil Descriptions</h3>
           <div className="suggestion_form">
-
+            <div className="suggestion_form_group">
+              <label htmlFor="descriptionName" className="suggestion_form_label">
+                Description Name
+              </label>
+              <TextField fullWidth id="descriptionName" onChange={this.onTextFieldChange}
+                variant="outlined" value={this.state.descriptionName} />
+            </div>
             <div className="suggestion_form_2_col">
               <div className="suggestion_form_2_col_2">
                 <div className="suggestion_form_group">
@@ -574,12 +569,12 @@ class SuggestKitchenUtensilForm extends Component {
                 </div>
               </div>
 
-              <Button variant="contained" disableRipple onClick={this.addSize} className='ingredient_button' style={{ width: "max-content" }} > Add Size</Button>
+              <Button variant="contained" disableRipple onClick={this.addDescription} className='ingredient_button' style={{ width: "max-content" }} > Add Size</Button>
             </div>
 
             <Stack direction="row" spacing={1} className="stack">
               {
-                sizeStrings.map((data, index) => (
+                descriptionStrings.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
@@ -653,11 +648,11 @@ class SuggestKitchenUtensilForm extends Component {
               </Row> */}
           <u >View privacy policy</u>
           <div id="ProductAdditionalDataDisplayed" >
-            <Popup1 openModal={this.state.openModal} closeModal={this.closeModal}
+            <Popup1 popup='kitchen' openModal={this.state.openModal} closeModal={this.closeModal}
               name={this.state.utensilName} description={this.state.intro}
               imageData={this.state.utensilImageData} image={this.state.utensilImage}
               imagesData={this.state.utensilImagesData} categories={this.state.suggestedCategories}
-              sizesList={this.state.sizeStrings}
+              descriptionsList={this.state.descriptionStrings}
             />
             {/* <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
                  mealName={this.state.mealName} mealImage={this.state.mealImage}
