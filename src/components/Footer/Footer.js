@@ -1,11 +1,14 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
+import styles from './Footer.module.css'
 
 
 const Footer = () => {
   return (
-    <Container className="footer-wraper" >
+    <Container className={styles.footerWraper} >
+      {/* <Container> */}
+
       <Row style={{ width: "100%" }}>
         <hr
           className="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto"
@@ -65,7 +68,7 @@ const Footer = () => {
             <a href="https://www.awokorpenterprises.com"> ChopChowSD </a></div>
         </Col>
       </Row>
-    </Container>
+    </Container >
   );
 };
 

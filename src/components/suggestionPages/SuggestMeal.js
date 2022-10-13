@@ -14,7 +14,6 @@ import "./suggestion.module.css";
 import Popup2 from "../popups/popup2";
 // import ProductsPageModal from "./ProductsPageModal";
 var FormData = require('form-data');
-
 // var fs = require('fs');
 
 class SuggestMealForm extends Component {

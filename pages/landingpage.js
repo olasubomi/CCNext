@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import Banner from "./Banners/banner"
 import Banner2 from "../src/components/Banners/banner2"
 // import HomePageButtons from "./HomePage/HomePageButtons"
-import '../src/components/HomePage/home.module.css';
+import styles from '../src/components/HomePage/home.module.css';
 import EastIcon from '@mui/icons-material/East';
 import background from "../public/assets/homepage/grocery_bag.jpg";
 import foodImage from "../public/assets/homepage/food.png";
@@ -88,191 +88,192 @@ class LandingPage extends Component {
         for (i = 0; i < dots.length; i++) {
             dots[i].className = dots[i].className.replace(" active", "");
         }
-        slides[slideIndex - 1].style.display = "grid";
-        dots[slideIndex - 1].className += " active";
+        // slides[slideIndex - 1].style.display = "grid";
+        // dots[slideIndex - 1].className += " active";
     }
 
     render() {
 
         return (
-            <div className="home_container">
+            <div className={styles.home_container}>
                 {/* <Banner/> */}
                 {/* Slideshow container */}
-                <div className="home_section_1">
-                    <div className="slideshow_container">
+                <div className={styles.home_section_1}>
+                    <div className={styles.slideshow_container}>
 
                         {/* Full-width images with number and caption text */}
-                        <div className="mySlides">
-                            <div className="slide_wrapper"></div>
-                            <div className="slide_text">
+                        <div className={styles.mySlides}>
+                            <div className={styles.slide_wrapper}></div>
+                            <div className={styles.slide_text}>
                                 <h2>Get the best Ingredients for your meal</h2>
-                                <a href="/" className="slide_button">
+                                <a href="/" className={styles.slide_button}>
                                     Sign Up Now
                                 </a>
                             </div>
-                            {/* <img src={banner1} className="slide_image" /> */}
-                            <div className="slide_image" style={{
-                                backgroundImage: `url(${banner1})`,
-                            }}></div>
+                            {/* <img src={banner1} className={styles.slide_image} /> */}
+                            <div className={styles.slide_image}
+                                style={{
+                                    backgroundImage: `url(${banner1})`,
+                                }}>
+                            </div>
                         </div>
 
-                        <div className="mySlides">
-                            <div className="slide_wrapper"></div>
-                            <div className="slide_text">
+                        <div className={styles.mySlides}>
+                            <div className={styles.slide_wrapper}></div>
+                            <div className={styles.slide_text}>
                                 <h2>
                                     Well established
                                     Local and
                                     international
                                     food suppliers
                                 </h2>
-                                <a href="/" className="slide_button">
+                                <a href="/" className={styles.slide_button}>
                                     Learn More
                                 </a>
                             </div>
-                            {/* <img src={background} className="slide_image" /> */}
-                            <div className="slide_image" style={{
+                            <div className={styles.slide_image} style={{
                                 backgroundImage: `url(${background})`,
                             }}></div>
                         </div>
 
-                        <div className="mySlides">
-                            <div className="slide_wrapper"></div>
-                            <div className="slide_text">
+                        <div className={styles.mySlides}>
+                            <div className={styles.slide_wrapper}></div>
+                            <div className={styles.slide_text}>
                                 <h2>Enjoy hassle free cooking with CHOP CHOW</h2>
-                                <a href="/" className="slide_button">
+                                <a href="/" className={styles.slide_button}>
                                     Learn More
                                 </a>
                             </div>
-                            <div className="slide_image" style={{
+                            <div className={styles.slide_image} style={{
                                 backgroundImage: `url(${banner2})`,
                             }}></div>
-                            {/* <img src={banner2} className="slide_image" /> */}
+                            {/* <img src={banner2} className={styles.slide_image} /> */}
                         </div>
 
                         {/* Next and previous buttons */}
-                        <div className="prev" onClick={() => this.plusSlides(-1)}>
-                            <KeyboardArrowLeftIcon className="next_icon" />
+                        <div className={styles.prev} onClick={() => this.plusSlides(-1)}>
+                            <KeyboardArrowLeftIcon className={styles.next_icon} />
                         </div>
-                        <div className="next" onClick={() => this.plusSlides(1)}>
-                            <KeyboardArrowRightIcon className="next_icon" />
+                        <div className={styles.next} onClick={() => this.plusSlides(1)}>
+                            <KeyboardArrowRightIcon className={styles.next_icon} />
                         </div>
                         {/* The dots/circles */}
 
                     </div>
-                    <div className="dots">
-                        <span className="dot" onClick={() => this.currentSlide(1)}></span>
-                        <span className="dot" onClick={() => this.currentSlide(2)}></span>
-                        <span className="dot" onClick={() => this.currentSlide(3)}></span>
+                    <div className={styles.dots}>
+                        <span className={styles.dot} onClick={() => this.currentSlide(1)}></span>
+                        <span className={styles.dot} onClick={() => this.currentSlide(2)}></span>
+                        <span className={styles.dot} onClick={() => this.currentSlide(3)}></span>
                     </div>
                 </div>
                 {/* <HomePageButtons/> */}
-                <div className="home_section_2">
-                    <div className="features">
-                        <div className="lines">
-                            <div className="line"></div>
-                            <div className="line"></div>
+                <div className={styles.home_section_2}>
+                    <div className={styles.features}>
+                        <div className={styles.lines}>
+                            <div className={styles.line}></div>
+                            <div className={styles.line}></div>
                         </div>
-                        <div className="feature">
-                            <div className="feature_num">
+                        <div className={styles.feature}>
+                            <div className={styles.feature_num}>
                                 <p>1</p>
                             </div>
-                            <img src={shoppingImage} alt="feature" className="feature_img" />
-                            <h2 className="feature_name">All-in-One Shopping</h2>
-                            <p className="feature_desc">
+                            <img src={shoppingImage} alt="feature" className={styles.feature_img} />
+                            <h2 className={styles.feature_name}>All-in-One Shopping</h2>
+                            <p className={styles.feature_desc}>
                                 So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
                             </p>
                         </div>
-                        <div className="feature">
-                            <div className="feature_num">
+                        <div className={styles.feature}>
+                            <div className={styles.feature_num}>
                                 <p>2</p>
                             </div>
-                            <img src={supplierImage} alt="feature" className="feature_img" />
-                            <h2 className="feature_name">Fast Delivery</h2>
-                            <p className="feature_desc">
+                            <img src={supplierImage} alt="feature" className={styles.feature_img} />
+                            <h2 className={styles.feature_name}>Fast Delivery</h2>
+                            <p className={styles.feature_desc}>
                                 So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
                             </p>
 
                         </div>
-                        <div className="feature">
-                            <div className="feature_num">
+                        <div className={styles.feature}>
+                            <div className={styles.feature_num}>
                                 <p>3</p>
                             </div>
-                            <img src={chefImage} alt="feature" className="feature_img" />
-                            <h2 className="feature_name">Earn as a Chef</h2>
-                            <p className="feature_desc">
+                            <img src={chefImage} alt="feature" className={styles.feature_img} />
+                            <h2 className={styles.feature_name}>Earn as a Chef</h2>
+                            <p className={styles.feature_desc}>
                                 So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
                             </p>
                         </div>
                     </div>
                 </div>
-                <div className="home_section_3">
-                    <div className="home_section_3_row">
-                        <div className="home_section_3_row_1">
+                <div className={styles.home_section_3}>
+                    <div className={styles.home_section_3_row}>
+                        <div className={styles.home_section_3_row_1}>
                             <img
                                 src={shopImage}
                                 alt="home"
-                                className="home_section_3_row_1"
+                                className={styles.home_section_3_row_1}
                             />
                         </div>
-                        <div className="home_section_3_row_2">
-                            <h3 className="home_section_3_row_2_h3">
+                        <div className={styles.home_section_3_row_2}>
+                            <h3 className={styles.home_section_3_row_2_h3}>
                                 WELL-ESTABLISHED LOCAL AND INTERNATIONAL FOOD SUPPLIERS
                             </h3>
-                            <p className="home_section_3_row_2_p">
+                            <p className={styles.home_section_3_row_2_p}>
                                 You are responsible for operations, service, or customer support and face challenges
                                 trying to communicate complex procedures to a global market effectively.
                                 Traditional methods don&apos;t work and are laborious, costly and error prone.
                             </p>
-                            <div className="home_section_3_row_2_link">
+                            <div className={styles.home_section_3_row_2_link}>
                                 <p>Learn More</p>
-                                <EastIcon className="home_section_3_row_2_link_icon" />
+                                <EastIcon className={styles.home_section_3_row_2_link_icon} />
                             </div>
                         </div>
                     </div>
-                    <div className="home_section_3_row">
-                        <div className="home_section_3_row_1 row_reverse">
+                    <div className={styles.home_section_3_row}>
+                        <div className={`${styles.home_section_3_row_1} ${styles.row_reverse}`}>
                             <img
                                 src={utensilImage}
                                 alt="about us"
-                                className="home_section_3_row_1"
+                                className={styles.home_section_3_row_1}
                             />
                         </div>
-                        <div className="home_section_3_row_2">
-                            <h3 className="home_section_3_row_2_h3">
+                        <div className={styles.home_section_3_row_2}>
+                            <h3 className={styles.home_section_3_row_2_h3}>
                                 GET PROFESSIONAL RECOMMENDATION OF RECIPIES
                             </h3>
-                            <p className="home_section_3_row_2_p">
+                            <p className={styles.home_section_3_row_2_p}>
                                 You are responsible for operations, service, or customer support and face challenges
                                 trying to communicate complex procedures to a global market effectively.
                                 Traditional methods don&apos;t work and are laborious, costly and error prone.
                             </p>
-                            <div className="home_section_3_row_2_link">
+                            <div className={styles.home_section_3_row_2_link}>
                                 <p>Shop Now</p>
-                                <EastIcon className="home_section_3_row_2_link_icon" />
+                                <EastIcon className={styles.home_section_3_row_2_link_icon} />
                             </div>
                         </div>
                     </div>
 
-                    <div className="home_section_3_row">
-                        <div className="home_section_3_row_1">
+                    <div className={styles.home_section_3_row}>
+                        <div className={styles.home_section_3_row_1}>
                             <img
                                 src={foodImage}
                                 alt="about us"
-                                className="home_section_3_row_1"
+                                className={styles.home_section_3_row_1}
                             />
                         </div>
-                        <div className="home_section_3_row_2">
-                            <h3 className="home_section_3_row_2_h3">
+                        <div className={styles.home_section_3_row_2}>
+                            <h3 className={styles.home_section_3_row_2_h3}>
                                 HOME COOKED INTERNATIONAL MEAL
                             </h3>
-                            <p className="home_section_3_row_2_p">
+                            <p className={styles.home_section_3_row_2_p}>
                                 You are responsible for operations, service, or customer support and face challenges
                                 trying to communicate complex procedures to a global market effectively.
                                 Traditional methods don&apos;t work and are laborious, costly and error prone.
                             </p>
-                            <div className="home_section_3_row_2_link">
+                            <div className={styles.home_section_3_row_2_link}>
                                 <p>See Collections</p>
-                                <EastIcon className="home_section_3_row_2_link_icon" />
+                                <EastIcon className={styles.home_section_3_row_2_link_icon} />
                             </div>
                         </div>
                     </div>

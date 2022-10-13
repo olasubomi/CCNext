@@ -1,7 +1,7 @@
 // import App from 'next/app'
 import '../src/App.css'
-import '../src/components/Footer/Footer.css'
-import '../src/components/Header/header.css'
+// import '../src/components/Footer/Footer.css'
+// import '../src/components/Header/header.css'
 
 function MyApp({ Component, pageProps }) {
     return <Component {...pageProps} />

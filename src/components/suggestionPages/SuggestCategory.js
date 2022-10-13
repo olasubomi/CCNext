@@ -7,7 +7,7 @@ import axios from '../../util/Api';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
-import "./suggestion.module.css";
+// import "./suggestion.module.css";
 
 
 class SuggestCategoryForm extends Component {
