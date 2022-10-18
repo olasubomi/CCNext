@@ -4,6 +4,7 @@ import Banner2 from "../src/components/Banners/banner2"
 // import HomePageButtons from "./HomePage/HomePageButtons"
 import styles from '../src/components/HomePage/home.module.css';
 import EastIcon from '@mui/icons-material/East';
+
 import background from "../public/assets/homepage/grocery_bag.jpg";
 import foodImage from "../public/assets/homepage/food.png";
 import utensilImage from "../public/assets/homepage/utensil.png";
@@ -13,8 +14,11 @@ import banner2 from "../public/assets/homepage/banner-2.png";
 import supplierImage from "../public/assets/homepage/supplier.png";
 import shoppingImage from "../public/assets/homepage/shopping.png";
 import chefImage from "../public/assets/homepage/chef.png";
+
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import Image from 'next/image';
+
 
 class LandingPage extends Component {
 
@@ -110,12 +114,12 @@ class LandingPage extends Component {
                                     Sign Up Now
                                 </a>
                             </div>
-                            {/* <img src={banner1} className={styles.slide_image} /> */}
-                            <div className={styles.slide_image}
+                            <Image src={banner1} className={styles.slide_image} />
+                            {/* <div className={styles.slide_image}
                                 style={{
                                     backgroundImage: `url(${banner1})`,
                                 }}>
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className={styles.mySlides}>
@@ -131,9 +135,11 @@ class LandingPage extends Component {
                                     Learn More
                                 </a>
                             </div>
-                            <div className={styles.slide_image} style={{
+                            {/* <div className={styles.slide_image} style={{
                                 backgroundImage: `url(${background})`,
-                            }}></div>
+                            }}></div> */}
+                            <Image src={background} className={styles.slide_image} />
+
                         </div>
 
                         <div className={styles.mySlides}>
@@ -144,10 +150,10 @@ class LandingPage extends Component {
                                     Learn More
                                 </a>
                             </div>
-                            <div className={styles.slide_image} style={{
+                            {/* <div className={styles.slide_image} style={{
                                 backgroundImage: `url(${banner2})`,
-                            }}></div>
-                            {/* <img src={banner2} className={styles.slide_image} /> */}
+                            }}></div> */}
+                            <Image src={banner2} className={styles.slide_image} />
                         </div>
 
                         {/* Next and previous buttons */}
@@ -177,7 +183,8 @@ class LandingPage extends Component {
                             <div className={styles.feature_num}>
                                 <p>1</p>
                             </div>
-                            <img src={shoppingImage} alt="feature" className={styles.feature_img} />
+
+                            <Image src={shoppingImage} alt="feature" className={styles.feature_img} />
                             <h2 className={styles.feature_name}>All-in-One Shopping</h2>
                             <p className={styles.feature_desc}>
                                 So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
@@ -187,7 +194,7 @@ class LandingPage extends Component {
                             <div className={styles.feature_num}>
                                 <p>2</p>
                             </div>
-                            <img src={supplierImage} alt="feature" className={styles.feature_img} />
+                            <Image src={supplierImage} alt="feature" className={styles.feature_img} />
                             <h2 className={styles.feature_name}>Fast Delivery</h2>
                             <p className={styles.feature_desc}>
                                 So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
@@ -198,7 +205,7 @@ class LandingPage extends Component {
                             <div className={styles.feature_num}>
                                 <p>3</p>
                             </div>
-                            <img src={chefImage} alt="feature" className={styles.feature_img} />
+                            <Image src={chefImage} alt="feature" className={styles.feature_img} />
                             <h2 className={styles.feature_name}>Earn as a Chef</h2>
                             <p className={styles.feature_desc}>
                                 So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
@@ -209,7 +216,7 @@ class LandingPage extends Component {
                 <div className={styles.home_section_3}>
                     <div className={styles.home_section_3_row}>
                         <div className={styles.home_section_3_row_1}>
-                            <img
+                            <Image
                                 src={shopImage}
                                 alt="home"
                                 className={styles.home_section_3_row_1}
@@ -232,7 +239,7 @@ class LandingPage extends Component {
                     </div>
                     <div className={styles.home_section_3_row}>
                         <div className={`${styles.home_section_3_row_1} ${styles.row_reverse}`}>
-                            <img
+                            <Image
                                 src={utensilImage}
                                 alt="about us"
                                 className={styles.home_section_3_row_1}
@@ -256,7 +263,7 @@ class LandingPage extends Component {
 
                     <div className={styles.home_section_3_row}>
                         <div className={styles.home_section_3_row_1}>
-                            <img
+                            <Image
                                 src={foodImage}
                                 alt="about us"
                                 className={styles.home_section_3_row_1}

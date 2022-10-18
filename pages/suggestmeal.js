@@ -4,7 +4,7 @@ import axios from '../src/util/Api';
 import WestIcon from '@mui/icons-material/West';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import "../src/components/suggestionPages/suggestion.module.css";
+import styles from "../src/components/suggestionPages/suggestion.module.css";
 import Link from "next/link";
 import SuggestMealForm from "../src/components/suggestionPages/SuggestMeal";
 import SuggestProductForm from "../src/components/suggestionPages/SuggestProduct";
@@ -170,26 +170,26 @@ class SuggestMeal extends Component {
         const { suggestOption, suggestionType } = this.state;
 
         return (
-            <div className="suggestion_container">
-                <div className="suggestion_sections">
-                    <div className="suggestion_section_1">
-                        <div className="suggestion_section_1_col_1">
-                            <ul className="suggestion_header_pages">
-                                <WestIcon className="suggestion_header_page_arrow" />
+            <div className={styles.suggestion_container}>
+                <div className={styles.suggestion_sections}>
+                    <div className={styles.suggestion_section_1}>
+                        <div className={styles.suggestion_section_1_col_1}>
+                            <ul className={styles.suggestion_header_pages}>
+                                <WestIcon className={styles.suggestion_header_page_arrow} />
                                 <li>
                                     <Link href="/">back</Link>
                                 </li>
                             </ul>
                         </div>
-                        <div className="suggestion_section_1_col_2">
-                            <p className="suggestion_section_1_col_2_p"> Choose type</p>
-                            <div className="select_container">
-                                <div onClick={this.suggestOption} className="select_box">
+                        <div className={styles.suggestion_section_1_col_2}>
+                            <p className={styles.suggestion_section_1_col_2_p}> Choose type</p>
+                            <div className={styles.select_container}>
+                                <div onClick={this.suggestOption} className={styles.select_box}>
                                     <p>{suggestionType}</p>
-                                    <ArrowDropDownIcon className="select_box_icon" />
+                                    <ArrowDropDownIcon className={styles.select_box_icon} />
                                 </div>
                                 {suggestOption &&
-                                    <div className="select_options">
+                                    <div className={styles.select_options}>
                                         <p onClick={() => this.handleSuggestionType('Meal')}>Meals</p>
                                         <p onClick={() => this.handleSuggestionType('Product')}>Products</p>
                                         <p onClick={() => this.handleSuggestionType('Kitchen Utensil')}>Kitchen Utensils</p>
