@@ -10,7 +10,7 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import AddIcon from '@mui/icons-material/Add';
 // import MealPageModal from "../mealsPage/MealPageModal";
-import "./suggestion.module.css";
+import styles from "./suggestion.module.css";
 import Popup1 from "../popups/popup1";
 
 class SuggestProductForm extends Component {
@@ -683,11 +683,11 @@ class SuggestProductForm extends Component {
     const { ingredientStrings, sizeStrings } = this.state;
 
     return (
-      <div className="suggestion_section_2" >
-        <form id="formproduct" className="suggestion_forms" noValidate autoComplete="off" encType="multipart/form-data" method="post" >
-          <div className="suggestion_form">
-            <div className="suggestion_form_group">
-              <label htmlFor="productName" className="suggestion_form_label">
+      <div className={styles.suggestion_section_2}>
+        <form id="formproduct" className={styles.suggestion_forms} noValidate autoComplete="off" encType="multipart/form-data" method="post" >
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="productName" className={styles.suggestion_form_label}>
                 Product Name
               </label>
               {/* <Autocomplete
@@ -704,24 +704,25 @@ class SuggestProductForm extends Component {
             </div>
 
             <h3>Upload Product Images <em>(Up to 4)</em></h3>
-            {this.state.productImagesData.length < 3 &&
-              <div className="suggestion_form_image">
-                <div className="suggestion_form_image_col_1">
-                  <div onClick={() => this.uploadProductImage()} className="suggestion_form_image_icon_con">
-                    <AddIcon className="suggestion_form_image_icon" />
-                  </div>
-                </div>
-                <div className="suggestion_form_image_col_2">
+            {
+              this.state.productImagesData.length < 3 &&
+              <div className={styles.suggestion_form_image}>
+                <div className={styles.suggestion_form_image_col_1}>
+                  <div onClick={() => this.uploadProductImage()} className={styles.suggestion_form_image_icon_con}>
+                    <AddIcon className={styles.suggestion_form_image_icon} />
+                  </div >
+                </div >
+                <div className={styles.suggestion_form_image_col_2}>
                   <p>Upload picture with : Jpeg or Png format and not more than 500kb</p>
                 </div>
               </div>}
 
             <Row>
               <Col md={12} style={{ marginTop: "20px" }}>
-                <p><img id="ProductsMainImages" width="100%" alt="main_product_Image" style={{ display: "none" }} />
-                </p>
-              </Col>
-            </Row>
+                < p > <img id="ProductsMainImages" width="100%" alt="main_product_Image" style={{ display: "none" }} />
+                </p >
+              </Col >
+            </Row >
 
             {
               this.state.productImagesData.map((data, index) =>
@@ -734,32 +735,33 @@ class SuggestProductForm extends Component {
               )
             }
 
-            <h3>Product Description</h3>
-            <div className="suggestion_form_group">
-              <label htmlFor="productDescription" className="suggestion_form_label">
-                Intro (150 words)
-              </label>
+            < h3 > Product Description</h3 >
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="productDescription" className={styles.suggestion_form_label
+              }>
+                Intro(150 words)
+              </label >
               <TextField value={this.state.productDescription} multiline id="productDescription" fullWidth onChange={this.onTextFieldChange} variant="outlined" />
-            </div>
-          </div>
+            </div >
+          </div >
 
           <h3>Product Size</h3>
-          <div className="suggestion_form">
-            <div className="suggestion_form_2_col">
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_2_col}>
 
-              <div className="suggestion_form_2_col_2">
-                <div className="suggestion_form_group">
-                  <label htmlFor="sizeQuantity" className="suggestion_form_label">
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="sizeQuantity" className={styles.suggestion_form_label}>
                     Quantity
                   </label>
                   <TextField fullWidth id="sizeQuantity" type="number" onChange={this.onTextFieldChange}
                     variant="outlined" placeholder="1.." value={this.state.sizeQuantity} />
                 </div>
-              </div>
+              </div >
 
-              <div className="suggestion_form_2_col_1">
-                <div className="suggestion_form_group">
-                  <label htmlFor="sizeMeasurement" className="suggestion_form_label">
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="sizeMeasurement" className={styles.suggestion_form_label}>
                     Measurement
                   </label>
                   <Autocomplete
@@ -774,14 +776,14 @@ class SuggestProductForm extends Component {
                   />
                 </div>
 
-              </div>
+              </div >
 
-              <Button variant="contained" disableRipple onClick={this.addSize} className='ingredient_button' style={{ width: "max-content" }} > Add Size</Button>
-            </div>
+              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
+            </div >
             {/* // show all ingredients in two column table format */}
             {/* Show all Products in display format as expected in Meal Page*/}
 
-            {/* <Row className="mb-2">
+            {/* <Row className="mb-2}>
                   <Col md={12}>
                     <ChipInput
                       label="IngredientsList"
@@ -795,13 +797,13 @@ class SuggestProductForm extends Component {
                     />
                   </Col>
                 </Row> */}
-            <Stack direction="row" spacing={1} className="stack">
+            <Stack direction="row" spacing={1} className={styles.stack}>
               {
                 sizeStrings.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
-                    className='chip'
+                    className={styles.chip}
                     onClick={() => this.handleDeleteSizeChip(data)}
                     onDelete={() => this.handleDeleteSizeChip(data)}
                   />
@@ -812,12 +814,12 @@ class SuggestProductForm extends Component {
           </div>
 
           <h3>Product Categories</h3>
-          <div className="suggestion_form">
-            <div className="suggestion_form_group">
-              <label htmlFor="tags-outlined" className="suggestion_form_label">
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="tags-outlined" className={styles.suggestion_form_label}>
                 Suggest category for this product
               </label>
-              <div className="input_button">
+              <div className={styles.input_button}>
                 <Autocomplete
                   multiple
                   id="tags-outlined"
@@ -839,29 +841,29 @@ class SuggestProductForm extends Component {
                       fullWidth
                     />)}
                 />
-                <Button variant="contained" disableRipple onClick={this.addCategory} className='ingredient_button' style={{ width: "max-content" }} > Add Category</Button>
-              </div>
+                < Button variant="contained" disableRipple onClick={this.addCategory} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Category</Button >
+              </div >
 
-            </div>
-            <Stack direction="row" spacing={1} className="stack">
+            </div >
+            <Stack direction="row" spacing={1} className={styles.stack}>
               {
                 this.state.suggestedCategories.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
-                    className='chip'
+                    className={styles.chip}
                     onClick={() => this.handleDeleteCategoryChip(data)}
                     onDelete={() => this.handleDeleteCategoryChip(data)}
                   />
                 ))
               }
             </Stack>
-          </div>
+          </div >
 
           <h3>Add Product Ingredients</h3>
-          <div className="suggestion_form">
-            <div className="suggestion_form_group">
-              <label htmlFor="currentIngredient" className="suggestion_form_label">
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="currentIngredient" className={styles.suggestion_form_label}>
                 Ingredient Name
               </label>
               <Autocomplete
@@ -877,22 +879,22 @@ class SuggestProductForm extends Component {
                 fullWidth
 
               />
-            </div>
-            <div className="suggestion_form_2_col">
+            </div >
+            <div className={styles.suggestion_form_2_col}>
 
-              <div className="suggestion_form_2_col_1">
-                <div className="suggestion_form_group">
-                  <label htmlFor="currentIngredientQuantity" className="suggestion_form_label">
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="currentIngredientQuantity" className={styles.suggestion_form_label}>
                     Quantity
                   </label>
                   <TextField fullWidth id="currentIngredientQuantity" type="number" onChange={this.onTextFieldChange}
                     variant="outlined" placeholder="1.." value={this.state.currentIngredientQuantity} />
-                </div>
-              </div>
+                </div >
+              </div >
 
-              <div className="suggestion_form_2_col_2">
-                <div className="suggestion_form_group">
-                  <label htmlFor="currentIngredientMeasurement" className="suggestion_form_label">
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="currentIngredientMeasurement" className={styles.suggestion_form_label}>
                     Measurements
                   </label>
                   <Autocomplete
@@ -906,14 +908,14 @@ class SuggestProductForm extends Component {
                       variant="outlined" type="text" />)}
                   />
                 </div>
-              </div>
+              </div >
 
-              <Button variant="contained" disableRipple onClick={this.addIngredientToMeal} className='ingredient_button' style={{ width: "max-content" }} > Add Ingredient</Button>
-            </div>
+              <Button variant="contained" disableRipple onClick={this.addIngredientToMeal} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Ingredient</Button>
+            </div >
             {/* // show all ingredients in two column table format */}
             {/* Show all Products in display format as expected in Meal Page*/}
 
-            {/* <Row className="mb-2">
+            {/* <Row className="mb-2}>
                   <Col md={12}>
                     <ChipInput
                       label="IngredientsList"
@@ -927,20 +929,20 @@ class SuggestProductForm extends Component {
                     />
                   </Col>
                 </Row> */}
-            <Stack direction="row" spacing={1} className="stack">
+            <Stack direction="row" spacing={1} className={styles.stack}>
               {
                 ingredientStrings.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
-                    className='chip'
+                    className={styles.chip}
                     onClick={() => this.handleDeleteIngredientChip(data)}
                     onDelete={() => this.handleDeleteIngredientChip(data)}
                   />
                 ))
               }
             </Stack>
-          </div>
+          </div >
 
 
           <u style={{ color: "#F47900" }} onClick={this.openMealDetailsModal}> Show Preview</u>
@@ -948,7 +950,7 @@ class SuggestProductForm extends Component {
           {/* <Row>
                 <Col md={12}> */}
           {/* <ThemeProvider theme={theme}> */}
-          <Button variant="contained" className='ingredient_button' style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Product</Button>
+          <Button variant="contained" className={styles.ingredient_button} style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Product</Button>
           {/* </ThemeProvider> */}
           {/* </Col>
                 
@@ -978,8 +980,8 @@ class SuggestProductForm extends Component {
                   tips={this.state.tips} mealImageData={this.state.mealImageData}
                  /> */}
           </div>
-        </form>
-      </div>
+        </form >
+      </div >
     );
   }
 }

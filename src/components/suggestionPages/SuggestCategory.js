@@ -7,7 +7,7 @@ import axios from '../../util/Api';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
-// import "./suggestion.module.css";
+import styles from "./suggestion.module.css";
 
 
 class SuggestCategoryForm extends Component {
@@ -157,16 +157,16 @@ class SuggestCategoryForm extends Component {
     // });
 
     return (
-      <div className="suggestion_section_2" >
-        <form className="suggestion_forms" noValidate autoComplete="off" encType="multipart/form-data" method="post" >
+      <div className={styles.suggestion_section_2} >
+        <form className={styles.suggestion_forms} noValidate autoComplete="off" encType="multipart/form-data" method="post" >
 
           <h3> Categories</h3>
-          <div className="suggestion_form">
-            <div className="suggestion_form_group">
-              <label htmlFor="tags-outlined" className="suggestion_form_label">
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="tags-outlined" className={styles.suggestion_form_label}>
                 Suggest category
               </label>
-              <div className="input_button">
+              <div className={styles.input_button}>
                 <Autocomplete
                   multiple
                   id="tags-outlined"
@@ -186,17 +186,17 @@ class SuggestCategoryForm extends Component {
                       fullWidth
                     />)}
                 />
-                <Button variant="contained" disableRipple onClick={this.addCategory} className='ingredient_button' style={{ width: "max-content" }} > Add Category</Button>
+                <Button variant="contained" disableRipple onClick={this.addCategory} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Category</Button>
               </div>
 
             </div>
-            <Stack direction="row" spacing={1} className="stack">
+            <Stack direction="row" spacing={1} className={styles.stack}>
               {
                 this.state.suggestedCategories.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
-                    className='chip'
+                    className={styles.chip}
                     onClick={() => this.handleDeleteCategoryChip(data)}
                     onDelete={() => this.handleDeleteCategoryChip(data)}
                   />
@@ -208,7 +208,7 @@ class SuggestCategoryForm extends Component {
           {/* <Row>
                 <Col md={12}> */}
           {/* <ThemeProvider theme={theme}> */}
-          <Button variant="contained" className='ingredient_button' style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Category</Button>
+          <Button variant="contained" className={styles.ingredient_button} style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Category</Button>
           {/* </ThemeProvider> */}
           {/* </Col>
                 

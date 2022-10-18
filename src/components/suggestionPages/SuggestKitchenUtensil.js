@@ -11,7 +11,7 @@ import Chip from '@mui/material/Chip';
 import AddIcon from '@mui/icons-material/Add';
 // import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 // import MealPageModal from "../mealsPage/MealPageModal";
-import "./suggestion.module.css";
+import styles from "./suggestion.module.css";
 import Popup1 from "../popups/popup1";
 
 
@@ -482,11 +482,11 @@ class SuggestKitchenUtensilForm extends Component {
     const { descriptionStrings } = this.state;
 
     return (
-      <div className="suggestion_section_2" >
-        <form id="formutensil" className="suggestion_forms" noValidate autoComplete="off" encType="multipart/form-data" method="post" >
-          <div className="suggestion_form">
-            <div className="suggestion_form_group">
-              <label htmlFor="utensilName" className="suggestion_form_label">
+      <div className={styles.suggestion_section_2}>
+        <form id="formutensil" className={styles.suggestion_forms} noValidate autoComplete="off" encType="multipart/form-data" method="post" >
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="utensilName" className={styles.suggestion_form_label}>
                 Utensil Name
               </label>
               <TextField value={this.state.utensilName} id="utensilName" fullWidth onChange={this.onInputChange} variant="outlined" required />
@@ -494,13 +494,13 @@ class SuggestKitchenUtensilForm extends Component {
 
             <h3>Upload Utensil Images <em>(Up to 4)</em></h3>
             {this.state.utensilImagesData.length < 3 &&
-              <div className="suggestion_form_image">
-                <div className="suggestion_form_image_col_1">
-                  <div onClick={() => this.uploadUtensilImage()} className="suggestion_form_image_icon_con">
-                    <AddIcon className="suggestion_form_image_icon" />
+              <div className={styles.suggestion_form_image}>
+                <div className={styles.suggestion_form_image_col_1}>
+                  <div onClick={() => this.uploadUtensilImage()} className={styles.suggestion_form_image_icon_con}>
+                    <AddIcon className={styles.suggestion_form_image_icon} />
                   </div>
                 </div>
-                <div className="suggestion_form_image_col_2">
+                <div className={styles.suggestion_form_image_col_2}>
                   <p>Upload picture with : Jpeg or Png format and not more than 500kb</p>
                 </div>
               </div>}
@@ -524,26 +524,26 @@ class SuggestKitchenUtensilForm extends Component {
             }
 
             <h3>Description</h3>
-            <div className="suggestion_form_group">
-              <label htmlFor="intro" className="suggestion_form_label">
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="intro" className={styles.suggestion_form_label}>
                 Intro (150 words)
               </label>
               <TextField value={this.state.intro} multiline id="intro" fullWidth onChange={this.onTextFieldChange} variant="outlined" />
             </div>
           </div>
           <h3>Utensil Descriptions</h3>
-          <div className="suggestion_form">
-            <div className="suggestion_form_group">
-              <label htmlFor="descriptionName" className="suggestion_form_label">
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="descriptionName" className={styles.suggestion_form_label}>
                 Description Name
               </label>
               <TextField fullWidth id="descriptionName" onChange={this.onTextFieldChange}
                 variant="outlined" value={this.state.descriptionName} />
             </div>
-            <div className="suggestion_form_2_col">
-              <div className="suggestion_form_2_col_2">
-                <div className="suggestion_form_group">
-                  <label htmlFor="quantity" className="suggestion_form_label">
+            <div className={styles.suggestion_form_2_col}>
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="quantity" className={styles.suggestion_form_label}>
                     Quantity
                   </label>
                   <TextField fullWidth id="quantity" type="number" onChange={this.onTextFieldChange}
@@ -551,9 +551,9 @@ class SuggestKitchenUtensilForm extends Component {
                 </div>
               </div>
 
-              <div className="suggestion_form_2_col_1">
-                <div className="suggestion_form_group">
-                  <label htmlFor="measurement" className="suggestion_form_label">
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="measurement" className={styles.suggestion_form_label}>
                     Measurement
                   </label>
                   <Autocomplete
@@ -569,16 +569,16 @@ class SuggestKitchenUtensilForm extends Component {
                 </div>
               </div>
 
-              <Button variant="contained" disableRipple onClick={this.addDescription} className='ingredient_button' style={{ width: "max-content" }} > Add Size</Button>
+              <Button variant="contained" disableRipple onClick={this.addDescription} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
             </div>
 
-            <Stack direction="row" spacing={1} className="stack">
+            <Stack direction="row" spacing={1} className={styles.stack}>
               {
                 descriptionStrings.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
-                    className='chip'
+                    className={styles.chip}
                     onClick={() => this.handleDeleteSizeChip(data)}
                     onDelete={() => this.handleDeleteSizeChip(data)}
                   />
@@ -590,12 +590,12 @@ class SuggestKitchenUtensilForm extends Component {
 
 
           <h3>Utensil Categories</h3>
-          <div className="suggestion_form">
-            <div className="suggestion_form_group">
-              <label htmlFor="tags-outlined" className="suggestion_form_label">
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="tags-outlined" className={styles.suggestion_form_label}>
                 Suggest category for this Utensil
               </label>
-              <div className="input_button">
+              <div className={styles.input_button}>
                 <Autocomplete
                   multiple
                   id="tags-outlined"
@@ -617,17 +617,17 @@ class SuggestKitchenUtensilForm extends Component {
                       fullWidth
                     />)}
                 />
-                <Button variant="contained" disableRipple onClick={this.addCategory} className='ingredient_button' style={{ width: "max-content" }} > Add Category</Button>
+                <Button variant="contained" disableRipple onClick={this.addCategory} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Category</Button>
               </div>
 
             </div>
-            <Stack direction="row" spacing={1} className="stack">
+            <Stack direction="row" spacing={1} className={styles.stack}>
               {
                 this.state.suggestedCategories.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
-                    className='chip'
+                    className={styles.chip}
                     onClick={() => this.handleDeleteCategoryChip(data)}
                     onDelete={() => this.handleDeleteCategoryChip(data)}
                   />
@@ -641,7 +641,7 @@ class SuggestKitchenUtensilForm extends Component {
           {/* <Row>
                 <Col md={12}> */}
           {/* <ThemeProvider theme={theme}> */}
-          <Button variant="contained" className='ingredient_button' style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Utensil</Button>
+          <Button variant="contained" className={styles.ingredient_button} style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Utensil</Button>
           {/* </ThemeProvider> */}
           {/* </Col>
                 
