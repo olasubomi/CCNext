@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Link from "next/link";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import { useEffect } from 'react'
+import styles from './header.module.css'
 
 
 // import img_logo from "../../assets/images/CC_Logo_no_bg.png"
@@ -117,7 +118,7 @@ class Header extends Component {
 
     if (isAuthenticated) {
       login_on_desktop_navbar = (
-        <li className="nav-item">
+        <li className={styles.nav_item}>
           <Dropdown alignRight>
             <Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
               {username}
@@ -140,9 +141,9 @@ class Header extends Component {
       );
 
       login_on_burger_navbar = (
-        <li className="nav-item">
+        <li className={styles.nav_item}>
           <Dropdown>
-            <Dropdown.Toggle className="user-item" as={this.CustomToggle} id="dropdown-custom-components">
+            <Dropdown.Toggle className={styles.user_item} as={this.CustomToggle} id="dropdown-custom-components">
               {username}
             </Dropdown.Toggle>
             <Dropdown.Menu >
@@ -164,9 +165,9 @@ class Header extends Component {
 
     } else {
       login_on_desktop_navbar = (
-        <li className="nav-item">
+        <li className={styles.nav_item}>
           <Link href="/login">
-            <a className="nav-link px-2">
+            <a className={styles.nav_link +  " px-2"}>
               Log In / Register
             </a>
           </Link>
@@ -174,28 +175,28 @@ class Header extends Component {
       );
 
       login_on_burger_navbar = (
-        <li className="nav-item" style={{ padding: "14px 16px" }}>
-          <Link href="/login" className="nav-link px-2" style={{ color: "#FFFFFF" }} >Log In / Register</Link>
+        <li className={styles.nav_item} style={{ padding: "14px 16px" }}>
+          <Link href="/login" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }} >Log In / Register</Link>
         </li>
       );
     }
 
     return (
-      <div className="header-wraper">
+      <div className={styles.header_wraper}>
         <nav
-          className="navbar navbar-expand-md fixed-top-sm justify-content-start flex-nowrap navbar-light"
+          className={styles.navbar +  " _expand-md fixed-top-sm justify-content-start flex-nowrap _light" }
           style={{ backgroundColor: "#FFFFFF", borderBottom: "1px solid #fd7e14" }}
         >
           {/* Desktop Navbar */}
-          <div className="header-panel w-100">
-            <div className="header-left ">
-              <Link href="/" className="logo_tag navbar-brand ">
+          <div className={styles.header_panel + " w-100"}>
+            <div className={styles.header_left }>
+              <Link href="/" className={styles.logo_tag + " " + styles.navbar_brand }>
                 <img src={img_logo} width="60px" alt="" />
               </Link>
-              <div className=" form-inline navbar-first" style={{ padding: "14px 16px" }}>
-                <div className="input-group " >
-                  <input className="form-control " placeholder="Search meal or category" />
-                  <span className="input-group-append">
+              <div className="form-inline _first" style={{ padding: "14px 16px" }}>
+                <div className={styles.input_group} >
+                  <input className={styles.form_control} placeholder="Search meal or category" />
+                  <span className={styles.input_group_append}>
                     <button className="btn btn-outline-secondary" type="button" style={{ backgroundColor: "#fd7e14", borderColor: "#fd7e14", }} >
                       <i className="fa fa-search" style={{ color: "#FFFFFF" }}></i>
                     </button>
@@ -204,40 +205,40 @@ class Header extends Component {
               </div>
             </div>
 
-            <div className="header-right navbar-first">
-              <ul className="navbar-nav flex-row">
-                <li className="nav-item">
-                  <Link href="/grocery" className="nav-link px-3">Grocery List</Link>
+            <div className="header-right _first">
+              <ul className="_nav flex-row">
+                <li className={styles.nav_item}>
+                  <Link href="/grocery" className={styles.nav_link + " px-3"}>Grocery List</Link>
                 </li>
-                <li className="nav-item">
-                  <Link href="/suggestmeal" className="nav-link px-3">Suggest Meal</Link>
+                <li className={styles.nav_item}>
+                  <Link href="/suggestmeal" className={styles.nav_link + " px-3"}>Suggest Meal</Link>
                 </li>
                 {login_on_desktop_navbar}
               </ul>
             </div>
           </div>
 
-          <Link href="#" className="icon navbar-toggle" onClick={() => { console.log("Comes thru here"); myFunction(); }}  >
+          <Link href="#" className="icon _toggle" onClick={() => { console.log("Comes thru here"); myFunction(); }}  >
             <i className="fa fa-bars" style={{ color: "#AAAAAA", right: "1%" }}></i>
           </Link>
         </nav>
 
 
         {/* Burger navbar */}
-        <div className="mobileNavbar" id="mobileNavbar" style={{ display: "none" }} >
-          <div className="mobileNavbar-menu">
-            <span className="input-group-append" style={{ marginTop: "23px", marginRight: "15px", justifyContent: "flex-end" }}>
-              <Link href="#" className="icon navbar-toggle" onClick={() => { console.log("Comes thru here"); myFunction(); }}  >
+        <div className={styles.mobileNavbar} id="mobileNavbar" style={{ display: "none" }} >
+          <div className={styles.mobile_menu}>
+            <span className={styles.input_group_append} style={{ marginTop: "23px", marginRight: "15px", justifyContent: "flex-end" }}>
+              <Link href="#" className="icon _toggle" onClick={() => { console.log("Comes thru here"); myFunction(); }}  >
                 <i className="fa fa-bars" style={{ color: "white", marginLeft: "10px", padding: "10px 17px" }}></i>
               </Link>
             </span>
 
-            <ul className="navbar-nav">
+            <ul className="_nav">
               <li style={{ padding: "5px 16px", borderBottom: "1px solid #FFFFFF" }}>
                 <div className='search_bar'>
                   <form >
                     <input className='form-control' placeholder='Search meal or category' style={{ backgroundColor: "#fd7e14", border: "1px solid #FFFFFF", }} />
-                    <span className="search_bar__icon">
+                    <span className={styles.search_bar__icon}>
                       <div className="btn btn-outline-secondary" style={{ backgroundColor: "#FFFFFF", borderColor: "#fd7e14", }}>
                         <i className="fa fa-search " style={{ color: "#fd7e14" }} ></i>
                       </div>
@@ -247,36 +248,36 @@ class Header extends Component {
               </li>
 
               {login_on_burger_navbar}
-              <li className="nav-item" style={{ padding: "14px 16px" }}>
-                <Link href="/grocery" className="nav-link px-2" style={{ color: "#FFFFFF" }}>Grocery List</Link>
+              <li className={styles.nav_item} style={{ padding: "14px 16px" }}>
+                <Link href="/grocery" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }}>Grocery List</Link>
               </li>
-              <li className="nav-item" style={{ padding: "14px 16px", borderBottom: "1px solid #FFFFFF", }}>
-                <Link href="/SuggestMeal" className="nav-link px-2" style={{ color: "#FFFFFF" }}>Suggest Meal</Link>
+              <li className={styles.nav_item} style={{ padding: "14px 16px", borderBottom: "1px solid #FFFFFF", }}>
+                <Link href="/SuggestMeal" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }}>Suggest Meal</Link>
               </li>
-              <li className="nav-item" style={{ padding: "14px 16px" }}>
-                <Link href="/v2" className="nav-link px-2" style={{ color: "#FFFFFF" }}>Home</Link>
+              <li className={styles.nav_item} style={{ padding: "14px 16px" }}>
+                <Link href="/v2" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }}>Home</Link>
               </li>
-              <li className="nav-item" style={{ padding: "14px 16px" }}>
-                <Link href="/products" className="nav-link px-2" style={{ color: "#FFFFFF" }} > Stores </Link>
+              <li className={styles.nav_item} style={{ padding: "14px 16px" }}>
+                <Link href="/products" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }} > Stores </Link>
               </li>
-              <li className="nav-item" style={{ padding: "14px 16px" }}>
-                <Link href="/products" className="nav-link px-2" style={{ color: "#FFFFFF" }}>Receipes</Link>
+              <li className={styles.nav_item} style={{ padding: "14px 16px" }}>
+                <Link href="/products" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }}>Receipes</Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <nav className="navbar navbar-expand-md  navbar-light navbar-second" style={{ backgroundColor: "#EEEEEE" }}>
-          <div className="navbar-collapse collapse pt-2 pt-md-0" id="navbar2">
-            <ul className="navbar-nav">
-              <li className="nav-item active" style={{ marginRight: "50%" }}>
-                <Link href="/home" className="nav-link px-2"> Home </Link>
+        <nav className="navbar _expand-md  _light _second" style={{ backgroundColor: "#EEEEEE" }}>
+          <div className="_collapse collapse pt-2 pt-md-0" id="navbar2">
+            <ul className="_nav">
+              <li className="nav_item active" style={{ marginRight: "50%" }}>
+                <Link href="/home" className={styles.nav_link + " px-2"}> Home </Link>
               </li>
-              <li className="nav-item" style={{ marginRight: "50%" }}>
-                <Link href="/products" className="nav-link px-2"> Stores </Link>
+              <li className={styles.nav_item} style={{ marginRight: "50%" }}>
+                <Link href="/products" className={styles.nav_link + " px-2"}> Stores </Link>
               </li>
-              <li className="nav-item" style={{ marginRight: "50%" }}>
-                <Link href="/v2" className="nav-link px-2"> Receipes </Link>
+              <li className={styles.nav_item} style={{ marginRight: "50%" }}>
+                <Link href="/v2" className={styles.nav_link + " px-2"}> Receipes </Link>
               </li>
             </ul>
           </div>

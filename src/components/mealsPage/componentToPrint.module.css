@@ -1,12 +1,3 @@
-/* *,
-*::after,
-*::before {
-  margin: 0;
-  padding: 0;
-  box-sizing: inherit; } */
-
-.html {
-  box-sizing: border-box; }
 
 .print_container {
   position: fixed;
@@ -120,6 +111,7 @@
   font-weight: normal;
   font-size: 70px;
   line-height: 30px;
+  word-break: break-all;
   color: #222321;
   text-transform: capitalize; }
 
@@ -214,10 +206,10 @@
 
 .print_col_1_detail {
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 7px;
   align-self: start;
   height: 25rem;
-  width: 15rem;
+  width: 16rem;
   margin-top: -13rem;
   align-content: start;
   background-color: white;
@@ -242,6 +234,9 @@
   margin: 0; }
 
 .print_col_1_detail > ul {
+  word-break: break-word;
+  overflow: hidden;
+  margin: 0;
   list-style-type: none;
   text-align: start;
   display: flex;
@@ -262,6 +257,7 @@
   font-size: 10px; }
 
 .print_col_1_detail > ul > li > h4 {
+  margin-bottom: 2px;
   font-style: normal;
   font-weight: normal;
   font-size: inherit;
@@ -291,7 +287,7 @@
 .print_page_1_row_2 {
   margin: 1rem;
   display: grid;
-  grid-template-columns: 1fr 15rem;
+  grid-template-columns: 1fr 16rem;
   grid-gap: 1rem;
   margin-right: 0;
   margin-bottom: 0;
@@ -413,9 +409,13 @@
   display: flex;
   grid-gap: 4px;
   flex-wrap: wrap;
+  overflow: hidden;
 }
 
 .instruction_step {
+  /* word-break: break-word; */
+  text-overflow: ellipsis;
+  overflow: hidden;
   padding-left: 1rem;
   font-weight: normal !important;
   font-size: 14px;

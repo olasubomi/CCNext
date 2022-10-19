@@ -63,6 +63,7 @@
 }
 
 .slide_button{
+    text-decoration: none;
     display: block;
     width: max-content;
     margin: auto;
@@ -206,14 +207,14 @@
 .lines{
     position: absolute;
     display: grid;
-    width: 65%;
+    width: 62%;
     grid-auto-flow: column;
     grid-template-columns: 1fr 1fr;
     grid-gap: 6rem;
     justify-content: space-between;
     /* margin-bottom: -9rem; */
-    top: -53px;
-    left: 17%;
+    top: -40px;
+    left: 19%;
 }
 
 .line{

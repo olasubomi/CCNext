@@ -1,17 +1,17 @@
-.navbar-light .navbar-brand:hover {
+.navbar_light .navbar_brand:hover {
   background-color: white; }
 
-.navbar-light .navbar-brand {
+.navbar_light .navbar_brand {
   padding-top: 15px; }
 
-.navbar-first {
+.navbar_first {
   align-items: center;
   padding: 10px 20px; }
 
-.nav-link {
+.nav_link {
   padding: 10px 20px; }
 
-.header-wraper .header-panel {
+.header_wraper .header_panel {
   display: flex;
   justify-content: space-between; }
 
@@ -23,9 +23,9 @@
   color: rgba(0, 0, 0, 0.6);
   text-decoration: none; }
 
-.nav-item {
+.nav_item {
   padding: 1px 16px !important; }
-  .nav-item a:hover {
+  .nav_item a:hover {
     color: rgba(0, 0, 0, 0.6);
     text-decoration: none; }
 
@@ -33,19 +33,19 @@
   color: rgba(0, 0, 0, 0.6);
   padding-left: 8px; }
 
-.input-group-append .navbar-toggle .fa-bars:hover {
+.input_group_append .navbar_toggle .fa-bars:hover {
   background-color: red; }
 
 @media (max-width: 768px) {
-  .navbar-second {
+  .navbar_second {
     display: none; }
-  .navbar-first {
+  .navbar_first {
     display: none; }
-  .header-left .navbar-first {
+  .header_left .navbar_first {
     display: none; }
-  .header-wraper .navbar-second {
+  .header_wraper .navbar_second {
     display: none; }
-  .nav-item a:hover {
+  .nav_item a:hover {
     color: white;
     text-decoration: none; }
   .dropdown a {
@@ -62,7 +62,7 @@
 .search_bar {
   position: relative;
   height: 40px; }
-  .search_bar .form-control {
+  .search_bar .form_control {
     padding: 0 20px 0 12px;
     height: 35px;
     border-radius: 5px;

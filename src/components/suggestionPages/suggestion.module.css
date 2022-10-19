@@ -1,3 +1,4 @@
+
 .suggestion_container{
     position: relative;
     background: #FCFCFC;
@@ -52,11 +53,11 @@
     align-items: center;
 }
 
-.a {
+/* a {
     text-decoration: none;
     color: inherit;
     height: max-content;
-}
+} */
 
 .suggestion_header_pages {
     list-style-type: none;
@@ -147,9 +148,9 @@
     cursor: pointer;
 }
 
-.p{
+/* p{
     margin: 0;
-}
+} */
 
 .suggestion_section_1_col_2_h3{
     width: 8rem;
@@ -226,7 +227,7 @@
     width: 100%;
 }
 
-.label{
+.suggestion_form_group >label{
     margin: 0;
     margin-left: 7px;
     font-style: normal;
@@ -239,7 +240,7 @@
     color: rgba(0, 0, 0, 0.45);
 }
 
-.input{
+.suggestion_form_group >input{
     width: 100%;
     padding: 14.5px 12px 14.5px 1.5rem !important;
     outline: none;
@@ -251,16 +252,16 @@
     border-radius: 3px;
 }
 
-.input:hover{
+.suggestion_form_group > input:hover{
     border-color: #04d505 !important;
 }
 
-.fieldset{
+.suggestion_form_group >fieldset{
     border: 0 !important;
     border-color: none !important;
 }
 
-.textarea{
+.suggestion_form_group >textarea{
     width: 100%;
     padding: 14.5px 12px 14.5px 1rem !important;
     outline: none;
@@ -272,7 +273,7 @@
     border-radius: 3px;
 }
 
-.textarea:hover{
+.suggestion_form_group >textarea:hover{
     border-color: #04d505 !important;
 }
 
@@ -310,6 +311,11 @@
     align-self: end;
 }
 
+.stack{
+    width: 100%;
+    overflow: hidden;
+}
+
 .chip{
     background-color: #D9D9D9 !important;
     border-radius: 28px !important;
@@ -320,6 +326,13 @@
     margin-bottom: 8px !important;
 
     color: #000000 !important;
+    overflow: hidden;
+}
+
+.chip > span{
+    white-space: unset;
+    padding: 9px 12px;
+    word-break: break-all;
 }
 
 .chip > svg{
@@ -361,7 +374,7 @@
     align-content: start;
 }
 
-.u{
+.suggestion_forms >u{
     text-align: center;
     text-decoration: none;
     font-style: normal;
@@ -420,6 +433,13 @@
     flex-wrap: wrap;
 }
 
+@media screen and (max-width: 650px) {
+
+    .more_steps{
+        grid-template-columns: 1fr;
+    }
+}
+
 @media screen and (max-width: 620px) {
     
     .suggestion_form_2_col{
@@ -430,6 +450,10 @@
     .input_button{
         grid-template-columns: 1fr;
         grid-gap: 1rem;
+    }
+
+    .more_steps{
+        grid-template-columns: 1fr;
     }
 }
 
@@ -475,7 +499,7 @@
         line-height: 12px;
     }
 
-    .label{
+    .suggestion_form_group >label{
         font-size: 10px;
     }
 

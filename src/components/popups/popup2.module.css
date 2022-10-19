@@ -80,7 +80,7 @@
 .popup2_images{
     display: grid;
     grid-auto-flow: column;
-    grid-gap: 1rem;
+    grid-gap: 9px;
     justify-content: start;
 }
 
@@ -117,6 +117,7 @@
 }
 
 .popup2_col_3{
+    position: relative;
     display: grid;
     align-content: start;
     grid-gap: 1rem;
@@ -133,7 +134,7 @@
 
 .del{
     display: grid;
-    grid-gap: 10px;
+    grid-gap: 4px;
     align-content: start;
     overflow: hidden;
 }
@@ -184,6 +185,7 @@
 }
 
 .popup2_description{
+    word-break: break-word;
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -314,7 +316,7 @@
     cursor: pointer;
     position: absolute;
     right: 0;
-    top: 50%;
+    top: 40%;
 }
 
 .popup2_dec_con {
@@ -325,7 +327,7 @@
     cursor: pointer;
     position: absolute;
     left: 0;
-    top: 50%;
+    top: 40%;
 }
 
 .popup2_cancel {
@@ -357,7 +359,6 @@
 }
 
 .popup2_steps{
-    position: relative;
     display: grid;
     grid-gap: 10px;
     height: 100%;
@@ -386,12 +387,13 @@
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    line-height: 160%;
+    line-height: 140%;
     /* or 22px */
 
 
     color: #353535;
     overflow-y: scroll;
+    word-break: break-all;
 }
 
 .popup2_footer{
@@ -441,9 +443,9 @@
         height: 100%;
     }
 
-    .popup2_step_img{
+    /* .popup2_step_img{
         height: 100%;
-    }
+    } */
 
     .popup2_image{
         width: 46px;
@@ -465,7 +467,7 @@
 
     .popup2_step_img{
         width: 100%;
-        height: 96px;
+        height: 130px;
     }
 
     .popup2_row_2{
@@ -474,7 +476,8 @@
 
     .popup2_steps{
         grid-template-rows: 1fr;
-        grid-template-columns: 1fr 1fr;
+        grid-auto-flow: column;
+        padding: 0 2rem;
     }
     
     .popup2_row_2 > div{
@@ -505,10 +508,14 @@
     .popup2{
         width: 95%;
     }
+
+    .popup2_images{
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .popup2_image{
+        width: 100%;
+    }
     
 }
 
-/* ::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space 
-    background: transparent;  /* Optional: just make scrollbar invisible 
-  } */

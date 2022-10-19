@@ -5,12 +5,9 @@ import Banner2 from "../src/components/Banners/banner2"
 import styles from '../src/components/HomePage/home.module.css';
 import EastIcon from '@mui/icons-material/East';
 
-import background from "../public/assets/homepage/grocery_bag.jpg";
 import foodImage from "../public/assets/homepage/food.png";
 import utensilImage from "../public/assets/homepage/utensil.png";
 import shopImage from "../public/assets/homepage/shop.png";
-import banner1 from "../public/assets/homepage/banner-1.png";
-import banner2 from "../public/assets/homepage/banner-2.png";
 import supplierImage from "../public/assets/homepage/supplier.png";
 import shoppingImage from "../public/assets/homepage/shopping.png";
 import chefImage from "../public/assets/homepage/chef.png";
@@ -32,8 +29,9 @@ class LandingPage extends Component {
 
     componentDidMount() {
         let slideIndex = this.state.slideIndex;
-
+        this.slider(slideIndex)
         setInterval(() => {
+            console.log('red')
             this.plusSlides(slideIndex)
         }, 6000)
     }
@@ -72,8 +70,9 @@ class LandingPage extends Component {
         // }
 
         let i;
-        let slides = document.getElementsByClassName("mySlides");
-        let dots = document.getElementsByClassName("dot");
+        let slides = document.getElementsByClassName("home_mySlides__Te_K_");
+        console.log(slides.length)
+        let dots = document.getElementsByClassName("home_dot__tB27k");
         if (n > slides.length) {
             slideIndex = 1;
             this.setState({
@@ -92,8 +91,8 @@ class LandingPage extends Component {
         for (i = 0; i < dots.length; i++) {
             dots[i].className = dots[i].className.replace(" active", "");
         }
-        // slides[slideIndex - 1].style.display = "grid";
-        // dots[slideIndex - 1].className += " active";
+        slides[slideIndex - 1].style.display = "grid";
+        dots[slideIndex - 1].className += " active";
     }
 
     render() {
@@ -114,12 +113,12 @@ class LandingPage extends Component {
                                     Sign Up Now
                                 </a>
                             </div>
-                            <Image src={banner1} className={styles.slide_image} />
-                            {/* <div className={styles.slide_image}
+                            {/* <Image src={banner1} className={styles.slide_image} /> */}
+                            <div className={styles.slide_image}
                                 style={{
-                                    backgroundImage: `url(${banner1})`,
+                                    backgroundImage: `url(/assets/homepage/banner-1.png)`,
                                 }}>
-                            </div> */}
+                            </div>
                         </div>
 
                         <div className={styles.mySlides}>
@@ -135,10 +134,10 @@ class LandingPage extends Component {
                                     Learn More
                                 </a>
                             </div>
-                            {/* <div className={styles.slide_image} style={{
-                                backgroundImage: `url(${background})`,
-                            }}></div> */}
-                            <Image src={background} className={styles.slide_image} />
+                            <div className={styles.slide_image} style={{
+                                backgroundImage: `url(/assets/homepage/grocery_bag.jpg)`,
+                            }}></div>
+                            {/* <Image src={background} className={styles.slide_image} /> */}
 
                         </div>
 
@@ -150,10 +149,10 @@ class LandingPage extends Component {
                                     Learn More
                                 </a>
                             </div>
-                            {/* <div className={styles.slide_image} style={{
-                                backgroundImage: `url(${banner2})`,
-                            }}></div> */}
-                            <Image src={banner2} className={styles.slide_image} />
+                            <div className={styles.slide_image} style={{
+                                backgroundImage: `url(/assets/homepage/banner-2.png)`,
+                            }}></div>
+                            {/* <Image src={banner2} className={styles.slide_image} /> */}
                         </div>
 
                         {/* Next and previous buttons */}

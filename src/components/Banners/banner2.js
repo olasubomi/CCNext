@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import banner3 from "../../../public/assets/homepage/banner-3.png";
-import './banner2.module.css';
+import styles from './banner2.module.css';
 import Link from "next/link";
 
 class Banner2 extends Component {
@@ -17,16 +16,16 @@ class Banner2 extends Component {
         return (
             <div>
                 <div style={{
-                    backgroundImage: `url(${banner3})`,
+                    backgroundImage: `url(/assets/homepage/banner-3.png)`,
                 }}
-                    className="banner_container"
+                    className={styles.banner_container}
                 >
                     {/* <!-- <h1>Book a Consultation</h1> --> */}
-                    <div className="banner2container">
-                        <p className="banner2_text">
+                    <div className={styles.banner2container}>
+                        <p className={styles.banner2_text}>
                             ENJOY HASSLE FREE COOKING WITH CHOP CHOW
                         </p>
-                        <Link href="/v2" className="banner2_button">Learn More</Link>
+                        <Link href="/v2"><a className={styles.banner2_button}>Learn More</a></Link>
                     </div>
 
                 </div>
