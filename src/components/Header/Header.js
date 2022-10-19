@@ -206,7 +206,7 @@ class Header extends Component {
             </div>
 
             <div className="header-right _first">
-              <ul className="_nav flex-row">
+              <ul className={styles.navbar_nav}>
                 <li className={styles.nav_item}>
                   <Link href="/grocery" className={styles.nav_link + " px-3"}>Grocery List</Link>
                 </li>
