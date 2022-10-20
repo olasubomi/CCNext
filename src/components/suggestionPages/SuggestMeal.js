@@ -1374,7 +1374,7 @@ class SuggestMealForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
-    var url = "http://localhost:5000/api/meals/addMealSuggestion/";
+    var url = "http://localhost:5000/api/meals/createMeal/";
 
     const config = {
       method: 'POST', data: suggestMealForm, url: url,

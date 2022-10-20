@@ -95,7 +95,7 @@ export default class ResetPassword extends React.Component {
                         <Form.Label></Form.Label>
                         
                       </Form.Group>
-                      <Form.Label>We will sent you a link to reset your password.</Form.Label>
+                      <Form.Label>We will send you a link to reset your password.</Form.Label>
 
                       <p className="msg-success">{this.state.messageSuccess}</p>
                       <p className="msg-err">{this.state.messageErr}</p>

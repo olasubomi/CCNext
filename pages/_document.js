@@ -18,10 +18,10 @@ export default function Document() {
     --> */}
                     <link rel="manifest" href="./manifest.json" />
                     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
-                    <link
+                    {/* <link
                         rel="stylesheet"
                         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-                    />
+                    /> */}
 
                     {/* <!--
                     Notice the use of %PUBLIC_URL% in the tags above.

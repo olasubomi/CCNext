@@ -8,20 +8,24 @@ import Link from 'next/link';
 export default class SignUp extends React.Component {
   state = {
     email: '',
-    phone: '',
+    phone_number: '',
+    first_name: '',
+    last_name: '',
     username: '',
     password: '',
     messageErr: false,
     messageSuccess: false,
     showModal: true,
-    emailNotification: false
+    email_notifications: false
   };
 
 
   handleChange = (e) => {
     let name = e.currentTarget.name;
     let value = e.currentTarget.value;
-    name === "emailNotification" ? this.setState({emailNotification: e.currentTarget.checked}) : this.setState({ [name]: value });
+    name === "email_notifications" ?
+      this.setState({ emailNotification: e.currentTarget.checked })
+      : this.setState({ [name]: value });
 
   }
 
@@ -64,14 +68,20 @@ export default class SignUp extends React.Component {
   
   submitForm = () => {
     console.log("state,", this.state);
-    var url = 'https://chopchowdev.herokuapp.com/api/signupuser';
+    var url = 'https://chopchowdev.herokuapp.com/api/user/signup';
+    var url = = 'http://localhost:5000/api/user/signup';
+    var payLoad = this.state;
+    delete payLoad.messageErr;
+    delete payLoad.messageSuccess;
+    delete payLoad.showModal;
+
     fetch(url, {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-type': 'application/json',
       },
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(payLoad),
     }).then(response => {
         if (response.status === 400 || response.status === 404) {
           this.setState({ messageErr: 'Bad Request , Check username or password ...' });
@@ -113,14 +123,30 @@ export default class SignUp extends React.Component {
                   <Form.Label>Or</Form.Label>
                 <Form.Control
                       type="tel"
-                      name="phone"
-                      value={this.state.phone}
+                      name="phone_number"
+                     value={this.state.phone_number}
                       placeholder="Your Phone Number"
                       onChange={this.handleChange}
                     />
                   </Form.Group>
                   <hr/>
                   <Form.Group>
+                    <Form.Control
+                      type="text"
+                      name="first_name"
+                      value={this.state.first_name}
+                      placeholder="First Name"
+                      onChange={this.handleChange}
+                      required
+                    />
+                     <Form.Control
+                      type="text"
+                      name="last_name"
+                      value={this.state.last_name}
+                      placeholder="Last Name"
+                      onChange={this.handleChange}
+                      required
+                    />
                   <Form.Control
                       type="text"
                       name="username"
