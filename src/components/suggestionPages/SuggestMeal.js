@@ -1330,12 +1330,12 @@ class SuggestMealForm extends Component {
 
     //-------------Submit remainder data of meal to Mongo ------------------------------------------
     let suggestMealForm = new FormData();
-    suggestMealForm.append('mealName', mealName);
-    suggestMealForm.append('mealImage', mealImage);
+    suggestMealForm.append('meal_name', mealName);
+    suggestMealForm.append('meal_images', mealImage);
     suggestMealForm.append('mealImageName', mealImageName);
 
-    suggestMealForm.append('prepTime', prepTime);
-    suggestMealForm.append('cookTime', cookTime);
+    suggestMealForm.append('prep_time', prepTime);
+    suggestMealForm.append('cook_time', cookTime);
     suggestMealForm.append('intro', intro);
 
     suggestMealForm.append('tips', JSON.stringify(tips));
@@ -1352,15 +1352,15 @@ class SuggestMealForm extends Component {
 
     // new suggested products
     suggestMealForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
-
-    suggestMealForm.append('categories', JSON.stringify(suggestedCategories));
+    suggestMealForm.append('meal_categories', JSON.stringify(suggestedCategories));
+    // suggestMealForm.append('categories', JSON.stringify(suggestedCategories));
     suggestMealForm.append('newCategories', JSON.stringify(new_categories));
 
-    suggestMealForm.append('kitchenUtensils', JSON.stringify(suggestedUtensils));
+    suggestMealForm.append('kitchen_utensils', JSON.stringify(suggestedUtensils));
     suggestMealForm.append('newKitchenUtensils', JSON.stringify(new_kitchen_utensils));
 
     // RecipeSteps
-    suggestMealForm.append('stepSlides', JSON.stringify(instructionGroupData));
+    suggestMealForm.append('formatted_instructions', JSON.stringify(instructionGroupData));
     suggestMealForm.append('instructionChunkContent1', chunk1Content);
     suggestMealForm.append('instructionChunkContent2', chunk2Content);
     suggestMealForm.append('instructionChunkContent3', chunk3Content);

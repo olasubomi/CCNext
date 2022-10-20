@@ -22,9 +22,6 @@ class SuggestProductForm extends Component {
   categories = ["Baking", "Cooking", "Home", "Ethiopian",];
   measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
     "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
-  kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
-    "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
-    "Wire Mesh", "Zester"];
 
   ingredientsQuantityMeasurements = [];
 
@@ -760,14 +757,6 @@ class SuggestProductForm extends Component {
       if (index === -1) new_categories.push(suggestedCategories[i]);
     }
 
-    let new_kitchen_utensils = [];
-    for (i = 0; i < suggestedUtensils.length; i++) {
-      // check if categories already exist, only add new categories to db,
-      // though all will still be attached to product, as mentioned
-      let index = this.kitchenUtensils.indexOf(suggestedUtensils[i]);
-      if (index === -1) new_kitchen_utensils.push(suggestedUtensils[i]);
-    }
-
     //prepare product data to Mongo and Recipe Steps Images and Video content to s3
     const instructionGroupData = [];
     const contentNameToContentImageOrVideoMapForS3 = new FormData();
@@ -788,7 +777,7 @@ class SuggestProductForm extends Component {
     suggestProductForm.append('product_name', productName);
     suggestProductForm.append('product_images', productImage);
     suggestProductForm.append('productImageName', productImageName);
-    suggestProductForm.append('intro', intro);
+    suggestProductForm.append('product_details', intro);
 
     // suggestProductForm.append('ingredientStrings', ingredientStrings);
     // list of products quantity measurements (created on submit Product)
@@ -801,7 +790,10 @@ class SuggestProductForm extends Component {
     // new suggested products
     suggestProductForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
 
-    suggestProductForm.append('categories', JSON.stringify(suggestedCategories));
+    suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
+    suggestProductForm.append('product_type', JSON.stringify("ingredient"));
+    suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
+
     suggestProductForm.append('newCategories', JSON.stringify(new_categories));
 
     // suggestProductForm.append('instructionsGroupList', instructionGroupData);
@@ -810,7 +802,7 @@ class SuggestProductForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Product to Mongo---------------------------------------------------
     // var url = "/createProduct/";
-    var url = "http://localhost:5000/api/products/createProduct/";
+    var url = "http://localhost:5000/api/products/create/";
 
     const config = {
       method: 'POST', data: suggestProductForm, url: url,
