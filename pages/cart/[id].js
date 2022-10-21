@@ -4,7 +4,12 @@ const Cart = () => {
     const router = useRouter()
     const { id } = router.query
 
-    return <p>Cart: {id}</p>
+    return <div>
+        <Head>
+            <title>Chop Chow Cart Page</title>
+            <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+        </Head>
+        Cart: {id}</div>
 }
 
 export default Cart

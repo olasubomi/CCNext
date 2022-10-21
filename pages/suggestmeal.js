@@ -171,6 +171,10 @@ class SuggestMeal extends Component {
 
         return (
             <div className={styles.suggestion_container}>
+                <Head>
+                    <title>Suggested Meal Form</title>
+                    <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                </Head>
                 <div className={styles.suggestion_sections}>
                     <div className={styles.suggestion_section_1}>
                         <div className={styles.suggestion_section_1_col_1}>

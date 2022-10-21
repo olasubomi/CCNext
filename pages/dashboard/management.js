@@ -4,7 +4,12 @@ const Management = () => {
     const router = useRouter()
     const { id } = router.query
 
-    return <p>Management: {id}</p>
+    return <div>
+        <Head>
+            <title>Chop Chow Management</title>
+            <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+        </Head>
+        Management: {id}</div>
 }
 
 export default Management
