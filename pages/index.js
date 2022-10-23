@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Header from "../src/components/Header/Header";
+import Header, { Header2 } from "../src/components/Header/Header";
 import Footer from "../src/components/Footer/Footer";
 import LandingPage from "./landingpage";
 import { useEffect } from 'react'
@@ -24,6 +24,7 @@ import { setInitUrl, getUser } from "../src/actions";
 import { connect } from 'react-redux';
 import axios from '../src/util/Api';
 import productsObj from '../src/custom_data/products.json';
+import SideNav from "../src/components/Header/sidenav";
 // import { createMuiTheme, ThemeProvider } from '@mui/material';
 
 
@@ -61,6 +62,9 @@ class App extends Component {
         return <div>
 
             <Header />
+            <Header2 />
+            <SideNav />
+
             <LandingPage />
             <Footer />
 

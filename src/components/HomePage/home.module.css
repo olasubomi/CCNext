@@ -2,6 +2,15 @@
     display: grid;
     grid-gap: 4rem;
     /* justify-items: center; */
+    margin-top: 155px;
+}
+
+.home_container2{
+    display: grid;
+    grid-gap: 4rem;
+    /* justify-items: center; */
+    align-items: center;
+    height: 100vh;
 }
 
 .home_section_1{
@@ -432,6 +441,10 @@
 }
 
 @media screen and (max-width: 768px) {
+    .home_container{
+        margin-top: 102px;
+    }
+
     .slideshow_container{
         height: 40vh;
     }

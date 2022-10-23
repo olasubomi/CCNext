@@ -1,52 +1,45 @@
-import React, { Component } from "react";
-import Link from "next/link";
+
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
-import { useEffect } from 'react'
 import styles from './header.module.css'
 
+import Link from "next/link";
+import React, { useState } from "react";
+import openIcon from "../../../public/assets/icons/eva_menu-open.png"
+import messageIcon from "../../../public/assets/icons/message.png"
+import orderIcon from "../../../public/assets/icons/orderIcon.png"
+import verifiedIcon from "../../../public/assets/icons/verified.png"
+import cancelredIcon from "../../../public/assets/icons/cancelred.png"
+import Image from 'next/image';
+import { ArrowDownIcon, ArrowLeftFillIcon, BasketIcon, CartIcon, DashBoardIcon, HomeIcon, NotificationIcon, Order2Icon, UserIcon } from "../icons";
 
-// import img_logo from "../../assets/images/CC_Logo_no_bg.png"
-// import './header.css';
-import Dropdown from 'react-bootstrap/Dropdown'
-import { connect } from 'react-redux';
-// import { withRouter } from "react-router-dom";
-// import axios from '../../util/Api';
+ 
+function Header(){
+  const [isAuthenticated, setIsAuthenticatedState] = useState(false);
+  const [customerId, setCustomerIdState] = useState(null);
+  const [username, setUsernameState] = useState(null);
+  const [showNotif, setshowNotifState] = useState(true);
+  const [openLogin, setOpenLoginState] = useState(false);
 
-//////////////////////////////////////////////////////////////////////
-class Header extends Component {
-  constructor() {
-    super();
-    this.state = {
-      suggestMealPopOver: false,
-      base_index: 0,
-      topNav_className: "w3-bar w3-dark-grey w3-green topnav",
-      isAuthenticated: false,
-      customerId: null,
-      username: null,
-    };
-  }
-
-  //////////////////////////////////////////////////////////////////////
-  updateLogInStatus(customerId, username) {
+  function updateLogInStatus(customerId, username) {
     console.log("updates log in status before");
-    this.setState({ isAuthenticated: true });
-    this.setState({ customerId: customerId });
-    this.setState({ username: username });
+    setIsAuthenticatedState(true)
+    setCustomerIdState(customerId)
+    setUsernameState(username)
 
     console.log("updates log in status after");
     console.log("customerID is:" + customerId);
   }
 
   //////////////////////////////////////////////////////////////////////
-  CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-    <a href="/" ref={ref} onClick={(e) => { e.preventDefault(); onClick(e); }}>
-      {children}
-      &#x25bc;
-    </a>
-  ));
+  // CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+  //   <a href="/" ref={ref} onClick={(e) => { e.preventDefault(); onClick(e); }}>
+  //     {children}
+  //     &#x25bc;
+  //   </a>
+  // ));
 
   //////////////////////////////////////////////////////////////////////
-  handleLogout(e) {
+  function handleLogout(e) {
     if (e === "6") {
       //clear cookie cache
       // useEffect(() => {
@@ -74,7 +67,7 @@ class Header extends Component {
             console.log(res.data);
             if (res.data === "success") {
               console.log("comes to turn off authentication state");
-              this.setState({ isAuthenticated: false });
+              setIsAuthenticatedState(false)
             }
           });
         })
@@ -83,7 +76,7 @@ class Header extends Component {
           console.log(err);
         });
 
-      this.setState({ isAuthenticated: false });
+      setIsAuthenticatedState(false)
       window.location.reload(false);
     }
     else if (e === "4") {
@@ -92,202 +85,293 @@ class Header extends Component {
   }
 
 
-  handleDashborad() {
+  function handleDashborad() {
     // this.props.history.push('/admin');
   }
 
-
-  //////////////////////////////////////////////////////////////////////
-  render() {
-    // const username = this.props.authUser;
-    const isAuthenticated = false;
-
-    /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
-    function myFunction() {
-      var x = document.getElementById("mobileNavbar");
-      console.log(x);
-      if (x.className === "mobileNavbar") {
-        x.className += " visible";
-      } else {
-        x.className = "mobileNavbar";
+  function toggleNotification(e){
+    document.getElementById('notification').style.display = 'grid';
+    document.addEventListener('click', (e) => {
+      if(document.getElementById('notification')){
+        if(e.target.id !== 'notImg' && 
+          e.target.id !== 'notNo' &&
+          e.target.id !== 'noticon' &&
+          e.target.id !== 'notText'
+        )
+        document.getElementById('notification').style.display = 'none';
       }
-    }
+    })
+  }
 
-    var login_on_desktop_navbar;
-    var login_on_burger_navbar;
+  function toggleUserDetails(e){
+    document.getElementById('userdetails').style.display = 'grid';
+    document.addEventListener('click', (e) => {
+      if(document.getElementById('userdetails')){
+        if(e.target.id !== 'userImg' && 
+          e.target.id !== 'usericon' &&
+          e.target.id !== 'userName'
+        )
+        document.getElementById('userdetails').style.display = 'none';
+      }
+    })
 
-    if (isAuthenticated) {
-      login_on_desktop_navbar = (
-        <li className={styles.nav_item}>
-          <Dropdown alignRight>
-            <Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
-              {username}
-            </Dropdown.Toggle>
-            <Dropdown.Menu >
-              <Dropdown.Item eventKey="1" onSelect={(ev, obj) => this.handleDashborad()}>Profile</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="2" onSelect={(ev, obj) => this.handleDashborad()}> Dashboard/orders</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="3" onSelect={(ev, obj) => this.handleDashborad()}>Support</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="4" onSelect={(ev, obj) => this.handleLogout(ev)}>Suggest Meal</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="5" onSelect={(ev, obj) => this.handleDashborad()}>Switch to driver mode</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="6" onSelect={(ev, obj) => this.handleLogout(ev)}>Log out</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </li>
-      );
+    window.event.returnValue = false
+  }
 
-      login_on_burger_navbar = (
-        <li className={styles.nav_item}>
-          <Dropdown>
-            <Dropdown.Toggle className={styles.user_item} as={this.CustomToggle} id="dropdown-custom-components">
-              {username}
-            </Dropdown.Toggle>
-            <Dropdown.Menu >
-              <Dropdown.Item eventKey="1" onSelect={(ev, obj) => this.handleDashborad()}>Profile</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="2" onSelect={(ev, obj) => this.handleDashborad()}> Dashboard/orders</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="3" onSelect={(ev, obj) => this.handleDashborad()}>Support</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="4" onSelect={(ev, obj) => this.handleLogout(ev)}>Suggest Meal</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="5" onSelect={(ev, obj) => this.handleDashborad()}>Switch to driver mode</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="6" onSelect={(ev, obj) => this.handleLogout(ev)}>Log out</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </li>
-      );
+  function toggleLogin (){
+    setOpenLoginState(!openLogin)
+  }
 
-    } else {
-      login_on_desktop_navbar = (
-        <li className={styles.nav_item}>
-          <Link href="/login">
-            <a className={styles.nav_link +  " px-2"}>
-              Log In / Register
-            </a>
-          </Link>
-        </li>
-      );
 
-      login_on_burger_navbar = (
-        <li className={styles.nav_item} style={{ padding: "14px 16px" }}>
-          <Link href="/login" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }} >Log In / Register</Link>
-        </li>
-      );
-    }
 
-    return (
-      <div className={styles.header_wraper}>
-        <nav
-          className={styles.navbar +  " _expand-md fixed-top-sm justify-content-start flex-nowrap _light" }
-          style={{ backgroundColor: "#FFFFFF", borderBottom: "1px solid #fd7e14" }}
-        >
-          {/* Desktop Navbar */}
-          <div className={styles.header_panel + " w-100"}>
-            <div className={styles.header_left }>
-              <Link href="/" className={styles.logo_tag + " " + styles.navbar_brand }>
-                <img src={img_logo} width="60px" alt="" />
+  return(
+    <>
+      <div className={styles.navbar}>
+        <div className={styles.navbar_top_container}>
+          <div className={styles.navbar_top}>
+            <Link href='/'>
+              <a className={styles.navbar_top_logo_img}>
+                <Image
+                  src={img_logo}
+                  alt="logo"
+                  
+                />
+                </a>
+            </Link>
+            <div className={styles.navbar_top_details}>
+              {!isAuthenticated ?
+              <Link href='/login'>
+              <a className={styles.navbar_user_loginbtn}>
+                {/* <Link href="/login">
+                  <a> */}
+                    Log In/Register
+                  {/* </a>
+                </Link> */}
+              </a>
               </Link>
-              <div className="form-inline _first" style={{ padding: "14px 16px" }}>
-                <div className={styles.input_group} >
-                  <input className={styles.form_control} placeholder="Search meal or category" />
-                  <span className={styles.input_group_append}>
-                    <button className="btn btn-outline-secondary" type="button" style={{ backgroundColor: "#fd7e14", borderColor: "#fd7e14", }} >
-                      <i className="fa fa-search" style={{ color: "#FFFFFF" }}></i>
-                    </button>
+              :
+              <div className={styles.navbar_user_info}>
+                <img id="userImg" onClick={(e) => toggleUserDetails(e)} src='/assets/icons/user.png' alt='User' className={styles.navbar_user_img}/>
+                <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>Olayemi</h2>
+                <ArrowDownIcon id="usericon" onClick={(e) => toggleUserDetails(e)} style={styles.navbar_user_icon} />
+                <div id="userdetails" className={styles.navbar_user_signedin}>
+                  <div className={styles.navbar_user_signedin_link  + " " + styles.black}>
+                    <DashBoardIcon style='' />
+                    <Image src={openIcon} alt="dashboard" />
+                    <h3>Dashboard</h3>
+                  </div>
+                  <div className={styles.navbar_user_signedin_link  + " " + styles.black}>
+                    {/* <Image src={openIcon} alt="profile" /> */}
+                    <UserIcon style='' />
+                    <h3>Profile</h3>
+                  </div>
+                  <div className={styles.navbar_user_signedin_logout}>
+                    <div>
+                      <div className={styles.navbar_user_signedin_link + " " + styles.white}>
+                        <Image src={openIcon} alt="logout" />
+                        <ArrowLeftFillIcon style='' />
+                        <h3>Logout</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              }
+              <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
+              <div className={styles.navbar_top_details_col}>
+                <div id='noticon' onClick={(e) => toggleNotification(e)}>
+                  <NotificationIcon id="notImg" style={styles.navbar_top_details_col_icon} />
+                  <span id="notNo" style={{background: "#04D505"}} className={styles.numberofitems}>
+                    3
+                  </span>
+                </div>
+                <h5 id="notText" onClick={(e) => toggleNotification(e)}>Notification</h5>
+                <div id="notification" className={styles.summaries_min}>
+                  <div className={styles.summary_min}>
+                    <div className={styles.summary_min_head}>
+                      <h3 className={styles.summary_min_h3}>Notification</h3>
+                    </div>
+                    <div className={styles.summary_min_notifications}>
+                      <div className={styles.summary_notification}>
+                        <Image
+                          src={orderIcon}
+                          alt="order"
+                          className={styles.summary_notification_Img}
+                        />
+                        <div className={styles.summary_notification_Details}>
+                          <h3 className={styles.summary_notification_desc}>
+                            hhh
+                          </h3>
+                          <p className={styles.summary_notification_link}>
+                            View Order
+                          </p>
+                          <p className={styles.summary_notification_time}>
+                            2 sec
+                          </p>
+                        </div>
+                      </div>
+                      <div className={styles.summary_notification}>
+                        <Image
+                          src={messageIcon}
+                          alt="notification"
+                          className={styles.summary_notification_Img}
+                        />
+                        <div className={styles.summary_notification_Details}>
+                          <h3 className={styles.summary_notification_desc}>
+                            Suggested meal : Baking with Flour approved
+                          </h3>
+                          <p className={styles.summary_notification_time}>
+                            2 sec
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className={styles.summary_notification}>
+                        <Image
+                          src={verifiedIcon}
+                          alt="notification"
+                          className={styles.summary_notification_Img}
+                        />
+                        <div className={styles.summary_notification_Details}>
+                          <h3 className={styles.summary_notification_desc}>
+                            Suggested meal : Baking with Flour approved
+                          </h3>
+                          <p className={styles.summary_notification_link}>
+                            Track Order
+                          </p>
+                          <p className={styles.summary_notification_time}>
+                            2 sec
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className={styles.summary_notification}>
+                        <Image
+                          src={verifiedIcon}
+                          alt="notification"
+                          className={styles.summary_notification_Img}
+                        />
+                        <div className={styles.summary_notification_Details}>
+                          <h3 className={styles.summary_notification_desc}>
+                            Suggested meal : Baking with Flour approved
+                          </h3>
+                          <p className={styles.summary_notification_link}>
+                            View Inventory
+                          </p>
+                          <p className={styles.summary_notification_time}>
+                            2 sec
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className={styles.summary_notification}>
+                        <Image
+                          src={cancelredIcon}
+                          alt="notification"
+                          className={styles.summary_notification_Img}
+                        />
+                        <div className={styles.summary_notification_Details}>
+                          <h3 className={styles.summary_notification_desc}>
+                          Suggested meal : Gbegiri rejected
+                          </h3>
+                          <p className={styles.summary_notification_link}>
+                            View
+                          </p>
+                          <p className={styles.summary_notification_time}>
+                            2 sec
+                          </p>
+                        </div>
+                      </div>
+
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+              <div className={styles.navbar_top_details_col + " " +styles.hide}>
+                <CartIcon style={styles.navbar_top_details_col_icon} />
+                <div>
+                  <Link href='/cart/2'>
+                    <a>
+                      <h5>Cart</h5>
+                    </a>
+                  </Link>
+                  <span style={{background: "#F47900"}} className={styles.numberofitems}>
+                      3
                   </span>
                 </div>
               </div>
             </div>
-
-            <div className="header-right _first">
-              <ul className={styles.navbar_nav}>
-                <li className={styles.nav_item}>
-                  <Link href="/grocery" className={styles.nav_link + " px-3"}>Grocery List</Link>
-                </li>
-                <li className={styles.nav_item}>
-                  <Link href="/suggestmeal" className={styles.nav_link + " px-3"}>Suggest Meal</Link>
-                </li>
-                {login_on_desktop_navbar}
-              </ul>
-            </div>
-          </div>
-
-          <Link href="#" className="icon _toggle" onClick={() => { console.log("Comes thru here"); myFunction(); }}  >
-            <i className="fa fa-bars" style={{ color: "#AAAAAA", right: "1%" }}></i>
-          </Link>
-        </nav>
-
-
-        {/* Burger navbar */}
-        <div className={styles.mobileNavbar} id="mobileNavbar" style={{ display: "none" }} >
-          <div className={styles.mobile_menu}>
-            <span className={styles.input_group_append} style={{ marginTop: "23px", marginRight: "15px", justifyContent: "flex-end" }}>
-              <Link href="#" className="icon _toggle" onClick={() => { console.log("Comes thru here"); myFunction(); }}  >
-                <i className="fa fa-bars" style={{ color: "white", marginLeft: "10px", padding: "10px 17px" }}></i>
-              </Link>
-            </span>
-
-            <ul className="_nav">
-              <li style={{ padding: "5px 16px", borderBottom: "1px solid #FFFFFF" }}>
-                <div className='search_bar'>
-                  <form >
-                    <input className='form-control' placeholder='Search meal or category' style={{ backgroundColor: "#fd7e14", border: "1px solid #FFFFFF", }} />
-                    <span className={styles.search_bar__icon}>
-                      <div className="btn btn-outline-secondary" style={{ backgroundColor: "#FFFFFF", borderColor: "#fd7e14", }}>
-                        <i className="fa fa-search " style={{ color: "#fd7e14" }} ></i>
-                      </div>
-                    </span>
-                  </form>
-                </div>
-              </li>
-
-              {login_on_burger_navbar}
-              <li className={styles.nav_item} style={{ padding: "14px 16px" }}>
-                <Link href="/grocery" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }}>Grocery List</Link>
-              </li>
-              <li className={styles.nav_item} style={{ padding: "14px 16px", borderBottom: "1px solid #FFFFFF", }}>
-                <Link href="/SuggestMeal" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }}>Suggest Meal</Link>
-              </li>
-              <li className={styles.nav_item} style={{ padding: "14px 16px" }}>
-                <Link href="/v2" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }}>Home</Link>
-              </li>
-              <li className={styles.nav_item} style={{ padding: "14px 16px" }}>
-                <Link href="/products" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }} > Stores </Link>
-              </li>
-              <li className={styles.nav_item} style={{ padding: "14px 16px" }}>
-                <Link href="/products" className={styles.nav_link + " px-2"} style={{ color: "#FFFFFF" }}>Receipes</Link>
-              </li>
-            </ul>
           </div>
         </div>
-
-        <nav className="navbar _expand-md  _light _second" style={{ backgroundColor: "#EEEEEE" }}>
-          <div className="_collapse collapse pt-2 pt-md-0" id="navbar2">
-            <ul className="_nav">
-              <li className="nav_item active" style={{ marginRight: "50%" }}>
-                <Link href="/home" className={styles.nav_link + " px-2"}> Home </Link>
-              </li>
-              <li className={styles.nav_item} style={{ marginRight: "50%" }}>
-                <Link href="/products" className={styles.nav_link + " px-2"}> Stores </Link>
-              </li>
-              <li className={styles.nav_item} style={{ marginRight: "50%" }}>
-                <Link href="/v2" className={styles.nav_link + " px-2"}> Receipes </Link>
-              </li>
-            </ul>
-          </div>
-        </nav>
+        
       </div>
-    );
-  }
+      <div className={styles.navbar_down}>
+        <div className={styles.navbar_down_col}>
+          <Link href='/'>
+            <a>
+              <HomeIcon style={styles.navbar_down_col_icon} />
+              <p>Home</p>
+            </a>
+          </Link>
+        </div>
+        <div className={styles.navbar_down_col}>
+          <Link href='/dashboard/orders/orders'>
+            <a>
+              <Order2Icon style={styles.navbar_down_col_icon} />
+              <p>Order</p>
+            </a>
+          </Link>
+        </div>
+        <div className={styles.navbar_down_col}>
+          <Link href='/grocery-list'>
+            <a>
+              <BasketIcon style={styles.navbar_down_col_icon} />
+              <p>Grocery List</p>
+            </a>
+          </Link>
+        </div>
+        <div className={styles.navbar_down_col}>
+          <Link href='/cart'>
+            <a>
+              <CartIcon style={styles.navbar_down_col_icon} />
+              <p>Cart</p>
+            </a>
+          </Link>
+        </div>
+      </div>
+    </>
+  )
 }
 
-
-
-// export default connect(mapStateToProps, () => ({}))(withRouter(Header));
 export default Header;
+
+export function Header2(){
+    
+  return(
+    <div className={styles.navbar2}>
+      <div className={styles.navbar_main_container}>
+        <div className={styles.navbar_main}>
+          <ul className={styles.navbar_main_links}>
+            <li className={styles.navbar_main_link}>
+              <p >Store</p>
+            </li>
+            <li className={styles.navbar_main_link}>
+              <p >Meals</p>
+            </li>
+            <li className={styles.navbar_main_link}>
+              <p >Product</p>
+            </li>
+            <li className={styles.navbar_main_link}>
+              <p >Kitchen Utensils</p>
+            </li>
+          </ul>
+          
+          <div className={styles.navbar_main_grocery}>
+              <p >Grocery Lists</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
