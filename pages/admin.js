@@ -1,4 +1,4 @@
-
+import Head from "next/head";
 const Admin = () => {
     return <div>
         <Head>

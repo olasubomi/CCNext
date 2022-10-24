@@ -15,6 +15,7 @@ import chefImage from "../public/assets/homepage/chef.png";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Image from 'next/image';
+import Head from "next/head";
 
 
 class LandingPage extends Component {

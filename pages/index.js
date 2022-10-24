@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Header from "../src/components/Header/Header";
 import Footer from "../src/components/Footer/Footer";
 import LandingPage from "./landingpage";
-import { useEffect } from 'react'
+import { useEffect } from 'react';
+import Head from "next/head";
 
 // import { Route, Switch, Redirect } from "react-router-dom";
 // import HomePage from "./components/HomePage";

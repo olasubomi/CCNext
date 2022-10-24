@@ -1,4 +1,4 @@
-
+import Head from "next/head";
 const Login = () => {
     return <div>
         <Head>

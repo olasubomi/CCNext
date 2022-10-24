@@ -10,6 +10,7 @@ import SuggestMealForm from "../src/components/suggestionPages/SuggestMeal";
 import SuggestProductForm from "../src/components/suggestionPages/SuggestProduct";
 import SuggestKitchenUtensilForm from "../src/components/suggestionPages/SuggestKitchenUtensil";
 import SuggestCategoryForm from "../src/components/suggestionPages/SuggestCategory";
+import Head from "next/head";
 
 class SuggestMeal extends Component {
     ingredientsQuantityMeasurements = [];

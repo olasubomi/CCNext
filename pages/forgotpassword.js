@@ -1,4 +1,4 @@
-
+import Head from "next/head";
 const ForgotPassword = () => {
     return <div>
         <Head>
