@@ -47,6 +47,18 @@ class SuggestProductForm extends Component {
       currentIngredientMeasurement: "",
       sizeQuantity: "",
       sizeMeasurement: "",
+      caloriesQuantity: "",
+      caloriesMeasurement: "",
+      total_carbsQuantity: "",
+      total_carbsMeasurement: "",
+      net_carbsQuantity: "",
+      net_carbsMeasurement: "",
+      fiberQuantity: "",
+      fiberMeasurement: "",
+      fatQuantity: "",
+      fatMeasurement: "",
+      proteinQuantity: "",
+      proteinMeasurement: "",
       currentIngredientQuantity: "",
       currentProductImgSrc: null,
       currentProductDisplayIndex: 0,
@@ -902,7 +914,7 @@ class SuggestProductForm extends Component {
             </div >
           </div >
 
-          <h3>Product Size</h3>
+          <h3>Product Size </h3>
           <div className={styles.suggestion_form}>
             <div className={styles.suggestion_form_2_col}>
 
@@ -954,6 +966,315 @@ class SuggestProductForm extends Component {
                     />
                   </Col>
                 </Row> */}
+            <Stack direction="row" spacing={1} className={styles.stack}>
+              {
+                sizeStrings.map((data, index) => (
+                  <Chip
+                    key={index}
+                    label={data}
+                    className={styles.chip}
+                    onClick={() => this.handleDeleteSizeChip(data)}
+                    onDelete={() => this.handleDeleteSizeChip(data)}
+                  />
+                ))
+              }
+            </Stack>
+
+          </div>
+
+          <h3>Nutritional Information</h3>
+          <h3>Calories</h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_2_col}>
+
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="caloriesQuantity" className={styles.suggestion_form_label}>
+                    Quantity
+                  </label>
+                  <TextField fullWidth id="caloriesQuantity" type="number" onChange={this.onTextFieldChange}
+                    variant="outlined" placeholder="1.." value={this.state.caloriesQuantity} />
+                </div>
+              </div >
+
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="sizeMeasurement" className={styles.suggestion_form_label}>
+                    Measurement
+                  </label>
+                  <Autocomplete
+                    id="caloriesMeasurement"
+                    options={this.measurements.map((option) => option)}
+                    value={this.state.caloriesMeasurement}
+                    onChange={this.handleSizeMeasurement}
+                    freeSolo
+                    renderInput={(params) => (<TextField {...params}
+                      value={this.state.caloriesMeasurement} id="caloriesMeasurement"
+                      variant="outlined" type="text" />)}
+                  />
+                </div>
+
+              </div >
+
+              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
+            </div >
+
+            <Stack direction="row" spacing={1} className={styles.stack}>
+              {
+                sizeStrings.map((data, index) => (
+                  <Chip
+                    key={index}
+                    label={data}
+                    className={styles.chip}
+                    onClick={() => this.handleDeleteSizeChip(data)}
+                    onDelete={() => this.handleDeleteSizeChip(data)}
+                  />
+                ))
+              }
+            </Stack>
+
+          </div>
+          <h3>Total Carbs</h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_2_col}>
+
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="totalcarbsQuantity" className={styles.suggestion_form_label}>
+                    Quantity
+                  </label>
+                  <TextField fullWidth id="totalcarbsQuantity" type="number" onChange={this.onTextFieldChange}
+                    variant="outlined" placeholder="1.." value={this.state.totalcarbsQuantity} />
+                </div>
+              </div >
+
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="totalcarbsMeasurement" className={styles.suggestion_form_label}>
+                    Measurement
+                  </label>
+                  <Autocomplete
+                    id="totalcarbsMeasurement"
+                    options={this.measurements.map((option) => option)}
+                    value={this.state.totalcarbsMeasurement}
+                    onChange={this.handleSizeMeasurement}
+                    freeSolo
+                    renderInput={(params) => (<TextField {...params}
+                      value={this.state.totalcarbsMeasurement} id="totalcarbsMeasurement"
+                      variant="outlined" type="text" />)}
+                  />
+                </div>
+
+              </div >
+
+              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
+            </div >
+
+            <Stack direction="row" spacing={1} className={styles.stack}>
+              {
+                sizeStrings.map((data, index) => (
+                  <Chip
+                    key={index}
+                    label={data}
+                    className={styles.chip}
+                    onClick={() => this.handleDeleteSizeChip(data)}
+                    onDelete={() => this.handleDeleteSizeChip(data)}
+                  />
+                ))
+              }
+            </Stack>
+
+          </div>
+          <h3>Net Carbs</h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_2_col}>
+
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="netcarbsQuantity" className={styles.suggestion_form_label}>
+                    Quantity
+                  </label>
+                  <TextField fullWidth id="netcarbsQuantity" type="number" onChange={this.onTextFieldChange}
+                    variant="outlined" placeholder="1.." value={this.state.netcarbsQuantity} />
+                </div>
+              </div >
+
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="netcarbsMeasurement" className={styles.suggestion_form_label}>
+                    Measurement
+                  </label>
+                  <Autocomplete
+                    id="netcarbsMeasurement"
+                    options={this.measurements.map((option) => option)}
+                    value={this.state.netcarbsMeasurement}
+                    onChange={this.handleSizeMeasurement}
+                    freeSolo
+                    renderInput={(params) => (<TextField {...params}
+                      value={this.state.sizeMeasurement} id="netcarbsMeasurement"
+                      variant="outlined" type="text" />)}
+                  />
+                </div>
+
+              </div >
+
+              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
+            </div >
+
+            <Stack direction="row" spacing={1} className={styles.stack}>
+              {
+                sizeStrings.map((data, index) => (
+                  <Chip
+                    key={index}
+                    label={data}
+                    className={styles.chip}
+                    onClick={() => this.handleDeleteSizeChip(data)}
+                    onDelete={() => this.handleDeleteSizeChip(data)}
+                  />
+                ))
+              }
+            </Stack>
+
+          </div>
+          <h3>Fiber</h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_2_col}>
+
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="fiberQuantity" className={styles.suggestion_form_label}>
+                    Quantity
+                  </label>
+                  <TextField fullWidth id="fiberQuantity" type="number" onChange={this.onTextFieldChange}
+                    variant="outlined" placeholder="1.." value={this.state.fiberQuantity} />
+                </div>
+              </div >
+
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="fiberMeasurement" className={styles.suggestion_form_label}>
+                    Measurement
+                  </label>
+                  <Autocomplete
+                    id="fiberMeasurement"
+                    options={this.measurements.map((option) => option)}
+                    value={this.state.fiberMeasurement}
+                    onChange={this.handleSizeMeasurement}
+                    freeSolo
+                    renderInput={(params) => (<TextField {...params}
+                      value={this.state.fiberMeasurement} id="fiberMeasurement"
+                      variant="outlined" type="text" />)}
+                  />
+                </div>
+
+              </div >
+
+              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
+            </div >
+
+            <Stack direction="row" spacing={1} className={styles.stack}>
+              {
+                sizeStrings.map((data, index) => (
+                  <Chip
+                    key={index}
+                    label={data}
+                    className={styles.chip}
+                    onClick={() => this.handleDeleteSizeChip(data)}
+                    onDelete={() => this.handleDeleteSizeChip(data)}
+                  />
+                ))
+              }
+            </Stack>
+
+          </div>
+          <h3>Fat</h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_2_col}>
+
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="fatQuantity" className={styles.suggestion_form_label}>
+                    Quantity
+                  </label>
+                  <TextField fullWidth id="fatQuantity" type="number" onChange={this.onTextFieldChange}
+                    variant="outlined" placeholder="1.." value={this.state.fatQuantity} />
+                </div>
+              </div >
+
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="fatMeasurement" className={styles.suggestion_form_label}>
+                    Measurement
+                  </label>
+                  <Autocomplete
+                    id="fatMeasurement"
+                    options={this.measurements.map((option) => option)}
+                    value={this.state.fatMeasurement}
+                    onChange={this.handleSizeMeasurement}
+                    freeSolo
+                    renderInput={(params) => (<TextField {...params}
+                      value={this.state.fatMeasurement} id="fatMeasurement"
+                      variant="outlined" type="text" />)}
+                  />
+                </div>
+
+              </div >
+
+              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
+            </div >
+
+            <Stack direction="row" spacing={1} className={styles.stack}>
+              {
+                sizeStrings.map((data, index) => (
+                  <Chip
+                    key={index}
+                    label={data}
+                    className={styles.chip}
+                    onClick={() => this.handleDeleteSizeChip(data)}
+                    onDelete={() => this.handleDeleteSizeChip(data)}
+                  />
+                ))
+              }
+            </Stack>
+
+          </div>
+
+          <h3>Protein</h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_2_col}>
+
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="proteinQuantity" className={styles.suggestion_form_label}>
+                    Quantity
+                  </label>
+                  <TextField fullWidth id="proteinQuantity" type="number" onChange={this.onTextFieldChange}
+                    variant="outlined" placeholder="1.." value={this.state.proteinQuantity} />
+                </div>
+              </div >
+
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="proteinMeasurement" className={styles.suggestion_form_label}>
+                    Measurement
+                  </label>
+                  <Autocomplete
+                    id="proteinMeasurement"
+                    options={this.measurements.map((option) => option)}
+                    value={this.state.proteinMeasurement}
+                    onChange={this.handleSizeMeasurement}
+                    freeSolo
+                    renderInput={(params) => (<TextField {...params}
+                      value={this.state.proteinMeasurement} id="proteinMeasurement"
+                      variant="outlined" type="text" />)}
+                  />
+                </div>
+
+              </div >
+
+              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
+            </div >
+
             <Stack direction="row" spacing={1} className={styles.stack}>
               {
                 sizeStrings.map((data, index) => (
