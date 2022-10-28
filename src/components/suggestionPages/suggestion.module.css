@@ -4,6 +4,7 @@
     background: #FCFCFC;
     display: grid;
     justify-items: center;
+    margin-top: 155px;
 }
 
 .suggestion_sections{
@@ -431,6 +432,12 @@
 
 .stack{
     flex-wrap: wrap;
+}
+
+@media screen and (max-width: 650px) {
+    .suggestion_container{
+        margin-top: 102px;
+    }
 }
 
 @media screen and (max-width: 650px) {

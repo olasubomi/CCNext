@@ -1,115 +1,95 @@
-import React from 'react';
-import './style.css';
-import { Form, Button, Container, Modal, Row, Col, ButtonToolbar } from 'react-bootstrap';
+import React, { useState } from 'react';
+import styles from '../Login/style.module.css';
+// import { Form, Button, Container, Modal, Row, Col, ButtonToolbar } from 'react-bootstrap';
 // import { setTimeout } from 'timers';
+import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
+import closeIcon from "../../../public/assets/icons/eva_menu-close.png"
+import Image from "next/image";
 
-export default class ResetPassword extends React.Component {
-  state = {
-    email: '',
-    username: '',
-    messageErr: false,
-    messageSuccess: false,
-    showModal: true,
-  };
+export default function ForgetPassword(props){
 
+  const [status, setStatusState] = useState(null);
+  const [message, setMessageState] = useState(null);
+  const [formState, setFormState] = useState({
+    email: "",
+  });
+  const { email } = formState;
 
-  handleChange = (e) => {
-    let name = e.currentTarget.name;
-    let value = e.currentTarget.value;
-    this.setState({ [name]: value });
-  }
-
-
-  handleClose = (delay) => {
-    // setTimeout(() => {
-      this.props.history.push('/');
-    // }, delay || 0);
-  };
-
-  formSubmit = (e) => {
+  function formSubmit(e){
     e.preventDefault();
-    if((this.state.email || this.state.username)) {
-      this.submitForm();
+    if((email)) {
+      submitForm();
     } else {
-      this.setState({ messageErr: 'Please enter correct data.' });
+      setStatusState('error')
+      setMessageState('Please enter correct data.')
     }
   };
 
-  submitForm = () => {
+  function submitForm() {
     fetch('https://chopchowdev.herokuapp.com/api/forgotpass', {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-type': 'application/json',
       },
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(state),
     }).then(response => {
       console.log(response)
         if (response.status === 400 || response.status === 404) {
-          this.setState({ messageErr: 'Bad Request , Your username or email does not exist.' });
+          setStatusState('error')
+          setMessageState('Bad Request , Your username or email does not exist.')
         } else if (response.status === 401) {
-          this.setState({ messageErr: 'you are UnAuthorized' });
+          setStatusState('error')
+          setMessageState('you are UnAuthorized')
         } else if (response.status >= 500) {
-          this.setState({ messageErr: 'Sorry , Internal Server ERROR' })
+          setStatusState('error')
+          setMessageState('Sorry , Internal Server ERROR')
         } else {
-          this.setState({ messageErr: '', isAuthenticated: true, messageSuccess: 'Please check your inbox for more details! ' });
+          setStatusState('success')
+          setMessageState('Please check your inbox for more details! ')
           this.handleClose(5000);
         }
       })
   };
 
-  render() {
+    return(
+        <div className={styles.forgot_password}>
+            <div className={styles.login_top}>
+              <div onClick={props.closeForgetPassword} className={styles.login_cancel_con}>
+                <Image src={closeIcon} className={styles.login_cancel} />
+              </div>
+              <Image
+                  src={img_logo}
+                  alt="logo"
+                  className={styles.login_main_logo_img}
+                />
+            </div>
+            <h2>Forgot Password</h2>
+            <h3>Can’t remember your login credentials? Enter your details below and we’ll send instructions if your account exists.</h3>
+            <div className={styles.login_form}>
+              <div className={styles.login_form_group}>
+                <label htmlFor="email" className={styles.login_form_label}>
+                  Email
+                </label>
+                <input
+                  type="text"
+                  name="email"
+                  value={email}
+                  placeholder="Your email"
+                  className={styles.login_form_input}
+                />
+              </div>
+            </div>
+            {status === 'success' ? 
+            <p className="msg-success">{message}</p>:
+            <p className="msg-err">{message}</p>}
+  
+            <button onClick={formSubmit} className={styles.login_button}>Send reset link</button>
+  
+            <h3 className={styles.login_new}>I remember your password</h3>
 
-  return (
-    <Modal show={this.state.showModal} onHide={this.handleClose} className="modal resetpassword" backdrop="static">
-      <Modal.Header closeButton>
-        <Modal.Title style={{ width: '100%', textAlign: 'center' }}>
-          <div>Forgot Password</div>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Container>
-          <Row className="justify-content-md-center">
-            <Col xs lg>
-              <Form className="" onSubmit={this.formSubmit}>
-                <Form.Group>
-                    <Form.Control
-                          type="text"
-                          name="email"
-                          value={this.state.email}
-                          placeholder="Your email"
-                          onChange={this.handleChange}
-                        />
-                      <Form.Label>Or</Form.Label>
-                    
-                      </Form.Group>
-                      
-                      <Form.Group>
-                      <Form.Control
-                          type="text"
-                          name="username"
-                          value={this.state.username}
-                          placeholder="Username"
-                          onChange={this.handleChange}
-                        />
-                        <Form.Label></Form.Label>
-                        
-                      </Form.Group>
-                      <Form.Label>We will send you a link to reset your password.</Form.Label>
+            <button className={styles.login_button2}>Log in</button>
 
-                      <p className="msg-success">{this.state.messageSuccess}</p>
-                      <p className="msg-err">{this.state.messageErr}</p>
-                      <ButtonToolbar>
-                        <Button variant="secondary" type="submit" className="login__form-btn">Reset</Button>
-                      </ButtonToolbar>
-                      
-                    </Form>
-                  </Col>
-                </Row>
-              </Container>
-            </Modal.Body>
-          </Modal>
-        )
+        </div>
+    )
   }
-
-}

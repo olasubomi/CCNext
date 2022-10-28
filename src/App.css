@@ -208,3 +208,13 @@ html{
   background-color: red !important;
   position: relative;
 } */
+
+a{
+  cursor: pointer;
+}
+
+a{
+  text-decoration: none;
+  color: inherit;
+  height: max-content;
+}

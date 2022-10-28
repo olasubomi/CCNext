@@ -10,6 +10,9 @@ import SuggestMealForm from "../src/components/suggestionPages/SuggestMeal";
 import SuggestProductForm from "../src/components/suggestionPages/SuggestProduct";
 import SuggestKitchenUtensilForm from "../src/components/suggestionPages/SuggestKitchenUtensil";
 import SuggestCategoryForm from "../src/components/suggestionPages/SuggestCategory";
+import Header, { Header2 } from "../src/components/Header/Header";
+import SideNav from "../src/components/Header/sidenav";
+
 import Head from "next/head";
 
 class SuggestMeal extends Component {
@@ -171,6 +174,10 @@ class SuggestMeal extends Component {
         const { suggestOption, suggestionType } = this.state;
 
         return (
+            <>
+            <Header />
+            <Header2 />
+            <SideNav />
             <div className={styles.suggestion_container}>
                 <Head>
                     <title>Suggested Meal Form</title>
@@ -249,6 +256,7 @@ class SuggestMeal extends Component {
                     </DialogContent>
                 </Dialog>
             </div>
+            </>
         );
     }
 }

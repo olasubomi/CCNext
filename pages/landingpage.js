@@ -32,7 +32,6 @@ class LandingPage extends Component {
         let slideIndex = this.state.slideIndex;
         this.slider(slideIndex)
         setInterval(() => {
-            console.log('red')
             this.plusSlides(slideIndex)
         }, 6000)
     }
@@ -59,7 +58,6 @@ class LandingPage extends Component {
 
     slider = (n) => {
         let { slideIndex } = this.state;
-        console.log(slideIndex)
         // if(slideIndex < images.length-1){
         //   this.setState({
         //     slideIndex: slideIndex + 1
@@ -72,7 +70,7 @@ class LandingPage extends Component {
 
         let i;
         let slides = document.getElementsByClassName("home_mySlides__Te_K_");
-        console.log(slides.length)
+
         let dots = document.getElementsByClassName("home_dot__tB27k");
         if (n > slides.length) {
             slideIndex = 1;
