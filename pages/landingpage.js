@@ -15,6 +15,7 @@ import chefImage from "../public/assets/homepage/chef.png";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Image from 'next/image';
+import Head from "next/head";
 
 
 class LandingPage extends Component {
@@ -99,6 +100,10 @@ class LandingPage extends Component {
             <div className={styles.home_container}>
                 {/* <Banner/> */}
                 {/* Slideshow container */}
+                <Head>
+                    <title>Chop Chow Home Page</title>
+                    <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                </Head>
                 <div className={styles.home_section_1}>
                     <div className={styles.slideshow_container}>
 

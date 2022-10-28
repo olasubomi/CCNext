@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Header, { Header2 } from "../src/components/Header/Header";
 import Footer from "../src/components/Footer/Footer";
 import LandingPage from "./landingpage";
-import { useEffect } from 'react'
+import { useEffect } from 'react';
+import Head from "next/head";
 
 // import { Route, Switch, Redirect } from "react-router-dom";
 // import HomePage from "./components/HomePage";
@@ -60,6 +61,10 @@ class App extends Component {
         // const { customer_id } = this.props;
 
         return <div>
+            <Head>
+                <title>Chop Chow Landing Page</title>
+                <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+            </Head>
 
             <Header />
             <Header2 />

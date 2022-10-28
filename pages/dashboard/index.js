@@ -1,6 +1,8 @@
+
 import Link from 'next/link';
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react';
+import Head from "next/head";
 import styles from '../../src/components/dashboard/dashboard.module.css'
 import Header from '../../src/components/Header/Header';
 import SideNav, { SideNav2 } from '../../src/components/Header/sidenav';
@@ -9,6 +11,7 @@ import dashRequestsIcon from "../../public/assets/icons/dashrequestsIcon.png"
 import dashUsersIcon from "../../public/assets/icons/dashusersIcon.png"
 import Image from 'next/image';
 import { CloseFillIcon } from '../../src/components/icons';
+
 
 const DashboardHomePage = (props) => {
     const router = useRouter()
@@ -39,6 +42,10 @@ const DashboardHomePage = (props) => {
 
   return (
     <div className={styles.container + " " + styles.col2}>
+    <Head>
+            <title>Chop Chow Dashboard Home Page</title>
+            <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+        </Head>
         <Header />
         <SideNav />
         <div className={styles.left}>

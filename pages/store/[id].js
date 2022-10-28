@@ -1,10 +1,16 @@
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import Head from "next/head";
 
 const IndividualStorePage = () => {
     const router = useRouter()
     const { id } = router.query
 
-    return <p>IndividualStorePage: {id}</p>
+    return <div>
+        <Head>
+            <title>Chop Chow Store Page</title>
+            <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+        </Head>
+        IndividualStorePage: {id}</div>
 }
 
 export default IndividualStorePage
