@@ -9,11 +9,11 @@ import dashRequestsIcon from "../public/assets/icons/dashrequestsIcon.png"
 import dashUsersIcon from "../public/assets/icons/dashusersIcon.png"
 import Image from 'next/image';
 import { CloseFillIcon } from '../src/components/icons';
-import { IgrDoughnutChart, IgrDoughnutChartModule, IgrItemLegendModule, IgrRingSeries, IgrRingSeriesModule } from 'igniteui-react-charts';
+// import { IgrDoughnutChart, IgrDoughnutChartModule, IgrItemLegendModule, IgrRingSeries, IgrRingSeriesModule } from 'igniteui-react-charts';
 
-IgrDoughnutChartModule.register();
-IgrRingSeriesModule.register();
-IgrItemLegendModule.register();
+// IgrDoughnutChartModule.register();
+// IgrRingSeriesModule.register();
+// IgrItemLegendModule.register();
 
 const Admin = (props) => {
     const router = useRouter()
@@ -106,7 +106,7 @@ const Admin = (props) => {
                     <h3>Categories</h3>
                     <div className={styles.chart}>
                         <div className={styles.chart_circle}>
-                            <IgrDoughnutChart
+                            {/* <IgrDoughnutChart
                                 width="100%"
                                 height="100%"
                                 allowSliceSelection="false"
@@ -121,7 +121,7 @@ const Admin = (props) => {
                                         startAngle={30}
                                         outlines='transparent'
                                         />
-                            </IgrDoughnutChart>
+                            </IgrDoughnutChart> */}
 
                             <div className={styles.chart_circle_total}>
                                 <p>Total</p>
@@ -166,7 +166,7 @@ const Admin = (props) => {
                     <h3>User Stats</h3>
                     <div className={styles.chart}>
                         <div className={styles.chart_circle}>
-                            <IgrDoughnutChart
+                            {/* <IgrDoughnutChart
                                 width="100%"
                                 height="100%"
                                 allowSliceSelection="false"
@@ -181,7 +181,7 @@ const Admin = (props) => {
                                         startAngle={30}
                                         outlines='transparent'
                                         />
-                            </IgrDoughnutChart>
+                            </IgrDoughnutChart> */}
 
                             <div className={styles.chart_circle_total}>
                                 <p>Total</p>
@@ -270,7 +270,7 @@ const Admin = (props) => {
                         <h3>Categories</h3>
                         <div className={styles.chart}>
                             <div className={styles.chart_circle}>
-                                <IgrDoughnutChart
+                                {/* <IgrDoughnutChart
                                     width="100%"
                                     height="100%"
                                     allowSliceSelection="false"
@@ -285,7 +285,7 @@ const Admin = (props) => {
                                             startAngle={30}
                                             outlines='transparent'
                                             />
-                                </IgrDoughnutChart>
+                                </IgrDoughnutChart> */}
 
                                 <div className={styles.chart_circle_total}>
                                     <p>Total</p>
@@ -330,7 +330,7 @@ const Admin = (props) => {
                         <h3>User Stats</h3>
                         <div className={styles.chart}>
                         <div className={styles.chart_circle}>
-                                <IgrDoughnutChart
+                                {/* <IgrDoughnutChart
                                     width="100%"
                                     height="100%"
                                     allowSliceSelection="false"
@@ -345,7 +345,7 @@ const Admin = (props) => {
                                             startAngle={30}
                                             outlines='transparent'
                                             />
-                                </IgrDoughnutChart>
+                                </IgrDoughnutChart> */}
 
                                 <div className={styles.chart_circle_total}>
                                     <p>Total</p>

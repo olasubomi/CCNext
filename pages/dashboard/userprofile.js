@@ -1,5 +1,4 @@
 
-import { useRouter } from 'next/router'
 import { useState } from 'react';
 import {container, col2, left, empty, center } from '../../src/components/dashboard/dashboard.module.css'
 import styles from '../../src/components/dashboard/profile.module.css'
@@ -73,8 +72,6 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   }));
 
 const UserProfile = () => {
-    const router = useRouter()
-    const { id } = router.query
     const [formState, setFormState] = useState({
         email: "",
         phone_number: "",

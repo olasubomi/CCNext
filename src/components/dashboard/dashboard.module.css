@@ -4,7 +4,6 @@
     height: 100vh;
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: 259px 1fr;
 }
 
 .col2{
@@ -495,35 +494,33 @@
     }
   
     .status{
-      width: 95px;
-      height: 33px;
+      width: 74px;
+      height: 21px;
       font-style: normal;
       font-weight: 400;
-      font-size: 14px;
-      line-height: 17px;
+      font-size: 12px !important;
+      line-height: 15px !important;    
       /* identical to box height */
   
-      letter-spacing: 0.374px;
-  
-      border-radius: 16px;
+      border-radius: 24px;
       display: grid;
       align-items: center;
       justify-items: center;
     }
   
     .approve{
-      background: #DEEDE5;
-      color: #5CA37B;
+      background: #DEEDE5 !important;
+      color: #5CA37B !important;
     }
   
     .pending{
-      background: #F8F2D4;
-      color: #DABC29;
+      background: rgba(137, 62, 233, 0.25) !important;
+      color: #893EE9 !important;
     }
   
-    .review{
-      background: #D4E2F8;
-      color:#296DDA;
+    .rejected{
+      background: rgba(244, 7, 7, 0.25) !important;
+      color:#F63636 !important;
     }
   
     .errorMsg{
