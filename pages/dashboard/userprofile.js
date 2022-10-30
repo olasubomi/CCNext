@@ -1,5 +1,5 @@
-
 import { useState } from 'react';
+import Head from "next/head";
 import {container, col2, left, empty, center } from '../../src/components/dashboard/dashboard.module.css'
 import styles from '../../src/components/dashboard/profile.module.css'
 import Header from '../../src/components/Header/Header';
@@ -71,6 +71,7 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
     },
   }));
 
+
 const UserProfile = () => {
     const [formState, setFormState] = useState({
         email: "",
@@ -91,6 +92,10 @@ const UserProfile = () => {
 
     return (
         <div className={container + " " + col2}>
+        <Head>
+            <title>User Profile</title>
+            <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+        </Head>
         <Header />
         <SideNav />
         <div className={left}>
@@ -929,6 +934,7 @@ const UserProfile = () => {
         
     </div>
     )
+
 }
 
 export default UserProfile

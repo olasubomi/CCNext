@@ -13,6 +13,8 @@ import SuggestCategoryForm from "../src/components/suggestionPages/SuggestCatego
 import Header, { Header2 } from "../src/components/Header/Header";
 import SideNav from "../src/components/Header/sidenav";
 
+import Head from "next/head";
+
 class SuggestMeal extends Component {
     ingredientsQuantityMeasurements = [];
 
@@ -177,6 +179,10 @@ class SuggestMeal extends Component {
             <Header2 />
             <SideNav />
             <div className={styles.suggestion_container}>
+                <Head>
+                    <title>Suggested Meal Form</title>
+                    <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                </Head>
                 <div className={styles.suggestion_sections}>
                     <div className={styles.suggestion_section_1}>
                         <div className={styles.suggestion_section_1_col_1}>

@@ -128,7 +128,6 @@ const PublicStore = () => {
             <Footer />
         </div>
     )
-
 }
 
 export default PublicStore

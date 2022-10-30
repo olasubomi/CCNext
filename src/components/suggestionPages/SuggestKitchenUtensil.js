@@ -16,19 +16,14 @@ import Popup1 from "../popups/popup1";
 
 
 class SuggestKitchenUtensilForm extends Component {
-  allMealNames = [];
-  productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
-    "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
-    "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes", "Beef", "Green Pepper",
-    "Garlic", "Ginger", "Vegetable Oil", "Lemon", "Rosemary Powder"];
-  productImageLink = [];
+
   categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
   measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
     "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
   kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
     "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
     "Wire Mesh", "Zester"];
-
+  utensilsList = []
   ingredientsQuantityMeasurements = [];
 
 
@@ -85,23 +80,25 @@ class SuggestKitchenUtensilForm extends Component {
   componentDidMount() {
 
     // get all Meal Names***
-    var url = "/get-meals";
+    var url = "/get-all-products";
+    var url = "http://localhost:5000/api/products/get-all-products";
+
     axios.get(url).then((body) => {
-      var mealList = body.data;
-      if (mealList && mealList.data.length !== 0) {
+      var utensilsList = body.data;
+      if (utensilsList && utensilsList.data.length !== 0) {
         console.log("returns GET of ALL MEALS ");
         for (var i = 0; i < mealList.data.length; i++) {
           this.allMealNames.push(mealList.data[i].mealName);
         }
       } else {
-        console.log("get all meal names function does not return");
+        console.log("get all Utensils names function does not return");
       }
     })
       .catch((err) => {
         console.log(err);
       });
 
-    console.log(this.allMealNames);
+    console.log(this.utensilsList);
     // get all store names*, if NEW products section exists.
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
@@ -471,6 +468,166 @@ class SuggestKitchenUtensilForm extends Component {
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
+  sendSuggestedUtensilToDB = async (e) => {
+    const { productName, productImage, productImageName, intro,
+      new_product_ingredients, ingredientGroupList, suggestedCategories } = this.state;
+
+    // handle edge case Product name, ingredienrs or image upload required to submit form
+    if (productName === "") { console.log("product label blank"); return; }
+    // if (ingredientStrings.length === 0) { window.alert("Suggested Product requires adding at least one ingredient to submit"); return; }
+    if (productImage === null || productImage === undefined) { window.alert("You didn't add suggested product image"); return; }
+
+    // Handle instruction/product images to create url for product images on server
+    /*Loop through Ingredients product data
+    Check if all products listed exist in the database.
+    If not, let server create placeholder before submitting to db.
+    Get list of new products and new Categories
+    This for loop is making sure we are building a product_slider.
+    we could probably merge this in the above for loop easily, but we want to call this path function,
+    so lets figure out what its even doing!*/
+
+    const all_ingredients_formatted = [];
+    const product_slider = [];
+    let i = 0;
+
+    for (i = 0; i < new_product_ingredients.length; i++) {
+      // store ingredient format to submit ingredient product objects
+      var tmp_ingredient = {
+        // name and optional image added to new product,
+        // we can add remainder products data after testing current
+        ingredient: new_product_ingredients[i].productName,
+        // image: new_product_ingredients[i].productImgFile
+      };
+      // handle quantity measurement list
+      var measurementQuantity = {
+        quantity: ingredientGroupList[i].quantity,
+        measurement: ingredientGroupList[i].measurement,
+      }
+      // no need for handlers since this is created on submit!
+      this.ingredientsQuantityMeasurements.push(measurementQuantity);
+      // new_products.push(tmp_ingredient);
+      // product_slider.push(tmp_slider_data);
+    }
+
+    let new_measurements = [];
+    for (i = 0; i < ingredientGroupList.length; i++) {
+      // store ingredient format to submit ingredient product objects
+      var tmp_ingredient = {
+        // name and optional image added to new product,
+        // we can add remainder products data after testing current
+        productName: ingredientGroupList[i].productName,
+        quantity: ingredientGroupList[i].quantity,
+        measurement: ingredientGroupList[i].measurement,
+        productImgPath: ingredientGroupList[i].productImgPath,
+        properIngredientStringSyntax: ingredientGroupList[i].properIngredientStringSyntax
+      };
+
+      all_ingredients_formatted.push(tmp_ingredient);
+      console.log(tmp_ingredient);
+
+      const tmp_slider_data = {
+        ingredient: ingredientGroupList[i].product,
+        image: ingredientGroupList[i].productImgPath,
+        display: ingredientGroupList[i].display,
+      };
+      // store product slider format to submit slider object to product
+      product_slider.push(tmp_slider_data);
+
+
+      // get new_Measurements from inputted ingredient packets
+      if (ingredientGroupList[i].measurement !== "") {
+        let index = this.measurements.indexOf(ingredientGroupList[i].measurement);
+        if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
+      }
+    }
+    //-------------to make new category data ------------------------------------------
+    // get list of new categories to submit to mongo
+    let new_categories = [];
+    for (i = 0; i < suggestedCategories.length; i++) {
+      // check if categories already exist, only add new categories to db,
+      // though all will still be attached to product, as mentioned
+      let index = this.categories.indexOf(suggestedCategories[i]);
+      if (index === -1) new_categories.push(suggestedCategories[i]);
+    }
+
+    //prepare product data to Mongo and Recipe Steps Images and Video content to s3
+    const instructionGroupData = [];
+    const contentNameToContentImageOrVideoMapForS3 = new FormData();
+    console.log("product name:");
+    console.log(this.state.productName);
+
+    contentNameToContentImageOrVideoMapForS3.append('productContentName', this.state.productName);
+    console.log(contentNameToContentImageOrVideoMapForS3);
+    var keyValueData = { productContentName: this.state.productName };
+    // console.log("Stringified version:");
+    // console.log(keyValueData);
+    var singleTitleTest = JSON.stringify(keyValueData);
+    console.log(singleTitleTest);
+
+
+    //-------------Submit remainder data of product to Mongo ------------------------------------------
+    let suggestProductForm = new FormData();
+    suggestProductForm.append('product_name', productName);
+    suggestProductForm.append('product_images', productImage);
+    suggestProductForm.append('productImageName', productImageName);
+    suggestProductForm.append('product_details', intro);
+
+    // suggestProductForm.append('ingredientStrings', ingredientStrings);
+    // list of products quantity measurements (created on submit Product)
+    // suggestProductForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
+    suggestProductForm.append('new_measurements', JSON.stringify(new_measurements));
+
+    // suggestProductForm.append('product_slider', JSON.stringify(product_slider));
+    suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
+
+    // new suggested products
+    suggestProductForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
+
+    suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
+    suggestProductForm.append('product_type', JSON.stringify("utensil"));
+    suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
+
+    suggestProductForm.append('newCategories', JSON.stringify(new_categories));
+
+    // suggestProductForm.append('instructionsGroupList', instructionGroupData);
+    console.log(this.state.chunk1Content);
+
+    // chunk content should be passed as file
+    //---------------------------------------------Submit Product to Mongo---------------------------------------------------
+    // var url = "/createProduct/";
+    var url = "http://localhost:5000/api/products/create/";
+
+    const config = {
+      method: 'POST', data: suggestProductForm, url: url,
+      headers: {
+        // 'application/json' is the modern content-type for JSON, but some
+        // older servers may use 'text/json'.
+        // See: http://bit.ly/text-json
+        // application/x-www-form-urlencoded
+        // 'content-type': 'multipart/form-data'
+      }
+    };
+
+    console.log("Printing Chunk Contents");
+
+    var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
+    console.log(instructionData);
+
+    axios(config).then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
+        console.log(response);
+        console.log("Display Product submitted successfully");
+        // window.location.href = "/SuggestProduct"
+      } else {
+        console.log("Something wrong happened ");
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+
+  }
+  ///////////////////////////////////////////////////////////////////////////////////////
   render() {
 
     // const [ingredientInput, setIngredientInput] = useState('');    
@@ -641,7 +798,7 @@ class SuggestKitchenUtensilForm extends Component {
           {/* <Row>
                 <Col md={12}> */}
           {/* <ThemeProvider theme={theme}> */}
-          <Button variant="contained" className={styles.ingredient_button} style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Utensil</Button>
+          <Button variant="contained" className={styles.ingredient_button} style={{ width: "100%" }} onClick={() => this.sendSuggestedUtensilToDB()}> Add Utensil</Button>
           {/* </ThemeProvider> */}
           {/* </Col>
                 

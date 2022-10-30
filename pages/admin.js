@@ -1,7 +1,7 @@
-
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react';
 import styles from '../src/components/dashboard/dashboard.module.css'
+import Head from "next/head";
 import Header from '../src/components/Header/Header';
 import SideNav, { SideNav2 } from '../src/components/Header/sidenav';
 import dashOrdersIcon from "../public/assets/icons/dashordersIcon.png"
@@ -50,6 +50,10 @@ const Admin = (props) => {
 
   return (
     <div className={styles.container + " " + styles.col3}>
+    <Head>
+            <title>Chop Chow Admin Page</title>
+            <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+        </Head>
         <Header />
         <SideNav />
         <div className={styles.left}>
