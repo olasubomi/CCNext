@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 import styles from '../src/components/dashboard/dashboard.module.css'
 import Head from "next/head";
 import Header from '../src/components/Header/Header';
-import SideNav, { SideNav2 } from '../src/components/Header/sidenav';
+import SideNav from '../src/components/Header/sidenav';
 import dashOrdersIcon from "../public/assets/icons/dashordersIcon.png"
 import dashRequestsIcon from "../public/assets/icons/dashrequestsIcon.png"
 import dashUsersIcon from "../public/assets/icons/dashusersIcon.png"
 import Image from 'next/image';
 import { CloseFillIcon } from '../src/components/icons';
+import Sidenav2 from '../src/components/Header/sidenav2';
 // import { IgrDoughnutChart, IgrDoughnutChartModule, IgrItemLegendModule, IgrRingSeries, IgrRingSeriesModule } from 'igniteui-react-charts';
 
 // IgrDoughnutChartModule.register();
@@ -35,7 +36,6 @@ const Admin = (props) => {
     "Nov",
     "Dec",
   ];
-  console.log(props)
 
   useEffect(() => {
 
@@ -57,7 +57,7 @@ const Admin = (props) => {
         <Header />
         <SideNav />
         <div className={styles.left}>
-            <SideNav2 />
+            <Sidenav2 />
         </div>
         <div className={styles.empty}></div>
         <div className={styles.center}>

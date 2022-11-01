@@ -7,6 +7,8 @@ let base_url = `https://chopchowdev.herokuapp.com/api/`;
 
 if (process.env.NODE_ENV !== "development") {
     base_url = `https://chopchowdev.herokuapp.com/api/`;
+}else{
+    base_url = `http://localhost:5000/api/`;
 }
 
 let axios = Axios.create({
@@ -18,7 +20,7 @@ let axios = Axios.create({
 
 if (typeof window !== 'undefined') {
 
-    const token = JSON.parse(localStorage.getItem('token'));
+    const token = localStorage.getItem('x-auth-token');
 
     console.error("__ token __", token);
     axios.defaults.headers.common['Authorization'] = "Bearer " + token;

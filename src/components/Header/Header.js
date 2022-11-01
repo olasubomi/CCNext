@@ -3,7 +3,7 @@ import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import styles from './header.module.css'
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import openIcon from "../../../public/assets/icons/eva_menu-open.png"
 import messageIcon from "../../../public/assets/icons/message.png"
 import orderIcon from "../../../public/assets/icons/orderIcon.png"
@@ -11,14 +11,43 @@ import verifiedIcon from "../../../public/assets/icons/verified.png"
 import cancelredIcon from "../../../public/assets/icons/cancelred.png"
 import Image from 'next/image';
 import { ArrowDownIcon, ArrowLeftFillIcon, BasketIcon, CartIcon, DashBoardIcon, HomeIcon, NotificationIcon, Order2Icon, UserIcon } from "../icons";
+import { Auth } from "../auth";
+import { connect } from "react-redux";
+import { getPath } from "../../actions/Common";
+import { useRouter } from "next/router";
+import { userSignOut, verifyToken } from "../../actions";
 
  
-function Header(){
+function Header(props){
   const [isAuthenticated, setIsAuthenticatedState] = useState(false);
   const [customerId, setCustomerIdState] = useState(null);
   const [username, setUsernameState] = useState(null);
   const [showNotif, setshowNotifState] = useState(true);
   const [openLogin, setOpenLoginState] = useState(false);
+  const router = useRouter()
+
+  useEffect(() => {
+    props.getPath(router.pathname)
+    let token = localStorage.getItem('x-auth-token');
+    let time = localStorage.getItem('in');
+    if(token !== null && time !== null){
+      const msInMinute = 60 * 1000;
+      let min = Math.abs(Date.now() - time) / msInMinute;
+      if(min > 30){
+        localStorage.removeItem('x-auth-token');
+        localStorage.removeItem('in');
+        localStorage.removeItem('user');
+      }else{
+        let user = JSON.parse(localStorage.getItem('user'));
+        props.verifyToken(user,token)
+      }
+    }else{
+      localStorage.removeItem('x-auth-token');
+      localStorage.removeItem('in');
+      localStorage.removeItem('user');
+    }
+  }, []);
+
 
   function updateLogInStatus(customerId, username) {
     console.log("updates log in status before");
@@ -37,7 +66,6 @@ function Header(){
   //     &#x25bc;
   //   </a>
   // ));
-
   //////////////////////////////////////////////////////////////////////
   function handleLogout(e) {
     if (e === "6") {
@@ -122,6 +150,10 @@ function Header(){
     setOpenLoginState(!openLogin)
   }
 
+  function logout(){
+    props.logout()
+  }
+
 
 
   return(
@@ -139,37 +171,33 @@ function Header(){
                 </a>
             </Link>
             <div className={styles.navbar_top_details}>
-              {!isAuthenticated ?
-              <Link href='/login'>
-              <a className={styles.navbar_user_loginbtn}>
-                {/* <Link href="/login">
-                  <a> */}
+              {(!props.auth.isAuthenticated && props.auth.authUser === null) ?
+              // <Link href='/login'>
+              // <a className={styles.navbar_user_loginbtn}>
+                  <div onClick={toggleLogin} className={styles.navbar_user_loginbtn}>
                     Log In/Register
-                  {/* </a>
-                </Link> */}
-              </a>
-              </Link>
+                  </div>
+              // </a>[//\\][//\\][Aa1]
+              // </Link>
               :
               <div className={styles.navbar_user_info}>
                 <img id="userImg" onClick={(e) => toggleUserDetails(e)} src='/assets/icons/user.png' alt='User' className={styles.navbar_user_img}/>
-                <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>Olayemi</h2>
+                <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>{props.auth.authUser.username}</h2>
                 <ArrowDownIcon id="usericon" onClick={(e) => toggleUserDetails(e)} style={styles.navbar_user_icon} />
                 <div id="userdetails" className={styles.navbar_user_signedin}>
                   <div className={styles.navbar_user_signedin_link  + " " + styles.black}>
-                    <DashBoardIcon style='' />
-                    <Image src={openIcon} alt="dashboard" />
+                    <DashBoardIcon style={styles.navbar_main_link_icon} />
                     <h3>Dashboard</h3>
                   </div>
                   <div className={styles.navbar_user_signedin_link  + " " + styles.black}>
                     {/* <Image src={openIcon} alt="profile" /> */}
-                    <UserIcon style='' />
+                    <UserIcon style={styles.navbar_main_link_icon} />
                     <h3>Profile</h3>
                   </div>
                   <div className={styles.navbar_user_signedin_logout}>
                     <div>
-                      <div className={styles.navbar_user_signedin_link + " " + styles.white}>
-                        <Image src={openIcon} alt="logout" />
-                        <ArrowLeftFillIcon style='' />
+                      <div onClick={logout} className={styles.navbar_user_signedin_link + " " + styles.white}>
+                        <ArrowLeftFillIcon style={styles.navbar_main_link_icon2} />
                         <h3>Logout</h3>
                       </div>
                     </div>
@@ -307,7 +335,7 @@ function Header(){
         
       </div>
       <div className={styles.navbar_down}>
-        <div className={styles.navbar_down_col}>
+        <div className={styles.navbar_down_col + " " + (props.path === '/' && styles.activeLinkDown)}>
           <Link href='/'>
             <a>
               <HomeIcon style={styles.navbar_down_col_icon} />
@@ -315,7 +343,7 @@ function Header(){
             </a>
           </Link>
         </div>
-        <div className={styles.navbar_down_col}>
+        <div className={styles.navbar_down_col + " " + (props.path === '/dashboard/orders/orders' && styles.activeLinkDown)}>
           <Link href='/dashboard/orders/orders'>
             <a>
               <Order2Icon style={styles.navbar_down_col_icon} />
@@ -323,7 +351,7 @@ function Header(){
             </a>
           </Link>
         </div>
-        <div className={styles.navbar_down_col}>
+        <div className={styles.navbar_down_col + " " + (props.path === '/grocery-list' && styles.activeLinkDown)}>
           <Link href='/grocery-list'>
             <a>
               <BasketIcon style={styles.navbar_down_col_icon} />
@@ -331,7 +359,7 @@ function Header(){
             </a>
           </Link>
         </div>
-        <div className={styles.navbar_down_col}>
+        <div className={styles.navbar_down_col + " " + (props.path === '/cart' && styles.activeLinkDown)}>
           <Link href='/cart'>
             <a>
               <CartIcon style={styles.navbar_down_col_icon} />
@@ -340,11 +368,33 @@ function Header(){
           </Link>
         </div>
       </div>
+      {openLogin &&
+      <Auth toggleLogin={toggleLogin} />}
     </>
   )
 }
 
-export default Header;
+// export default Header;
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getPath: path => dispatch(getPath(path)),
+    logout: () => dispatch(userSignOut()),
+    verifyToken: (user,token) => dispatch(verifyToken(user,token))
+  };
+}
+
+function mapStateToProp(state) {
+  return {
+    path: state.Common.path,
+    auth: state.Auth
+  };
+}
+
+export default connect(
+  mapStateToProp,
+  mapDispatchToProps,
+)(Header);
 
 export function Header2(){
     

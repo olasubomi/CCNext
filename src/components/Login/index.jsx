@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { userSignIn } from '../../actions';
 // import { withRouter } from "react-router-dom";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
+import facebook from "../../../public/assets/logos/facebook.png"
+import altlogin from "../../../public/assets/logos/altlogin.png"
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png"
 import Image from "next/image";
 import Link from "next/link";
@@ -43,6 +45,12 @@ function Login(props){
 
   function onChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
+  }
+
+  function Login(e){
+    e.preventDefault();
+    props.login(email, password);
+    props.toggleLogin()
   }
 
   return(
@@ -98,10 +106,7 @@ function Login(props){
           </div>
 
           <button 
-           onClick={(ev) => {
-            ev.preventDefault();
-            props.userSignIn({ email: email, password: password });
-          }}
+           onClick={Login}
            className={styles.login_button}>Login</button>
 
           <h3 className={styles.login_new}>Don't have an account yet? {props.toggleLogin ? <span onClick={openSignUp}>Sign up here</span>: <Link href='/signup'><a>Sign up here</a></Link> }</h3>
@@ -111,11 +116,11 @@ function Login(props){
 
             <div className={styles.login_socials}>
               <div className={styles.login_social  + " " + styles.blue}>
-                <Image src={closeIcon} />
-                <h4>Google</h4>
+                <Image src={facebook} />
+                <h4>Facebook</h4>
               </div>
               <div className={styles.login_social}>
-                <Image src={closeIcon} />
+                <Image src={altlogin} />
                 <h4>Google</h4>
               </div>
             </div>
@@ -145,11 +150,21 @@ function Login(props){
   )
 }
 
-const mapStateToProps = ({ auth, commonData }) => {
-  const { authUser, role, customer_id } = auth;
-  const {status }  = commonData;
-  return { authUser, role, customer_id, status }
-};
+function mapStateToProp(state) {
+  return {
+    auth: state.Auth
+  };
+}
 
-const mapDispatchToProps = { userSignIn };
-export default Login;
+function mapDispatchToProps(dispatch) {
+  return {
+    login: (email, password) => dispatch(userSignIn(email, password))
+  };
+}
+
+// export default Login;
+
+export default connect(
+  mapStateToProp,
+  mapDispatchToProps,
+)(Login);

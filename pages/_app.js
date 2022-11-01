@@ -2,9 +2,17 @@
 import '../src/App.css'
 // import '../src/components/Footer/Footer.css'
 // import '../src/components/Header/header.css'
+import { wrapper, store } from "../src/store/index";
+import { Provider } from "react-redux";
 
 function MyApp({ Component, pageProps }) {
-    return <Component {...pageProps} />
+    return (
+        <>
+            <Provider store={store}>
+                <Component {...pageProps} />
+            </Provider>
+        </>
+    )
 }
 
 // Only uncomment this method if you have blocking data requirements for
@@ -19,4 +27,4 @@ function MyApp({ Component, pageProps }) {
 //   return { ...appProps }
 // }
 
-export default MyApp
+export default  wrapper.withRedux(MyApp)

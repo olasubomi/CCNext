@@ -6,7 +6,7 @@ import Image from 'next/image';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png"
 import Link from 'next/link';
-import { DashBoardIcon, HotMealIcon, InventoryIcon, OrderIcon, PowerIcon, StoreMgtIcon, SupportIcon, UserIcon } from '../icons';
+import Sidenav2 from './sidenav2';
 
  
 function SideNav(){
@@ -53,70 +53,10 @@ function SideNav(){
                     </div>
                 </div>
             </div>
-            <SideNav2 />
+            <Sidenav2 showBottom={true} />
         </div>
     </div>
   )
 }
 
 export default SideNav;
-
-export function SideNav2(){
-
-    return(
-        <div className={styles.sidenav_links_con}>
-            <div className={styles.sidenav_links}>
-                <div className={styles.sidenav_link}>
-                    <DashBoardIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard">
-                        <a>Dashboard</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link + " " + styles.active}>
-                    <InventoryIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard/inventory">
-                        <a>Inventory</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link}>
-                    <OrderIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard/orders/orders">
-                        <a>Order</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link}>
-                    <HotMealIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard/suggestedmeals">
-                        <a>Meal/Product Suggestion</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link}>
-                    <UserIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard/userprofile">
-                        <a>My Profile</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link}>
-                    <StoreMgtIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard/userprofile">
-                        <a>Store Management</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link}>
-                    <SupportIcon style={styles.sidenav_link_icon} />
-                    <Link href="/support">
-                        <a>Support</a>
-                    </Link>
-                </div>
-            </div>
-            <div className={styles.side_bottom}>
-                <div className={styles.sidenav_link}>
-                    <PowerIcon style={styles.sidenav_link_icon} />
-                    <Link href="/">
-                        <a >Logout</a>
-                    </Link>
-                </div>
-            </div>
-        </div>
-    )
-}

@@ -135,6 +135,7 @@
 
     color: #000000;
     margin: 0;
+    text-transform: capitalize;
 }
 
 .profile_basic_info > p{
