@@ -90,11 +90,11 @@ const UserProfile = (props) => {
     const { email, phone_number, first_name, last_name, password, address, new_password, card_type } = formState;
     const [value, setValue] = useState('2018-01-01T00:00:00.000Z');
 
-    useEffect(() => {
-        if(props.auth.authUser === null){
-            router.push('/')
-        }
-      }, []);
+    // useEffect(() => {
+    //     if(props.auth.authUser === null){
+    //         router.push('/')
+    //     }
+    //   }, []);
 
     function handleChange(e) {
         setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -118,6 +118,7 @@ const UserProfile = (props) => {
                 <div className={styles.empty}></div>
                 <div className={styles.profile_summary_con}>
                     <h3>Summary</h3>
+                    {props.auth.authUser &&
                     <div className={styles.profile_summary}>
                         <div className={styles.profile_summary_link}>
                             <Link href='#basic-information' >
@@ -140,26 +141,44 @@ const UserProfile = (props) => {
                             </Link>
                         </div>
                         <div className={styles.profile_summary_link}>
-                            <Link href='#account-type' >
-                                <a>Account Type</a>
+                            <Link href='#notification' >
+                                <a>Notification</a>
                             </Link>
                         </div>
+                        {(props.auth.authUser.user_type !== 'driver' || props.auth.authUser.user_type !== 'admin') &&
                         <div className={styles.profile_summary_link}>
                             <Link href='#food-preference' >
                                 <a>Food Preference</a>
                             </Link>
                         </div>
+                        }
+                        {(props.auth.authUser.user_type !== 'supplier' || props.auth.authUser.user_type !== 'admin') &&
                         <div className={styles.profile_summary_link}>
-                            <Link href='#upgrade-chopChow-plan' >
+                            <Link href='#upgrade-chopChow-plan'>
                                 <a>Upgrade ChopChow Plan</a>
                             </Link>
                         </div>
+                        }
+                        {props.auth.authUser.user_type === 'driver' &&
+                        <div className={styles.profile_summary_link}>
+                            <Link href='#working-hours'>
+                                <a>Working Hours</a>
+                            </Link>
+                        </div>
+                        }
+                        <div className={styles.profile_summary_link}>
+                            <Link href='#account-type'>
+                                <a>Account Type</a>
+                            </Link>
+                        </div>
+                        {props.auth.authUser.user_type !== 'admin' &&
                         <div className={styles.profile_summary_link}>
                             <Link href='#close-account' >
                                 <a>Close Account</a>
                             </Link>
-                        </div>
+                        </div>}
                     </div>
+                    }
                 </div>
                 <div className={styles.profile_details}>
                     {props.auth.authUser &&
@@ -491,6 +510,33 @@ const UserProfile = (props) => {
                             <button className={styles.profile_button}>Save Changes</button>
                         </div>
 
+                        <div id='notification' className={styles.profile_basic_info_con}>
+                            <h3>Notification</h3>
+                            <div className={styles.profile_basic_info}>
+                                <div className={styles.profile_notification_con}>
+                                    <h3>General Notification</h3>
+                                    <div className={styles.profile_notifications}>
+                                        <div className={styles.profile_notification}>
+                                            <h3>Receive notification for all order activities</h3>
+                                        </div>
+                                        {props.auth.authUser.user_type !== 'driver' && 
+                                        <div className={styles.profile_notification}>
+                                            <h3>When someone comment on your product</h3>
+                                        </div>}
+                                    </div>
+                                </div>
+                                <div className={styles.line}></div>
+                                <div className={styles.profile_notification_con}>
+                                    <h3>Newsletter</h3>
+                                    <div className={styles.profile_notifications}>
+                                        <div className={styles.profile_notification}>
+                                            <h3>Get notification for our product updates </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         {(props.auth.authUser.user_type !== 'driver' || props.auth.authUser.user_type !== 'admin') &&
                         <div id='food-preference' className={styles.profile_basic_info_con}>
                             <h3>Food Preference</h3>
@@ -715,36 +761,9 @@ const UserProfile = (props) => {
                             </div>
                         </div>
                         }
-
-                        <div className={styles.profile_basic_info_con}>
-                            <h3>Notification</h3>
-                            <div className={styles.profile_basic_info}>
-                                <div className={styles.profile_notification_con}>
-                                    <h3>General Notification</h3>
-                                    <div className={styles.profile_notifications}>
-                                        <div className={styles.profile_notification}>
-                                            <h3>Receive notification for all order activities</h3>
-                                        </div>
-                                        {props.auth.authUser.user_type !== 'driver' && 
-                                        <div className={styles.profile_notification}>
-                                            <h3>When someone comment on your product</h3>
-                                        </div>}
-                                    </div>
-                                </div>
-                                <div className={styles.line}></div>
-                                <div className={styles.profile_notification_con}>
-                                    <h3>Newsletter</h3>
-                                    <div className={styles.profile_notifications}>
-                                        <div className={styles.profile_notification}>
-                                            <h3>Get notification for our product updates </h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         
                         {props.auth.authUser.user_type === 'driver' &&
-                        <div className={styles.profile_basic_info_con}>
+                        <div id='working-hours' className={styles.profile_basic_info_con}>
                             <h3>Work Hours</h3>
                             <div className={styles.profile_basic_info}>
                                 <div className={styles.profile_workinghours_con}>
@@ -941,11 +960,13 @@ const UserProfile = (props) => {
 
                         <div className={styles.line}></div>
 
+                        {props.auth.authUser.user_type !== 'admin' &&
                         <div id='close-account' className={styles.profile_basic_info_con}>
                             <h3>Close Account</h3>
                             <p>Do you want to close down your account? Action cannot be reversed.</p>
                             <button className={styles.profile_button} style={{width: '212px', justifySelf: 'start', background: '#F40707'}}>Close</button>
                         </div>
+                        }
                     </>
                     }
 

@@ -6,7 +6,7 @@ import Head from "next/head";
 import styles from '../../src/components/dashboard/dashboard.module.css'
 import Header from '../../src/components/Header/Header';
 import SideNav from '../../src/components/Header/sidenav';
-import { BagIcon, BatteryIcon, CloseFillIcon, ListIcon, TagIcon } from '../../src/components/icons';
+import { BagIcon, BatteryIcon, CloseFillIcon, LineChartIcon, ListIcon, TagIcon, ThumbsUpIcon } from '../../src/components/icons';
 import Sidenav2 from '../../src/components/Header/sidenav2';
 import GoBack from '../../src/components/CommonComponents/goBack';
 import { connect } from "react-redux";
@@ -39,11 +39,11 @@ const DashboardHomePage = (props) => {
   ];
   console.log(props)
 
-  useEffect(() => {
-    if(props.auth.authUser === null){
-        router.push('/')
-    }
-  }, []);
+//   useEffect(() => {
+//     if(props.auth.authUser === null){
+//         router.push('/')
+//     }
+//   }, []);
 
 //   const data = [
 //     { MarketShare: 37, Category: "Cooling", Summary: "Cooling 40%", },
@@ -54,7 +54,7 @@ const DashboardHomePage = (props) => {
 
   return (
     <div className={styles.container + " " + (props.auth.authUser && props.auth.authUser.user_type === 'admin' ? styles.col3 :styles.col2)}>
-    <Head>
+        <Head>
             <title>Chop Chow Dashboard Home Page</title>
             <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
         </Head>
@@ -83,10 +83,11 @@ const DashboardHomePage = (props) => {
                                 <div></div>
                                 <p className={styles.box_duration}>Today</p>
                             </div>
-                            <div className={styles.value_con2}>
+                            <div className={styles.value_con}>
                                 <div className={styles.value_con2 + " " + styles.red}>
-                                    {props.auth.authUser.user_type === 'customer' && <TagIcon />}
+                                    {(props.auth.authUser.user_type === 'customer' || props.auth.authUser.user_type === 'driver') && <TagIcon />}
                                     {props.auth.authUser.user_type === 'admin' && <BatteryIcon />}
+                                    {props.auth.authUser.user_type === 'supplier' && <LineChartIcon />}
                                 </div>
                                 <div>
                                     <h3 className={styles.box_name}>
@@ -100,16 +101,20 @@ const DashboardHomePage = (props) => {
                         <div className={styles.box2}>
                             <div className={styles.box_purpose2}>
                                 <div></div>
-                                <p className={styles.box_duration}>Monthly</p>
+                                {(props.auth.authUser.user_type === 'driver' || props.auth.authUser.user_type === 'admin') &&
+                                <p className={styles.box_duration}>Monthly</p>}
                             </div>
-                            <div className={styles.value_con2}>
+                            <div className={styles.value_con}>
                                 <div className={styles.value_con2 + " " + styles.orange}>
-                                    {props.auth.authUser.user_type === 'customer' && <BagIcon />}
+                                    {(props.auth.authUser.user_type === 'customer' || props.auth.authUser.user_type === 'supplier') && <BagIcon />}
                                     {props.auth.authUser.user_type === 'admin' && <BatteryIcon />}
+                                    {props.auth.authUser.user_type === 'driver' && <ThumbsUpIcon />}
                                 </div>
                                 <div>
                                     <h3 className={styles.box_name}>
                                         {props.auth.authUser.user_type === 'customer' && 'Total Suggestion'}
+                                        {props.auth.authUser.user_type === 'driver' && 'Total Order Fulfilled'}
+                                        {props.auth.authUser.user_type === 'supplier' && 'Total Inventory Products'}
                                         {props.auth.authUser.user_type === 'admin' && 'Total Users'}
                                     </h3>
                                     <p className={styles.value}>0</p>
@@ -119,17 +124,16 @@ const DashboardHomePage = (props) => {
                         <div className={styles.box2}>
                             <div className={styles.box_purpose2}>
                                 <div></div>
-                                <p className={styles.box_duration}>Weekly</p>
+                                {props.auth.authUser.user_type === 'admin' &&
+                                <p className={styles.box_duration}>Weekly</p>}
                             </div>
-                            <div className={styles.value_con2}>
+                            <div className={styles.value_con}>
                                 <div className={styles.value_con2 + " " + styles.green}>
-                                    {props.auth.authUser.user_type === 'customer' && <ListIcon />}
-                                    {props.auth.authUser.user_type === 'admin' && <BatteryIcon />}
+                                    {props.auth.authUser.user_type === 'admin' ? <BatteryIcon /> : <ListIcon />}
                                 </div>
                                 <div>
                                     <h3 className={styles.box_name}>
-                                        {props.auth.authUser.user_type === 'customer' && 'Orders in queue'}
-                                        {props.auth.authUser.user_type === 'admin' && 'Total Orders'}
+                                        {props.auth.authUser.user_type === 'admin' ? 'Total Orders' : 'Orders in queue'}
                                     </h3>
                                     <p className={styles.value}>0</p>
                                 </div>
@@ -263,8 +267,9 @@ const DashboardHomePage = (props) => {
                 }
                 <div className={styles.dashboard_container}>
                     <h3>
-                        {props.auth.authUser.user_type === 'customer' && 'Recent Order'}
+                        {(props.auth.authUser.user_type === 'customer' || props.auth.authUser.user_type === 'supplier') && 'Recent Order'}
                         {props.auth.authUser.user_type === 'admin' && 'Requests'}
+                        {props.auth.authUser.user_type === 'driver' && 'Recent Request'}
                     </h3>
                     <div className={styles.dashboard}>
                     {props.auth.authUser.user_type === 'admin' &&
@@ -277,7 +282,6 @@ const DashboardHomePage = (props) => {
                             <th className={styles.request_th} style={{textAlign: 'center'}}>Status</th>
                             <th className={styles.request_th + " " + styles.hideData}>Price</th>
                             <th className={styles.request_th + " " + styles.hideData}>Date</th>
-                            <th className={styles.request_th + " " + styles.showData} style={{textAlign: 'center'}}>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -285,20 +289,18 @@ const DashboardHomePage = (props) => {
                                 <td className={styles.request_td}>dfdsf</td>
                                 <td className={styles.request_td}>asf</td>
                                 <td className={styles.request_td + " " + styles.hideData}>safa</td>
-                                <td className={styles.request_td} style={{textAlign: 'center'}}>saf</td>
+                                <td className={styles.request_td+ " " + styles.status + " " + styles.pending} style={{textAlign: 'center'}}>saf</td>
                                 <td className={styles.request_td + " " + styles.hideData}>afa</td>
                                 <td className={styles.request_td + " " + styles.hideData}>afa</td>
-                                <td className={styles.request_td + " " + styles.showData} style={{textAlign: 'center'}}><CloseFillIcon style={styles.actionIcon} /></td>
                             </tr>
 
                             <tr className={styles.refId + " " + styles.request_tr}>
                                 <td className={styles.request_td}>dfdsf</td>
                                 <td className={styles.request_td}>asf</td>
                                 <td className={styles.request_td + " " + styles.hideData}>safa</td>
-                                <td className={styles.request_td} style={{textAlign: 'center'}}>saf</td>
+                                <td className={styles.request_td+ " " + styles.status + " " + styles.approve} style={{textAlign: 'center'}}>saf</td>
                                 <td className={styles.request_td + " " + styles.hideData}>afa</td>
                                 <td className={styles.request_td + " " + styles.hideData}>afa</td>
-                                <td className={styles.request_td + " " + styles.showData} style={{textAlign: 'center'}}><CloseFillIcon style={styles.actionIcon} /></td>
                             </tr>
                         
                         </tbody>
@@ -320,7 +322,7 @@ const DashboardHomePage = (props) => {
                             <tr className={styles.refId + " " + styles.request_tr}>
                                 <td className={styles.request_td}>dfdsf</td>
                                 <td className={styles.request_td}>asf</td>
-                                <td className={styles.request_td} style={{textAlign: 'center'}}>saf</td>
+                                <td className={styles.request_td + " " + styles.status + " " + styles.rejected} style={{textAlign: 'center'}}>saf</td>
                                 <td className={styles.request_td + " " + styles.hideData}>safa</td>
                                 <td className={styles.request_td + " " + styles.hideData}>afa</td>
                                 <td className={styles.request_td + " " + styles.hideData}>afa</td>
@@ -329,7 +331,7 @@ const DashboardHomePage = (props) => {
                             <tr className={styles.refId + " " + styles.request_tr}>
                                 <td className={styles.request_td}>dfdsf</td>
                                 <td className={styles.request_td}>asf</td>
-                                <td className={styles.request_td} style={{textAlign: 'center'}}>saf</td>
+                                <td className={styles.request_td+ " " + styles.status + " " + styles.pending} style={{textAlign: 'center'}}>saf</td>
                                 <td className={styles.request_td + " " + styles.hideData}>safa</td>
                                 <td className={styles.request_td + " " + styles.hideData}>afa</td>
                                 <td className={styles.request_td + " " + styles.hideData}>afa</td>
@@ -337,6 +339,81 @@ const DashboardHomePage = (props) => {
                         
                         </tbody>
                     </table>
+                    }
+
+                    {props.auth.authUser.user_type === 'supplier' &&
+                    <table className={styles.request_table}>
+                        <thead>
+                        <tr className={styles.request_tr} style={{backgroundColor: 'transparent'}}>
+                            <th className={styles.request_th}>Order Number</th>
+                            <th className={styles.request_th}>Customer</th>
+                            <th className={styles.request_th} style={{textAlign: 'center'}}>Status</th>
+                            <th className={styles.request_th + " " + styles.hideData}>Type</th>
+                            <th className={styles.request_th + " " + styles.hideData}>Price</th>
+                            <th className={styles.request_th + " " + styles.hideData}>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr className={styles.refId + " " + styles.request_tr}>
+                                <td className={styles.request_td}>dfdsf</td>
+                                <td className={styles.request_td}>asf</td>
+                                <td className={styles.request_td + " " + styles.status + " " + styles.rejected} style={{textAlign: 'center'}}>saf</td>
+                                <td className={styles.request_td + " " + styles.hideData}>safa</td>
+                                <td className={styles.request_td + " " + styles.hideData}>afa</td>
+                                <td className={styles.request_td + " " + styles.hideData}>afa</td>
+                            </tr>
+
+                            <tr className={styles.refId + " " + styles.request_tr}>
+                                <td className={styles.request_td}>dfdsf</td>
+                                <td className={styles.request_td}>asf</td>
+                                <td className={styles.request_td+ " " + styles.status + " " + styles.pending} style={{textAlign: 'center'}}>saf</td>
+                                <td className={styles.request_td + " " + styles.hideData}>safa</td>
+                                <td className={styles.request_td + " " + styles.hideData}>afa</td>
+                                <td className={styles.request_td + " " + styles.hideData}>afa</td>
+                            </tr>
+                        
+                        </tbody>
+                    </table>
+                    }
+
+                    {props.auth.authUser.user_type === 'driver' &&
+                    <div className={styles.order_groups}>
+                        <div className={styles.orders_head} style={{backgroundColor: 'transparent'}}>
+                            <div className={styles.orders_th}>Order Groups</div>
+                            <div className={styles.orders_th}>Pickup Location</div>
+                            <div className={styles.orders_th}>Delivery Location</div>
+                            <div className={styles.orders_th}>Total</div>
+                            <div className={styles.orders_th}>Pending</div>
+                            <div className={styles.orders_th}>Picked</div>
+                            <div className={styles.orders_th}>Fulfilled</div>
+                        </div>
+                        <div className={styles.orders_body}>
+                            <table className={styles.orders_table}>
+                                <tbody>
+                                    <tr className={styles.refId + " " + styles.orders_tr}>
+                                        <td style={{color: '#000000'}} className={styles.orders_td}>dfdsf</td>
+                                        <td style={{color: '#000000'}} className={styles.orders_td}>asf</td>
+                                        <td style={{color: '#000000'}} className={styles.orders_td}>safa</td>
+                                        <td className={styles.orders_td}>saf</td>
+                                        <td className={styles.orders_td}>afa</td>
+                                        <td className={styles.orders_td}>afa</td>
+                                        <td className={styles.orders_td}>afa</td>
+                                    </tr>
+
+                                    <tr className={styles.refId + " " + styles.orders_tr}>
+                                        <td style={{color: '#000000'}} className={styles.orders_td}>dfdsf</td>
+                                        <td style={{color: '#000000'}} className={styles.orders_td}>asf</td>
+                                        <td style={{color: '#000000'}} className={styles.orders_td}>safa</td>
+                                        <td className={styles.orders_td} style={{textAlign: 'center'}}>saf</td>
+                                        <td className={styles.orders_td}>afa</td>
+                                        <td className={styles.orders_td}>afa</td>
+                                        <td className={styles.orders_td}>afa</td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     }
                     </div>
                 </div>

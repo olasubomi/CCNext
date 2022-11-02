@@ -86,9 +86,9 @@ export default function ForgetPassword(props){
   
             <button onClick={formSubmit} className={styles.login_button}>Send reset link</button>
   
-            <h3 className={styles.login_new}>I remember your password</h3>
+            <h3 onClick={props.closeForgetPassword} className={styles.login_new}>I remember my password</h3>
 
-            <button className={styles.login_button2}>Log in</button>
+            {/* <button className={styles.login_button2}>Log in</button> */}
 
         </div>
     )

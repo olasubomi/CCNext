@@ -84,6 +84,7 @@
   display: flex;
   gap: 5px;
   align-items: center;
+  cursor: pointer;
 }
 
 .navbar_user_img{

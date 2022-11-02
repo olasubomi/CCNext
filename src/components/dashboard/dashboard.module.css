@@ -208,7 +208,6 @@
     line-height: 17px;
     color: #6D6D6D;
     margin: 0;
-    display: none;
 }
 
 .value {
@@ -242,18 +241,6 @@
     grid-column: 2/3;
     justify-self: end;
     align-self: start;
-}
-
-.value_con2{
-  display: grid;
-  align-content: center;
-  align-items: center;
-  gap: 10px;
-  grid-auto-flow: column;
-}
-
-.value_con2 > div{
-    display: grid;
 }
 
 .value_con2{
@@ -469,7 +456,7 @@
     .request_tr{
       display: grid;
       grid-auto-flow: column;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: 11% 11% 13% 13% 14% 15%;
       justify-content: space-between;
       grid-gap: 4rem;
       margin: 0;
@@ -554,6 +541,7 @@
       display: grid;
       align-items: center;
       justify-items: center;
+      justify-self: center;
     }
   
     .approve{

@@ -107,7 +107,7 @@ export const verifyToken = (user,token) => {
         dispatch({ type: FETCH_START });
         axios.get('/user/verifyToken').then(({ data }) => {
             console.log(" ___ verifyUser RESPONSE ___ ", data);
-            if(data.success){
+            // if(data.success){
                 localStorage.setItem('x-auth-token', token);
                 localStorage.setItem('in', Date.now());
                 localStorage.setItem('user', JSON.stringify(user));
@@ -116,21 +116,23 @@ export const verifyToken = (user,token) => {
                 dispatch({ type: USER_DATA, payload: user });
                 dispatch({ type: USER_TOKEN_SET, payload: token });
                 dispatch({ type: IS_AUTHENTICATED, payload: true });
-            }else{
-                localStorage.removeItem('x-auth-token');
-                localStorage.removeItem('in');
-                localStorage.removeItem('user');
-                dispatch({ type: FETCH_SUCCESS });
-                dispatch({ type: USER_DATA, payload: user });
-                dispatch({ type: USER_TOKEN_SET, payload: token });
-                dispatch({ type: IS_AUTHENTICATED, payload: true });
-            }
+            // }else{
+            //     console.log('logout')
+            //     localStorage.removeItem('x-auth-token');
+            //     localStorage.removeItem('in');
+            //     localStorage.removeItem('user');
+            //     dispatch({ type: FETCH_SUCCESS });
+            //     dispatch({ type: USER_DATA, payload: [] });
+            //     dispatch({ type: USER_TOKEN_SET, payload: '' });
+            //     dispatch({ type: IS_AUTHENTICATED, payload: false });
+            // }
             
         }).catch(err => {
             console.error("xxx verifyUser Request ERROR xxx", err);
             dispatch({ type: FETCH_ERROR, payload: "Error during get me request with this token" });
             dispatch({ type: SIGNOUT_USER_SUCCESS });
             dispatch({ type: IS_AUTHENTICATED, payload: false });
+            window.location.assign('/')
         });
     }
 };

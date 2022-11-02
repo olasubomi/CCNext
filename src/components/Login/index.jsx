@@ -14,12 +14,14 @@ import Link from "next/link";
 import ForgetPassword from "../forgotpassword";
 import SignUp from "../signup";
 import { EyeSIcon } from "../icons";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 function Login(props){
   const [forgetPassword, setForgetPasswordState] = useState(false);
   const [signUp, setSignUpState] = useState(false);
   const [status, setStatusState] = useState(null);
   const [message, setMessageState] = useState(null);
+  const [showPass, setShowPassState] = useState(null);
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -53,6 +55,10 @@ function Login(props){
     props.toggleLogin()
   }
 
+  function togglePass(){
+    setShowPassState(!showPass)
+  }
+
   return(
     <>
       {!signUp && !forgetPassword &&
@@ -84,13 +90,16 @@ function Login(props){
                 Password
               </label>
               <input
-                type="password" name="password"
+                type={showPass ? "text":"password"} name="password"
                 value={password} placeholder="Your password"
                 onChange={onChange}
                 className={styles.login_form_input}
               />
-              <div className={styles.secureEye}>
+              <div onClick={togglePass} className={styles.secureEye}>
+              {showPass ? 
+                <VisibilityIcon className={styles.eye} /> :
                 <EyeSIcon style={styles.eye} />
+              }
               </div>
             </div>
           </div>

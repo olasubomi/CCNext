@@ -21,11 +21,11 @@ const SuggestedMeals = (props) => {
     const [search, setSearchState] = useState(false)
     const [showReason, setShowReasonState] = useState(false)
 
-    useEffect(() => {
-        if(props.auth.authUser === null){
-            router.push('/')
-        }
-      }, []);
+    // useEffect(() => {
+    //     if(props.auth.authUser === null){
+    //         router.push('/')
+    //     }
+    //   }, []);
 
     function togglePublicMeal(){
         setAddPublicMeal(!addPublicMeal)
@@ -132,9 +132,13 @@ const SuggestedMeals = (props) => {
                             <td className={styles.request_td}>safa</td>
                             <td className={styles.request_td}>afa</td>
                             <td className={styles.request_td + " " + styles.actions_con}>
-                                <div className={styles.tableactionbutton}>Send for review</div>
-                                {props.auth.authUser.user_type === 'supplier' &&
-                                    <div className={styles.tableactionbutton} style={{background: 'F47900', color:'white'}}>Send for Inventory</div> 
+                                {props.auth.authUser.user_type !== 'admin' &&
+                                <>
+                                    <div className={styles.tableactionbutton}>Send for review</div>
+                                    {props.auth.authUser.user_type === 'supplier' &&
+                                        <div className={styles.tableactionbutton} style={{background: 'F47900', color:'white'}}>Send for Inventory</div> 
+                                    }
+                                </>
                                 }
                                 <CloseFillIcon style={actionIcon} />
                             </td>

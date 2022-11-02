@@ -152,6 +152,7 @@ function Header(props){
 
   function logout(){
     props.logout()
+    router.push('/')
   }
 
 
@@ -185,15 +186,23 @@ function Header(props){
                 <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>{props.auth.authUser.username}</h2>
                 <ArrowDownIcon id="usericon" onClick={(e) => toggleUserDetails(e)} style={styles.navbar_user_icon} />
                 <div id="userdetails" className={styles.navbar_user_signedin}>
-                  <div className={styles.navbar_user_signedin_link  + " " + styles.black}>
-                    <DashBoardIcon style={styles.navbar_main_link_icon} />
-                    <h3>Dashboard</h3>
-                  </div>
-                  <div className={styles.navbar_user_signedin_link  + " " + styles.black}>
-                    {/* <Image src={openIcon} alt="profile" /> */}
-                    <UserIcon style={styles.navbar_main_link_icon} />
-                    <h3>Profile</h3>
-                  </div>
+                  <Link href='/dashboard'>
+                    <a>
+                      <div className={styles.navbar_user_signedin_link  + " " + styles.black}>
+                        <DashBoardIcon style={styles.navbar_main_link_icon} />
+                        <h3>Dashboard</h3>
+                      </div>
+                    </a>
+                  </Link>
+                  <Link href='/dashboard/userprofile'>
+                    <a>
+                      <div className={styles.navbar_user_signedin_link  + " " + styles.black}>
+                        {/* <Image src={openIcon} alt="profile" /> */}
+                        <UserIcon style={styles.navbar_main_link_icon} />
+                        <h3>Profile</h3>
+                      </div>
+                    </a>
+                  </Link>
                   <div className={styles.navbar_user_signedin_logout}>
                     <div>
                       <div onClick={logout} className={styles.navbar_user_signedin_link + " " + styles.white}>
