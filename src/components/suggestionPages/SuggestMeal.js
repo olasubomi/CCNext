@@ -15,6 +15,8 @@ import Popup2 from "../popups/popup2";
 // import ProductsPageModal from "./ProductsPageModal";
 var FormData = require('form-data');
 // var fs = require('fs');
+import Image from 'next/image';
+
 
 class SuggestMealForm extends Component {
   allMealNames = [];
@@ -1353,7 +1355,7 @@ class SuggestMealForm extends Component {
     // new suggested products
     suggestMealForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
     suggestMealForm.append('meal_categories', JSON.stringify(suggestedCategories));
-    // suggestMealForm.append('categories', JSON.stringify(suggestedCategories));
+    suggestMealForm.append('categories', JSON.stringify(suggestedCategories));
     suggestMealForm.append('newCategories', JSON.stringify(new_categories));
 
     suggestMealForm.append('kitchen_utensils', JSON.stringify(suggestedUtensils));
@@ -1547,7 +1549,7 @@ class SuggestMealForm extends Component {
               </div>}
             <Row>
               <Col md={12} style={{ marginTop: "20px" }}>
-                <p><img id="MealsMainImages" width="100%" alt="main_Meal_Image" style={{ display: "none" }} />
+                <p><Image id="MealsMainImages" width="100%" alt="main_Meal_Image" style={{ display: "none" }} />
                 </p>
               </Col>
             </Row>
@@ -1556,7 +1558,7 @@ class SuggestMealForm extends Component {
               this.state.mealImagesData.map((data, index) =>
                 <Row key={index}>
                   <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><img src={data} width="100%" alt="main_Utensil_Image" />
+                    <p><Image src={data} width="100%" height="100%" alt="main_Utensil_Image" />
                     </p>
                   </Col>
                 </Row>
@@ -1800,7 +1802,7 @@ availableLocations,
                   </div>
                 </div>
 
-                <p><img id="chunk1Image" className={styles.suggestion_image} alt="recipe_step1_image_or_video" style={{ display: "none" }} />
+                <p><Image id="chunk1Image" className={styles.suggestion_image} alt="recipe_step1_image_or_video" style={{ display: "none" }} />
                   <video className={styles.suggestion_image} id="chunk1Video" style={{ display: "none" }} controls>
                     Your browser does not support the video tag.
                   </video>
@@ -1860,7 +1862,7 @@ availableLocations,
                       </div>
                     </div>
 
-                    <p><img id={"chunk" + id + "Image"} className={styles.suggestion_image} alt={"recipe_step" + id + "_image_or_video"} style={{ display: "none" }} />
+                    <p><Image id={"chunk" + id + "Image"} className={styles.suggestion_image} alt={"recipe_step" + id + "_image_or_video"} style={{ display: "none" }} />
                       <video className={styles.suggestion_image} id={"chunk" + id + "Video"} style={{ display: "none" }} controls>
                         Your browser does not support the video tag.
                       </video>
@@ -1885,7 +1887,7 @@ availableLocations,
                     <TextField id="chunk1Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 1)} label="Section 1 Title" variant="outlined" />
                     <br />
                     <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent1" name="instructionChunkContent1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 1)} />
-                    <p><img id="chunk1Image" width="100%" alt="recipe_step1_image_or_video" style={{ display: "none" }} />
+                    <p><Image id="chunk1Image" width="100%" alt="recipe_step1_image_or_video" style={{ display: "none" }} />
                       <video width="100%" id="chunk1Video" style={{ display: "none" }} controls>
                         Your browser does not support the video tag.
                       </video>
@@ -1897,7 +1899,7 @@ availableLocations,
 
                     <br />
                     <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent2" name="instructionChunkContent2" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 2)} />
-                    <p><img id="chunk2Image" width="100%" alt="recipe_step2_image_or_video" style={{ display: "none" }} />
+                    <p><Image id="chunk2Image" width="100%" alt="recipe_step2_image_or_video" style={{ display: "none" }} />
                       <video width="100%" id="chunk2Video" style={{ display: "none" }} controls>
                         <source type="video/mp4" id="chunk2VideoSource" />
                         Your browser does not support the video tag.
@@ -1913,7 +1915,7 @@ availableLocations,
 
                     <br />
                     <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent3" name="instructionChunkContent3" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 3)} />
-                    <p><img id="chunk3Image" width="100%" alt="recipe_step3_image_or_video" style={{ display: "none" }} />
+                    <p><Image id="chunk3Image" width="100%" alt="recipe_step3_image_or_video" style={{ display: "none" }} />
                       <video width="100%" id="chunk3Video" style={{ display: "none" }} controls>
                         <source type="video/mp4" id="chunk3VideoSource" />
                         Your browser does not support the video tag.
@@ -1927,7 +1929,7 @@ availableLocations,
 
                     <br />
                     <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent4" name="instructionChunkContent4" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 4)} />
-                    <p><img id="chunk4Image" width="100%" alt="recipe_step4_image_or_video" style={{ display: "none" }} />
+                    <p><Image id="chunk4Image" width="100%" alt="recipe_step4_image_or_video" style={{ display: "none" }} />
                       <video width="100%" id="chunk4Video" style={{ display: "none" }} controls>
                         <source type="video/mp4" id="chunk4VideoSource" />
                         Your browser does not support the video tag.
@@ -1942,7 +1944,7 @@ availableLocations,
 
                     <br />
                     <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent5" name="instructionChunkContent5" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 5)} />
-                    <p><img id="chunk5Image" width="100%" alt="recipe_step5_image_or_video" style={{ display: "none" }} />
+                    <p><Image id="chunk5Image" width="100%" alt="recipe_step5_image_or_video" style={{ display: "none" }} />
                       <video width="100%" id="chunk5Video" style={{ display: "none" }} controls>
                         <source type="video/mp4" id="chunk5VideoSource" />
                         Your browser does not support the video tag.
@@ -1955,7 +1957,7 @@ availableLocations,
 
                     <br />
                     <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent6" name="instructionChunkContent6" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 6)} />
-                    <p><img id="chunk6Image" width="100%" alt="recipe_step6_image_or_video" style={{ display: "none" }} />
+                    <p><Image id="chunk6Image" width="100%" alt="recipe_step6_image_or_video" style={{ display: "none" }} />
                       <video width="100%" id="chunk6Video" style={{ display: "none" }} controls>
                         <source type="video/mp4" id="chunk6VideoSource" />
                         Your browser does not support the video tag.

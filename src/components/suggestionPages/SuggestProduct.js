@@ -11,6 +11,8 @@ import Chip from '@mui/material/Chip';
 import AddIcon from '@mui/icons-material/Add';
 import styles from "./suggestion.module.css";
 import Popup1 from "../popups/popup1";
+import Image from 'next/image';
+
 
 class SuggestProductForm extends Component {
   allProductNames = [];
@@ -693,7 +695,6 @@ class SuggestProductForm extends Component {
 
     // handle edge case Product name, ingredienrs or image upload required to submit form
     if (productName === "") { console.log("product label blank"); return; }
-    // if (ingredientStrings.length === 0) { window.alert("Suggested Product requires adding at least one ingredient to submit"); return; }
     if (productImage === null || productImage === undefined) { window.alert("You didn't add suggested product image"); return; }
 
     // Handle instruction/product images to create url for product images on server
@@ -888,7 +889,7 @@ class SuggestProductForm extends Component {
 
             <Row>
               <Col md={12} style={{ marginTop: "20px" }}>
-                < p > <img id="ProductsMainImages" width="100%" alt="main_product_Image" style={{ display: "none" }} />
+                < p > <Image id="ProductsMainImages" width="100%" alt="main_product_Image" style={{ display: "none" }} />
                 </p >
               </Col >
             </Row >
@@ -897,7 +898,7 @@ class SuggestProductForm extends Component {
               this.state.productImagesData.map((data, index) =>
                 <Row key={index}>
                   <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><img src={data} width="100%" alt="main_product_Image" />
+                    <p><Image src={data} width="100%" alt="main_product_Image" />
                     </p>
                   </Col>
                 </Row>
@@ -1435,12 +1436,11 @@ class SuggestProductForm extends Component {
               </Row> */}
           <u >View privacy policy</u>
           <div id="ProductAdditionalDataDisplayed" >
-            <Popup1 openModal={this.state.openModal} closeModal={this.closeModal}
+            <Popup1 popup='product' openModal={this.state.openModal} closeModal={this.closeModal}
               name={this.state.productName} description={this.state.productDescription}
               imageData={this.state.productImageData} image={this.state.productImage}
               imagesData={this.state.productImagesData} categories={this.state.suggestedCategories}
-              quantity={this.state.quantity}
-              sizesList={this.state.sizeStrings}
+              sizesList={this.state.sizeStrings} ingredientList={ingredientStrings}
             />
             {/* <ProductPageModal openModal={this.state.openModal} closeModal={this.closeModal}
                  productName={this.state.productName} product_images={this.state.product_images}

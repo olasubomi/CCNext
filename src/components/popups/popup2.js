@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import CancelIcon from '@mui/icons-material/Cancel';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import Image from 'next/image';
 import printImage from "../../../public/assets/logos/print.png";
 import twitterImage from "../../../public/assets/logos/twitter.png";
 import facebookImage from "../../../public/assets/logos/facebook.png";
@@ -53,7 +54,7 @@ class Popup2 extends Component {
                                 <div className={styles.popup2_col_1}>
                                     <div className={styles.img_col}>
                                         {imageData !== '' &&
-                                            <img
+                                            <Image
                                                 src={imageData}
                                                 alt="pop up"
                                                 className={styles.popup2_main_img}
@@ -62,7 +63,7 @@ class Popup2 extends Component {
                                             <div className={styles.popup2_images}>
                                                 {
                                                     imagesData.map((data, index) =>
-                                                        <img key={index} alt="pop up" src={data} className={styles.popup2_image} />
+                                                        <Image key={index} alt="pop up" src={data} className={styles.popup2_image} />
                                                     )
                                                 }
 
@@ -113,7 +114,7 @@ class Popup2 extends Component {
                                         {this.props['instructionChunk' + curIn].title !== '' &&
                                             <>
                                                 {allowedImageExtensions.exec(this.props['instructionChunk' + curIn].dataName) && this.props['chunk' + curIn + 'Content'] !== undefined &&
-                                                    <img
+                                                    <Image
                                                         src={this.props['chunk' + curIn + 'Content']}
                                                         alt={this.props['instructionChunk' + curIn].title}
                                                         className={styles.popup2_step_img}
@@ -140,14 +141,15 @@ class Popup2 extends Component {
                             </div>
                             <div className={styles.popup2_footer}>
                                 <p>Share this product</p>
-                                <img src={facebookImage} alt='facebook' />
-                                <img src={instagramImage} alt='instagram' />
-                                <img src={twitterImage} alt='twitter' />
+                                <Image src={facebookImage} alt='facebook' />
+                                <Image src={instagramImage} alt='instagram' />
+                                <Image src={twitterImage} alt='twitter' />
                                 <ReactToPrint
                                     trigger={() => {
                                         // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
                                         // to the root node of the returned component as it will be overwritten.
-                                        return <div><img src={printImage} alt='print' /></div>;
+                                        return <div>
+                                            <Image alt='print' src={printImage} /></div>;
                                     }}
                                     content={() => this.componentRef}
                                 />
