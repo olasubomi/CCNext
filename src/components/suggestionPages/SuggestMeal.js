@@ -140,7 +140,7 @@ class SuggestMealForm extends Component {
       if (mealList && mealList.data.length !== 0) {
         console.log("returns GET of ALL MEALS ");
         for (var i = 0; i < mealList.data.length; i++) {
-          this.allMealNames.push(mealList.data[i].mealName);
+          this.props.allMealNames.push(mealList.data[i].mealName);
         }
       } else {
         console.log("get all meal names function does not return");
@@ -377,13 +377,13 @@ class SuggestMealForm extends Component {
     var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
 
     if (allowedImageExtensions.exec(event.target.files[0].name)) {
-      if (this.state.mealImage === []) {
+      if (this.state.mealImage === '') {
         this.setState({
           mealImage: [...this.state.mealImage, event.target.files[0]]
         });
         this.setState({
           mealImageName: event.target.files[0].name,
-          mealImagesData: [...this.state.mealImagesData, event.target.files[0]],
+          // mealImagesData: [...this.state.mealImagesData, event.target.files[0]],
           mealImageData: URL.createObjectURL(event.target.files[0])
         });
         //display meals main image or videoin suggest meal
@@ -400,7 +400,7 @@ class SuggestMealForm extends Component {
         // console.log(URL.createObjectURL(event.target.files[0]));
       } else {
         this.setState({
-          mealImagesData: [...this.state.mealImagesData, event.target.files[0]]
+          mealImagesData: [...this.state.mealImagesData, URL.createObjectURL(event.target.files[0])]
         });
         // var image = document.getElementById("mealsMainImages"+(this.state.utensilImagesData.length+1));
         // image.style.display = "block";
@@ -559,7 +559,7 @@ class SuggestMealForm extends Component {
     if (val !== undefined && val !== null) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.productNames.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.props.productNames.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrProductIndexInDBsProductsList);
 
@@ -1000,7 +1000,7 @@ class SuggestMealForm extends Component {
 
     console.log("current state of product index at Add Ingredient To Meal is : \n" + this.state.currProductIndexInDBsProductsList);
 
-    const searchResult = this.productNames.map(function callback(element) { if (element.toLowerCase() === (ingredientValue.toLowerCase())) { return true; } else { return false; } });
+    const searchResult = this.props.productNames.map(function callback(element) { if (element.toLowerCase() === (ingredientValue.toLowerCase())) { return true; } else { return false; } });
     const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
     console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrProductIndexInDBsProductsList);
 
@@ -1126,7 +1126,7 @@ class SuggestMealForm extends Component {
 
       // get new_Measurements from inputted ingredient packets
       if (ingredientGroupList[i].measurement !== "") {
-        let index = this.measurements.indexOf(ingredientGroupList[i].measurement);
+        let index = this.props.measurements.indexOf(ingredientGroupList[i].measurement);
         if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
       }
     }
@@ -1136,7 +1136,7 @@ class SuggestMealForm extends Component {
     for (i = 0; i < suggestedCategories.length; i++) {
       // check if categories already exist, only add new categories to db,
       // though all will still be attached to meal, as mentioned
-      let index = this.categories.indexOf(suggestedCategories[i]);
+      let index = this.props.categories.indexOf(suggestedCategories[i]);
       if (index === -1) new_categories.push(suggestedCategories[i]);
     }
 
@@ -1144,7 +1144,7 @@ class SuggestMealForm extends Component {
     for (i = 0; i < suggestedUtensils.length; i++) {
       // check if categories already exist, only add new categories to db,
       // though all will still be attached to meal, as mentioned
-      let index = this.kitchenUtensils.indexOf(suggestedUtensils[i]);
+      let index = this.props.kitchenUtensils.indexOf(suggestedUtensils[i]);
       if (index === -1) new_kitchen_utensils.push(suggestedUtensils[i]);
     }
 
@@ -1400,7 +1400,7 @@ class SuggestMealForm extends Component {
               </label>
               <Autocomplete
                 id="mealName"
-                options={this.allMealNames.map((option) => option)}
+                options={this.props.allMealNames.map((option) => option)}
                 // onChange={(ev, val) => this.onInputChange(ev, val)}
                 onInputChange={(ev, val) => this.onInputChange(ev, val)}
                 freeSolo
@@ -1429,7 +1429,7 @@ class SuggestMealForm extends Component {
             </div>
 
             <h3>Upload Images <em>(Up to 4)</em></h3>
-            {this.state.mealImagesData.length < 4 &&
+            {this.state.mealImagesData.length < 3 &&
               <div className={styles.suggestion_form_image}>
                 <div className={styles.suggestion_form_image_col_1}>
                   <div onClick={() => this.uploadMealImage()} className={styles.suggestion_form_image_icon_con}>
@@ -1446,12 +1446,12 @@ class SuggestMealForm extends Component {
                 </p>
               </Col>
             </Row>
-
+            {console.log(this.state.mealImagesData)}
             {
               this.state.mealImagesData.map((data, index) =>
                 <Row key={index}>
                   <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><Image src={data} width="100%" height="100%" alt="main_Utensil_Image" />
+                    <p><Image src={data} width="100%" height="100%" alt="other_meal_images" />
                     </p>
                   </Col>
                 </Row>
@@ -1492,7 +1492,7 @@ class SuggestMealForm extends Component {
               </label>
               <Autocomplete
                 id="currentIngredient"
-                options={this.productNames.map((option) => option)}
+                options={this.props.productNames.map((option) => option)}
                 // onChange={(ev)=>this.onTextFieldChange(ev)}
                 value={this.state.currentIngredient}
                 onChange={(ev, val) => this.handleProductNameInput(ev, val)}
@@ -1523,7 +1523,7 @@ class SuggestMealForm extends Component {
                   </label>
                   <Autocomplete
                     id="currentIngredientMeasurement"
-                    options={this.measurements.map((option) => option)}
+                    options={this.props.measurements.map((option) => option)}
                     value={this.state.currentIngredientMeasurement}
                     onChange={this.handleIngredientMeasurement}
                     freeSolo
@@ -1568,7 +1568,7 @@ class SuggestMealForm extends Component {
                   freeSolo
                   clearOnBlur
                   onBlur={this.kitBlur}
-                  options={this.kitchenUtensils.map((option) => option)}
+                  options={this.props.kitchenUtensils.map((option) => option)}
                   // onChange={(ev,val)=>this.handleUtensilsDropdownChange(ev,val)}
                   onChange={(e, val) => this.handleKitchenUtensilInputName(val)}
                   renderInput={(params) => (<TextField {...params}
@@ -1763,7 +1763,7 @@ class SuggestMealForm extends Component {
                   clearOnBlur
                   onBlur={this.categoryBlur}
                   // filterSelectedOptions
-                  options={this.categories.map((option) => option)}
+                  options={this.props.categories.map((option) => option)}
                   // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
                   onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
                   // getOptionLabel={option => option}
