@@ -19,19 +19,6 @@ import Image from 'next/image';
 
 
 class SuggestMealForm extends Component {
-  allMealNames = [];
-  productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
-    "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
-    "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes", "Beef", "Green Pepper",
-    "Garlic", "Ginger", "Vegetable Oil", "Lemon", "Rosemary Powder"];
-  productImageLink = [];
-  categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
-  measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
-    "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
-  kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
-    "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
-    "Wire Mesh", "Zester"];
-
   ingredientsQuantityMeasurements = [];
 
   constructor(props) {
@@ -170,62 +157,24 @@ class SuggestMealForm extends Component {
     // var url = "/get-all-products";
     url = "https://chopchowdev.herokuapp.com/get-all-products";
 
-    // axios.get(url).then((body) => {
-    //   this.productsList = body.data;
-    //   if (this.productsList && this.productsList.data.length !== 0) {
-    //     console.log("returns GET ALL PRODUCTS ");
-    //     for (var i = 0; i < this.productsList.data.length; i++) {
-    //       this.productNames.push(this.productsList.data[i].product_name);
-    //       this.productImageLink.push(this.productsList.data[i].product_image);
-    //     }       
-    //   } else {
-    //     console.log("get all products function does not return");
-    //   }
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
 
     //----get category meals-------------------------
     url = "/get-all-categories";
-    // axios.get(url).then((body) => {
-    //   var categoriesFromDBList = body.data;
-    //   if (categoriesFromDBList && categoriesFromDBList.data.length !== 0) {
-    //     console.log("returns GET of ALL Categories ");
 
-    //     for (var i = 0; i < categoriesFromDBList.data.length; i++) {
-    //       this.categories.push(categoriesFromDBList.data[i].category_name);
-    //     }
-    //     console.log("PRINTING UPDATED CATEGORIES LIST");
-    //   } else {
-    //     console.log("get all products function does not return");
-    //   }
-    // })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
     this.categories = this.categories;
     if (typeof window !== 'undefined') {
 
       let doc = document.querySelector('#formmeal')
       if (doc) {
-        doc.addEventListener('keyup', (e) => {
-          console.log('sdcd')
+        setInterval(() => {
           localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
-        })
 
-        doc.addEventListener('click', (e) => {
-          localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
-        }, false)
+        }, 100)
       }
 
       if (localStorage.getItem('suggestMealForm')) {
         let {
           mealName,
-          mealImage,
-          mealImageName,
-          mealImageData,
-          mealImagesData,
           intro,
 
           ingredientNames,
@@ -283,95 +232,12 @@ class SuggestMealForm extends Component {
           stepInputs
         } = JSON.parse(localStorage.getItem('suggestMealForm'))
 
-        if (mealImageData !== '') {
-          var imageM = document.getElementById("MealsMainImages");
-          imageM.style.display = "block";
-          imageM.src = mealImageData;
-        }
-
-        var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
-        var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
-
-        var imageElementId = "chunk1Image";
-        var videoElementId = "chunk1Video";
-
-        // console.log(allowedImageExtensions.exec(event.target.files[0].name));
-
-        // we need to keep track of wether an image or video was last uploaded and use the last one only.
-        if (JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'] !== '') {
-          if (allowedImageExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk1'].dataName)) {
-            //display meals main image or videoin suggest meal
-
-            setTimeout(() => {
-              var image = document.getElementById(imageElementId);
-              var video = document.getElementById(videoElementId);
-              image.style.display = "block";
-              image.src = JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'];
-              video.style.display = "none";
-            }, 100)
-
-          }
-          else if (allowedVideoExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk1'].dataName)) {
-            //display meals main image or videoin suggest meal
-            setTimeout(() => {
-              var image = document.getElementById(imageElementId);
-              var video = document.getElementById(videoElementId);
-              video.style.display = "block";
-              video.src = JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'];
-              image.style.display = "none";
-              video.play();
-            }, 100)
-          }
-          else {
-            alert('Invalid file type');
-          }
-        }
-
-        for (let i = 0; i < stepInputs.length; i++) {
-
-          let imageElementId = "chunk" + (stepInputs[i]) + "Image";
-          let videoElementId = "chunk" + (stepInputs[i]) + "Video";
-
-          // console.log(allowedImageExtensions.exec(event.target.files[0].name));
-
-          // we need to keep track of wether an image or video was last uploaded and use the last one only.
-          if (JSON.parse(localStorage.getItem('suggestMealForm'))['chunk' + stepInputs[i] + 'Content'] !== '') {
-            if (allowedImageExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk' + stepInputs[i]].dataName)) {
-              //display meals main image or videoin suggest meal
-
-              setTimeout(() => {
-                console.log(imageElementId, videoElementId)
-                var image = document.getElementById(imageElementId);
-                var video = document.getElementById(videoElementId);
-                image.style.display = "block";
-                image.src = JSON.parse(localStorage.getItem('suggestMealForm'))['chunk' + stepInputs[i] + 'Content'];
-                video.style.display = "none";
-              }, 100)
-
-            }
-            else if (allowedVideoExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk' + stepInputs[i]].dataName)) {
-              //display meals main image or videoin suggest meal
-              setTimeout(() => {
-                var image = document.getElementById(imageElementId);
-                var video = document.getElementById(videoElementId);
-                video.style.display = "block";
-                video.src = JSON.parse(localStorage.getItem('suggestMealForm'))['chunk' + stepInputs[i] + 'Content'];
-                image.style.display = "none";
-                video.play();
-              }, 100)
-            }
-            else {
-              alert('Invalid file type');
-            }
-          }
-        }
-
         this.setState({
           mealName,
-          mealImage,
-          mealImageName,
-          mealImageData,
-          mealImagesData,
+          mealImage: '',
+          mealImageName: '',
+          mealImageData: '',
+          mealImagesData: [],
           intro,
 
           ingredientNames,
@@ -399,20 +265,44 @@ class SuggestMealForm extends Component {
           cookTime,
           prepTime,
 
-          instructionChunk6,
-          instructionChunk1,
-          instructionChunk2,
-          instructionChunk3,
-          instructionChunk4,
-          instructionChunk5,
+          instructionChunk6: {
+            title: instructionChunk6.title,
+            instructionSteps: instructionChunk6.instructionSteps,
+            dataName: ""
+          },
+          instructionChunk1: {
+            title: instructionChunk1.title,
+            instructionSteps: instructionChunk1.instructionSteps,
+            dataName: ""
+          },
+          instructionChunk2: {
+            title: instructionChunk2.title,
+            instructionSteps: instructionChunk2.instructionSteps,
+            dataName: ""
+          },
+          instructionChunk3: {
+            title: instructionChunk3.title,
+            instructionSteps: instructionChunk3.instructionSteps,
+            dataName: ""
+          },
+          instructionChunk4: {
+            title: instructionChunk4.title,
+            instructionSteps: instructionChunk4.instructionSteps,
+            dataName: ""
+          },
+          instructionChunk5: {
+            title: instructionChunk5.title,
+            instructionSteps: instructionChunk5.instructionSteps,
+            dataName: ""
+          },
           instructionWordlength,
 
-          chunk1Content,
-          chunk2Content,
-          chunk3Content,
-          chunk4Content,
-          chunk5Content,
-          chunk6Content,
+          chunk1Content: '',
+          chunk2Content: '',
+          chunk3Content: '',
+          chunk4Content: '',
+          chunk5Content: '',
+          chunk6Content: '',
 
           // do we want all the instruction variables ?
           // instructionGroupList:[],
@@ -428,6 +318,11 @@ class SuggestMealForm extends Component {
           booleanOfDisplayOfDialogBoxConfirmation,
           stepInputs
         })
+        var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
+        var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
+
+        var imageElementId = "chunk1Image";
+        var videoElementId = "chunk1Video";
       }
     }
   }
@@ -442,24 +337,12 @@ class SuggestMealForm extends Component {
   //////////////////////////////////////////////////////////////////////////////////////////////
   openMealDetailsModal = (index) => {
     // toggle products page visibility for product to be Edited.
-    // this.productDisplayBooleansOutOfState[this.state.ingredientGroupList.length] = false;
-    // this.productDisplayBooleansOutOfState[index] = true;
 
-    // var tmpIngredientGroupList = this.state.ingredientGroupList;
-    // tmpIngredientGroupList[index].display = true;
-    // tmpIngredientGroupList[currentProductDisplayIndex].display = false;
-    // this.setState({ingredientGroupList: tmpIngredientGroupList});
     console.log("Comes in toggle product details div id. Index is : " + index);
 
     var individualProductDisplay = document.getElementById("ProductAdditionalDataDisplayed");
     console.log(individualProductDisplay);
 
-    // if (individualProductDisplay.style.display === "block") {
-    //   individualProductDisplay.style.display = "none";
-    // }
-    // else {
-    //   individualProductDisplay.style.display = "block";
-    // }
     this.setState({ openModal: true });
   }
 
@@ -494,10 +377,13 @@ class SuggestMealForm extends Component {
     var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
 
     if (allowedImageExtensions.exec(event.target.files[0].name)) {
-      if (this.state.mealImage === '') {
+      if (this.state.mealImage === []) {
         this.setState({
-          mealImage: event.target.files[0],
+          mealImage: [...this.state.mealImage, event.target.files[0]]
+        });
+        this.setState({
           mealImageName: event.target.files[0].name,
+          mealImagesData: [...this.state.mealImagesData, event.target.files[0]],
           mealImageData: URL.createObjectURL(event.target.files[0])
         });
         //display meals main image or videoin suggest meal
@@ -514,7 +400,7 @@ class SuggestMealForm extends Component {
         // console.log(URL.createObjectURL(event.target.files[0]));
       } else {
         this.setState({
-          mealImagesData: [...this.state.mealImagesData, URL.createObjectURL(event.target.files[0])]
+          mealImagesData: [...this.state.mealImagesData, event.target.files[0]]
         });
         // var image = document.getElementById("mealsMainImages"+(this.state.utensilImagesData.length+1));
         // image.style.display = "block";
@@ -1168,9 +1054,13 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedMealToDB = async (e) => {
-    const { mealName, prepTime, cookTime, mealImage, mealImageName, intro, servings, chef,
+    const { mealName, prepTime, cookTime, mealImage, mealImageName, mealImageData, mealImagesData, intro, servings, chef,
       new_product_ingredients, ingredientGroupList, suggestedCategories, tips, suggestedUtensils,
       chunk1Content, chunk2Content, chunk3Content, chunk4Content, chunk5Content, chunk6Content } = this.state;
+
+    console.log(mealImage);
+    console.log(mealImageData);
+    console.log(mealImagesData);
 
     // handle edge case meal name, ingredienrs or image upload required to submit form
     if (mealName === "") { console.log("meal label blank"); return; }
@@ -1333,7 +1223,9 @@ class SuggestMealForm extends Component {
     //-------------Submit remainder data of meal to Mongo ------------------------------------------
     let suggestMealForm = new FormData();
     suggestMealForm.append('meal_name', mealName);
-    suggestMealForm.append('meal_images', mealImage);
+    suggestMealForm.append('mealImage', mealImage);
+    console.log(mealImage)
+    suggestMealForm.append('meal_images', mealImagesData);
     suggestMealForm.append('mealImageName', mealImageName);
 
     suggestMealForm.append('prep_time', prepTime);
@@ -1355,14 +1247,14 @@ class SuggestMealForm extends Component {
     // new suggested products
     suggestMealForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
     suggestMealForm.append('meal_categories', JSON.stringify(suggestedCategories));
-    suggestMealForm.append('categories', JSON.stringify(suggestedCategories));
-    suggestMealForm.append('newCategories', JSON.stringify(new_categories));
+    suggestMealForm.append('categories', suggestedCategories);
+    suggestMealForm.append('newCategories', new_categories);
 
     suggestMealForm.append('kitchen_utensils', JSON.stringify(suggestedUtensils));
     suggestMealForm.append('newKitchenUtensils', JSON.stringify(new_kitchen_utensils));
 
     // RecipeSteps
-    suggestMealForm.append('formatted_instructions', JSON.stringify(instructionGroupData));
+    suggestMealForm.append('formatted_instructions', instructionGroupData);
     suggestMealForm.append('instructionChunkContent1', chunk1Content);
     suggestMealForm.append('instructionChunkContent2', chunk2Content);
     suggestMealForm.append('instructionChunkContent3', chunk3Content);
@@ -1371,7 +1263,8 @@ class SuggestMealForm extends Component {
     suggestMealForm.append('instructionChunkContent6', chunk6Content);
 
     // suggestMealForm.append('instructionsGroupList', instructionGroupData);
-    console.log(this.state.chunk1Content);
+    // console.log(this.state.chunk1Content);
+    console.log(suggestMealForm.values);
 
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
@@ -1536,7 +1429,7 @@ class SuggestMealForm extends Component {
             </div>
 
             <h3>Upload Images <em>(Up to 4)</em></h3>
-            {this.state.mealImagesData.length < 3 &&
+            {this.state.mealImagesData.length < 4 &&
               <div className={styles.suggestion_form_image}>
                 <div className={styles.suggestion_form_image_col_1}>
                   <div onClick={() => this.uploadMealImage()} className={styles.suggestion_form_image_icon_con}>
@@ -1549,7 +1442,7 @@ class SuggestMealForm extends Component {
               </div>}
             <Row>
               <Col md={12} style={{ marginTop: "20px" }}>
-                <p><Image id="MealsMainImages" width="100%" alt="main_Meal_Image" style={{ display: "none" }} />
+                <p><img id="MealsMainImages" width="100%" height="100%" alt="main_Meal_Image" style={{ display: "none" }} />
                 </p>
               </Col>
             </Row>
@@ -1646,20 +1539,6 @@ class SuggestMealForm extends Component {
             {/* // show all ingredients in two column table format */}
             {/* Show all Products in display format as expected in Meal Page*/}
 
-            {/* <Row className={styles.mb-2}>
-                  <Col md={12}>
-                    <ChipInput
-                      label="IngredientsList"
-                      value={this.state.ingredientStrings}
-                      onAdd={(chip) => this.handleAddIngredientChip(chip)}
-                      placeholder="e.g 1 Onion, 2 Cups of Water, etc"
-                      onDelete={(chip) => this.handleDeleteIngredientChip(chip)}
-                      variant="outlined"
-                      fullWidth
-                      className={styles.mb-2}
-                    />
-                  </Col>
-                </Row> */}
             <Stack direction="row" spacing={1} className={styles.stack}>
               {
                 ingredientStrings.map((data, index) => (
@@ -1675,22 +1554,6 @@ class SuggestMealForm extends Component {
             </Stack>
 
           </div>
-
-
-          {/* <ProductsPageModal
-                        value={this.state.ingredientGroupList}
-                        productIndex = {this.getProductIndex()}
-                        // {this.state.currentProductIndexDisplayed}
-                        // toggleProductPage={this.
-                        // openProductDetailsModal
-                      // }
-             /> */}
-          {/* 
-availableLocations,
-    rawImages, productImages,
-    calories
-    total_carbs, net_carbs, fiber, fat, protein ,
-    sodium, cholesterol, vitamind, calcium, iron, potassium */}
 
           <h3>Kitchen Utensils<em>(optional)</em></h3>
           <div className={styles.suggestion_form}>
@@ -1802,7 +1665,8 @@ availableLocations,
                   </div>
                 </div>
 
-                <p><Image id="chunk1Image" className={styles.suggestion_image} alt="recipe_step1_image_or_video" style={{ display: "none" }} />
+                <p><Image id="chunk1Image" className={styles.suggestion_image} alt="recipe_step1_image_or_video"
+                  height={"100%"} width={"100%"} />
                   <video className={styles.suggestion_image} id="chunk1Video" style={{ display: "none" }} controls>
                     Your browser does not support the video tag.
                   </video>
@@ -1862,7 +1726,8 @@ availableLocations,
                       </div>
                     </div>
 
-                    <p><Image id={"chunk" + id + "Image"} className={styles.suggestion_image} alt={"recipe_step" + id + "_image_or_video"} style={{ display: "none" }} />
+                    <p><Image id={"chunk" + id + "Image"} height={"100%"} width={"100%"} className={styles.suggestion_image} alt={"recipe_step" + id + "_image_or_video"}
+                      style={{ display: "none" }} />
                       <video className={styles.suggestion_image} id={"chunk" + id + "Video"} style={{ display: "none" }} controls>
                         Your browser does not support the video tag.
                       </video>
@@ -1882,90 +1747,6 @@ availableLocations,
               }
             </div>
 
-            {/* <Row>
-                  <Col md={6}>
-                    <TextField id="chunk1Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 1)} label="Section 1 Title" variant="outlined" />
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent1" name="instructionChunkContent1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 1)} />
-                    <p><Image id="chunk1Image" width="100%" alt="recipe_step1_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk1Video" style={{ display: "none" }} controls>
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk1.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 1)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 1)} variant="outlined" />
-                  </Col>
-                  <Col md={6}>
-                    <TextField id="chunk2Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 2)} label="Section 2 Title" variant="outlined" />
-
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent2" name="instructionChunkContent2" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 2)} />
-                    <p><Image id="chunk2Image" width="100%" alt="recipe_step2_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk2Video" style={{ display: "none" }} controls>
-                        <source type="video/mp4" id="chunk2VideoSource" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk2.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 2)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 2)} variant="outlined" />
-
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <TextField id="chunk3Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 3)} label="Section 3 Title" variant="outlined" />
-
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent3" name="instructionChunkContent3" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 3)} />
-                    <p><Image id="chunk3Image" width="100%" alt="recipe_step3_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk3Video" style={{ display: "none" }} controls>
-                        <source type="video/mp4" id="chunk3VideoSource" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk3.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 3)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 3)} variant="outlined" />
-
-                  </Col>
-                  <Col md={6}>
-                    <TextField id="chunk4Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 4)} label="Section 4 Title" variant="outlined" />
-
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent4" name="instructionChunkContent4" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 4)} />
-                    <p><Image id="chunk4Image" width="100%" alt="recipe_step4_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk4Video" style={{ display: "none" }} controls>
-                        <source type="video/mp4" id="chunk4VideoSource" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk4.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 4)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 4)} variant="outlined" />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <TextField id="chunk5Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 5)} label="Section 5 Title" variant="outlined" />
-
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent5" name="instructionChunkContent5" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 5)} />
-                    <p><Image id="chunk5Image" width="100%" alt="recipe_step5_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk5Video" style={{ display: "none" }} controls>
-                        <source type="video/mp4" id="chunk5VideoSource" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk5.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 5)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 5)} variant="outlined" />
-                  </Col>
-                  <Col md={6}>
-                    <TextField id="chunk6Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 6)} label="Section 6 Title" variant="outlined" />
-
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent6" name="instructionChunkContent6" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 6)} />
-                    <p><Image id="chunk6Image" width="100%" alt="recipe_step6_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk6Video" style={{ display: "none" }} controls>
-                        <source type="video/mp4" id="chunk6VideoSource" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk6.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 6)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 6)} variant="outlined" />
-                  </Col>
-                </Row> */}
           </div>
 
           <h3>Add Meal Categories</h3>
@@ -2073,21 +1854,6 @@ availableLocations,
               instructionWordlength={this.state.instructionWordlength}
               tips={this.state.tips} mealImageData={this.state.mealImageData}
             />
-            {/* <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
-                 mealName={this.state.mealName} mealImage={this.state.mealImage}
-                 categories={this.state.suggestedCategories}
-                  prepTime={this.state.prepTime} cookTime={this.state.cookTime}
-                  serves={this.state.servings}
-                  ingredientsList = {this.state.ingredientStrings} utensilsList={this.state.suggestedUtensils}
-                  instructionChunk1={this.state.instructionChunk1} instructionChunk2={this.state.instructionChunk2}
-                  instructionChunk3={this.state.instructionChunk3} instructionChunk4={this.state.instructionChunk4}
-                  instructionChunk5={this.state.instructionChunk5} instructionChunk6={this.state.instructionChunk6}
-                  chunk1Content={this.state.chunk1Content} chunk2Content={this.state.chunk2Content}
-                  chunk3Content={this.state.chunk3Content} chunk4Content={this.state.chunk4Content}
-                  chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
-                  instructionWordlength={this.state.instructionWordlength}
-                  tips={this.state.tips} mealImageData={this.state.mealImageData}
-                 /> */}
           </div>
           {/* <Popup1></Popup1> */}
         </form>

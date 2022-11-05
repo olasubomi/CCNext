@@ -28,11 +28,15 @@ class Popup1 extends Component {
                                     src={imageData}
                                     alt="pop up"
                                     className={styles.popup_main_img}
+                                    height={"100%"} width={"100%"}
                                 />
                                 <div className={styles.popup_images}>
+                                    {/* {console.log(imageData)} */}
                                     {
                                         imagesData.map((data, index) =>
-                                            <Image key={index} alt="pop up" src={data} className={styles.popup_image} />
+                                            <Image key={index} alt="pop up" src={data}
+                                                height={"100%"} width={"100%"}
+                                                className={styles.popup_image} />
                                         )
                                     }
 
