@@ -741,7 +741,7 @@
   margin-top: 2rem;
 }
 
-.sidenav_links > .sidenav_link:hover{
+.sidenav_links > a:hover{
   background: #BE6002;
   border-radius: 8px;
 }

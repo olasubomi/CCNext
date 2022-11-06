@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
+import axios from '../../src/util/Api';
 
 const SuggestedMeals = (props) => {
     const router = useRouter()
@@ -21,11 +22,11 @@ const SuggestedMeals = (props) => {
     const [search, setSearchState] = useState(false)
     const [showReason, setShowReasonState] = useState(false)
 
-    // useEffect(() => {
-    //     if(props.auth.authUser === null){
-    //         router.push('/')
-    //     }
-    //   }, []);
+    useEffect(() => {
+        axios.get('/meals/get-meals/1').then(data => {
+            console.log(data)
+        })
+      }, []);
 
     function togglePublicMeal(){
         setAddPublicMeal(!addPublicMeal)
@@ -96,6 +97,7 @@ const SuggestedMeals = (props) => {
                 </div>
                 <div className={styles.suggestedmeal_row2}>
                     <h3>Items</h3>
+                    {props.auth.authUser.user_type !== 'admin' &&
                     <div>
                         <h5>Remove Sections(s)</h5>
                         <div>
@@ -109,6 +111,7 @@ const SuggestedMeals = (props) => {
                             </div>
                         </div>
                     </div>
+                    }
                 </div>
                 <div className={styles.suggestedmeal}>
                 <table className={styles.request_table}>
@@ -169,9 +172,13 @@ const SuggestedMeals = (props) => {
                             <td className={styles.request_td}>safa</td>
                             <td className={styles.request_td}>afa</td>
                             <td className={styles.request_td+ " " + styles.actions_con}>
-                                <div className={styles.tableactionbutton}>Send for review</div>
-                                {props.auth.authUser.user_type === 'supplier' &&
-                                    <div className={styles.tableactionbutton}>Send for Inventory</div> 
+                                {props.auth.authUser.user_type !== 'admin' &&
+                                <>
+                                    <div className={styles.tableactionbutton}>Send for review</div>
+                                    {props.auth.authUser.user_type === 'supplier' &&
+                                        <div className={styles.tableactionbutton}>Send for Inventory</div> 
+                                    }
+                                </>
                                 }
                                 <CloseFillIcon style={styles.actionIcon} />
                             </td>

@@ -54,6 +54,43 @@
     align-items: center;
 }
 
+.mode_con{
+  justify-self: end;
+  display: flex;
+}
+
+.mode{
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  /* identical to box height */
+
+
+  color: #737373;
+  padding: 0 7px;
+  width: 102px;
+  height: 26px;
+  background: rgba(4, 213, 5, 0.06);
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  cursor: pointer;
+}
+
+.left_mode{
+  border-radius: 4px 0px 0px 4px;
+}
+
+.right_mode{
+  border-radius: 0px 4px 4px 0px;
+}
+
+.active_mode{
+  background: #00A301;
+  color: #FFFFFF;
+}
+
 /* a {
     text-decoration: none;
     color: inherit;

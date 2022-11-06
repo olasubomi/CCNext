@@ -19,30 +19,32 @@ export const setInitUrl = (url) => {
     };
 };
 
-export const userSignUp = ({ name, email, password }) => {
-    console.log(name, email, password);
+export const userSignUp = (form) => {
+    console.log(form);
     return (dispatch) => {
         dispatch({ type: FETCH_START });
-        axios.post('/register', {
-            name: name,
-            email: email,
-            password: password
+        axios.post('/user/signup', {
+            ...form
         }
         ).then(({ data }) => {
             console.log("__ SignUp api res __ : ", data);
-            if (typeof window !== 'undefined') {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + data.data.token;
 
-                localStorage.setItem("token", JSON.stringify(data.token));
-                axios.defaults.headers.common['Authorization'] = "Bearer " + data.token;
-                dispatch({ type: FETCH_SUCCESS });
-                dispatch({ type: USER_TOKEN_SET, payload: data.token });
-                dispatch({ type: USER_ROLE, payload: data.role });
-            }
+            localStorage.setItem('x-auth-token', data.data.token);
+            localStorage.setItem('in', Date.now());
+            localStorage.setItem('user', JSON.stringify(data.data.user));
+
+            dispatch({ type: FETCH_SUCCESS });
+            dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+            dispatch({ type: USER_ROLE, payload: data.data.role });
+            dispatch({ type: USER_DATA, payload: data.data.user });
+            dispatch({ type: IS_AUTHENTICATED, payload: true });
             // dispatch({ type: USER_DATA, payload: data.user });
             // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
         }).catch(err => {
             console.error("xxx userSignUp Request ERROR xxx");
             console.log(err.response.status);
+            dispatch({ type: IS_AUTHENTICATED, payload: false });
             if (err.response.status === 422) {
                 dispatch({ type: FETCH_ERROR, payload: "Email address was already taken. If you are owner, please proceed to login with this email." });
             }
@@ -136,6 +138,21 @@ export const verifyToken = (user,token) => {
         });
     }
 };
+
+export const forgotPassword = (email) => {
+    return (dispatch) => {
+        dispatch({ type: FETCH_START });
+        axios.post('/user/forgotpassword', {email: email})
+            .then(({ data }) => {
+                console.log(" email sent: ", data)
+                dispatch({ type: FETCH_SUCCESS });
+            })
+            .catch(err => {
+                console.error("xxx forgotPassword Request ERROR xxx", err);
+                dispatch({ type: FETCH_ERROR, payload: "Error during request to resend email" });
+            });
+    }
+}
 
 export const changePassword = (payload) => {
     return (dispatch) => {
