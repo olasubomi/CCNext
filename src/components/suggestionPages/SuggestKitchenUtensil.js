@@ -17,23 +17,18 @@ import Popup1 from "../popups/popup1";
 
 class SuggestKitchenUtensilForm extends Component {
 
-  categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
-  measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
-    "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
-  kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
-    "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
-    "Wire Mesh", "Zester"];
   utensilsList = []
   ingredientsQuantityMeasurements = [];
 
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       utensilName: "",
-      utensilImage: "",
-      utensilImageName: "",
-      utensilImageData: "",
+      utensilImage1: "",
+      utensilImage2: "",
+      utensilImage3: "",
+      utensilImage4: "",
       utensilImagesData: [],
       intro: "",
 
@@ -170,7 +165,6 @@ class SuggestKitchenUtensilForm extends Component {
 
         // we need to update how we create image paths
         productImg_path,
-        new_product_ingredients,
         suggested_stores,
         currProductIndexInDBsProductsList,
         // currStoreIndexIfExistsInProductsList,
@@ -206,7 +200,6 @@ class SuggestKitchenUtensilForm extends Component {
 
         // we need to update how we create image paths
         productImg_path,
-        new_product_ingredients,
         suggested_stores,
         currProductIndexInDBsProductsList,
         // currStoreIndexIfExistsInProductsList,
@@ -245,38 +238,46 @@ class SuggestKitchenUtensilForm extends Component {
 
     if (allowedImageExtensions.exec(event.target.files[0].name)) {
       //display utensils main image or videoin suggest utensil
-      if (this.state.utensilImage === '') {
-        this.setState({
-          utensilImage: event.target.files[0],
-          utensilImageName: event.target.files[0].name,
-          utensilImageData: URL.createObjectURL(event.target.files[0])
-        });
-        var image = document.getElementById("UtensilsMainImages");
-        image.style.display = "block";
-        image.src = URL.createObjectURL(event.target.files[0]);
+      // if (this.state.utensilImage === '') {
+      this.setState({
+        utensilImagesData: [...this.state.utensilImagesData, event.target.files[0]]
+      });
 
-        console.log(event.target.files[0]);
-        console.log(event.target.files[0].name);
-
-
-        console.log(allowedImageExtensions.exec(event.target.files[0].name));
-
-        // console.log(URL.createObjectURL(event.target.files[0]));
-      } else {
-        this.setState({
-          utensilImagesData: [...this.state.utensilImagesData, URL.createObjectURL(event.target.files[0])]
-        });
-        // var image = document.getElementById("UtensilsMainImages"+(this.state.utensilImagesData.length+1));
-        // image.style.display = "block";
-        // image.src = URL.createObjectURL(event.target.files[0]);
-
-        console.log(event.target.files[0]);
-        console.log(event.target.files[0].name);
-
-
-        console.log(allowedImageExtensions.exec(event.target.files[0].name));
+      if (this.state.utensilImage1 == "") {
+        this.setState({ utensilImage1: event.target.files[0] });
+      }
+      else if (this.state.utensilImage2 == "") {
+        this.setState({ utensilImage2: event.target.files[0] });
+      }
+      else if (this.state.utensilImage3 == "") {
+        this.setState({ utensilImage3: event.target.files[0] });
 
       }
+      else {
+        this.setState({ utensilImage4: event.target.files[0] });
+
+      }
+      // this.setState({
+      //   utensilImage: event.target.files[0],
+      //   utensilImageName: event.target.files[0].name,
+      //   utensilImageData: URL.createObjectURL(event.target.files[0])
+      // });
+      var image = document.getElementById("UtensilsMainImages");
+      image.style.display = "block";
+      image.src = URL.createObjectURL(event.target.files[0]);
+
+      console.log(event.target.files[0]);
+      console.log(event.target.files[0].name);
+      console.log(allowedImageExtensions.exec(event.target.files[0].name));
+
+      // console.log(URL.createObjectURL(event.target.files[0]));
+      // } else {
+
+      // var image = document.getElementById("UtensilsMainImages"+(this.state.utensilImagesData.length+1));
+      // image.style.display = "block";
+      // image.src = URL.createObjectURL(event.target.files[0]);
+
+      // }
     }
     else {
       alert("Invalid image type");
@@ -396,12 +397,6 @@ class SuggestKitchenUtensilForm extends Component {
     descriptionObject.productIndex = 0;
     // descriptionObject.calories = 0;
 
-    // append String to new Products array if not
-    // var tmpNewProducts = [...this.state.new_product_ingredients];
-    // var tmpNewProducts = this.state.new_product_ingredients;
-    // var updatedProductList = [tmpNewProducts, descriptionObject];
-
-    // this.setState({ new_product_ingredients: updatedProductList })
     this.setState({ new_product_description: [...this.state.new_product_description, descriptionObject] });
 
     this.setState({ descriptionGroupList: [...this.state.descriptionGroupList, descriptionObject] });
@@ -445,14 +440,7 @@ class SuggestKitchenUtensilForm extends Component {
   }
 
   openMealDetailsModal = (index) => {
-    // toggle products page visibility for product to be Edited.
-    // this.productDisplayBooleansOutOfState[this.state.ingredientGroupList.length] = false;
-    // this.productDisplayBooleansOutOfState[index] = true;
 
-    // var tmpIngredientGroupList = this.state.ingredientGroupList;
-    // tmpIngredientGroupList[index].display = true;
-    // tmpIngredientGroupList[currentProductDisplayIndex].display = false;
-    // this.setState({ingredientGroupList: tmpIngredientGroupList});
     console.log("Comes in toggle product details div id. Index is : " + index);
 
     var individualProductDisplay = document.getElementById("ProductAdditionalDataDisplayed");
@@ -469,13 +457,14 @@ class SuggestKitchenUtensilForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedUtensilToDB = async (e) => {
-    const { productName, productImage, productImageName, intro,
-      new_product_ingredients, ingredientGroupList, suggestedCategories } = this.state;
+    const { productName, utensilImagesData, intro,
+      suggestedCategories, utensilImage1, utensilImage2, utensilImage3, utensilImage4 } = this.state;
 
     // handle edge case Product name, ingredienrs or image upload required to submit form
     if (productName === "") { console.log("product label blank"); return; }
     // if (ingredientStrings.length === 0) { window.alert("Suggested Product requires adding at least one ingredient to submit"); return; }
-    if (productImage === null || productImage === undefined) { window.alert("You didn't add suggested product image"); return; }
+    if (utensilImagesData === null || utensilImagesData === undefined ||
+      utensilImagesData === []) { window.alert("You didn't add suggested product image"); return; }
 
     // Handle instruction/product images to create url for product images on server
     /*Loop through Ingredients product data
@@ -490,63 +479,14 @@ class SuggestKitchenUtensilForm extends Component {
     const product_slider = [];
     let i = 0;
 
-    for (i = 0; i < new_product_ingredients.length; i++) {
-      // store ingredient format to submit ingredient product objects
-      var tmp_ingredient = {
-        // name and optional image added to new product,
-        // we can add remainder products data after testing current
-        ingredient: new_product_ingredients[i].productName,
-        // image: new_product_ingredients[i].productImgFile
-      };
-      // handle quantity measurement list
-      var measurementQuantity = {
-        quantity: ingredientGroupList[i].quantity,
-        measurement: ingredientGroupList[i].measurement,
-      }
-      // no need for handlers since this is created on submit!
-      this.ingredientsQuantityMeasurements.push(measurementQuantity);
-      // new_products.push(tmp_ingredient);
-      // product_slider.push(tmp_slider_data);
-    }
-
     let new_measurements = [];
-    for (i = 0; i < ingredientGroupList.length; i++) {
-      // store ingredient format to submit ingredient product objects
-      var tmp_ingredient = {
-        // name and optional image added to new product,
-        // we can add remainder products data after testing current
-        productName: ingredientGroupList[i].productName,
-        quantity: ingredientGroupList[i].quantity,
-        measurement: ingredientGroupList[i].measurement,
-        productImgPath: ingredientGroupList[i].productImgPath,
-        properIngredientStringSyntax: ingredientGroupList[i].properIngredientStringSyntax
-      };
-
-      all_ingredients_formatted.push(tmp_ingredient);
-      console.log(tmp_ingredient);
-
-      const tmp_slider_data = {
-        ingredient: ingredientGroupList[i].product,
-        image: ingredientGroupList[i].productImgPath,
-        display: ingredientGroupList[i].display,
-      };
-      // store product slider format to submit slider object to product
-      product_slider.push(tmp_slider_data);
-
-
-      // get new_Measurements from inputted ingredient packets
-      if (ingredientGroupList[i].measurement !== "") {
-        let index = this.measurements.indexOf(ingredientGroupList[i].measurement);
-        if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
-      }
-    }
     //-------------to make new category data ------------------------------------------
     // get list of new categories to submit to mongo
     let new_categories = [];
     for (i = 0; i < suggestedCategories.length; i++) {
       // check if categories already exist, only add new categories to db,
       // though all will still be attached to product, as mentioned
-      let index = this.categories.indexOf(suggestedCategories[i]);
+      let index = this.props.categories?.indexOf(suggestedCategories[i]);
       if (index === -1) new_categories.push(suggestedCategories[i]);
     }
 
@@ -568,8 +508,10 @@ class SuggestKitchenUtensilForm extends Component {
     //-------------Submit remainder data of product to Mongo ------------------------------------------
     let suggestProductForm = new FormData();
     suggestProductForm.append('product_name', productName);
-    suggestProductForm.append('product_images', productImage);
-    suggestProductForm.append('productImageName', productImageName);
+    suggestProductForm.append('product_images', utensilImage1);
+    suggestProductForm.append('product_images', utensilImage2);
+    suggestProductForm.append('product_images', utensilImage3);
+    suggestProductForm.append('product_images', utensilImage4);
     suggestProductForm.append('product_details', intro);
 
     // suggestProductForm.append('ingredientStrings', ingredientStrings);
@@ -581,8 +523,6 @@ class SuggestKitchenUtensilForm extends Component {
     suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
 
     // new suggested products
-    suggestProductForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
-
     suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
     suggestProductForm.append('product_type', JSON.stringify("utensil"));
     suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
@@ -650,7 +590,7 @@ class SuggestKitchenUtensilForm extends Component {
             </div>
 
             <h3>Upload Utensil Images <em>(Up to 4)</em></h3>
-            {this.state.utensilImagesData.length < 3 &&
+            {this.state.utensilImagesData.length < 4 &&
               <div className={styles.suggestion_form_image}>
                 <div className={styles.suggestion_form_image_col_1}>
                   <div onClick={() => this.uploadUtensilImage()} className={styles.suggestion_form_image_icon_con}>
@@ -715,7 +655,7 @@ class SuggestKitchenUtensilForm extends Component {
                   </label>
                   <Autocomplete
                     id="measurement"
-                    options={this.measurements.map((option) => option)}
+                    options={this.props.measurements.map((option) => option)}
                     value={this.state.measurement}
                     onChange={this.handleMeasurement}
                     freeSolo
@@ -760,7 +700,7 @@ class SuggestKitchenUtensilForm extends Component {
                   clearOnBlur
                   onBlur={this.categoryBlur}
                   // filterSelectedOptions
-                  options={this.categories.map((option) => option)}
+                  options={this.props.categories?.map((option) => option)}
                   // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
                   onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
                   // getOptionLabel={option => option}
