@@ -421,6 +421,19 @@
     color: #949494;
 }
 
+.suggestion_form_image_col_1{
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 1.5rem;
+    justify-content: start;
+    align-items: center;
+}
+
+.suggestion_form_image_col_1 > span{
+    width: 132px !important;
+    height: 132px !important;
+}
+
 .suggestion_image{
     width: 130px;
     height: 130px;

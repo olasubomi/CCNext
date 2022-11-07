@@ -14,6 +14,7 @@ import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import AddIcon from '@mui/icons-material/Add';
 import TransferToInventory from '../../src/components/dashboard/transferToInventory';
+import Image from 'next/image';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -71,25 +72,101 @@ const CreateStore = () => {
         email: "",
         phone_number: "",
         store_name: "",
-        password: "",
-        address: "",
-        new_password: '',
-        card_type: ''
+        city: "",
+        state: "",
+        zip: '',
+        country: '',
+        address: '',
+        profile_picture: '',
+        profile_picture_name: '',
+        profile_picture_data: '',
+        background_picture: '',
+        background_picture_name: '',
+        background_picture_data: '',
+        description: '',
       });
-    const { email, phone_number, store_name, address } = formState;
-    const [value, setValue] = useState('2018-01-01T00:00:00.000Z');
+    const { email, phone_number, store_name, city, state, country, zip, address, profile_picture, background_picture, description } = formState;
+    const [times, setTimes] = useState({
+        sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        tuesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        wednesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        thursday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        friday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        saturday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'}
+    });
     const days = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
       ];
 
     function handleChange(e) {
         setFormState({ ...formState, [e.target.name]: e.target.value });
+    }
+
+    function handleTime(time, day, when){
+        console.log(time)
+        // times[day][when] = time;
+        setTimes({...times,[day]: {...times[day], [when]: time}})
+    }
+
+    function onUpdateImage(event, picture){
+        if (event.target.files[0] === undefined) return;
+        var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
+    
+        if (allowedImageExtensions.exec(event.target.files[0].name)) {
+            if(picture === 'profile'){
+                setFormState({ ...formState,
+                    ['profile_picture']: event.target.files[0],
+                ['profile_picture_name']: event.target.files[0].name,
+                ['profile_picture_data']: URL.createObjectURL(event.target.files[0])
+                })
+                var image = document.getElementById("profile_picture");
+                image.style.display = "block";
+                image.src = URL.createObjectURL(event.target.files[0]);
+            }else{
+                setFormState({ ...formState,
+                    ['background_picture']: event.target.files[0],
+                ['background_picture_name']: event.target.files[0].name,
+                ['background_picture_data']: URL.createObjectURL(event.target.files[0])
+                })
+                var image = document.getElementById("background_picture");
+                image.style.display = "block";
+                image.src = URL.createObjectURL(event.target.files[0]);
+            }
+        }
+        else {
+          alert("Invalid image type");
+        }
+    
+    };
+
+    function uploadImage(picture) {
+
+        if(picture === 'profile'){
+            const input = document.createElement("input");
+            input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+            input.id = "profileImage";
+            input.name = "profileImage";
+            input.type = "file";
+            input.onchange = (ev) => onUpdateImage(ev, picture);
+            input.hidden = true;
+            input.click()
+        }else{
+            const input = document.createElement("input");
+            input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+            input.id = "backgroundImage";
+            input.name = "backgroundImage";
+            input.type = "file";
+            input.onchange = (ev) => onUpdateImage(ev, picture);
+            input.hidden = true;
+            input.click()
+        }
     }
 
     return (
@@ -143,24 +220,24 @@ const CreateStore = () => {
                             <div className={profileStyles.profile_form_col_2}>
                                 <div className={profileStyles.profile_form_group}>
                                     <label htmlFor="city" className={profileStyles.profile_form_label}>City</label>
-                                    <input  name="city" type="text" className={profileStyles.profile_form_input} />
+                                    <input value={city} name="city" type="text" className={profileStyles.profile_form_input} />
                                     {/* {this.props.errors.city && <div className={profileStyles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                 </div>
                                 <div className={profileStyles.profile_form_group}>
                                     <label htmlFor="state" className={profileStyles.profile_form_label}>State</label>
-                                    <input name="state" type="text" className={profileStyles.profile_form_input} />
+                                    <input value={state} name="state" type="text" className={profileStyles.profile_form_input} />
                                     {/* {this.props.errors.lastname && <div className={profileStyles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                 </div>
                             </div>
                             <div className={profileStyles.profile_form_col_2}>
                                 <div className={profileStyles.profile_form_group}>
                                     <label htmlFor="zip_code" className={profileStyles.profile_form_label}>Zip Code</label>
-                                    <input  name="zip_code" type="text" className={profileStyles.profile_form_input} />
+                                    <input value={zip}  name="zip_code" type="text" className={profileStyles.profile_form_input} />
                                     {/* {this.props.errors.zip_code && <div className={profileStyles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                 </div>
                                 <div className={profileStyles.profile_form_group}>
                                     <label htmlFor="country" className={profileStyles.profile_form_label}>Country</label>
-                                    <input name="country" type="text" className={profileStyles.profile_form_input} />
+                                    <input value={country} name="country" type="text" className={profileStyles.profile_form_input} />
                                     {/* {this.props.errors.lastname && <div className={profileStyles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                 </div>
                             </div>
@@ -183,7 +260,8 @@ const CreateStore = () => {
 
                                 <div className={suggestion_form_image}>
                                     <div className={suggestion_form_image_col_1}>
-                                    <div className={suggestion_form_image_icon_con}>
+                                        <Image id="profile_picture" width='100%' alt="profile" style={{ display: "none" }} />
+                                    <div onClick={() => uploadImage('profile')} className={suggestion_form_image_icon_con}>
                                         <AddIcon className={suggestion_form_image_icon} />
                                     </div>
                                     </div>
@@ -198,7 +276,8 @@ const CreateStore = () => {
 
                                 <div className={suggestion_form_image}>
                                     <div className={suggestion_form_image_col_1}>
-                                    <div className={suggestion_form_image_icon_con}>
+                                        <Image id="background_picture" width='100%' alt="background" style={{ display: "none" }} />
+                                    <div onClick={() => uploadImage('background')} className={suggestion_form_image_icon_con}>
                                         <AddIcon className={suggestion_form_image_icon} />
                                     </div>
                                     </div>
@@ -209,9 +288,9 @@ const CreateStore = () => {
                                 <h3>Description</h3>
                                 <div className={suggestion_form_group}>
                                 <label htmlFor="intro" className={suggestion_form_label}>
-                                    Intro
+                                    Description
                                 </label>
-                                <TextField multiline id="intro" fullWidth variant="outlined" />
+                                <TextField value={description} multiline id="intro" fullWidth variant="outlined" />
                                 </div>
                             </div>
                             
@@ -236,8 +315,8 @@ const CreateStore = () => {
                                         <div className={profileStyles.profile_workinghour_date}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <TimePicker
-                                                value={value}
-                                                onChange={setValue}
+                                                value={times[day]['from']}
+                                                onChange={time => handleTime(time, day, 'from')}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
                                         </LocalizationProvider>
@@ -246,8 +325,8 @@ const CreateStore = () => {
                                         <div className={profileStyles.profile_workinghour_date}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <TimePicker
-                                                value={value}
-                                                onChange={setValue}
+                                                value={times[day]['to']}
+                                                onChange={time => handleTime(time, day, 'to')}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
                                         </LocalizationProvider>

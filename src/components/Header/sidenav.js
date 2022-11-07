@@ -7,9 +7,11 @@ import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png"
 import Link from 'next/link';
 import Sidenav2 from './sidenav2';
+import { connect } from 'react-redux';
+import { UserIcon } from '../icons';
 
  
-function SideNav(){
+function SideNav(props){
 
     function openSidenav(e){
         document.getElementById('mySidenav').style.display = 'grid';
@@ -45,13 +47,18 @@ function SideNav(){
                 </a>
                 </Link>
                 </div>
+                {props.auth.authUser && 
                 <div className={styles.sidenav_top_row_2}>
-                    <Image src={img_logo} alt="logo" className={styles.sidenav_top_row_2_img} />
+                    {props.auth.authUser.profile_picture ? 
+                    <Image width={100} height={100} src={props.auth.authUser.profile_picture} alt="logo" className={styles.sidenav_top_row_2_img} />:
+                    <UserIcon />
+                    }
                     <div>
-                        <h3>James Henderson</h3>
-                        <p>supplier</p>
+                        <h3>{props.auth.authUser.first_name +" " + props.auth.authUser.last_name} Henderson</h3>
+                        <p>{props.auth.authUser.user_type}</p>
                     </div>
                 </div>
+                }
             </div>
             <Sidenav2 showBottom={true} />
         </div>
@@ -59,4 +66,15 @@ function SideNav(){
   )
 }
 
-export default SideNav;
+// export default SideNav;
+
+function mapStateToProp(state) {
+  return {
+    path: state.Common.path,
+    auth: state.Auth
+  };
+}
+
+export default connect(
+  mapStateToProp,
+)(SideNav);

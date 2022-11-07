@@ -6,6 +6,10 @@ import Link from 'next/link';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png"
 import Image from "next/image";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+import { connect } from 'react-redux';
+import { userSignUp } from '../../actions';
 
 // import { setTimeout } from 'timers';
 
@@ -191,55 +195,64 @@ import Image from "next/image";
 
 // }
 
-export default function SignUp(props){
+function SignUp(props){
   const [message, setMessageState] = useState(null);
   const [status, setStatusState] = useState(null);
   const [formState, setFormState] = useState({
     username: "",
+    email: "",
     phone_number: "",
     first_name: "",
     last_name: "",
     password: "",
-    authCode: "",
-    agreement: ''
   });
-  const { username, phone_number, first_name, last_name, password, authCode, agreement } = formState;
+  const { username, email, phone_number, first_name, last_name, password } = formState;
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   }
 
+  function handlePhoneChange(e) {
+    setFormState({ ...formState, ['phone_number']: e });
+  }
+
+  // function formSubmit(e){
+  //   e.preventDefault();
+  //   //validate email
+  //   if (username !== "" && /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/.test(username) ){
+  //     var [account, address] = username.split('@'); 
+  //     var domainParts = address.split('.');
+
+  //     if(  username.length < 256 && account.length < 64 && domainParts.some(function (part) {
+  //       return part.length < 63;
+  //     })){
+  //       setStatusState('success')
+  //       setMessageState('')
+
+  //         submitForm();
+  //     }else{
+  //       setStatusState('error')
+  //       setMessageState('Please enter a valid email.')
+  //     }
+  //   }
+  //   else{
+  //     if((phone_number.length >= 10 && phone_number.length <=30) && username && password) {
+  //       setStatusState('')
+  //       setMessageState('')
+
+  //       submitForm();
+  //     }
+  //     else{
+  //       setStatusState('success')
+  //       setMessageState('Please enter a valid phone number or email.')
+  //     }
+  //   }
+  // }
+
   function formSubmit(e){
     e.preventDefault();
-    //validate email
-    if (username !== "" && /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/.test(username) ){
-      var [account, address] = username.split('@'); 
-      var domainParts = address.split('.');
-
-      if(  username.length < 256 && account.length < 64 && domainParts.some(function (part) {
-        return part.length < 63;
-      })){
-        setStatusState('success')
-        setMessageState('')
-
-          submitForm();
-      }else{
-        setStatusState('error')
-        setMessageState('Please enter a valid email.')
-      }
-    }
-    else{
-      if((phone_number.length >= 10 && phone_number.length <=30) && username && password) {
-        setStatusState('')
-        setMessageState('')
-
-        submitForm();
-      }
-      else{
-        setStatusState('success')
-        setMessageState('Please enter a valid phone number or email.')
-      }
-    }
+    props.signup(formState);
+    props.toggleLogin()
   }
   
   function submitForm() {
@@ -323,6 +336,19 @@ export default function SignUp(props){
                   className={styles.login_form_input}
                 />
               </div>
+              <div className={styles.login_form_group}>
+                <label htmlFor="email" className={styles.login_form_label}>
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  placeholder="Email"
+                  onChange={handleChange}
+                  className={styles.login_form_input}
+                />
+              </div>
               <div className={styles.login_form_col_2}>
                   <div className={styles.login_form_group}>
                       <label htmlFor="city" className={styles.login_form_label}>City</label>
@@ -339,13 +365,20 @@ export default function SignUp(props){
                 <label htmlFor="phone_number" className={styles.login_form_label}>
                   Phone Number
                 </label>
-                <input
+                {/* <input
                   type="tel"
                   name="phone_number"
                  value={phone_number}
                   placeholder="Your Phone Number"
                   onChange={handleChange}
                   className={styles.login_form_input}
+                /> */}
+                <PhoneInput
+                  inputClass={styles.login_form_input}
+                  country={'us'}
+                  name="phone_number"
+                  value={phone_number}
+                  onChange={phone => handlePhoneChange(phone)}
                 />
               </div>
               <div className={styles.login_form_group}>
@@ -427,3 +460,20 @@ export default function SignUp(props){
       </>
     )
   }
+
+  function mapStateToProp(state) {
+    return {
+      auth: state.Auth
+    };
+  }
+  
+  function mapDispatchToProps(dispatch) {
+    return {
+      signup: (form) => dispatch(userSignUp(form))
+    };
+  }
+  
+  export default connect(
+    mapStateToProp,
+    mapDispatchToProps,
+  )(SignUp);

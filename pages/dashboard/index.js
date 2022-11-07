@@ -6,7 +6,7 @@ import Head from "next/head";
 import styles from '../../src/components/dashboard/dashboard.module.css'
 import Header from '../../src/components/Header/Header';
 import SideNav from '../../src/components/Header/sidenav';
-import { BagIcon, BatteryIcon, CloseFillIcon, LineChartIcon, ListIcon, TagIcon, ThumbsUpIcon } from '../../src/components/icons';
+import { BagIcon, BatteryIcon, CloseFillIcon, LineChartIcon, ListIcon, TagIcon, ThumbsUpIcon, UsersIcon } from '../../src/components/icons';
 import Sidenav2 from '../../src/components/Header/sidenav2';
 import GoBack from '../../src/components/CommonComponents/goBack';
 import { connect } from "react-redux";
@@ -22,6 +22,7 @@ const DashboardHomePage = (props) => {
     const { id } = router.query;
 
     const [loading, setLoadingState] = useState(false);
+    const [driverMode, setDriverModeState] = useState(false);
   const [page, setPageState] = useState(1);
   const months = [
     "Jan",
@@ -51,6 +52,10 @@ const DashboardHomePage = (props) => {
 //     { MarketShare: 25, Category: "Residential", Summary: "Residential 35%",  },
 // ];
 
+  function toggleDriverMode(){
+    setDriverModeState(!driverMode)
+  }
+
 
   return (
     <div className={styles.container + " " + (props.auth.authUser && props.auth.authUser.user_type === 'admin' ? styles.col3 :styles.col2)}>
@@ -68,6 +73,12 @@ const DashboardHomePage = (props) => {
             <div className={styles.header2}>
                 <div className={styles.header2_col_1}>
                     <GoBack />
+                </div>
+                <div className={styles.header2_col_2}>
+                    <div className={styles.mode_con}>
+                        <div onClick={toggleDriverMode} className={styles.mode + ' ' + styles.left_mode + ' '+(driverMode? '': styles.active_mode)}>Supplier mode</div>
+                        <div onClick={toggleDriverMode} className={styles.mode + ' ' + styles.right_mode + ' '+(driverMode? styles.active_mode : '')}>Driver mode</div>
+                    </div>
                 </div>
             </div>
             {props.auth.authUser && 
@@ -107,7 +118,7 @@ const DashboardHomePage = (props) => {
                             <div className={styles.value_con}>
                                 <div className={styles.value_con2 + " " + styles.orange}>
                                     {(props.auth.authUser.user_type === 'customer' || props.auth.authUser.user_type === 'supplier') && <BagIcon />}
-                                    {props.auth.authUser.user_type === 'admin' && <BatteryIcon />}
+                                    {props.auth.authUser.user_type === 'admin' && <TagIcon />}
                                     {props.auth.authUser.user_type === 'driver' && <ThumbsUpIcon />}
                                 </div>
                                 <div>
@@ -129,7 +140,7 @@ const DashboardHomePage = (props) => {
                             </div>
                             <div className={styles.value_con}>
                                 <div className={styles.value_con2 + " " + styles.green}>
-                                    {props.auth.authUser.user_type === 'admin' ? <BatteryIcon /> : <ListIcon />}
+                                    {props.auth.authUser.user_type === 'admin' ? <UsersIcon /> : <ListIcon />}
                                 </div>
                                 <div>
                                     <h3 className={styles.box_name}>

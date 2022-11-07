@@ -22,6 +22,7 @@ import Switch from '@mui/material/Switch';
 import Sidenav2 from '../../src/components/Header/sidenav2';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
+import { UserIcon } from '../../src/components/icons';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -85,19 +86,82 @@ const UserProfile = (props) => {
         password: "",
         address: "",
         new_password: '',
-        card_type: ''
+        card_type: '',
+        profileImage: '',
+        profileImageName: '',
+        profileImageData: ''
       });
-    const { email, phone_number, first_name, last_name, password, address, new_password, card_type } = formState;
-    const [value, setValue] = useState('2018-01-01T00:00:00.000Z');
+    const { email, phone_number, first_name, last_name, password, address, new_password, profileImageData, card_type } = formState;
+    const [times, setTimes] = useState({
+        sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        tuesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        wednesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        thursday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        friday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
+        saturday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'}
+    });
+    const days = [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ];
 
-    // useEffect(() => {
-    //     if(props.auth.authUser === null){
-    //         router.push('/')
-    //     }
-    //   }, []);
+    useEffect(() => {
+        if(props.auth.authUser){
+            setFormState({ ...formState,
+                ['email']: props.auth.authUser.email,
+                ['first_name']: props.auth.authUser.first_name,
+                ['last_name']: props.auth.authUser.last_name,
+                ['phone_number']: props.auth.authUser.phone_number
+            })
+        }
+      }, []);
 
     function handleChange(e) {
         setFormState({ ...formState, [e.target.name]: e.target.value });
+    }
+
+    function onUpdateProfileImage(event){
+        if (event.target.files[0] === undefined) return;
+        var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
+    
+        if (allowedImageExtensions.exec(event.target.files[0].name)) {
+            setFormState({ ...formState,
+                ['profileImage']: event.target.files[0],
+              ['profileImageName']: event.target.files[0].name,
+              ['profileImageData']: URL.createObjectURL(event.target.files[0])
+            })
+            var image = document.getElementById("profile_image");
+            image.style.display = "block";
+            image.src = URL.createObjectURL(event.target.files[0]);
+        }
+        else {
+          alert("Invalid image type");
+        }
+    
+    };
+
+    function uploadProfileImage() {
+        // <input accept="image/*,video/mp4,video/mov,video/x-m4v,video/*" id="ProfileImage" name="ProfileImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onUpdateProfileImage(ev)} />
+        const input = document.createElement("input");
+        input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+        input.id = "profileImage";
+        input.name = "profileImage";
+        input.type = "file";
+        input.onchange = (ev) => onUpdateProfileImage(ev);
+        input.hidden = true;
+        input.click()
+    }
+
+    function handleTime(time, day, when){
+        console.log(time)
+        // times[day][when] = time;
+        setTimes({...times,[day]: {...times[day], [when]: time}})
     }
 
     return (
@@ -145,14 +209,14 @@ const UserProfile = (props) => {
                                 <a>Notification</a>
                             </Link>
                         </div>
-                        {(props.auth.authUser.user_type !== 'driver' || props.auth.authUser.user_type !== 'admin') &&
+                        {(props.auth.authUser.user_type === 'supplier' || props.auth.authUser.user_type === 'customer') &&
                         <div className={styles.profile_summary_link}>
                             <Link href='#food-preference' >
                                 <a>Food Preference</a>
                             </Link>
                         </div>
                         }
-                        {(props.auth.authUser.user_type !== 'supplier' || props.auth.authUser.user_type !== 'admin') &&
+                        {(props.auth.authUser.user_type === 'driver' || props.auth.authUser.user_type === 'customer') &&
                         <div className={styles.profile_summary_link}>
                             <Link href='#upgrade-chopChow-plan'>
                                 <a>Upgrade ChopChow Plan</a>
@@ -188,9 +252,14 @@ const UserProfile = (props) => {
                             <div className={styles.profile_basic_info}>
                                 <div className={styles.profile_image_con}>
                                     <div className={styles.profile_image}>
-                                        <Image src={profileImage} />
+                                        
+                                        {(profileImageData === '' && props.auth.authUser.profile_picture === undefined) && <UserIcon />}
+                                        {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) && 
+                                        <Image width={500} height={500} src={props.auth.authUser.profile_picture} />
+                                        }
+                                        <Image id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
                                     </div>
-                                    <p>Change Picture</p>
+                                    <p onClick={uploadProfileImage}>Change Picture</p>
                                 </div>
                                 <div className={styles.profile_form}>
                                     <h3>Contact Information</h3>
@@ -200,7 +269,7 @@ const UserProfile = (props) => {
                                             <input 
                                             type="text"
                                             name="first_name"
-                                            value={props.auth.authUser.first_name}
+                                            value={first_name}
                                             placeholder="First Name"
                                             onChange={handleChange}
                                             className={styles.profile_form_input} />
@@ -211,7 +280,7 @@ const UserProfile = (props) => {
                                             <input
                                             type="text"
                                             name="last_name"
-                                            value={props.auth.authUser.last_name}
+                                            value={last_name}
                                             placeholder="Last Name"
                                             onChange={handleChange}
                                             className={styles.profile_form_input} />
@@ -225,7 +294,7 @@ const UserProfile = (props) => {
                                         <input
                                         type="text"
                                         name="email"
-                                        value={props.auth.authUser.email}
+                                        value={email}
                                         placeholder="Email"
                                         onChange={handleChange}
                                         className={styles.profile_form_input}
@@ -238,7 +307,7 @@ const UserProfile = (props) => {
                                         <input
                                         type="tel"
                                         name="phone_number"
-                                        value={props.auth.authUser.phone_number}
+                                        value={phone_number}
                                         placeholder="Your Phone Number"
                                         onChange={handleChange}
                                         className={styles.profile_form_input}
@@ -537,7 +606,7 @@ const UserProfile = (props) => {
                             </div>
                         </div>
 
-                        {(props.auth.authUser.user_type !== 'driver' || props.auth.authUser.user_type !== 'admin') &&
+                        {(props.auth.authUser.user_type === 'supplier' || props.auth.authUser.user_type === 'customer') &&
                         <div id='food-preference' className={styles.profile_basic_info_con}>
                             <h3>Food Preference</h3>
                             <div className={styles.profile_basic_info}>
@@ -752,7 +821,7 @@ const UserProfile = (props) => {
                             </div>
                         </div>
 
-                        {(props.auth.authUser.user_type !== 'supplier' || props.auth.authUser.user_type !== 'admin') &&
+                        {(props.auth.authUser.user_type === 'driver' || props.auth.authUser.user_type === 'customer') &&
                         <div id='upgrade-chopChow-plan' className={styles.profile_basic_info_con}>
                             <h3>Upgrade ChopChow Plan</h3>
                             <div className={styles.profile_basic_info}>
@@ -770,195 +839,45 @@ const UserProfile = (props) => {
                                     <h3>Set Working Hours</h3>
                                     <p>Configure the standard hours of operation for this store</p>
                                     <div className={styles.profile_workinghour_days}>
-                                        <div className={styles.profile_workinghour_day}>
-                                            <h3>Sunday</h3>
-                                            <div className={styles.profile_workinghour_switch}>
-                                            <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                            Closed
+                                        {days.map(day => {
+                                        return(    
+                                            <div className={styles.profile_workinghour_day}>
+                                                <h3>{day}</h3>
+                                                <div className={styles.profile_workinghour_switch}>
+                                                <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
+                                                Open
+                                                </div>
+                                                <div className={styles.profile_workinghour_date}>
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <TimePicker
+                                                        value={times[day]['from']}
+                                                        onChange={time => handleTime(time, day, 'from')}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
+                                                </LocalizationProvider>
+                                                </div>
+                                                <h4>To</h4>
+                                                <div className={styles.profile_workinghour_date}>
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <TimePicker
+                                                        value={times[day]['to']}
+                                                        onChange={time => handleTime(time, day, 'to')}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
+                                                </LocalizationProvider>
+                                                </div>
                                             </div>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                            <h4>To</h4>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                        </div>
-                                        <div className={styles.profile_workinghour_day}>
-                                            <h3>Sunday</h3>
-                                            <div className={styles.profile_workinghour_switch}>
-                                            <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                            Closed
-                                            </div>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                            <h4>To</h4>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                        </div>
-                                        <div className={styles.profile_workinghour_day}>
-                                            <h3>Sunday</h3>
-                                            <div className={styles.profile_workinghour_switch}>
-                                            <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                            Closed
-                                            </div>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                            <h4>To</h4>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                        </div>
-                                        <div className={styles.profile_workinghour_day}>
-                                            <h3>Sunday</h3>
-                                            <div className={styles.profile_workinghour_switch}>
-                                            <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                            Closed
-                                            </div>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                            <h4>To</h4>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                        </div>
-                                        <div className={styles.profile_workinghour_day}>
-                                            <h3>Sunday</h3>
-                                            <div className={styles.profile_workinghour_switch}>
-                                            <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                            Closed
-                                            </div>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                            <h4>To</h4>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                        </div>
-                                        <div className={styles.profile_workinghour_day}>
-                                            <h3>Sunday</h3>
-                                            <div className={styles.profile_workinghour_switch}>
-                                            <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                            Closed
-                                            </div>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                            <h4>To</h4>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                        </div>
-                                        <div className={styles.profile_workinghour_day}>
-                                            <h3>Sunday</h3>
-                                            <div className={styles.profile_workinghour_switch}>
-                                            <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                            Closed
-                                            </div>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                            <h4>To</h4>
-                                            <div className={styles.profile_workinghour_date}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                    value={value}
-                                                    onChange={setValue}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            </div>
-                                        </div>
+                                            )
+                                        })}
                                     </div>
                                 </div>
                             </div>
                         </div>
                         }
-
+                        
+                        {props.auth.authUser.user_type !== 'admin' &&
                         <div className={styles.line}></div>
+                        }
 
                         {props.auth.authUser.user_type !== 'admin' &&
                         <div id='close-account' className={styles.profile_basic_info_con}>

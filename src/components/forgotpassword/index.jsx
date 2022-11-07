@@ -5,8 +5,10 @@ import styles from '../Login/style.module.css';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png"
 import Image from "next/image";
+import { forgotPassword } from '../../actions';
+import { connect } from 'react-redux';
 
-export default function ForgetPassword(props){
+function ForgetPassword(props){
 
   const [status, setStatusState] = useState(null);
   const [message, setMessageState] = useState(null);
@@ -15,41 +17,13 @@ export default function ForgetPassword(props){
   });
   const { email } = formState;
 
+  function handleChange(e) {
+    setFormState({ ...formState, [e.target.name]: e.target.value });
+  }
+
   function formSubmit(e){
     e.preventDefault();
-    if((email)) {
-      submitForm();
-    } else {
-      setStatusState('error')
-      setMessageState('Please enter correct data.')
-    }
-  };
-
-  function submitForm() {
-    fetch('https://chopchowdev.herokuapp.com/api/forgotpass', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(state),
-    }).then(response => {
-      console.log(response)
-        if (response.status === 400 || response.status === 404) {
-          setStatusState('error')
-          setMessageState('Bad Request , Your username or email does not exist.')
-        } else if (response.status === 401) {
-          setStatusState('error')
-          setMessageState('you are UnAuthorized')
-        } else if (response.status >= 500) {
-          setStatusState('error')
-          setMessageState('Sorry , Internal Server ERROR')
-        } else {
-          setStatusState('success')
-          setMessageState('Please check your inbox for more details! ')
-          this.handleClose(5000);
-        }
-      })
+    props.forgotpassword(email)
   };
 
     return(
@@ -76,6 +50,7 @@ export default function ForgetPassword(props){
                   name="email"
                   value={email}
                   placeholder="Your email"
+                  onChange={handleChange}
                   className={styles.login_form_input}
                 />
               </div>
@@ -93,3 +68,20 @@ export default function ForgetPassword(props){
         </div>
     )
   }
+
+  function mapStateToProp(state) {
+    return {
+      auth: state.Auth
+    };
+  }
+  
+  function mapDispatchToProps(dispatch) {
+    return {
+      forgotpassword: (email) => dispatch(forgotPassword(email))
+    };
+  }
+  
+  export default connect(
+    mapStateToProp,
+    mapDispatchToProps,
+  )(ForgetPassword);
