@@ -25,10 +25,15 @@ class SuggestMealForm extends Component {
     super(props);
     this.state = {
       mealName: "",
-      mealImage: "",
+      mealImage: [],
       mealImageName: "",
       mealImageData: "",
       mealImagesData: [],
+
+      mealImage1: "",
+      mealImage2: "",
+      mealImage3: "",
+      mealImage4: "",
       intro: "",
 
       ingredientNames: [],
@@ -210,13 +215,6 @@ class SuggestMealForm extends Component {
           instructionChunk5,
           instructionWordlength,
 
-          chunk1Content,
-          chunk2Content,
-          chunk3Content,
-          chunk4Content,
-          chunk5Content,
-          chunk6Content,
-
           // do we want all the instruction variables ?
           // instructionGroupList:[],
 
@@ -234,7 +232,7 @@ class SuggestMealForm extends Component {
 
         this.setState({
           mealName,
-          mealImage: '',
+          mealImage: [],
           mealImageName: '',
           mealImageData: '',
           mealImagesData: [],
@@ -370,49 +368,102 @@ class SuggestMealForm extends Component {
   };
 
   ///////////////////////////////////////////////////////////////////////////////////////
-  onUpdateMealImage = (event) => {
+  onUpdateMealImage = (event, id) => {
+    if (event.target.files[0] === undefined) return;
+
+    // Allowing file type
+    var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
+    // we need to keep track of wether an image or video was last uploaded and use the last one only.
+    if (allowedImageExtensions.exec(event.target.files[0].name)) {
+
+      this.setState({
+        // mealImageName: event.target.files[0].name,
+        mealImagesData: [...this.state.mealImagesData, event.target.files[0]],
+        // mealImageData: URL.createObjectURL(event.target.files[0])
+      });
+
+      console.log("uploading recipeChunkImageOrVideo content looks like below: ");
+      console.log(event.target.files[0]);
+      let particularArray;
+
+      if (this.state.mealImage1 == "") {
+        this.setState({ mealImage1: event.target.files[0] });
+      }
+      else if (this.state.mealImage2 == "") {
+        this.setState({ mealImage2: event.target.files[0] });
+      }
+      else if (this.state.mealImage3 == "") {
+        this.setState({ mealImage3: event.target.files[0] });
+
+      }
+      else {
+        this.setState({ mealImage4: event.target.files[0] });
+
+      }
+
+      // this.setState({ instructionimagesAndVideos: recipeChunkImageOrVideo });
+
+      // var imageElementId = "meal" + (id) + "Image";
+      // var image = document.getElementById(imageElementId);
+
+      // // console.log(allowedImageExtensions.exec(event.target.files[0].name));
+      // //display meals main image or videoin suggest meal
+      // image.style.display = "block";
+      // image.src = image.src = URL.createObjectURL(event.target.files[0]);
+
+    }
+    else {
+      alert('Invalid file type');
+    }
+  };
+  ///////////////////////////////////////////////////////////////////////////////////////
+  onUpdateMealImage2 = (event) => {
     if (event.target.files[0] === undefined) return;
 
     // Allowing file type
     var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
 
     if (allowedImageExtensions.exec(event.target.files[0].name)) {
-      if (this.state.mealImage === '') {
-        this.setState({
-          mealImage: [...this.state.mealImage, event.target.files[0]]
-        });
-        this.setState({
-          mealImageName: event.target.files[0].name,
-          // mealImagesData: [...this.state.mealImagesData, event.target.files[0]],
-          mealImageData: URL.createObjectURL(event.target.files[0])
-        });
-        //display meals main image or videoin suggest meal
-        var image = document.getElementById("MealsMainImages");
-        image.style.display = "block";
-        image.src = URL.createObjectURL(event.target.files[0]);
+      // if (this.state.mealImage === '') {
+      this.setState({
+        mealImage: [...this.state.mealImage, event.target.files[0]]
+      });
+      // this.setState({
+      //   // mealImageName: event.target.files[0].name,
+      //   mealImagesData: [...this.state.mealImagesData, event.target.files[0]],
+      //   // mealImageData: URL.createObjectURL(event.target.files[0])
+      // });
+      //display meals main image or videoin suggest meal
+      var image = document.getElementById("MealsMainImages");
+      image.style.display = "block";
+      image.src = URL.createObjectURL(event.target.files[0]);
 
-        console.log(event.target.files[0]);
-        console.log(event.target.files[0].name);
-
-
-        console.log(allowedImageExtensions.exec(event.target.files[0].name));
-
-        // console.log(URL.createObjectURL(event.target.files[0]));
-      } else {
-        this.setState({
-          mealImagesData: [...this.state.mealImagesData, URL.createObjectURL(event.target.files[0])]
-        });
-        // var image = document.getElementById("mealsMainImages"+(this.state.utensilImagesData.length+1));
-        // image.style.display = "block";
-        // image.src = URL.createObjectURL(event.target.files[0]);
-
-        console.log(event.target.files[0]);
-        console.log(event.target.files[0].name);
+      console.log(event.target.files[0]);
+      console.log(event.target.files[0].name);
 
 
-        console.log(allowedImageExtensions.exec(event.target.files[0].name));
+      console.log(allowedImageExtensions.exec(event.target.files[0].name));
 
-      }
+      // console.log(URL.createObjectURL(event.target.files[0]));
+      // }
+      // else {
+      //   // this.setState({
+      //   //   mealImagesData: [...this.state.mealImagesData, URL.createObjectURL(event.target.files[0])]
+      //   // });
+      //   this.setState({
+      //     mealImagesData: [...this.state.mealImagesData, event.target.files[0]]
+      //   });
+      //   // var image = document.getElementById("mealsMainImages"+(this.state.utensilImagesData.length+1));
+      //   // image.style.display = "block";
+      //   // image.src = URL.createObjectURL(event.target.files[0]);
+
+      //   console.log(event.target.files[0]);
+      //   console.log(event.target.files[0].name);
+
+
+      //   console.log(allowedImageExtensions.exec(event.target.files[0].name));
+
+      // }
     }
     else {
       alert("Invalid image type");
@@ -432,32 +483,32 @@ class SuggestMealForm extends Component {
       case 1:
         particularArray = this.state.instructionChunk1;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk1: particularArray, chunk1Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({ instructionChunk1: particularArray, chunk1Content: event.target.files[0] });
         break;
       case 2:
         particularArray = this.state.instructionChunk2;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk2: particularArray, chunk2Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({ instructionChunk2: particularArray, chunk2Content: event.target.files[0] });
         break;
       case 3:
         particularArray = this.state.instructionChunk3;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk3: particularArray, chunk3Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({ instructionChunk3: particularArray, chunk3Content: event.target.files[0] });
         break;
       case 4:
         particularArray = this.state.instructionChunk4;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk4: particularArray, chunk4Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({ instructionChunk4: particularArray, chunk4Content: event.target.files[0] });
         break;
       case 5:
         particularArray = this.state.instructionChunk5;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk5: particularArray, chunk5Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({ instructionChunk5: particularArray, chunk5Content: event.target.files[0] });
         break;
       case 6:
         particularArray = this.state.instructionChunk6;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk6: particularArray, chunk6Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({ instructionChunk6: particularArray, chunk6Content: event.target.files[0] });
         break;
       default:
       // ..do nothing
@@ -1056,7 +1107,8 @@ class SuggestMealForm extends Component {
   sendSuggestedMealToDB = async (e) => {
     const { mealName, prepTime, cookTime, mealImage, mealImageName, mealImageData, mealImagesData, intro, servings, chef,
       new_product_ingredients, ingredientGroupList, suggestedCategories, tips, suggestedUtensils,
-      chunk1Content, chunk2Content, chunk3Content, chunk4Content, chunk5Content, chunk6Content } = this.state;
+      chunk1Content, chunk2Content, chunk3Content, chunk4Content, chunk5Content, chunk6Content,
+      mealImage1, mealImage2, mealImage3, mealImage4 } = this.state;
 
     console.log(mealImage);
     console.log(mealImageData);
@@ -1223,15 +1275,13 @@ class SuggestMealForm extends Component {
     //-------------Submit remainder data of meal to Mongo ------------------------------------------
     let suggestMealForm = new FormData();
     suggestMealForm.append('meal_name', mealName);
-    suggestMealForm.append('mealImage', mealImage);
-    console.log(mealImage)
-    suggestMealForm.append('meal_images', mealImagesData);
-    suggestMealForm.append('mealImageName', mealImageName);
-
+    suggestMealForm.append('meal_images', mealImage1);
+    suggestMealForm.append('meal_images', mealImage2);
+    suggestMealForm.append('meal_images', mealImage3);
+    suggestMealForm.append('meal_images', mealImage4);
     suggestMealForm.append('prep_time', prepTime);
     suggestMealForm.append('cook_time', cookTime);
     suggestMealForm.append('intro', intro);
-
     suggestMealForm.append('tips', JSON.stringify(tips));
     suggestMealForm.append('chef', chef);
     suggestMealForm.append('servings', servings);
@@ -1321,7 +1371,8 @@ class SuggestMealForm extends Component {
     input.id = "mealImage";
     input.name = "mealImage";
     input.type = "file";
-    input.onchange = (ev) => this.onUpdateMealImage(ev);
+    let id = this.state.mealImagesData.length;
+    input.onchange = (ev) => this.onUpdateMealImage(ev, id);
     input.hidden = true;
     input.click()
   }
@@ -1387,6 +1438,7 @@ class SuggestMealForm extends Component {
     //   palette: { primary: green },
     // });
 
+    console.log(this.props.categories);
     const { ingredientStrings, stepInputs } = this.state;
 
     return (
@@ -1429,7 +1481,7 @@ class SuggestMealForm extends Component {
             </div>
 
             <h3>Upload Images <em>(Up to 4)</em></h3>
-            {this.state.mealImagesData.length < 3 &&
+            {this.state.mealImagesData.length < 4 &&
               <div className={styles.suggestion_form_image}>
                 <div className={styles.suggestion_form_image_col_1}>
                   <div onClick={() => this.uploadMealImage()} className={styles.suggestion_form_image_icon_con}>
@@ -1442,7 +1494,7 @@ class SuggestMealForm extends Component {
               </div>}
             <Row>
               <Col md={12} style={{ marginTop: "20px" }}>
-                <p><img id="MealsMainImages" width="100%" height="100%" alt="main_Meal_Image" style={{ display: "none" }} />
+                <p><img id="meal0Image" width="100%" height="100%" alt="main_Meal_Image" style={{ display: "none" }} />
                 </p>
               </Col>
             </Row>
@@ -1451,7 +1503,7 @@ class SuggestMealForm extends Component {
               this.state.mealImagesData.map((data, index) =>
                 <Row key={index}>
                   <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><Image src={data} width="100%" height="100%" alt="other_meal_images" />
+                    <p><Image src={data} id={'meal' + { index } + 'Image'} width="100%" height="100%" alt="other_meal_images" />
                     </p>
                   </Col>
                 </Row>
@@ -1763,7 +1815,7 @@ class SuggestMealForm extends Component {
                   clearOnBlur
                   onBlur={this.categoryBlur}
                   // filterSelectedOptions
-                  options={this.props.categories.map((option) => option)}
+                  options={this.props.categories?.map((option) => option)}
                   // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
                   onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
                   // getOptionLabel={option => option}
