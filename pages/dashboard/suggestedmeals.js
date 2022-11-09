@@ -13,6 +13,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 import axios from '../../src/util/Api';
+import Meal from '../../src/components/individualPage/Meal';
+import WestIcon from '@mui/icons-material/West';
 
 const SuggestedMeals = (props) => {
     const router = useRouter()
@@ -21,12 +23,41 @@ const SuggestedMeals = (props) => {
     const [searchOption, setSearchOption] = useState()
     const [search, setSearchState] = useState(false)
     const [showReason, setShowReasonState] = useState(false)
+    const [meals, setMealsState] = useState([])
+    const [meal, setMealState] = useState({})
+    const [filteredMeals, setFilteredMealsState] = useState([])
+    const [searchSuggestedMeal, setSearchSuggestedMealState] = useState('')
+    const [openMeal, setOpenMealState] = useState(false)
+    const [changeStatus, setChangeStatusState] = useState(false)
+    const [statusType, setStatusTypeState] = useState('')
+    const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ]
 
     useEffect(() => {
-        axios.get('/meals/get-meals/1').then(data => {
-            console.log(data)
-        })
-      }, []);
+        if(props.auth.authUser){
+            if(props.auth.authUser.user_type === 'admin'){
+                axios.get('/meals/get-meals/1').then(data => {
+                    console.log(data.data)
+                    if(data.data.data){
+                        setMealsState(data.data.data.meals)
+                        setFilteredMealsState(data.data.data.meals)
+                    }
+                })
+            }
+        }
+      }, [props.auth]);
 
     function togglePublicMeal(){
         setAddPublicMeal(!addPublicMeal)
@@ -41,21 +72,52 @@ const SuggestedMeals = (props) => {
         setSearchOption(!searchOption)
     }
 
-    // search = (e) => {
-    //     let url = window.location.href;
-    //     if(e.keyCode){
-    //       if(e.keyCode === 13){
-            
-    //           window.location.replace("/search/" + this.state.searchName);
-    //       }
-    //     }else{
-    //         window.location.replace("/search/" + this.state.searchName);
-    //     }
-    //     // searchProduct(this.state.searchName)
-    //     // .then(res => {
-    //     //     this.props.history.push('/product/')
-    //     // })
-    // };
+    function handleSearch(e){
+        setSearchSuggestedMealState(e.target.value);
+        // if(e.target.value.length>=1){
+        //   let url = window.location.href;
+        //   let value;
+        //   value = { name: e.target.value }
+        //   productSuggestion(value).then(res => {
+        //     console.log(res)
+        //     if(res.data.data.products){
+        //       this.setState({
+        //         queryResults: res.data.data.products.items
+        //       })
+        //     }
+        //     if(res.data.data.products){
+        //       this.setState({
+        //         suggestionResults: res.data.data.products.items
+        //       })
+        //     }
+        //   })
+        // }
+        
+      };
+    
+      function searchSuggested(e) {
+        if(e.keyCode){
+          if(e.keyCode === 13){
+            if(searchSuggestedMeal.length>0){
+                let newMeals = meals.filter((meal) => {
+                    return meal.mealName.includes(searchSuggestedMeal) || meal.intro.includes(searchSuggestedMeal) ||
+                    meal._id.includes(searchSuggestedMeal)
+                })
+                console.log(newMeals)
+                setFilteredMealsState(newMeals)
+            }
+              
+          }
+        }else{
+            if(searchSuggestedMeal.length>0){
+                let newMeals = meals.filter((meal) => {
+                    return meal.intro.includes(searchSuggestedMeal) || meal.mealName.includes(searchSuggestedMeal) || 
+                    meal._id.includes(searchSuggestedMeal)
+                })
+                setFilteredMealsState(newMeals)
+            }
+        }
+      };
 
     function toggleSearch(){
         setSearchState(!search);
@@ -63,6 +125,43 @@ const SuggestedMeals = (props) => {
 
     function toggleShowReason(){
         setShowReasonState(!showReason)
+    }
+
+    function toggleOpenMeal(meal){
+        setMealState(meal)
+        setOpenMealState(true)
+    }
+
+    function closeMeal(){
+        setOpenMealState(false)
+    }
+
+    function toggleChangeStatus(){
+        setChangeStatusState(!changeStatus)
+    }
+
+    function handleStatusType(type) {
+        setStatusTypeState(type)
+        axios.post('/meals/update/'+meal._id, {publicly_available: type}).then(res => {
+            setMealState(res.data.data)
+            axios.get('/meals/get-meals/1').then(data => {
+                if(data.data.data){
+                    setMealsState(data.data.data.meals)
+                    setFilteredMealsState(data.data.data.meals)
+                }
+            })
+        })
+        toggleChangeStatus()
+    }
+
+    function deleteMeal(id){
+        axios.delete('/meals/delete/'+id).then(res => {
+            console.log(res.data)
+            axios.get('/meals/get-meals/1').then(data => {
+                setMealsState(data.data.data.meals)
+                setFilteredMealsState(data.data.data.meals)
+            })
+        })
     }
 
     return (
@@ -74,120 +173,151 @@ const SuggestedMeals = (props) => {
         </div>
         <div className={empty}></div>
         <div className={center}>
-            <h3>Suggested Meal/Products</h3>
-            {props.auth.authUser &&
-            <div className={styles.suggestedmeal_container}>
-                <div className={styles.suggestedmeal_search_con}>
-                    <div className={styles.search_con}>
-                        <div className={styles.search_box}>
-                            <p className={styles.search_icon}>
-                                <SearchIcon className={styles.search_icon} />
-                            </p>
-                            <input
-                            type="text"
-                            name="search"
-                            className={styles.search_input}
-                            placeholder="Search for products"
-                            />
+            {!openMeal &&
+            <>
+                <h3>Suggested Meal/Products</h3>
+                {props.auth.authUser &&
+                <div className={styles.suggestedmeal_container}>
+                    <div className={styles.suggestedmeal_search_con}>
+                        <div className={styles.search_con}>
+                            <div className={styles.search_box}>
+                                <p onClick={searchSuggested} className={styles.search_icon}>
+                                    <SearchIcon className={styles.search_icon} />
+                                </p>
+                                <input
+                                type="text"
+                                name="search"
+                                onChange={handleSearch}
+                                onKeyUp={searchSuggested}
+                                className={styles.search_input}
+                                placeholder="Search for products"
+                                />
+                            </div>
+                            <div className={styles.search_button} onClick={searchSuggested}>Search</div>
                         </div>
-                        <div className={styles.search_button}>Search</div>
+                        {props.auth.authUser.user_type === 'customer' &&
+                        <Link href='/dashboard/createstore'><a>Create Store</a></Link>}
                     </div>
-                    {props.auth.authUser.user_type === 'customer' &&
-                    <Link href='/dashboard/createstore'><a>Create Store</a></Link>}
-                </div>
-                <div className={styles.suggestedmeal_row2}>
-                    <h3>Items</h3>
-                    {props.auth.authUser.user_type !== 'admin' &&
-                    <div>
-                        <h5>Remove Sections(s)</h5>
+                    <div className={styles.suggestedmeal_row2}>
+                        <h3>Items</h3>
+                        {props.auth.authUser.user_type !== 'admin' &&
                         <div>
-                            <div onClick={togglePublicMeal} className={styles.tableactionbutton}>+ Add public meal</div>
-                            <div className={styles.tableactionbutton}>
-                                <Link href='/suggestmeal' >
-                                    <a>
-                                        + New Suggestion
-                                    </a>
-                                </Link>
+                            <h5>Remove Sections(s)</h5>
+                            <div>
+                                <div onClick={togglePublicMeal} className={styles.tableactionbutton}>+ Add public meal</div>
+                                <div className={styles.tableactionbutton}>
+                                    <Link href='/suggestmeal' >
+                                        <a>
+                                            + New Suggestion
+                                        </a>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
+                        }
                     </div>
-                    }
-                </div>
-                <div className={styles.suggestedmeal}>
-                <table className={styles.request_table}>
-                    <thead>
-                    <tr className={styles.request_tr} style={{backgroundColor: 'transparent'}}>
-                        <input name='id' type="checkbox" />
-                        <th className={styles.request_th}>ID number</th>
-                        <th className={styles.request_th}>Name</th>
-                        <th className={styles.request_th}>Status <FillterIcon /></th>
-                        <th className={styles.request_th}>Categories <FillterIcon /></th>
-                        <th className={styles.request_th}>Date Created <FillterIcon /></th>
-                        <th className={styles.request_th} style={{textAlign: 'center'}}>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr className={styles.refId + " " + styles.request_tr}>
+                    <div className={styles.suggestedmeal}>
+                    <table className={styles.request_table}>
+                        <thead>
+                        <tr className={styles.request_tr} style={
+                            props.auth.authUser.user_type === 'admin' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 5%'}:
+                            props.auth.authUser.user_type === 'customer' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 16%'}:
+                            props.auth.authUser.user_type === 'supplier' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 25%'}: {backgroundColor: 'transparent'}
+                            }>
                             <input name='id' type="checkbox" />
-                            <td className={styles.request_td}>dfdsf</td>
-                            <td className={styles.request_td}>saf</td>
-                            <td className={styles.request_td + " " + status + " " + pending}>asf</td>
-                            <td className={styles.request_td}>safa</td>
-                            <td className={styles.request_td}>afa</td>
-                            <td className={styles.request_td + " " + styles.actions_con}>
-                                {props.auth.authUser.user_type !== 'admin' &&
-                                <>
-                                    <div className={styles.tableactionbutton}>Send for review</div>
-                                    {props.auth.authUser.user_type === 'supplier' &&
-                                        <div className={styles.tableactionbutton} style={{background: 'F47900', color:'white'}}>Send for Inventory</div> 
-                                    }
-                                </>
-                                }
-                                <CloseFillIcon style={actionIcon} />
-                            </td>
+                            <th className={styles.request_th}>ID number</th>
+                            <th className={styles.request_th}>Name</th>
+                            <th className={styles.request_th} style={{justifySelf: 'center'}}>Status <FillterIcon /></th>
+                            <th className={styles.request_th}>Categories <FillterIcon /></th>
+                            <th className={styles.request_th}>Date Created <FillterIcon /></th>
+                            <th className={styles.request_th} style={{textAlign: 'center'}}>Action</th>
                         </tr>
-                        <tr className={styles.refId + " " + styles.request_tr}>
-                            <input name='id' type="checkbox" />
-                            <td className={styles.request_td}>dfdsf</td>
-                            <td className={styles.request_td}>saf</td>
-                            <div className={styles.actions_con}>
-                                <td className={styles.request_td + " " + status + " " + rejected}>asf </td>
-                                <p onMouseEnter={toggleShowReason} onMouseLeave={toggleShowReason}><MessageIcon /></p>
-                                {showReason &&
-                                <div className={styles.rejection_con}>
-                                    <div className={styles.actions_con_col1}>
-                                        <h3>Reason for rejection</h3>
-                                    </div>
-                                    <div className={styles.actions_con_col2}>
-                                        <h2>Publishes undesirable content</h2>
-                                        <div className={styles.line}></div>
-                                        <p>
-                                        User reports that the images sometimes "fuzz out" 
-                                        or have a period where the image quality is low 
-                                        resolution
-                                        </p>
-                                    </div>
-                                </div>}
-                            </div>
-                            <td className={styles.request_td}>safa</td>
-                            <td className={styles.request_td}>afa</td>
-                            <td className={styles.request_td+ " " + styles.actions_con}>
-                                {props.auth.authUser.user_type !== 'admin' &&
-                                <>
-                                    <div className={styles.tableactionbutton}>Send for review</div>
-                                    {props.auth.authUser.user_type === 'supplier' &&
-                                        <div className={styles.tableactionbutton}>Send for Inventory</div> 
-                                    }
-                                </>
-                                }
-                                <CloseFillIcon style={styles.actionIcon} />
-                            </td>
-                        </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                filteredMeals.map((meal) => {
+                                    return(
+                                        <tr key={meal._id} className={styles.refId + " " + styles.request_tr}style={
+                                            props.auth.authUser.user_type === 'admin' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 5%'}:
+                                            props.auth.authUser.user_type === 'customer' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 16%'}:
+                                            props.auth.authUser.user_type === 'supplier' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 25%'}: {backgroundColor: 'transparent'}
+                                            }>
+                                            <input name='id' type="checkbox" />
+                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal._id}</td>
+                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.mealName}</td>
+                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td + " " + status + " " + 
+                                                ((meal.publicly_available === 'Draft' || meal.publicly_available === 'Pending') ? pending :
+                                                meal.publicly_available === 'Public' ? approve :
+                                                meal.publicly_available === 'Rejected' ? rejected : '')}
+                                            >
+                                                {meal.publicly_available}
+                                            </td>
+                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.categories && meal.categories[0]}</td>
+                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.createdAt && new Date(meal.createdAt).getDate() + ' ' + months[new Date(meal.createdAt).getMonth()] + ' ,'+ new Date(meal.createdAt).getFullYear()}</td>
+                                            <td className={styles.request_td + " " + styles.actions_con}>
+                                                {props.auth.authUser.user_type !== 'admin' &&
+                                                <>
+                                                    <div className={styles.tableactionbutton}>Send for review</div>
+                                                    {props.auth.authUser.user_type === 'supplier' &&
+                                                        <div className={styles.tableactionbutton} style={{background: 'F47900', color:'white'}}>Send for Inventory</div> 
+                                                    }
+                                                </>
+                                                }
+                                                <td onClick={() => deleteMeal(meal._id)}>
+                                                <CloseFillIcon style={actionIcon} /></td>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                    </div>
                 </div>
-            </div>
+                }
+            </>
+            }
+            {openMeal &&
+                <div>
+                    <div className={styles.meal_section_1}>
+                        <div className={styles.meal_section_1_col_1}>
+                            <ul className={styles.goback_header_pages}>
+                                <div onClick={closeMeal}><WestIcon className={styles.goback_header_page_arrow} /></div>
+                                <li onClick={closeMeal}>
+                                    back
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className={styles.meal_section_1}>
+                        <div className={styles.meal_section_1_col_1}>
+                            <h3>Meal Description</h3>
+                        </div>
+                        <div className={styles.meal_section_1_col_2}>
+                            {/* <p className={styles.meal_section_1_col_2_p}> Choose type</p> */}
+                            <div className={styles.select_container}>
+                                <div onClick={toggleChangeStatus} className={styles.select_box}>
+                                    <p>{statusType}</p>
+                                    <ArrowDropDownIcon className={styles.select_box_icon} />
+                                </div>
+                                {changeStatus &&
+                                    <div className={styles.select_options}>
+                                        <p onClick={() => handleStatusType('Public')}>Public</p>
+                                        <p onClick={() => handleStatusType('Pending')}>Pending</p>
+                                        <p onClick={() => handleStatusType('Rejected')}>Rejected</p>
+                                    </div>}
+                            </div>
+                            <p className={status + " " + 
+                            ((meal.publicly_available === 'Draft' || meal.publicly_available === 'Pending') ? pending :
+                            meal.publicly_available === 'Public' ? approve :
+                            meal.publicly_available === 'Rejected' ? rejected : '')}>
+                                {meal.publicly_available}
+                            </p>
+                        </div>
+                    </div>
+                    <Meal meal={meal} />
+                </div>
             }
         </div>
         
@@ -229,45 +359,36 @@ const SuggestedMeals = (props) => {
                             <div className={styles.search_container_col_1}>
                                 
                                 <div className={styles.search_suggestion}>
-                                    <h3 className={styles.search_suggestion_h3}>Top Categories</h3>
-                                    <ul className={styles.search_suggestion_lists}></ul>
-                                </div>
-                                <div className={styles.search_help}>
-                                    <h3 className={styles.search_help_h3}>How can we help?</h3>
+                                    <h3 className={styles.search_suggestion_h3}>Meals (1)</h3>
                                     <ul className={styles.search_help_lists}>
-                                    <li className={styles.search_help_list}>
-                                        <Link href="/appointment-booking">
-                                        <a>
-                                        Appointment Booking
-                                        </a></Link>
-                                    </li>
-                                    <li className={styles.search_help_list}>
-                                        <Link href="/inspiration">
-                                        <a>
-                                        Inspiration
-                                        </a></Link>
-                                    </li>
-                                    <li className={styles.search_help_list}>
-                                    <Link href="/showroom"><a>Showrooms</a></Link>
-                                    </li>
-                                    <li className={styles.search_help_list}>
-                                        <Link href="/faqs"><a>FAQs</a></Link>
-                                    </li>
+                                        <li className={styles.search_help_list}>
+                                            Australian Rice
+                                        </li>
+                                        <li className={styles.search_help_list}>
+                                            Austra Salad
+                                        </li>
+                                        <li className={styles.search_help_list}>
+                                        Austra Oyster
+                                        </li>
+                                        <li className={styles.search_help_list}>
+                                            Auyya
+                                        </li>
                                     </ul>
                                 </div>
-                            </div>
-                            <div className={styles.search_container_col_2}>
-                                <div className={styles.search_container_col_2_row_1}>
-                                    <h3 className={styles.search_products_h3}>Products</h3>
-                                    <Link href="/products">
-                                    <a className="view-all">
-                                    View all
-                                    </a></Link>
-                                </div>
-                                <div className={styles.search_container_col_2_row_2}>
-                                    <div className={styles.searched_products}>
-                                    
+
+                                <div className={styles.search_container_col_2}>
+                                    <div className={styles.search_container_col_2_row_1}>
+                                        <h3 className={styles.search_products_h3}>Products</h3>
                                     </div>
+                                    <div className={styles.search_container_col_2_row_2}>
+                                        <div className={styles.searched_products}>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={styles.search_help}>
+                                    <h3 className={styles.search_help_h3}>Kitchen Utensils</h3>
+                                    
                                 </div>
                             </div>
                         </div>}
