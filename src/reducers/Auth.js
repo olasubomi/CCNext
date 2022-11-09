@@ -1,13 +1,14 @@
-import { INIT_URL, SIGNOUT_USER_SUCCESS, USER_DATA, USER_TOKEN_SET, USER_ROLE, CUSTOMER_ID } from "../constants/ActionTypes";
+import { INIT_URL, SIGNOUT_USER_SUCCESS, USER_DATA, USER_TOKEN_SET, USER_ROLE, CUSTOMER_ID, IS_AUTHENTICATED } from "../constants/ActionTypes";
 
-if (typeof window !== 'undefined') {
+
 
     const INIT_STATE = {
-        token: JSON.parse(localStorage.getItem('token')),
+        token: '',
         initURL: '',
         authUser: null,
+        isAuthenticated: false
     };
-}
+
 
 export default (state = INIT_STATE, action) => {
     switch (action.type) {
@@ -19,15 +20,22 @@ export default (state = INIT_STATE, action) => {
         case SIGNOUT_USER_SUCCESS: {
             return {
                 ...state,
-                token: null,
+                token: '',
                 authUser: null,
-                initURL: ''
+                initURL: '',
+                isAuthenticated: false
             }
         }
         case USER_DATA: {
             return {
                 ...state,
                 authUser: action.payload,
+            };
+        }
+        case IS_AUTHENTICATED: {
+            return {
+                ...state,
+                isAuthenticated: action.payload,
             };
         }
         case USER_TOKEN_SET: {

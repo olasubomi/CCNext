@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import TextField from "@mui/material/TextField";
 // import Chip from "@mui/material/Chip";
-import Autocomplete from "@mui/lab/Autocomplete"; // createFilterOptions,
+import Autocomplete from "@mui/material/Autocomplete"; // createFilterOptions,
 // import axios from 'axios';
 import axios from '../../util/Api';
 import { Row, Col } from "react-bootstrap";
@@ -15,31 +15,24 @@ import Popup2 from "../popups/popup2";
 // import ProductsPageModal from "./ProductsPageModal";
 var FormData = require('form-data');
 // var fs = require('fs');
+import Image from 'next/image';
+
 
 class SuggestMealForm extends Component {
-  allMealNames = [];
-  productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
-    "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
-    "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes", "Beef", "Green Pepper",
-    "Garlic", "Ginger", "Vegetable Oil", "Lemon", "Rosemary Powder"];
-  productImageLink = [];
-  categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
-  measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
-    "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
-  kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
-    "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
-    "Wire Mesh", "Zester"];
-
   ingredientsQuantityMeasurements = [];
 
   constructor(props) {
     super(props);
     this.state = {
       mealName: "",
-      mealImage: "",
+      mealImage: [],
       mealImageName: "",
-      mealImageData: "",
       mealImagesData: [],
+
+      mealImage1: "",
+      mealImage2: "",
+      mealImage3: "",
+      mealImage4: "",
       intro: "",
 
       ingredientNames: [],
@@ -105,6 +98,12 @@ class SuggestMealForm extends Component {
       chunk4Content: "",
       chunk5Content: "",
       chunk6Content: "",
+      chunk1ContentURL: "",
+      chunk2ContentURL: "",
+      chunk3ContentURL: "",
+      chunk4ContentURL: "",
+      chunk5ContentURL: "",
+      chunk6ContentURL: "",
 
       // do we want all the instruction variables ?
       // instructionGroupList:[],
@@ -151,7 +150,7 @@ class SuggestMealForm extends Component {
       if (mealList && mealList.data.length !== 0) {
         console.log("returns GET of ALL MEALS ");
         for (var i = 0; i < mealList.data.length; i++) {
-          this.allMealNames.push(mealList.data[i].mealName);
+          this.props.allMealNames.push(mealList.data[i].mealName);
         }
       } else {
         console.log("get all meal names function does not return");
@@ -168,62 +167,24 @@ class SuggestMealForm extends Component {
     // var url = "/get-all-products";
     url = "https://chopchowdev.herokuapp.com/get-all-products";
 
-    // axios.get(url).then((body) => {
-    //   this.productsList = body.data;
-    //   if (this.productsList && this.productsList.data.length !== 0) {
-    //     console.log("returns GET ALL PRODUCTS ");
-    //     for (var i = 0; i < this.productsList.data.length; i++) {
-    //       this.productNames.push(this.productsList.data[i].product_name);
-    //       this.productImageLink.push(this.productsList.data[i].product_image);
-    //     }       
-    //   } else {
-    //     console.log("get all products function does not return");
-    //   }
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
 
     //----get category meals-------------------------
     url = "/get-all-categories";
-    // axios.get(url).then((body) => {
-    //   var categoriesFromDBList = body.data;
-    //   if (categoriesFromDBList && categoriesFromDBList.data.length !== 0) {
-    //     console.log("returns GET of ALL Categories ");
 
-    //     for (var i = 0; i < categoriesFromDBList.data.length; i++) {
-    //       this.categories.push(categoriesFromDBList.data[i].category_name);
-    //     }
-    //     console.log("PRINTING UPDATED CATEGORIES LIST");
-    //   } else {
-    //     console.log("get all products function does not return");
-    //   }
-    // })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
     this.categories = this.categories;
     if (typeof window !== 'undefined') {
 
       let doc = document.querySelector('#formmeal')
       if (doc) {
-        doc.addEventListener('keyup', (e) => {
-          console.log('sdcd')
+        setInterval(() => {
           localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
-        })
 
-        doc.addEventListener('click', (e) => {
-          localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
-        }, false)
+        }, 100)
       }
 
       if (localStorage.getItem('suggestMealForm')) {
         let {
           mealName,
-          mealImage,
-          mealImageName,
-          mealImageData,
-          mealImagesData,
           intro,
 
           ingredientNames,
@@ -258,13 +219,6 @@ class SuggestMealForm extends Component {
           instructionChunk4,
           instructionChunk5,
           instructionWordlength,
-
-          chunk1Content,
-          chunk2Content,
-          chunk3Content,
-          chunk4Content,
-          chunk5Content,
-          chunk6Content,
 
           // do we want all the instruction variables ?
           // instructionGroupList:[],
@@ -281,95 +235,8 @@ class SuggestMealForm extends Component {
           stepInputs
         } = JSON.parse(localStorage.getItem('suggestMealForm'))
 
-        if (mealImageData !== '') {
-          var imageM = document.getElementById("MealsMainImages");
-          imageM.style.display = "block";
-          imageM.src = mealImageData;
-        }
-
-        var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
-        var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
-
-        var imageElementId = "chunk1Image";
-        var videoElementId = "chunk1Video";
-
-        // console.log(allowedImageExtensions.exec(event.target.files[0].name));
-
-        // we need to keep track of wether an image or video was last uploaded and use the last one only.
-        if (JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'] !== '') {
-          if (allowedImageExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk1'].dataName)) {
-            //display meals main image or videoin suggest meal
-
-            setTimeout(() => {
-              var image = document.getElementById(imageElementId);
-              var video = document.getElementById(videoElementId);
-              image.style.display = "block";
-              image.src = JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'];
-              video.style.display = "none";
-            }, 100)
-
-          }
-          else if (allowedVideoExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk1'].dataName)) {
-            //display meals main image or videoin suggest meal
-            setTimeout(() => {
-              var image = document.getElementById(imageElementId);
-              var video = document.getElementById(videoElementId);
-              video.style.display = "block";
-              video.src = JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'];
-              image.style.display = "none";
-              video.play();
-            }, 100)
-          }
-          else {
-            alert('Invalid file type');
-          }
-        }
-
-        for (let i = 0; i < stepInputs.length; i++) {
-
-          let imageElementId = "chunk" + (stepInputs[i]) + "Image";
-          let videoElementId = "chunk" + (stepInputs[i]) + "Video";
-
-          // console.log(allowedImageExtensions.exec(event.target.files[0].name));
-
-          // we need to keep track of wether an image or video was last uploaded and use the last one only.
-          if (JSON.parse(localStorage.getItem('suggestMealForm'))['chunk' + stepInputs[i] + 'Content'] !== '') {
-            if (allowedImageExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk' + stepInputs[i]].dataName)) {
-              //display meals main image or videoin suggest meal
-
-              setTimeout(() => {
-                console.log(imageElementId, videoElementId)
-                var image = document.getElementById(imageElementId);
-                var video = document.getElementById(videoElementId);
-                image.style.display = "block";
-                image.src = JSON.parse(localStorage.getItem('suggestMealForm'))['chunk' + stepInputs[i] + 'Content'];
-                video.style.display = "none";
-              }, 100)
-
-            }
-            else if (allowedVideoExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk' + stepInputs[i]].dataName)) {
-              //display meals main image or videoin suggest meal
-              setTimeout(() => {
-                var image = document.getElementById(imageElementId);
-                var video = document.getElementById(videoElementId);
-                video.style.display = "block";
-                video.src = JSON.parse(localStorage.getItem('suggestMealForm'))['chunk' + stepInputs[i] + 'Content'];
-                image.style.display = "none";
-                video.play();
-              }, 100)
-            }
-            else {
-              alert('Invalid file type');
-            }
-          }
-        }
-
         this.setState({
           mealName,
-          mealImage,
-          mealImageName,
-          mealImageData,
-          mealImagesData,
           intro,
 
           ingredientNames,
@@ -397,20 +264,37 @@ class SuggestMealForm extends Component {
           cookTime,
           prepTime,
 
-          instructionChunk6,
-          instructionChunk1,
-          instructionChunk2,
-          instructionChunk3,
-          instructionChunk4,
-          instructionChunk5,
+          instructionChunk6: {
+            title: instructionChunk6.title,
+            instructionSteps: instructionChunk6.instructionSteps,
+            dataName: ""
+          },
+          instructionChunk1: {
+            title: instructionChunk1.title,
+            instructionSteps: instructionChunk1.instructionSteps,
+            dataName: ""
+          },
+          instructionChunk2: {
+            title: instructionChunk2.title,
+            instructionSteps: instructionChunk2.instructionSteps,
+            dataName: ""
+          },
+          instructionChunk3: {
+            title: instructionChunk3.title,
+            instructionSteps: instructionChunk3.instructionSteps,
+            dataName: ""
+          },
+          instructionChunk4: {
+            title: instructionChunk4.title,
+            instructionSteps: instructionChunk4.instructionSteps,
+            dataName: ""
+          },
+          instructionChunk5: {
+            title: instructionChunk5.title,
+            instructionSteps: instructionChunk5.instructionSteps,
+            dataName: ""
+          },
           instructionWordlength,
-
-          chunk1Content,
-          chunk2Content,
-          chunk3Content,
-          chunk4Content,
-          chunk5Content,
-          chunk6Content,
 
           // do we want all the instruction variables ?
           // instructionGroupList:[],
@@ -426,6 +310,11 @@ class SuggestMealForm extends Component {
           booleanOfDisplayOfDialogBoxConfirmation,
           stepInputs
         })
+        var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
+        var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
+
+        var imageElementId = "chunk1Image";
+        var videoElementId = "chunk1Video";
       }
     }
   }
@@ -440,24 +329,12 @@ class SuggestMealForm extends Component {
   //////////////////////////////////////////////////////////////////////////////////////////////
   openMealDetailsModal = (index) => {
     // toggle products page visibility for product to be Edited.
-    // this.productDisplayBooleansOutOfState[this.state.ingredientGroupList.length] = false;
-    // this.productDisplayBooleansOutOfState[index] = true;
 
-    // var tmpIngredientGroupList = this.state.ingredientGroupList;
-    // tmpIngredientGroupList[index].display = true;
-    // tmpIngredientGroupList[currentProductDisplayIndex].display = false;
-    // this.setState({ingredientGroupList: tmpIngredientGroupList});
     console.log("Comes in toggle product details div id. Index is : " + index);
 
     var individualProductDisplay = document.getElementById("ProductAdditionalDataDisplayed");
     console.log(individualProductDisplay);
 
-    // if (individualProductDisplay.style.display === "block") {
-    //   individualProductDisplay.style.display = "none";
-    // }
-    // else {
-    //   individualProductDisplay.style.display = "block";
-    // }
     this.setState({ openModal: true });
   }
 
@@ -485,51 +362,55 @@ class SuggestMealForm extends Component {
   };
 
   ///////////////////////////////////////////////////////////////////////////////////////
-  onUpdateMealImage = (event) => {
+  onUpdateMealImage = (event, id) => {
     if (event.target.files[0] === undefined) return;
 
     // Allowing file type
     var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
-
+    // we need to keep track of wether an image or video was last uploaded and use the last one only.
     if (allowedImageExtensions.exec(event.target.files[0].name)) {
-      if (this.state.mealImage === '') {
-        this.setState({
-          mealImage: event.target.files[0],
-          mealImageName: event.target.files[0].name,
-          mealImageData: URL.createObjectURL(event.target.files[0])
-        });
+
+      this.setState({
+        // mealImageName: event.target.files[0].name,
+        mealImagesData: [...this.state.mealImagesData, URL.createObjectURL(event.target.files[0])],
+      });
+
+      console.log("uploading recipeChunkImageOrVideo content looks like below: ");
+      console.log(event.target.files[0]);
+      let particularArray;
+
+      if (this.state.mealImage0 == "") {
+        this.setState({ mealImage1: event.target.files[0] });
+
+        var imageElementId = "mealImage0";
+        var image = document.getElementById(imageElementId);
+
+        // console.log(allowedImageExtensions.exec(event.target.files[0].name));
         //display meals main image or videoin suggest meal
-        var image = document.getElementById("MealsMainImages");
+        console.log(imageElementId);
         image.style.display = "block";
-        image.src = URL.createObjectURL(event.target.files[0]);
-
-        console.log(event.target.files[0]);
-        console.log(event.target.files[0].name);
-
-
-        console.log(allowedImageExtensions.exec(event.target.files[0].name));
-
-        // console.log(URL.createObjectURL(event.target.files[0]));
-      } else {
-        this.setState({
-          mealImagesData: [...this.state.mealImagesData, URL.createObjectURL(event.target.files[0])]
-        });
-        // var image = document.getElementById("mealsMainImages"+(this.state.utensilImagesData.length+1));
-        // image.style.display = "block";
-        // image.src = URL.createObjectURL(event.target.files[0]);
-
-        console.log(event.target.files[0]);
-        console.log(event.target.files[0].name);
-
-
-        console.log(allowedImageExtensions.exec(event.target.files[0].name));
+        image.src = image.src = URL.createObjectURL(event.target.files[0]);
 
       }
+      else if (this.state.mealImage1 == "") {
+        this.setState({ mealImage2: event.target.files[0] });
+
+      }
+      else if (this.state.mealImage2 == "") {
+        this.setState({ mealImage2: event.target.files[0] });
+
+      }
+      else {
+        this.setState({ mealImage3: event.target.files[0] });
+
+      }
+
+      // this.setState({ instructionimagesAndVideos: recipeChunkImageOrVideo });
+
     }
     else {
-      alert("Invalid image type");
+      alert('Invalid file type');
     }
-
   };
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -544,32 +425,50 @@ class SuggestMealForm extends Component {
       case 1:
         particularArray = this.state.instructionChunk1;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk1: particularArray, chunk1Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({
+          instructionChunk1: particularArray, chunk1Content: event.target.files[0],
+          chunk1ContentURL: URL.createObjectURL(event.target.files[0])
+        });
         break;
       case 2:
         particularArray = this.state.instructionChunk2;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk2: particularArray, chunk2Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({
+          instructionChunk2: particularArray, chunk2Content: event.target.files[0],
+          chunk2ContentURL: URL.createObjectURL(event.target.files[0])
+        });
         break;
       case 3:
         particularArray = this.state.instructionChunk3;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk3: particularArray, chunk3Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({
+          instructionChunk3: particularArray, chunk3Content: event.target.files[0],
+          chunk3ContentURL: URL.createObjectURL(event.target.files[0])
+        });
         break;
       case 4:
         particularArray = this.state.instructionChunk4;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk4: particularArray, chunk4Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({
+          instructionChunk4: particularArray, chunk4Content: event.target.files[0],
+          chunk4ContentURL: URL.createObjectURL(event.target.files[0])
+        });
         break;
       case 5:
         particularArray = this.state.instructionChunk5;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk5: particularArray, chunk5Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({
+          instructionChunk5: particularArray, chunk5Content: event.target.files[0],
+          chunk5ContentURL: URL.createObjectURL(event.target.files[0])
+        });
         break;
       case 6:
         particularArray = this.state.instructionChunk6;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk6: particularArray, chunk6Content: URL.createObjectURL(event.target.files[0]) });
+        this.setState({
+          instructionChunk6: particularArray, chunk6Content: event.target.files[0],
+          chunk6ContentURL: URL.createObjectURL(event.target.files[0])
+        });
         break;
       default:
       // ..do nothing
@@ -671,7 +570,7 @@ class SuggestMealForm extends Component {
     if (val !== undefined && val !== null) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.productNames.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.props.productNames.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrProductIndexInDBsProductsList);
 
@@ -1112,7 +1011,7 @@ class SuggestMealForm extends Component {
 
     console.log("current state of product index at Add Ingredient To Meal is : \n" + this.state.currProductIndexInDBsProductsList);
 
-    const searchResult = this.productNames.map(function callback(element) { if (element.toLowerCase() === (ingredientValue.toLowerCase())) { return true; } else { return false; } });
+    const searchResult = this.props.productNames.map(function callback(element) { if (element.toLowerCase() === (ingredientValue.toLowerCase())) { return true; } else { return false; } });
     const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
     console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrProductIndexInDBsProductsList);
 
@@ -1166,9 +1065,13 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedMealToDB = async (e) => {
-    const { mealName, prepTime, cookTime, mealImage, mealImageName, intro, servings, chef,
+    const { mealName, prepTime, cookTime, mealImage, mealImagesData, intro, servings, chef,
       new_product_ingredients, ingredientGroupList, suggestedCategories, tips, suggestedUtensils,
-      chunk1Content, chunk2Content, chunk3Content, chunk4Content, chunk5Content, chunk6Content } = this.state;
+      chunk1Content, chunk2Content, chunk3Content, chunk4Content, chunk5Content, chunk6Content,
+      mealImage1, mealImage2, mealImage3, mealImage4 } = this.state;
+
+    console.log(mealImage);
+    console.log(mealImagesData);
 
     // handle edge case meal name, ingredienrs or image upload required to submit form
     if (mealName === "") { console.log("meal label blank"); return; }
@@ -1234,7 +1137,7 @@ class SuggestMealForm extends Component {
 
       // get new_Measurements from inputted ingredient packets
       if (ingredientGroupList[i].measurement !== "") {
-        let index = this.measurements.indexOf(ingredientGroupList[i].measurement);
+        let index = this.props.measurements.indexOf(ingredientGroupList[i].measurement);
         if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
       }
     }
@@ -1244,7 +1147,7 @@ class SuggestMealForm extends Component {
     for (i = 0; i < suggestedCategories.length; i++) {
       // check if categories already exist, only add new categories to db,
       // though all will still be attached to meal, as mentioned
-      let index = this.categories.indexOf(suggestedCategories[i]);
+      let index = this.props.categories.indexOf(suggestedCategories[i]);
       if (index === -1) new_categories.push(suggestedCategories[i]);
     }
 
@@ -1252,7 +1155,7 @@ class SuggestMealForm extends Component {
     for (i = 0; i < suggestedUtensils.length; i++) {
       // check if categories already exist, only add new categories to db,
       // though all will still be attached to meal, as mentioned
-      let index = this.kitchenUtensils.indexOf(suggestedUtensils[i]);
+      let index = this.props.kitchenUtensils.indexOf(suggestedUtensils[i]);
       if (index === -1) new_kitchen_utensils.push(suggestedUtensils[i]);
     }
 
@@ -1331,13 +1234,13 @@ class SuggestMealForm extends Component {
     //-------------Submit remainder data of meal to Mongo ------------------------------------------
     let suggestMealForm = new FormData();
     suggestMealForm.append('meal_name', mealName);
-    suggestMealForm.append('meal_images', mealImage);
-    suggestMealForm.append('mealImageName', mealImageName);
-
+    suggestMealForm.append('meal_images', mealImage0);
+    suggestMealForm.append('meal_images', mealImage1);
+    suggestMealForm.append('meal_images', mealImage2);
+    suggestMealForm.append('meal_images', mealImage3);
     suggestMealForm.append('prep_time', prepTime);
     suggestMealForm.append('cook_time', cookTime);
     suggestMealForm.append('intro', intro);
-
     suggestMealForm.append('tips', JSON.stringify(tips));
     suggestMealForm.append('chef', chef);
     suggestMealForm.append('servings', servings);
@@ -1353,14 +1256,14 @@ class SuggestMealForm extends Component {
     // new suggested products
     suggestMealForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
     suggestMealForm.append('meal_categories', JSON.stringify(suggestedCategories));
-    // suggestMealForm.append('categories', JSON.stringify(suggestedCategories));
-    suggestMealForm.append('newCategories', JSON.stringify(new_categories));
+    suggestMealForm.append('categories', suggestedCategories);
+    suggestMealForm.append('newCategories', new_categories);
 
     suggestMealForm.append('kitchen_utensils', JSON.stringify(suggestedUtensils));
     suggestMealForm.append('newKitchenUtensils', JSON.stringify(new_kitchen_utensils));
 
     // RecipeSteps
-    suggestMealForm.append('formatted_instructions', JSON.stringify(instructionGroupData));
+    suggestMealForm.append('formatted_instructions', instructionGroupData);
     suggestMealForm.append('instructionChunkContent1', chunk1Content);
     suggestMealForm.append('instructionChunkContent2', chunk2Content);
     suggestMealForm.append('instructionChunkContent3', chunk3Content);
@@ -1369,7 +1272,8 @@ class SuggestMealForm extends Component {
     suggestMealForm.append('instructionChunkContent6', chunk6Content);
 
     // suggestMealForm.append('instructionsGroupList', instructionGroupData);
-    console.log(this.state.chunk1Content);
+    // console.log(this.state.chunk1Content);
+    console.log(suggestMealForm.values);
 
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
@@ -1426,7 +1330,8 @@ class SuggestMealForm extends Component {
     input.id = "mealImage";
     input.name = "mealImage";
     input.type = "file";
-    input.onchange = (ev) => this.onUpdateMealImage(ev);
+    let id = this.state.mealImagesData.length;
+    input.onchange = (ev) => this.onUpdateMealImage(ev, id);
     input.hidden = true;
     input.click()
   }
@@ -1492,6 +1397,7 @@ class SuggestMealForm extends Component {
     //   palette: { primary: green },
     // });
 
+    console.log(this.props.categories);
     const { ingredientStrings, stepInputs } = this.state;
 
     return (
@@ -1505,7 +1411,7 @@ class SuggestMealForm extends Component {
               </label>
               <Autocomplete
                 id="mealName"
-                options={this.allMealNames.map((option) => option)}
+                options={this.props.allMealNames.map((option) => option)}
                 // onChange={(ev, val) => this.onInputChange(ev, val)}
                 onInputChange={(ev, val) => this.onInputChange(ev, val)}
                 freeSolo
@@ -1534,7 +1440,7 @@ class SuggestMealForm extends Component {
             </div>
 
             <h3>Upload Images <em>(Up to 4)</em></h3>
-            {this.state.mealImagesData.length < 3 &&
+            {this.state.mealImagesData.length < 4 &&
               <div className={styles.suggestion_form_image}>
                 <div className={styles.suggestion_form_image_col_1}>
                   <div onClick={() => this.uploadMealImage()} className={styles.suggestion_form_image_icon_con}>
@@ -1547,16 +1453,16 @@ class SuggestMealForm extends Component {
               </div>}
             <Row>
               <Col md={12} style={{ marginTop: "20px" }}>
-                <p><img id="MealsMainImages" width="100%" alt="main_Meal_Image" style={{ display: "none" }} />
+                <p><img id="mealImage0" width="100%" height="100%" alt="main_Meal_Image" style={{ display: "none" }} />
                 </p>
               </Col>
             </Row>
-
+            {console.log(this.state.mealImagesData)}
             {
               this.state.mealImagesData.map((data, index) =>
                 <Row key={index}>
                   <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><img src={data} width="100%" alt="main_Utensil_Image" />
+                    <p><Image src={data} id={'mealImage' + { index }} width="100%" height="100%" alt="other_meal_images" />
                     </p>
                   </Col>
                 </Row>
@@ -1597,7 +1503,7 @@ class SuggestMealForm extends Component {
               </label>
               <Autocomplete
                 id="currentIngredient"
-                options={this.productNames.map((option) => option)}
+                options={this.props.productNames.map((option) => option)}
                 // onChange={(ev)=>this.onTextFieldChange(ev)}
                 value={this.state.currentIngredient}
                 onChange={(ev, val) => this.handleProductNameInput(ev, val)}
@@ -1628,7 +1534,7 @@ class SuggestMealForm extends Component {
                   </label>
                   <Autocomplete
                     id="currentIngredientMeasurement"
-                    options={this.measurements.map((option) => option)}
+                    options={this.props.measurements.map((option) => option)}
                     value={this.state.currentIngredientMeasurement}
                     onChange={this.handleIngredientMeasurement}
                     freeSolo
@@ -1644,20 +1550,6 @@ class SuggestMealForm extends Component {
             {/* // show all ingredients in two column table format */}
             {/* Show all Products in display format as expected in Meal Page*/}
 
-            {/* <Row className={styles.mb-2}>
-                  <Col md={12}>
-                    <ChipInput
-                      label="IngredientsList"
-                      value={this.state.ingredientStrings}
-                      onAdd={(chip) => this.handleAddIngredientChip(chip)}
-                      placeholder="e.g 1 Onion, 2 Cups of Water, etc"
-                      onDelete={(chip) => this.handleDeleteIngredientChip(chip)}
-                      variant="outlined"
-                      fullWidth
-                      className={styles.mb-2}
-                    />
-                  </Col>
-                </Row> */}
             <Stack direction="row" spacing={1} className={styles.stack}>
               {
                 ingredientStrings.map((data, index) => (
@@ -1674,22 +1566,6 @@ class SuggestMealForm extends Component {
 
           </div>
 
-
-          {/* <ProductsPageModal
-                        value={this.state.ingredientGroupList}
-                        productIndex = {this.getProductIndex()}
-                        // {this.state.currentProductIndexDisplayed}
-                        // toggleProductPage={this.
-                        // openProductDetailsModal
-                      // }
-             /> */}
-          {/* 
-availableLocations,
-    rawImages, productImages,
-    calories
-    total_carbs, net_carbs, fiber, fat, protein ,
-    sodium, cholesterol, vitamind, calcium, iron, potassium */}
-
           <h3>Kitchen Utensils<em>(optional)</em></h3>
           <div className={styles.suggestion_form}>
             <div className={styles.suggestion_form_group}>
@@ -1703,7 +1579,7 @@ availableLocations,
                   freeSolo
                   clearOnBlur
                   onBlur={this.kitBlur}
-                  options={this.kitchenUtensils.map((option) => option)}
+                  options={this.props.kitchenUtensils.map((option) => option)}
                   // onChange={(ev,val)=>this.handleUtensilsDropdownChange(ev,val)}
                   onChange={(e, val) => this.handleKitchenUtensilInputName(val)}
                   renderInput={(params) => (<TextField {...params}
@@ -1800,7 +1676,8 @@ availableLocations,
                   </div>
                 </div>
 
-                <p><img id="chunk1Image" className={styles.suggestion_image} alt="recipe_step1_image_or_video" style={{ display: "none" }} />
+                <p><img id="chunk1Image" className={styles.suggestion_image} alt="recipe_step1_image_or_video"
+                  height={"100%"} width={"100%"} style={{ display: "none" }} />
                   <video className={styles.suggestion_image} id="chunk1Video" style={{ display: "none" }} controls>
                     Your browser does not support the video tag.
                   </video>
@@ -1860,7 +1737,8 @@ availableLocations,
                       </div>
                     </div>
 
-                    <p><img id={"chunk" + id + "Image"} className={styles.suggestion_image} alt={"recipe_step" + id + "_image_or_video"} style={{ display: "none" }} />
+                    <p><img id={"chunk" + id + "Image"} height={"100%"} width={"100%"} className={styles.suggestion_image} alt={"recipe_step" + id + "_image_or_video"}
+                      style={{ display: "none" }} />
                       <video className={styles.suggestion_image} id={"chunk" + id + "Video"} style={{ display: "none" }} controls>
                         Your browser does not support the video tag.
                       </video>
@@ -1880,90 +1758,6 @@ availableLocations,
               }
             </div>
 
-            {/* <Row>
-                  <Col md={6}>
-                    <TextField id="chunk1Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 1)} label="Section 1 Title" variant="outlined" />
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent1" name="instructionChunkContent1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 1)} />
-                    <p><img id="chunk1Image" width="100%" alt="recipe_step1_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk1Video" style={{ display: "none" }} controls>
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk1.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 1)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 1)} variant="outlined" />
-                  </Col>
-                  <Col md={6}>
-                    <TextField id="chunk2Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 2)} label="Section 2 Title" variant="outlined" />
-
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent2" name="instructionChunkContent2" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 2)} />
-                    <p><img id="chunk2Image" width="100%" alt="recipe_step2_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk2Video" style={{ display: "none" }} controls>
-                        <source type="video/mp4" id="chunk2VideoSource" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk2.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 2)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 2)} variant="outlined" />
-
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <TextField id="chunk3Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 3)} label="Section 3 Title" variant="outlined" />
-
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent3" name="instructionChunkContent3" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 3)} />
-                    <p><img id="chunk3Image" width="100%" alt="recipe_step3_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk3Video" style={{ display: "none" }} controls>
-                        <source type="video/mp4" id="chunk3VideoSource" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk3.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 3)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 3)} variant="outlined" />
-
-                  </Col>
-                  <Col md={6}>
-                    <TextField id="chunk4Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 4)} label="Section 4 Title" variant="outlined" />
-
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent4" name="instructionChunkContent4" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 4)} />
-                    <p><img id="chunk4Image" width="100%" alt="recipe_step4_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk4Video" style={{ display: "none" }} controls>
-                        <source type="video/mp4" id="chunk4VideoSource" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk4.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 4)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 4)} variant="outlined" />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <TextField id="chunk5Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 5)} label="Section 5 Title" variant="outlined" />
-
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent5" name="instructionChunkContent5" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 5)} />
-                    <p><img id="chunk5Image" width="100%" alt="recipe_step5_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk5Video" style={{ display: "none" }} controls>
-                        <source type="video/mp4" id="chunk5VideoSource" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk5.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 5)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 5)} variant="outlined" />
-                  </Col>
-                  <Col md={6}>
-                    <TextField id="chunk6Title" className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, 6)} label="Section 6 Title" variant="outlined" />
-
-                    <br />
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent6" name="instructionChunkContent6" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 6)} />
-                    <p><img id="chunk6Image" width="100%" alt="recipe_step6_image_or_video" style={{ display: "none" }} />
-                      <video width="100%" id="chunk6Video" style={{ display: "none" }} controls>
-                        <source type="video/mp4" id="chunk6VideoSource" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </p>
-                    <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionChunk6.instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, 6)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 6)} variant="outlined" />
-                  </Col>
-                </Row> */}
           </div>
 
           <h3>Add Meal Categories</h3>
@@ -1980,7 +1774,7 @@ availableLocations,
                   clearOnBlur
                   onBlur={this.categoryBlur}
                   // filterSelectedOptions
-                  options={this.categories.map((option) => option)}
+                  options={this.props.categories?.map((option) => option)}
                   // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
                   onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
                   // getOptionLabel={option => option}
@@ -2057,35 +1851,20 @@ availableLocations,
           <div id="ProductAdditionalDataDisplayed" >
             <Popup2 popupType='Meal Suggestion Preview' openModal={this.state.openModal} closeModal={this.closeModal}
               name={this.state.mealName} description={this.state.intro}
-              imageData={this.state.mealImageData} image={this.state.mealImage}
-              imagesData={this.state.mealImagesData} categories={this.state.suggestedCategories}
+              imageData={this.state.mealImagesData[0]} image={this.state.mealImage[0]}
+              imagesData={this.state.mealImagesData.slice(1)} categories={this.state.suggestedCategories}
               prepTime={this.state.prepTime} cookTime={this.state.cookTime}
               serves={this.state.servings} chef={this.state.chef}
               ingredientsList={this.state.ingredientStrings} utensilsList={this.state.suggestedUtensils}
               instructionChunk1={this.state.instructionChunk1} instructionChunk2={this.state.instructionChunk2}
               instructionChunk3={this.state.instructionChunk3} instructionChunk4={this.state.instructionChunk4}
               instructionChunk5={this.state.instructionChunk5} instructionChunk6={this.state.instructionChunk6}
-              chunk1Content={this.state.chunk1Content} chunk2Content={this.state.chunk2Content}
-              chunk3Content={this.state.chunk3Content} chunk4Content={this.state.chunk4Content}
-              chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
+              chunk1Content={this.state.chunk1ContentURL} chunk2Content={this.state.chunk2ContentURL}
+              chunk3Content={this.state.chunk3ContentURL} chunk4Content={this.state.chunk4ContentURL}
+              chunk5Content={this.state.chunk5ContentURL} chunk6Content={this.state.chunk6ContentURL}
               instructionWordlength={this.state.instructionWordlength}
-              tips={this.state.tips} mealImageData={this.state.mealImageData}
+              tips={this.state.tips} mealImageData={this.state.mealImagesData}
             />
-            {/* <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
-                 mealName={this.state.mealName} mealImage={this.state.mealImage}
-                 categories={this.state.suggestedCategories}
-                  prepTime={this.state.prepTime} cookTime={this.state.cookTime}
-                  serves={this.state.servings}
-                  ingredientsList = {this.state.ingredientStrings} utensilsList={this.state.suggestedUtensils}
-                  instructionChunk1={this.state.instructionChunk1} instructionChunk2={this.state.instructionChunk2}
-                  instructionChunk3={this.state.instructionChunk3} instructionChunk4={this.state.instructionChunk4}
-                  instructionChunk5={this.state.instructionChunk5} instructionChunk6={this.state.instructionChunk6}
-                  chunk1Content={this.state.chunk1Content} chunk2Content={this.state.chunk2Content}
-                  chunk3Content={this.state.chunk3Content} chunk4Content={this.state.chunk4Content}
-                  chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
-                  instructionWordlength={this.state.instructionWordlength}
-                  tips={this.state.tips} mealImageData={this.state.mealImageData}
-                 /> */}
           </div>
           {/* <Popup1></Popup1> */}
         </form>

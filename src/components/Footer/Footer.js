@@ -1,74 +1,166 @@
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import styles from './Footer.module.css'
+import facebookImg from "../../../public/assets/icons/Facebook+Icon+Black 1.png";
+import instagramImg from "../../../public/assets/icons/instagram-icon-free-7 1.png";
 
 
 const Footer = () => {
   return (
-    <Container className={styles.footerWraper} >
-      {/* <Container> */}
+    <div className={styles.footer_container}>
+        <div className={styles.footer_row_1}>
+          <div className={styles.footer_row_1_container}>
 
-      <Row style={{ width: "100%" }}>
-        <hr
-          className="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto"
-          style={{ width: "100%" }}
-        />
-        <Col md={3} className="footer-colmun">
-          <h6 className="text-uppercase font-weight-bold" style={{ color: "gray" }}>
-            <strong>Services</strong>
-          </h6>
-          <hr
-            className="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto"
-            style={{ width: "100px" }}
-          />
-          <p><a href="#!">Recipes</a></p>
-          <p><a href="#!">GroceryList</a></p>
-          <p><a href="#!">Food Products</a></p>
-          <p><a href="#!">Kitchen Products</a></p>
-          <p><a href="#!">Household Products</a></p>
-        </Col>
-        <Col md={3} className="footer-colmun">
-          <h6 className="text-uppercase font-weight-bold" style={{ color: "gray" }}>
-            <strong>Resources</strong>
-          </h6>
-          <hr
-            className="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto"
-            style={{ width: "100px" }}
-          />
-          <p><a href="#!">Login/ My Account</a></p>
-          <p><a href="#!">Sign Up</a></p>
-          <p><a href="#!">Supplier Home</a></p>
-          <p><a href="#!">Shipping + Returns</a></p>
-          <p><a href="#!">FAQ + Support</a></p>
-          <p><a href="#!">Contact</a></p>
-        </Col>
-        <Col md={3} className="footer-colmun">
-          <h6 className="text-uppercase font-weight-bold" style={{ color: "gray" }}>
-            <strong>Company</strong>
-          </h6>
-          <hr
-            className="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto"
-            style={{ width: "100px" }}
-          />
-          <p><a href="#!" className="fa mr-3" > About Us</a></p>
-          <p><a href="#!" className="fa mr-3" > Careers</a></p>
-          <p><a href="#!" className="fa mr-3" > Partner</a></p>
-          <p><a href="#!" className="fa mr-3" > Terms of Service</a></p>
-          <p><a href="#!" className="fa mr-3" > Privacy Policy</a></p>
-        </Col>
-        <Col md={3} className="footer-colmun" style={{ textAlign: "center" }}>
-          <img src={img_logo} width="100px" alt="" />
-          <div className="logo-text">Adding convenience to home made mealsTM</div>
-          <div style={{ marginTop: "20px" }}>
-            <i className="fa fa-facebook-square m-2" aria-hidden="true" style={{ fontSize: "30px" }}></i>
-            <i className="fa fa-instagram m-2" aria-hidden="true" style={{ fontSize: "30px" }}></i>
+            <div className={styles.footer_row_1_join_us_form}>
+              
+              <React.Fragment>
+                <input placeholder="Enter email to subscribe to our newsletter" aria-label="News Letter" type="email" name="email" className={styles.footer_row_1_join_us_input} />
+              <button className={styles.footer_row_1_button}>Subscribe</button>
+              </React.Fragment>
+              
+            </div>
           </div>
-          <div className=""> &copy; {new Date().getFullYear()} Copyright:{" "}
-            <a href="https://www.awokorpenterprises.com"> ChopChowSD </a></div>
-        </Col>
-      </Row>
-    </Container >
+        </div>
+        <div className={styles.footer_row_2}>
+          <div className={styles.footer_row_22}>
+            <div className={styles.footer_row_2_navigations}>
+              <h3 className={styles.footer_row_2_navigation_h3}>Pages</h3>
+              <ul className={styles.footer_row_2_navigation_lists}>
+                <Link href="/">
+                <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>
+                    Recipes
+                  </li>
+                </a></Link>
+                <Link
+                  href="/"
+                >
+                  <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>
+                    Grocery List
+                  </li>
+                </a></Link>
+                <Link
+                  href="/"
+                >
+                  <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>
+                    Food Products
+                  </li>
+                </a></Link>
+                <Link
+                  href="/"
+                >
+                  <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>
+                    Kitchen Products
+                  </li>
+                </a></Link>
+                <Link
+                  href="/"
+                >
+                  <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>
+                    Household Products
+                  </li>
+                </a></Link>
+              </ul>
+            </div>
+            <div className={styles.footer_row_2_navigations}>
+              <h3 className={styles.footer_row_2_navigation_h3}>Resources</h3>
+              <ul className={styles.footer_row_2_navigation_lists}>
+                <Link href="/login">
+                <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>
+                    Login/My account
+                  </li>
+                </a></Link>
+                <Link href="/login">
+                <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>Sign Up</li>
+                </a></Link>
+                <Link href="/">
+                <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>Shipping Return</li>
+                </a></Link>
+                <Link href="/">
+                <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>FAQ + Support</li>
+                </a></Link>
+              </ul>
+            </div>
+            <div className={styles.footer_row_2_navigations + " " + styles.lastnavbox}>
+              <h3 className={styles.footer_row_2_navigation_h3}>Company</h3>
+              <ul className={styles.footer_row_2_navigation_lists}>
+                <Link href="/">
+                <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>About Us</li>
+                </a></Link>
+                <Link
+                  href="/"
+                >
+                  <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>
+                    Careers
+                  </li>
+                </a></Link>
+                <Link
+                  href="/"
+                >
+                  <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>
+                    Partners
+                  </li>
+                </a></Link>
+                <Link
+                  href="/"
+                >
+                  <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>
+                    Terms of Service
+                  </li>
+                </a></Link>
+                <Link
+                  href="/"
+                >
+                  <a className={styles.footer_row_2_navigation_link}>
+                  <li className={styles.footer_row_2_navigation_list}>
+                    Privacy and Policy
+                  </li>
+                </a></Link>
+              </ul>
+            </div>
+          </div>
+          <div className={styles.footer_row_2_details}>
+            <div className={styles.footer_main_logo}>
+              <Image
+                src={img_logo}
+                alt="chop chow"
+                className={styles.footer_main_logo_img + " " + styles.lazyload}
+              />
+            </div>
+            <div className={styles.footer_row_2_h2}>
+              Adding convenience to home made mealsTM
+            </div>
+            <div className={styles.footer_top_social_links}>
+              <Link href="https://www.instagram.com/preciselighting.ng/">
+              <a aria-label="Check out our instagram page" target="_blank">
+                <Image className={styles.footer_top_social_link_logo} src={instagramImg} alt='instagram' />
+              </a></Link>
+              <Link href="https://www.facebook.com/Preciselighting">
+              <a aria-label="Check out our facebook page" target="_blank">
+                <Image className={styles.footer_top_social_link_logo} src={facebookImg} alt='instagram' />
+              </a></Link>
+            </div>
+            <h3 className={styles.footer_row_2_h3}>
+            {new Date().getFullYear()} Copyright: <span>ChopChowSD</span>
+            </h3>
+          </div>
+        </div>
+      </div>
   );
 };
 

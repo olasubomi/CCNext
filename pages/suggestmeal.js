@@ -10,9 +10,24 @@ import SuggestMealForm from "../src/components/suggestionPages/SuggestMeal";
 import SuggestProductForm from "../src/components/suggestionPages/SuggestProduct";
 import SuggestKitchenUtensilForm from "../src/components/suggestionPages/SuggestKitchenUtensil";
 import SuggestCategoryForm from "../src/components/suggestionPages/SuggestCategory";
+import Header, { Header2 } from "../src/components/Header/Header";
+import SideNav from "../src/components/Header/sidenav";
+
 import Head from "next/head";
 
 class SuggestMeal extends Component {
+    allMealNames = [];
+    productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
+        "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
+        "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes", "Beef", "Green Pepper",
+        "Garlic", "Ginger", "Vegetable Oil", "Lemon", "Rosemary Powder"];
+    productImageLink = [];
+    categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
+    measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
+        "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
+    kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
+        "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
+        "Wire Mesh", "Zester"];
     ingredientsQuantityMeasurements = [];
 
     constructor(props) {
@@ -54,7 +69,7 @@ class SuggestMeal extends Component {
             if (mealList && mealList.data.length !== 0) {
                 console.log("returns GET of ALL MEALS ");
                 for (var i = 0; i < mealList.data.length; i++) {
-                    this.props.allMealNames.push(mealList.data[i].mealName);
+                    this.allMealNames.push(mealList.data[i].mealName);
                 }
             } else {
                 console.log("get all meal names function does not return");
@@ -64,7 +79,7 @@ class SuggestMeal extends Component {
                 console.log(err);
             });
 
-        console.log(this.props.allMealNames);
+        console.log(this.allMealNames);
         // get all store names*, if NEW products section exists.
 
         // can redux resolve this for us by checking if we recently called this in cache or from another page ??
@@ -171,84 +186,89 @@ class SuggestMeal extends Component {
         const { suggestOption, suggestionType } = this.state;
 
         return (
-            <div className={styles.suggestion_container}>
-                <Head>
-                    <title>Suggested Meal Form</title>
-                    <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
-                </Head>
-                <div className={styles.suggestion_sections}>
-                    <div className={styles.suggestion_section_1}>
-                        <div className={styles.suggestion_section_1_col_1}>
-                            <ul className={styles.suggestion_header_pages}>
-                                <WestIcon className={styles.suggestion_header_page_arrow} />
-                                <li>
-                                    <Link href="/">back</Link>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className={styles.suggestion_section_1_col_2}>
-                            <p className={styles.suggestion_section_1_col_2_p}> Choose type</p>
-                            <div className={styles.select_container}>
-                                <div onClick={this.suggestOption} className={styles.select_box}>
-                                    <p>{suggestionType}</p>
-                                    <ArrowDropDownIcon className={styles.select_box_icon} />
+            <>
+                <Header />
+                <Header2 />
+                <SideNav />
+                <div className={styles.suggestion_container}>
+                    <Head>
+                        <title>Suggested Meal Form</title>
+                        <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                    </Head>
+                    <div className={styles.suggestion_sections}>
+                        <div className={styles.suggestion_section_1}>
+                            <div className={styles.suggestion_section_1_col_1}>
+                                <ul className={styles.suggestion_header_pages}>
+                                    <WestIcon className={styles.suggestion_header_page_arrow} />
+                                    <li>
+                                        <Link href="/">back</Link>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className={styles.suggestion_section_1_col_2}>
+                                <p className={styles.suggestion_section_1_col_2_p}> Choose type</p>
+                                <div className={styles.select_container}>
+                                    <div onClick={this.suggestOption} className={styles.select_box}>
+                                        <p>{suggestionType}</p>
+                                        <ArrowDropDownIcon className={styles.select_box_icon} />
+                                    </div>
+                                    {suggestOption &&
+                                        <div className={styles.select_options}>
+                                            <p onClick={() => this.handleSuggestionType('Meal')}>Meals</p>
+                                            <p onClick={() => this.handleSuggestionType('Product')}>Products</p>
+                                            <p onClick={() => this.handleSuggestionType('Kitchen Utensil')}>Kitchen Utensils</p>
+                                            <p onClick={() => this.handleSuggestionType('Category')}>Category</p>
+                                        </div>}
                                 </div>
-                                {suggestOption &&
-                                    <div className={styles.select_options}>
-                                        <p onClick={() => this.handleSuggestionType('Meal')}>Meals</p>
-                                        <p onClick={() => this.handleSuggestionType('Product')}>Products</p>
-                                        <p onClick={() => this.handleSuggestionType('Kitchen Utensil')}>Kitchen Utensils</p>
-                                        <p onClick={() => this.handleSuggestionType('Category')}>Category</p>
-                                    </div>}
                             </div>
                         </div>
+                        {suggestionType === 'Meal' &&
+                            <SuggestMealForm
+                                allMealNames={this.allMealNames}
+                                productNames={this.productNames}
+                                measurements={this.measurements}
+                                kitchenUtensils={this.kitchenUtensils}
+                                categories={this.categories}
+                            ></SuggestMealForm>
+                        }
+                        {suggestionType === 'Product' &&
+                            <SuggestProductForm
+                                allMealNames={this.allMealNames}
+                                productNames={this.productNames}
+                                measurements={this.measurements}
+                                kitchenUtensils={this.kitchenUtensils}
+                                categories={this.categories}
+                            ></SuggestProductForm>
+                        }
+                        {suggestionType === 'Kitchen Utensil' &&
+                            <SuggestKitchenUtensilForm
+                                measurements={this.measurements}
+                                kitchenUtensils={this.kitchenUtensils}
+                                categories={this.categories}
+                            ></SuggestKitchenUtensilForm>
+                        }
+                        {suggestionType === 'Category' &&
+                            <SuggestCategoryForm
+                                categories={this.categories}
+                            ></SuggestCategoryForm>
+                        }
                     </div>
-                    {suggestionType === 'Meal' &&
-                        <SuggestMealForm
-                            allMealNames={this.props.allMealNames}
-                            productNames={this.props.productNames}
-                            measurements={this.props.measurements}
-                            kitchenUtensils={this.props.kitchenUtensils}
-                            categories={this.props.categories}
-                        ></SuggestMealForm>
-                    }
-                    {suggestionType === 'Product' &&
-                        <SuggestProductForm
-                            allMealNames={this.props.allMealNames}
-                            productNames={this.props.productNames}
-                            measurements={this.props.measurements}
-                            kitchenUtensils={this.props.kitchenUtensils}
-                            categories={this.props.categories}
-                        ></SuggestProductForm>
-                    }
-                    {suggestionType === 'Kitchen Utensil' &&
-                        <SuggestKitchenUtensilForm
-                            measurements={this.props.measurements}
-                            kitchenUtensils={this.props.kitchenUtensils}
-                            categories={this.props.categories}
-                        ></SuggestKitchenUtensilForm>
-                    }
-                    {suggestionType === 'Category' &&
-                        <SuggestCategoryForm
-                            categories={this.props.categories}
-                        ></SuggestCategoryForm>
-                    }
+                    <Dialog
+                        open={this.state.booleanOfDisplayOfDialogBoxConfirmation}
+                        onClose={this.handleCloseOfMealSubmissinoDialogMessage}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        maxWidth="xs"
+                        fullWidth
+                    >
+                        <DialogTitle id="alert-dialog-title">Meal Submitted Successfully!</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Thanks for your submission. Your recipe may be published to our meals page upon admin review. Explore our Preview and Print option to create a hard copy of this meal.</DialogContentText>
+                        </DialogContent>
+                    </Dialog>
                 </div>
-                <Dialog
-                    open={this.state.booleanOfDisplayOfDialogBoxConfirmation}
-                    onClose={this.handleCloseOfMealSubmissinoDialogMessage}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                    maxWidth="xs"
-                    fullWidth
-                >
-                    <DialogTitle id="alert-dialog-title">Meal Submitted Successfully!</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Thanks for your submission. Your recipe may be published to our meals page upon admin review. Explore our Preview and Print option to create a hard copy of this meal.</DialogContentText>
-                    </DialogContent>
-                </Dialog>
-            </div>
+            </>
         );
     }
 }

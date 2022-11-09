@@ -1,4 +1,4 @@
-.popup2_container{
+.popup2_container {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -11,10 +11,10 @@
     z-index: 200;
 }
 
-.popup2{
+.popup2 {
     width: 973px;
     height: 709px;
-    
+
     background: #FFFFFF;
     border-radius: 11px;
     overflow: hidden;
@@ -22,7 +22,7 @@
     grid-template-rows: 10% 80% 10%;
 }
 
-.popup2_row_2{
+.popup2_row_2 {
     display: grid;
     grid-gap: 2rem;
     grid-template-columns: 324px 1fr 324px;
@@ -30,12 +30,12 @@
     height: 100%;
 }
 
-.popup2_row_2 > div:not(:last-child){
+.popup2_row_2>div:not(:last-child) {
     border-right: 1px solid rgba(0, 0, 0, 0.2);
     padding-right: 1rem;
 }
 
-.popup2_top{
+.popup2_top {
     display: grid;
     grid-auto-flow: column;
     /* width: max-content; */
@@ -49,7 +49,7 @@
     padding: 10px 1rem;
 }
 
-.popup2_top > h2 {
+.popup2_top>h2 {
     margin: 0;
     font-style: normal;
     font-weight: 500;
@@ -59,7 +59,7 @@
     color: #000000;
 }
 
-.popup2_top > h3 {
+.popup2_top>h3 {
     font-family: "Montserrat Medium";
     font-style: normal;
     font-weight: normal;
@@ -70,34 +70,34 @@
     color: #2B2B2B;
 }
 
-.popup2_main_img{
+.popup2_main_img {
     width: 314px;
     height: 207px;
     border-radius: 8px;
-    filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.1));
+    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1));
 }
 
-.popup2_images{
+.popup2_images {
     display: grid;
     grid-auto-flow: column;
     grid-gap: 9px;
     justify-content: start;
 }
 
-.popup2_image{
+.popup2_image {
     width: 75px;
     height: 72px;
     border-radius: 8px;
-    filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.1));
+    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1));
 }
 
-.popup2_main_logo_img{
+.popup2_main_logo_img {
     Width: 102px;
     Height: 40px;
     image-rendering: -webkit-optimize-contrast;
 }
 
-.popup2_col_1{
+.popup2_col_1 {
     display: grid;
     justify-content: start;
     align-content: start;
@@ -105,7 +105,7 @@
     overflow: hidden;
 }
 
-.popup2_col_2{
+.popup2_col_2 {
     display: grid;
     align-items: start;
     height: 100%;
@@ -116,7 +116,7 @@
     margin-bottom: 2rem; */
 }
 
-.popup2_col_3{
+.popup2_col_3 {
     position: relative;
     display: grid;
     align-content: start;
@@ -124,7 +124,7 @@
     overflow: hidden;
 }
 
-.popup2_details{
+.popup2_details {
     display: grid;
     grid-gap: 1rem;
     height: 100%;
@@ -132,7 +132,7 @@
     grid-template-rows: 80% 20%;
 }
 
-.del{
+.del {
     display: grid;
     grid-gap: 4px;
     align-content: start;
@@ -143,23 +143,23 @@
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
-  }
-  
-  .th, .td {
+}
+
+.th,.td {
     text-align: center;
     padding: 8px;
-  }
+}
 
-  .th{
+.th {
     font-style: normal;
     font-weight: 400;
     font-size: 11px;
     line-height: 13px;
 
     color: #6D6D6D;
-  }
+}
 
-  .td{
+.td {
     font-style: normal;
     font-weight: 400;
     font-size: 13px;
@@ -168,13 +168,13 @@
 
 
     color: #353535;
-  }
-  
-  .tr:nth-child(even) {
-    background-color: #F1F1F1;
-  }
+}
 
-.popup2_name{
+.tr:nth-child(even) {
+    background-color: #F1F1F1;
+}
+
+.popup2_name {
     margin: 0;
     font-style: normal;
     font-weight: 500;
@@ -184,7 +184,7 @@
     color: #000000;
 }
 
-.popup2_description{
+.popup2_description {
     word-break: break-word;
     font-style: normal;
     font-weight: 400;
@@ -197,7 +197,7 @@
     overflow-y: scroll;
 }
 
-.popup2_del{
+.popup2_del {
     margin: 0;
     list-style-type: none;
     display: grid;
@@ -206,14 +206,14 @@
     grid-gap: 6px;
 }
 
-.popup2_del > li{
+.popup2_del>li {
     display: grid;
     grid-auto-flow: column;
     grid-gap: 8px;
     align-items: center;
 }
 
-.popup2_del > li > p{
+.popup2_del>li>p {
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -224,7 +224,7 @@
     color: #000000;
 }
 
-.popup2_del > li > h5{
+.popup2_del>li>h5 {
     margin: 0;
     font-style: normal;
     font-weight: 400;
@@ -236,12 +236,12 @@
     color: #000000;
 }
 
-.popup2_categories{
+.popup2_categories {
     display: grid;
     align-content: start;
 }
 
-.popup2_category_name{
+.popup2_category_name {
     margin: 0;
     font-style: normal;
     font-weight: 500;
@@ -253,7 +253,7 @@
     color: #000000;
 }
 
-.popup2_category{
+.popup2_category {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -264,11 +264,11 @@
     color: #6D6D6D
 }
 
-.popup2_sizes{
+.popup2_sizes {
     display: grid;
 }
 
-.popup2_sizes > h3{
+.popup2_sizes>h3 {
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -279,14 +279,14 @@
     color: #000000;
 }
 
-.popup2_size{
+.popup2_size {
     width: 200px;
     display: grid;
     grid-gap: 6px;
     grid-template-columns: max-content 1fr max-content;
 }
 
-.popup2_size > p{
+.popup2_size>p {
     font-weight: 400;
     font-size: 12px;
     line-height: 149.52%;
@@ -296,7 +296,7 @@
     color: #353535;
 }
 
-.popup2_size > div{
+.popup2_size>div {
     border: 1px dashed rgba(0, 0, 0, 0.2);
 }
 
@@ -338,7 +338,7 @@
     color: rgb(34, 35, 33);
 }
 
-.popup2_col_h3{
+.popup2_col_h3 {
     display: none;
     font-family: "Montserrat SemiBold";
     font-style: normal;
@@ -346,9 +346,9 @@
     font-size: 18px;
     color: #064A61;
     line-height: 20px;
-} 
+}
 
-.popup2_col_3 >h2{
+.popup2_col_3>h2 {
     margin: 0;
     font-style: normal;
     font-weight: 400;
@@ -358,7 +358,7 @@
     color: #000000;
 }
 
-.popup2_steps{
+.popup2_steps {
     display: grid;
     grid-gap: 10px;
     height: 100%;
@@ -366,12 +366,12 @@
     padding-right: 1rem;
 }
 
-.popup2_step_img{
+.popup2_step_img {
     width: 276px;
     height: 202px;
 }
 
-.popup2_step_name{
+.popup2_step_name {
     margin: 0;
     font-style: normal;
     font-weight: 500;
@@ -383,7 +383,7 @@
     color: #000000;
 }
 
-.popup2_instructions{
+.popup2_instructions {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -396,7 +396,7 @@
     word-break: break-all;
 }
 
-.popup2_footer{
+.popup2_footer {
     display: grid;
     grid-auto-flow: column;
     grid-gap: 1rem;
@@ -406,7 +406,7 @@
     align-items: center;
 }
 
-.popup2_footer > p{
+.popup2_footer>p {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -417,28 +417,28 @@
     color: #000000;
 }
 
-.popup2_footer >img{
+.popup2_footer>img {
     cursor: pointer;
     width: 18px;
     height: 18px;
 }
 
-.img_col{
+.img_col {
     display: grid;
     grid-gap: 10px;
 }
 
 @media screen and (max-width: 985px) {
-    .popup2{
+    .popup2 {
         width: 95%;
         height: 90%;
     }
 
-    .popup2_row_2{
+    .popup2_row_2 {
         grid-template-columns: 1fr 1fr 324px;
     }
-    
-    .popup2_main_img{
+
+    .popup2_main_img {
         width: 100%;
         height: 100%;
     }
@@ -447,45 +447,45 @@
         height: 100%;
     } */
 
-    .popup2_image{
+    .popup2_image {
         width: 46px;
         height: 45px;
     }
 }
 
 @media screen and (max-width: 800px) {
-    .popup2{
+    .popup2 {
         width: 75%;
         overflow-y: scroll;
         grid-template-rows: unset;
     }
-    
-    .popup2_main_img{
+
+    .popup2_main_img {
         width: 100%;
         height: 163px;
     }
 
-    .popup2_step_img{
+    .popup2_step_img {
         width: 100%;
         height: 130px;
     }
 
-    .popup2_row_2{
+    .popup2_row_2 {
         grid-template-columns: 1fr;
     }
 
-    .popup2_steps{
+    .popup2_steps {
         grid-template-rows: 1fr;
         grid-auto-flow: column;
         padding: 0 2rem;
     }
-    
-    .popup2_row_2 > div{
+
+    .popup2_row_2>div {
         border-right: 0 !important;
         padding-right: 0 !important;
     }
-    
-    .popup2_details{
+
+    .popup2_details {
         overflow: unset;
         grid-template-rows: 1fr;
     }
@@ -494,28 +494,34 @@
         grid-template-columns: 1fr;
     }
 
-    .popup2_col_1{
+    .popup2_col_1 {
         grid-template-columns: 1fr 1fr;
     }
-    
-    .popup2_col_2{
+
+    .popup2_col_2 {
         height: max-content;
         overflow: unset;
     }
 }
 
 @media screen and (max-width: 560px) {
-    .popup2{
+    .popup2 {
         width: 95%;
     }
 
-    .popup2_images{
+    .popup2_images {
         grid-template-columns: 1fr 1fr 1fr;
     }
 
-    .popup2_image{
+    .popup2_image {
         width: 100%;
     }
-    
+
 }
 
+.-webkit-scrollbar {
+    width: 0;
+    /* Remove scrollbar space */
+    background: transparent;
+    /* Optional: just make scrollbar invisible */
+}

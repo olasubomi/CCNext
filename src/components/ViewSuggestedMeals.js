@@ -9,7 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import SendIcon from '@mui/icons-material/Send';
 
 import ChipInput from  "@mui/material/Chip"
-import Autocomplete from "@mui/lab/Autocomplete";
+import { Autocomplete } from "@mui/lab/Autocomplete";
 import { createMuiTheme, ThemeProvider } from '@mui/material/styles';
 import {withStyles} from '@mui/styles';
 import { green } from '@mui/material/colors';

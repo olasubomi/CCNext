@@ -4,6 +4,7 @@
     background: #FCFCFC;
     display: grid;
     justify-items: center;
+    margin-top: 155px;
 }
 
 .suggestion_sections{
@@ -420,6 +421,19 @@
     color: #949494;
 }
 
+.suggestion_form_image_col_1{
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 1.5rem;
+    justify-content: start;
+    align-items: center;
+}
+
+.suggestion_form_image_col_1 > span{
+    width: 132px !important;
+    height: 132px !important;
+}
+
 .suggestion_image{
     width: 130px;
     height: 130px;
@@ -431,6 +445,12 @@
 
 .stack{
     flex-wrap: wrap;
+}
+
+@media screen and (max-width: 650px) {
+    .suggestion_container{
+        margin-top: 102px;
+    }
 }
 
 @media screen and (max-width: 650px) {
