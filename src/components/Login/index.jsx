@@ -6,18 +6,22 @@ import { connect } from 'react-redux';
 import { userSignIn } from '../../actions';
 // import { withRouter } from "react-router-dom";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
+import facebook from "../../../public/assets/logos/facebook.png"
+import altlogin from "../../../public/assets/logos/altlogin.png"
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png"
 import Image from "next/image";
 import Link from "next/link";
 import ForgetPassword from "../forgotpassword";
 import SignUp from "../signup";
 import { EyeSIcon } from "../icons";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 function Login(props){
   const [forgetPassword, setForgetPasswordState] = useState(false);
   const [signUp, setSignUpState] = useState(false);
   const [status, setStatusState] = useState(null);
   const [message, setMessageState] = useState(null);
+  const [showPass, setShowPassState] = useState(null);
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -43,6 +47,16 @@ function Login(props){
 
   function onChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
+  }
+
+  function Login(e){
+    e.preventDefault();
+    props.login(email, password);
+    props.toggleLogin()
+  }
+
+  function togglePass(){
+    setShowPassState(!showPass)
   }
 
   return(
@@ -76,13 +90,16 @@ function Login(props){
                 Password
               </label>
               <input
-                type="password" name="password"
+                type={showPass ? "text":"password"} name="password"
                 value={password} placeholder="Your password"
                 onChange={onChange}
                 className={styles.login_form_input}
               />
-              <div className={styles.secureEye}>
+              <div onClick={togglePass} className={styles.secureEye}>
+              {showPass ? 
+                <VisibilityIcon className={styles.eye} /> :
                 <EyeSIcon style={styles.eye} />
+              }
               </div>
             </div>
           </div>
@@ -98,10 +115,7 @@ function Login(props){
           </div>
 
           <button 
-           onClick={(ev) => {
-            ev.preventDefault();
-            props.userSignIn({ email: email, password: password });
-          }}
+           onClick={Login}
            className={styles.login_button}>Login</button>
 
           <h3 className={styles.login_new}>Don't have an account yet? {props.toggleLogin ? <span onClick={openSignUp}>Sign up here</span>: <Link href='/signup'><a>Sign up here</a></Link> }</h3>
@@ -111,11 +125,11 @@ function Login(props){
 
             <div className={styles.login_socials}>
               <div className={styles.login_social  + " " + styles.blue}>
-                <Image src={closeIcon} />
-                <h4>Google</h4>
+                <Image src={facebook} />
+                <h4>Facebook</h4>
               </div>
               <div className={styles.login_social}>
-                <Image src={closeIcon} />
+                <Image src={altlogin} />
                 <h4>Google</h4>
               </div>
             </div>
@@ -145,11 +159,21 @@ function Login(props){
   )
 }
 
-const mapStateToProps = ({ auth, commonData }) => {
-  const { authUser, role, customer_id } = auth;
-  const {status }  = commonData;
-  return { authUser, role, customer_id, status }
-};
+function mapStateToProp(state) {
+  return {
+    auth: state.Auth
+  };
+}
 
-const mapDispatchToProps = { userSignIn };
-export default Login;
+function mapDispatchToProps(dispatch) {
+  return {
+    login: (email, password) => dispatch(userSignIn(email, password))
+  };
+}
+
+// export default Login;
+
+export default connect(
+  mapStateToProp,
+  mapDispatchToProps,
+)(Login);

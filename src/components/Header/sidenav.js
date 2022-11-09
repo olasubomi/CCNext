@@ -6,10 +6,12 @@ import Image from 'next/image';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png"
 import Link from 'next/link';
-import { DashBoardIcon, HotMealIcon, InventoryIcon, OrderIcon, PowerIcon, StoreMgtIcon, SupportIcon, UserIcon } from '../icons';
+import Sidenav2 from './sidenav2';
+import { connect } from 'react-redux';
+import { UserIcon } from '../icons';
 
  
-function SideNav(){
+function SideNav(props){
 
     function openSidenav(e){
         document.getElementById('mySidenav').style.display = 'grid';
@@ -45,78 +47,34 @@ function SideNav(){
                 </a>
                 </Link>
                 </div>
+                {props.auth.authUser && 
                 <div className={styles.sidenav_top_row_2}>
-                    <Image src={img_logo} alt="logo" className={styles.sidenav_top_row_2_img} />
+                    {props.auth.authUser.profile_picture ? 
+                    <Image width={100} height={100} src={props.auth.authUser.profile_picture} alt="logo" className={styles.sidenav_top_row_2_img} />:
+                    <UserIcon />
+                    }
                     <div>
-                        <h3>James Henderson</h3>
-                        <p>supplier</p>
+                        <h3>{props.auth.authUser.first_name +" " + props.auth.authUser.last_name} Henderson</h3>
+                        <p>{props.auth.authUser.user_type}</p>
                     </div>
                 </div>
+                }
             </div>
-            <SideNav2 />
+            <Sidenav2 showBottom={true} />
         </div>
     </div>
   )
 }
 
-export default SideNav;
+// export default SideNav;
 
-export function SideNav2(){
-
-    return(
-        <div className={styles.sidenav_links_con}>
-            <div className={styles.sidenav_links}>
-                <div className={styles.sidenav_link}>
-                    <DashBoardIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard">
-                        <a>Dashboard</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link + " " + styles.active}>
-                    <InventoryIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard/inventory">
-                        <a>Inventory</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link}>
-                    <OrderIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard/orders/orders">
-                        <a>Order</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link}>
-                    <HotMealIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard/suggestedmeals">
-                        <a>Meal/Product Suggestion</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link}>
-                    <UserIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard/userprofile">
-                        <a>My Profile</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link}>
-                    <StoreMgtIcon style={styles.sidenav_link_icon} />
-                    <Link href="/dashboard/userprofile">
-                        <a>Store Management</a>
-                    </Link>
-                </div>
-                <div className={styles.sidenav_link}>
-                    <SupportIcon style={styles.sidenav_link_icon} />
-                    <Link href="/support">
-                        <a>Support</a>
-                    </Link>
-                </div>
-            </div>
-            <div className={styles.side_bottom}>
-                <div className={styles.sidenav_link}>
-                    <PowerIcon style={styles.sidenav_link_icon} />
-                    <Link href="/">
-                        <a >Logout</a>
-                    </Link>
-                </div>
-            </div>
-        </div>
-    )
+function mapStateToProp(state) {
+  return {
+    path: state.Common.path,
+    auth: state.Auth
+  };
 }
+
+export default connect(
+  mapStateToProp,
+)(SideNav);

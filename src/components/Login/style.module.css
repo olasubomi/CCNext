@@ -114,7 +114,7 @@
   
   .login{
       justify-self: center;
-      width: 90%;
+      width: 55%;
       height: max-content;
       
       background: #FFFFFF;
@@ -562,6 +562,19 @@
 
   color: #000000;
   margin: 1rem 0;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1450px) {
+  .login{
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .login{
+    width: 90%;
+  }
 }
 
 @media screen and (max-width: 900px) {

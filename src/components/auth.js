@@ -1,4 +1,6 @@
+import { useState } from "react";
 import Login from "./Login";
+import { login_container } from "./Login/style.module.css";
 
 export function Auth(props){
     const [forgetPassword, setForgetPasswordState] = useState(false);
@@ -21,8 +23,8 @@ export function Auth(props){
     }
   
     return(
-      <div className={styles.login_container}>
-        <Login toggleLogin={toggleLogin} />
+      <div className={login_container}>
+        <Login toggleLogin={props.toggleLogin} />
       </div>
     )
   }

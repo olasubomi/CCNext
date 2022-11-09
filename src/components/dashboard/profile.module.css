@@ -120,11 +120,19 @@
 
 
     color: #6D6D6D;
+    border-bottom: 1px solid #6D6D6D;
+    width: max-content;
+    padding-bottom: 2px;
 }
 
 .profile_image{
     width: 132px;
     height: 132px;
+}
+
+.profile_image > span{
+    width: 132px !important;
+    height: 132px !important;
 }
 
 .profile_basic_info > h3{
@@ -135,6 +143,7 @@
 
     color: #000000;
     margin: 0;
+    text-transform: capitalize;
 }
 
 .profile_basic_info > p{

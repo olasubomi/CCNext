@@ -4,7 +4,6 @@
     height: 100vh;
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: 259px 1fr;
 }
 
 .col2{
@@ -46,6 +45,58 @@
     align-content: start;
     overflow-x: hidden;
   }
+
+.header2{
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mode_con{
+  justify-self: end;
+  display: flex;
+}
+
+.mode{
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  /* identical to box height */
+
+
+  color: #737373;
+  padding: 0 7px;
+  width: 102px;
+  height: 26px;
+  background: rgba(4, 213, 5, 0.06);
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  cursor: pointer;
+}
+
+.left_mode{
+  border-radius: 4px 0px 0px 4px;
+}
+
+.right_mode{
+  border-radius: 0px 4px 4px 0px;
+}
+
+.active_mode{
+  background: #00A301;
+  color: #FFFFFF;
+}
+
+/* a {
+    text-decoration: none;
+    color: inherit;
+    height: max-content;
+} */
+
 
 .dashboard_header{
   display: grid;
@@ -194,7 +245,6 @@
     line-height: 17px;
     color: #6D6D6D;
     margin: 0;
-    display: none;
 }
 
 .value {
@@ -231,19 +281,40 @@
 }
 
 .value_con2{
+  width: 71px;
+  height: 71px;
+  border-radius: 50%;
   display: grid;
-  align-content: center;
+  justify-items: center;
   align-items: center;
-  gap: 10px;
-  grid-auto-flow: column;
 }
 
-.value_con2 > div{
-    display: grid;
+.value_con2 > svg{
+  width: 31px;
 }
 
-.value_con2 >span{
-    width: 43px !important;
+.red{
+  background: rgba(255, 0, 0, 0.3);
+}
+
+.red >svg{
+  fill: #CF0000;
+}
+
+.orange{
+  background: rgba(244, 121, 0, 0.3);
+}
+
+.orange > svg{
+  fill: #F47900;
+}
+
+.green{
+  background: rgba(4, 213, 5, 0.3);
+}
+
+.green > svg{
+  fill: #06AA06;
 }
 
 .value_con2 > div > h3{
@@ -422,7 +493,7 @@
     .request_tr{
       display: grid;
       grid-auto-flow: column;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: 11% 11% 13% 13% 14% 15%;
       justify-content: space-between;
       grid-gap: 4rem;
       margin: 0;
@@ -495,35 +566,34 @@
     }
   
     .status{
-      width: 95px;
-      height: 33px;
+      width: 74px;
+      height: 21px;
       font-style: normal;
       font-weight: 400;
-      font-size: 14px;
-      line-height: 17px;
+      font-size: 12px !important;
+      line-height: 15px !important;    
       /* identical to box height */
   
-      letter-spacing: 0.374px;
-  
-      border-radius: 16px;
+      border-radius: 24px;
       display: grid;
       align-items: center;
       justify-items: center;
+      justify-self: center;
     }
   
     .approve{
-      background: #DEEDE5;
-      color: #5CA37B;
+      background: #DEEDE5 !important;
+      color: #5CA37B !important;
     }
   
     .pending{
-      background: #F8F2D4;
-      color: #DABC29;
+      background: rgba(137, 62, 233, 0.25) !important;
+      color: #893EE9 !important;
     }
   
-    .review{
-      background: #D4E2F8;
-      color:#296DDA;
+    .rejected{
+      background: rgba(244, 7, 7, 0.25) !important;
+      color:#F63636 !important;
     }
   
     .errorMsg{

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import TextField from "@mui/material/TextField";
 // import Chip from "@mui/material/Chip";
-import Autocomplete from "@mui/lab/Autocomplete"; // createFilterOptions,
+import { Autocomplete } from "@mui/lab/Autocomplete"; // createFilterOptions,
 // import axios from 'axios';
 import axios from '../../util/Api';
 import { Row, Col } from "react-bootstrap";
@@ -11,6 +11,8 @@ import Chip from '@mui/material/Chip';
 import AddIcon from '@mui/icons-material/Add';
 import styles from "./suggestion.module.css";
 import Popup1 from "../popups/popup1";
+import Image from 'next/image';
+
 
 class SuggestProductForm extends Component {
   allProductNames = [];
@@ -31,7 +33,10 @@ class SuggestProductForm extends Component {
       productName: "",
       product_images: "",
       productImageName: "",
-      productImageData: "",
+      productImage1: "",
+      productImage2: "",
+      productImage3: "",
+      productImage4: "",
       productImagesData: [],
       productDescription: "",
 
@@ -168,10 +173,6 @@ class SuggestProductForm extends Component {
       if (localStorage.getItem('suggestProductForm')) {
         let {
           productName,
-          productImage,
-          productImageName,
-          productImageData,
-          productImagesData,
           productDescription,
 
           ingredientNames,
@@ -210,18 +211,14 @@ class SuggestProductForm extends Component {
           stepInputs
         } = JSON.parse(localStorage.getItem('suggestProductForm'))
 
-        if (productImageData !== '') {
-          var image = document.getElementById("ProductsMainImages");
-          image.style.display = "block";
-          image.src = productImageData;
-        }
+        // if (this.state.productImagesData.length !== 0) {
+        //   var image = document.getElementById("ProductsMainImages");
+        //   image.style.display = "block";
+        //   image.src = this.state.productImagesData[0];
+        // }
 
         this.setState({
           productName,
-          productImage,
-          productImageName,
-          productImageData,
-          productImagesData,
           productDescription,
 
           ingredientNames,
@@ -256,7 +253,7 @@ class SuggestProductForm extends Component {
           booleanOfDisplayOfDialogBoxConfirmation,
 
           //productsModal controller
-          openModal,
+          openModal: false,
           stepInputs,
         })
       }
@@ -289,46 +286,52 @@ class SuggestProductForm extends Component {
     var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
 
     if (allowedImageExtensions.exec(event.target.files[0].name)) {
-
-      if (this.state.productImage === "") {
-        this.setState({
-          productImage: event.target.files[0],
-          productImageName: event.target.files[0].name,
-          productImageData: URL.createObjectURL(event.target.files[0])
-        });
-        //display products main image or videoin suggest product
-        var image = document.getElementById("ProductsMainImages");
-        image.style.display = "block";
-        image.src = URL.createObjectURL(event.target.files[0]);
-
-        console.log(event.target.files[0]);
-        console.log(event.target.files[0].name);
+      // if (this.state.productImage === "") {
+      // this.setState({
+      //   productImage: event.target.files[0],
+      //   productImageName: event.target.files[0].name,
+      //   productImageData: URL.createObjectURL(event.target.files[0])
+      // });
+      //display products main image or videoin suggest product
+      // if (this.state.productImage1 !== "") {
+      this.setState({
+        productImagesData: [...this.state.productImagesData, URL.createObjectURL(event.target.files[0])]
+      });
+      // }
 
 
-        console.log(allowedImageExtensions.exec(event.target.files[0].name));
+      if (this.state.productImage1 == "") {
+        this.setState({ productImage1: event.target.files[0] });
+      }
+      else if (this.state.productImage2 == "") {
+        this.setState({ productImage2: event.target.files[0] });
+      }
+      else if (this.state.productImage3 == "") {
+        this.setState({ productImage3: event.target.files[0] });
 
-        // console.log(URL.createObjectURL(event.target.files[0]));
-      } else {
-        this.setState({
-          productImagesData: [...this.state.productImagesData, URL.createObjectURL(event.target.files[0])]
-        });
-        // var image = document.getElementById("productsMainImages"+(this.state.utensilImagesData.length+1));
-        // image.style.display = "block";
-        // image.src = URL.createObjectURL(event.target.files[0]);
-
-        console.log(event.target.files[0]);
-        console.log(event.target.files[0].name);
-
-
-        console.log(allowedImageExtensions.exec(event.target.files[0].name));
+      }
+      else {
+        this.setState({ productImage4: event.target.files[0] });
 
       }
 
+      // var image = document.getElementById("ProductsMainImages");
+      // image.style.display = "block";
+      // image.src = URL.createObjectURL(event.target.files[0]);
+
+      console.log(event.target.files[0]);
+      console.log(event.target.files[0].name);
+      console.log(allowedImageExtensions.exec(event.target.files[0].name));
+
+      // console.log(URL.createObjectURL(event.target.files[0]));
+      // } else {
+      // var image = document.getElementById("productsMainImages"+(this.state.utensilImagesData.length+1));
+      // image.style.display = "block";
+      // image.src = URL.createObjectURL(event.target.files[0]);
     }
     else {
       alert("Invalid image type");
     }
-
   };
 
   onTextFieldChange = (e) => {
@@ -688,13 +691,14 @@ class SuggestProductForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedProductToDB = async (e) => {
-    const { productName, productImage, productImageName, intro,
-      new_product_ingredients, ingredientGroupList, suggestedCategories } = this.state;
+    const { productName, productImageName, intro, productImagesData,
+      new_product_ingredients, ingredientGroupList, suggestedCategories,
+      productImage1, productImage2, productImage3, productImage4 } = this.state;
 
     // handle edge case Product name, ingredienrs or image upload required to submit form
     if (productName === "") { console.log("product label blank"); return; }
-    // if (ingredientStrings.length === 0) { window.alert("Suggested Product requires adding at least one ingredient to submit"); return; }
-    if (productImage === null || productImage === undefined) { window.alert("You didn't add suggested product image"); return; }
+    if (productImagesData === null || productImagesData === undefined ||
+      productImagesData === []) { window.alert("You didn't add suggested product image"); return; }
 
     // Handle instruction/product images to create url for product images on server
     /*Loop through Ingredients product data
@@ -787,8 +791,11 @@ class SuggestProductForm extends Component {
     //-------------Submit remainder data of product to Mongo ------------------------------------------
     let suggestProductForm = new FormData();
     suggestProductForm.append('product_name', productName);
-    suggestProductForm.append('product_images', productImage);
-    suggestProductForm.append('productImageName', productImageName);
+    suggestProductForm.append('product_images', productImage1);
+    suggestProductForm.append('product_images', productImage2);
+    suggestProductForm.append('product_images', productImage3);
+    suggestProductForm.append('product_images', productImage4);
+    // suggestProductForm.append('productImageName', productImageName);
     suggestProductForm.append('product_details', intro);
 
     // suggestProductForm.append('ingredientStrings', ingredientStrings);
@@ -874,7 +881,7 @@ class SuggestProductForm extends Component {
 
             <h3>Upload Product Images <em>(Up to 4)</em></h3>
             {
-              this.state.productImagesData.length < 3 &&
+              this.state.productImagesData.length < 4 &&
               <div className={styles.suggestion_form_image}>
                 <div className={styles.suggestion_form_image_col_1}>
                   <div onClick={() => this.uploadProductImage()} className={styles.suggestion_form_image_icon_con}>
@@ -886,18 +893,18 @@ class SuggestProductForm extends Component {
                 </div>
               </div>}
 
-            <Row>
+            {/* <Row>
               <Col md={12} style={{ marginTop: "20px" }}>
-                < p > <img id="ProductsMainImages" width="100%" alt="main_product_Image" style={{ display: "none" }} />
+                < p > <img id="ProductsMainImages" width="100%" height="100%" alt="main_product_Image" style={{ display: "none" }} />
                 </p >
               </Col >
-            </Row >
+            </Row > */}
 
             {
               this.state.productImagesData.map((data, index) =>
                 <Row key={index}>
                   <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><img src={data} width="100%" alt="main_product_Image" />
+                    <p><Image src={data} width="100%" height="100%" alt="main_product_Images" />
                     </p>
                   </Col>
                 </Row>
@@ -1435,12 +1442,12 @@ class SuggestProductForm extends Component {
               </Row> */}
           <u >View privacy policy</u>
           <div id="ProductAdditionalDataDisplayed" >
-            <Popup1 openModal={this.state.openModal} closeModal={this.closeModal}
+            <Popup1 popup='product' openModal={this.state.openModal} closeModal={this.closeModal}
               name={this.state.productName} description={this.state.productDescription}
-              imageData={this.state.productImageData} image={this.state.productImage}
-              imagesData={this.state.productImagesData} categories={this.state.suggestedCategories}
-              quantity={this.state.quantity}
-              sizesList={this.state.sizeStrings}
+              imageData={this.state.productImagesData[0]}
+              image={this.state.productImagesData[0]}
+              imagesData={this.state.productImagesData.slice(1)} categories={this.state.suggestedCategories}
+              sizesList={this.state.sizeStrings} ingredientList={ingredientStrings}
             />
             {/* <ProductPageModal openModal={this.state.openModal} closeModal={this.closeModal}
                  productName={this.state.productName} product_images={this.state.product_images}

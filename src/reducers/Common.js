@@ -1,10 +1,11 @@
-import { FETCH_ERROR, FETCH_START, FETCH_SUCCESS } from '../constants/ActionTypes'
+import { FETCH_ERROR, FETCH_START, FETCH_SUCCESS, GET_PATH } from '../constants/ActionTypes'
 
 const INIT_STATE = {
     loading: false,
     status: false,
     message: '',
     error: "",
+    path: '/'
 };
 
 export default (state = INIT_STATE, action) => {
@@ -33,6 +34,12 @@ export default (state = INIT_STATE, action) => {
                 loading: false,
                 message: '',
                 error: action.payload || ''
+            };
+        }
+        case GET_PATH: {
+            return {
+                ...state,
+                path: action.payload
             };
         }
         default:

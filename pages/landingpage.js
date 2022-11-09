@@ -20,6 +20,7 @@ import Head from "next/head";
 
 class LandingPage extends Component {
 
+
     constructor(props) {
         super(props);
         this.state = {
@@ -113,7 +114,7 @@ class LandingPage extends Component {
                             <div className={styles.slide_text}>
                                 <h2>Get the best Ingredients for your meal</h2>
                                 <a href="/" className={styles.slide_button}>
-                                    Sign Up Now
+                                    Shop Now
                                 </a>
                             </div>
                             {/* <Image src={banner1} className={styles.slide_image} /> */}
@@ -148,8 +149,8 @@ class LandingPage extends Component {
                             <div className={styles.slide_wrapper}></div>
                             <div className={styles.slide_text}>
                                 <h2>Enjoy hassle free cooking with CHOP CHOW</h2>
-                                <a href="/" className={styles.slide_button}>
-                                    Learn More
+                                <a href="/signup" className={styles.slide_button}>
+                                    Sign Up Now
                                 </a>
                             </div>
                             <div className={styles.slide_image} style={{
@@ -189,7 +190,7 @@ class LandingPage extends Component {
                             <Image src={shoppingImage} alt="feature" className={styles.feature_img} />
                             <h2 className={styles.feature_name}>All-in-One Shopping</h2>
                             <p className={styles.feature_desc}>
-                                So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
+                                We're your one stop shop for multiple stores near you. With [app name], you can easily find all of the best shops in your area, including those that aren't well-known.
                             </p>
                         </div>
                         <div className={styles.feature}>
@@ -199,7 +200,7 @@ class LandingPage extends Component {
                             <Image src={supplierImage} alt="feature" className={styles.feature_img} />
                             <h2 className={styles.feature_name}>Fast Delivery</h2>
                             <p className={styles.feature_desc}>
-                                So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
+                                We offer a wide range of delivery options that make it easy to get your favorite products delivered to you. If you want to schedule an order for a specific time, or if you just want to get it immediately, we've got you covered.
                             </p>
 
                         </div>
@@ -210,7 +211,8 @@ class LandingPage extends Component {
                             <Image src={chefImage} alt="feature" className={styles.feature_img} />
                             <h2 className={styles.feature_name}>Earn as a Chef</h2>
                             <p className={styles.feature_desc}>
-                                So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
+                                Start a delivery business with ChopChow. You can set up your own storefront and earn money as a chef or restaurant.
+                                You can also hire drivers to deliver your food, or we can handle the logistics for you.
                             </p>
                         </div>
                     </div>
@@ -229,9 +231,7 @@ class LandingPage extends Component {
                                 WELL-ESTABLISHED LOCAL AND INTERNATIONAL FOOD SUPPLIERS
                             </h3>
                             <p className={styles.home_section_3_row_2_p}>
-                                You are responsible for operations, service, or customer support and face challenges
-                                trying to communicate complex procedures to a global market effectively.
-                                Traditional methods don&apos;t work and are laborious, costly and error prone.
+                                One of the most important features of ChopChow is that we make it easy for you to order food products from well established local and international food suppliers to add convenience to cooking from home.
                             </p>
                             <div className={styles.home_section_3_row_2_link}>
                                 <p>Learn More</p>
@@ -249,12 +249,15 @@ class LandingPage extends Component {
                         </div>
                         <div className={styles.home_section_3_row_2}>
                             <h3 className={styles.home_section_3_row_2_h3}>
-                                GET PROFESSIONAL RECOMMENDATION OF RECIPIES
+                                GET PROFESSIONAL RECOMMENDATIONS OF RECIPIES
                             </h3>
                             <p className={styles.home_section_3_row_2_p}>
-                                You are responsible for operations, service, or customer support and face challenges
-                                trying to communicate complex procedures to a global market effectively.
-                                Traditional methods don&apos;t work and are laborious, costly and error prone.
+                                We know that you're an expert in the kitchen, but sometimes
+                                you just need a little help to make something new or different.
+                                Our app is designed to help you get creative with recipes, and
+                                learn from some of the best chefs in the world. You can search
+                                for your favorite meals or try something new, and we'll
+                                recommend different twists on how to make them.
                             </p>
                             <div className={styles.home_section_3_row_2_link}>
                                 <p>Shop Now</p>
@@ -276,9 +279,15 @@ class LandingPage extends Component {
                                 HOME COOKED INTERNATIONAL MEAL
                             </h3>
                             <p className={styles.home_section_3_row_2_p}>
-                                You are responsible for operations, service, or customer support and face challenges
-                                trying to communicate complex procedures to a global market effectively.
-                                Traditional methods don&apos;t work and are laborious, costly and error prone.
+                                Learn to cook meals from around the world!
+
+                                We believe that cooking is a skill that everyone should have.
+
+                                So, we created our app to teach you how to cook international meals from scratch, just like the professionals do.
+
+                                We take you through step-by-step instructions on how to make your favorite dishes, with tips and tricks from professional chefs themselves!
+
+                                It's never been easier or more fun to learn how to cook!
                             </p>
                             <div className={styles.home_section_3_row_2_link}>
                                 <p>See Collections</p>
