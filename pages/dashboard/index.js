@@ -10,11 +10,11 @@ import { BagIcon, BatteryIcon, CloseFillIcon, LineChartIcon, ListIcon, TagIcon, 
 import Sidenav2 from '../../src/components/Header/sidenav2';
 import GoBack from '../../src/components/CommonComponents/goBack';
 import { connect } from "react-redux";
-import { IgrDoughnutChart, IgrDoughnutChartModule, IgrItemLegendModule, IgrRingSeries, IgrRingSeriesModule } from 'igniteui-react-charts';
+// import { IgrDoughnutChart, IgrDoughnutChartModule, IgrItemLegendModule, IgrRingSeries, IgrRingSeriesModule } from 'igniteui-react-charts';
 
-IgrDoughnutChartModule.register();
-IgrRingSeriesModule.register();
-IgrItemLegendModule.register();
+// IgrDoughnutChartModule.register();
+// IgrRingSeriesModule.register();
+// IgrItemLegendModule.register();
 
 
 const DashboardHomePage = (props) => {
@@ -46,11 +46,11 @@ const DashboardHomePage = (props) => {
 //     }
 //   }, []);
 
-  const data = [
-    { MarketShare: 37, Category: "Cooling", Summary: "Cooling 40%", },
-    { MarketShare: 12, Category: "Heating", Summary: "Heating 25%", },
-    { MarketShare: 25, Category: "Residential", Summary: "Residential 35%",  },
-];
+//   const data = [
+//     { MarketShare: 37, Category: "Cooling", Summary: "Cooling 40%", },
+//     { MarketShare: 12, Category: "Heating", Summary: "Heating 25%", },
+//     { MarketShare: 25, Category: "Residential", Summary: "Residential 35%",  },
+// ];
 
   function toggleDriverMode(){
     setDriverModeState(!driverMode)
@@ -153,13 +153,13 @@ const DashboardHomePage = (props) => {
                         </div>
                     </div>
                 </div>
-                {/* {props.auth.authUser.user_type === 'admin' && */}
+                {props.auth.authUser.user_type === 'admin' &&
                     <div className={styles.chart_con}>
                         <div className={styles.chart_col}>
                             <h3>Categories</h3>
                             <div className={styles.chart}>
                                 <div className={styles.chart_circle}>
-                                    <IgrDoughnutChart
+                                    {/* <IgrDoughnutChart
                                         width="100%"
                                         height="100%"
                                         allowSliceSelection="false"
@@ -174,7 +174,7 @@ const DashboardHomePage = (props) => {
                                                 startAngle={30}
                                                 outlines='transparent'
                                                 />
-                                    </IgrDoughnutChart>
+                                    </IgrDoughnutChart> */}
         
                                     <div className={styles.chart_circle_total}>
                                         <p>Total</p>
@@ -276,7 +276,7 @@ const DashboardHomePage = (props) => {
                             </div>
                         </div>
                     </div>
-                {/* } */}
+                }
                 <div className={styles.dashboard_container}>
                     <h3>
                         {(props.auth.authUser.user_type === 'customer' || props.auth.authUser.user_type === 'supplier') && 'Recent Order'}
