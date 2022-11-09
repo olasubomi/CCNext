@@ -13,6 +13,8 @@ import AddIcon from '@mui/icons-material/Add';
 // import MealPageModal from "../mealsPage/MealPageModal";
 import styles from "./suggestion.module.css";
 import Popup1 from "../popups/popup1";
+import Image from 'next/image';
+
 
 
 class SuggestKitchenUtensilForm extends Component {
@@ -240,7 +242,7 @@ class SuggestKitchenUtensilForm extends Component {
       //display utensils main image or videoin suggest utensil
       // if (this.state.utensilImage === '') {
       this.setState({
-        utensilImagesData: [...this.state.utensilImagesData, event.target.files[0]]
+        utensilImagesData: [...this.state.utensilImagesData, URL.createObjectURL(event.target.files[0])]
       });
 
       if (this.state.utensilImage1 == "") {
@@ -262,13 +264,13 @@ class SuggestKitchenUtensilForm extends Component {
       //   utensilImageName: event.target.files[0].name,
       //   utensilImageData: URL.createObjectURL(event.target.files[0])
       // });
-      var image = document.getElementById("UtensilsMainImages");
-      image.style.display = "block";
-      image.src = URL.createObjectURL(event.target.files[0]);
+      // var image = document.getElementById("UtensilsMainImages");
+      // image.style.display = "block";
+      // image.src = URL.createObjectURL(event.target.files[0]);
 
-      console.log(event.target.files[0]);
-      console.log(event.target.files[0].name);
-      console.log(allowedImageExtensions.exec(event.target.files[0].name));
+      // console.log(event.target.files[0]);
+      // console.log(event.target.files[0].name);
+      // console.log(allowedImageExtensions.exec(event.target.files[0].name));
 
       // console.log(URL.createObjectURL(event.target.files[0]));
       // } else {
@@ -407,10 +409,6 @@ class SuggestKitchenUtensilForm extends Component {
     this.setState({ measurement: "", descriptionName: "" });
     this.handleAddDescriptionChip(properDescriptionStringSyntax);
 
-    //  Resetting inner html directly to clear ingredient inputs without changing state
-    // document.getElementById("currentIngredient").value = 'NewPs';
-    // document.getElementById("currentIngredientQuantity").value = 8;
-    // document.getElementById("currentIngredientMeasurement").value = 'Removed';
 
   }
 
@@ -602,18 +600,11 @@ class SuggestKitchenUtensilForm extends Component {
                 </div>
               </div>}
 
-            <Row>
-              <Col md={12} style={{ marginTop: "20px" }}>
-                <p><img id="UtensilsMainImages" width="100%" alt="main_Utensil_Image" style={{ display: "none" }} />
-                </p>
-              </Col>
-            </Row>
-
             {
               this.state.utensilImagesData.map((data, index) =>
                 <Row key={index}>
                   <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><img id="UtensilsMainImages" src={data} width="100%" alt="main_Utensil_Image" />
+                    <p><Image id="UtensilsMainImages" src={data} width="100%" height="100%" alt="main_Utensil_Image" />
                     </p>
                   </Col>
                 </Row>
@@ -747,8 +738,8 @@ class SuggestKitchenUtensilForm extends Component {
           <div id="ProductAdditionalDataDisplayed" >
             <Popup1 popup='kitchen' openModal={this.state.openModal} closeModal={this.closeModal}
               name={this.state.utensilName} description={this.state.intro}
-              imageData={this.state.utensilImageData} image={this.state.utensilImage}
-              imagesData={this.state.utensilImagesData} categories={this.state.suggestedCategories}
+              imageData={this.state.utensilImagesData[0]} image={this.state.utensilImagesData[0]}
+              imagesData={this.state.utensilImagesData.slice(1)} categories={this.state.suggestedCategories}
               descriptionsList={this.state.descriptionStrings}
             />
             {/* <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}

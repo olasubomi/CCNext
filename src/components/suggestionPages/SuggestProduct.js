@@ -211,11 +211,11 @@ class SuggestProductForm extends Component {
           stepInputs
         } = JSON.parse(localStorage.getItem('suggestProductForm'))
 
-        if (this.state.productImagesData !== []) {
-          var image = document.getElementById("ProductsMainImages");
-          image.style.display = "block";
-          image.src = this.state.productImagesData[0];
-        }
+        // if (this.state.productImagesData.length !== 0) {
+        //   var image = document.getElementById("ProductsMainImages");
+        //   image.style.display = "block";
+        //   image.src = this.state.productImagesData[0];
+        // }
 
         this.setState({
           productName,
@@ -253,7 +253,7 @@ class SuggestProductForm extends Component {
           booleanOfDisplayOfDialogBoxConfirmation,
 
           //productsModal controller
-          openModal,
+          openModal: false,
           stepInputs,
         })
       }
@@ -293,9 +293,12 @@ class SuggestProductForm extends Component {
       //   productImageData: URL.createObjectURL(event.target.files[0])
       // });
       //display products main image or videoin suggest product
+      // if (this.state.productImage1 !== "") {
       this.setState({
-        productImagesData: [...this.state.productImagesData, event.target.files[0]]
+        productImagesData: [...this.state.productImagesData, URL.createObjectURL(event.target.files[0])]
       });
+      // }
+
 
       if (this.state.productImage1 == "") {
         this.setState({ productImage1: event.target.files[0] });
@@ -312,9 +315,9 @@ class SuggestProductForm extends Component {
 
       }
 
-      var image = document.getElementById("ProductsMainImages");
-      image.style.display = "block";
-      image.src = URL.createObjectURL(event.target.files[0]);
+      // var image = document.getElementById("ProductsMainImages");
+      // image.style.display = "block";
+      // image.src = URL.createObjectURL(event.target.files[0]);
 
       console.log(event.target.files[0]);
       console.log(event.target.files[0].name);
@@ -890,18 +893,18 @@ class SuggestProductForm extends Component {
                 </div>
               </div>}
 
-            <Row>
+            {/* <Row>
               <Col md={12} style={{ marginTop: "20px" }}>
-                < p > <Image id="ProductsMainImages" width="100%" height="100%" alt="main_product_Image" style={{ display: "none" }} />
+                < p > <img id="ProductsMainImages" width="100%" height="100%" alt="main_product_Image" style={{ display: "none" }} />
                 </p >
               </Col >
-            </Row >
+            </Row > */}
 
             {
               this.state.productImagesData.map((data, index) =>
                 <Row key={index}>
                   <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><Image src={data} width="100%" height="100%" alt="main_product_Image" />
+                    <p><Image src={data} width="100%" height="100%" alt="main_product_Images" />
                     </p>
                   </Col>
                 </Row>
@@ -1441,8 +1444,9 @@ class SuggestProductForm extends Component {
           <div id="ProductAdditionalDataDisplayed" >
             <Popup1 popup='product' openModal={this.state.openModal} closeModal={this.closeModal}
               name={this.state.productName} description={this.state.productDescription}
-              imageData={this.state.productImagesData[0]} image={this.state.productImagesData[0]}
-              imagesData={this.state.productImagesData} categories={this.state.suggestedCategories}
+              imageData={this.state.productImagesData[0]}
+              image={this.state.productImagesData[0]}
+              imagesData={this.state.productImagesData.slice(1)} categories={this.state.suggestedCategories}
               sizesList={this.state.sizeStrings} ingredientList={ingredientStrings}
             />
             {/* <ProductPageModal openModal={this.state.openModal} closeModal={this.closeModal}

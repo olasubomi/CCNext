@@ -30,13 +30,6 @@ class SuggestCategoryForm extends Component {
     super(props);
     this.state = {
 
-      // do we want to use current ingredient formats ? Yes.
-      //   currentIngredient: "",
-      //   currentIngredientMeasurement: "",
-      //   currentUtensilQuantity: "",
-      //   currentProductImgSrc: null,
-      //   currentProductDisplayIndex: 0,
-
       currentStore: "",
 
       // we need to update how we create image paths
@@ -86,40 +79,8 @@ class SuggestCategoryForm extends Component {
     // var url = "/get-all-products";
     url = "https://chopchowdev.herokuapp.com/get-all-products";
 
-    // axios.get(url).then((body) => {
-    //   this.productsList = body.data;
-    //   if (this.productsList && this.productsList.data.length !== 0) {
-    //     console.log("returns GET ALL PRODUCTS ");
-    //     for (var i = 0; i < this.productsList.data.length; i++) {
-    //       this.productNames.push(this.productsList.data[i].product_name);
-    //       this.productImageLink.push(this.productsList.data[i].product_image);
-    //     }       
-    //   } else {
-    //     console.log("get all products function does not return");
-    //   }
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
-
-    //----get category meals-------------------------
     url = "/get-all-categories";
-    // axios.get(url).then((body) => {
-    //   var categoriesFromDBList = body.data;
-    //   if (categoriesFromDBList && categoriesFromDBList.data.length !== 0) {
-    //     console.log("returns GET of ALL Categories ");
 
-    //     for (var i = 0; i < categoriesFromDBList.data.length; i++) {
-    //       this.categories.push(categoriesFromDBList.data[i].category_name);
-    //     }
-    //     console.log("PRINTING UPDATED CATEGORIES LIST");
-    //   } else {
-    //     console.log("get all products function does not return");
-    //   }
-    // })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
     this.categories = this.categories;
   }
 
@@ -146,15 +107,62 @@ class SuggestCategoryForm extends Component {
     // this.props.openModal = false;
     // this.props.func_removeutensilFlag();
   }
+  ///////////////////////////////////////////////////////////////////////////////////////
+  sendSuggestedCategoriesToDB = async (e) => {
+    const { suggestedCategories } = this.state;
 
+    //-------------to make new category data ------------------------------------------
+    // get list of new categories to submit to mongo
+    let new_categories = [];
+    for (i = 0; i < suggestedCategories.length; i++) {
+      // check if categories already exist, only add new categories to db,
+      // though all will still be attached to product, as mentioned
+      let index = this.props.categories?.indexOf(suggestedCategories[i]);
+      if (index === -1) new_categories.push(suggestedCategories[i]);
+    }
+
+    //-------------Submit remainder data of product to Mongo ------------------------------------------
+    let suggestProductForm = new FormData();
+
+    // new suggested products
+    suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
+    // chunk content should be passed as file
+    //---------------------------------------------Submit Product to Mongo---------------------------------------------------
+    // var url = "/createProduct/";
+    var url = "http://localhost:5000/api/products/create/";
+
+    const config = {
+      method: 'POST', data: suggestProductForm, url: url,
+      headers: {
+        // 'application/json' is the modern content-type for JSON, but some
+        // older servers may use 'text/json'.
+        // See: http://bit.ly/text-json
+        // application/x-www-form-urlencoded
+        // 'content-type': 'multipart/form-data'
+      }
+    };
+
+    console.log("Printing Chunk Contents");
+
+    var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
+    console.log(instructionData);
+
+    axios(config).then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
+        console.log(response);
+        console.log("Display Product submitted successfully");
+        // window.location.href = "/SuggestProduct"
+      } else {
+        console.log("Something wrong happened ");
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+
+  }
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
-
-    // const [ingredientInput, setIngredientInput] = useState('');    
-
-    // const theme = createMuiTheme({
-    //   palette: { primary: green },
-    // });
 
     return (
       <div className={styles.suggestion_section_2} >
@@ -208,7 +216,7 @@ class SuggestCategoryForm extends Component {
           {/* <Row>
                 <Col md={12}> */}
           {/* <ThemeProvider theme={theme}> */}
-          <Button variant="contained" className={styles.ingredient_button} style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Category</Button>
+          <Button variant="contained" className={styles.ingredient_button} style={{ width: "100%" }} onClick={() => this.sendSuggestedCategoriesToDB()}> Add Category</Button>
           {/* </ThemeProvider> */}
           {/* </Col>
                 
