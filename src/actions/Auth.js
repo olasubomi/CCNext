@@ -113,7 +113,7 @@ export const verifyToken = (user,token) => {
                 localStorage.setItem('x-auth-token', token);
                 localStorage.setItem('in', Date.now());
                 localStorage.setItem('user', JSON.stringify(user));
-                console.log(user, token)
+                console.log(user)
                 dispatch({ type: FETCH_SUCCESS });
                 dispatch({ type: USER_DATA, payload: user });
                 dispatch({ type: USER_TOKEN_SET, payload: token });

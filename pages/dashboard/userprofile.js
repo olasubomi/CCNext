@@ -23,6 +23,8 @@ import Sidenav2 from '../../src/components/Header/sidenav2';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 import { UserIcon } from '../../src/components/icons';
+import axios from '../../src/util/Api';
+import PhoneInput from 'react-phone-input-2';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -120,11 +122,15 @@ const UserProfile = (props) => {
                 ['phone_number']: props.auth.authUser.phone_number
             })
         }
-      }, []);
+      },[props.auth]);
 
     function handleChange(e) {
         setFormState({ ...formState, [e.target.name]: e.target.value });
     }
+
+    function handlePhoneChange(e) {
+        setFormState({ ...formState, ['phone_number']: e });
+      }
 
     function onUpdateProfileImage(event){
         if (event.target.files[0] === undefined) return;
@@ -162,6 +168,18 @@ const UserProfile = (props) => {
         console.log(time)
         // times[day][when] = time;
         setTimes({...times,[day]: {...times[day], [when]: time}})
+    }
+
+    function saveChanges(e){
+        e.preventDefault()
+        let fields = formState;
+        const formData = new FormData();
+        formData.append('image', fields.profileImage);
+        fields.image = formData;
+
+        axios.put('/user/updateuserprofile/'+props.auth.authUser._id, {_id: props.auth.authUser._id, email: fields.email, first_name: fields.first_name, last_name: fields.last_name, phone_number: fields.phone_number}).then(res => {
+            console.log(res)
+        })
     }
 
     return (
@@ -257,7 +275,7 @@ const UserProfile = (props) => {
                                         {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) && 
                                         <Image width={500} height={500} src={props.auth.authUser.profile_picture} />
                                         }
-                                        <Image id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
+                                        <img id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
                                     </div>
                                     <p onClick={uploadProfileImage}>Change Picture</p>
                                 </div>
@@ -304,13 +322,12 @@ const UserProfile = (props) => {
                                         <label htmlFor="phone_number" className={styles.profile_form_label}>
                                         Phone Number
                                         </label>
-                                        <input
-                                        type="tel"
-                                        name="phone_number"
-                                        value={phone_number}
-                                        placeholder="Your Phone Number"
-                                        onChange={handleChange}
-                                        className={styles.profile_form_input}
+                                        <PhoneInput
+                                            inputClass={styles.login_form_input}
+                                            country={'us'}
+                                            name="phone_number"
+                                            value={phone_number}
+                                            onChange={phone => handlePhoneChange(phone)}
                                         />
                                     </div>
                                     <div className={styles.profile_form_col_2}>
@@ -391,7 +408,7 @@ const UserProfile = (props) => {
                                 </div>
                             </div>
 
-                            <button className={styles.profile_button}>Save Changes</button>
+                            <button className={styles.profile_button} onClick={saveChanges}>Save Changes</button>
                         </div>
 
                         <div id='billing-address' className={styles.profile_basic_info_con}>

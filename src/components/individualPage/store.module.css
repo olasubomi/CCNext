@@ -1,0 +1,245 @@
+
+.store_container{
+    position: relative;
+    background: #FCFCFC;
+    display: grid;
+    justify-items: center;
+    margin-top: 155px;
+}
+
+.store_sections{
+    display: grid;
+    padding: 2rem 0;
+    width: 100%;
+    grid-gap: 2rem;
+}
+
+
+.btnGroup{
+    justify-self: end !important;
+    display: flex;
+    gap: 10px;
+}
+
+.btnoutline{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+
+    width: 160px;
+    height: 40px;
+
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #353535;
+}
+
+.btnfill{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 160px;
+    height: 40px;
+
+    background: #F47900;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #FFFFFF;
+}
+
+
+.row_reverse{
+    grid-column: 2/3;
+    grid-row: 1/2;
+}
+
+
+.productcard_row{
+    display: grid;
+    grid-gap: 3rem;
+    align-content: start;
+    padding-bottom: 2rem;
+    width: 100%;
+}
+
+.productcard_col_1{
+    justify-self: start;
+}
+
+.productcard_col_1 > h3{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+
+    color: #000000;
+    margin: 0;
+
+}
+
+.productcard_col_2{
+    width: 100%;
+    display: grid;
+    grid-gap: 2rem;
+    justify-items: center;
+}
+
+.productcard_col_3{
+    justify-self: center;
+}
+
+.productcard_col_3 > h5{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #000000;
+}
+
+.products_con{
+    display: grid;
+    padding: 2rem 0;
+    width: 100%;
+    grid-gap: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 1rem 0 3rem;
+}
+
+.productcard_productcard {
+    display: grid;
+    grid-gap: 8px;
+    height: 100%;
+  }
+  
+  .productcard_productcards {
+    width: 100%;
+    height: max-content;
+    display: grid;
+    /* grid-template-columns: 1fr 1fr 1fr 1fr; */
+    grid-auto-flow: column;
+    /* grid-template-rows: repeat(auto-fill, 514px); */
+    grid-gap: 3rem;
+    flex-wrap: wrap;
+    justify-content: start;
+    overflow-x: scroll;
+  }
+  
+  /* .productcard_productcard {
+    display: grid;
+    grid-gap: 1rem;
+    animation: opacity 0.3s linear;
+    position: relative;
+    height: 100%;
+  } */
+  
+  .productcard_productcard_name {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #000000;
+    margin: 0;
+  }
+  
+  .productcard_productcard_col {
+    /* display: none; */
+    display: grid;
+    grid-gap: 5px;
+    grid-auto-flow: column;
+    justify-content: space-between;
+  }
+  
+  .productcard_productcard_category {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 21px;
+    text-transform: capitalize;
+    /* identical to box height, or 150% */
+  
+    color: #222321;
+    margin-top: -10px;
+  }
+  
+  .productcard_productcard_price {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #000000;
+  }
+  
+  .productcard_productcard_img_container {
+    width: 100%;
+    height: 161px;
+    /* display: grid; */
+  }
+
+  .productcard_productcard_img_container > span{
+    width: 180px !important;
+    height: 161px !important;
+  }
+  
+  .productcard_productcard_img {
+    width: 100%;
+    height: 161px;
+    grid-column: 1/-1;
+    grid-row: 1/-1;
+    z-index: 1;
+    background-size: 100% 100%;
+    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1));
+    border-radius: 8px;
+  }
+
+  .productcard_productcard > p{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    /* identical to box height */
+
+
+    color: #6D6D6D;
+  }
+
+  .productcard_productcard_duration{
+   font-style: normal;
+   font-weight: 400;
+   font-size: 16px;
+   line-height: 19px;
+   
+   color: #6D6D6D; 
+  }
+
+  .store_review_rating_icons{
+    justify-self: start;
+    display: flex;
+}
+
+.store_review_rating_icon{
+    width: 14px;
+    height: 13px;
+    fill: #04D505;
+}
+
+.store_review_rating_icon2{
+    width: 14px;
+    height: 13px;
+    fill: #D9D9D9;
+}

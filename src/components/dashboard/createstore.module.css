@@ -1,3 +1,11 @@
+.header2{
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .form_group{
     position: relative;
     display: grid;

@@ -74,12 +74,13 @@ const DashboardHomePage = (props) => {
                 <div className={styles.header2_col_1}>
                     <GoBack />
                 </div>
+                {props.auth.authUser && props.auth.authUser.user_type !== 'admin' && 
                 <div className={styles.header2_col_2}>
                     <div className={styles.mode_con}>
                         <div onClick={toggleDriverMode} className={styles.mode + ' ' + styles.left_mode + ' '+(driverMode? '': styles.active_mode)}>Supplier mode</div>
                         <div onClick={toggleDriverMode} className={styles.mode + ' ' + styles.right_mode + ' '+(driverMode? styles.active_mode : '')}>Driver mode</div>
                     </div>
-                </div>
+                </div>}
             </div>
             {props.auth.authUser && 
             <>

@@ -15,6 +15,7 @@ import Switch from '@mui/material/Switch';
 import AddIcon from '@mui/icons-material/Add';
 import TransferToInventory from '../../src/components/dashboard/transferToInventory';
 import Image from 'next/image';
+import GoBack from '../../src/components/CommonComponents/goBack';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -109,6 +110,10 @@ const CreateStore = () => {
         setFormState({ ...formState, [e.target.name]: e.target.value });
     }
 
+    function handlePhoneChange(e) {
+        setFormState({ ...formState, ['phone_number']: e });
+      }
+
     function handleTime(time, day, when){
         console.log(time)
         // times[day][when] = time;
@@ -175,6 +180,11 @@ const CreateStore = () => {
         <SideNav />
         <div className={center}>
             <div className={profileStyles.profile_details}>
+                <div className={styles.header2}>
+                    <div className={styles.header2_col_1}>
+                        <GoBack />
+                    </div>
+                </div>
                 <div className={profileStyles.profile_basic_info_con}>
                     <h3>Create A Store</h3>
                     <div className={profileStyles.profile_basic_info}>
@@ -208,13 +218,12 @@ const CreateStore = () => {
                                 <label htmlFor="phone_number" className={profileStyles.profile_form_label}>
                                 Phone Number
                                 </label>
-                                <input
-                                type="tel"
-                                name="phone_number"
-                                value={phone_number}
-                                placeholder="Your Phone Number"
-                                onChange={handleChange}
-                                className={profileStyles.profile_form_input}
+                                <PhoneInput
+                                    inputClass={styles.login_form_input}
+                                    country={'us'}
+                                    name="phone_number"
+                                    value={phone_number}
+                                    onChange={phone => handlePhoneChange(phone)}
                                 />
                             </div>
                             <div className={profileStyles.profile_form_col_2}>
@@ -260,7 +269,7 @@ const CreateStore = () => {
 
                                 <div className={suggestion_form_image}>
                                     <div className={suggestion_form_image_col_1}>
-                                        <Image id="profile_picture" width='100%' alt="profile" style={{ display: "none" }} />
+                                        <img id="profile_picture" width='100%' alt="profile" style={{ display: "none" }} />
                                     <div onClick={() => uploadImage('profile')} className={suggestion_form_image_icon_con}>
                                         <AddIcon className={suggestion_form_image_icon} />
                                     </div>
@@ -276,7 +285,7 @@ const CreateStore = () => {
 
                                 <div className={suggestion_form_image}>
                                     <div className={suggestion_form_image_col_1}>
-                                        <Image id="background_picture" width='100%' alt="background" style={{ display: "none" }} />
+                                        <img id="background_picture" width='100%' alt="background" style={{ display: "none" }} />
                                     <div onClick={() => uploadImage('background')} className={suggestion_form_image_icon_con}>
                                         <AddIcon className={suggestion_form_image_icon} />
                                     </div>

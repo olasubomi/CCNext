@@ -543,6 +543,7 @@
     }
 
     .actionIcon{
+      cursor: pointer;
         fill: #949494;
         width: 21px;
         margin-right: 11px;
