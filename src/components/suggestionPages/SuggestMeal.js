@@ -652,7 +652,7 @@ class SuggestMealForm extends Component {
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.props.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
 
@@ -1251,12 +1251,11 @@ class SuggestMealForm extends Component {
     suggestMealForm.append('new_measurements', JSON.stringify(new_measurements));
 
     // suggestMealForm.append('product_slider', JSON.stringify(product_slider));
-    suggestMealForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
+    suggestMealForm.append('formatted_ingredients', JSON.stringify(all_ingredients_formatted));
 
     // new suggested products
     suggestMealForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
     suggestMealForm.append('meal_categories', JSON.stringify(suggestedCategories));
-    suggestMealForm.append('categories', suggestedCategories);
     suggestMealForm.append('newCategories', new_categories);
 
     suggestMealForm.append('kitchen_utensils', JSON.stringify(suggestedUtensils));
