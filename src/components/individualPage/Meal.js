@@ -23,28 +23,31 @@ function Meal(props){
                 
                 <div className={styles.meal_section_2}>
                     <div className={styles.meal_section_2_col_1}>
+                        {props.meal.meal_images.length > 0&&
                         <Image
-                            src={img_logo}
+                            src={props.meal.meal_images[0]}
                             alt="pop up"
                             className={styles.meal_section_2_main_img}
                             height={"100%"} width={"100%"}
-                        />
+                        />}
                         <div className={styles.meal_section_2_images}>
-                            <Image alt="pop up" src={img_logo}
+                            {props.meal.meal_images.length > 1 &&
+                            <>
+                            {props.meal.meal_images.slice(1).map((image, index) => {
+                               return(
+                                <Image key={index} alt="pop up" src={image}
                                 height={"100%"} width={"100%"}
                                 className={styles.meal_section_2_image} />
-                            <Image alt="pop up" src={img_logo}
-                                height={"100%"} width={"100%"}
-                                className={styles.meal_section_2_image} />
-                            <Image alt="pop up" src={img_logo}
-                                height={"100%"} width={"100%"}
-                                className={styles.meal_section_2_image} />
+                               ) 
+                            })}
+                            </>
+                            }
 
                         </div>
                     </div>
                     <div className={styles.meal_section_2_col_2}>
                         <div className={styles.meal_section_2_details}>
-                            <h2 className={styles.meal_section_2_name}>{props.meal.mealName}</h2>
+                            <h2 className={styles.meal_section_2_name}>{props.meal.meal_name}</h2>
                             <div className={styles.store}>
                                 <h4>Chop Chow Store</h4>
                                 <div>
@@ -57,7 +60,13 @@ function Meal(props){
                             </p>
                             <div className={styles.meal_section_2_categories}>
                                 <h3 className={styles.meal_section_2_category_name}>Product Category</h3>
-                                <p className={styles.meal_section_2_category}>{props.meal.categories.map((cat) => <span>{cat} &nbsp; &nbsp;</span>)}</p>
+                                <p className={styles.meal_section_2_category}>
+                                    {props.meal.meal_categories.length > 0 &&
+                                    <>
+                                    {JSON.parse(props.meal.meal_categories[0]).map((cat, j) => <span key={j}>{cat} &nbsp; &nbsp;</span>)}
+                                    </>
+                                    }
+                                </p>
                             </div>
                         </div>
                         <div className={styles.meal_section_2_price}>
@@ -91,19 +100,19 @@ function Meal(props){
                         </div>
                         <div>
                             <h3>PrepTime:</h3>
-                            <p>{props.meal.readTime} Minutes</p>
+                            <p>{props.meal.prep_time} Minutes</p>
                         </div>
                         <div>
                             <h3>CookTime : </h3>
-                            <p>{props.meal.cookTime} Minutes </p>
+                            <p>{props.meal.cook_time} Minutes </p>
                         </div>
                         <div>
                             <h3>Chef:</h3>
-                            <p>lddd</p>
+                            <p>{props.meal.chef}</p>
                         </div>
                     </div>
                 </div>
-                {props.meal.ingredients &&
+                {props.meal.formatted_instructions &&
                 <div className={styles.meal_section_4}>
                     <div className={styles.ingredient_container}>
                         <h3>Add Ingredients</h3>
@@ -119,18 +128,22 @@ function Meal(props){
                             <div className={styles.ingredients_body}>
                                 <table className={styles.ingredients_table}>
                                     <tbody>
-                                        {props.meal.ingredients.map((ingredient, index) => {
+                                        {props.meal.formatted_ingredients.length > 0 &&
+                                        <>
+                                        {JSON.parse(props.meal.formatted_ingredients[0]).map((ingredient, index) => {
                                             return(
                                                 <tr key={index} className={styles.ingredients_tr}>
                                                     <input name='id' type="checkbox" />
-                                                    <td style={{color: '#000000'}} className={styles.ingredients_td}>{ingredient.split('x').length > 1 ? ingredient.split('x')[0] : ingredient.split('-')[0]}</td>
-                                                    <td className={styles.ingredients_td} style={{textAlign: 'center'}}>{ingredient.split('x').length > 1 ? ingredient.split('x')[1].split(' ')[1] : ingredient.split('-')[1].split(' ')[1]}</td>
-                                                    <td className={styles.ingredients_td}>{ingredient.split('x').length > 1 ? ingredient.split('x')[1] && ingredient.split('x')[1].split(' ')[2] : ingredient.split('-')[1] && ingredient.split('-')[1].split(' ')[2]}</td>
-                                                    <td className={styles.ingredients_td} style={{textAlign: 'center'}}>afa</td>
+                                                    <td style={{color: '#000000'}} className={styles.ingredients_td}>{ingredient.productName}</td>
+                                                    <td className={styles.ingredients_td} style={{textAlign: 'center'}}>{ingredient.quantity}</td>
+                                                    <td className={styles.ingredients_td}>{ingredient.measurement}</td>
+                                                    <td className={styles.ingredients_td} style={{textAlign: 'center'}}></td>
                                                     <td className={styles.ingredients_td}>Unavailable</td>
                                                 </tr>
                                             )
                                         })}
+                                        </>
+                                        }
                                     
                                     </tbody>
                                 </table>
@@ -180,27 +193,29 @@ function Meal(props){
                     </div>
                 </div>
                 }
-                {props.meal.instructions &&
+                {props.meal.formatted_instructions &&
                 <div className={styles.meal_section_5}>
                     <h3>Steps</h3>
-                    {props.meal.instructions.map(instruction => {
+                    {props.meal.formatted_instructions.map((instruction, index) => {
                         return(
-                            <div className={styles.meal_section_5_row}>
+                            <div key={index} className={styles.meal_section_5_row}>
                                 <div className={styles.meal_section_5_row_1}>
+                                    {instruction.image ? 
                                     <Image
                                     width={'100%'}
                                     height={'100%'}
                                         src={instruction.image}
                                         alt="home"
                                         className={styles.meal_section_5_row_1}
-                                    />
+                                    />:
+                                    <p></p>}
                                 </div>
                                 <div className={styles.meal_section_5_row_2}>
                                     <h3 className={styles.meal_section_5_row_2_h3}>
                                         Step 1 Title
                                     </h3>
                                     <p className={styles.meal_section_5_row_2_p}>
-                                        {instruction.step.map((int) => <>{int}</>) }
+                                        {instruction.step?.map((int) => <>{int}</>) }
                                     </p>
                                 </div>
                             </div>
@@ -213,20 +228,28 @@ function Meal(props){
                 <div className={styles.meal_section_6}>
                     <h3>Meal Categories</h3>
                     <ul>
-                        <li>color</li>
-                        <li>React</li>
-                        <li>TagIcon</li>
+                        {props.meal.meal_categories.length > 0 &&
+                        <>
+                        {JSON.parse(props.meal.meal_categories[0]).map((cat, index) => <li key={index}>{cat}</li>)}
+                        </>
+                        }
                     </ul>
                 </div>
 
                 <div className={styles.meal_section_7}>
                     <h3>Tips</h3>
                     <div>
+                        {props.meal.tips && props.meal.tips.length > 0 &&
                         <ul>
-                            <li>color</li>
-                            <li>React</li>
-                            <li>TagIcon</li>
+                            {JSON.parse(props.meal.tips[0]).map((tip, index) => {
+                                return(
+                                    <li key={index}>{tip}</li>
+                                )
+                            })
+                            
+                            }
                         </ul>
+                        }
                     </div>
                 </div>
 

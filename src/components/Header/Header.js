@@ -182,7 +182,9 @@ function Header(props){
               // </Link>
               :
               <div className={styles.navbar_user_info}>
-                <img id="userImg" onClick={(e) => toggleUserDetails(e)} src='/assets/icons/user.png' alt='User' className={styles.navbar_user_img}/>
+                {props.auth.authUser.profile_picture ? 
+                <img id="userImg" onClick={(e) => toggleUserDetails(e)} src={props.auth.authUser.profile_picture} alt='User' className={styles.navbar_user_img}/>:
+                <UserIcon style={styles.navbar_main_link_icon} />}
                 <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>{props.auth.authUser.username}</h2>
                 <ArrowDownIcon id="usericon" onClick={(e) => toggleUserDetails(e)} style={styles.navbar_user_icon} />
                 <div id="userdetails" className={styles.navbar_user_signedin}>

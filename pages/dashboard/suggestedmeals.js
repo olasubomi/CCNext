@@ -244,7 +244,7 @@ const SuggestedMeals = (props) => {
                                             }>
                                             <input name='id' type="checkbox" />
                                             <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal._id}</td>
-                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.mealName}</td>
+                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.meal_name}</td>
                                             <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td + " " + status + " " + 
                                                 ((meal.publicly_available === 'Draft' || meal.publicly_available === 'Pending') ? pending :
                                                 meal.publicly_available === 'Public' ? approve :
@@ -252,7 +252,7 @@ const SuggestedMeals = (props) => {
                                             >
                                                 {meal.publicly_available}
                                             </td>
-                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.categories && meal.categories[0]}</td>
+                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.meal_categories && meal.meal_categories.length > 0 && JSON.parse(meal.meal_categories[0])[0]}</td>
                                             <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.createdAt && new Date(meal.createdAt).getDate() + ' ' + months[new Date(meal.createdAt).getMonth()] + ' ,'+ new Date(meal.createdAt).getFullYear()}</td>
                                             <td className={styles.request_td + " " + styles.actions_con}>
                                                 {props.auth.authUser.user_type !== 'admin' &&
@@ -263,8 +263,8 @@ const SuggestedMeals = (props) => {
                                                     }
                                                 </>
                                                 }
-                                                <td onClick={() => deleteMeal(meal._id)}>
-                                                <CloseFillIcon style={actionIcon} /></td>
+                                                <i onClick={() => deleteMeal(meal._id)}>
+                                                <CloseFillIcon style={actionIcon} /></i>
                                             </td>
                                         </tr>
                                     )
