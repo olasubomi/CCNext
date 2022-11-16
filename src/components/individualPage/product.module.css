@@ -184,7 +184,7 @@
 
     color: #353535;
 }
-
+product_section_2_details_col
 .product_section_2_description {
     word-break: break-word;
     font-style: normal;
@@ -643,6 +643,17 @@
   .productcard_productcard_img_container > span{
     width: 180px !important;
     height: 161px !important;
+  }
+
+  .productcard_productcard_img_container2 {
+    width: 100%;
+    height: 237px;
+    /* display: grid; */
+  }
+
+  .productcard_productcard_img_container2 > span{
+    width: 237px !important;
+    height: 237px !important;
   }
   
   .productcard_productcard_img {

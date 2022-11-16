@@ -2,11 +2,9 @@ import React from "react";
 import styles from "./meal.module.css";
 
 import Head from "next/head";
-import Header, { Header2 } from "../Header/Header";
-import Sidenav from "../Header/sidenav";
 import img_logo from "../../../public/assets/logos/sezzle.png"
 import Image from "next/image";
-import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, TwitterEIcon, WhatsappEIcon } from "../icons";
+import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIcon, TwitterEIcon, WhatsappEIcon } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
 
@@ -261,6 +259,58 @@ function Meal(props){
                 <div className={styles.meal_section_8}>
                     <h3>Add Review</h3>
                     <Reviews />
+                </div>
+
+                <div className={styles.productcard_row}>
+                    <div className={styles.productcard_col_1}>
+                        <h3>Related Meal</h3>
+                    </div>
+                    <div className={styles.productcard_col_2}>
+                        <div className={styles.productcard_productcards}>
+                            {new Array(1,2,3,4,5,6,7,8).map((data, index) => {
+                                return(
+                                <div key={index} className={styles.productcard_productcard}>
+                                    <div className={styles.productcard_productcard_img_container}>
+
+                                    <Image
+                                        priority
+                                        src={img_logo}
+                                        alt="Store"
+                                        className={styles.productcard_productcard_img}
+                                    />
+                                    </div>
+                                    <div className={styles.productcard_productcard_col}>
+                                        <h6 className={styles.productcard_productcard_name}>TagIcon</h6>
+                                        <p className={styles.productcard_productcard_duration}>
+                                            7 min
+                                        </p>
+                                    </div>
+                                    <div className={styles.productcard_productcard_col}>
+                                        <div className={styles.product_review_rating_icons}>
+                                            {
+                                                Array.from({ length: 5 }).map((i,j) => {
+                                                    var rate = 4;
+                                                    if((j+1) <= rate){
+                                                        return(
+                                                            <StarIcon style={styles.product_review_rating_icon} />
+                                                        )
+                                                    }else{
+                                                        return(
+                                                            <StarIcon style={styles.product_review_rating_icon2} />
+                                                        )}
+                                                })
+                                            }
+                                        </div>
+                                        <p className={styles.productcard_productcard_price}>
+                                            $666
+                                        </p>
+                                    </div>
+                                </div>
+                                )
+                            })
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
             }
