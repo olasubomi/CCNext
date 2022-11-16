@@ -20,6 +20,9 @@ yarn.lock:
 # production
 #/build
 
+#local files only
+src/outdated_files/
+
 # misc
 .DS_Store
 .env.local

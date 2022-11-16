@@ -120,7 +120,7 @@ class SuggestMeal extends Component {
         //   .catch((err) => {
         //     console.log(err);
         //   });
-        this.categories = this.props.categories;
+        // this.categories = this.props.categories;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////

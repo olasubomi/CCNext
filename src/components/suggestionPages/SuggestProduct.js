@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import TextField from "@mui/material/TextField";
 // import Chip from "@mui/material/Chip";
-import { Autocomplete } from "@mui/lab/Autocomplete"; // createFilterOptions,
+import Autocomplete from "@mui/material/Autocomplete";
 // import axios from 'axios';
 import axios from '../../util/Api';
 import { Row, Col } from "react-bootstrap";
@@ -546,6 +546,14 @@ class SuggestProductForm extends Component {
       this.setState({ sizeStrings: array, sizeGroupList: removeFromGroup });
     }
   }
+  handleDeleteCategoryChip(chip) {
+    var array = [...this.state.suggestedCategories]; // make a separate copy of the array
+    var index = array.indexOf(chip);
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ suggestedCategories: array });
+    }
+  }
 
   handleAddIngredientChip(chip) {
     this.setState({
@@ -943,7 +951,7 @@ class SuggestProductForm extends Component {
                   <Autocomplete
                     id="sizeMeasurement"
                     options={this.measurements.map((option) => option)}
-                    value={this.state.sizeMeasurement}
+                    value={this.state.sizeMeasurement} x
                     onChange={this.handleSizeMeasurement}
                     freeSolo
                     renderInput={(params) => (<TextField {...params}
