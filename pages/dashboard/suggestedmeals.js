@@ -2,9 +2,8 @@
 import Header from '../../src/components/Header/Header';
 import SideNav from '../../src/components/Header/sidenav';
 import {container, col2, left, empty, center, status, approve, pending, rejected, actionIcon } from '../../src/components/dashboard/dashboard.module.css'
-import { center_h3 } from '../../src/components/dashboard/profile.module.css'
 import styles from '../../src/components/dashboard/suggestedmeals.module.css'
-import { CloseFillIcon, FillterIcon, MessageIcon } from '../../src/components/icons';
+import { CloseFillIcon, FillterIcon } from '../../src/components/icons';
 import Link from 'next/link';
 import Sidenav2 from '../../src/components/Header/sidenav2';
 import SearchIcon from '@mui/icons-material/Search';
@@ -15,6 +14,8 @@ import { useRouter } from 'next/router';
 import axios from '../../src/util/Api';
 import Meal from '../../src/components/individualPage/Meal';
 import WestIcon from '@mui/icons-material/West';
+import TransferToInventory from '../../src/components/dashboard/transferToInventory';
+import SuggestedMealRow from '../../src/components/dashboard/suggestedmealRow';
 
 const SuggestedMeals = (props) => {
     const router = useRouter()
@@ -29,25 +30,13 @@ const SuggestedMeals = (props) => {
     const [searchSuggestedMeal, setSearchSuggestedMealState] = useState('')
     const [openMeal, setOpenMealState] = useState(false)
     const [changeStatus, setChangeStatusState] = useState(false)
+    const [transferToInventory, setTransferToInventoryState] = useState(false)
     const [statusType, setStatusTypeState] = useState('')
-    const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ]
+    
 
     useEffect(() => {
         if(props.auth.authUser){
-            if(props.auth.authUser.user_type === 'admin'){
+            // if(props.auth.authUser.user_type === 'admin'){
                 axios.get('/meals/get-meals/1').then(data => {
                     console.log(data.data)
                     if(data.data.data){
@@ -55,7 +44,7 @@ const SuggestedMeals = (props) => {
                         setFilteredMealsState(data.data.data.meals)
                     }
                 })
-            }
+            // }
         }
       }, [props.auth]);
 
@@ -164,6 +153,10 @@ const SuggestedMeals = (props) => {
         })
     }
 
+    function toggleTransferToInventory(){
+        setTransferToInventoryState(!transferToInventory)
+    }
+
     return (
     <div className={container + " " + col2}>
         <Header />
@@ -221,15 +214,15 @@ const SuggestedMeals = (props) => {
                         <thead>
                         <tr className={styles.request_tr} style={
                             props.auth.authUser.user_type === 'admin' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 5%'}:
-                            props.auth.authUser.user_type === 'customer' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 16%'}:
-                            props.auth.authUser.user_type === 'supplier' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 25%'}: {backgroundColor: 'transparent'}
+                            props.auth.authUser.user_type === 'customer' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 22%'}:
+                            props.auth.authUser.user_type === 'supplier' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 28%'}: {backgroundColor: 'transparent'}
                             }>
                             <input name='id' type="checkbox" />
                             <th className={styles.request_th}>ID number</th>
                             <th className={styles.request_th}>Name</th>
                             <th className={styles.request_th} style={{justifySelf: 'center'}}>Status <FillterIcon /></th>
-                            <th className={styles.request_th}>Categories <FillterIcon /></th>
-                            <th className={styles.request_th}>Date Created <FillterIcon /></th>
+                            <th className={styles.request_th + " " + styles.hideData}>Categories <FillterIcon /></th>
+                            <th className={styles.request_th + " " + styles.hideData}>Date Created <FillterIcon /></th>
                             <th className={styles.request_th} style={{textAlign: 'center'}}>Action</th>
                         </tr>
                         </thead>
@@ -237,36 +230,7 @@ const SuggestedMeals = (props) => {
                             {
                                 filteredMeals.map((meal) => {
                                     return(
-                                        <tr key={meal._id} className={styles.refId + " " + styles.request_tr}style={
-                                            props.auth.authUser.user_type === 'admin' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 5%'}:
-                                            props.auth.authUser.user_type === 'customer' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 16%'}:
-                                            props.auth.authUser.user_type === 'supplier' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 25%'}: {backgroundColor: 'transparent'}
-                                            }>
-                                            <input name='id' type="checkbox" />
-                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal._id}</td>
-                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.mealName}</td>
-                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td + " " + status + " " + 
-                                                ((meal.publicly_available === 'Draft' || meal.publicly_available === 'Pending') ? pending :
-                                                meal.publicly_available === 'Public' ? approve :
-                                                meal.publicly_available === 'Rejected' ? rejected : '')}
-                                            >
-                                                {meal.publicly_available}
-                                            </td>
-                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.categories && meal.categories[0]}</td>
-                                            <td onClick={() => toggleOpenMeal(meal)} className={styles.request_td}>{meal.createdAt && new Date(meal.createdAt).getDate() + ' ' + months[new Date(meal.createdAt).getMonth()] + ' ,'+ new Date(meal.createdAt).getFullYear()}</td>
-                                            <td className={styles.request_td + " " + styles.actions_con}>
-                                                {props.auth.authUser.user_type !== 'admin' &&
-                                                <>
-                                                    <div className={styles.tableactionbutton}>Send for review</div>
-                                                    {props.auth.authUser.user_type === 'supplier' &&
-                                                        <div className={styles.tableactionbutton} style={{background: 'F47900', color:'white'}}>Send for Inventory</div> 
-                                                    }
-                                                </>
-                                                }
-                                                <td onClick={() => deleteMeal(meal._id)}>
-                                                <CloseFillIcon style={actionIcon} /></td>
-                                            </td>
-                                        </tr>
+                                        <SuggestedMealRow toggleTransferToInventory={toggleTransferToInventory} auth={props.auth} key={meal._id} meal={meal} toggleOpenMeal={toggleOpenMeal} />
                                     )
                                 })
                             }
@@ -398,6 +362,10 @@ const SuggestedMeals = (props) => {
             </div>
             
         </div>}
+
+        {transferToInventory && 
+            <TransferToInventory toggleTransferToInventory={toggleTransferToInventory} />
+        }
         
     </div>
     )

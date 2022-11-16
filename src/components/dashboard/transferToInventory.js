@@ -54,14 +54,16 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
     },
   }));
 
-export default function TransferToInventory(){
+export default function TransferToInventory(props){
 
     return(
         <div className={styles.transToIn_container}>
             <div className={styles.transToIn}>
                 <div className={styles.transToIn_top}>
                     <h2>Transfer Meal to Inventory</h2>
+                    <div onClick={props.toggleTransferToInventory}>
                     <CancelIcon className={styles.transToIn_cancel_con} />
+                    </div>
                 </div>
 
                 <div className={styles.transToIn_details_con}>
@@ -182,7 +184,7 @@ export default function TransferToInventory(){
                 </div>
 
                 <div className={styles.transToIn_footer}>
-                    <button className={styles.transToIn_footer_button}>Cancle</button>
+                    <button className={styles.transToIn_footer_button} onClick={props.toggleTransferToInventory}>Cancle</button>
                     <button className={styles.transToIn_footer_button2}>Confirm</button>
                 </div>
             

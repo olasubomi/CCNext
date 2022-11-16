@@ -13,8 +13,6 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import AddIcon from '@mui/icons-material/Add';
-import TransferToInventory from '../../src/components/dashboard/transferToInventory';
-import Image from 'next/image';
 import GoBack from '../../src/components/CommonComponents/goBack';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({

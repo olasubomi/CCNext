@@ -20,11 +20,11 @@ function Reviews(){
                                             var rate = 4;
                                             if((j+1) <= rate){
                                                 return(
-                                                    <StarIcon style={styles.product_review_rating_icon} />
+                                                    <StarIcon key={j} style={styles.product_review_rating_icon} />
                                                 )
                                             }else{
                                                 return(
-                                                    <StarIcon style={styles.product_review_rating_icon2} />
+                                                    <StarIcon key={j} style={styles.product_review_rating_icon2} />
                                                 )}
                                         })
                                     }
@@ -50,11 +50,11 @@ function Reviews(){
                                                 var rate = 4;
                                                 if((j+1) <= rate){
                                                     return(
-                                                        <StarIcon style={styles.product_review_rating_icon} />
+                                                        <StarIcon key={j} style={styles.product_review_rating_icon} />
                                                     )
                                                 }else{
                                                     return(
-                                                        <StarIcon style={styles.product_review_rating_icon2} />
+                                                        <StarIcon key={j} style={styles.product_review_rating_icon2} />
                                                     )}
                                             })
                                         }

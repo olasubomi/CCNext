@@ -891,6 +891,14 @@
     .value_con > div > h3{
         display: block;
     }
+
+    .status{
+      width: 62px;
+      height: 17px;
+      font-weight: 400;
+      font-size: 9px !important;
+      line-height: 11px !important;
+    }
 }
 
 @media screen and (max-width: 485px) {

@@ -94,7 +94,7 @@ function Product(props){
 
                 <div className={styles.productcard_row}>
                     <div className={styles.productcard_col_1}>
-                        <h3>Popular Meals</h3>
+                        <h3>Featured In</h3>
                     </div>
                     <div className={styles.productcard_col_2}>
                         <div className={styles.productcard_productcards}>
@@ -152,6 +152,56 @@ function Product(props){
                 <div className={styles.product_section_8}>
                     <h3>Add Review</h3>
                     <Reviews />
+                </div>
+
+                <div className={styles.productcard_row}>
+                    <div className={styles.productcard_col_1}>
+                        <h3>People Also Like</h3>
+                    </div>
+                    <div className={styles.productcard_col_2}>
+                        <div className={styles.productcard_productcards}>
+                            {new Array(1,2,3,4,5).map((data, index) => {
+                                return(
+                                <div key={index} className={styles.productcard_productcard}>
+                                    <div className={styles.productcard_productcard_img_container2}>
+
+                                    <Image
+                                        priority
+                                        src={img_logo}
+                                        alt="Store"
+                                        className={styles.productcard_productcard_img}
+                                    />
+                                    </div>
+                                    <div className={styles.productcard_productcard_col}>
+                                        <h6 className={styles.productcard_productcard_name}>TagIcon</h6>
+                                    </div>
+                                    <p>Chop Chow Official Store</p>
+                                    <div className={styles.productcard_productcard_col}>
+                                        <div className={styles.product_review_rating_icons}>
+                                            {
+                                                Array.from({ length: 5 }).map((i,j) => {
+                                                    var rate = 4;
+                                                    if((j+1) <= rate){
+                                                        return(
+                                                            <StarIcon style={styles.product_review_rating_icon} />
+                                                        )
+                                                    }else{
+                                                        return(
+                                                            <StarIcon style={styles.product_review_rating_icon2} />
+                                                        )}
+                                                })
+                                            }
+                                        </div>
+                                        <p className={styles.productcard_productcard_duration}>
+                                            7min
+                                        </p>
+                                    </div>
+                                </div>
+                                )
+                            })
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

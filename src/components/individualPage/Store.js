@@ -5,10 +5,33 @@ import Head from "next/head";
 import img_logo from "../../../public/assets/logos/sezzle.png"
 import Image from "next/image";
 import Reviews from "./Reviews";
-import { StarIcon } from "../icons";
+import { CallIcon, EmailIcon, LocationIcon, StarIcon, TimeIcon } from "../icons";
 
-function Store(props){
-    console.log(props.meal)
+function Store(){
+
+    function handleSearch(e){
+        // setSearchSuggestedMealState(e.target.value);
+        // if(e.target.value.length>=1){
+        //   let url = window.location.href;
+        //   let value;
+        //   value = { name: e.target.value }
+        //   productSuggestion(value).then(res => {
+        //     console.log(res)
+        //     if(res.data.data.products){
+        //       this.setState({
+        //         queryResults: res.data.data.products.items
+        //       })
+        //     }
+        //     if(res.data.data.products){
+        //       this.setState({
+        //         suggestionResults: res.data.data.products.items
+        //       })
+        //     }
+        //   })
+        // }
+        
+      };
+
     return (
         <>
             <Head>
@@ -17,6 +40,50 @@ function Store(props){
             </Head>
             <div className={styles.store_sections}>
 
+                <div className={styles.product_section_2}>
+                    <div className={styles.product_section_2_col_1}>
+                        <Image
+                            src={img_logo}
+                            alt="pop up"
+                            className={styles.product_section_2_main_img}
+                            height={"100%"} width={"100%"}
+                        />
+                    </div>
+                    <div className={styles.product_section_2_col_2}>
+                        <div className={styles.product_section_2_details}>
+                            <h2 className={styles.product_section_2_name}>fdsfsd</h2>
+                            <div className={styles.store}>
+                                <div>
+                                    <LocationIcon style={styles.store_icon} />
+                                    <p>6391 Elgin St. Celina, Delaware 10299</p>
+                                </div>
+                                <div>
+                                    <EmailIcon style={styles.store_icon} />
+                                    <p>Danghoang87hl@gmail.com</p>
+                                </div>
+                                <div>
+                                    <CallIcon style={styles.store_icon} />
+                                    <p>(406) 555-0120</p>
+                                </div>
+                            </div>
+                            <div className={styles.store}>
+                                <div>
+                                    <TimeIcon style={styles.store_icon} />
+                                    <p>Pickup: 8:00 am - 10:00am</p>
+                                    <p>2:00 pm - 5:00pm</p>
+                                </div>
+                            </div>
+                            <div className={styles.product_section_2_categories}>
+                                <h3 className={styles.product_section_2_category_name}>About Store</h3>
+                                <p className={styles.product_section_2_category}>
+                                    For athletes, high altitude produces two contradictory effects on performance. 
+                                    For explosive events (sprints up to 400 metres, long jump, triple jump) the reduction in atmospheric pressure
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div className={styles.products_con}>
                     <div className={styles.productcard_row}>
                         <div className={styles.productcard_col_1}>
@@ -24,7 +91,7 @@ function Store(props){
                         </div>
                         <div className={styles.productcard_col_2}>
                             <div className={styles.productcard_productcards}>
-                                {new Array(1,2,3,4,5,).map((data, index) => {
+                                {new Array(1,2,3,4,5,6).map((data, index) => {
                                     return(
                                     <div key={index} className={styles.productcard_productcard}>
                                         <div className={styles.productcard_productcard_img_container}>
@@ -76,7 +143,7 @@ function Store(props){
                         </div>
                         <div className={styles.productcard_col_2}>
                             <div className={styles.productcard_productcards}>
-                                {new Array(1,2,3,4,5,).map((data, index) => {
+                                {new Array(1,2,3,4,5,6).map((data, index) => {
                                     return(
                                     <div key={index} className={styles.productcard_productcard}>
                                         <div className={styles.productcard_productcard_img_container}>

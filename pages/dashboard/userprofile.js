@@ -324,7 +324,7 @@ const UserProfile = (props) => {
                                         </label>
                                         <PhoneInput
                                             inputClass={styles.login_form_input}
-                                            country={'us'}
+                                            
                                             name="phone_number"
                                             value={phone_number}
                                             onChange={phone => handlePhoneChange(phone)}
