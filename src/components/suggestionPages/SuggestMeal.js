@@ -28,11 +28,10 @@ class SuggestMealForm extends Component {
       mealImage: [],
       mealImageName: "",
       mealImagesData: [],
-
+      mealImage0: "",
       mealImage1: "",
       mealImage2: "",
       mealImage3: "",
-      mealImage4: "",
       intro: "",
 
       ingredientNames: [],
@@ -380,7 +379,7 @@ class SuggestMealForm extends Component {
       let particularArray;
 
       if (this.state.mealImage0 == "") {
-        this.setState({ mealImage1: event.target.files[0] });
+        this.setState({ mealImage0: event.target.files[0] });
 
         var imageElementId = "mealImage0";
         var image = document.getElementById(imageElementId);
@@ -393,7 +392,7 @@ class SuggestMealForm extends Component {
 
       }
       else if (this.state.mealImage1 == "") {
-        this.setState({ mealImage2: event.target.files[0] });
+        this.setState({ mealImage1: event.target.files[0] });
 
       }
       else if (this.state.mealImage2 == "") {
@@ -1068,7 +1067,7 @@ class SuggestMealForm extends Component {
     const { mealName, prepTime, cookTime, mealImage, mealImagesData, intro, servings, chef,
       new_product_ingredients, ingredientGroupList, suggestedCategories, tips, suggestedUtensils,
       chunk1Content, chunk2Content, chunk3Content, chunk4Content, chunk5Content, chunk6Content,
-      mealImage1, mealImage2, mealImage3, mealImage4 } = this.state;
+      mealImage1, mealImage2, mealImage3, mealImage0 } = this.state;
 
     console.log(mealImage);
     console.log(mealImagesData);
@@ -1262,13 +1261,13 @@ class SuggestMealForm extends Component {
     suggestMealForm.append('newKitchenUtensils', JSON.stringify(new_kitchen_utensils));
 
     // RecipeSteps
-    suggestMealForm.append('formatted_instructions', instructionGroupData);
-    suggestMealForm.append('instructionChunkContent1', chunk1Content);
-    suggestMealForm.append('instructionChunkContent2', chunk2Content);
-    suggestMealForm.append('instructionChunkContent3', chunk3Content);
-    suggestMealForm.append('instructionChunkContent4', chunk4Content);
-    suggestMealForm.append('instructionChunkContent5', chunk5Content);
-    suggestMealForm.append('instructionChunkContent6', chunk6Content);
+    suggestMealForm.append('formatted_instructions', JSON.stringify(instructionGroupData));
+    suggestMealForm.append('image_or_video_content_1', chunk1Content);
+    suggestMealForm.append('image_or_video_content_2', chunk2Content);
+    suggestMealForm.append('image_or_video_content_3', chunk3Content);
+    suggestMealForm.append('image_or_video_content_4', chunk4Content);
+    suggestMealForm.append('image_or_video_content_5', chunk5Content);
+    suggestMealForm.append('image_or_video_content_6', chunk6Content);
 
     // suggestMealForm.append('instructionsGroupList', instructionGroupData);
     // console.log(this.state.chunk1Content);

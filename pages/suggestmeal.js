@@ -63,7 +63,7 @@ class SuggestMeal extends Component {
     componentDidMount() {
 
         // get all Meal Names***
-        var url = "/get-meals";
+        var url = "http://localhost:5000/api/meals/get-meals";
         axios.get(url).then((body) => {
             var mealList = body.data;
             if (mealList && mealList.data.length !== 0) {
@@ -84,7 +84,7 @@ class SuggestMeal extends Component {
 
         // can redux resolve this for us by checking if we recently called this in cache or from another page ??
         // var url = "/get-all-products";
-        url = "https://chopchowdev.herokuapp.com/get-all-products";
+        url = "http://localhost:5000/api/products/get-all-products";
 
         // axios.get(url).then((body) => {
         //   this.productsList = body.data;
@@ -103,7 +103,7 @@ class SuggestMeal extends Component {
         // });
 
         //----get category meals-------------------------
-        url = "/get-all-categories";
+        url = "http://localhost:5000/api/categories/get-all-categories";
         // axios.get(url).then((body) => {
         //   var categoriesFromDBList = body.data;
         //   if (categoriesFromDBList && categoriesFromDBList.data.length !== 0) {
