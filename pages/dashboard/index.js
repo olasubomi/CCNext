@@ -10,6 +10,9 @@ import { BagIcon, BatteryIcon, CloseFillIcon, LineChartIcon, ListIcon, TagIcon, 
 import Sidenav2 from '../../src/components/Header/sidenav2';
 import GoBack from '../../src/components/CommonComponents/goBack';
 import { connect } from "react-redux";
+import { verifyToken } from '../../src/actions';
+import axios from '../../src/util/Api';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 // import { IgrDoughnutChart, IgrDoughnutChartModule, IgrItemLegendModule, IgrRingSeries, IgrRingSeriesModule } from 'igniteui-react-charts';
 
 // IgrDoughnutChartModule.register();
@@ -21,9 +24,15 @@ const DashboardHomePage = (props) => {
     const router = useRouter()
     const { id } = router.query;
 
-    const [loading, setLoadingState] = useState(false);
     const [driverMode, setDriverModeState] = useState(false);
   const [page, setPageState] = useState(1);
+  const [mealCount, setMealCountState] = useState(0);
+  const [userCount, setUserCountState] = useState(0);
+  const [orderCount, setOrderCountState] = useState(0);
+  const [productCount, setProductCountState] = useState(0);
+  const [kitchenUtensilCount, setKitchenUtensilCountState] = useState(0);
+  const [changeType, setChangeTypeState] = useState(false);
+  const [meals, setMealsState] = useState([])
   const months = [
     "Jan",
     "Feb",
@@ -40,11 +49,52 @@ const DashboardHomePage = (props) => {
   ];
   console.log(props)
 
-//   useEffect(() => {
-//     if(props.auth.authUser === null){
-//         router.push('/')
-//     }
-//   }, []);
+  useEffect(() => {
+    if(props.auth.authUser !== null){
+        if(props.auth.authUser.user_type === 'admin'){
+            axios.get('/analytics/get-users-count/').then(res =>{
+                setUserCountState(res.data.data.docCount)
+            })
+            axios.get('/analytics/get-meals-count/').then(res =>{
+                setMealCountState(res.data.data.docCount)
+            })
+            axios.get('/analytics/get-orders-count/').then(res =>{
+                console.log(res.data)
+                setOrderCountState(res.data.data.docCount)
+            })
+            axios.get('/analytics/get-products-count/').then(res =>{
+                console.log(res.data)
+                setProductCountState(res.data.data.docCount)
+            })
+        }else if(props.auth.authUser.user_type === 'customer'){
+            axios.get('/analytics/get-orders-count/').then(res =>{
+                console.log(res.data)
+            })
+            axios.get('/analytics/get-meals-count/').then(res =>{
+                console.log(res.data)
+            })
+            axios.get('/analytics/get-orders-count/').then(res =>{
+                console.log(res.data)
+            })
+        }
+
+        if(props.auth.authUser.user_type === 'admin'){
+            axios.get('/meals/get-meals/1').then(data => {
+                console.log(data.data)
+                if(data.data.data){
+                    setMealsState(data.data.data.meals)
+                }
+            })
+        }else{
+            axios.get('/meals/get-meals/1?user='+props.auth.authUser._id).then(data => {
+                console.log(data.data)
+                if(data.data.data){
+                    setMealsState(data.data.data.meals)
+                }
+            })
+        }
+    }
+  }, [props.auth]);
 
 //   const data = [
 //     { MarketShare: 37, Category: "Cooling", Summary: "Cooling 40%", },
@@ -52,9 +102,17 @@ const DashboardHomePage = (props) => {
 //     { MarketShare: 25, Category: "Residential", Summary: "Residential 35%",  },
 // ];
 
-  function toggleDriverMode(){
-    setDriverModeState(!driverMode)
+  function toggleDriverMode(type){
+    axios.put('/user/updateuserprofile/'+props.auth.authUser._id, { user_type: type }).then(res => {
+        console.log(res.data)
+        props.getUser()
+        setDriverModeState(!driverMode)
+    })
   }
+  
+  function toggleChangeType(){
+    setChangeTypeState(!changeType)
+    }
 
 
   return (
@@ -74,11 +132,11 @@ const DashboardHomePage = (props) => {
                 <div className={styles.header2_col_1}>
                     <GoBack />
                 </div>
-                {props.auth.authUser && props.auth.authUser.user_type !== 'admin' && 
+                {props.auth.authUser && props.auth.authUser.user_type !== 'admin' && props.auth.authUser.user_type !== 'driver' && 
                 <div className={styles.header2_col_2}>
                     <div className={styles.mode_con}>
-                        <div onClick={toggleDriverMode} className={styles.mode + ' ' + styles.left_mode + ' '+(driverMode? '': styles.active_mode)}>Supplier mode</div>
-                        <div onClick={toggleDriverMode} className={styles.mode + ' ' + styles.right_mode + ' '+(driverMode? styles.active_mode : '')}>Driver mode</div>
+                        <div onClick={() => toggleDriverMode(props.auth.authUser.user_type)} className={styles.mode + ' ' + styles.left_mode + ' '+(driverMode? '': styles.active_mode)}>{props.auth.authUser.user_type} mode</div>
+                        <div onClick={() => toggleDriverMode('driver')} className={styles.mode + ' ' + styles.right_mode + ' '+(driverMode? styles.active_mode : '')}>Driver mode</div>
                     </div>
                 </div>}
             </div>
@@ -86,6 +144,21 @@ const DashboardHomePage = (props) => {
             <>
                 <div className={styles.dashboard_header}>
                     <h3>Hello {props.auth.authUser.username} {props.auth.authUser.user_type === 'admin' &&<span>(Super Admin)</span>}</h3>
+                    {props.auth.authUser && props.auth.authUser.user_type === 'driver' &&
+                    <div className={styles.select_container}>
+                        <div onClick={toggleChangeType} className={styles.select_box}>
+                            <p>{props.auth.authUser.user_type}</p>
+                            <ArrowDropDownIcon className={styles.select_box_icon} />
+                        </div>
+                        {changeType &&
+                            <div className={styles.select_options}>
+                                <p onClick={() => toggleDriverMode('customer')}>Customer</p>
+                                <p onClick={() => toggleDriverMode('supplier')}>Supplier</p>
+                                {/* <p onClick={() => handleSearchType('Kitchen Utensil')}>Kitchen Utensils</p> */}
+                                {/* <p onClick={() => handleSearchType('Category')}>Category</p> */}
+                            </div>}
+                    </div>
+                    }
                 </div>
                 <div className={styles.overview_con}>
                     <h3>Overview</h3>
@@ -106,7 +179,7 @@ const DashboardHomePage = (props) => {
                                         {props.auth.authUser.user_type === 'customer' && 'Completed Order'}
                                         {props.auth.authUser.user_type === 'admin' && 'Requests'}
                                     </h3>
-                                    <p className={styles.value}>0</p>
+                                    <p className={styles.value}>{mealCount+productCount+kitchenUtensilCount}</p>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +202,7 @@ const DashboardHomePage = (props) => {
                                         {props.auth.authUser.user_type === 'supplier' && 'Total Inventory Products'}
                                         {props.auth.authUser.user_type === 'admin' && 'Total Users'}
                                     </h3>
-                                    <p className={styles.value}>0</p>
+                                    <p className={styles.value}>{userCount}</p>
                                 </div>
                             </div>
                         </div>
@@ -147,7 +220,7 @@ const DashboardHomePage = (props) => {
                                     <h3 className={styles.box_name}>
                                         {props.auth.authUser.user_type === 'admin' ? 'Total Orders' : 'Orders in queue'}
                                     </h3>
-                                    <p className={styles.value}>0</p>
+                                    <p className={styles.value}>{orderCount}</p>
                                 </div>
                             </div>
                         </div>
@@ -178,7 +251,7 @@ const DashboardHomePage = (props) => {
         
                                     <div className={styles.chart_circle_total}>
                                         <p>Total</p>
-                                        <h3>2142</h3>
+                                        <h3>{mealCount+productCount+kitchenUtensilCount}</h3>
                                     </div>
                                 </div>
                                 <div className={styles.chart_breakdown_con}>
@@ -187,8 +260,11 @@ const DashboardHomePage = (props) => {
                                         <div className={styles.chart_breakdown_details}>
                                             <p>Meal</p>
                                             <div>
-                                                <h5>40%</h5>
-                                                <h5>1965</h5>
+                                                {mealCount > 0 ?
+                                                <h5>{Math.round((mealCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>:
+                                                <h5>0%</h5>
+                                                }
+                                                <h5>{mealCount}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -197,8 +273,12 @@ const DashboardHomePage = (props) => {
                                         <div className={styles.chart_breakdown_details}>
                                             <p>Product</p>
                                             <div>
-                                                <h5>35%</h5>
-                                                <h5>1877</h5>
+                                                {productCount > 0 ?
+                                                <h5>{Math.round((productCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>
+                                                :
+                                                <h5>0%</h5>
+                                                }
+                                                <h5>{productCount}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -207,8 +287,12 @@ const DashboardHomePage = (props) => {
                                         <div className={styles.chart_breakdown_details}>
                                             <p>Kitchen Utensils</p>
                                             <div>
-                                                <h5>25%</h5>
-                                                <h5>544</h5>
+                                                {kitchenUtensilCount > 0 ?
+                                                <h5>{Math.round((kitchenUtensilCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>
+                                                :
+                                                <h5>0%</h5>
+                                                }
+                                                <h5>{kitchenUtensilCount}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -292,28 +376,32 @@ const DashboardHomePage = (props) => {
                             <th className={styles.request_th}>Meal</th>
                             <th className={styles.request_th + " " + styles.hideData}>Category</th>
                             <th className={styles.request_th} style={{textAlign: 'center'}}>Status</th>
-                            <th className={styles.request_th + " " + styles.hideData}>Price</th>
+                            {/* <th className={styles.request_th + " " + styles.hideData}>Price</th> */}
                             <th className={styles.request_th + " " + styles.hideData}>Date</th>
                         </tr>
                         </thead>
                         <tbody>
-                            <tr className={styles.refId + " " + styles.request_tr}>
-                                <td className={styles.request_td}>dfdsf</td>
-                                <td className={styles.request_td}>asf</td>
-                                <td className={styles.request_td + " " + styles.hideData}>safa</td>
-                                <td className={styles.request_td+ " " + styles.status + " " + styles.pending} style={{textAlign: 'center'}}>saf</td>
-                                <td className={styles.request_td + " " + styles.hideData}>afa</td>
-                                <td className={styles.request_td + " " + styles.hideData}>afa</td>
-                            </tr>
-
-                            <tr className={styles.refId + " " + styles.request_tr}>
-                                <td className={styles.request_td}>dfdsf</td>
-                                <td className={styles.request_td}>asf</td>
-                                <td className={styles.request_td + " " + styles.hideData}>safa</td>
-                                <td className={styles.request_td+ " " + styles.status + " " + styles.approve} style={{textAlign: 'center'}}>saf</td>
-                                <td className={styles.request_td + " " + styles.hideData}>afa</td>
-                                <td className={styles.request_td + " " + styles.hideData}>afa</td>
-                            </tr>
+                            {
+                                meals.map(meal => {
+                                    return(
+                                        <tr className={styles.refId + " " + styles.request_tr}>
+                                            <td className={styles.request_td}>{meal._id}</td>
+                                            <td className={styles.request_td}>{meal.meal_name}</td>
+                                            <td className={styles.request_td + " " + styles.hideData}>{meal.meal_categories && meal.meal_categories.length > 0 && JSON.parse(meal.meal_categories[0])[0]}</td>
+                                            <td className={styles.request_td + " " + styles.status + " " + 
+                                                ((meal.publicly_available === 'Draft' || meal.publicly_available === 'Pending') ? styles.pending :
+                                                meal.publicly_available === 'Public' ? styles.approve :
+                                                meal.publicly_available === 'Rejected' ? styles.rejected : '')}
+                                            >
+                                                {meal.publicly_available}
+                                            </td>
+                                            {/* <td className={styles.request_td + " " + styles.hideData}>afa</td> */}
+                                            <td className={styles.request_td + " " + styles.hideData}>{meal.createdAt && new Date(meal.createdAt).getDate() + ' ' + months[new Date(meal.createdAt).getMonth()] + ' ,'+ new Date(meal.createdAt).getFullYear()}</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                            
                         
                         </tbody>
                     </table>
@@ -483,6 +571,12 @@ const DashboardHomePage = (props) => {
   )
 }
 
+function mapDispatchToProps(dispatch) {
+    return {
+      getUser: () => dispatch(verifyToken())
+    };
+  }
+
 function mapStateToProp(state) {
     return {
       auth: state.Auth
@@ -491,4 +585,5 @@ function mapStateToProp(state) {
   
   export default connect(
     mapStateToProp,
+    mapDispatchToProps
   )(DashboardHomePage);

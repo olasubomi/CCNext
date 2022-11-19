@@ -23,3 +23,22 @@
 
     color: #000000;
 }
+
+
+.ingredient_button{
+    width: 134px;
+    height: 46px !important;
+
+    background-color: #F47900 !important;
+    border-radius: 4px !important;
+    text-transform: none !important;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px !important;
+    line-height: 17px !important;
+    /* identical to box height */
+
+
+    color: #FFFFFF;
+    align-self: end;
+}

@@ -195,7 +195,7 @@
 .transToIn_details_col2 > div > div{
     display: flex;
     gap: 10px;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
 }
 

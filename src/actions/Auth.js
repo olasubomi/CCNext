@@ -86,15 +86,17 @@ export const userSignIn = ( email, password ) => {
     }
 };
 
-export const getUser = () => {
+export const getUser = (id) => {
     return (dispatch) => {
         dispatch({ type: FETCH_START });
-        axios.get('/authenticate-app-page',
+        axios.get('/findUser/'+id,
         ).then(({ data }) => {
             console.log(" ___ getUser RESPONSE ___ ", data);
             dispatch({ type: FETCH_SUCCESS });
-            dispatch({ type: USER_DATA, payload: data.username });
-            dispatch({ type: CUSTOMER_ID, payload: data.data });
+            dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+            dispatch({ type: USER_ROLE, payload: data.data.role });
+            dispatch({ type: USER_DATA, payload: data.data.user });
+            dispatch({ type: IS_AUTHENTICATED, payload: true });
 
         }).catch(err => {
             console.error("xxx getUser Request ERROR xxx", err);
@@ -134,7 +136,6 @@ export const verifyToken = (user,token) => {
             dispatch({ type: FETCH_ERROR, payload: "Error during get me request with this token" });
             dispatch({ type: SIGNOUT_USER_SUCCESS });
             dispatch({ type: IS_AUTHENTICATED, payload: false });
-            window.location.assign('/')
         });
     }
 };
