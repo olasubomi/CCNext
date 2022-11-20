@@ -25,6 +25,7 @@ class SuggestProductForm extends Component {
   measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
     "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
 
+  nutritionFacts = ["Calories", "Total Carbs", "Net Carbs", "Fiber", "Fat", "Protein"]
   ingredientsQuantityMeasurements = [];
 
   constructor(props) {
@@ -52,6 +53,7 @@ class SuggestProductForm extends Component {
       currentIngredientMeasurement: "",
       sizeQuantity: "",
       sizeMeasurement: "",
+      currentNutritionNAme: "",
       caloriesQuantity: "",
       caloriesMeasurement: "",
       total_carbsQuantity: "",
@@ -496,8 +498,6 @@ class SuggestProductForm extends Component {
 
     console.log("current state of product index at Add Ingredient To product is : \n" + this.state.currProductIndexInDBsProductsList);
 
-    console.log("ADDs to new_product_ingredients");
-
     console.log("creating new product object");
 
     // edit product details for new product object
@@ -505,12 +505,6 @@ class SuggestProductForm extends Component {
     sizeObject.productIndex = 0;
     // sizeObject.calories = 0;
 
-    // append String to new Products array if not
-    // var tmpNewProducts = [...this.state.new_product_ingredients];
-    // var tmpNewProducts = this.state.new_product_ingredients;
-    // var updatedProductList = [tmpNewProducts, sizeObject];
-
-    // this.setState({ new_product_ingredients: updatedProductList })
     this.setState({ new_product_size: [sizeObject] });
 
     this.setState({ sizeGroupList: [sizeObject] });
@@ -602,12 +596,9 @@ class SuggestProductForm extends Component {
 
     // This is the Object for an Ingredient of a Known Product
     var currIngredientObject = {
-      // productName: this.state.currentIngredient,  
       productName: ingredientValue,
       // productImgFile: this.state.currentProductImgSrc,
       productImgPath: null,
-      // display: this.state.currProductIndexInDBsProductsList,
-      // availableLocations: [],
 
       // these are added to ingredient packets on submit, and not relevant in product object details
       quantity: quantityValue,
@@ -645,11 +636,6 @@ class SuggestProductForm extends Component {
       // currIngredientObject.calories = 0;
 
       // append String to new Products array if not
-      // var tmpNewProducts = [...this.state.new_product_ingredients];
-      // var tmpNewProducts = this.state.new_product_ingredients;
-      // var updatedProductList = [tmpNewProducts, currIngredientObject];
-
-      // this.setState({ new_product_ingredients: updatedProductList })
       this.setState({ new_product_ingredients: [...this.state.new_product_ingredients, currIngredientObject] });
     }
 
@@ -700,7 +686,7 @@ class SuggestProductForm extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedProductToDB = async (e) => {
     const { productName, productImageName, intro, productImagesData,
-      new_product_ingredients, ingredientGroupList, suggestedCategories,
+      ingredientGroupList, suggestedCategories,
       productImage1, productImage2, productImage3, productImage4 } = this.state;
 
     // handle edge case Product name, ingredienrs or image upload required to submit form
@@ -721,24 +707,6 @@ class SuggestProductForm extends Component {
     const product_slider = [];
     let i = 0;
 
-    for (i = 0; i < new_product_ingredients.length; i++) {
-      // store ingredient format to submit ingredient product objects
-      var tmp_ingredient = {
-        // name and optional image added to new product,
-        // we can add remainder products data after testing current
-        ingredient: new_product_ingredients[i].productName,
-        // image: new_product_ingredients[i].productImgFile
-      };
-      // handle quantity measurement list
-      var measurementQuantity = {
-        quantity: ingredientGroupList[i].quantity,
-        measurement: ingredientGroupList[i].measurement,
-      }
-      // no need for handlers since this is created on submit!
-      this.ingredientsQuantityMeasurements.push(measurementQuantity);
-      // new_products.push(tmp_ingredient);
-      // product_slider.push(tmp_slider_data);
-    }
 
     let new_measurements = [];
     for (i = 0; i < ingredientGroupList.length; i++) {
@@ -746,7 +714,7 @@ class SuggestProductForm extends Component {
       var tmp_ingredient = {
         // name and optional image added to new product,
         // we can add remainder products data after testing current
-        productName: ingredientGroupList[i].productName,
+        product_name: ingredientGroupList[i].productName,
         quantity: ingredientGroupList[i].quantity,
         measurement: ingredientGroupList[i].measurement,
         productImgPath: ingredientGroupList[i].productImgPath,
@@ -812,21 +780,22 @@ class SuggestProductForm extends Component {
     suggestProductForm.append('new_measurements', JSON.stringify(new_measurements));
 
     // suggestProductForm.append('product_slider', JSON.stringify(product_slider));
-    suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
-
+    // suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
+    all_ingredients_formatted.map((individualIngredients) => {
+      console.log(individualIngredients);
+      suggestProductForm.append('ingredients_in_product', JSON.stringify(individualIngredients));
+    })
     // new suggested products
-    suggestProductForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
+    // suggestProductForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
 
-    suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
-    suggestProductForm.append('product_type', JSON.stringify("ingredient"));
+    // suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
+    suggestedCategories.map((individualCategories) => {
+      suggestProductForm.append('product_categories', individualCategories);
+    })
+    suggestProductForm.append('product_type', JSON.stringify("Ingredient"));
     suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
 
-    suggestProductForm.append('newCategories', JSON.stringify(new_categories));
 
-    // suggestProductForm.append('instructionsGroupList', instructionGroupData);
-    console.log(this.state.chunk1Content);
-
-    // chunk content should be passed as file
     //---------------------------------------------Submit Product to Mongo---------------------------------------------------
     // var url = "/createProduct/";
     var url = "http://localhost:5000/api/products/create/";
@@ -964,23 +933,7 @@ class SuggestProductForm extends Component {
 
               <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
             </div >
-            {/* // show all ingredients in two column table format */}
-            {/* Show all Products in display format as expected in Product Page*/}
 
-            {/* <Row className="mb-2}>
-                  <Col md={12}>
-                    <ChipInput
-                      label="IngredientsList"
-                      value={this.state.ingredientStrings}
-                      onAdd={(chip) => this.handleAddIngredientChip(chip)}
-                      placeholder="e.g 1 Onion, 2 Cups of Water, etc"
-                      onDelete={(chip) => this.handleDeleteIngredientChip(chip)}
-                      variant="outlined"
-                      fullWidth
-                      className="mb-2"
-                    />
-                  </Col>
-                </Row> */}
             <Stack direction="row" spacing={1} className={styles.stack}>
               {
                 sizeStrings.map((data, index) => (
@@ -996,263 +949,74 @@ class SuggestProductForm extends Component {
             </Stack>
 
           </div>
-
           <h3>Nutritional Information</h3>
-          <h3>Calories</h3>
           <div className={styles.suggestion_form}>
-            <div className={styles.suggestion_form_2_col}>
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="currentIngredient" className={styles.suggestion_form_label}>
+                Nutrition Name
+              </label>
+              <Autocomplete
+                id="currentNutritionName"
+                options={this.nutritionFacts.map((option) => option)}
+                // onChange={(ev)=>this.onTextFieldChange(ev)}
+                value={this.state.currentNutritionName}
+                onChange={(ev, val) => this.handleProductNameInput(ev, val)}
+                freeSolo
+                renderInput={(params) => (<TextField {...params} id="currentNutritionName"
+                  value={this.state.currentNutritionName} variant="outlined" type="text"
+                />)}
+                fullWidth
 
-              <div className={styles.suggestion_form_2_col_2}>
-                <div className={styles.suggestion_form_group}>
-                  <label htmlFor="caloriesQuantity" className={styles.suggestion_form_label}>
-                    Quantity
-                  </label>
-                  <TextField fullWidth id="caloriesQuantity" type="number" onChange={this.onTextFieldChange}
-                    variant="outlined" placeholder="1.." value={this.state.caloriesQuantity} />
-                </div>
-              </div >
+              />
+            </div >
+            <div className={styles.suggestion_form_2_col}>
 
               <div className={styles.suggestion_form_2_col_1}>
                 <div className={styles.suggestion_form_group}>
-                  <label htmlFor="sizeMeasurement" className={styles.suggestion_form_label}>
-                    Measurement
+                  <label htmlFor="currentIngredientQuantity" className={styles.suggestion_form_label}>
+                    Quantity
+                  </label>
+                  <TextField fullWidth id="currentIngredientQuantity" type="number" onChange={this.onTextFieldChange}
+                    variant="outlined" placeholder="1.." value={this.state.currentIngredientQuantity} />
+                </div >
+              </div >
+
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label htmlFor="currentIngredientMeasurement" className={styles.suggestion_form_label}>
+                    Measurements
                   </label>
                   <Autocomplete
-                    id="caloriesMeasurement"
+                    id="currentIngredientMeasurement"
                     options={this.measurements.map((option) => option)}
-                    value={this.state.caloriesMeasurement}
-                    onChange={this.handleSizeMeasurement}
+                    value={this.state.currentIngredientMeasurement}
+                    onChange={this.handleIngredientMeasurement}
                     freeSolo
                     renderInput={(params) => (<TextField {...params}
-                      value={this.state.caloriesMeasurement} id="caloriesMeasurement"
+                      value={this.state.currentIngredientMeasurement} id="currentIngredientMeasurement"
                       variant="outlined" type="text" />)}
                   />
                 </div>
-
               </div >
 
-              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
+              <Button variant="contained" disableRipple onClick={this.addIngredientToProduct} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Ingredient</Button>
             </div >
 
             <Stack direction="row" spacing={1} className={styles.stack}>
               {
-                sizeStrings.map((data, index) => (
+                ingredientStrings.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
                     className={styles.chip}
-                    onClick={() => this.handleDeleteSizeChip(data)}
-                    onDelete={() => this.handleDeleteSizeChip(data)}
+                    onClick={() => this.handleDeleteIngredientChip(data)}
+                    onDelete={() => this.handleDeleteIngredientChip(data)}
                   />
                 ))
               }
             </Stack>
+          </div >
 
-          </div>
-          <h3>Total Carbs</h3>
-          <div className={styles.suggestion_form}>
-            <div className={styles.suggestion_form_2_col}>
-
-              <div className={styles.suggestion_form_2_col_2}>
-                <div className={styles.suggestion_form_group}>
-                  <label htmlFor="totalcarbsQuantity" className={styles.suggestion_form_label}>
-                    Quantity
-                  </label>
-                  <TextField fullWidth id="totalcarbsQuantity" type="number" onChange={this.onTextFieldChange}
-                    variant="outlined" placeholder="1.." value={this.state.totalcarbsQuantity} />
-                </div>
-              </div >
-
-              <div className={styles.suggestion_form_2_col_1}>
-                <div className={styles.suggestion_form_group}>
-                  <label htmlFor="totalcarbsMeasurement" className={styles.suggestion_form_label}>
-                    Measurement
-                  </label>
-                  <Autocomplete
-                    id="totalcarbsMeasurement"
-                    options={this.measurements.map((option) => option)}
-                    value={this.state.totalcarbsMeasurement}
-                    onChange={this.handleSizeMeasurement}
-                    freeSolo
-                    renderInput={(params) => (<TextField {...params}
-                      value={this.state.totalcarbsMeasurement} id="totalcarbsMeasurement"
-                      variant="outlined" type="text" />)}
-                  />
-                </div>
-
-              </div >
-
-              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
-            </div >
-
-            <Stack direction="row" spacing={1} className={styles.stack}>
-              {
-                sizeStrings.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data}
-                    className={styles.chip}
-                    onClick={() => this.handleDeleteSizeChip(data)}
-                    onDelete={() => this.handleDeleteSizeChip(data)}
-                  />
-                ))
-              }
-            </Stack>
-
-          </div>
-          <h3>Net Carbs</h3>
-          <div className={styles.suggestion_form}>
-            <div className={styles.suggestion_form_2_col}>
-
-              <div className={styles.suggestion_form_2_col_2}>
-                <div className={styles.suggestion_form_group}>
-                  <label htmlFor="netcarbsQuantity" className={styles.suggestion_form_label}>
-                    Quantity
-                  </label>
-                  <TextField fullWidth id="netcarbsQuantity" type="number" onChange={this.onTextFieldChange}
-                    variant="outlined" placeholder="1.." value={this.state.netcarbsQuantity} />
-                </div>
-              </div >
-
-              <div className={styles.suggestion_form_2_col_1}>
-                <div className={styles.suggestion_form_group}>
-                  <label htmlFor="netcarbsMeasurement" className={styles.suggestion_form_label}>
-                    Measurement
-                  </label>
-                  <Autocomplete
-                    id="netcarbsMeasurement"
-                    options={this.measurements.map((option) => option)}
-                    value={this.state.netcarbsMeasurement}
-                    onChange={this.handleSizeMeasurement}
-                    freeSolo
-                    renderInput={(params) => (<TextField {...params}
-                      value={this.state.sizeMeasurement} id="netcarbsMeasurement"
-                      variant="outlined" type="text" />)}
-                  />
-                </div>
-
-              </div >
-
-              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
-            </div >
-
-            <Stack direction="row" spacing={1} className={styles.stack}>
-              {
-                sizeStrings.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data}
-                    className={styles.chip}
-                    onClick={() => this.handleDeleteSizeChip(data)}
-                    onDelete={() => this.handleDeleteSizeChip(data)}
-                  />
-                ))
-              }
-            </Stack>
-
-          </div>
-          <h3>Fiber</h3>
-          <div className={styles.suggestion_form}>
-            <div className={styles.suggestion_form_2_col}>
-
-              <div className={styles.suggestion_form_2_col_2}>
-                <div className={styles.suggestion_form_group}>
-                  <label htmlFor="fiberQuantity" className={styles.suggestion_form_label}>
-                    Quantity
-                  </label>
-                  <TextField fullWidth id="fiberQuantity" type="number" onChange={this.onTextFieldChange}
-                    variant="outlined" placeholder="1.." value={this.state.fiberQuantity} />
-                </div>
-              </div >
-
-              <div className={styles.suggestion_form_2_col_1}>
-                <div className={styles.suggestion_form_group}>
-                  <label htmlFor="fiberMeasurement" className={styles.suggestion_form_label}>
-                    Measurement
-                  </label>
-                  <Autocomplete
-                    id="fiberMeasurement"
-                    options={this.measurements.map((option) => option)}
-                    value={this.state.fiberMeasurement}
-                    onChange={this.handleSizeMeasurement}
-                    freeSolo
-                    renderInput={(params) => (<TextField {...params}
-                      value={this.state.fiberMeasurement} id="fiberMeasurement"
-                      variant="outlined" type="text" />)}
-                  />
-                </div>
-
-              </div >
-
-              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
-            </div >
-
-            <Stack direction="row" spacing={1} className={styles.stack}>
-              {
-                sizeStrings.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data}
-                    className={styles.chip}
-                    onClick={() => this.handleDeleteSizeChip(data)}
-                    onDelete={() => this.handleDeleteSizeChip(data)}
-                  />
-                ))
-              }
-            </Stack>
-
-          </div>
-          <h3>Fat</h3>
-          <div className={styles.suggestion_form}>
-            <div className={styles.suggestion_form_2_col}>
-
-              <div className={styles.suggestion_form_2_col_2}>
-                <div className={styles.suggestion_form_group}>
-                  <label htmlFor="fatQuantity" className={styles.suggestion_form_label}>
-                    Quantity
-                  </label>
-                  <TextField fullWidth id="fatQuantity" type="number" onChange={this.onTextFieldChange}
-                    variant="outlined" placeholder="1.." value={this.state.fatQuantity} />
-                </div>
-              </div >
-
-              <div className={styles.suggestion_form_2_col_1}>
-                <div className={styles.suggestion_form_group}>
-                  <label htmlFor="fatMeasurement" className={styles.suggestion_form_label}>
-                    Measurement
-                  </label>
-                  <Autocomplete
-                    id="fatMeasurement"
-                    options={this.measurements.map((option) => option)}
-                    value={this.state.fatMeasurement}
-                    onChange={this.handleSizeMeasurement}
-                    freeSolo
-                    renderInput={(params) => (<TextField {...params}
-                      value={this.state.fatMeasurement} id="fatMeasurement"
-                      variant="outlined" type="text" />)}
-                  />
-                </div>
-
-              </div >
-
-              <Button variant="contained" disableRipple onClick={this.addSize} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
-            </div >
-
-            <Stack direction="row" spacing={1} className={styles.stack}>
-              {
-                sizeStrings.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data}
-                    className={styles.chip}
-                    onClick={() => this.handleDeleteSizeChip(data)}
-                    onDelete={() => this.handleDeleteSizeChip(data)}
-                  />
-                ))
-              }
-            </Stack>
-
-          </div>
 
           <h3>Protein</h3>
           <div className={styles.suggestion_form}>
@@ -1457,21 +1221,6 @@ class SuggestProductForm extends Component {
               imagesData={this.state.productImagesData.slice(1)} categories={this.state.suggestedCategories}
               sizesList={this.state.sizeStrings} ingredientList={ingredientStrings}
             />
-            {/* <ProductPageModal openModal={this.state.openModal} closeModal={this.closeModal}
-                 productName={this.state.productName} product_images={this.state.product_images}
-                 categories={this.state.suggestedCategories}
-                  prepTime={this.state.prepTime} cookTime={this.state.cookTime}
-                  serves={this.state.servings}
-                  ingredientsList = {this.state.ingredientStrings} utensilsList={this.state.suggestedUtensils}
-                  instructionChunk1={this.state.instructionChunk1} instructionChunk2={this.state.instructionChunk2}
-                  instructionChunk3={this.state.instructionChunk3} instructionChunk4={this.state.instructionChunk4}
-                  instructionChunk5={this.state.instructionChunk5} instructionChunk6={this.state.instructionChunk6}
-                  chunk1Content={this.state.chunk1Content} chunk2Content={this.state.chunk2Content}
-                  chunk3Content={this.state.chunk3Content} chunk4Content={this.state.chunk4Content}
-                  chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
-                  instructionWordlength={this.state.instructionWordlength}
-                  tips={this.state.tips} ProductImageData={this.state.ProductImageData}
-                 /> */}
           </div>
         </form >
       </div >

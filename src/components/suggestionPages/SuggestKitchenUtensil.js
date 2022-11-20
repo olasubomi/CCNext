@@ -521,12 +521,14 @@ class SuggestKitchenUtensilForm extends Component {
     suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
 
     // new suggested products
-    suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
+    // suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
     suggestProductForm.append('product_type', JSON.stringify("utensil"));
     suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
 
-    suggestProductForm.append('newCategories', JSON.stringify(new_categories));
-
+    // suggestProductForm.append('newCategories', JSON.stringify(new_categories));
+    suggestedCategories.map((individualCategories) => {
+      suggestProductForm.append('product_categories', individualCategories);
+    })
     // suggestProductForm.append('instructionsGroupList', instructionGroupData);
     console.log(this.state.chunk1Content);
 
