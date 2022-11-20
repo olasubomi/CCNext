@@ -25,6 +25,7 @@ import { useRouter } from 'next/router';
 import { UserIcon } from '../../src/components/icons';
 import axios from '../../src/util/Api';
 import PhoneInput from 'react-phone-input-2';
+import { getUser } from '../../src/actions';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -91,9 +92,16 @@ const UserProfile = (props) => {
         card_type: '',
         profileImage: '',
         profileImageName: '',
-        profileImageData: ''
+        profileImageData: '',
+        city: '',
+        country: '', state: '', zip_code: '', 
+        billing_address: '', billing_address2: '', billing_city: '', billing_country: '',
+        billing_state: '', billing_zip_code: ''
       });
-    const { email, phone_number, first_name, last_name, password, address, new_password, profileImageData, card_type } = formState;
+    const { email, phone_number, first_name, last_name, password, 
+        address, new_password, profileImageData, country, state, city, zip_code, 
+        billing_address, billing_address2, billing_city, billing_country,
+        billing_state, billing_zip_code } = formState;
     const [times, setTimes] = useState({
         sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
         monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
@@ -172,13 +180,31 @@ const UserProfile = (props) => {
 
     function saveChanges(e){
         e.preventDefault()
-        let fields = formState;
-        const formData = new FormData();
-        formData.append('image', fields.profileImage);
-        fields.image = formData;
+        let {
+            phone_number,
+            first_name,
+            last_name,
+            profileImage,
+        billing_address, billing_city, billing_country,
+        billing_state, billing_zip_code} = formState;
 
-        axios.put('/user/updateuserprofile/'+props.auth.authUser._id, {_id: props.auth.authUser._id, email: fields.email, first_name: fields.first_name, last_name: fields.last_name, phone_number: fields.phone_number}).then(res => {
+        let delivery_addresses={
+            phone_number: phone_number,
+            street: billing_address + billing_state,
+            city: billing_city,
+            zip_code: billing_zip_code,
+            country: billing_country
+        }
+        const formData = new FormData();
+        formData.append('profile_picture', profileImage);
+        formData.append('first_name', first_name);
+        formData.append('last_name', last_name);
+        formData.append('phone_number', phone_number);
+        formData.append('delivery_addresses', delivery_addresses);
+
+        axios.put('/user/updateuserprofile/'+props.auth.authUser._id, formData).then(res => {
             console.log(res)
+            props.getUser(props.auth.authUser._id)
         })
     }
 
@@ -333,24 +359,24 @@ const UserProfile = (props) => {
                                     <div className={styles.profile_form_col_2}>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="city" className={styles.profile_form_label}>City</label>
-                                            <input  name="city" type="text" className={styles.profile_form_input} />
+                                            <input  name="city" value={city} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.city && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                         </div>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="state" className={styles.profile_form_label}>State</label>
-                                            <input name="state" type="text" className={styles.profile_form_input} />
+                                            <input name="state" value={state} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                         </div>
                                     </div>
                                     <div className={styles.profile_form_col_2}>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="zip_code" className={styles.profile_form_label}>Zip Code</label>
-                                            <input  name="zip_code" type="text" className={styles.profile_form_input} />
+                                            <input  name="zip_code" value={zip_code} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.zip_code && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                         </div>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="country" className={styles.profile_form_label}>Country</label>
-                                            <input name="country" type="text" className={styles.profile_form_input} />
+                                            <input name="country" value={country} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                         </div>
                                     </div>
@@ -422,6 +448,7 @@ const UserProfile = (props) => {
                                         <input
                                         type="text"
                                         name="billing_address"
+                                        value={billing_address}
                                         placeholder="Street Address"
                                         onChange={handleChange}
                                         className={styles.profile_form_input}
@@ -432,9 +459,10 @@ const UserProfile = (props) => {
                                         Street Address 2
                                         </label>
                                         <input
-                                        type="tel"
+                                        type="text"
                                         name="billing_address2"
-                                        placeholder="Your New Password"
+                                        value={billing_address2}
+                                        placeholder="Your second address"
                                         onChange={handleChange}
                                         className={styles.profile_form_input}
                                         />
@@ -444,24 +472,24 @@ const UserProfile = (props) => {
                                         
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="billing_state" className={styles.profile_form_label}>State/Province</label>
-                                            <input name="billing_state" type="text" className={styles.profile_form_input} />
+                                            <input name="billing_state" value={billing_state} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                         </div>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="billing_city" className={styles.profile_form_label}>City</label>
-                                            <input  name="billing_city" type="text" className={styles.profile_form_input} />
+                                            <input  name="billing_city" value={billing_city} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.billing_city && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                         </div>
                                     </div>
                                     <div className={styles.profile_form_col_2}>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="billing_zip_code" className={styles.profile_form_label}>Zip/Postal Code</label>
-                                            <input  name="billing_zip_code" type="text" className={styles.profile_form_input} />
+                                            <input  name="billing_zip_code" value={billing_zip_code} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.billing_zip_code && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                         </div>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="billing_country" className={styles.profile_form_label}>Country</label>
-                                            <input name="billing_country" type="text" className={styles.profile_form_input} />
+                                            <input name="billing_country" value={billing_country} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                         </div>
                                     </div>
@@ -915,6 +943,12 @@ const UserProfile = (props) => {
 
 }
 
+function mapDispatchToProps(dispatch) {
+    return {
+      getUser: (id) => dispatch(getUser(id))
+    };
+  }
+
 function mapStateToProp(state) {
     return {
       auth: state.Auth
@@ -923,4 +957,5 @@ function mapStateToProp(state) {
   
   export default connect(
     mapStateToProp,
+    mapDispatchToProps
   )(UserProfile);

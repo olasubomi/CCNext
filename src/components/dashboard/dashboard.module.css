@@ -64,13 +64,11 @@
   font-weight: 400;
   font-size: 12px;
   line-height: 15px;
-  /* identical to box height */
-
-
   color: #737373;
   padding: 0 7px;
-  width: 102px;
+  width: max-content;
   height: 26px;
+  text-transform: capitalize;
   background: rgba(4, 213, 5, 0.06);
   display: flex;
   align-items: center;
@@ -493,7 +491,7 @@
     .request_tr{
       display: grid;
       grid-auto-flow: column;
-      grid-template-columns: 11% 11% 13% 13% 14% 15%;
+      grid-template-columns: 15% 11% 16% 13% 19%;
       justify-content: space-between;
       grid-gap: 4rem;
       margin: 0;
@@ -792,6 +790,65 @@
     color: #6D6D6D;
     overflow-wrap: break-word;
   }
+
+  .select_container{
+    display: grid;
+    grid-gap: 6px;
+}
+
+.select_box{
+    width: 162px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
+    border-radius: 4px;
+    padding: 7.5px 10px;
+    position: relative;
+    display: grid;
+    justify-content: space-between;
+    grid-auto-flow: column;
+}
+
+.select_box > p{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+
+    color: #6D6D6D;
+    text-transform: capitalize;
+}
+
+.select_box_icon{
+    font-size: 20px !important;
+    color: #353535;
+}
+
+.select_options{
+    top: 146px;
+    width: 162px;
+    position: absolute;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
+    border-radius: 4px;
+    padding: 7.5px 14px;
+    display: grid;
+    grid-gap: 15px;
+    z-index: 5;
+}
+
+.select_options > p{
+    cursor: pointer;
+}
+
+.showData{
+    display: none;
+}
+
+.arrowDown{
+    font-size:22px;
+}
 
 @media screen and (max-width: 1350px) {
     .col3{

@@ -22,20 +22,29 @@ function Meal(props){
                 <div className={styles.meal_section_2}>
                     <div className={styles.meal_section_2_col_1}>
                         {props.meal.meal_images.length > 0&&
+                        <>
+                        {props.meal.meal_images[0].length > 0 ? 
                         <Image
                             src={props.meal.meal_images[0]}
                             alt="pop up"
                             className={styles.meal_section_2_main_img}
                             height={"100%"} width={"100%"}
-                        />}
+                        />:<span></span>
+                        }
+                        </>
+                        }
                         <div className={styles.meal_section_2_images}>
                             {props.meal.meal_images.length > 1 &&
                             <>
                             {props.meal.meal_images.slice(1).map((image, index) => {
                                return(
+                                <>
+                                {image.length > 0 &&
                                 <Image key={index} alt="pop up" src={image}
                                 height={"100%"} width={"100%"}
                                 className={styles.meal_section_2_image} />
+                                }
+                                </>
                                ) 
                             })}
                             </>
@@ -194,31 +203,34 @@ function Meal(props){
                 {props.meal.formatted_instructions &&
                 <div className={styles.meal_section_5}>
                     <h3>Steps</h3>
-                    {props.meal.formatted_instructions.map((instruction, index) => {
-                        return(
-                            <div key={index} className={styles.meal_section_5_row}>
-                                <div className={styles.meal_section_5_row_1}>
-                                    {instruction.image ? 
-                                    <Image
-                                    width={'100%'}
-                                    height={'100%'}
-                                        src={instruction.image}
-                                        alt="home"
-                                        className={styles.meal_section_5_row_1}
-                                    />:
-                                    <p></p>}
+                    {props.meal.formatted_instructions.length > 0 &&
+                    <>
+                        {JSON.parse(props.meal.formatted_instructions[0]).map((instruction, index) => {
+                            return(
+                                <div key={index} className={styles.meal_section_5_row}>
+                                    <div className={styles.meal_section_5_row_1}>
+                                        {props.meal['image_or_video_content_'+index+1] && props.meal['image_or_video_content_'+index][0] !== '' ? 
+                                        <Image
+                                        width={300}
+                                        height={300}
+                                            src={props.meal['image_or_video_content_'+index+1][0]}
+                                            alt="home"
+                                            className={styles.meal_section_5_row_1}
+                                        />:
+                                        <p></p>}
+                                    </div>
+                                    <div className={styles.meal_section_5_row_2}>
+                                        <h3 className={styles.meal_section_5_row_2_h3}>
+                                            {instruction.title}
+                                        </h3>
+                                        <p className={styles.meal_section_5_row_2_p}>
+                                            {instruction.instructionSteps?.map((int) => <> {int + ' '} </>) }
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className={styles.meal_section_5_row_2}>
-                                    <h3 className={styles.meal_section_5_row_2_h3}>
-                                        Step 1 Title
-                                    </h3>
-                                    <p className={styles.meal_section_5_row_2_p}>
-                                        {instruction.step?.map((int) => <>{int}</>) }
-                                    </p>
-                                </div>
-                            </div>
-                        )
-                    })
+                            )
+                        })}
+                    </>
                     }
                     
                 </div>}

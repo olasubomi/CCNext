@@ -25,6 +25,7 @@ const SuggestedMeals = (props) => {
     const [search, setSearchState] = useState(false)
     const [showReason, setShowReasonState] = useState(false)
     const [meals, setMealsState] = useState([])
+    const [publicMeals, setPublicMealsState] = useState([])
     const [meal, setMealState] = useState({})
     const [filteredMeals, setFilteredMealsState] = useState([])
     const [searchSuggestedMeal, setSearchSuggestedMealState] = useState('')
@@ -36,7 +37,7 @@ const SuggestedMeals = (props) => {
 
     useEffect(() => {
         if(props.auth.authUser){
-            // if(props.auth.authUser.user_type === 'admin'){
+            if(props.auth.authUser.user_type === 'admin'){
                 axios.get('/meals/get-meals/1').then(data => {
                     console.log(data.data)
                     if(data.data.data){
@@ -44,7 +45,15 @@ const SuggestedMeals = (props) => {
                         setFilteredMealsState(data.data.data.meals)
                     }
                 })
-            // }
+            }else{
+                axios.get('/meals/get-meals/1?user='+props.auth.authUser._id).then(data => {
+                    console.log(data.data)
+                    if(data.data.data){
+                        setMealsState(data.data.data.meals)
+                        setFilteredMealsState(data.data.data.meals)
+                    }
+                })
+            }
         }
       }, [props.auth]);
 
@@ -89,7 +98,7 @@ const SuggestedMeals = (props) => {
           if(e.keyCode === 13){
             if(searchSuggestedMeal.length>0){
                 let newMeals = meals.filter((meal) => {
-                    return meal.mealName.includes(searchSuggestedMeal) || meal.intro.includes(searchSuggestedMeal) ||
+                    return meal.meal_name.includes(searchSuggestedMeal) || meal.intro.includes(searchSuggestedMeal) ||
                     meal._id.includes(searchSuggestedMeal)
                 })
                 console.log(newMeals)
@@ -100,7 +109,7 @@ const SuggestedMeals = (props) => {
         }else{
             if(searchSuggestedMeal.length>0){
                 let newMeals = meals.filter((meal) => {
-                    return meal.intro.includes(searchSuggestedMeal) || meal.mealName.includes(searchSuggestedMeal) || 
+                    return meal.intro.includes(searchSuggestedMeal) || meal.meal_name.includes(searchSuggestedMeal) || 
                     meal._id.includes(searchSuggestedMeal)
                 })
                 setFilteredMealsState(newMeals)
@@ -155,6 +164,42 @@ const SuggestedMeals = (props) => {
 
     function toggleTransferToInventory(){
         setTransferToInventoryState(!transferToInventory)
+    }
+
+    function handleSearchPublicMeal(e){
+        setSearchSuggestedMealState(e.target.value);
+        if(e.target.value.length>=1){
+            let value;
+            value = { name: e.target.value }
+            axios.get('/meals/get-meals/1?publicly_available=Public&meal_name='+e.target.value).then(data => {
+                console.log(data.data)
+                if(data.data.data){
+                    setPublicMealsState(data.data.data.meals)
+                }
+            })
+        }
+        
+    };
+
+    function addMeal(meal){
+        meal.user = props.auth.authUser._id
+        meal.chef = props.auth.authUser.username
+        meal.publicly_available = 'Draft'
+        let newMeals = meals
+        delete meal._id
+        axios.post('/meals/create', meal).then(response => {
+            if (response.status >= 200 && response.status < 300) {
+                console.log(response.data)
+                newMeals.push(response.data.data)
+                setMealsState(newMeals)
+                setFilteredMealsState(newMeals)
+
+            } else {
+              console.log("Something wrong happened ");
+            }
+          }).catch(error => {
+            console.log(error);
+          });
     }
 
     return (
@@ -230,7 +275,7 @@ const SuggestedMeals = (props) => {
                             {
                                 filteredMeals.map((meal) => {
                                     return(
-                                        <SuggestedMealRow toggleTransferToInventory={toggleTransferToInventory} auth={props.auth} key={meal._id} meal={meal} toggleOpenMeal={toggleOpenMeal} />
+                                        <SuggestedMealRow deleteMeal={deleteMeal} toggleTransferToInventory={toggleTransferToInventory} auth={props.auth} key={meal._id} meal={meal} toggleOpenMeal={toggleOpenMeal} />
                                     )
                                 })
                             }
@@ -262,11 +307,11 @@ const SuggestedMeals = (props) => {
                             {/* <p className={styles.meal_section_1_col_2_p}> Choose type</p> */}
                             <div className={styles.select_container}>
                                 <div onClick={toggleChangeStatus} className={styles.select_box}>
-                                    <p>{statusType}</p>
+                                    <p>{statusType.length > 0 ? statusType : meal.publicly_available}</p>
                                     <ArrowDropDownIcon className={styles.select_box_icon} />
                                 </div>
                                 {changeStatus &&
-                                    <div className={styles.select_options}>
+                                    <div className={styles.select_options2}>
                                         <p onClick={() => handleStatusType('Public')}>Public</p>
                                         <p onClick={() => handleStatusType('Pending')}>Pending</p>
                                         <p onClick={() => handleStatusType('Rejected')}>Rejected</p>
@@ -315,6 +360,7 @@ const SuggestedMeals = (props) => {
                         <input
                         type="text"
                         name="search"
+                        onChange={handleSearchPublicMeal}
                         className={styles.search_input}
                         placeholder="Search for products"
                         />
@@ -325,24 +371,22 @@ const SuggestedMeals = (props) => {
                                 <div className={styles.search_suggestion}>
                                     <h3 className={styles.search_suggestion_h3}>Meals (1)</h3>
                                     <ul className={styles.search_help_lists}>
-                                        <li className={styles.search_help_list}>
-                                            Australian Rice
-                                        </li>
-                                        <li className={styles.search_help_list}>
-                                            Austra Salad
-                                        </li>
-                                        <li className={styles.search_help_list}>
-                                        Austra Oyster
-                                        </li>
-                                        <li className={styles.search_help_list}>
-                                            Auyya
-                                        </li>
+                                        {publicMeals.map(meal => {
+                                            return(
+                                                <li onClick={() => addMeal(meal)} className={styles.search_help_list}>
+                                                    {meal.meal_name}
+                                                </li>
+                                            )
+                                        })}
                                     </ul>
                                 </div>
 
                                 <div className={styles.search_container_col_2}>
                                     <div className={styles.search_container_col_2_row_1}>
                                         <h3 className={styles.search_products_h3}>Products</h3>
+                                        <ul className={styles.search_help_lists}>
+                                            
+                                        </ul>
                                     </div>
                                     <div className={styles.search_container_col_2_row_2}>
                                         <div className={styles.searched_products}>

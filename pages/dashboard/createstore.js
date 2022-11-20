@@ -6,7 +6,7 @@ import SideNav from '../../src/components/Header/sidenav'
 import styles from '../../src/components/dashboard/createstore.module.css';
 import profileStyles from '../../src/components/dashboard/profile.module.css';
 import { suggestion_form_image, suggestion_form_image_col_1, suggestion_form_image_col_2, suggestion_form_image_icon, suggestion_form_image_icon_con, suggestion_form_group, suggestion_form_label} from "../../src/components/suggestionPages/suggestion.module.css";
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
@@ -14,6 +14,9 @@ import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import AddIcon from '@mui/icons-material/Add';
 import GoBack from '../../src/components/CommonComponents/goBack';
+import axios from '../../src/util/Api';
+import { connect } from 'react-redux';
+import PhoneInput from 'react-phone-input-2';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -66,14 +69,14 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
     },
   }));
 
-const CreateStore = () => {
+const CreateStore = (props) => {
     const [formState, setFormState] = useState({
         email: "",
         phone_number: "",
         store_name: "",
         city: "",
         state: "",
-        zip: '',
+        zip_code: '',
         country: '',
         address: '',
         profile_picture: '',
@@ -84,7 +87,7 @@ const CreateStore = () => {
         background_picture_data: '',
         description: '',
       });
-    const { email, phone_number, store_name, city, state, country, zip, address, profile_picture, background_picture, description } = formState;
+    const { email, phone_number, store_name, city, state, country, zip_code, address, description } = formState;
     const [times, setTimes] = useState({
         sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
         monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
@@ -172,6 +175,39 @@ const CreateStore = () => {
         }
     }
 
+    function createStore(){
+        let supplier_address={
+            phone_number: phone_number,
+            street: address,
+            city: city,
+            zip_code: zip_code,
+            country: country
+        }
+        let createStoreObject = new FormData();
+        createStoreObject.append('store_name', store_name);
+        createStoreObject.append('phone_number', phone_number);
+        createStoreObject.append('profile_picture', formState.profile_picture);
+        createStoreObject.append('background_picture', formState.background_picture);
+        createStoreObject.append('email', email);
+        createStoreObject.append('hours', JSON.stringify(times));
+        createStoreObject.append('store_owner', props.auth.authUser._id);
+        createStoreObject.append('supplier_address', JSON.stringify(supplier_address));
+
+
+        axios.post('/stores/createstore', createStoreObject).then(response => {
+        if (response.status >= 200 && response.status < 300) {
+            // this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
+            console.log(response);
+            console.log("Display Meal submitted successfully");
+            // window.location.href = "/SuggestMeal"
+        } else {
+            console.log("Something wrong happened ");
+        }
+        }).catch(error => {
+        console.log(error);
+        });
+    }
+
     return (
         <div className={container}>
         <Header />
@@ -227,24 +263,24 @@ const CreateStore = () => {
                             <div className={profileStyles.profile_form_col_2}>
                                 <div className={profileStyles.profile_form_group}>
                                     <label htmlFor="city" className={profileStyles.profile_form_label}>City</label>
-                                    <input value={city} name="city" type="text" className={profileStyles.profile_form_input} />
+                                    <input value={city} onChange={handleChange} name="city" type="text" className={profileStyles.profile_form_input} />
                                     {/* {this.props.errors.city && <div className={profileStyles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                 </div>
                                 <div className={profileStyles.profile_form_group}>
                                     <label htmlFor="state" className={profileStyles.profile_form_label}>State</label>
-                                    <input value={state} name="state" type="text" className={profileStyles.profile_form_input} />
+                                    <input value={state} onChange={handleChange} name="state" type="text" className={profileStyles.profile_form_input} />
                                     {/* {this.props.errors.lastname && <div className={profileStyles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                 </div>
                             </div>
                             <div className={profileStyles.profile_form_col_2}>
                                 <div className={profileStyles.profile_form_group}>
                                     <label htmlFor="zip_code" className={profileStyles.profile_form_label}>Zip Code</label>
-                                    <input value={zip}  name="zip_code" type="text" className={profileStyles.profile_form_input} />
+                                    <input value={zip_code} onChange={handleChange}  name="zip_code" type="text" className={profileStyles.profile_form_input} />
                                     {/* {this.props.errors.zip_code && <div className={profileStyles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                 </div>
                                 <div className={profileStyles.profile_form_group}>
                                     <label htmlFor="country" className={profileStyles.profile_form_label}>Country</label>
-                                    <input value={country} name="country" type="text" className={profileStyles.profile_form_input} />
+                                    <input value={country} onChange={handleChange} name="country" type="text" className={profileStyles.profile_form_input} />
                                     {/* {this.props.errors.lastname && <div className={profileStyles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                 </div>
                             </div>
@@ -294,10 +330,10 @@ const CreateStore = () => {
                             <div className={styles.form_group}>
                                 <h3>Description</h3>
                                 <div className={suggestion_form_group}>
-                                <label htmlFor="intro" className={suggestion_form_label}>
+                                <label htmlFor="description" className={suggestion_form_label}>
                                     Description
                                 </label>
-                                <TextField value={description} multiline id="intro" fullWidth variant="outlined" />
+                                <TextField value={description} onChange={handleChange} name='description' multiline id="description" fullWidth variant="outlined" />
                                 </div>
                             </div>
                             
@@ -345,6 +381,7 @@ const CreateStore = () => {
                         </div>
                     </div>
                 </div>
+                <Button variant="contained" className={styles.ingredient_button} style={{ width: "100%" }} onClick={() => createStore()}> Create Store</Button>
             </div>
             {/* <TransferToInventory /> */}
         </div>
@@ -353,4 +390,14 @@ const CreateStore = () => {
     )
 }
 
-export default CreateStore
+// export default CreateStore
+
+function mapStateToProp(state) {
+    return {
+      auth: state.Auth
+    };
+  }
+  
+  export default connect(
+    mapStateToProp,
+  )(CreateStore);

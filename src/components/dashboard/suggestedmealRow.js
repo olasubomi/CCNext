@@ -55,7 +55,7 @@ function SuggestedMealRow(props){
                         }
                     </>
                     }
-                    <i className={styles.hideData} onClick={() => deleteMeal(meal._id)}>
+                    <i className={styles.hideData} onClick={() => props.deleteMeal(meal._id)}>
                     <CloseFillIcon style={actionIcon} /></i>
                     {show ? 
                     <i onClick={showDropDown} className={styles.showData}>
@@ -80,7 +80,7 @@ function SuggestedMealRow(props){
 
                 <div className={styles.suggested_categories}>
                     <h3 className={styles.suggested_category_name}>Action</h3>
-                    <p onClick={() => deleteMeal(meal._id)} className={styles.suggested_category + " " + styles.redtext}>Remove</p>
+                    <p onClick={() => props.deleteMeal(meal._id)} className={styles.suggested_category + " " + styles.redtext}>Remove</p>
                 </div>
             </div>
             }
