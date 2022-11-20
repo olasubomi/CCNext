@@ -191,7 +191,9 @@ const SuggestedMeals = (props) => {
             if (response.status >= 200 && response.status < 300) {
                 console.log(response.data)
                 newMeals.push(response.data.data)
-                setMealsState(meals)
+                setMealsState(newMeals)
+                setFilteredMealsState(newMeals)
+
             } else {
               console.log("Something wrong happened ");
             }
@@ -273,7 +275,7 @@ const SuggestedMeals = (props) => {
                             {
                                 filteredMeals.map((meal) => {
                                     return(
-                                        <SuggestedMealRow toggleTransferToInventory={toggleTransferToInventory} auth={props.auth} key={meal._id} meal={meal} toggleOpenMeal={toggleOpenMeal} />
+                                        <SuggestedMealRow deleteMeal={deleteMeal} toggleTransferToInventory={toggleTransferToInventory} auth={props.auth} key={meal._id} meal={meal} toggleOpenMeal={toggleOpenMeal} />
                                     )
                                 })
                             }

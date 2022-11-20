@@ -10,7 +10,7 @@ import { BagIcon, BatteryIcon, CloseFillIcon, LineChartIcon, ListIcon, TagIcon, 
 import Sidenav2 from '../../src/components/Header/sidenav2';
 import GoBack from '../../src/components/CommonComponents/goBack';
 import { connect } from "react-redux";
-import { verifyToken } from '../../src/actions';
+import { getUser } from '../../src/actions';
 import axios from '../../src/util/Api';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 // import { IgrDoughnutChart, IgrDoughnutChartModule, IgrItemLegendModule, IgrRingSeries, IgrRingSeriesModule } from 'igniteui-react-charts';
@@ -105,7 +105,7 @@ const DashboardHomePage = (props) => {
   function toggleDriverMode(type){
     axios.put('/user/updateuserprofile/'+props.auth.authUser._id, { user_type: type }).then(res => {
         console.log(res.data)
-        props.getUser()
+        props.getUser(props.auth.authUser._id)
         setDriverModeState(!driverMode)
     })
   }
@@ -573,7 +573,7 @@ const DashboardHomePage = (props) => {
 
 function mapDispatchToProps(dispatch) {
     return {
-      getUser: () => dispatch(verifyToken())
+      getUser: (id) => dispatch(getUser(id))
     };
   }
 
