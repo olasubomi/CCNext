@@ -16,6 +16,7 @@ import Meal from '../../src/components/individualPage/Meal';
 import WestIcon from '@mui/icons-material/West';
 import TransferToInventory from '../../src/components/dashboard/transferToInventory';
 import SuggestedMealRow from '../../src/components/dashboard/suggestedmealRow';
+import Sent from '../../src/components/dashboard/sent';
 
 const SuggestedMeals = (props) => {
     const router = useRouter()
@@ -32,24 +33,36 @@ const SuggestedMeals = (props) => {
     const [openMeal, setOpenMealState] = useState(false)
     const [changeStatus, setChangeStatusState] = useState(false)
     const [transferToInventory, setTransferToInventoryState] = useState(false)
+    const [sent, setSentState] = useState(false)
     const [statusType, setStatusTypeState] = useState('')
+    const [page, setPageState] = useState(1);
+    const [pages, setPagesState] = useState(1);
+    const [mealCount, setMealCountState] = useState(0);
     
 
     useEffect(() => {
         if(props.auth.authUser){
             if(props.auth.authUser.user_type === 'admin'){
-                axios.get('/meals/get-meals/1').then(data => {
+                axios.get('/meals/get-meals/'+page).then(data => {
                     console.log(data.data)
                     if(data.data.data){
                         setMealsState(data.data.data.meals)
+                        setMealCountState(data.data.data.count)
+                        if(data.data.data.count > 10){
+                            setPagesState(Math.ceil(data.data.data.count/10))
+                        }
                         setFilteredMealsState(data.data.data.meals)
                     }
                 })
             }else{
-                axios.get('/meals/get-meals/1?user='+props.auth.authUser._id).then(data => {
+                axios.get('/meals/get-meals/'+page+'?user='+props.auth.authUser._id).then(data => {
                     console.log(data.data)
                     if(data.data.data){
                         setMealsState(data.data.data.meals)
+                        setMealCountState(data.data.data.count)
+                        if(data.data.data.count > 10){
+                            setPagesState(Math.ceil(data.data.data.count/10))
+                        }
                         setFilteredMealsState(data.data.data.meals)
                     }
                 })
@@ -141,13 +154,34 @@ const SuggestedMeals = (props) => {
     function handleStatusType(type) {
         setStatusTypeState(type)
         axios.post('/meals/update/'+meal._id, {publicly_available: type}).then(res => {
-            setMealState(res.data.data)
-            axios.get('/meals/get-meals/1').then(data => {
-                if(data.data.data){
-                    setMealsState(data.data.data.meals)
-                    setFilteredMealsState(data.data.data.meals)
+            if(res.data.data){
+                setMealState(res.data.data)
+                if(props.auth.authUser.user_type === 'admin'){
+                    axios.get('/meals/get-meals/1').then(data => {
+                        console.log(data.data)
+                        if(data.data.data){
+                            setMealsState(data.data.data.meals)
+                            setMealCountState(data.data.data.count)
+                            if(data.data.data.count > 10){
+                                setPagesState(Math.ceil(data.data.data.count/10))
+                            }
+                            setFilteredMealsState(data.data.data.meals)
+                        }
+                    })
+                }else{
+                    axios.get('/meals/get-meals/1?user='+props.auth.authUser._id).then(data => {
+                        console.log(data.data)
+                        if(data.data.data){
+                            setMealsState(data.data.data.meals)
+                            setMealCountState(data.data.data.count)
+                            if(data.data.data.count > 10){
+                                setPagesState(Math.ceil(data.data.data.count/10))
+                            }
+                            setFilteredMealsState(data.data.data.meals)
+                        }
+                    })
                 }
-            })
+            }
         })
         toggleChangeStatus()
     }
@@ -155,10 +189,31 @@ const SuggestedMeals = (props) => {
     function deleteMeal(id){
         axios.delete('/meals/delete/'+id).then(res => {
             console.log(res.data)
-            axios.get('/meals/get-meals/1').then(data => {
-                setMealsState(data.data.data.meals)
-                setFilteredMealsState(data.data.data.meals)
-            })
+            if(props.auth.authUser.user_type === 'admin'){
+                axios.get('/meals/get-meals/1').then(data => {
+                    console.log(data.data)
+                    if(data.data.data){
+                        setMealsState(data.data.data.meals)
+                        setMealCountState(data.data.data.count)
+                        if(data.data.data.count > 10){
+                            setPagesState(Math.ceil(data.data.data.count/10))
+                        }
+                        setFilteredMealsState(data.data.data.meals)
+                    }
+                })
+            }else{
+                axios.get('/meals/get-meals/1?user='+props.auth.authUser._id).then(data => {
+                    console.log(data.data)
+                    if(data.data.data){
+                        setMealsState(data.data.data.meals)
+                        setMealCountState(data.data.data.count)
+                        if(data.data.data.count > 10){
+                            setPagesState(Math.ceil(data.data.data.count/10))
+                        }
+                        setFilteredMealsState(data.data.data.meals)
+                    }
+                })
+            }
         })
     }
 
@@ -166,11 +221,14 @@ const SuggestedMeals = (props) => {
         setTransferToInventoryState(!transferToInventory)
     }
 
+    function toggleSent(){
+        setSentState(!sent)
+    }
+
     function handleSearchPublicMeal(e){
         setSearchSuggestedMealState(e.target.value);
+        setSearchState(true)
         if(e.target.value.length>=1){
-            let value;
-            value = { name: e.target.value }
             axios.get('/meals/get-meals/1?publicly_available=Public&meal_name='+e.target.value).then(data => {
                 console.log(data.data)
                 if(data.data.data){
@@ -201,6 +259,70 @@ const SuggestedMeals = (props) => {
             console.log(error);
           });
     }
+
+    async function nextPage () {
+        if(page < pages){
+            let newPage = page + 1;
+            setPageState(newPage)
+            if(props.auth.authUser.user_type === 'admin'){
+                axios.get('/meals/get-meals/'+newPage).then(data => {
+                    console.log(data.data)
+                    if(data.data.data){
+                        setMealsState(data.data.data.meals)
+                        setMealCountState(data.data.data.count)
+                        if(data.data.data.count > 10){
+                            setPagesState(Math.ceil(data.data.data.count/10))
+                        }
+                        setFilteredMealsState(data.data.data.meals)
+                    }
+                })
+            }else{
+                axios.get('/meals/get-meals/'+newPage+'?user='+props.auth.authUser._id).then(data => {
+                    console.log(data.data)
+                    if(data.data.data){
+                        setMealsState(data.data.data.meals)
+                        setMealCountState(data.data.data.count)
+                        if(data.data.data.count > 10){
+                            setPagesState(Math.ceil(data.data.data.count/10))
+                        }
+                        setFilteredMealsState(data.data.data.meals)
+                    }
+                })
+            }
+        }
+      };
+    
+      async function prevPage () {
+        if(page > 1){
+            let newPage = page - 1;
+            setPageState(newPage)
+            if(props.auth.authUser.user_type === 'admin'){
+                axios.get('/meals/get-meals/'+newPage).then(data => {
+                    console.log(data.data)
+                    if(data.data.data){
+                        setMealsState(data.data.data.meals)
+                        setMealCountState(data.data.data.count)
+                        if(data.data.data.count > 10){
+                            setPagesState(Math.ceil(data.data.data.count/10))
+                        }
+                        setFilteredMealsState(data.data.data.meals)
+                    }
+                })
+            }else{
+                axios.get('/meals/get-meals/'+newPage+'?user='+props.auth.authUser._id).then(data => {
+                    console.log(data.data)
+                    if(data.data.data){
+                        setMealsState(data.data.data.meals)
+                        setMealCountState(data.data.data.count)
+                        if(data.data.data.count > 10){
+                            setPagesState(Math.ceil(data.data.data.count/10))
+                        }
+                        setFilteredMealsState(data.data.data.meals)
+                    }
+                })
+            }
+        }
+      };
 
     return (
     <div className={container + " " + col2}>
@@ -257,11 +379,9 @@ const SuggestedMeals = (props) => {
                     <div className={styles.suggestedmeal}>
                     <table className={styles.request_table}>
                         <thead>
-                        <tr className={styles.request_tr} style={
-                            props.auth.authUser.user_type === 'admin' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 5%'}:
-                            props.auth.authUser.user_type === 'customer' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 22%'}:
-                            props.auth.authUser.user_type === 'supplier' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 28%'}: {backgroundColor: 'transparent'}
-                            }>
+                        <tr className={styles.request_tr + ' ' + (props.auth.authUser.user_type === 'admin' ? styles.admin_request_tr:
+                            props.auth.authUser.user_type === 'customer' ? styles.customer_request_tr:
+                            props.auth.authUser.user_type === 'supplier' ? styles.supplier_request_tr: '')}>
                             <input name='id' type="checkbox" />
                             <th className={styles.request_th}>ID number</th>
                             <th className={styles.request_th}>Name</th>
@@ -275,13 +395,29 @@ const SuggestedMeals = (props) => {
                             {
                                 filteredMeals.map((meal) => {
                                     return(
-                                        <SuggestedMealRow deleteMeal={deleteMeal} toggleTransferToInventory={toggleTransferToInventory} auth={props.auth} key={meal._id} meal={meal} toggleOpenMeal={toggleOpenMeal} />
+                                        <SuggestedMealRow deleteMeal={deleteMeal} toggleSent={toggleSent} toggleTransferToInventory={toggleTransferToInventory} auth={props.auth} key={meal._id} meal={meal} toggleOpenMeal={toggleOpenMeal} />
                                     )
                                 })
                             }
 
                         </tbody>
                     </table>
+                    {mealCount > 0 &&
+                    <div className={styles.user_pagination}>
+                        <div>
+                            {
+                                page > 1 &&
+                                <div onClick={prevPage} className={styles.paginate_btn}>Prev</div>
+                            }
+                            {
+                                page < pages &&
+                                <div onClick={nextPage} className={styles.paginate_btn}>Next</div>
+                            }
+                            
+                        </div>
+                        <p>{'' + page + ' of ' + pages}</p>
+                    </div>
+                    }
                     </div>
                 </div>
                 }
@@ -409,6 +545,10 @@ const SuggestedMeals = (props) => {
 
         {transferToInventory && 
             <TransferToInventory toggleTransferToInventory={toggleTransferToInventory} />
+        }
+
+        {sent && 
+            <Sent toggleSent={toggleSent} />
         }
         
     </div>

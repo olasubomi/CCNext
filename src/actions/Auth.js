@@ -89,13 +89,14 @@ export const userSignIn = ( email, password ) => {
 export const getUser = (id) => {
     return (dispatch) => {
         dispatch({ type: FETCH_START });
-        axios.get('/findUser/'+id,
+        axios.get('/user/findUser/'+id,
         ).then(({ data }) => {
-            console.log(" ___ getUser RESPONSE ___ ", data);
+            console.log(" ___ getUser RESPONSE ___ ", data.data);
             dispatch({ type: FETCH_SUCCESS });
-            dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
-            dispatch({ type: USER_ROLE, payload: data.data.role });
-            dispatch({ type: USER_DATA, payload: data.data.user });
+            // dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+            // dispatch({ type: USER_ROLE, payload: data.data.role });
+            localStorage.setItem('user', JSON.stringify(data.data));
+            dispatch({ type: USER_DATA, payload: data.data });
             dispatch({ type: IS_AUTHENTICATED, payload: true });
 
         }).catch(err => {
@@ -114,7 +115,7 @@ export const verifyToken = (user,token) => {
             // if(data.success){
                 localStorage.setItem('x-auth-token', token);
                 localStorage.setItem('in', Date.now());
-                localStorage.setItem('user', JSON.stringify(user));
+                // localStorage.setItem('user', JSON.stringify(user));
                 console.log(user)
                 dispatch({ type: FETCH_SUCCESS });
                 dispatch({ type: USER_DATA, payload: user });

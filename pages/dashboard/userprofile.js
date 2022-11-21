@@ -130,7 +130,7 @@ const UserProfile = (props) => {
                 ['phone_number']: props.auth.authUser.phone_number
             })
         }
-      },[props.auth]);
+      },[props.auth.authUser]);
 
     function handleChange(e) {
         setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -196,14 +196,16 @@ const UserProfile = (props) => {
             country: billing_country
         }
         const formData = new FormData();
-        formData.append('profile_picture', profileImage);
+        if(profileImage.length > 0){
+            formData.append('profile_picture', profileImage);
+        }
         formData.append('first_name', first_name);
         formData.append('last_name', last_name);
         formData.append('phone_number', phone_number);
-        formData.append('delivery_addresses', delivery_addresses);
+        // formData.append('delivery_addresses', delivery_addresses);
 
         axios.put('/user/updateuserprofile/'+props.auth.authUser._id, formData).then(res => {
-            console.log(res)
+            console.log(res.data)
             props.getUser(props.auth.authUser._id)
         })
     }

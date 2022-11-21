@@ -151,7 +151,7 @@ const DashboardHomePage = (props) => {
                             <ArrowDropDownIcon className={styles.select_box_icon} />
                         </div>
                         {changeType &&
-                            <div className={styles.select_options}>
+                            <div className={styles.select_options2}>
                                 <p onClick={() => toggleDriverMode('customer')}>Customer</p>
                                 <p onClick={() => toggleDriverMode('supplier')}>Supplier</p>
                                 {/* <p onClick={() => handleSearchType('Kitchen Utensil')}>Kitchen Utensils</p> */}

@@ -58,3 +58,10 @@
 
     color: #353535;
 }
+
+@media screen and (max-width: 1005px) {
+    .stores_con{
+        grid-template-columns: 1fr;
+        justify-self: unset;
+    }
+}

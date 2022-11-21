@@ -172,7 +172,7 @@ function Header(props){
                 </a>
             </Link>
             <div className={styles.navbar_top_details}>
-              {(!props.auth.isAuthenticated && props.auth.authUser === null) ?
+              {(!props.auth.isAuthenticated || props.auth.authUser === null) ?
               // <Link href='/login'>
               // <a className={styles.navbar_user_loginbtn}>
                   <div onClick={toggleLogin} className={styles.navbar_user_loginbtn}>
@@ -185,7 +185,7 @@ function Header(props){
                 {props.auth.authUser.profile_picture ? 
                 <img id="userImg" onClick={(e) => toggleUserDetails(e)} src={props.auth.authUser.profile_picture} alt='User' className={styles.navbar_user_img}/>:
                 <UserIcon style={styles.navbar_main_link_icon} />}
-                <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>{props.auth.authUser.username}</h2>
+                <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>{props.auth.authUser.first_name}</h2>
                 <ArrowDownIcon id="usericon" onClick={(e) => toggleUserDetails(e)} style={styles.navbar_user_icon} />
                 <div id="userdetails" className={styles.navbar_user_signedin}>
                   <Link href='/dashboard'>

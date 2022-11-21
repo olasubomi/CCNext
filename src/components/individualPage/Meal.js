@@ -62,6 +62,32 @@ function Meal(props){
                                     <p>6391 Elgin St. Celina, Delaware 10299</p>
                                 </div>
                             </div>
+                            <div className={styles.meal_section_32}>
+                                <div className={styles.meal_details}>
+                                    <div className={styles.hide}>
+                                        <h3>Serves: </h3>
+                                        <p>{props.meal.servings}</p>
+                                    </div>
+                                    <div>
+                                        <h3>PrepTime:</h3>
+                                        <p>{props.meal.prep_time} Minutes</p>
+                                    </div>
+                                    <div>
+                                        <h3>CookTime : </h3>
+                                        <p>{props.meal.cook_time} Minutes </p>
+                                    </div>
+                                    <div>
+                                        <h3>Chef:</h3>
+                                        <p>{props.meal.chef}</p>
+                                    </div>
+                                </div>
+                                <div className={styles.meal_details}>
+                                    <div>
+                                        <h3>intro: </h3>
+                                        <p>{props.meal.intro}</p>
+                                    </div>
+                                </div>
+                            </div>
                             <p className={styles.meal_section_2_description}>
                                 {props.meal.intro}
                             </p>
@@ -83,14 +109,14 @@ function Meal(props){
                     </div>
                 </div>
                 <div className={styles.section_2_footer}>
-                    <div>
+                    <div className={styles.hide}>
                         <p><ShareIcon />Share this product:</p>
                         <FacebookEIcon />
                         <TwitterEIcon />
                         <InstaEIcon />
                         <WhatsappEIcon /> 
                     </div>
-                    <div>
+                    <div className={styles.hide}>
                         <p>Print Preview</p>
                         <PrintEIcon />
                     </div>
@@ -101,7 +127,7 @@ function Meal(props){
                 </div>
                 <div className={styles.meal_section_3}>
                     <div className={styles.meal_details}>
-                        <div>
+                        <div className={styles.hide}>
                             <h3>Serves: </h3>
                             <p>{props.meal.servings}</p>
                         </div>
@@ -127,8 +153,8 @@ function Meal(props){
                             <div className={styles.ingredients_head} style={{backgroundColor: 'transparent'}}>
                                 <div></div>
                                 <div className={styles.ingredients_th}>Names</div>
-                                <div className={styles.ingredients_th} style={{textAlign: 'center'}}>Quantity</div>
-                                <div className={styles.ingredients_th}>Measurement</div>
+                                <div className={styles.ingredients_th + ' ' + styles.hide} style={{textAlign: 'center'}}>Quantity</div>
+                                <div className={styles.ingredients_th + ' ' + styles.hide}>Measurement</div>
                                 <div className={styles.ingredients_th} style={{textAlign: 'center'}}>Availability in store</div>
                                 <div className={styles.ingredients_th}>Price</div>
                             </div>
@@ -142,8 +168,8 @@ function Meal(props){
                                                 <tr key={index} className={styles.ingredients_tr}>
                                                     <input name='id' type="checkbox" />
                                                     <td style={{color: '#000000'}} className={styles.ingredients_td}>{ingredient.productName}</td>
-                                                    <td className={styles.ingredients_td} style={{textAlign: 'center'}}>{ingredient.quantity}</td>
-                                                    <td className={styles.ingredients_td}>{ingredient.measurement}</td>
+                                                    <td className={styles.ingredients_td + ' ' + styles.hide} style={{textAlign: 'center'}}>{ingredient.quantity}</td>
+                                                    <td className={styles.ingredients_td + ' ' + styles.hide}>{ingredient.measurement}</td>
                                                     <td className={styles.ingredients_td} style={{textAlign: 'center'}}></td>
                                                     <td className={styles.ingredients_td}>Unavailable</td>
                                                 </tr>
