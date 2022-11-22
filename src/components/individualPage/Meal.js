@@ -7,9 +7,11 @@ import Image from "next/image";
 import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIcon, TwitterEIcon, WhatsappEIcon } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
+import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
 function Meal(props){
     console.log(props.meal)
+    const router = window.location
     return (
         <>
             <Head>
@@ -111,10 +113,18 @@ function Meal(props){
                 <div className={styles.section_2_footer}>
                     <div className={styles.hide}>
                         <p><ShareIcon />Share this product:</p>
-                        <FacebookEIcon />
-                        <TwitterEIcon />
-                        <InstaEIcon />
-                        <WhatsappEIcon /> 
+                        <FacebookShareButton>
+                            <FacebookEIcon quote={props.meal.intro} url={router.href} />
+                        </FacebookShareButton>
+                        <TwitterShareButton title={props.meal.meal_name} url={router.href}>
+                            <TwitterEIcon />
+                        </TwitterShareButton>
+                        <InstapaperShareButton title={props.meal.meal_name} url={router.href}>
+                            <InstaEIcon />
+                        </InstapaperShareButton>
+                        <WhatsappShareButton title={props.meal.meal_name} url={router.href} >
+                            <WhatsappEIcon />
+                        </WhatsappShareButton>
                     </div>
                     <div className={styles.hide}>
                         <p>Print Preview</p>
@@ -229,7 +239,7 @@ function Meal(props){
                 {props.meal.formatted_instructions &&
                 <div className={styles.meal_section_5}>
                     <h3>Steps</h3>
-                    {props.meal.formatted_instructions.length > 0 &&
+                    {/* {props.meal.formatted_instructions.length > 0 &&
                     <>
                         {JSON.parse(props.meal.formatted_instructions[0]).map((instruction, index) => {
                             return(
@@ -257,7 +267,7 @@ function Meal(props){
                             )
                         })}
                     </>
-                    }
+                    } */}
                     
                 </div>}
 

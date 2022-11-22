@@ -17,6 +17,7 @@ import WestIcon from '@mui/icons-material/West';
 import TransferToInventory from '../../src/components/dashboard/transferToInventory';
 import SuggestedMealRow from '../../src/components/dashboard/suggestedmealRow';
 import Sent from '../../src/components/dashboard/sent';
+import Popup2 from '../../src/components/popups/popup2';
 
 const SuggestedMeals = (props) => {
     const router = useRouter()
@@ -34,9 +35,11 @@ const SuggestedMeals = (props) => {
     const [changeStatus, setChangeStatusState] = useState(false)
     const [transferToInventory, setTransferToInventoryState] = useState(false)
     const [sent, setSentState] = useState(false)
+    const [openModal, setOpenModalState] = useState(false)
     const [statusType, setStatusTypeState] = useState('')
     const [page, setPageState] = useState(1);
     const [pages, setPagesState] = useState(1);
+    const [ingredientsStringSyntax, setIngredientsString] = useState([]);
     const [mealCount, setMealCountState] = useState(0);
     
 
@@ -217,7 +220,8 @@ const SuggestedMeals = (props) => {
         })
     }
 
-    function toggleTransferToInventory(){
+    function toggleTransferToInventory(meal){
+        setMealState(meal)
         setTransferToInventoryState(!transferToInventory)
     }
 
@@ -259,6 +263,33 @@ const SuggestedMeals = (props) => {
             console.log(error);
           });
     }
+
+    function openMealDetailsModal(meal){
+        setMealState(meal)
+        let ingredients =JSON.parse(meal.formatted_ingredients[0]);
+        var ingredientsString = []
+        for(let i=0; i<ingredients.length; i++){
+            let properIngredientStringSyntax = ''
+            if (ingredients[i].quantity === "") {
+                properIngredientStringSyntax = ingredients[i].productName;
+              } else if (ingredients[i].measurement === "" && ingredients[i].quantity !== "") {
+                // MAKE sure we are using the right and tested variables to display the right type of string at all times.
+                properIngredientStringSyntax = "" + ingredients[i].quantity + " " + ingredients[i].productName;
+              } else {
+                properIngredientStringSyntax =
+                  "" + ingredients[i].quantity + " " + ingredients[i].measurement +
+                  " of " + ingredients[i].productName;
+            }
+            ingredientsString.push(properIngredientStringSyntax)
+        }
+        console.log(ingredientsString)
+        setIngredientsString(ingredientsString)
+        setOpenModalState(true)
+    }
+
+    function closeModal() {
+        setOpenModalState(false);
+      }
 
     async function nextPage () {
         if(page < pages){
@@ -395,7 +426,7 @@ const SuggestedMeals = (props) => {
                             {
                                 filteredMeals.map((meal) => {
                                     return(
-                                        <SuggestedMealRow deleteMeal={deleteMeal} toggleSent={toggleSent} toggleTransferToInventory={toggleTransferToInventory} auth={props.auth} key={meal._id} meal={meal} toggleOpenMeal={toggleOpenMeal} />
+                                        <SuggestedMealRow deleteMeal={deleteMeal} toggleSent={toggleSent} toggleTransferToInventory={toggleTransferToInventory} openMealDetailsModal={openMealDetailsModal} auth={props.auth} key={meal._id} meal={meal} toggleOpenMeal={toggleOpenMeal} />
                                     )
                                 })
                             }
@@ -465,6 +496,23 @@ const SuggestedMeals = (props) => {
                 </div>
             }
         </div>
+        {openModal &&
+        <Popup2 popupType='Meal Suggestion Preview' openModal={openModal} closeModal={closeModal}
+              name={meal.meal_name} description={meal.meal_name}
+              imageData={meal.meal_images[0]} image={meal.meal_images[0]}
+              imagesData={meal.meal_images.slice(1)} categories={JSON.parse(meal.meal_categories[0])}
+              prepTime={meal.prep_time} cookTime={meal.cook_time}
+              serves={meal.servings} chef={meal.chef}
+              ingredientsList={ingredientsStringSyntax} utensilsList={JSON.parse(meal.meal_categories[0])}
+              instructionChunk1={JSON.parse(meal.formatted_instructions[0])[1]} instructionChunk2={JSON.parse(meal.formatted_instructions[0])[2]}
+              instructionChunk3={JSON.parse(meal.formatted_instructions[0])[3]} instructionChunk4={JSON.parse(meal.formatted_instructions[0])[4]}
+              instructionChunk5={JSON.parse(meal.formatted_instructions[0])[5]} instructionChunk6={JSON.parse(meal.formatted_instructions[0])[6]}
+              chunk1Content={meal.image_or_video_content_1[0]} chunk2Content={meal.image_or_video_content_2[0]}
+              chunk3Content={meal.image_or_video_content_3[0]} chunk4Content={meal.image_or_video_content_4[0]}
+              chunk5Content={meal.image_or_video_content_5[0]} chunk6Content={meal.image_or_video_content_6[0]}
+              instructionWordlength={meal.instructionWordlength}
+              tips={JSON.parse(meal.tips[0])} mealImageData={meal.meal_images[0]}
+            />}
         
         {addPublicMeal && 
         <div className={styles.addpublicMeal_container}>
@@ -544,7 +592,7 @@ const SuggestedMeals = (props) => {
         </div>}
 
         {transferToInventory && 
-            <TransferToInventory toggleTransferToInventory={toggleTransferToInventory} />
+            <TransferToInventory meal={meal} toggleTransferToInventory={toggleTransferToInventory} />
         }
 
         {sent && 

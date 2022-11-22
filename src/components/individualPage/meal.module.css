@@ -1066,6 +1066,7 @@
 
     .meal_section_2_col_1 {
         grid-gap: 10px;
+        grid-template-columns: max-content 1fr;
     }
 
     .meal_section_2_main_img {
@@ -1073,8 +1074,16 @@
         height: 163px;
     }
 
+    .meal_section_2_col_1 > span{
+        width: 100% !important;
+    }
+
     .meal_section_2_images {
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr;
+        align-content: start;
+        grid-auto-flow: unset;
+        grid-column: 1/2;
+        grid-row: 1/2;
     }
 
     .meal_section_2_image {
@@ -1204,6 +1213,16 @@
 
     .meal_section_2_size {
         width: 100%;
+    }
+
+    .meal_section_2_col_1 > span{
+        width: 272px !important;
+        height: 168px !important;
+    }
+
+    .meal_section_2_images > span{
+        width: 46px !important;
+        height: 46px !important;
     }
 
     .meal_section_2_main_img {

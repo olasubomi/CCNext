@@ -2,6 +2,8 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import styles from './transferToInventory.module.css';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
+import { useEffect, useState } from 'react';
+import axios from '../../util/Api';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -55,6 +57,78 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   }));
 
 export default function TransferToInventory(props){
+    const [formState, setFormState] = useState({
+        prepackagedMeal: false,
+        ingredientsAvailable: [],
+        estimated_preparation_time: 0,
+        item_type: 'Meal'
+      });
+
+      const { ingredientsAvailable } = formState;
+
+    useEffect(() => {
+        if(props.meal.meal_categories.length > 0){
+            let ingredientsAvailablee = []
+            let ingredients = JSON.parse(props.meal.formatted_ingredients[0])
+            for(let i=0; i<ingredients.length; i++){
+                ingredientsAvailablee.push({
+                    name: ingredients[i].productName,
+                    quantity: ingredients[i].quantity,
+                    set_price: '',
+                    product_available: true
+                })
+            }
+            setFormState({ ...formState, ['ingredientsAvailable']: ingredientsAvailablee });
+        }
+    }, [props.meal])
+    
+    function handleChange(e) {
+        const { name, value } = e.target;
+        if(name === 'meal_type'){
+            if(value === 'packaged'){
+                setFormState({ ...formState, [name]: value,  ['prepackagedMeal']: true});
+            }else{
+                setFormState({ ...formState, [name]: value, ['prepackagedMeal']: false });
+            }
+        }else{
+            setFormState({ ...formState, [name]: value });
+        }
+        
+        console.log(formState)
+      };
+
+    function handleIngredientChange(e,id,key) {
+        const { value } = e.target;
+        let ingredientsAvailable = formState.ingredientsAvailable;
+        ingredientsAvailable[id][key] =  value
+        setFormState({ ...formState, ['ingredientsAvailable']: ingredientsAvailable });
+    };
+
+    function handleIngredientAvailabilityChange(value,id,key) {
+        console.log(value)
+        let ingredientsAvailable = formState.ingredientsAvailable;
+        ingredientsAvailable[id][key] =  value
+        setFormState({ ...formState, ['ingredientsAvailable']: ingredientsAvailable });
+    };
+
+    function sendToInventory(){
+        let fields = formState;
+        delete fields.meal_type
+        fields['item'] = props.meal._id
+        fields['storeId'] = '63783f54088dda05688af4df'
+        axios.post('/inventory/create-inventory', fields).then(response => {
+        if (response.status >= 200 && response.status < 300) {
+            // this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
+            console.log(response);
+            console.log("Display Meal submitted successfully");
+            // window.location.href = "/SuggestMeal"
+        } else {
+            console.log("Something wrong happened ");
+        }
+        }).catch(error => {
+        console.log(error);
+        });
+    }
 
     return(
         <div className={styles.transToIn_container}>
@@ -72,6 +146,7 @@ export default function TransferToInventory(props){
                         <div className={styles.transToIn_meal_type}>
                             <div className={styles.transToIn_meal_type_option}>
                                 <input
+                                onChange={handleChange}
                                 className={styles.transToIn_meal_type_radioInput}
                                 type="radio"
                                 id="non packaged"
@@ -99,6 +174,7 @@ export default function TransferToInventory(props){
                                 <input
                                 className={styles.transToIn_meal_type_radioInput}
                                 type="radio"
+                                onChange={handleChange}
                                 id="packaged"
                                 name="meal_type"
                                 value="packaged"
@@ -122,14 +198,14 @@ export default function TransferToInventory(props){
                             <div>
                                 <p>Enter Meal Price</p>
                                 <h4>$</h4>
-                                <input />
+                                <input onChange={handleChange} name='meal_price' />
                             </div>
                         </div>
                         <div>
                             <h3>Set Estimated preparation time</h3>
                             <div>
                                 <p>Set time for pickup</p>
-                                <input />
+                                <input onChange={handleChange} name='estimated_preparation_time' type='number' />
                                 <h4>Minutes</h4>
                             </div>
                         </div>
@@ -161,22 +237,19 @@ export default function TransferToInventory(props){
                             </tr>
                             </thead>
                             <tbody>
-                                <tr className={styles.refId + " " + styles.request_tr}>
-                                    <td className={styles.request_td}>dfdsf</td>
-                                    <td className={styles.request_td}>saf</td>
-                                    <td className={styles.request_td}>asf</td>
-                                    <td className={styles.request_td}>
-                                        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                    </td>
-                                </tr>
-                                <tr className={styles.refId + " " + styles.request_tr}>
-                                    <td className={styles.request_td}>dfdsf</td>
-                                    <td className={styles.request_td}>saf</td>
-                                    <td className={styles.request_td}>asf</td>
-                                    <td className={styles.request_td}>
-                                        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                    </td>
-                                </tr>
+                                {ingredientsAvailable.map((ingredient, index) => {
+                                    return(
+                                        <tr className={styles.refId + " " + styles.request_tr}>
+                                            <td className={styles.request_td}>{ingredient.name}</td>
+                                            <td className={styles.request_td}><input value={ingredient.quantity} onChange={(e) => handleIngredientChange(e,index,'quantity')} name='meal_price' /></td>
+                                            <td className={styles.request_td}><input value={ingredient.set_price} onChange={(e) => handleIngredientChange(e,index,'set_price')} name='meal_price' /></td>
+                                            <td className={styles.request_td}>
+                                                <AntSwitch checked={ingredient.product_available} onChange={(e) => handleIngredientAvailabilityChange(!ingredient.product_available,index,'product_available')} inputProps={{ 'aria-label': 'ant design' }} />
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                                }
 
                             </tbody>
                         </table>
@@ -185,7 +258,7 @@ export default function TransferToInventory(props){
 
                 <div className={styles.transToIn_footer}>
                     <button className={styles.transToIn_footer_button} onClick={props.toggleTransferToInventory}>Cancle</button>
-                    <button className={styles.transToIn_footer_button2}>Confirm</button>
+                    <button onClick={sendToInventory} className={styles.transToIn_footer_button2}>Confirm</button>
                 </div>
             
             </div>

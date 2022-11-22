@@ -33,17 +33,17 @@ function SuggestedMealRow(props){
                             props.auth.authUser.user_type === 'customer' ? styles.customer_request_tr:
                             props.auth.authUser.user_type === 'supplier' ? styles.supplier_request_tr: '')}>
                 <input name='id' type="checkbox" />
-                <td onClick={() => props.toggleOpenMeal(meal)} className={styles.request_td}>{meal._id}</td>
-                <td onClick={() => props.toggleOpenMeal(meal)} className={styles.request_td}>{meal.meal_name}</td>
-                <td onClick={() => props.toggleOpenMeal(meal)} className={styles.request_td + " " + status + " " + 
+                <td onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(meal): () => props.openMealDetailsModal(meal)} className={styles.request_td}>{meal._id}</td>
+                <td onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(meal): () => props.openMealDetailsModal(meal)} className={styles.request_td}>{meal.meal_name}</td>
+                <td onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(meal): () => props.openMealDetailsModal(meal)} className={styles.request_td + " " + status + " " + 
                     ((meal.publicly_available === 'Draft' || meal.publicly_available === 'Pending') ? pending :
                     meal.publicly_available === 'Public' ? approve :
                     meal.publicly_available === 'Rejected' ? rejected : '')}
                 >
                     {meal.publicly_available}
                 </td>
-                <td onClick={() => props.toggleOpenMeal(meal)} className={styles.request_td + " " + styles.hideData}>{meal.meal_categories && meal.meal_categories.length > 0 && JSON.parse(meal.meal_categories[0])[0]}</td>
-                <td onClick={() => props.toggleOpenMeal(meal)} className={styles.request_td + " " + styles.hideData}>{meal.createdAt && new Date(meal.createdAt).getDate() + ' ' + months[new Date(meal.createdAt).getMonth()] + ' ,'+ new Date(meal.createdAt).getFullYear()}</td>
+                <td onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(meal): () => props.openMealDetailsModal(meal)} className={styles.request_td + " " + styles.hideData}>{meal.meal_categories && meal.meal_categories.length > 0 && JSON.parse(meal.meal_categories[0])[0]}</td>
+                <td onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(meal): () => props.openMealDetailsModal(meal)} className={styles.request_td + " " + styles.hideData}>{meal.createdAt && new Date(meal.createdAt).getDate() + ' ' + months[new Date(meal.createdAt).getMonth()] + ' ,'+ new Date(meal.createdAt).getFullYear()}</td>
                 <td className={styles.request_td + " " + styles.actions_con}>
                     {props.auth.authUser.user_type !== 'admin' &&
                     <>
@@ -51,7 +51,7 @@ function SuggestedMealRow(props){
                         {props.auth.authUser.user_type === 'supplier' &&
                         <>
                             {meal.publicly_available === 'Public' ? 
-                            <div onClick={props.toggleTransferToInventory} className={styles.tableactionbutton} style={{background: '#F47900', color:'white', border: 'none'}}>Send for Inventory</div> 
+                            <div onClick={() => props.toggleTransferToInventory(meal)} className={styles.tableactionbutton} style={{background: '#F47900', color:'white', border: 'none'}}>Send for Inventory</div> 
                             :
                             <div className={styles.tableactionbutton} style={{background: '#D9D9D9', color:'white', border: 'none'}}>Send for Inventory</div> 
                             }
