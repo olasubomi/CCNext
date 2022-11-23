@@ -107,7 +107,7 @@ class SuggestKitchenUtensilForm extends Component {
     //   if (this.productsList && this.productsList.data.length !== 0) {
     //     console.log("returns GET ALL PRODUCTS ");
     //     for (var i = 0; i < this.productsList.data.length; i++) {
-    //       this.productNames.push(this.productsList.data[i].product_name);
+    //       this.utensilNames.push(this.productsList.data[i].product_name);
     //       this.productImageLink.push(this.productsList.data[i].product_image);
     //     }       
     //   } else {
@@ -338,7 +338,7 @@ class SuggestKitchenUtensilForm extends Component {
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.props.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
 
@@ -370,26 +370,14 @@ class SuggestKitchenUtensilForm extends Component {
     // var measurementValue = this.state.currentIngredientMeasurement;
     var measurementValue = document.getElementById("measurement").value;
 
+    properDescriptionStringSyntax =
+      descriptionValue + " : " + quantityValue + "" + measurementValue;
 
-    if (descriptionValue === "") { window.alert("Enter decription name"); return; }
-    if (quantityValue === "") { window.alert("Enter quantity"); return; }
-    // update ingredient string syntax for no quantity or no measurement.
-    if (quantityValue === "") {
-      properDescriptionStringSyntax = descriptionValue;
-    } else if (measurementValue === "" && quantityValue !== "") {
-      // MAKE sure we are using the right and tested variables to display the right type of string at all times.
-      properDescriptionStringSyntax = "" + quantityValue + "-" + descriptionValue;
-    } else {
-      properDescriptionStringSyntax =
-        "" + quantityValue + " " + measurementValue + "-" + descriptionValue;
-    }
-    console.log(properDescriptionStringSyntax);
 
     // This is the Object for an Ingredient of a Known Product
     var descriptionObject = {
-
-      // display: this.state.currProductIndexInDBsProductsList,
-      // availableLocations: [],
+      description_name: descriptionValue,
+      quantity: quantityValue,
       measurement: measurementValue,
       properDescriptionStringSyntax: properDescriptionStringSyntax
     };
@@ -409,6 +397,7 @@ class SuggestKitchenUtensilForm extends Component {
     this.setState({ measurement: "", descriptionName: "" });
     this.handleAddDescriptionChip(properDescriptionStringSyntax);
 
+    console.log(this.state.descriptionGroupList);
 
   }
 
@@ -455,11 +444,11 @@ class SuggestKitchenUtensilForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedUtensilToDB = async (e) => {
-    const { productName, utensilImagesData, intro,
+    const { utensilName, utensilImagesData, intro,
       suggestedCategories, utensilImage1, utensilImage2, utensilImage3, utensilImage4 } = this.state;
 
     // handle edge case Product name, ingredienrs or image upload required to submit form
-    if (productName === "") { console.log("product label blank"); return; }
+    if (utensilName === "") { console.log("product label blank"); return; }
     // if (ingredientStrings.length === 0) { window.alert("Suggested Product requires adding at least one ingredient to submit"); return; }
     if (utensilImagesData === null || utensilImagesData === undefined ||
       utensilImagesData === []) { window.alert("You didn't add suggested product image"); return; }
@@ -492,11 +481,11 @@ class SuggestKitchenUtensilForm extends Component {
     const instructionGroupData = [];
     const contentNameToContentImageOrVideoMapForS3 = new FormData();
     console.log("product name:");
-    console.log(this.state.productName);
+    console.log(this.state.utensilName);
 
-    contentNameToContentImageOrVideoMapForS3.append('productContentName', this.state.productName);
+    contentNameToContentImageOrVideoMapForS3.append('productContentName', this.state.utensilName);
     console.log(contentNameToContentImageOrVideoMapForS3);
-    var keyValueData = { productContentName: this.state.productName };
+    var keyValueData = { productContentName: this.state.utensilName };
     // console.log("Stringified version:");
     // console.log(keyValueData);
     var singleTitleTest = JSON.stringify(keyValueData);
@@ -505,7 +494,7 @@ class SuggestKitchenUtensilForm extends Component {
 
     //-------------Submit remainder data of product to Mongo ------------------------------------------
     let suggestProductForm = new FormData();
-    suggestProductForm.append('product_name', productName);
+    suggestProductForm.append('product_name', utensilName);
     suggestProductForm.append('product_images', utensilImage1);
     suggestProductForm.append('product_images', utensilImage2);
     suggestProductForm.append('product_images', utensilImage3);
@@ -529,7 +518,7 @@ class SuggestKitchenUtensilForm extends Component {
     suggestedCategories.map((individualCategories) => {
       suggestProductForm.append('product_categories', individualCategories);
     })
-    // suggestProductForm.append('instructionsGroupList', instructionGroupData);
+    suggestProductForm.append('product_details', descriptionGroupList);
     console.log(this.state.chunk1Content);
 
     // chunk content should be passed as file
@@ -659,7 +648,7 @@ class SuggestKitchenUtensilForm extends Component {
                 </div>
               </div>
 
-              <Button variant="contained" disableRipple onClick={this.addDescription} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Size</Button>
+              <Button variant="contained" disableRipple onClick={this.addDescription} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Description</Button>
             </div>
 
             <Stack direction="row" spacing={1} className={styles.stack}>
