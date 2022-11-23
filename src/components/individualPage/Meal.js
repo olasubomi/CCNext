@@ -28,9 +28,9 @@ function Meal(props){
                         {props.meal.meal_images[0].length > 0 ? 
                         <Image
                             src={props.meal.meal_images[0]}
-                            alt="pop up"
+                            alt={props.meal.meal_name}
                             className={styles.meal_section_2_main_img}
-                            height={"100%"} width={"100%"}
+                            height={500} width={500}
                         />:<span></span>
                         }
                         </>
@@ -42,8 +42,8 @@ function Meal(props){
                                return(
                                 <>
                                 {image.length > 0 &&
-                                <Image key={index} alt="pop up" src={image}
-                                height={"100%"} width={"100%"}
+                                <Image key={index} alt={props.meal.meal_name} src={image}
+                                height={300} width={300}
                                 className={styles.meal_section_2_image} />
                                 }
                                 </>

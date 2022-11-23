@@ -38,12 +38,12 @@ function SideNav2(props){
                             </div>
                         </a>
                     </Link>
-                    {(props.auth.authUser.user_type !== "driver" || props.auth.authUser.user_type !== "admin") &&
+                    {(props.auth.authUser.user_type !== "driver") &&
                     <Link href="/dashboard/suggestedmeals">
                         <a>
                             <div className={styles.sidenav_link + " " + (props.path === '/dashboard/suggestedmeals' && styles.active)}>
                                 <HotMealIcon style={styles.sidenav_link_icon} />
-                                Meal/Product Suggestion
+                                {props.auth.authUser.user_type === "admin" ? 'Meal Request': 'Meal/Product Suggestion'}
                             </div>
                         </a>
                     </Link>

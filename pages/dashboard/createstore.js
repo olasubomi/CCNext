@@ -70,6 +70,8 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   }));
 
 const CreateStore = (props) => {
+    const [status, setStatusState] = useState('');
+    const [message, setMessageState] = useState('');
     const [formState, setFormState] = useState({
         email: "",
         phone_number: "",
@@ -89,13 +91,13 @@ const CreateStore = (props) => {
       });
     const { email, phone_number, store_name, city, state, country, zip_code, address, description } = formState;
     const [times, setTimes] = useState({
-        sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        tuesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        wednesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        thursday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        friday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        saturday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'}
+        sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open:true},
+        monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open:true},
+        tuesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open:true},
+        wednesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open:true},
+        thursday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open:true},
+        friday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open:true},
+        saturday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open:true}
     });
     const days = [
         "sunday",
@@ -120,6 +122,10 @@ const CreateStore = (props) => {
         // times[day][when] = time;
         setTimes({...times,[day]: {...times[day], [when]: time}})
     }
+
+    function handleDayAvailabiltyChange(value,day,when) {
+        setTimes({...times,[day]: {...times[day], [when]: value}})
+    };
 
     function onUpdateImage(event, picture){
         if (event.target.files[0] === undefined) return;
@@ -199,17 +205,37 @@ const CreateStore = (props) => {
             // this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
             console.log(response);
             console.log("Display Meal submitted successfully");
+            setStatusState('success')
+            setMessageState('Store created')
+            setTimeout(() => {
+                setStatusState('')
+                setMessageState('')
+            },5000)
             // window.location.href = "/SuggestMeal"
         } else {
-            console.log("Something wrong happened ");
+            setStatusState('error')
+            setMessageState('Error creating store')
+            setTimeout(() => {
+                setStatusState('')
+                setMessageState('')
+            }, 5000)
         }
-        }).catch(error => {
-        console.log(error);
+        }).catch(() => {
+            setStatusState('error')
+            setMessageState('Error creating store')
+            setTimeout(() => {
+                setStatusState('')
+                setMessageState('')
+            }, 5000)
         });
     }
 
     return (
         <div className={container}>
+            <div className="alert">
+                {status === "error" && <div className="alert-danger">{message}</div>}
+                {status === "success" && <div className="alert-success">{message}</div>}
+            </div>
         <Header />
         <SideNav />
         <div className={center}>
@@ -352,8 +378,8 @@ const CreateStore = (props) => {
                                     <div className={profileStyles.profile_workinghour_day}>
                                         <h3>{day}</h3>
                                         <div className={profileStyles.profile_workinghour_switch}>
-                                        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                        Open
+                                        <AntSwitch checked={times[day]['open']} onChange={() => handleDayAvailabiltyChange(!times[day]['open'], day, 'open')} inputProps={{ 'aria-label': 'ant design' }} />
+                                        {times[day]['open'] ? 'Open': 'Closed'}
                                         </div>
                                         <div className={profileStyles.profile_workinghour_date}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>

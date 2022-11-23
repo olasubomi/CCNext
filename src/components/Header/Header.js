@@ -160,6 +160,16 @@ function Header(props){
   return(
     <>
       <div className={styles.navbar}>
+        <div className="alert">
+          {props.message.length > 0 && 
+          <div className="alert-success">
+            {props.message}
+          </div>}
+          {props.error.length > 0 &&
+          <div className="alert-danger">
+            {props.error}
+          </div>}
+        </div>
         <div className={styles.navbar_top_container}>
           <div className={styles.navbar_top}>
             <Link href='/'>
@@ -398,7 +408,9 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProp(state) {
   return {
     path: state.Common.path,
-    auth: state.Auth
+    auth: state.Auth,
+    error: state.Common.error,
+    message: state.Common.message,
   };
 }
 

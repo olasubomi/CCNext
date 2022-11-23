@@ -7,41 +7,47 @@ import Image from "next/image";
 import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIcon, TwitterEIcon, WhatsappEIcon } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
+import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
 function Product(props){
-    console.log(props.meal)
+    console.log(props.product)
+    const router = window.location
     return (
         <>
             <Head>
-                <title>Meal</title>
+                <title>Product</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <div className={styles.product_sections}>
                 
                 <div className={styles.product_section_2}>
                     <div className={styles.product_section_2_col_1}>
-                        <Image
-                            src={img_logo}
-                            alt="pop up"
-                            className={styles.product_section_2_main_img}
-                            height={"100%"} width={"100%"}
-                        />
+                        {props.product.product_images.length > 0 ?
+                            <Image
+                                src={props.product.product_images[0]}
+                                alt={props.product.product_name}
+                                className={styles.product_section_2_main_img}
+                                height={500} width={500}
+                            />:
+                            <span></span>
+                        }
                         <div className={styles.product_section_2_images}>
-                            <Image alt="pop up" src={img_logo}
-                                height={"100%"} width={"100%"}
-                                className={styles.product_section_2_image} />
-                            <Image alt="pop up" src={img_logo}
-                                height={"100%"} width={"100%"}
-                                className={styles.product_section_2_image} />
-                            <Image alt="pop up" src={img_logo}
-                                height={"100%"} width={"100%"}
-                                className={styles.product_section_2_image} />
+                            {props.product.product_images.length > 1 &&
+                                <>
+                                {props.product.product_images.slice(1).map((image, index) => {
+                                    <Image key={index} alt={props.product.product_name} src={image}
+                                        height={200} width={200}
+                                        className={styles.product_section_2_image} />
+                                    })
+                                }
+                                </>
+                            }
 
                         </div>
                     </div>
                     <div className={styles.product_section_2_col_2}>
                         <div className={styles.product_section_2_details}>
-                            <h2 className={styles.product_section_2_name}>fdsfsd</h2>
+                            <h2 className={styles.product_section_2_name}>{props.product.product_name}</h2>
                             <div className={styles.store}>
                                 <h4>Chop Chow Store</h4>
                                 <div>
@@ -50,12 +56,12 @@ function Product(props){
                                 </div>
                             </div>
                             <p className={styles.product_section_2_description}>
-                                sadfdsf
+                                {props.product.product_name}
                             </p>
                             <div className={styles.product_section_2_details_col}>
                                 <div className={styles.product_section_2_categories}>
                                     <h3 className={styles.product_section_2_category_name}>Category</h3>
-                                    <p className={styles.product_section_2_category}>rewrg fvdsvsd</p>
+                                    <p className={styles.product_section_2_category}>{props.product.product_categories.map((cat, j) => <span key={j}>{cat} &nbsp; &nbsp;</span>)}</p>
                                 </div>
                                 <div className={styles.product_section_2_categories}>
                                     <h3 className={styles.product_section_2_category_name}>Product size</h3>
@@ -77,10 +83,18 @@ function Product(props){
                 <div className={styles.section_2_footer}>
                     <div>
                         <p><ShareIcon />Share this product:</p>
-                        <FacebookEIcon />
-                        <TwitterEIcon />
-                        <InstaEIcon />
-                        <WhatsappEIcon /> 
+                        <FacebookShareButton>
+                            <FacebookEIcon quote={props.product.product_name} url={router.href} />
+                        </FacebookShareButton>
+                        <TwitterShareButton title={props.product.product_name} url={router.href}>
+                            <TwitterEIcon />
+                        </TwitterShareButton>
+                        <InstapaperShareButton title={props.product.product_name} url={router.href}>
+                            <InstaEIcon />
+                        </InstapaperShareButton>
+                        <WhatsappShareButton title={props.product.product_name} url={router.href} >
+                            <WhatsappEIcon />
+                        </WhatsappShareButton> 
                     </div>
                     <div>
                         <p>Print Preview</p>
