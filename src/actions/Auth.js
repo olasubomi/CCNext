@@ -34,20 +34,27 @@ export const userSignUp = (form) => {
             localStorage.setItem('in', Date.now());
             localStorage.setItem('user', JSON.stringify(data.data.user));
 
-            dispatch({ type: FETCH_SUCCESS });
+            dispatch({ type: FETCH_SUCCESS, payload: 'Sign up successful' });
             dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
             dispatch({ type: USER_ROLE, payload: data.data.role });
             dispatch({ type: USER_DATA, payload: data.data.user });
             dispatch({ type: IS_AUTHENTICATED, payload: true });
             // dispatch({ type: USER_DATA, payload: data.user });
             // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
-        }).catch(err => {
+            setTimeout(() => {
+                dispatch({ type: FETCH_SUCCESS, payload: '' });
+            }, 5000)
+        }).catch((err,{request}) => {
             console.error("xxx userSignUp Request ERROR xxx");
             console.log(err.response.status);
+            dispatch({ type: FETCH_ERROR, payload: 'Login error' });
             dispatch({ type: IS_AUTHENTICATED, payload: false });
             if (err.response.status === 422) {
-                dispatch({ type: FETCH_ERROR, payload: "Email address was already taken. If you are owner, please proceed to login with this email." });
+                dispatch({ type: FETCH_ERROR, payload: JSON.parse(request.response).message.message });
             }
+            setTimeout(() => {
+                dispatch({ type: FETCH_ERROR, payload: '' });
+            }, 5000)
         });
     }
 };
@@ -70,18 +77,24 @@ export const userSignIn = ( email, password ) => {
             localStorage.setItem('in', Date.now());
             localStorage.setItem('user', JSON.stringify(data.data.user));
 
-            dispatch({ type: FETCH_SUCCESS });
+            dispatch({ type: FETCH_SUCCESS, payload: 'Login successfull' });
             dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
             dispatch({ type: USER_ROLE, payload: data.data.role });
             dispatch({ type: USER_DATA, payload: data.data.user });
             dispatch({ type: IS_AUTHENTICATED, payload: true });
             // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
             // console.log(" ___ userSignIn customerID ", data.customerID);
+            setTimeout(() => {
+                dispatch({ type: FETCH_SUCCESS, payload: '' });
+            }, 5000)
 
-        }).catch(err => {
-            console.error("xxx userSignIn Request ERROR xxx", err);
+        }).catch(({request}) => {
+            console.error("xxx userSignIn Request ERROR xxx", JSON.parse(request.response).message.message);
             dispatch({ type: IS_AUTHENTICATED, payload: false });
-            dispatch({ type: FETCH_ERROR, payload: "Error during user sign in request" });
+            dispatch({ type: FETCH_ERROR, payload: JSON.parse(request.response).message.message });
+            setTimeout(() => {
+                dispatch({ type: FETCH_ERROR, payload: '' });
+            }, 5000)
         });
     }
 };
@@ -89,13 +102,14 @@ export const userSignIn = ( email, password ) => {
 export const getUser = (id) => {
     return (dispatch) => {
         dispatch({ type: FETCH_START });
-        axios.get('/findUser/'+id,
+        axios.get('/user/findUser/'+id,
         ).then(({ data }) => {
-            console.log(" ___ getUser RESPONSE ___ ", data);
+            console.log(" ___ getUser RESPONSE ___ ", data.data);
             dispatch({ type: FETCH_SUCCESS });
-            dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
-            dispatch({ type: USER_ROLE, payload: data.data.role });
-            dispatch({ type: USER_DATA, payload: data.data.user });
+            // dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+            // dispatch({ type: USER_ROLE, payload: data.data.role });
+            localStorage.setItem('user', JSON.stringify(data.data));
+            dispatch({ type: USER_DATA, payload: data.data });
             dispatch({ type: IS_AUTHENTICATED, payload: true });
 
         }).catch(err => {
@@ -114,7 +128,7 @@ export const verifyToken = (user,token) => {
             // if(data.success){
                 localStorage.setItem('x-auth-token', token);
                 localStorage.setItem('in', Date.now());
-                localStorage.setItem('user', JSON.stringify(user));
+                // localStorage.setItem('user', JSON.stringify(user));
                 console.log(user)
                 dispatch({ type: FETCH_SUCCESS });
                 dispatch({ type: USER_DATA, payload: user });

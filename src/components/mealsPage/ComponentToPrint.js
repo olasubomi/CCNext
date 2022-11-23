@@ -13,27 +13,27 @@ class ComponentToPrint extends React.Component {
 
   componentDidMount() {
     console.log(this.props.instructionWordlength)
-    if ((this.props.instructionChunk1.instructionSteps.length +
-      this.props.instructionChunk2.instructionSteps.length +
-      this.props.instructionChunk3.instructionSteps.length +
-      this.props.instructionChunk4.instructionSteps.length +
-      this.props.instructionChunk5.instructionSteps.length +
-      this.props.instructionChunk6.instructionSteps.length) > 10) {
+    if ((this.props.instructionChunk1?.instructionSteps.length +
+      this.props.instructionChunk2?.instructionSteps.length +
+      this.props.instructionChunk3?.instructionSteps.length +
+      this.props.instructionChunk4?.instructionSteps.length +
+      this.props.instructionChunk5?.instructionSteps.length +
+      this.props.instructionChunk6?.instructionSteps.length) > 10) {
       this.setState({
         instructionFontSize: '11px'
       })
       // alert('Instruction steps might be too long for preview. Consider reducing text or spreading text more evenly between the sections available.')
     }
 
-    // if((this.props.instructionChunk4.instructionSteps.length+this.props.instructionChunk1.instructionSteps.length) > 12){
+    // if((this.props.instructionChunk4?.instructionSteps.length+this.props.instructionChunk1?.instructionSteps.length) > 12){
     //   this.setState({
     //     instructionFontSize: '10px'
     //   })
-    // }else if((this.props.instructionChunk2.instructionSteps.length+this.props.instructionChunk5.instructionSteps.length) > 12){
+    // }else if((this.props.instructionChunk2?.instructionSteps.length+this.props.instructionChunk5?.instructionSteps.length) > 12){
     //   this.setState({
     //     instructionFontSize: '10px'
     //   })
-    // }else if((this.props.instructionChunk3.instructionSteps.length+this.props.instructionChunk6.instructionSteps.length) > 12){
+    // }else if((this.props.instructionChunk3?.instructionSteps.length+this.props.instructionChunk6?.instructionSteps.length) > 12){
     //   this.setState({
     //     instructionFontSize: '10px'
     //   })
@@ -125,188 +125,188 @@ class ComponentToPrint extends React.Component {
           <div className={styles.print_page_2}>
             <div className={styles.print_body}>
               <div className={styles.meal_instructions}>
-                <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? { flexWrap: 'wrap' } : {}} className={styles.meal_instruction}>
-                  {(this.props.instructionChunk1.instructionSteps.length > 0 || this.props.instructionChunk1.title || this.props.chunk1Content) &&
-                    <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
+                <div style={(this.props.instructionChunk4?.instructionSteps.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) ? { flexWrap: 'wrap' } : {}} className={styles.meal_instruction}>
+                  {(this.props.instructionChunk1?.instructionSteps.length > 0 || this.props.instructionChunk1?.title || this.props.chunk1Content) &&
+                    <div style={(this.props.instructionChunk4?.instructionSteps.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
                       <div className={styles.instruction_step_top}>
                         <h4>1</h4>
-                        {(allowedImageExtensions.exec(this.props.instructionChunk1.dataName) && this.props.chunk1Content !== '') &&
+                        {(allowedImageExtensions.exec(this.props.instructionChunk1?.dataName) && this.props.chunk1Content !== '') &&
                           <img
                             src={this.props.chunk1Content}
-                            alt={this.props.instructionChunk1.title}
+                            alt={this.props.instructionChunk1?.title}
                             className={styles.instruction_img} />
                         }
 
-                        {(allowedVideoExtensions.exec(this.props.instructionChunk1.dataName) && this.props.chunk1Content !== '') &&
+                        {(allowedVideoExtensions.exec(this.props.instructionChunk1?.dataName) && this.props.chunk1Content !== '') &&
                           <video className={styles.instruction_img} src={this.props.chunk1Content}>
                             Your browser does not support the video tag.
                           </video>
                         }
                         {!this.props.chunk1Content &&
-                          <h4 className='title'>{this.props.instructionChunk1.title}</h4>}
+                          <h4 className='title'>{this.props.instructionChunk1?.title}</h4>}
                       </div>
                       {this.props.chunk1Content &&
-                        <h4 className='title'>{this.props.instructionChunk1.title}</h4>}
-                      {/* <div>{this.props.instructionChunk1.dataName}</div> */}
+                        <h4 className='title'>{this.props.instructionChunk1?.title}</h4>}
+                      {/* <div>{this.props.instructionChunk1?.dataName}</div> */}
                       <div className='instruction_steps'>
                         <div className={styles.instruction_step} style={{ fontSize: this.state.instructionFontSize }}>
-                          {this.props.instructionChunk1.instructionSteps.map((step, index) => (index + 1) + ". " + step + " ")}
+                          {this.props.instructionChunk1?.instructionSteps.map((step, index) => (index + 1) + ". " + step + " ")}
                         </div>
                       </div>
-                      {/* <div>{this.props.instructionChunk1.instructionSteps}</div> */}
+                      {/* <div>{this.props.instructionChunk1?.instructionSteps}</div> */}
 
                     </div>
                   }
-                  {(this.props.instructionChunk2.instructionSteps.length > 0 || this.props.instructionChunk2.title || this.props.chunk2Content) &&
-                    <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
+                  {(this.props.instructionChunk2?.instructionSteps.length > 0 || this.props.instructionChunk2?.title || this.props.chunk2Content) &&
+                    <div style={(this.props.instructionChunk4?.instructionSteps.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
                       <div className={styles.instruction_step_top}>
                         <h4>2</h4>
-                        {(allowedImageExtensions.exec(this.props.instructionChunk2.dataName) && this.props.chunk2Content !== '') &&
+                        {(allowedImageExtensions.exec(this.props.instructionChunk2?.dataName) && this.props.chunk2Content !== '') &&
                           <img
                             src={this.props.chunk2Content}
-                            alt={this.props.instructionChunk2.title}
+                            alt={this.props.instructionChunk2?.title}
                             className={styles.instruction_img} />
                         }
 
-                        {(allowedVideoExtensions.exec(this.props.instructionChunk2.dataName) && this.props.chunk2Content !== '') &&
+                        {(allowedVideoExtensions.exec(this.props.instructionChunk2?.dataName) && this.props.chunk2Content !== '') &&
                           <video className={styles.instruction_img} src={this.props.chunk2Content}>
                             Your browser does not support the video tag.
                           </video>
                         }
                         {!this.props.chunk2Content &&
-                          <h4 className='title'>{this.props.instructionChunk2.title}</h4>}
+                          <h4 className='title'>{this.props.instructionChunk2?.title}</h4>}
                       </div>
                       {this.props.chunk2Content &&
-                        <h4 className='title'>{this.props.instructionChunk2.title}</h4>}
-                      {/* <div>{this.props.instructionChunk4.dataName}</div> */}
+                        <h4 className='title'>{this.props.instructionChunk2?.title}</h4>}
+                      {/* <div>{this.props.instructionChunk4?.dataName}</div> */}
                       <div className='instruction_steps'>
                         <div className={styles.instruction_step} style={{ fontSize: this.state.instructionFontSize }}>
-                          {this.props.instructionChunk2.instructionSteps.map((step, index) => (this.props.instructionChunk1.instructionSteps.length + index + 1) + ". " + step + " ")}
+                          {this.props.instructionChunk2?.instructionSteps.map((step, index) => (this.props.instructionChunk1?.instructionSteps.length + index + 1) + ". " + step + " ")}
                         </div>
                       </div>
                     </div>
                   }
-                  {(this.props.instructionChunk3.instructionSteps.length > 0 || this.props.instructionChunk3.title || this.props.chunk3Content) &&
-                    <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
+                  {(this.props.instructionChunk3?.instructionSteps.length > 0 || this.props.instructionChunk3?.title || this.props.chunk3Content) &&
+                    <div style={(this.props.instructionChunk4?.instructionSteps.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
                       <div className={styles.instruction_step_top}>
                         <h4>3</h4>
-                        {(allowedImageExtensions.exec(this.props.instructionChunk3.dataName) && this.props.chunk3Content !== '') &&
+                        {(allowedImageExtensions.exec(this.props.instructionChunk3?.dataName) && this.props.chunk3Content !== '') &&
                           <img
                             src={this.props.chunk3Content}
-                            alt={this.props.instructionChunk3.title}
+                            alt={this.props.instructionChunk3?.title}
                             className={styles.instruction_img} />
                         }
 
-                        {(allowedVideoExtensions.exec(this.props.instructionChunk3.dataName) && this.props.chunk3Content !== '') &&
+                        {(allowedVideoExtensions.exec(this.props.instructionChunk3?.dataName) && this.props.chunk3Content !== '') &&
                           <video className={styles.instruction_img} src={this.props.chunk3Content}>
                             Your browser does not support the video tag.
                           </video>
                         }
                         {!this.props.chunk3Content &&
-                          <h4 className='title'>{this.props.instructionChunk3.title}</h4>}
+                          <h4 className='title'>{this.props.instructionChunk3?.title}</h4>}
                       </div>
                       {this.props.chunk3Content &&
-                        <h4 className='title'>{this.props.instructionChunk3.title}</h4>}
-                      {/* <div>{this.props.instructionChunk3.dataName}</div> */}
+                        <h4 className='title'>{this.props.instructionChunk3?.title}</h4>}
+                      {/* <div>{this.props.instructionChunk3?.dataName}</div> */}
                       <div className='instruction_steps'>
                         <div className={styles.instruction_step} style={{ fontSize: this.state.instructionFontSize }}>
-                          {this.props.instructionChunk3.instructionSteps.map((step, index) => (this.props.instructionChunk1.instructionSteps.length + this.props.instructionChunk2.instructionSteps.length + index + 1) + ". " + step + " ")}
+                          {this.props.instructionChunk3?.instructionSteps.map((step, index) => (this.props.instructionChunk1?.instructionSteps.length + this.props.instructionChunk2?.instructionSteps.length + index + 1) + ". " + step + " ")}
                         </div>
                       </div>
-                      {/* <div>{this.props.instructionChunk3.instructionSteps}</div> */}
+                      {/* <div>{this.props.instructionChunk3?.instructionSteps}</div> */}
 
                     </div>
                   }
-                  {(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) &&
-                    <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
+                  {(this.props.instructionChunk4?.instructionSteps.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) &&
+                    <div style={(this.props.instructionChunk4?.instructionSteps.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
                       <div className={styles.instruction_step_top}>
                         <h4>4</h4>
-                        {(allowedImageExtensions.exec(this.props.instructionChunk4.dataName) && this.props.chunk4Content !== '') &&
+                        {(allowedImageExtensions.exec(this.props.instructionChunk4?.dataName) && this.props.chunk4Content !== '') &&
                           <img
                             src={this.props.chunk4Content}
-                            alt={this.props.instructionChunk4.title}
+                            alt={this.props.instructionChunk4?.title}
                             className={styles.instruction_img} />
                         }
 
-                        {(allowedVideoExtensions.exec(this.props.instructionChunk4.dataName) && this.props.chunk4Content !== '') &&
+                        {(allowedVideoExtensions.exec(this.props.instructionChunk4?.dataName) && this.props.chunk4Content !== '') &&
                           <video className={styles.instruction_img} src={this.props.chunk4Content}>
                             Your browser does not support the video tag.
                           </video>
                         }
                         {!this.props.chunk4Content &&
-                          <h4 className='title'>{this.props.instructionChunk4.title}</h4>}
+                          <h4 className='title'>{this.props.instructionChunk4?.title}</h4>}
                       </div>
                       {this.props.chunk4Content &&
-                        <h4 className='title'>{this.props.instructionChunk4.title}</h4>}
-                      {/* <div>{this.props.instructionChunk4.dataName}</div> */}
+                        <h4 className='title'>{this.props.instructionChunk4?.title}</h4>}
+                      {/* <div>{this.props.instructionChunk4?.dataName}</div> */}
                       <div className='instruction_steps'>
                         <div className={styles.instruction_step} style={{ fontSize: this.state.instructionFontSize }}>
-                          {this.props.instructionChunk4.instructionSteps.map((step, index) => (this.props.instructionChunk1.instructionSteps.length + this.props.instructionChunk2.instructionSteps.length + this.props.instructionChunk3.instructionSteps.length + index + 1) + ". " + step + " ")}
+                          {this.props.instructionChunk4?.instructionSteps.map((step, index) => (this.props.instructionChunk1?.instructionSteps.length + this.props.instructionChunk2?.instructionSteps.length + this.props.instructionChunk3?.instructionSteps.length + index + 1) + ". " + step + " ")}
                         </div>
                       </div>
                     </div>
                   }
-                  {(this.props.instructionChunk5.instructionSteps.length > 0 || this.props.instructionChunk5.title || this.props.chunk5Content) &&
-                    <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
+                  {(this.props.instructionChunk5?.instructionSteps.length > 0 || this.props.instructionChunk5?.title || this.props.chunk5Content) &&
+                    <div style={(this.props.instructionChunk4?.instructionSteps.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
                       <div className={styles.instruction_step_top}>
                         <h4>5</h4>
-                        {(allowedImageExtensions.exec(this.props.instructionChunk5.dataName) && this.props.chunk5Content !== '') &&
+                        {(allowedImageExtensions.exec(this.props.instructionChunk5?.dataName) && this.props.chunk5Content !== '') &&
                           <img
                             src={this.props.chunk5Content}
-                            alt={this.props.instructionChunk5.title}
+                            alt={this.props.instructionChunk5?.title}
                             className={styles.instruction_img} />
                         }
 
-                        {(allowedVideoExtensions.exec(this.props.instructionChunk5.dataName) && this.props.chunk5Content !== '') &&
+                        {(allowedVideoExtensions.exec(this.props.instructionChunk5?.dataName) && this.props.chunk5Content !== '') &&
                           <video className={styles.instruction_img} src={this.props.chunk5Content}>
                             Your browser does not support the video tag.
                           </video>
                         }
                         {!this.props.chunk5Content &&
-                          <h4 className='title'>{this.props.instructionChunk5.title}</h4>}
+                          <h4 className='title'>{this.props.instructionChunk5?.title}</h4>}
                       </div>
                       {this.props.chunk5Content &&
-                        <h4 className='title'>{this.props.instructionChunk5.title}</h4>}
-                      {/* <div>{this.props.instructionChunk5.dataName}</div> */}
+                        <h4 className='title'>{this.props.instructionChunk5?.title}</h4>}
+                      {/* <div>{this.props.instructionChunk5?.dataName}</div> */}
                       <div className='instruction_steps'>
                         <div className={styles.instruction_step} style={{ fontSize: this.state.instructionFontSize }}>
-                          {this.props.instructionChunk5.instructionSteps.map((step, index) => (this.props.instructionChunk1.instructionSteps.length + this.props.instructionChunk2.instructionSteps.length + this.props.instructionChunk3.instructionSteps.length + this.props.instructionChunk4.instructionSteps.length + index + 1) + ". " + step + " ")}
+                          {this.props.instructionChunk5?.instructionSteps.map((step, index) => (this.props.instructionChunk1?.instructionSteps.length + this.props.instructionChunk2?.instructionSteps.length + this.props.instructionChunk3?.instructionSteps.length + this.props.instructionChunk4?.instructionSteps.length + index + 1) + ". " + step + " ")}
                         </div>
                       </div>
-                      {/* <div>{this.props.instructionChunk5.instructionSteps}</div> */}
+                      {/* <div>{this.props.instructionChunk5?.instructionSteps}</div> */}
 
                     </div>
                   }
 
-                  {(this.props.instructionChunk6.instructionSteps.length > 0 || this.props.instructionChunk6.title || this.props.chunk6Content) &&
-                    <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
+                  {(this.props.instructionChunk6?.instructionSteps.length > 0 || this.props.instructionChunk6?.title || this.props.chunk6Content) &&
+                    <div style={(this.props.instructionChunk4?.instructionSteps.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
                       <div className={styles.instruction_step_top}>
                         <h4>6</h4>
-                        {(allowedImageExtensions.exec(this.props.instructionChunk6.dataName) && this.props.chunk6Content !== '') &&
+                        {(allowedImageExtensions.exec(this.props.instructionChunk6?.dataName) && this.props.chunk6Content !== '') &&
                           <img
                             src={this.props.chunk6Content}
-                            alt={this.props.instructionChunk6.title}
+                            alt={this.props.instructionChunk6?.title}
                             className={styles.instruction_img} />
                         }
 
-                        {(allowedVideoExtensions.exec(this.props.instructionChunk6.dataName) && this.props.chunk6Content !== '') &&
+                        {(allowedVideoExtensions.exec(this.props.instructionChunk6?.dataName) && this.props.chunk6Content !== '') &&
                           <video className={styles.instruction_img} src={this.props.chunk6Content}>
                             Your browser does not support the video tag.
                           </video>
                         }
                         {!this.props.chunk6Content &&
-                          <h4 className='title'>{this.props.instructionChunk6.title}</h4>}
+                          <h4 className='title'>{this.props.instructionChunk6?.title}</h4>}
                       </div>
                       {this.props.chunk6Content &&
-                        <h4 className='title'>{this.props.instructionChunk6.title}</h4>}
-                      {/* <div>{this.props.instructionChunk6.dataName}</div> */}
+                        <h4 className='title'>{this.props.instructionChunk6?.title}</h4>}
+                      {/* <div>{this.props.instructionChunk6?.dataName}</div> */}
                       <div className='instruction_steps'>
                         <div className={styles.instruction_step} style={{ fontSize: this.state.instructionFontSize }}>
-                          {this.props.instructionChunk6.instructionSteps
-                            .map((step, index) => (this.props.instructionChunk1.instructionSteps.length + this.props.instructionChunk2.instructionSteps.length + this.props.instructionChunk3.instructionSteps.length + this.props.instructionChunk4.instructionSteps.length + this.props.instructionChunk5.instructionSteps.length + index + 1) + ". " + step + " ")}
+                          {this.props.instructionChunk6?.instructionSteps
+                            .map((step, index) => (this.props.instructionChunk1?.instructionSteps.length + this.props.instructionChunk2?.instructionSteps.length + this.props.instructionChunk3?.instructionSteps.length + this.props.instructionChunk4?.instructionSteps.length + this.props.instructionChunk5?.instructionSteps.length + index + 1) + ". " + step + " ")}
                         </div>
                       </div>
-                      {/* <div>{this.props.instructionChunk6.instructionSteps}</div> */}
+                      {/* <div>{this.props.instructionChunk6?.instructionSteps}</div> */}
 
                     </div>
                   }

@@ -21,7 +21,7 @@ function SuggestedMealRow(props){
         "Dec",
       ]
 
-    const {meal} = props;
+    const {suggestion} = props;
 
     function showDropDown(){
         setShowState(!show)
@@ -29,33 +29,42 @@ function SuggestedMealRow(props){
 
     return(
         <div className={styles.request_tr_div}>
-            <tr key={meal._id} className={styles.refId + " " + styles.request_tr}style={
-                props.auth.authUser.user_type === 'admin' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 5%'}:
-                props.auth.authUser.user_type === 'customer' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 22%'}:
-                props.auth.authUser.user_type === 'supplier' ? {backgroundColor: 'transparent', gridTemplateColumns: 'max-content 8% 10% 12% 12% 14% 28%'}: {backgroundColor: 'transparent'}
-                }>
+            <div key={suggestion._id} className={styles.refId + " " + styles.request_tr + ' ' + (props.auth.authUser.user_type === 'admin' ? styles.admin_request_tr:
+                            props.auth.authUser.user_type === 'customer' ? styles.customer_request_tr:
+                            props.auth.authUser.user_type === 'supplier' ? styles.supplier_request_tr: '')}>
                 <input name='id' type="checkbox" />
-                <td onClick={() => props.toggleOpenMeal(meal)} className={styles.request_td}>{meal._id}</td>
-                <td onClick={() => props.toggleOpenMeal(meal)} className={styles.request_td}>{meal.meal_name}</td>
-                <td onClick={() => props.toggleOpenMeal(meal)} className={styles.request_td + " " + status + " " + 
-                    ((meal.publicly_available === 'Draft' || meal.publicly_available === 'Pending') ? pending :
-                    meal.publicly_available === 'Public' ? approve :
-                    meal.publicly_available === 'Rejected' ? rejected : '')}
+                <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td}>{suggestion._id}</p>
+                <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td}>{props.searchType === 'Meal' ? suggestion.meal_name : suggestion.product_name}</p>
+                <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + status + " " + 
+                    ((suggestion.publicly_available === 'Draft' || suggestion.publicly_available === 'Pending') ? pending :
+                    suggestion.publicly_available === 'Public' ? approve :
+                    suggestion.publicly_available === 'Rejected' ? rejected : '')}
                 >
-                    {meal.publicly_available}
-                </td>
-                <td onClick={() => props.toggleOpenMeal(meal)} className={styles.request_td + " " + styles.hideData}>{meal.meal_categories && meal.meal_categories.length > 0 && JSON.parse(meal.meal_categories[0])[0]}</td>
-                <td onClick={() => props.toggleOpenMeal(meal)} className={styles.request_td + " " + styles.hideData}>{meal.createdAt && new Date(meal.createdAt).getDate() + ' ' + months[new Date(meal.createdAt).getMonth()] + ' ,'+ new Date(meal.createdAt).getFullYear()}</td>
-                <td className={styles.request_td + " " + styles.actions_con}>
+                    {suggestion.publicly_available}
+                </p>
+                <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + styles.hideData}>
+                    {props.searchType === 'Meal' ? 
+                    suggestion.meal_categories && suggestion.meal_categories.length > 0 && JSON.parse(suggestion.meal_categories[0])[0] : 
+                    suggestion.product_categories && suggestion.product_categories.length > 0 && suggestion.product_categories[0]
+                    }
+                </p>
+                <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + styles.hideData}>{suggestion.createdAt && new Date(suggestion.createdAt).getDate() + ' ' + months[new Date(suggestion.createdAt).getMonth()] + ' ,'+ new Date(suggestion.createdAt).getFullYear()}</p>
+                <p className={styles.request_td + " " + styles.actions_con}>
                     {props.auth.authUser.user_type !== 'admin' &&
                     <>
-                        <div className={styles.tableactionbutton}>Send for review</div>
+                        <div onClick={props.toggleSent} className={styles.tableactionbutton}>Send for review</div>
                         {props.auth.authUser.user_type === 'supplier' &&
-                            <div onClick={props.toggleTransferToInventory} className={styles.tableactionbutton} style={{background: '#F47900', color:'white', border: 'none'}}>Send for Inventory</div> 
+                        <>
+                            {suggestion.publicly_available === 'Public' ? 
+                            <div onClick={() => props.toggleTransferToInventory(suggestion)} className={styles.tableactionbutton} style={{background: '#F47900', color:'white', border: 'none'}}>Send for Inventory</div> 
+                            :
+                            <div className={styles.tableactionbutton} style={{background: '#D9D9D9', color:'white', border: 'none'}}>Send for Inventory</div> 
+                            }
+                        </>
                         }
                     </>
                     }
-                    <i className={styles.hideData} onClick={() => props.deleteMeal(meal._id)}>
+                    <i className={styles.hideData} onClick={() => props.deleteSuggestion(suggestion._id)}>
                     <CloseFillIcon style={actionIcon} /></i>
                     {show ? 
                     <i onClick={showDropDown} className={styles.showData}>
@@ -65,22 +74,27 @@ function SuggestedMealRow(props){
                         <ArrowDropDownIcon className={styles.arrowDown} />
                     </i>
                     }
-                </td>
-            </tr>
+                </p>
+            </div>
             {show &&
             <div className={styles.suggested_details_col}>
                 <div className={styles.suggested_categories}>
                     <h3 className={styles.suggested_category_name}>Category</h3>
-                    <p className={styles.suggested_category}>{meal.meal_categories && meal.meal_categories.length > 0 && JSON.parse(meal.meal_categories[0])[0]}</p>
+                    <p className={styles.suggested_category}>
+                        {props.searchType === 'Meal' ? 
+                        suggestion.meal_categories && suggestion.meal_categories.length > 0 && JSON.parse(suggestion.meal_categories[0])[0] : 
+                        suggestion.product_categories && suggestion.product_categories.length > 0 && suggestion.product_categories[0]
+                        }
+                    </p>
                 </div>
                 <div className={styles.suggested_categories}>
                     <h3 className={styles.suggested_category_name}>Date</h3>
-                    <p className={styles.suggested_category}>{meal.createdAt && new Date(meal.createdAt).getDate() + ' ' + months[new Date(meal.createdAt).getMonth()] + ' ,'+ new Date(meal.createdAt).getFullYear()}</p>
+                    <p className={styles.suggested_category}>{suggestion.createdAt && new Date(suggestion.createdAt).getDate() + ' ' + months[new Date(suggestion.createdAt).getMonth()] + ' ,'+ new Date(suggestion.createdAt).getFullYear()}</p>
                 </div>
 
                 <div className={styles.suggested_categories}>
                     <h3 className={styles.suggested_category_name}>Action</h3>
-                    <p onClick={() => props.deleteMeal(meal._id)} className={styles.suggested_category + " " + styles.redtext}>Remove</p>
+                    <p onClick={() => props.deleteSuggestion(suggestion._id)} className={styles.suggested_category + " " + styles.redtext}>Remove</p>
                 </div>
             </div>
             }

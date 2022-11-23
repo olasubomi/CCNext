@@ -13,11 +13,9 @@ import { connect } from "react-redux";
 import { getUser } from '../../src/actions';
 import axios from '../../src/util/Api';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-// import { IgrDoughnutChart, IgrDoughnutChartModule, IgrItemLegendModule, IgrRingSeries, IgrRingSeriesModule } from 'igniteui-react-charts';
-
-// IgrDoughnutChartModule.register();
-// IgrRingSeriesModule.register();
-// IgrItemLegendModule.register();
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement } from 'chart.js';
+ChartJS.register(ArcElement);
 
 
 const DashboardHomePage = (props) => {
@@ -32,7 +30,8 @@ const DashboardHomePage = (props) => {
   const [productCount, setProductCountState] = useState(0);
   const [kitchenUtensilCount, setKitchenUtensilCountState] = useState(0);
   const [changeType, setChangeTypeState] = useState(false);
-  const [meals, setMealsState] = useState([])
+  const [suggestions, setSuggestionsState] = useState([])
+  const [searchType, setSearchType] = useState('Meal')
   const months = [
     "Jan",
     "Feb",
@@ -78,29 +77,61 @@ const DashboardHomePage = (props) => {
             })
         }
 
-        if(props.auth.authUser.user_type === 'admin'){
-            axios.get('/meals/get-meals/1').then(data => {
-                console.log(data.data)
-                if(data.data.data){
-                    setMealsState(data.data.data.meals)
-                }
-            })
+        let url
+        if(searchType === 'Meal'){
+            if(props.auth.authUser.user_type === 'admin'){
+                url = '/meals/get-meals/1'
+            }
+        }else if(searchType === 'Product'){
+            if(props.auth.authUser.user_type === 'admin'){
+                url = '/products/get-all-products/1'
+            }
         }else{
-            axios.get('/meals/get-meals/1?user='+props.auth.authUser._id).then(data => {
+            if(props.auth.authUser.user_type === 'admin'){
+                url = '/categories/get-all-categories/1'
+            }
+        }
+
+        if(props.auth.authUser.user_type === 'admin'){
+            axios.get(url).then(data => {
                 console.log(data.data)
                 if(data.data.data){
-                    setMealsState(data.data.data.meals)
+                    if(searchType === 'Meal'){
+                        setSuggestionsState(data.data.data.meals)
+                    }else if(searchType === 'Product'){
+                        setSuggestionsState(data.data.data.products)
+                    }
                 }
             })
         }
     }
   }, [props.auth]);
 
-//   const data = [
-//     { MarketShare: 37, Category: "Cooling", Summary: "Cooling 40%", },
-//     { MarketShare: 12, Category: "Heating", Summary: "Heating 25%", },
-//     { MarketShare: 25, Category: "Residential", Summary: "Residential 35%",  },
-// ];
+    const requestChart = {
+    datasets: [{
+        data: [mealCount, mealCount, kitchenUtensilCount],
+        backgroundColor: [
+        '#F40707',
+        '#F47900',
+        '#04D505'
+        ],
+        borderWidth: 0,
+        cutout: '70%'
+    }],
+    };
+
+    const userChart = {
+        datasets: [{
+            data: [300, 50, 100],
+            backgroundColor: [
+            '#F40707',
+            '#F47900',
+            '#04D505'
+            ],
+            borderWidth: 0,
+            cutout: '70%'
+        }],
+    };
 
   function toggleDriverMode(type){
     axios.put('/user/updateuserprofile/'+props.auth.authUser._id, { user_type: type }).then(res => {
@@ -109,6 +140,34 @@ const DashboardHomePage = (props) => {
         setDriverModeState(!driverMode)
     })
   }
+
+function handleSearchType (type){
+    setSearchType(type)
+    let url
+    if(type === 'Meal'){
+        if(props.auth.authUser.user_type === 'admin'){
+            url = '/meals/get-meals/1'
+        }
+    }else if(type === 'Product'){
+        if(props.auth.authUser.user_type === 'admin'){
+            url = '/products/get-all-products/1'
+        }
+    }else{
+        if(props.auth.authUser.user_type === 'admin'){
+            url = '/categories/get-all-categories/1'
+        }
+    }
+    axios.get(url).then(data => {
+        console.log(data.data)
+        if(data.data.data){
+            if(type === 'Meal'){
+                setSuggestionsState(data.data.data.meals)
+            }else if(type === 'Product'){
+                setSuggestionsState(data.data.data.products)
+            }
+        }
+    })
+}
   
   function toggleChangeType(){
     setChangeTypeState(!changeType)
@@ -151,7 +210,7 @@ const DashboardHomePage = (props) => {
                             <ArrowDropDownIcon className={styles.select_box_icon} />
                         </div>
                         {changeType &&
-                            <div className={styles.select_options}>
+                            <div className={styles.select_options2}>
                                 <p onClick={() => toggleDriverMode('customer')}>Customer</p>
                                 <p onClick={() => toggleDriverMode('supplier')}>Supplier</p>
                                 {/* <p onClick={() => handleSearchType('Kitchen Utensil')}>Kitchen Utensils</p> */}
@@ -232,22 +291,11 @@ const DashboardHomePage = (props) => {
                             <h3>Categories</h3>
                             <div className={styles.chart}>
                                 <div className={styles.chart_circle}>
-                                    {/* <IgrDoughnutChart
-                                        width="100%"
-                                        height="100%"
-                                        allowSliceSelection="false"
-                                        allowSliceExplosion="false"
-                                        innerExtent={0.8}
-                                        >
-                                            <IgrRingSeries name="ring1"
-                                                dataSource={data}
-                                                brushes="#F40707 #F47900 #04D505"
-                                                valueMemberPath="MarketShare"
-                                                radiusFactor={0.7}
-                                                startAngle={30}
-                                                outlines='transparent'
-                                                />
-                                    </IgrDoughnutChart> */}
+                                    <Doughnut
+                                        data={requestChart}
+                                        width={400}
+                                        height={400}
+                                    />
         
                                     <div className={styles.chart_circle_total}>
                                         <p>Total</p>
@@ -303,22 +351,11 @@ const DashboardHomePage = (props) => {
                             <h3>User Stats</h3>
                             <div className={styles.chart}>
                                 <div className={styles.chart_circle}>
-                                    {/* <IgrDoughnutChart
-                                        width="100%"
-                                        height="100%"
-                                        allowSliceSelection="false"
-                                        allowSliceExplosion="false"
-                                        innerExtent={0.8}
-                                        >
-                                            <IgrRingSeries name="ring1"
-                                                dataSource={data}
-                                                brushes="#F40707 #F47900 #04D505"
-                                                valueMemberPath="MarketShare"
-                                                radiusFactor={0.7}
-                                                startAngle={30}
-                                                outlines='transparent'
-                                                />
-                                    </IgrDoughnutChart> */}
+                                    <Doughnut
+                                        data={userChart}
+                                        width={400}
+                                        height={400}
+                                    />
         
                                     <div className={styles.chart_circle_total}>
                                         <p>Total</p>
@@ -369,42 +406,56 @@ const DashboardHomePage = (props) => {
                     </h3>
                     <div className={styles.dashboard}>
                     {props.auth.authUser.user_type === 'admin' &&
-                    <table className={styles.request_table}>
-                        <thead>
-                        <tr className={styles.request_tr} style={{backgroundColor: 'transparent'}}>
-                            <th className={styles.request_th}>Request ID</th>
-                            <th className={styles.request_th}>Meal</th>
-                            <th className={styles.request_th + " " + styles.hideData}>Category</th>
-                            <th className={styles.request_th} style={{textAlign: 'center'}}>Status</th>
-                            {/* <th className={styles.request_th + " " + styles.hideData}>Price</th> */}
-                            <th className={styles.request_th + " " + styles.hideData}>Date</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                meals.map(meal => {
-                                    return(
-                                        <tr className={styles.refId + " " + styles.request_tr}>
-                                            <td className={styles.request_td}>{meal._id}</td>
-                                            <td className={styles.request_td}>{meal.meal_name}</td>
-                                            <td className={styles.request_td + " " + styles.hideData}>{meal.meal_categories && meal.meal_categories.length > 0 && JSON.parse(meal.meal_categories[0])[0]}</td>
-                                            <td className={styles.request_td + " " + styles.status + " " + 
-                                                ((meal.publicly_available === 'Draft' || meal.publicly_available === 'Pending') ? styles.pending :
-                                                meal.publicly_available === 'Public' ? styles.approve :
-                                                meal.publicly_available === 'Rejected' ? styles.rejected : '')}
-                                            >
-                                                {meal.publicly_available}
-                                            </td>
-                                            {/* <td className={styles.request_td + " " + styles.hideData}>afa</td> */}
-                                            <td className={styles.request_td + " " + styles.hideData}>{meal.createdAt && new Date(meal.createdAt).getDate() + ' ' + months[new Date(meal.createdAt).getMonth()] + ' ,'+ new Date(meal.createdAt).getFullYear()}</td>
-                                        </tr>
-                                    )
-                                })
-                            }
+                    <>
+                        <div className={styles.mode_con2}>
+                            <div onClick={() => handleSearchType('Meal')} className={styles.mode2 + ' ' + styles.left_mode2 + ' '+(searchType === 'Meal' ? styles.active_mode2 : '')}>Meal</div>
+                            <div onClick={() => handleSearchType('Product')} className={styles.mode2 + ' ' + ' '+(searchType === 'Product'? styles.active_mode2 : '')}>Product</div>
+                            <div onClick={() => handleSearchType('Category')} className={styles.mode2 + ' ' + styles.right_mode2 + ' '+(searchType === 'Category'? styles.active_mode2 : '')}>Category</div>
+                        </div>
+                        <table className={styles.request_table}>
+                            <thead>
+                            <tr className={styles.request_tr} style={{backgroundColor: 'transparent'}}>
+                                <th className={styles.request_th}>Request ID</th>
+                                <th className={styles.request_th}>Meal</th>
+                                <th className={styles.request_th + " " + styles.hideData}>Category</th>
+                                <th className={styles.request_th} style={{textAlign: 'center'}}>Status</th>
+                                {/* <th className={styles.request_th + " " + styles.hideData}>Price</th> */}
+                                <th className={styles.request_th + " " + styles.hideData}>Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    suggestions.map(suggestion => {
+                                        return(
+                                            <tr key={suggestion._id} className={styles.refId + " " + styles.request_tr}>
+                                                <td className={styles.request_td}>{suggestion._id}</td>
+                                                <td className={styles.request_td}>{searchType === 'Meal' ? suggestion.meal_name : searchType === 'Meal' ? suggestion.product_name : suggestion.product_name}</td>
+                                                <td className={styles.request_td + " " + styles.hideData}>
+                                                    {searchType === 'Meal' ? 
+                                                    suggestion.meal_categories && suggestion.meal_categories.length > 0 && JSON.parse(suggestion.meal_categories[0])[0] :
+                                                    searchType === 'Product' ?
+                                                    suggestion.product_categories && suggestion.product_categories.length > 0 && suggestion.product_categories[0] :
+                                                    suggestion.product_categories && suggestion.product_categories.length > 0 && suggestion.product_categories[0]
+                                                    }
+                                                </td>
+                                                <td className={styles.request_td + " " + styles.status + " " + 
+                                                    ((suggestion.publicly_available === 'Draft' || suggestion.publicly_available === 'Pending') ? styles.pending :
+                                                    suggestion.publicly_available === 'Public' ? styles.approve :
+                                                    suggestion.publicly_available === 'Rejected' ? styles.rejected : '')}
+                                                >
+                                                    {suggestion.publicly_available}
+                                                </td>
+                                                {/* <td className={styles.request_td + " " + styles.hideData}>afa</td> */}
+                                                <td className={styles.request_td + " " + styles.hideData}>{suggestion.createdAt && new Date(suggestion.createdAt).getDate() + ' ' + months[new Date(suggestion.createdAt).getMonth()] + ' ,'+ new Date(suggestion.createdAt).getFullYear()}</td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                                
                             
-                        
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </>
                     }
                     {props.auth.authUser.user_type === 'customer' &&
                     <table className={styles.request_table}>
@@ -517,6 +568,163 @@ const DashboardHomePage = (props) => {
                     }
                     </div>
                 </div>
+                {props.auth.authUser.user_type === 'admin' &&
+                <>
+                    <div className={styles.show}>
+                        <div className={styles.dashboard_container} style={{padding: '0 10px'}}>
+                            <h3>Order Groups</h3>
+                            <div className={styles.order_groups}>
+                                <div className={styles.orders_head} style={{backgroundColor: 'transparent'}}>
+                                    <div className={styles.orders_th}>Order Groups</div>
+                                    <div className={styles.orders_th}>Pickup Location</div>
+                                    <div className={styles.orders_th}>Delivery Location</div>
+                                    <div className={styles.orders_th}>Total</div>
+                                    <div className={styles.orders_th}>Pending</div>
+                                    <div className={styles.orders_th}>Picked</div>
+                                    <div className={styles.orders_th}>Fulfilled</div>
+                                </div>
+                                <div className={styles.orders_body}>
+                                    <table className={styles.orders_table}>
+                                        <tbody>
+                                            <tr className={styles.refId + " " + styles.orders_tr}>
+                                                <td style={{color: '#000000'}} className={styles.orders_td}>dfdsf</td>
+                                                <td style={{color: '#000000'}} className={styles.orders_td}>asf</td>
+                                                <td style={{color: '#000000'}} className={styles.orders_td}>safa</td>
+                                                <td className={styles.orders_td}>saf</td>
+                                                <td className={styles.orders_td}>afa</td>
+                                                <td className={styles.orders_td}>afa</td>
+                                                <td className={styles.orders_td}>afa</td>
+                                            </tr>
+
+                                            <tr className={styles.refId + " " + styles.orders_tr}>
+                                                <td style={{color: '#000000'}} className={styles.orders_td}>dfdsf</td>
+                                                <td style={{color: '#000000'}} className={styles.orders_td}>asf</td>
+                                                <td style={{color: '#000000'}} className={styles.orders_td}>safa</td>
+                                                <td className={styles.orders_td} style={{textAlign: 'center'}}>saf</td>
+                                                <td className={styles.orders_td}>afa</td>
+                                                <td className={styles.orders_td}>afa</td>
+                                                <td className={styles.orders_td}>afa</td>
+                                            </tr>
+                                        
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={styles.chart_con2}>
+                        <div className={styles.chart_col}>
+                            <h3>Categories</h3>
+                            <div className={styles.chart}>
+                                <div className={styles.chart_circle}>
+                                    <Doughnut
+                                        data={requestChart}
+                                        width={400}
+                                        height={400}
+                                    />
+
+                                    <div className={styles.chart_circle_total}>
+                                        <p>Total</p>
+                                        <h3>{mealCount+productCount+kitchenUtensilCount}</h3>
+                                    </div>
+                                </div>
+                                <div className={styles.chart_breakdown_con}>
+                                    <div className={styles.chart_breakdown}>
+                                        <div className={styles.chart_breakdown_bullet} style={{background: '#F47900'}}></div>
+                                        <div className={styles.chart_breakdown_details}>
+                                            <p>Meal</p>
+                                            <div>
+                                                {mealCount > 0 ?
+                                                <h5>{Math.round((mealCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>:
+                                                <h5>0%</h5>
+                                                }
+                                                <h5>{mealCount}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={styles.chart_breakdown}>
+                                        <div className={styles.chart_breakdown_bullet} style={{background: '#04D505'}}></div>
+                                        <div className={styles.chart_breakdown_details}>
+                                            <p>Product</p>
+                                            <div>
+                                                {productCount > 0 ?
+                                                <h5>{Math.round((productCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>
+                                                :
+                                                <h5>0%</h5>
+                                                }
+                                                <h5>{productCount}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={styles.chart_breakdown}>
+                                        <div className={styles.chart_breakdown_bullet} style={{background: '#CF0000'}}></div>
+                                        <div className={styles.chart_breakdown_details}>
+                                            <p>Kitchen Utensils</p>
+                                            <div>
+                                                {kitchenUtensilCount > 0 ?
+                                                <h5>{Math.round((kitchenUtensilCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>
+                                                :
+                                                <h5>0%</h5>
+                                                }
+                                                <h5>{kitchenUtensilCount}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.chart_col}>
+                            <h3>User Stats</h3>
+                            <div className={styles.chart}>
+                                <div className={styles.chart_circle}>
+                                    <Doughnut
+                                        data={userChart}
+                                        width={400}
+                                        height={400}
+                                    />
+
+                                    <div className={styles.chart_circle_total}>
+                                        <p>Total</p>
+                                        <h3>2142</h3>
+                                    </div>
+                                </div>
+                                <div className={styles.chart_breakdown_con}>
+                                    <div className={styles.chart_breakdown}>
+                                        <div className={styles.chart_breakdown_bullet} style={{background: '#F47900'}}></div>
+                                        <div className={styles.chart_breakdown_details}>
+                                            <p>Meal</p>
+                                            <div>
+                                                <h5>40%</h5>
+                                                <h5>1965</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={styles.chart_breakdown}>
+                                        <div className={styles.chart_breakdown_bullet} style={{background: '#04D505'}}></div>
+                                        <div className={styles.chart_breakdown_details}>
+                                            <p>Product</p>
+                                            <div>
+                                                <h5>35%</h5>
+                                                <h5>1877</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={styles.chart_breakdown}>
+                                        <div className={styles.chart_breakdown_bullet} style={{background: '#CF0000'}}></div>
+                                        <div className={styles.chart_breakdown_details}>
+                                            <p>Kitchen Utensils</p>
+                                            <div>
+                                                <h5>25%</h5>
+                                                <h5>544</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+                }
             </>}
         </div>
         {props.auth.authUser && props.auth.authUser.user_type === 'admin' &&

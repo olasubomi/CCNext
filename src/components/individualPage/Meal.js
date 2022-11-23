@@ -7,9 +7,11 @@ import Image from "next/image";
 import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIcon, TwitterEIcon, WhatsappEIcon } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
+import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
 function Meal(props){
     console.log(props.meal)
+    const router = window.location
     return (
         <>
             <Head>
@@ -26,9 +28,9 @@ function Meal(props){
                         {props.meal.meal_images[0].length > 0 ? 
                         <Image
                             src={props.meal.meal_images[0]}
-                            alt="pop up"
+                            alt={props.meal.meal_name}
                             className={styles.meal_section_2_main_img}
-                            height={"100%"} width={"100%"}
+                            height={500} width={500}
                         />:<span></span>
                         }
                         </>
@@ -40,8 +42,8 @@ function Meal(props){
                                return(
                                 <>
                                 {image.length > 0 &&
-                                <Image key={index} alt="pop up" src={image}
-                                height={"100%"} width={"100%"}
+                                <Image key={index} alt={props.meal.meal_name} src={image}
+                                height={300} width={300}
                                 className={styles.meal_section_2_image} />
                                 }
                                 </>
@@ -60,6 +62,32 @@ function Meal(props){
                                 <div>
                                     <LocationIcon style={styles.store_icon} />
                                     <p>6391 Elgin St. Celina, Delaware 10299</p>
+                                </div>
+                            </div>
+                            <div className={styles.meal_section_32}>
+                                <div className={styles.meal_details}>
+                                    <div className={styles.hide}>
+                                        <h3>Serves: </h3>
+                                        <p>{props.meal.servings}</p>
+                                    </div>
+                                    <div>
+                                        <h3>PrepTime:</h3>
+                                        <p>{props.meal.prep_time} Minutes</p>
+                                    </div>
+                                    <div>
+                                        <h3>CookTime : </h3>
+                                        <p>{props.meal.cook_time} Minutes </p>
+                                    </div>
+                                    <div>
+                                        <h3>Chef:</h3>
+                                        <p>{props.meal.chef}</p>
+                                    </div>
+                                </div>
+                                <div className={styles.meal_details}>
+                                    <div>
+                                        <h3>intro: </h3>
+                                        <p>{props.meal.intro}</p>
+                                    </div>
                                 </div>
                             </div>
                             <p className={styles.meal_section_2_description}>
@@ -83,14 +111,22 @@ function Meal(props){
                     </div>
                 </div>
                 <div className={styles.section_2_footer}>
-                    <div>
+                    <div className={styles.hide}>
                         <p><ShareIcon />Share this product:</p>
-                        <FacebookEIcon />
-                        <TwitterEIcon />
-                        <InstaEIcon />
-                        <WhatsappEIcon /> 
+                        <FacebookShareButton>
+                            <FacebookEIcon quote={props.meal.intro} url={router.href} />
+                        </FacebookShareButton>
+                        <TwitterShareButton title={props.meal.meal_name} url={router.href}>
+                            <TwitterEIcon />
+                        </TwitterShareButton>
+                        <InstapaperShareButton title={props.meal.meal_name} url={router.href}>
+                            <InstaEIcon />
+                        </InstapaperShareButton>
+                        <WhatsappShareButton title={props.meal.meal_name} url={router.href} >
+                            <WhatsappEIcon />
+                        </WhatsappShareButton>
                     </div>
-                    <div>
+                    <div className={styles.hide}>
                         <p>Print Preview</p>
                         <PrintEIcon />
                     </div>
@@ -101,7 +137,7 @@ function Meal(props){
                 </div>
                 <div className={styles.meal_section_3}>
                     <div className={styles.meal_details}>
-                        <div>
+                        <div className={styles.hide}>
                             <h3>Serves: </h3>
                             <p>{props.meal.servings}</p>
                         </div>
@@ -127,8 +163,8 @@ function Meal(props){
                             <div className={styles.ingredients_head} style={{backgroundColor: 'transparent'}}>
                                 <div></div>
                                 <div className={styles.ingredients_th}>Names</div>
-                                <div className={styles.ingredients_th} style={{textAlign: 'center'}}>Quantity</div>
-                                <div className={styles.ingredients_th}>Measurement</div>
+                                <div className={styles.ingredients_th + ' ' + styles.hide} style={{textAlign: 'center'}}>Quantity</div>
+                                <div className={styles.ingredients_th + ' ' + styles.hide}>Measurement</div>
                                 <div className={styles.ingredients_th} style={{textAlign: 'center'}}>Availability in store</div>
                                 <div className={styles.ingredients_th}>Price</div>
                             </div>
@@ -142,8 +178,8 @@ function Meal(props){
                                                 <tr key={index} className={styles.ingredients_tr}>
                                                     <input name='id' type="checkbox" />
                                                     <td style={{color: '#000000'}} className={styles.ingredients_td}>{ingredient.productName}</td>
-                                                    <td className={styles.ingredients_td} style={{textAlign: 'center'}}>{ingredient.quantity}</td>
-                                                    <td className={styles.ingredients_td}>{ingredient.measurement}</td>
+                                                    <td className={styles.ingredients_td + ' ' + styles.hide} style={{textAlign: 'center'}}>{ingredient.quantity}</td>
+                                                    <td className={styles.ingredients_td + ' ' + styles.hide}>{ingredient.measurement}</td>
                                                     <td className={styles.ingredients_td} style={{textAlign: 'center'}}></td>
                                                     <td className={styles.ingredients_td}>Unavailable</td>
                                                 </tr>
@@ -203,7 +239,7 @@ function Meal(props){
                 {props.meal.formatted_instructions &&
                 <div className={styles.meal_section_5}>
                     <h3>Steps</h3>
-                    {props.meal.formatted_instructions.length > 0 &&
+                    {/* {props.meal.formatted_instructions.length > 0 &&
                     <>
                         {JSON.parse(props.meal.formatted_instructions[0]).map((instruction, index) => {
                             return(
@@ -231,7 +267,7 @@ function Meal(props){
                             )
                         })}
                     </>
-                    }
+                    } */}
                     
                 </div>}
 

@@ -81,6 +81,8 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 
 const UserProfile = (props) => {
     const router = useRouter()
+    const [status, setStatusState] = useState('');
+    const [message, setMessageState] = useState('');
     const [formState, setFormState] = useState({
         email: "",
         phone_number: "",
@@ -103,13 +105,13 @@ const UserProfile = (props) => {
         billing_address, billing_address2, billing_city, billing_country,
         billing_state, billing_zip_code } = formState;
     const [times, setTimes] = useState({
-        sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        tuesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        wednesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        thursday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        friday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        saturday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'}
+        sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        tuesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        wednesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        thursday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        friday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        saturday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true}
     });
     const days = [
         "sunday",
@@ -129,8 +131,13 @@ const UserProfile = (props) => {
                 ['last_name']: props.auth.authUser.last_name,
                 ['phone_number']: props.auth.authUser.phone_number
             })
+
+            if(props.auth.authUser.driver_hours.length>0){
+                setTimes(props.auth.authUser.driver_hours[0])
+            }
+            
         }
-      },[props.auth]);
+      },[props.auth.authUser]);
 
     function handleChange(e) {
         setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -175,7 +182,25 @@ const UserProfile = (props) => {
     function handleTime(time, day, when){
         console.log(time)
         // times[day][when] = time;
+        let newTimes = {...times,[day]: {...times[day], [when]: time}}
+        console.log(newTimes)
         setTimes({...times,[day]: {...times[day], [when]: time}})
+        saveChange(newTimes)
+    }
+
+    function handleDayAvailabiltyChange(value,day,when) {
+        let newTimes = {...times,[day]: {...times[day], [when]: value}}
+        console.log(newTimes)
+        setTimes({...times,[day]: {...times[day], [when]: value}})
+        saveChange(newTimes)
+    };
+
+    function saveChange(times){
+        let fields = {driver_hours: times}
+        axios.put('/user/updateuserprofile/'+props.auth.authUser._id, fields).then(res => {
+            console.log(res.data)
+            props.getUser(props.auth.authUser._id)
+        })
     }
 
     function saveChanges(e){
@@ -196,20 +221,40 @@ const UserProfile = (props) => {
             country: billing_country
         }
         const formData = new FormData();
-        formData.append('profile_picture', profileImage);
+        if(profileImage.length > 0){
+            formData.append('profile_picture', profileImage);
+        }
         formData.append('first_name', first_name);
         formData.append('last_name', last_name);
         formData.append('phone_number', phone_number);
-        formData.append('delivery_addresses', delivery_addresses);
+        // formData.append('delivery_addresses', delivery_addresses);
 
         axios.put('/user/updateuserprofile/'+props.auth.authUser._id, formData).then(res => {
-            console.log(res)
+            console.log(res.data)
+            setStatusState('success')
+            setMessageState('User updated')
+            setTimeout(() => {
+                setStatusState('')
+                setMessageState('')
+            },5000)
             props.getUser(props.auth.authUser._id)
+            
+        }).catch(() => {
+            setStatusState('error')
+            setMessageState('Error updating user')
+            setTimeout(() => {
+                setStatusState('')
+                setMessageState('')
+            }, 5000)
         })
     }
 
     return (
         <div className={container + " " + col2}>
+            <div className="alert">
+                {status === "error" && <div className="alert-danger">{message}</div>}
+                {status === "success" && <div className="alert-success">{message}</div>}
+            </div>
         <Head>
             <title>User Profile</title>
             <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -889,8 +934,8 @@ const UserProfile = (props) => {
                                             <div className={styles.profile_workinghour_day}>
                                                 <h3>{day}</h3>
                                                 <div className={styles.profile_workinghour_switch}>
-                                                <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                                Open
+                                                <AntSwitch checked={times[day]['open']} onChange={() => handleDayAvailabiltyChange(!times[day]['open'], day, 'open')} inputProps={{ 'aria-label': 'ant design' }} />
+                                                {times[day]['open'] ? 'Open': 'Closed'}
                                                 </div>
                                                 <div className={styles.profile_workinghour_date}>
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>

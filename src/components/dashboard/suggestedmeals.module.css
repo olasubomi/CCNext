@@ -229,7 +229,7 @@
 
 .search_suggestion{
     display: grid;
-    grid-gap: 2rem;
+    grid-gap: 1rem;
     align-content: start;
 }
 
@@ -244,7 +244,7 @@
 
     color: #000000;
     border-bottom: 1px solid #949494;
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
 }
 
 .search_suggestion_lists{
@@ -283,7 +283,7 @@
 
     color: #000000;
     border-bottom: 1px solid #949494;
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
 }
 
 .search_help_lists{
@@ -293,6 +293,7 @@
 }
 
 .search_help_list{
+    cursor: pointer;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -305,8 +306,8 @@
 
 .search_container_col_2{
     display: grid;
-    grid-gap: 2rem;
-    grid-template-rows: 5rem 1fr;
+    grid-gap: 1rem;
+    grid-template-rows: 2.5rem 1fr;
 }
 
 .search_container_col_2_row_1{
@@ -372,14 +373,14 @@
     color: #000000;
 }
 
-.suggestedmeal_row2 >div{
+.suggestedmeal_row2_col2{
     display: grid;
     grid-auto-flow: column;
     grid-gap: 2rem;
     align-items: center;
 }
 
-.suggestedmeal_row2 >div >h5{
+.suggestedmeal_row2_col2 >h5{
     margin: 0;
     font-style: normal;
     font-weight: 400;
@@ -391,7 +392,42 @@
     color: rgba(255, 0, 0, 0.85);
 }
 
-.suggestedmeal_row2 > div >div{
+.mode_con{
+    justify-self: end;
+    display: flex;
+  }
+  
+  .mode{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #737373;
+    padding: 0 7px;
+    width: 94px;
+    height: 39px;
+    text-transform: capitalize;
+    background: rgba(244, 121, 0, 0.06);;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    cursor: pointer;
+  }
+  
+  .left_mode{
+    border-radius: 4px 0px 0px 4px;
+  }
+  
+  .right_mode{
+    border-radius: 0px 4px 4px 0px;
+  }
+  
+  .active_mode{
+    background: #F47900;
+    color: #FFFFFF;
+  }
+
+.suggestedmeal_row2_col2 >div{
     display: flex;
     gap: 8px;
 }
@@ -541,6 +577,17 @@
         background-color: #F47900;
     }
     
+
+    .admin_request_tr{
+        grid-template-columns: max-content 17% 13% 73px 12%;
+    }
+    .customer_request_tr{
+        grid-template-columns: max-content 8% 10% 12% 12% 14% 22%;
+    }
+    .supplier_request_tr{
+        grid-template-columns: max-content 8% 8% 71px 79px 94px 254px;
+        padding: 2rem;
+    }
     /* .th, .td {
       text-align: left;
       padding: 16px;
@@ -567,6 +614,28 @@
     .request_th > svg{
         fill: #6D6D6D;
         width: 14px;
+    }
+
+    .supplier_request_tr > .request_td{
+        font-style: normal;
+        font-weight: 400;
+        font-size: 13px;
+        line-height: 13px;
+    }
+
+    .supplier_request_tr > .request_th{
+        font-style: normal;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 13px;
+    }
+
+    .supplier_request_tr > .request_td > .tableactionbutton{
+        width: 108px;
+        height: 28px;
+        font-size: 10px;
+        line-height: 11px;
+        padding: 0 3px;
     }
   
     .request_td{
@@ -618,6 +687,7 @@
 
     .redtext{
         color: #F40707 !important;
+        cursor: pointer;
     }
     
     .suggested_category {
@@ -741,6 +811,10 @@
         cursor: pointer;
     }
 
+    .select_options2 > p{
+        cursor: pointer;
+    }
+
     .showData{
         display: none;
     }
@@ -748,6 +822,59 @@
     .arrowDown{
         font-size:22px;
     }
+
+    .user_pagination{
+        height: max-content;
+        padding: 4rem;
+        display: grid;
+        grid-gap: 1rem;
+        justify-content: end;
+      }
+      
+      .user_pagination > div{
+        display: flex;
+        gap: 1rem;
+      }
+      
+      .user_pagination > p{
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+        /* identical to box height */
+      
+        letter-spacing: 0.374px;
+      
+        /* Neutral/900 */
+      
+        color: #131518;
+        text-align: center;
+      }
+      
+      .paginate_btn{
+        cursor: pointer;
+        width: 45px;
+        height: 33px;
+      
+        /* Secondary green/500 */
+      
+        background: #7FBABD;
+        border-radius: 4px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+        /* identical to box height */
+      
+        letter-spacing: 0.374px;
+      
+        /* Primary blue/50 */
+      
+        color: #F3F6FC;
+        display: grid;
+        align-items: center;
+        justify-items: center;
+      }
 
 @media screen and (max-width: 1115px) {
     .hideData{
@@ -763,16 +890,44 @@
     }
 
     .request_tr{
-        grid-template-columns: max-content 18% 13% 17% 1fr !important;
         padding: 2rem;
+    }
+
+    .admin_request_tr{
+        grid-template-columns: max-content 26% 17% 73px 9% ;
+    }
+
+    .customer_request_tr{
+        grid-template-columns: max-content 18% 17% 17% 25% ;
+    }
+
+    .supplier_request_tr{
+        grid-template-columns: max-content 12% 13% 11% 249px ;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .customer_request_tr{
+        grid-template-columns: max-content 18% 14% 17% 37% ;
     }
 }
 
 @media screen and (max-width: 768px) {
     .request_tr{
-        grid-template-columns: 18% 17% 17% 1fr !important;
         grid-gap: 1rem;
         padding: 1rem;
+    }
+
+    .admin_request_tr{
+        grid-template-columns: 18% 20% 10% 8%;
+    }
+
+    .customer_request_tr{
+        grid-template-columns: 18% 15% 12% 35%;
+    }
+
+    .supplier_request_tr{
+        grid-template-columns: 13% 14% 11% 237px;
     }
 
     .request_tr > input{
@@ -781,24 +936,24 @@
 
     .request_td{
         font-style: normal;
-        font-weight: 400;
-        font-size: 11px;
-        line-height: 13px;
+        font-weight: 400 !important;
+        font-size: 11px !important;
+        line-height: 13px !important;
     }
 
     .request_th{
         font-style: normal;
-        font-weight: 500;
-        font-size: 11px;
-        line-height: 13px;
+        font-weight: 500 !important;
+        font-size: 11px !important;
+        line-height: 13px !important;
     }
 
     .tableactionbutton{
-        width: 92px;
-        height: 25px;
-        font-size: 9px;
-        line-height: 11px;
-        padding: 0 3px;
+        width: 99px !important;
+        height: 25px !important;
+        font-size: 9px !important;
+        line-height: 11px !important;
+        padding: 0 3px !important;
     }
 
     .search_box{
