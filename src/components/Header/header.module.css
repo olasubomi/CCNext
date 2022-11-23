@@ -91,6 +91,7 @@
 .navbar_user_img{
   width: 27px;
   height: 27px;
+  border-radius: 50%;
 }
 
 .navbar_user_name{
@@ -585,6 +586,10 @@
   grid-gap: 10px;
   align-items: start;
   margin-top: -3rem;
+}
+
+.sidenav_top_row_2 > span{
+  border-radius: 50%;
 }
 
 .sidenav_top_row_2_img{
