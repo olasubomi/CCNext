@@ -1,3 +1,8 @@
+.createstore{
+    display: grid;
+    grid-gap: 2rem;
+}
+
 .header2{
     display: flex;
     flex-wrap: wrap;

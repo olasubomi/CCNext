@@ -69,8 +69,8 @@ const DashboardHomePage = (props) => {
             axios.get('/analytics/get-orders-count/').then(res =>{
                 console.log(res.data)
             })
-            axios.get('/analytics/get-meals-count/').then(res =>{
-                console.log(res.data)
+            axios.get('/analytics/get-meals-count/?user='+props.auth.authUser._id).then(res =>{
+                setMealCountState(res.data.data.docCount)
             })
             axios.get('/analytics/get-orders-count/').then(res =>{
                 console.log(res.data)
@@ -133,12 +133,13 @@ const DashboardHomePage = (props) => {
         }],
     };
 
-  function toggleDriverMode(type){
+  function toggleMode(type){
     axios.put('/user/updateuserprofile/'+props.auth.authUser._id, { user_type: type }).then(res => {
         console.log(res.data)
         props.getUser(props.auth.authUser._id)
         setDriverModeState(!driverMode)
     })
+    setChangeTypeState(!changeType)
   }
 
 function handleSearchType (type){
@@ -164,6 +165,8 @@ function handleSearchType (type){
                 setSuggestionsState(data.data.data.meals)
             }else if(type === 'Product'){
                 setSuggestionsState(data.data.data.products)
+            }else{
+                setSuggestionsState(data.data.data.categories)
             }
         }
     })
@@ -187,23 +190,24 @@ function handleSearchType (type){
         </div>
         <div className={styles.empty}></div>
         <div className={styles.center}>
+            {props.auth.authUser && props.auth.authUser.user_type === 'driver' && props.auth.authUser.driver_hours.length < 1 && <div className="alert-warning">Provide required data as a driver</div>}
             <div className={styles.header2}>
                 <div className={styles.header2_col_1}>
                     <GoBack />
                 </div>
-                {props.auth.authUser && props.auth.authUser.user_type !== 'admin' && props.auth.authUser.user_type !== 'driver' && 
+                {/* {props.auth.authUser && props.auth.authUser.user_type !== 'admin' && props.auth.authUser.user_type !== 'driver' && 
                 <div className={styles.header2_col_2}>
                     <div className={styles.mode_con}>
-                        <div onClick={() => toggleDriverMode(props.auth.authUser.user_type)} className={styles.mode + ' ' + styles.left_mode + ' '+(driverMode? '': styles.active_mode)}>{props.auth.authUser.user_type} mode</div>
-                        <div onClick={() => toggleDriverMode('driver')} className={styles.mode + ' ' + styles.right_mode + ' '+(driverMode? styles.active_mode : '')}>Driver mode</div>
+                        <div onClick={() => toggleMode(props.auth.authUser.user_type)} className={styles.mode + ' ' + styles.left_mode + ' '+(driverMode? '': styles.active_mode)}>{props.auth.authUser.user_type} mode</div>
+                        <div onClick={() => toggleMode('driver')} className={styles.mode + ' ' + styles.right_mode + ' '+(driverMode? styles.active_mode : '')}>Driver mode</div>
                     </div>
-                </div>}
+                </div>} */}
             </div>
             {props.auth.authUser && 
             <>
                 <div className={styles.dashboard_header}>
                     <h3>Hello {props.auth.authUser.username} {props.auth.authUser.user_type === 'admin' &&<span>(Super Admin)</span>}</h3>
-                    {props.auth.authUser && props.auth.authUser.user_type === 'driver' &&
+                    
                     <div className={styles.select_container}>
                         <div onClick={toggleChangeType} className={styles.select_box}>
                             <p>{props.auth.authUser.user_type}</p>
@@ -211,13 +215,13 @@ function handleSearchType (type){
                         </div>
                         {changeType &&
                             <div className={styles.select_options2}>
-                                <p onClick={() => toggleDriverMode('customer')}>Customer</p>
-                                <p onClick={() => toggleDriverMode('supplier')}>Supplier</p>
+                                <p onClick={() => toggleMode('customer')}>Customer</p>
+                                <p onClick={() => toggleMode('supplier')}>Supplier</p>
+                                <p onClick={() => toggleMode('driver')}>Driver</p>
                                 {/* <p onClick={() => handleSearchType('Kitchen Utensil')}>Kitchen Utensils</p> */}
                                 {/* <p onClick={() => handleSearchType('Category')}>Category</p> */}
                             </div>}
                     </div>
-                    }
                 </div>
                 <div className={styles.overview_con}>
                     <h3>Overview</h3>
@@ -238,7 +242,12 @@ function handleSearchType (type){
                                         {props.auth.authUser.user_type === 'customer' && 'Completed Order'}
                                         {props.auth.authUser.user_type === 'admin' && 'Requests'}
                                     </h3>
-                                    <p className={styles.value}>{mealCount+productCount+kitchenUtensilCount}</p>
+                                    <p className={styles.value}>
+                                        {props.auth.authUser.user_type === 'customer' && (orderCount)}
+                                        {props.auth.authUser.user_type === 'driver' && orderCount}
+                                        {props.auth.authUser.user_type === 'supplier' && 'Total Inventory Products'}
+                                        {props.auth.authUser.user_type === 'admin' && (mealCount+productCount+kitchenUtensilCount)}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -261,7 +270,12 @@ function handleSearchType (type){
                                         {props.auth.authUser.user_type === 'supplier' && 'Total Inventory Products'}
                                         {props.auth.authUser.user_type === 'admin' && 'Total Users'}
                                     </h3>
-                                    <p className={styles.value}>{userCount}</p>
+                                    <p className={styles.value}>
+                                        {props.auth.authUser.user_type === 'customer' && mealCount}
+                                        {props.auth.authUser.user_type === 'driver' && orderCount}
+                                        {props.auth.authUser.user_type === 'supplier' && orderCount}
+                                        {props.auth.authUser.user_type === 'admin' && userCount}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -279,7 +293,12 @@ function handleSearchType (type){
                                     <h3 className={styles.box_name}>
                                         {props.auth.authUser.user_type === 'admin' ? 'Total Orders' : 'Orders in queue'}
                                     </h3>
-                                    <p className={styles.value}>{orderCount}</p>
+                                    <p className={styles.value}>
+                                        {props.auth.authUser.user_type === 'customer' && orderCount}
+                                        {props.auth.authUser.user_type === 'driver' && orderCount}
+                                        {props.auth.authUser.user_type === 'supplier' && orderCount}
+                                        {props.auth.authUser.user_type === 'admin' && orderCount}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -416,7 +435,7 @@ function handleSearchType (type){
                             <thead>
                             <tr className={styles.request_tr} style={{backgroundColor: 'transparent'}}>
                                 <th className={styles.request_th}>Request ID</th>
-                                <th className={styles.request_th}>Meal</th>
+                                <th className={styles.request_th}>{searchType}</th>
                                 <th className={styles.request_th + " " + styles.hideData}>Category</th>
                                 <th className={styles.request_th} style={{textAlign: 'center'}}>Status</th>
                                 {/* <th className={styles.request_th + " " + styles.hideData}>Price</th> */}
@@ -429,7 +448,7 @@ function handleSearchType (type){
                                         return(
                                             <tr key={suggestion._id} className={styles.refId + " " + styles.request_tr}>
                                                 <td className={styles.request_td}>{suggestion._id}</td>
-                                                <td className={styles.request_td}>{searchType === 'Meal' ? suggestion.meal_name : searchType === 'Meal' ? suggestion.product_name : suggestion.product_name}</td>
+                                                <td className={styles.request_td}>{searchType === 'Meal' ? suggestion.meal_name : searchType === 'Product' ? suggestion.product_name : suggestion.category_name}</td>
                                                 <td className={styles.request_td + " " + styles.hideData}>
                                                     {searchType === 'Meal' ? 
                                                     suggestion.meal_categories && suggestion.meal_categories.length > 0 && JSON.parse(suggestion.meal_categories[0])[0] :
@@ -443,7 +462,7 @@ function handleSearchType (type){
                                                     suggestion.publicly_available === 'Public' ? styles.approve :
                                                     suggestion.publicly_available === 'Rejected' ? styles.rejected : '')}
                                                 >
-                                                    {suggestion.publicly_available}
+                                                    {searchType === 'Category' ? suggestion.status : suggestion.publicly_available}
                                                 </td>
                                                 {/* <td className={styles.request_td + " " + styles.hideData}>afa</td> */}
                                                 <td className={styles.request_td + " " + styles.hideData}>{suggestion.createdAt && new Date(suggestion.createdAt).getDate() + ' ' + months[new Date(suggestion.createdAt).getMonth()] + ' ,'+ new Date(suggestion.createdAt).getFullYear()}</td>

@@ -5,10 +5,11 @@ import GoBack from '../../src/components/CommonComponents/goBack';
 import styles from "../../src/components/individualPage/meal.module.css";
 import Header, { Header2 } from '../../src/components/Header/Header';
 import Sidenav from '../../src/components/Header/sidenav';
+import { getMeal } from '../../src/util/getmeal';
 
-const individualMealPage = () => {
+const individualMealPage = (props) => {
     const router = useRouter()
-
+    console.log(props.meal)
     return (
         <div>
             <Head>
@@ -35,6 +36,26 @@ const individualMealPage = () => {
             </div>
         </div>
         )
+}
+
+export async function getServerSideProps(context){
+    // const res = await fetch('https://.../posts')
+    // const posts = await res.json()
+    // console.log(context)
+    let {id} = context.params
+    console.log(id)
+    let meal = await getMeal(id)
+    console.log(meal.data)
+
+    return {
+        props: {
+            meal: id
+        },
+        // Next.js will attempt to re-generate the page:
+        // - When a request comes in
+        // - At most once every second
+        // revalidate: 86400, // In seconds
+    }
 }
 
 export default individualMealPage

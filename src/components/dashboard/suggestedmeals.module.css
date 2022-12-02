@@ -853,27 +853,18 @@
       
       .paginate_btn{
         cursor: pointer;
-        width: 45px;
-        height: 33px;
       
-        /* Secondary green/500 */
-      
-        background: #7FBABD;
-        border-radius: 4px;
         font-style: normal;
         font-weight: 400;
-        font-size: 14px;
+        /* font-size: 14px; */
         line-height: 17px;
         /* identical to box height */
       
         letter-spacing: 0.374px;
-      
-        /* Primary blue/50 */
-      
-        color: #F3F6FC;
-        display: grid;
-        align-items: center;
-        justify-items: center;
+      }
+
+      .paginate_btn:hover{
+        text-decoration: underline;
       }
 
 @media screen and (max-width: 1115px) {

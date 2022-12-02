@@ -10,6 +10,7 @@ import Reviews from "./Reviews";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
 function Meal(props){
+    set
     console.log(props.meal)
     const router = window.location
     return (
