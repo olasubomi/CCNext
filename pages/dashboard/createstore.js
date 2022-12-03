@@ -239,7 +239,7 @@ const CreateStore = (props) => {
         <Header />
         <SideNav />
         <div className={center}>
-            <div className={profileStyles.profile_details}>
+            <div className={styles.createstore}>
                 <div className={styles.header2}>
                     <div className={styles.header2_col_1}>
                         <GoBack />

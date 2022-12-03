@@ -28,19 +28,19 @@ function SuggestedMealRow(props){
     }
 
     return(
-        <div className={styles.request_tr_div}>
-            <div key={suggestion._id} className={styles.refId + " " + styles.request_tr + ' ' + (props.auth.authUser.user_type === 'admin' ? styles.admin_request_tr:
+        <div key={suggestion._id} className={styles.request_tr_div}>
+            <div className={styles.refId + " " + styles.request_tr + ' ' + (props.auth.authUser.user_type === 'admin' ? styles.admin_request_tr:
                             props.auth.authUser.user_type === 'customer' ? styles.customer_request_tr:
                             props.auth.authUser.user_type === 'supplier' ? styles.supplier_request_tr: '')}>
                 <input name='id' type="checkbox" />
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td}>{suggestion._id}</p>
-                <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td}>{props.searchType === 'Meal' ? suggestion.meal_name : suggestion.product_name}</p>
+                <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td}>{props.searchType === 'Meal' ? suggestion.meal_name : props.searchType === 'Product' ? suggestion.product_name: suggestion.category_name}</p>
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + status + " " + 
                     ((suggestion.publicly_available === 'Draft' || suggestion.publicly_available === 'Pending') ? pending :
                     suggestion.publicly_available === 'Public' ? approve :
                     suggestion.publicly_available === 'Rejected' ? rejected : '')}
                 >
-                    {suggestion.publicly_available}
+                    {props.searchType === 'Category' ? suggestion.status : suggestion.publicly_available}
                 </p>
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + styles.hideData}>
                     {props.searchType === 'Meal' ? 
@@ -49,7 +49,7 @@ function SuggestedMealRow(props){
                     }
                 </p>
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + styles.hideData}>{suggestion.createdAt && new Date(suggestion.createdAt).getDate() + ' ' + months[new Date(suggestion.createdAt).getMonth()] + ' ,'+ new Date(suggestion.createdAt).getFullYear()}</p>
-                <p className={styles.request_td + " " + styles.actions_con}>
+                <div className={styles.request_td + " " + styles.actions_con}>
                     {props.auth.authUser.user_type !== 'admin' &&
                     <>
                         <div onClick={props.toggleSent} className={styles.tableactionbutton}>Send for review</div>
@@ -74,7 +74,7 @@ function SuggestedMealRow(props){
                         <ArrowDropDownIcon className={styles.arrowDown} />
                     </i>
                     }
-                </p>
+                </div>
             </div>
             {show &&
             <div className={styles.suggested_details_col}>

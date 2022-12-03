@@ -50,6 +50,7 @@ const SuggestedMeals = (props) => {
 
     useEffect(() => {
         if(props.auth.authUser){
+            setSearchType("Meal")
             let url
             if(props.auth.authUser.user_type === 'admin'){
                 url ='/meals/get-meals/'+page
@@ -58,20 +59,15 @@ const SuggestedMeals = (props) => {
             }
 
             axios.get(url).then(data => {
-                console.log(data.data)
+                console.log(searchType)
                 if(data.data.data){
                     
                     setSuggestedCountState(data.data.data.count)
                     if(data.data.data.count > 10){
                         setPagesState(Math.ceil(data.data.data.count/10))
                     }
-                    if(searchType === 'Meal'){
-                        setFilteredSuggestionsState(data.data.data.meals)
-                        setSuggestionsState(data.data.data.meals)
-                    }else{
-                        setFilteredSuggestionsState(data.data.data.products)
-                        setSuggestionsState(data.data.data.products)
-                    }
+                    setFilteredSuggestionsState(data.data.data.meals)
+                    setSuggestionsState(data.data.data.meals)
                 }
             })
         }
@@ -96,30 +92,20 @@ const SuggestedMeals = (props) => {
             }else{
                 url = '/meals/get-meals/1?user='+props.auth.authUser._id
             }
-        }else{
+        }else if(type === 'Product'){
             if(props.auth.authUser.user_type === 'admin'){
                 url = '/products/get-all-products/1'
             }else{
                 url = '/products/get-all-products/1?user='+props.auth.authUser._id
             }
-        }
-        axios.get(url).then(data => {
-            console.log(data.data)
-            if(data.data.data){
-                
-                setSuggestedCountState(data.data.data.count)
-                if(data.data.data.count > 10){
-                    setPagesState(Math.ceil(data.data.data.count/10))
-                }
-                if(type === 'Meal'){
-                    setFilteredSuggestionsState(data.data.data.meals)
-                    setSuggestionsState(data.data.data.meals)
-                }else{
-                    setFilteredSuggestionsState(data.data.data.products)
-                    setSuggestionsState(data.data.data.products)
-                }
+        }else{
+            if(props.auth.authUser.user_type === 'admin'){
+                url = '/categories/get-all-categories/1'
+            }else{
+                url = '/categories/get-all-categories/1?user='+props.auth.authUser._id
             }
-        })
+        }
+        getSuggestion(url, type)
     }
 
     function toggleSearchOption(){
@@ -139,11 +125,18 @@ const SuggestedMeals = (props) => {
             }else{
                 url = '/meals/get-meals/1?user='+props.auth.authUser._id+'&meal_name='+searchSuggestedSuggestion
             }
-        }else{
+        }else if(searchType === 'Meal'){
             if(props.auth.authUser.user_type === 'admin'){
                 url = '/products/get-all-products/1?product_name='+searchSuggestedSuggestion
             }else{
                 url = '/products/get-all-products/1?user='+props.auth.authUser._id+'&product_name='+searchSuggestedSuggestion
+            }
+        }
+        else{
+            if(props.auth.authUser.user_type === 'admin'){
+                url = '/categories/get-all-categories/1?product_name='+searchSuggestedSuggestion
+            }else{
+                url = '/categories/get-all-categories/1?user='+props.auth.authUser._id+'&product_name='+searchSuggestedSuggestion
             }
         }
         let url2
@@ -153,11 +146,17 @@ const SuggestedMeals = (props) => {
             }else{
                 url2 = '/meals/get-meals/1?user='+props.auth.authUser._id
             }
-        }else{
+        }else if(searchType === 'Product'){
             if(props.auth.authUser.user_type === 'admin'){
                 url2 = '/products/get-all-products/1'
             }else{
                 url2 = '/products/get-all-products/1?user='+props.auth.authUser._id
+            }
+        }else{
+            if(props.auth.authUser.user_type === 'admin'){
+                url2 = '/categories/get-all-categories/1'
+            }else{
+                url2 = '/categories/get-all-categories/1?user='+props.auth.authUser._id
             }
         }
         if(e.keyCode){
@@ -181,23 +180,7 @@ const SuggestedMeals = (props) => {
                     }
                 })
             }else{
-                axios.get(url2).then(data => {
-                    console.log(data.data)
-                    if(data.data.data){
-                        
-                        setSuggestedCountState(data.data.data.count)
-                        if(data.data.data.count > 10){
-                            setPagesState(Math.ceil(data.data.data.count/10))
-                        }
-                        if(searchType === 'Meal'){
-                            setFilteredSuggestionsState(data.data.data.meals)
-                            setSuggestionsState(data.data.data.meals)
-                        }else{
-                            setFilteredSuggestionsState(data.data.data.products)
-                            setSuggestionsState(data.data.data.products)
-                        }
-                    }
-                })
+                getSuggestion(url2)
             }
           }
         }else{
@@ -220,23 +203,7 @@ const SuggestedMeals = (props) => {
                     }
                 })
             }else{
-                axios.get(url2).then(data => {
-                    console.log(data.data)
-                    if(data.data.data){
-                        
-                        setSuggestedCountState(data.data.data.count)
-                        if(data.data.data.count > 10){
-                            setPagesState(Math.ceil(data.data.data.count/10))
-                        }
-                        if(searchType === 'Meal'){
-                            setFilteredSuggestionsState(data.data.data.meals)
-                            setSuggestionsState(data.data.data.meals)
-                        }else{
-                            setFilteredSuggestionsState(data.data.data.products)
-                            setSuggestionsState(data.data.data.products)
-                        }
-                    }
-                })
+                getSuggestion(url2)
             }
         }
       };
@@ -267,8 +234,10 @@ const SuggestedMeals = (props) => {
         let url1
         if(searchType === 'Meal'){
             url1 = '/meals/update/'
-        }else{
+        }else if(searchType === 'Product'){
             url1 = '/products/update/'
+        }else{
+            url1 = '/categories/update/'
         }
         axios.post(url1+suggestion._id, {publicly_available: type}).then(res => {
             if(res.data.data){
@@ -280,41 +249,55 @@ const SuggestedMeals = (props) => {
                     }else{
                         url2 = '/meals/get-meals/1?user='+props.auth.authUser._id
                     }
-                }else{
+                }else if(searchType === 'Product'){
                     if(props.auth.authUser.user_type === 'admin'){
                         url2 = '/products/get-all-products/1'
                     }else{
                         url2 = '/products/get-all-products/1?user='+props.auth.authUser._id
                     }
-                }
-                axios.get(url2).then(data => {
-                    console.log(data.data)
-                    if(data.data.data){
-                        
-                        setSuggestedCountState(data.data.data.count)
-                        if(data.data.data.count > 10){
-                            setPagesState(Math.ceil(data.data.data.count/10))
-                        }
-                        if(searchType === 'Meal'){
-                            setFilteredSuggestionsState(data.data.data.meals)
-                            setSuggestionsState(data.data.data.meals)
-                        }else{
-                            setFilteredSuggestionsState(data.data.data.products)
-                            setSuggestionsState(data.data.data.products)
-                        }
+                }else{
+                    if(props.auth.authUser.user_type === 'admin'){
+                        url2 = '/categories/get-all-categories/1'
+                    }else{
+                        url2 = '/categories/get-all-categories/1?user='+props.auth.authUser._id
                     }
-                })
+                }
+                getSuggestion(url2)
             }
         })
         toggleChangeStatus()
+    }
+
+    function getSuggestion(url, searchType=searchType){
+        axios.get(url).then(data => {
+            if(data.data.data){
+                
+                setSuggestedCountState(data.data.data.count)
+                if(data.data.data.count > 10){
+                    setPagesState(Math.ceil(data.data.data.count/10))
+                }
+                if(searchType === 'Meal'){
+                    setFilteredSuggestionsState(data.data.data.meals)
+                    setSuggestionsState(data.data.data.meals)
+                }else if(searchType === 'Product'){
+                    setFilteredSuggestionsState(data.data.data.products)
+                    setSuggestionsState(data.data.data.products)
+                }else{
+                    setFilteredSuggestionsState(data.data.data.categories)
+                    setSuggestionsState(data.data.data.categories)
+                }
+            }
+        })
     }
 
     function deleteSuggestion(id){
         let url1
         if(searchType === 'Meal'){
             url1 = '/meals/delete/'
-        }else{
+        }else if(searchType === 'Product'){
             url1 = '/products/deleteproduct/'
+        }else{
+            url1 = '/categories/delete-category/'
         }
         axios.delete(url1+id).then(res => {
             console.log(res.data)
@@ -325,44 +308,28 @@ const SuggestedMeals = (props) => {
                 }else{
                     url2 = '/meals/get-meals/1?user='+props.auth.authUser._id
                 }
-            }else{
+            }else if(searchType === 'Product'){
                 if(props.auth.authUser.user_type === 'admin'){
                     url2 = '/products/get-all-products/1'
                 }else{
                     url2 = '/products/get-all-products/1?user='+props.auth.authUser._id
                 }
-            }
-            axios.get(url2).then(data => {
-                console.log(data.data)
-                if(data.data.data){
-                    
-                    setSuggestedCountState(data.data.data.count)
-                    if(data.data.data.count > 10){
-                        setPagesState(Math.ceil(data.data.data.count/10))
-                    }
-                    if(searchType === 'Meal'){
-                        setFilteredSuggestionsState(data.data.data.meals)
-                        setSuggestionsState(data.data.data.meals)
-                    }else{
-                        setFilteredSuggestionsState(data.data.data.products)
-                        setSuggestionsState(data.data.data.products)
-                    }
-                    setStatus2State('success')
-                    setMessageState('Suggestion deleted')
-                    setTimeout(() => {
-                        setStatus2State('')
-                        setMessageState('')
-                    }, 5000)
+            }else {
+                if(props.auth.authUser.user_type === 'admin'){
+                    url2 = '/categories/get-all-categories/1'
+                }else{
+                    url2 = '/categories/get-all-categories/1?user='+props.auth.authUser._id
                 }
-            }).catch(error => {
-                setStatus2State('error')
-                setMessageState('Suggestion not deleted')
-                setTimeout(() => {
-                    setStatus2State('')
-                    setMessageState('')
-                }, 5000)
-          });
-        })
+            }
+            getSuggestion(url2)
+        }).catch(error => {
+            setStatus2State('error')
+            setMessageState('Suggestion not deleted')
+            setTimeout(() => {
+                setStatus2State('')
+                setMessageState('')
+            }, 5000)
+        });
     }
 
     function toggleTransferToInventory(meal){
@@ -405,6 +372,7 @@ const SuggestedMeals = (props) => {
         suggestion.publicly_available = 'Draft'
         let newSuggestions = suggestions
         delete suggestion._id
+        delete suggestion.createdAt
         let url
         if(searchType === 'Meal'){
             url = '/meals/create'
@@ -468,25 +436,27 @@ const SuggestedMeals = (props) => {
     }
 
     function openDetailsModal(product){
-        setSuggestionState(product)
-        let ingredients = product.ingredients_in_product;
-        var ingredientsString = []
-        for(let i=0; i<ingredients.length; i++){
-            let properIngredientStringSyntax = ''
-            if (ingredients[i].quantity === "") {
-                properIngredientStringSyntax = ingredients[i].productName;
-              } else if (ingredients[i].measurement === "" && ingredients[i].quantity !== "") {
-                // MAKE sure we are using the right and tested variables to display the right type of string at all times.
-                properIngredientStringSyntax = "" + ingredients[i].quantity + " " + ingredients[i].productName;
-              } else {
-                properIngredientStringSyntax =
-                  "" + ingredients[i].quantity + " " + ingredients[i].measurement +
-                  " of " + ingredients[i].productName;
+        // if(searchType == 'Product'){
+            setSuggestionState(product)
+            let ingredients = product.ingredients_in_product;
+            var ingredientsString = []
+            for(let i=0; i<ingredients.length; i++){
+                let properIngredientStringSyntax = ''
+                if (ingredients[i].quantity === "") {
+                    properIngredientStringSyntax = ingredients[i].productName;
+                } else if (ingredients[i].measurement === "" && ingredients[i].quantity !== "") {
+                    // MAKE sure we are using the right and tested variables to display the right type of string at all times.
+                    properIngredientStringSyntax = "" + ingredients[i].quantity + " " + ingredients[i].productName;
+                } else {
+                    properIngredientStringSyntax =
+                    "" + ingredients[i].quantity + " " + ingredients[i].measurement +
+                    " of " + ingredients[i].productName;
+                }
+                ingredientsString.push(properIngredientStringSyntax)
             }
-            ingredientsString.push(properIngredientStringSyntax)
-        }
-        setIngredientsString(ingredientsString)
-        setOpenModal2State(true)
+            setIngredientsString(ingredientsString)
+            setOpenModal2State(true)
+        // }
     }
 
     function closeModal() {
@@ -494,9 +464,8 @@ const SuggestedMeals = (props) => {
         setOpenModal2State(false)
       }
 
-    async function nextPage () {
+    async function nextPage (newPage=page + 1) {
         if(page < pages){
-            let newPage = page + 1;
             setPageState(newPage)
             let url
             if(searchType === 'Meal'){
@@ -532,9 +501,8 @@ const SuggestedMeals = (props) => {
         }
       };
     
-    async function prevPage () {
+    async function prevPage (newPage=page - 1) {
         if(page > 1){
-            let newPage = page - 1;
             setPageState(newPage)
             let url
             if(searchType === 'Meal'){
@@ -611,7 +579,8 @@ const SuggestedMeals = (props) => {
                     <div className={styles.suggestedmeal_row2}>
                         <div className={styles.mode_con}>
                             <div onClick={() => handleSearchType2('Meal')} className={styles.mode + ' ' + styles.left_mode + ' '+(searchType === 'Meal' ? styles.active_mode : '')}>Meal</div>
-                            <div onClick={() => handleSearchType2('Product')} className={styles.mode + ' ' + styles.right_mode + ' '+(searchType === 'Product'? styles.active_mode : '')}>Product</div>
+                            <div onClick={() => handleSearchType2('Product')} className={styles.mode + ' ' + ' '+(searchType === 'Product'? styles.active_mode : '')}>Product</div>
+                            <div onClick={() => handleSearchType2('Category')} className={styles.mode + ' ' + styles.right_mode + ' '+(searchType === 'Category'? styles.active_mode : '')}>Category</div>
                         </div>
                         {props.auth.authUser.user_type !== 'admin' &&
                         <div className={styles.suggestedmeal_row2_col2}>
@@ -660,11 +629,18 @@ const SuggestedMeals = (props) => {
                         <div>
                             {
                                 page > 1 &&
-                                <div onClick={prevPage} className={styles.paginate_btn}>Prev</div>
+                                <>
+                                    <p onClick={() => prevPage(1)} className={styles.paginate_btn}>&lt;&lt;</p>
+                                    <p onClick={() => prevPage()} className={styles.paginate_btn}>&lt;</p>
+                                </>
                             }
+
                             {
                                 page < pages &&
-                                <div onClick={nextPage} className={styles.paginate_btn}>Next</div>
+                                <>
+                                    <p onClick={() => nextPage()} className={styles.paginate_btn}>&gt;</p>
+                                    <p onClick={() => nextPage(pages)} className={styles.paginate_btn}>&gt;&gt;</p>
+                                </>
                             }
                             
                         </div>
@@ -717,6 +693,7 @@ const SuggestedMeals = (props) => {
                     {searchType === 'Meal' ? 
                         <Meal meal={suggestion} />
                         :
+                        searchType === 'Meal' &&
                         <Product product={suggestion} />
                     }
                 </div>
@@ -790,7 +767,7 @@ const SuggestedMeals = (props) => {
                             <div className={styles.search_container_col_1}>
                                 
                                 <div className={styles.search_suggestion}>
-                                    <h3 className={styles.search_suggestion_h3}>Meals (1)</h3>
+                                    <h3 className={styles.search_suggestion_h3}>Meals {searchType === 'Meal' && ("(" + (publicSuggestions.length) + ")")}</h3>
                                     {searchType === 'Meal' && 
                                     <ul className={styles.search_help_lists}>
                                         {publicSuggestions.map(suggestion => {
@@ -806,7 +783,7 @@ const SuggestedMeals = (props) => {
 
                                 <div className={styles.search_container_col_2}>
                                     <div className={styles.search_container_col_2_row_1}>
-                                        <h3 className={styles.search_products_h3}>Products</h3>
+                                        <h3 className={styles.search_products_h3}>Products {searchType === 'Product' && ("(" + (publicSuggestions.length) + ")")}</h3>
                                     </div>
                                     <div className={styles.search_container_col_2_row_2}>
                                         <div className={styles.searched_products}>
@@ -827,7 +804,7 @@ const SuggestedMeals = (props) => {
                                     </div>
                                 </div>
                                 <div className={styles.search_help}>
-                                    <h3 className={styles.search_help_h3}>Kitchen Utensils</h3>
+                                    <h3 className={styles.search_help_h3}>Kitchen Utensils {searchType === 'Kitchen Utensils' && ("(" + (publicSuggestions.length) + ")")}</h3>
                                     
                                 </div>
                             </div>
