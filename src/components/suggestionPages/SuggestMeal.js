@@ -28,11 +28,10 @@ class SuggestMealForm extends Component {
       mealImage: [],
       mealImageName: "",
       mealImagesData: [],
-
+      mealImage0: "",
       mealImage1: "",
       mealImage2: "",
       mealImage3: "",
-      mealImage4: "",
       intro: "",
 
       ingredientNames: [],
@@ -380,7 +379,7 @@ class SuggestMealForm extends Component {
       let particularArray;
 
       if (this.state.mealImage0 == "") {
-        this.setState({ mealImage1: event.target.files[0] });
+        this.setState({ mealImage0: event.target.files[0] });
 
         var imageElementId = "mealImage0";
         var image = document.getElementById(imageElementId);
@@ -393,7 +392,7 @@ class SuggestMealForm extends Component {
 
       }
       else if (this.state.mealImage1 == "") {
-        this.setState({ mealImage2: event.target.files[0] });
+        this.setState({ mealImage1: event.target.files[0] });
 
       }
       else if (this.state.mealImage2 == "") {
@@ -652,7 +651,7 @@ class SuggestMealForm extends Component {
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.props.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
 
@@ -1068,7 +1067,7 @@ class SuggestMealForm extends Component {
     const { mealName, prepTime, cookTime, mealImage, mealImagesData, intro, servings, chef,
       new_product_ingredients, ingredientGroupList, suggestedCategories, tips, suggestedUtensils,
       chunk1Content, chunk2Content, chunk3Content, chunk4Content, chunk5Content, chunk6Content,
-      mealImage1, mealImage2, mealImage3, mealImage4 } = this.state;
+      mealImage1, mealImage2, mealImage3, mealImage0 } = this.state;
 
     console.log(mealImage);
     console.log(mealImagesData);
@@ -1091,24 +1090,6 @@ class SuggestMealForm extends Component {
     const product_slider = [];
     let i = 0;
 
-    for (i = 0; i < new_product_ingredients.length; i++) {
-      // store ingredient format to submit ingredient product objects
-      var tmp_ingredient = {
-        // name and optional image added to new product,
-        // we can add remainder products data after testing current
-        ingredient: new_product_ingredients[i].productName,
-        // image: new_product_ingredients[i].productImgFile
-      };
-      // handle quantity measurement list
-      var measurementQuantity = {
-        quantity: ingredientGroupList[i].quantity,
-        measurement: ingredientGroupList[i].measurement,
-      }
-      // no need for handlers since this is created on submit!
-      this.ingredientsQuantityMeasurements.push(measurementQuantity);
-      // new_products.push(tmp_ingredient);
-      // product_slider.push(tmp_slider_data);
-    }
 
     let new_measurements = [];
     for (i = 0; i < ingredientGroupList.length; i++) {
@@ -1116,7 +1097,7 @@ class SuggestMealForm extends Component {
       var tmp_ingredient = {
         // name and optional image added to new product,
         // we can add remainder products data after testing current
-        productName: ingredientGroupList[i].productName,
+        product_name: ingredientGroupList[i].productName,
         quantity: ingredientGroupList[i].quantity,
         measurement: ingredientGroupList[i].measurement,
         productImgPath: ingredientGroupList[i].productImgPath,
@@ -1229,7 +1210,7 @@ class SuggestMealForm extends Component {
     // console.log(keyValueData);
     var singleTitleTest = JSON.stringify(keyValueData);
     console.log(singleTitleTest);
-
+    console.log(suggestedCategories);
 
     //-------------Submit remainder data of meal to Mongo ------------------------------------------
     let suggestMealForm = new FormData();
@@ -1245,31 +1226,38 @@ class SuggestMealForm extends Component {
     suggestMealForm.append('chef', chef);
     suggestMealForm.append('servings', servings);
 
-    // suggestMealForm.append('ingredientStrings', ingredientStrings);
-    // list of products quantity measurements (created on submit meal)
-    // suggestMealForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
-    suggestMealForm.append('new_measurements', JSON.stringify(new_measurements));
+    console.log(all_ingredients_formatted);
 
-    // suggestMealForm.append('product_slider', JSON.stringify(product_slider));
-    suggestMealForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
+    all_ingredients_formatted.map((individualIngredients) => {
+      suggestMealForm.append('formatted_ingredients', JSON.stringify(individualIngredients));
+    })
 
     // new suggested products
-    suggestMealForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
-    suggestMealForm.append('meal_categories', JSON.stringify(suggestedCategories));
-    suggestMealForm.append('categories', suggestedCategories);
-    suggestMealForm.append('newCategories', new_categories);
+    suggestedCategories.map((individualCategory) => {
+      suggestMealForm.append('meal_categories', individualCategory);
+    })
 
-    suggestMealForm.append('kitchen_utensils', JSON.stringify(suggestedUtensils));
-    suggestMealForm.append('newKitchenUtensils', JSON.stringify(new_kitchen_utensils));
+    suggestedUtensils.map((individualUtensils) => {
+      suggestMealForm.append('kitchen_utensils', individualUtensils);
+    })
+
+    console.log(instructionGroupData);
 
     // RecipeSteps
-    suggestMealForm.append('formatted_instructions', instructionGroupData);
-    suggestMealForm.append('instructionChunkContent1', chunk1Content);
-    suggestMealForm.append('instructionChunkContent2', chunk2Content);
-    suggestMealForm.append('instructionChunkContent3', chunk3Content);
-    suggestMealForm.append('instructionChunkContent4', chunk4Content);
-    suggestMealForm.append('instructionChunkContent5', chunk5Content);
-    suggestMealForm.append('instructionChunkContent6', chunk6Content);
+    // suggestMealForm.append('formatted_instructions', JSON.stringify(instructionGroupData));
+    instructionGroupData.map((individualInstructions) => {
+      console.log(individualInstructions);
+      console.log(JSON.stringify(individualInstructions));
+
+      suggestMealForm.append('formatted_instructions', individualInstructions);
+    })
+
+    suggestMealForm.append('image_or_video_content_1', chunk1Content);
+    suggestMealForm.append('image_or_video_content_2', chunk2Content);
+    suggestMealForm.append('image_or_video_content_3', chunk3Content);
+    suggestMealForm.append('image_or_video_content_4', chunk4Content);
+    suggestMealForm.append('image_or_video_content_5', chunk5Content);
+    suggestMealForm.append('image_or_video_content_6', chunk6Content);
 
     // suggestMealForm.append('instructionsGroupList', instructionGroupData);
     // console.log(this.state.chunk1Content);

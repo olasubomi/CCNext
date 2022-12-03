@@ -195,7 +195,7 @@
 .transToIn_details_col2 > div > div{
     display: flex;
     gap: 10px;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -354,6 +354,21 @@
 
     color: #131518;
     word-break: break-word;
+  }
+
+  .request_td > input{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000000;
+    border: none;
+    outline: none;
+    width: 59px;
+    height: 32px;
+    padding: 9px;
+    background: #F1F1F1;
+    border-radius: 2px;
   }
 
 .transToIn_footer{

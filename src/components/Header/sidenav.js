@@ -54,7 +54,7 @@ function SideNav(props){
                     <UserIcon />
                     }
                     <div>
-                        <h3>{props.auth.authUser.first_name +" " + props.auth.authUser.last_name} Henderson</h3>
+                        <h3>{props.auth.authUser.first_name +" " + props.auth.authUser.last_name}</h3>
                         <p>{props.auth.authUser.user_type}</p>
                     </div>
                 </div>

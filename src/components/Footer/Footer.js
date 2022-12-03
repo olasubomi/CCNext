@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import styles from './Footer.module.css'
 import facebookImg from "../../../public/assets/icons/Facebook+Icon+Black 1.png";

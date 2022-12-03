@@ -23,6 +23,9 @@ import Sidenav2 from '../../src/components/Header/sidenav2';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 import { UserIcon } from '../../src/components/icons';
+import axios from '../../src/util/Api';
+import PhoneInput from 'react-phone-input-2';
+import { getUser } from '../../src/actions';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -78,6 +81,8 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 
 const UserProfile = (props) => {
     const router = useRouter()
+    const [status, setStatusState] = useState('');
+    const [message, setMessageState] = useState('');
     const [formState, setFormState] = useState({
         email: "",
         phone_number: "",
@@ -89,17 +94,24 @@ const UserProfile = (props) => {
         card_type: '',
         profileImage: '',
         profileImageName: '',
-        profileImageData: ''
+        profileImageData: '',
+        city: '',
+        country: '', state: '', zip_code: '', 
+        billing_address: '', billing_address2: '', billing_city: '', billing_country: '',
+        billing_state: '', billing_zip_code: ''
       });
-    const { email, phone_number, first_name, last_name, password, address, new_password, profileImageData, card_type } = formState;
+    const { email, phone_number, first_name, last_name, password, 
+        address, new_password, profileImageData, country, state, city, zip_code, 
+        billing_address, billing_address2, billing_city, billing_country,
+        billing_state, billing_zip_code } = formState;
     const [times, setTimes] = useState({
-        sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        tuesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        wednesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        thursday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        friday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'},
-        saturday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z'}
+        sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        tuesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        wednesday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        thursday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        friday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
+        saturday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true}
     });
     const days = [
         "sunday",
@@ -119,12 +131,21 @@ const UserProfile = (props) => {
                 ['last_name']: props.auth.authUser.last_name,
                 ['phone_number']: props.auth.authUser.phone_number
             })
+
+            if(props.auth.authUser.driver_hours.length>0){
+                setTimes(props.auth.authUser.driver_hours[0])
+            }
+            
         }
-      }, []);
+      },[props.auth.authUser]);
 
     function handleChange(e) {
         setFormState({ ...formState, [e.target.name]: e.target.value });
     }
+
+    function handlePhoneChange(e) {
+        setFormState({ ...formState, ['phone_number']: e });
+      }
 
     function onUpdateProfileImage(event){
         if (event.target.files[0] === undefined) return;
@@ -161,11 +182,79 @@ const UserProfile = (props) => {
     function handleTime(time, day, when){
         console.log(time)
         // times[day][when] = time;
+        let newTimes = {...times,[day]: {...times[day], [when]: time}}
+        console.log(newTimes)
         setTimes({...times,[day]: {...times[day], [when]: time}})
+        saveChange(newTimes)
+    }
+
+    function handleDayAvailabiltyChange(value,day,when) {
+        let newTimes = {...times,[day]: {...times[day], [when]: value}}
+        console.log(newTimes)
+        setTimes({...times,[day]: {...times[day], [when]: value}})
+        saveChange(newTimes)
+    };
+
+    function saveChange(times){
+        let fields = {driver_hours: times}
+        axios.put('/user/updateuserprofile/'+props.auth.authUser._id, fields).then(res => {
+            console.log(res.data)
+            props.getUser(props.auth.authUser._id)
+        })
+    }
+
+    function saveChanges(e){
+        e.preventDefault()
+        let {
+            phone_number,
+            first_name,
+            last_name,
+            profileImage,
+        billing_address, billing_city, billing_country,
+        billing_state, billing_zip_code} = formState;
+
+        let delivery_addresses={
+            phone_number: phone_number,
+            street: billing_address + billing_state,
+            city: billing_city,
+            zip_code: billing_zip_code,
+            country: billing_country
+        }
+        const formData = new FormData();
+        if(profileImage.length > 0){
+            formData.append('profile_picture', profileImage);
+        }
+        formData.append('first_name', first_name);
+        formData.append('last_name', last_name);
+        formData.append('phone_number', phone_number);
+        // formData.append('delivery_addresses', delivery_addresses);
+
+        axios.put('/user/updateuserprofile/'+props.auth.authUser._id, formData).then(res => {
+            console.log(res.data)
+            setStatusState('success')
+            setMessageState('User updated')
+            setTimeout(() => {
+                setStatusState('')
+                setMessageState('')
+            },5000)
+            props.getUser(props.auth.authUser._id)
+            
+        }).catch(() => {
+            setStatusState('error')
+            setMessageState('Error updating user')
+            setTimeout(() => {
+                setStatusState('')
+                setMessageState('')
+            }, 5000)
+        })
     }
 
     return (
         <div className={container + " " + col2}>
+            <div className="alert">
+                {status === "error" && <div className="alert-danger">{message}</div>}
+                {status === "success" && <div className="alert-success">{message}</div>}
+            </div>
         <Head>
             <title>User Profile</title>
             <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -257,7 +346,7 @@ const UserProfile = (props) => {
                                         {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) && 
                                         <Image width={500} height={500} src={props.auth.authUser.profile_picture} />
                                         }
-                                        <Image id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
+                                        <img id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
                                     </div>
                                     <p onClick={uploadProfileImage}>Change Picture</p>
                                 </div>
@@ -304,36 +393,35 @@ const UserProfile = (props) => {
                                         <label htmlFor="phone_number" className={styles.profile_form_label}>
                                         Phone Number
                                         </label>
-                                        <input
-                                        type="tel"
-                                        name="phone_number"
-                                        value={phone_number}
-                                        placeholder="Your Phone Number"
-                                        onChange={handleChange}
-                                        className={styles.profile_form_input}
+                                        <PhoneInput
+                                            inputClass={styles.login_form_input}
+                                            
+                                            name="phone_number"
+                                            value={phone_number}
+                                            onChange={phone => handlePhoneChange(phone)}
                                         />
                                     </div>
                                     <div className={styles.profile_form_col_2}>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="city" className={styles.profile_form_label}>City</label>
-                                            <input  name="city" type="text" className={styles.profile_form_input} />
+                                            <input  name="city" value={city} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.city && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                         </div>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="state" className={styles.profile_form_label}>State</label>
-                                            <input name="state" type="text" className={styles.profile_form_input} />
+                                            <input name="state" value={state} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                         </div>
                                     </div>
                                     <div className={styles.profile_form_col_2}>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="zip_code" className={styles.profile_form_label}>Zip Code</label>
-                                            <input  name="zip_code" type="text" className={styles.profile_form_input} />
+                                            <input  name="zip_code" value={zip_code} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.zip_code && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                         </div>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="country" className={styles.profile_form_label}>Country</label>
-                                            <input name="country" type="text" className={styles.profile_form_input} />
+                                            <input name="country" value={country} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                         </div>
                                     </div>
@@ -391,7 +479,7 @@ const UserProfile = (props) => {
                                 </div>
                             </div>
 
-                            <button className={styles.profile_button}>Save Changes</button>
+                            <button className={styles.profile_button} onClick={saveChanges}>Save Changes</button>
                         </div>
 
                         <div id='billing-address' className={styles.profile_basic_info_con}>
@@ -405,6 +493,7 @@ const UserProfile = (props) => {
                                         <input
                                         type="text"
                                         name="billing_address"
+                                        value={billing_address}
                                         placeholder="Street Address"
                                         onChange={handleChange}
                                         className={styles.profile_form_input}
@@ -415,9 +504,10 @@ const UserProfile = (props) => {
                                         Street Address 2
                                         </label>
                                         <input
-                                        type="tel"
+                                        type="text"
                                         name="billing_address2"
-                                        placeholder="Your New Password"
+                                        value={billing_address2}
+                                        placeholder="Your second address"
                                         onChange={handleChange}
                                         className={styles.profile_form_input}
                                         />
@@ -427,24 +517,24 @@ const UserProfile = (props) => {
                                         
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="billing_state" className={styles.profile_form_label}>State/Province</label>
-                                            <input name="billing_state" type="text" className={styles.profile_form_input} />
+                                            <input name="billing_state" value={billing_state} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                         </div>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="billing_city" className={styles.profile_form_label}>City</label>
-                                            <input  name="billing_city" type="text" className={styles.profile_form_input} />
+                                            <input  name="billing_city" value={billing_city} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.billing_city && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                         </div>
                                     </div>
                                     <div className={styles.profile_form_col_2}>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="billing_zip_code" className={styles.profile_form_label}>Zip/Postal Code</label>
-                                            <input  name="billing_zip_code" type="text" className={styles.profile_form_input} />
+                                            <input  name="billing_zip_code" value={billing_zip_code} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.billing_zip_code && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
                                         </div>
                                         <div className={styles.profile_form_group}>
                                             <label htmlFor="billing_country" className={styles.profile_form_label}>Country</label>
-                                            <input name="billing_country" type="text" className={styles.profile_form_input} />
+                                            <input name="billing_country" value={billing_country} onChange={handleChange} type="text" className={styles.profile_form_input} />
                                             {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                         </div>
                                     </div>
@@ -844,8 +934,8 @@ const UserProfile = (props) => {
                                             <div className={styles.profile_workinghour_day}>
                                                 <h3>{day}</h3>
                                                 <div className={styles.profile_workinghour_switch}>
-                                                <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-                                                Open
+                                                <AntSwitch checked={times[day]['open']} onChange={() => handleDayAvailabiltyChange(!times[day]['open'], day, 'open')} inputProps={{ 'aria-label': 'ant design' }} />
+                                                {times[day]['open'] ? 'Open': 'Closed'}
                                                 </div>
                                                 <div className={styles.profile_workinghour_date}>
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -898,6 +988,12 @@ const UserProfile = (props) => {
 
 }
 
+function mapDispatchToProps(dispatch) {
+    return {
+      getUser: (id) => dispatch(getUser(id))
+    };
+  }
+
 function mapStateToProp(state) {
     return {
       auth: state.Auth
@@ -906,4 +1002,5 @@ function mapStateToProp(state) {
   
   export default connect(
     mapStateToProp,
+    mapDispatchToProps
   )(UserProfile);
