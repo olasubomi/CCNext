@@ -129,12 +129,20 @@ class SuggestCategoryForm extends Component {
     // get list of new categories to submit to mongo
     let new_categories = [];
     for (var i = 0; i < suggestedCategories.length; i++) {
+
+      const categorySentence = suggestedCategories[i];
+      const categoryWords = categorySentence.split(" ");
+
+      categoryWords.map((categoryWord) => {
+        return categoryWord[0].toUpperCase() + categoryWord.substring(1);
+      }).join(" ");
+
       // check if categories already exist, only add new categories to db,
       // though all will still be attached to product, as mentioned
-      let index = this.props.categories?.indexOf(suggestedCategories[i]);
+      let index = this.props.categories?.indexOf(categoryWords);
       if (index === -1) {
         let category_object = {};
-        category_object.category_name = suggestedCategories[i];
+        category_object.category_name = categoryWords;
         category_object.affiliated_objects = "ANY";
         category_object.publicly_available = "Draft";
         new_categories.push(category_object);

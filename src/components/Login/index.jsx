@@ -52,7 +52,9 @@ function Login(props){
   function Login(e){
     e.preventDefault();
     props.login(email, password);
-    props.toggleLogin()
+    // check redux
+    props.toggleLogin() // then redirect to dashboard
+
   }
 
   function togglePass(){

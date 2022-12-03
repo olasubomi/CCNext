@@ -260,7 +260,7 @@ class LandingPage extends Component {
                                 recommend different twists on how to make them.
                             </p>
                             <div className={styles.home_section_3_row_2_link}>
-                                <p>Suggest A Meal</p>
+                                <p><a href="/suggestmeal">Suggest A Meal </a> </p>
                                 <EastIcon className={styles.home_section_3_row_2_link_icon} />
                             </div>
                         </div>

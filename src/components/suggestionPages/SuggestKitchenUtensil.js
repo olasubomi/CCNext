@@ -50,11 +50,9 @@ class SuggestKitchenUtensilForm extends Component {
 
       // we need to update how we create image paths
       productImg_path: "",
-      new_product_description: [],
       suggested_stores: [],
       currProductIndexInDBsProductsList: -1,
       // currStoreIndexIfExistsInProductsList: -1,
-      suggestedUtensils: [],
 
       instructionWordlength: 0,
 
@@ -170,7 +168,6 @@ class SuggestKitchenUtensilForm extends Component {
         suggested_stores,
         currProductIndexInDBsProductsList,
         // currStoreIndexIfExistsInProductsList,
-        suggestedUtensils,
 
         suggestedCategories,
 
@@ -205,8 +202,6 @@ class SuggestKitchenUtensilForm extends Component {
         suggested_stores,
         currProductIndexInDBsProductsList,
         // currStoreIndexIfExistsInProductsList,
-        suggestedUtensils,
-
         suggestedCategories,
 
         booleanOfDisplayOfDialogBoxConfirmation,
@@ -310,8 +305,15 @@ class SuggestKitchenUtensilForm extends Component {
 
   addCategory = () => {
     let cat = this.state.categoryVal;
+    const categorySentence = cat;
+    const categoryWords = categorySentence.split(" ");
+
+    categoryWords.map((categoryWord) => {
+      return categoryWord[0].toUpperCase() + categoryWord.substring(1);
+    }).join(" ");
+
     let suggestedCategories = this.state.suggestedCategories;
-    suggestedCategories.push(cat);
+    suggestedCategories.push(categoryWords);
     this.setState({
       suggestedCategories
     })
@@ -371,7 +373,7 @@ class SuggestKitchenUtensilForm extends Component {
     var measurementValue = document.getElementById("measurement").value;
 
     properDescriptionStringSyntax =
-      descriptionValue + " : " + quantityValue + "" + measurementValue;
+      descriptionValue + ":" + quantityValue + "" + measurementValue;
 
 
     // This is the Object for an Ingredient of a Known Product
@@ -386,8 +388,6 @@ class SuggestKitchenUtensilForm extends Component {
     // descriptionObject.productImgFile = null;
     descriptionObject.productIndex = 0;
     // descriptionObject.calories = 0;
-
-    this.setState({ new_product_description: [...this.state.new_product_description, descriptionObject] });
 
     this.setState({ descriptionGroupList: [...this.state.descriptionGroupList, descriptionObject] });
     // after adding product to ingredient group list
@@ -445,7 +445,8 @@ class SuggestKitchenUtensilForm extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedUtensilToDB = async (e) => {
     const { utensilName, utensilImagesData, intro,
-      suggestedCategories, utensilImage1, utensilImage2, utensilImage3, utensilImage4 } = this.state;
+      suggestedCategories, descriptionGroupList,
+      utensilImage1, utensilImage2, utensilImage3, utensilImage4 } = this.state;
 
     // handle edge case Product name, ingredienrs or image upload required to submit form
     if (utensilName === "") { console.log("product label blank"); return; }
@@ -462,20 +463,11 @@ class SuggestKitchenUtensilForm extends Component {
     we could probably merge this in the above for loop easily, but we want to call this path function,
     so lets figure out what its even doing!*/
 
-    const all_ingredients_formatted = [];
+    // const all_ingredients_formatted = [];
     const product_slider = [];
     let i = 0;
 
     let new_measurements = [];
-    //-------------to make new category data ------------------------------------------
-    // get list of new categories to submit to mongo
-    let new_categories = [];
-    for (i = 0; i < suggestedCategories.length; i++) {
-      // check if categories already exist, only add new categories to db,
-      // though all will still be attached to product, as mentioned
-      let index = this.props.categories?.indexOf(suggestedCategories[i]);
-      if (index === -1) new_categories.push(suggestedCategories[i]);
-    }
 
     //prepare product data to Mongo and Recipe Steps Images and Video content to s3
     const instructionGroupData = [];
@@ -494,12 +486,23 @@ class SuggestKitchenUtensilForm extends Component {
 
     //-------------Submit remainder data of product to Mongo ------------------------------------------
     let suggestProductForm = new FormData();
-    suggestProductForm.append('product_name', utensilName);
+    const utensilString = utensilName;
+    const utensilWords = utensilString.split(" ");
+
+    utensilWords.map((utensilWord) => {
+      return utensilWord[0].toUpperCase() + utensilWord.substring(1);
+    }).join(" ");
+    suggestProductForm.append('product_name', utensilWords);
     suggestProductForm.append('product_images', utensilImage1);
     suggestProductForm.append('product_images', utensilImage2);
     suggestProductForm.append('product_images', utensilImage3);
     suggestProductForm.append('product_images', utensilImage4);
     suggestProductForm.append('product_details', intro);
+
+    descriptionGroupList.map((individualDescriptions) => {
+      console.log(individualDescriptions);
+      suggestProductForm.append('product_descriptions', JSON.stringify(individualDescriptions));
+    })
 
     // suggestProductForm.append('ingredientStrings', ingredientStrings);
     // list of products quantity measurements (created on submit Product)
@@ -507,18 +510,17 @@ class SuggestKitchenUtensilForm extends Component {
     suggestProductForm.append('new_measurements', JSON.stringify(new_measurements));
 
     // suggestProductForm.append('product_slider', JSON.stringify(product_slider));
-    suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
+    // suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
 
     // new suggested products
     // suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
-    suggestProductForm.append('product_type', JSON.stringify("utensil"));
+    suggestProductForm.append('product_type', JSON.stringify("Utensil"));
     suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
 
-    // suggestProductForm.append('newCategories', JSON.stringify(new_categories));
     suggestedCategories.map((individualCategories) => {
       suggestProductForm.append('product_categories', individualCategories);
     })
-    suggestProductForm.append('product_details', descriptionGroupList);
+    // suggestProductForm.append('product_details', descriptionGroupList);
     console.log(this.state.chunk1Content);
 
     // chunk content should be passed as file
@@ -733,21 +735,6 @@ class SuggestKitchenUtensilForm extends Component {
               imagesData={this.state.utensilImagesData.slice(1)} categories={this.state.suggestedCategories}
               descriptionsList={this.state.descriptionStrings}
             />
-            {/* <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
-                 mealName={this.state.mealName} mealImage={this.state.mealImage}
-                 categories={this.state.suggestedCategories}
-                  prepTime={this.state.prepTime} cookTime={this.state.cookTime}
-                  serves={this.state.servings}
-                  ingredientsList = {this.state.ingredientStrings} utensilsList={this.state.suggestedUtensils}
-                  instructionChunk1={this.state.instructionChunk1} instructionChunk2={this.state.instructionChunk2}
-                  instructionChunk3={this.state.instructionChunk3} instructionChunk4={this.state.instructionChunk4}
-                  instructionChunk5={this.state.instructionChunk5} instructionChunk6={this.state.instructionChunk6}
-                  chunk1Content={this.state.chunk1Content} chunk2Content={this.state.chunk2Content}
-                  chunk3Content={this.state.chunk3Content} chunk4Content={this.state.chunk4Content}
-                  chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
-                  instructionWordlength={this.state.instructionWordlength}
-                  tips={this.state.tips} mealImageData={this.state.mealImageData}
-                 /> */}
           </div>
         </form>
       </div>

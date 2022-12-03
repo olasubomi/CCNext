@@ -864,7 +864,15 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   handleKitchenUtensilInputName = (val) => {
-    this.setState({ suggestedUtensils: val });
+
+    const productString = val;
+    const productWords = productString.split(" ");
+
+    productWords.map((productWord) => {
+      return productWord[0].toUpperCase() + productWord.substring(1);
+    }).join(" ");
+
+    this.setState({ suggestedUtensils: productWords });
 
     // causees error when testing in request payload
     // var tmpKitchenUtenails = [...this.state.suggestedUtensils]
@@ -945,14 +953,18 @@ class SuggestMealForm extends Component {
 
   addCategory = () => {
     let cat = this.state.categoryVal;
+    const categorySentence = cat;
+    const categoryWords = categorySentence.split(" ");
+
+    categoryWords.map((categoryWord) => {
+      return categoryWord[0].toUpperCase() + categoryWord.substring(1);
+    }).join(" ");
+
     let suggestedCategories = this.state.suggestedCategories;
-    var index = suggestedCategories.indexOf(cat);
-    if (index === -1) {
-      suggestedCategories.push(cat);
-      this.setState({
-        suggestedCategories
-      })
-    }
+    suggestedCategories.push(categoryWords);
+    this.setState({
+      suggestedCategories
+    })
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -1082,7 +1094,7 @@ class SuggestMealForm extends Component {
     Check if all products listed exist in the database.
     If not, let server create placeholder before submitting to db.
     Get list of new products and new Categories
-    This for loop is making sure we are building a product_slider.
+
     we could probably merge this in the above for loop easily, but we want to call this path function,
     so lets figure out what its even doing!*/
 
@@ -1093,11 +1105,18 @@ class SuggestMealForm extends Component {
 
     let new_measurements = [];
     for (i = 0; i < ingredientGroupList.length; i++) {
+      const productString = ingredientGroupList[i].productName;
+      const productWords = productString.split(" ");
+
+      productWords.map((productWord) => {
+        return productWord[0].toUpperCase() + productWord.substring(1);
+      }).join(" ");
+
       // store ingredient format to submit ingredient product objects
       var tmp_ingredient = {
         // name and optional image added to new product,
         // we can add remainder products data after testing current
-        product_name: ingredientGroupList[i].productName,
+        product_name: productWords,
         quantity: ingredientGroupList[i].quantity,
         measurement: ingredientGroupList[i].measurement,
         productImgPath: ingredientGroupList[i].productImgPath,
@@ -1107,20 +1126,6 @@ class SuggestMealForm extends Component {
       all_ingredients_formatted.push(tmp_ingredient);
       console.log(tmp_ingredient);
 
-      const tmp_slider_data = {
-        ingredient: ingredientGroupList[i].product,
-        image: ingredientGroupList[i].productImgPath,
-        display: ingredientGroupList[i].display,
-      };
-      // store product slider format to submit slider object to meal
-      product_slider.push(tmp_slider_data);
-
-
-      // get new_Measurements from inputted ingredient packets
-      if (ingredientGroupList[i].measurement !== "") {
-        let index = this.props.measurements.indexOf(ingredientGroupList[i].measurement);
-        if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
-      }
     }
     //-------------to make new category data ------------------------------------------
     // get list of new categories to submit to mongo

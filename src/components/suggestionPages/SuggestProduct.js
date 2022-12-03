@@ -78,11 +78,9 @@ class SuggestProductForm extends Component {
       // we need to update how we create image paths
       productImg_path: "",
       new_product_ingredients: [],
-      new_product_size: [],
       suggested_stores: [],
       currProductIndexInDBsProductsList: -1,
       // currStoreIndexIfExistsInProductsList: -1,
-      suggestedUtensils: [],
       suggestedCategories: [],
 
       booleanOfDisplayOfDialogBoxConfirmation: false,
@@ -203,11 +201,9 @@ class SuggestProductForm extends Component {
           // we need to update how we create image paths
           productImg_path,
           new_product_ingredients,
-          new_product_size,
           suggested_stores,
           currProductIndexInDBsProductsList,
           // currStoreIndexIfExistsInProductsList,
-          suggestedUtensils,
           suggestedCategories,
 
           booleanOfDisplayOfDialogBoxConfirmation,
@@ -246,11 +242,9 @@ class SuggestProductForm extends Component {
           // we need to update how we create image paths
           productImg_path,
           new_product_ingredients,
-          new_product_size,
           suggested_stores,
           currProductIndexInDBsProductsList,
           // currStoreIndexIfExistsInProductsList,
-          suggestedUtensils,
           suggestedCategories,
 
           booleanOfDisplayOfDialogBoxConfirmation,
@@ -360,8 +354,15 @@ class SuggestProductForm extends Component {
 
   addCategory = () => {
     let cat = this.state.categoryVal;
+    const categorySentence = cat;
+    const categoryWords = categorySentence.split(" ");
+
+    categoryWords.map((categoryWord) => {
+      return categoryWord[0].toUpperCase() + categoryWord.substring(1);
+    }).join(" ");
+
     let suggestedCategories = this.state.suggestedCategories;
-    suggestedCategories.push(cat);
+    suggestedCategories.push(categoryWords);
     this.setState({
       suggestedCategories
     })
@@ -489,38 +490,23 @@ class SuggestProductForm extends Component {
     console.log(properSizeStringSyntax);
 
     // This is the Object for an Ingredient of a Known Product
-    var sizeObject = {
-
-      // display: this.state.currProductIndexInDBsProductsList,
-      // availableLocations: [],
-      size: sizeMeasurementValue,
-      properSizeStringSyntax: properSizeStringSyntax
+    var descriptionObject = {
+      description_name: "Size",
+      quantity: sizeQuantityValue,
+      measurement: sizeMeasurementValue,
+      properDescriptionStringSyntax: properSizeStringSyntax
     };
 
-    console.log("current state of product index at Add Ingredient To product is : \n" + this.state.currProductIndexInDBsProductsList);
-
-    console.log("creating new product object");
-
-    // edit product details for new product object
-    // sizeObject.productImgFile = null;
-    sizeObject.productIndex = 0;
-    // sizeObject.calories = 0;
-
-    this.setState({ new_product_size: [sizeObject] });
-
+    // refactor to have one size object rather than size group list
     this.setState({ sizeGroupList: [sizeObject] });
+    this.setState({ descriptionGroupList: [...this.state.descriptionGroupList, descriptionObject] });
+
     // after adding product to ingredient group list
     // reset current product img src and path to null, and same for current ingredient inputs
     // this.setState({ currentProductImgSrc: null, productImg_path: "" });
     this.setState({ sizeQuantity: '', sizeMeasurement: "null" });
     this.setState({ sizeMeasurement: "" });
     this.handleAddSizeChip(properSizeStringSyntax);
-
-    //  Resetting inner html directly to clear ingredient inputs without changing state
-    // document.getElementById("currentIngredient").value = 'NewPs';
-    // document.getElementById("currentIngredientQuantity").value = 8;
-    // document.getElementById("currentIngredientMeasurement").value = 'Removed';
-
   }
 
   handleAddSizeChip(chip) {
@@ -611,11 +597,7 @@ class SuggestProductForm extends Component {
 
     // This is the Object for an Ingredient of a Known Product
     var currNutritionObject = {
-      productName: ingredientValue,
-      // productImgFile: this.state.currentProductImgSrc,
-      productImgPath: null,
-
-      // these are added to ingredient packets on submit, and not relevant in product object details
+      description_name: ingredientValue,
       quantity: quantityValue,
       measurement: measurementValue,
       properIngredientStringSyntax: properIngredientStringSyntax
@@ -695,7 +677,7 @@ class SuggestProductForm extends Component {
 
   }
 
-  handleDeleteNutirtionChip(chip) {
+  handleDeleteNutritionChip(chip) {
     var array = this.state.nutritionalStrings; // make a separate copy of the array
     var removeFromGroup = this.state.descriptionGroupList;
 
@@ -740,7 +722,7 @@ class SuggestProductForm extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedProductToDB = async (e) => {
     const { productName, productImageName, intro, productImagesData,
-      ingredientGroupList, suggestedCategories,
+      ingredientGroupList, descriptionGroupList, suggestedCategories,
       productImage1, productImage2, productImage3, productImage4 } = this.state;
 
     // handle edge case Product name, ingredienrs or image upload required to submit form
@@ -764,11 +746,18 @@ class SuggestProductForm extends Component {
 
     let new_measurements = [];
     for (i = 0; i < ingredientGroupList.length; i++) {
+      const productString = ingredientGroupList[i].productName;
+      const productWords = productString.split(" ");
+
+      productWords.map((productWord) => {
+        return productWord[0].toUpperCase() + productWord.substring(1);
+      }).join(" ");
+
       // store ingredient format to submit ingredient product objects
       var tmp_ingredient = {
         // name and optional image added to new product,
         // we can add remainder products data after testing current
-        product_name: ingredientGroupList[i].productName,
+        product_name: productWords,
         quantity: ingredientGroupList[i].quantity,
         measurement: ingredientGroupList[i].measurement,
         productImgPath: ingredientGroupList[i].productImgPath,
@@ -793,15 +782,7 @@ class SuggestProductForm extends Component {
         if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
       }
     }
-    //-------------to make new category data ------------------------------------------
-    // get list of new categories to submit to mongo
-    let new_categories = [];
-    for (i = 0; i < suggestedCategories.length; i++) {
-      // check if categories already exist, only add new categories to db,
-      // though all will still be attached to product, as mentioned
-      let index = this.categories.indexOf(suggestedCategories[i]);
-      if (index === -1) new_categories.push(suggestedCategories[i]);
-    }
+
 
     //prepare product data to Mongo and Recipe Steps Images and Video content to s3
     const instructionGroupData = [];
@@ -827,6 +808,10 @@ class SuggestProductForm extends Component {
     suggestProductForm.append('product_images', productImage4);
     // suggestProductForm.append('productImageName', productImageName);
     suggestProductForm.append('product_details', intro);
+    descriptionGroupList.map((individualDescriptions) => {
+      console.log(individualDescriptions);
+      suggestProductForm.append('product_descriptions', individualDescriptions);
+    })
 
     // suggestProductForm.append('ingredientStrings', ingredientStrings);
     // list of products quantity measurements (created on submit Product)
