@@ -8,9 +8,32 @@ import SearchIcon from '@mui/icons-material/Search';
 import styles from '../../src/components/individualPage/store.module.css'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import WestIcon from '@mui/icons-material/West';
+import axios from '../../src/util/Api';
+import { useEffect } from 'react';
 
-const IndividualStorePage = () => {
+const IndividualStorePage = (props) => {
     const router = useRouter()
+    const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ]
+
+    useEffect(() => {
+        console.log(props.store)
+        // if(props.store && props.store.data && props.store.data.stores.length === 0){
+        //     window.location.assign('/')
+        // }
+    })
 
     return (
         <div>
@@ -35,7 +58,7 @@ const IndividualStorePage = () => {
                     </div>
                 </div> */}
                 <div style={{
-                    backgroundImage: `url(/assets/homepage/banner-3.png)`,
+                    backgroundImage: props.store.data.products[0].background_picture,
                     width: '100%'
                 }}
                     className={styles.banner_container}
@@ -85,9 +108,11 @@ const IndividualStorePage = () => {
                     </div>
 
                 </div>
-                <p className={styles.dateCreated} style={{width:'95%', textAlign:'end'}}>Store Created: August 23rd,2022 </p>
+                <p className={styles.dateCreated} style={{width:'95%', textAlign:'end'}}>Store Created: {props.store.data.products[0].createdAt && new Date(props.store.data.products[0].createdAt).getDate() + ' ' + months[new Date(props.store.data.products[0].createdAt).getMonth()] + ' ,'+ new Date(props.store.data.products[0].createdAt).getFullYear()} </p>
                 <div style={{width: '95%'}}>
-                    <Store />
+                {props.store && props.store.data && props.store.data.products.length > 0 &&
+                    <Store store={props.store.data.products[0]} />
+                    }
                 </div>
             </div>
         </div>
@@ -95,3 +120,23 @@ const IndividualStorePage = () => {
 }
 
 export default IndividualStorePage
+
+export async function getServerSideProps(context){
+    // const res = await fetch('https://.../posts')
+    // const posts = await res.json()
+    // console.log(context)
+    let {id} = context.params
+    let store = await axios.get('/stores/getallstores/1?_id='+id)
+
+    // console.log(meal.data)
+
+    return {
+        props: {
+            store: store.data
+        },
+        // Next.js will attempt to re-generate the page:
+        // - When a request comes in
+        // - At most once every second
+        // revalidate: 86400, // In seconds
+    }
+}

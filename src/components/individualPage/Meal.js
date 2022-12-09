@@ -8,11 +8,12 @@ import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIco
 import Stores from "./stores";
 import Reviews from "./Reviews";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import { useRouter } from "next/router";
 
 function Meal(props){
-    set
-    console.log(props.meal)
-    const router = window.location
+    const router = useRouter()
+
+    console.log(router)
     return (
         <>
             <Head>
@@ -105,17 +106,21 @@ function Meal(props){
                                 </p>
                             </div>
                         </div>
-                        <div className={styles.meal_section_2_price}>
-                            <h3>Price</h3>
-                            <p>$7.65<span>/piece</span></p>
-                        </div>
+                        {
+                            props.meal.publicly_available === 'Public' &&
+                        
+                            <div className={styles.meal_section_2_price}>
+                                <h3>Price</h3>
+                                <p>$7.65<span>/piece</span></p>
+                            </div>
+                        }
                     </div>
                 </div>
                 <div className={styles.section_2_footer}>
                     <div className={styles.hide}>
                         <p><ShareIcon />Share this product:</p>
                         <FacebookShareButton>
-                            <FacebookEIcon quote={props.meal.intro} url={router.href} />
+                            <FacebookEIcon quote={props.meal.intro} url={router.query} />
                         </FacebookShareButton>
                         <TwitterShareButton title={props.meal.meal_name} url={router.href}>
                             <TwitterEIcon />
@@ -131,10 +136,12 @@ function Meal(props){
                         <p>Print Preview</p>
                         <PrintEIcon />
                     </div>
+                    {
+                            props.meal.publicly_available === 'Public' &&
                     <div className={styles.btnGroup}>
                         <div className={styles.btnoutline}>Add to Grocery List</div>
                         <div className={styles.btnfill}>Add to Cart</div>
-                    </div>
+                    </div>}
                 </div>
                 <div className={styles.meal_section_3}>
                     <div className={styles.meal_details}>

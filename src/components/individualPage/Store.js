@@ -7,7 +7,7 @@ import Image from "next/image";
 import Reviews from "./Reviews";
 import { CallIcon, EmailIcon, LocationIcon, StarIcon, TimeIcon } from "../icons";
 
-function Store(){
+function Store(props){
 
     function handleSearch(e){
         // setSearchSuggestedMealState(e.target.value);
@@ -43,41 +43,41 @@ function Store(){
                 <div className={styles.product_section_2}>
                     <div className={styles.product_section_2_col_1}>
                         <Image
-                            src={img_logo}
+                            src={props.store.profile_picture}
                             alt="pop up"
                             className={styles.product_section_2_main_img}
-                            height={"100%"} width={"100%"}
+                            height={500} width={500}
                         />
                     </div>
                     <div className={styles.product_section_2_col_2}>
                         <div className={styles.product_section_2_details}>
-                            <h2 className={styles.product_section_2_name}>fdsfsd</h2>
+                            <h2 className={styles.product_section_2_name}>{props.store.store_name}</h2>
                             <div className={styles.store}>
+                                {props.store.supplier_address && 
                                 <div>
                                     <LocationIcon style={styles.store_icon} />
-                                    <p>6391 Elgin St. Celina, Delaware 10299</p>
-                                </div>
+                                    <p>{JSON.parse(props.store.supplier_address).address + " " + JSON.parse(props.store.supplier_address).city + " ," + JSON.parse(props.store.supplier_address).state + " " + JSON.parse(props.store.supplier_address).country + " " + JSON.parse(props.store.supplier_address).zip_code}6391 Elgin St. Celina, Delaware 10299</p>
+                                </div>}
                                 <div>
                                     <EmailIcon style={styles.store_icon} />
-                                    <p>Danghoang87hl@gmail.com</p>
+                                    <p>{props.store.email}</p>
                                 </div>
                                 <div>
                                     <CallIcon style={styles.store_icon} />
-                                    <p>(406) 555-0120</p>
+                                    <p>{props.store.phone_number}</p>
                                 </div>
                             </div>
                             <div className={styles.store}>
                                 <div>
                                     <TimeIcon style={styles.store_icon} />
                                     <p>Pickup: 8:00 am - 10:00am</p>
-                                    <p>2:00 pm - 5:00pm</p>
+                                    {/* <p>{props.store.hours[0]}</p> */}
                                 </div>
                             </div>
                             <div className={styles.product_section_2_categories}>
                                 <h3 className={styles.product_section_2_category_name}>About Store</h3>
                                 <p className={styles.product_section_2_category}>
-                                    For athletes, high altitude produces two contradictory effects on performance. 
-                                    For explosive events (sprints up to 400 metres, long jump, triple jump) the reduction in atmospheric pressure
+                                    {props.store.description}
                                 </p>
                             </div>
                         </div>

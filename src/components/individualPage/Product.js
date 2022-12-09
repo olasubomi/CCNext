@@ -8,10 +8,10 @@ import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIco
 import Stores from "./stores";
 import Reviews from "./Reviews";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import { useRouter } from "next/router";
 
 function Product(props){
-    console.log(props.product)
-    const router = window.location
+    const router = useRouter()
     return (
         <>
             <Head>
@@ -74,10 +74,12 @@ function Product(props){
                                 </div>
                             </div>
                         </div>
+                        {
+                            props.product.publicly_available === 'Public' &&
                         <div className={styles.product_section_2_price}>
                             <h3>Price</h3>
                             <p>$7.65<span>/piece</span></p>
-                        </div>
+                        </div>}
                     </div>
                 </div>
                 <div className={styles.section_2_footer}>
@@ -100,10 +102,12 @@ function Product(props){
                         <p>Print Preview</p>
                         <PrintEIcon />
                     </div>
+                    {
+                            props.product.publicly_available === 'Public' &&
                     <div className={styles.btnGroup}>
                         <div className={styles.btnoutline}>Add to Grocery List</div>
                         <div className={styles.btnfill}>Add to Cart</div>
-                    </div>
+                    </div>}
                 </div>
 
                 <div className={styles.productcard_row}>

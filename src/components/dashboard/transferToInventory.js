@@ -57,14 +57,17 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   }));
 
 export default function TransferToInventory(props){
+    const [restockOption, setRestockOption] = useState()
+    const [restockTime, setRestockTime] = useState('1 day')
     const [formState, setFormState] = useState({
         prepackagedMeal: false,
         ingredientsAvailable: [],
         estimated_preparation_time: 0,
-        item_type: 'Meal'
+        item_type: 'Meal',
+        in_stock: true
       });
 
-      const { ingredientsAvailable } = formState;
+      const { ingredientsAvailable, item_type, in_stock } = formState;
 
     useEffect(() => {
         if(props.meal.meal_categories.length > 0){
@@ -80,6 +83,7 @@ export default function TransferToInventory(props){
             }
             setFormState({ ...formState, ['ingredientsAvailable']: ingredientsAvailablee });
         }
+        setFormState({ ...formState, ['item_type']: props.type });
     }, [props.meal])
     
     function handleChange(e) {
@@ -96,6 +100,10 @@ export default function TransferToInventory(props){
         
         console.log(formState)
       };
+
+    function handleInStockChange(value) {
+        setFormState({ ...formState, ['in_stock']: value });
+    };
 
     function handleIngredientChange(e,id,key) {
         const { value } = e.target;
@@ -130,11 +138,20 @@ export default function TransferToInventory(props){
         });
     }
 
+    function handleRestockTimeChange (type){
+        setRestockTime(type)
+        toggleRestockTimeOption()
+    }
+
+    function toggleRestockTimeOption(){
+        setRestockOption(!restockOption)
+    }
+
     return(
         <div className={styles.transToIn_container}>
             <div className={styles.transToIn}>
                 <div className={styles.transToIn_top}>
-                    <h2>Transfer Meal to Inventory</h2>
+                    <h2>Transfer {' ' + item_type + ' '} to Inventory</h2>
                     <div onClick={props.toggleTransferToInventory}>
                     <CancelIcon className={styles.transToIn_cancel_con} />
                     </div>
@@ -143,6 +160,7 @@ export default function TransferToInventory(props){
                 <div className={styles.transToIn_details_con}>
                     <div className={styles.transToIn_meal_types}>
                         <p>Choose Meal Type</p>
+                        {item_type === "Meal" ? 
                         <div className={styles.transToIn_meal_type}>
                             <div className={styles.transToIn_meal_type_option}>
                                 <input
@@ -190,13 +208,62 @@ export default function TransferToInventory(props){
                                 Meal without the ingredients
                                 </label>
                             </div>
+                        </div>:
+                        <div className={styles.transToIn_meal_type}>
+                            <div className={styles.transToIn_meal_type_option}>
+                                <input
+                                onChange={handleChange}
+                                className={styles.transToIn_meal_type_radioInput}
+                                type="radio"
+                                id="Product"
+                                name="item_type"
+                                value="Product"
+                                />
+                                <label
+                                htmlFor="Product"
+                                className={styles.transToIn_meal_type_radio_button}
+                                ></label>
+                                <label
+                                htmlFor="Product"
+                                className={styles.transToIn_meal_type_radioLabel}
+                                >
+                                Product
+                                </label>
+                                {/* <label
+                                htmlFor="Product"
+                                className={styles.transToIn_meal_type_radioLabel2}
+                                >
+                                Includes all the ingredients needed in preparation of this meal
+                                </label> */}
+                            </div>
+                            <div className={styles.transToIn_meal_type_option}>
+                                <input
+                                className={styles.transToIn_meal_type_radioInput}
+                                type="radio"
+                                onChange={handleChange}
+                                id="Kitchen Utensils"
+                                name="item_type"
+                                value="Kitchen Utensils"
+                                />
+                                <label
+                                htmlFor="Kitchen Utensils"
+                                className={styles.transToIn_meal_type_radio_button}
+                                ></label>
+                                <label htmlFor="Kitchen Utensils" className={styles.transToIn_meal_type_radioLabel}>
+                                Kitchen Utensils
+                                </label>
+                                {/* <label htmlFor="Kitchen Utensils" className={styles.transToIn_meal_type_radioLabel2}>
+                                Meal without the ingredients
+                                </label> */}
+                            </div>
                         </div>
+                        }
                     </div>
                     <div className={styles.transToIn_details_col2}>
                         <div>
-                            <h3>Set Meal Price</h3>
+                            <h3>Set {' ' + item_type + ' '} Price</h3>
                             <div>
-                                <p>Enter Meal Price</p>
+                                <p>Enter {' ' + item_type + ' '} Price</p>
                                 <h4>$</h4>
                                 <input onChange={handleChange} name='meal_price' />
                             </div>
@@ -213,47 +280,61 @@ export default function TransferToInventory(props){
 
                     <div className={styles.transToIn_details_col3}>
                         <div>
-                            <h3>Receive notification for all order activities</h3>
-                            <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
+                            <h3>Are the ingredients available in your store</h3>
+                            <AntSwitch checked={in_stock} onChange={() => handleInStockChange(in_stock)} inputProps={{ 'aria-label': 'ant design' }} />
                         </div>
                         <div>
-                            <h3>When someone comment on your product</h3>
-                            <p>Set Time</p>
-                            <select>
-                                <option>1 day</option>
-                            </select>
+                            <h3>Out of Stock? How long before restock</h3>
+                            <div className={styles.select_container}>
+                                <div onClick={toggleRestockTimeOption} className={styles.select_box}>
+                                    <p>{restockTime}</p>
+                                    <ArrowDropDownIcon className={styles.select_box_icon} />
+                                </div>
+                                {restockOption &&
+                                    <div className={styles.select_options}>
+                                        <p onClick={() => handleRestockTimeChange('1 day')}>1 day</p>
+                                        <p onClick={() => handleRestockTimeChange('2 days')}>2 days</p>
+                                        <p onClick={() => handleRestockTimeChange('3 days')}>3 days</p>
+                                        <p onClick={() => handleRestockTimeChange('About 1 week')}>About 1 week</p>
+                                        <p onClick={() => handleRestockTimeChange('2 Weeks')}>2 Weeks</p>
+                                        <p onClick={() => handleRestockTimeChange('About 1 month')}>About 1 month</p>
+                                        <p onClick={() => handleRestockTimeChange('2 months')}>2 months</p>
+                                    </div>}
+                            </div>
                         </div>
                     </div>
+                    {
+                        item_type === 'Meal' &&
+                        <div className={styles.transToIn_details_col4}>
+                            <p>Set ingredient prices and availability</p>
+                            <table className={styles.request_table}>
+                                <thead>
+                                <div className={styles.request_tr} style={{backgroundColor: 'transparent'}}>
+                                    <th className={styles.request_th}>Items</th>
+                                    <th className={styles.request_th + " " + hideData}>Quantity</th>
+                                    <th className={styles.request_th}>Set Price</th>
+                                    <th className={styles.request_th}>Product Available</th>
+                                </div>
+                                </thead>
+                                <tbody>
+                                    {ingredientsAvailable.map((ingredient, index) => {
+                                        return(
+                                            <div className={styles.refId + " " + styles.request_tr}>
+                                                <div className={styles.request_td}>{ingredient.name}</div>
+                                                <div className={styles.request_td + " " + hideData}><input value={ingredient.quantity} onChange={(e) => handleIngredientChange(e,index,'quantity')} name='meal_price' /></div>
+                                                <div className={styles.request_td}>$<input value={ingredient.set_price} onChange={(e) => handleIngredientChange(e,index,'set_price')} name='meal_price' /></div>
+                                                <div className={styles.request_td}>
+                                                    <AntSwitch checked={ingredient.product_available} onChange={(e) => handleIngredientAvailabilityChange(!ingredient.product_available,index,'product_available')} inputProps={{ 'aria-label': 'ant design' }} />
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                    }
 
-                    <div className={styles.transToIn_details_col4}>
-                        <p>Set ingredient prices and availability</p>
-                        <table className={styles.request_table}>
-                            <thead>
-                            <tr className={styles.request_tr} style={{backgroundColor: 'transparent'}}>
-                                <th className={styles.request_th}>Items</th>
-                                <th className={styles.request_th}>Quantity</th>
-                                <th className={styles.request_th}>Set Price</th>
-                                <th className={styles.request_th}>Product Available</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                {ingredientsAvailable.map((ingredient, index) => {
-                                    return(
-                                        <tr className={styles.refId + " " + styles.request_tr}>
-                                            <td className={styles.request_td}>{ingredient.name}</td>
-                                            <td className={styles.request_td}><input value={ingredient.quantity} onChange={(e) => handleIngredientChange(e,index,'quantity')} name='meal_price' /></td>
-                                            <td className={styles.request_td}><input value={ingredient.set_price} onChange={(e) => handleIngredientChange(e,index,'set_price')} name='meal_price' /></td>
-                                            <td className={styles.request_td}>
-                                                <AntSwitch checked={ingredient.product_available} onChange={(e) => handleIngredientAvailabilityChange(!ingredient.product_available,index,'product_available')} inputProps={{ 'aria-label': 'ant design' }} />
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                                }
-
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
                 </div>
 
                 <div className={styles.transToIn_footer}>

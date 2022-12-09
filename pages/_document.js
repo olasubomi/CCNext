@@ -17,7 +17,7 @@ export default function Document() {
                     manifest.json provides metadata used when your web app is added to the
                     homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
     --> */}
-                    <link rel="manifest" href="./manifest.json" />
+                    {/* <link rel="manifest" href="./manifest.json" /> */}
                     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
                     {/* <link
                         rel="stylesheet"

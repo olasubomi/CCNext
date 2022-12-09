@@ -125,7 +125,7 @@ const SuggestedMeals = (props) => {
             }else{
                 url = '/meals/get-meals/1?user='+props.auth.authUser._id+'&meal_name='+searchSuggestedSuggestion
             }
-        }else if(searchType === 'Meal'){
+        }else if(searchType === 'Product'){
             if(props.auth.authUser.user_type === 'admin'){
                 url = '/products/get-all-products/1?product_name='+searchSuggestedSuggestion
             }else{
@@ -666,7 +666,7 @@ const SuggestedMeals = (props) => {
                     </div>
                     <div className={styles.meal_section_1}>
                         <div className={styles.meal_section_1_col_1}>
-                            <h3>Meal Description</h3>
+                            <h3>{searchType + " "} Description</h3>
                         </div>
                         <div className={styles.meal_section_1_col_2}>
                             {/* <p className={styles.meal_section_1_col_2_p}> Choose type</p> */}
@@ -693,7 +693,7 @@ const SuggestedMeals = (props) => {
                     {searchType === 'Meal' ? 
                         <Meal meal={suggestion} />
                         :
-                        searchType === 'Meal' &&
+                        searchType === 'Product' &&
                         <Product product={suggestion} />
                     }
                 </div>
@@ -817,7 +817,7 @@ const SuggestedMeals = (props) => {
         </div>}
 
         {transferToInventory && 
-            <TransferToInventory meal={suggestion} toggleTransferToInventory={toggleTransferToInventory} />
+            <TransferToInventory type={searchType} meal={suggestion} toggleTransferToInventory={toggleTransferToInventory} />
         }
 
         {sent && 

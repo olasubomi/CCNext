@@ -110,3 +110,15 @@
     padding: 1rem;
     align-items: center;
 }
+
+@media screen and (max-width: 768px) {
+    .sent{
+        width: 90%;
+        height: 90%;
+        grid-template-rows: 10% max-content 10%;
+    }
+
+    .sent_details_con{
+        width: 85%;
+    }
+}
