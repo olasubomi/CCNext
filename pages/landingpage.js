@@ -112,7 +112,7 @@ class LandingPage extends Component {
                         <div className={styles.mySlides}>
                             <div className={styles.slide_wrapper}></div>
                             <div className={styles.slide_text}>
-                                <h2>Get the best Ingredients for your meal</h2>
+                                <h2>Get the Best Ingredients for your meal</h2>
                                 <a href="/" className={styles.slide_button}>
                                     Shop Now
                                 </a>
@@ -129,7 +129,7 @@ class LandingPage extends Component {
                             <div className={styles.slide_wrapper}></div>
                             <div className={styles.slide_text}>
                                 <h2>
-                                    Well established
+                                    Well Established
                                     Local and
                                     international
                                     food suppliers
@@ -148,7 +148,7 @@ class LandingPage extends Component {
                         <div className={styles.mySlides}>
                             <div className={styles.slide_wrapper}></div>
                             <div className={styles.slide_text}>
-                                <h2>Enjoy hassle free cooking with CHOP CHOW</h2>
+                                <h2>Order from Multiple Stores in a Single Order</h2>
                                 <a href="/signup" className={styles.slide_button}>
                                     Sign Up Now
                                 </a>
