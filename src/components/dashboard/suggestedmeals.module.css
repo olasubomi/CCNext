@@ -867,6 +867,24 @@
         text-decoration: underline;
       }
 
+.form_group{
+    position: relative;
+    display: grid;
+    grid-gap: 10px;
+    width: 100%;
+    margin-top: 4rem;
+}
+
+.form_group > h3 {
+    margin: 0;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+
+    color: #000000;
+}
+
 @media screen and (max-width: 1115px) {
     .hideData{
         display: none;

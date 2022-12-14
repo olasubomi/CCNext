@@ -323,7 +323,7 @@ function Meal(props){
                     </div>
                     <div className={styles.productcard_col_2}>
                         <div className={styles.productcard_productcards}>
-                            {new Array(1,2,3,4,5,6,7,8).map((data, index) => {
+                            {props.meal.similar_meals.map((data, index) => {
                                 return(
                                 <div key={index} className={styles.productcard_productcard}>
                                     <div className={styles.productcard_productcard_img_container}>

@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import { useEffect, useState } from 'react';
 import axios from '../../util/Api';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -70,7 +71,7 @@ export default function TransferToInventory(props){
       const { ingredientsAvailable, item_type, in_stock } = formState;
 
     useEffect(() => {
-        if(props.meal.meal_categories.length > 0){
+        if(props.type === "Meal" && props.meal.meal_categories.length > 0){
             let ingredientsAvailablee = []
             let ingredients = JSON.parse(props.meal.formatted_ingredients[0])
             for(let i=0; i<ingredients.length; i++){
@@ -311,7 +312,7 @@ export default function TransferToInventory(props){
                                 <thead>
                                 <div className={styles.request_tr} style={{backgroundColor: 'transparent'}}>
                                     <th className={styles.request_th}>Items</th>
-                                    <th className={styles.request_th + " " + hideData}>Quantity</th>
+                                    <th className={styles.request_th + " " + styles.hideData}>Quantity</th>
                                     <th className={styles.request_th}>Set Price</th>
                                     <th className={styles.request_th}>Product Available</th>
                                 </div>
@@ -321,7 +322,7 @@ export default function TransferToInventory(props){
                                         return(
                                             <div className={styles.refId + " " + styles.request_tr}>
                                                 <div className={styles.request_td}>{ingredient.name}</div>
-                                                <div className={styles.request_td + " " + hideData}><input value={ingredient.quantity} onChange={(e) => handleIngredientChange(e,index,'quantity')} name='meal_price' /></div>
+                                                <div className={styles.request_td + " " + styles.hideData}><input value={ingredient.quantity} onChange={(e) => handleIngredientChange(e,index,'quantity')} name='meal_price' /></div>
                                                 <div className={styles.request_td}>$<input value={ingredient.set_price} onChange={(e) => handleIngredientChange(e,index,'set_price')} name='meal_price' /></div>
                                                 <div className={styles.request_td}>
                                                     <AntSwitch checked={ingredient.product_available} onChange={(e) => handleIngredientAvailabilityChange(!ingredient.product_available,index,'product_available')} inputProps={{ 'aria-label': 'ant design' }} />

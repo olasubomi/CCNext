@@ -8,7 +8,7 @@
     top: 0;
     left: 0;
     background-color: #00000047;
-    z-index: 100;
+    z-index: 200;
 }
 
 .transToIn{
@@ -314,6 +314,7 @@
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
+    overflow: scroll;
   }
 
   .request_table > thead{
@@ -473,17 +474,22 @@
 @media screen and (max-width: 1000px) {
     .transToIn{
         width: 98%;
-        padding-bottom: 4rem;
     }
 }
 
 @media screen and (max-width: 768px) {
+    .transToIn_container{
+        z-index: 199;
+    }
+
     .transToIn{
         width: 100%;
         height: 100%;
         border-radius: 0;
         overflow: scroll;
         grid-template-rows: 10% 1fr 10%;
+        padding-bottom: 7rem;
+        padding-top: 7rem;
     }
 
     .transToIn_meal_type{

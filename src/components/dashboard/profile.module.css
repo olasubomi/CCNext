@@ -240,6 +240,64 @@
     border: none;
 }
 
+.suggestion_form_image{
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 2.5rem;
+    justify-content: start;
+    align-items: center;
+}
+
+.suggestion_form_image_icon_con{
+    width: 75px;
+    height: 72px;
+    left: 0px;
+    top: 0px;
+
+    border: 1px dashed #F47900;
+    border-radius: 8px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.suggestion_form_image_icon{
+    color: #F47900;
+}
+
+.suggestion_form_image_col_2 > p{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+
+    color: #949494;
+}
+
+.suggestion_form_image_col_1{
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 1.5rem;
+    justify-content: start;
+    align-items: center;
+}
+
+.suggestion_form_image_col_1 > span{
+    width: 132px !important;
+    height: 132px !important;
+}
+
+.suggestion_image{
+    width: 130px;
+    height: 130px;
+}
+
+.MuiAutocomplete-tag{
+    display: none !important;
+}
+
 .profile_form_col_2{
     display: grid;
     grid-template-columns: 1fr 1fr;

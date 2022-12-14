@@ -10,7 +10,6 @@ import paypal from "../../public/assets/logos/paypal.png"
 import mastercard from "../../public/assets/logos/mastercard.png"
 import visa from "../../public/assets/logos/visa.png"
 import american from "../../public/assets/logos/american.png"
-import profileImage from "../../public/assets/logos/profileImage.png"
 import Image from 'next/image';
 import Link from 'next/link';
 import { TextField } from '@mui/material';
@@ -26,6 +25,7 @@ import { UserIcon } from '../../src/components/icons';
 import axios from '../../src/util/Api';
 import PhoneInput from 'react-phone-input-2';
 import { getUser } from '../../src/actions';
+import AddIcon from '@mui/icons-material/Add';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -98,12 +98,12 @@ const UserProfile = (props) => {
         city: '',
         country: '', state: '', zip_code: '', 
         billing_address: '', billing_address2: '', billing_city: '', billing_country: '',
-        billing_state: '', billing_zip_code: ''
+        billing_state: '', billing_zip_code: '', driver_car_model: '', vin: '', driver_car_color: '', driver_car_plate_number: '', driver_car_picture: {}
       });
     const { email, phone_number, first_name, last_name, password, 
         address, new_password, profileImageData, country, state, city, zip_code, 
         billing_address, billing_address2, billing_city, billing_country,
-        billing_state, billing_zip_code } = formState;
+        billing_state, billing_zip_code, driver_car_model, vin, driver_car_color, driver_car_plate_number, driver_car_picture } = formState;
     const [times, setTimes] = useState({
         sunday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
         monday: {from:'2018-01-01T00:00:00.000Z',to:'2018-01-01T00:00:00.000Z', open: true},
@@ -129,13 +129,16 @@ const UserProfile = (props) => {
                 ['email']: props.auth.authUser.email,
                 ['first_name']: props.auth.authUser.first_name,
                 ['last_name']: props.auth.authUser.last_name,
-                ['phone_number']: props.auth.authUser.phone_number
+                ['phone_number']: props.auth.authUser.phone_number,
+                ['driver_car_color']: props.auth.authUser.driver_car_color,
+                ['driver_car_model']: props.auth.authUser.driver_car_model,
+                ['driver_car_plate_number']: props.auth.authUser.driver_car_plate_number,
+                ['driver_car_picture']: {carContentURL: props.auth.authUser.driver_car_picture}
             })
 
             if(props.auth.authUser.driver_hours.length>0){
                 setTimes(props.auth.authUser.driver_hours[0])
             }
-            
         }
       },[props.auth.authUser]);
 
@@ -225,8 +228,14 @@ const UserProfile = (props) => {
             formData.append('profile_picture', profileImage);
         }
         formData.append('first_name', first_name);
-        formData.append('last_name', last_name);
-        formData.append('phone_number', phone_number);
+        formData.append('last_name', last_name); driver_car_picture
+        formData.append('driver_car_model', driver_car_model);
+        formData.append('driver_car_color', driver_car_color);
+        formData.append('driver_car_plate_number', driver_car_plate_number);
+        console.log(driver_car_picture.carContent)
+        if(driver_car_picture.carContent){
+            formData.append('driver_car_picture', driver_car_picture.carContent);
+        }
         // formData.append('delivery_addresses', delivery_addresses);
 
         axios.put('/user/updateuserprofile/'+props.auth.authUser._id, formData).then(res => {
@@ -248,6 +257,36 @@ const UserProfile = (props) => {
             }, 5000)
         })
     }
+
+    function uploadCarImage () {
+        // <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent1" name="instructionChunkContent1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 1)} />
+        const input = document.createElement("input");
+        input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+        input.id = "carImage";
+        input.name = "carImage";
+        input.type = "file";
+        input.onchange = (ev) => onhandleCarImg(ev);
+        input.hidden = true;
+        input.click()
+    }
+
+    function onhandleCarImg (event) {
+        if (event.target.files[0] === undefined) return;
+    
+        // Allowing file type
+        var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
+
+        if (allowedImageExtensions.exec(event.target.files[0].name)) {
+
+          setFormState({ ...formState, ['driver_car_picture']: {
+            carContent: event.target.files[0],
+            carContentURL: URL.createObjectURL(event.target.files[0])
+          } });
+        }
+        else {
+          alert('Invalid file type');
+        }
+      };
 
     return (
         <div className={container + " " + col2}>
@@ -288,6 +327,13 @@ const UserProfile = (props) => {
                                 <a>Billing Address</a>
                             </Link>
                         </div>
+                        {props.auth.authUser.user_type === 'driver' &&
+                        <div className={styles.profile_summary_link}>
+                            <Link href='#car-details' >
+                                <a>Car Details</a>
+                            </Link>
+                        </div>
+                        }
                         <div className={styles.profile_summary_link}>
                             <Link href='#payment-method' >
                                 <a>Payment Method</a>
@@ -542,6 +588,73 @@ const UserProfile = (props) => {
                                 </div>
                             </div>
                         </div>
+
+                        {props.auth.authUser.user_type === 'driver' &&
+                        <div id='car-details' className={styles.profile_basic_info_con}>
+                            <h3>Car Details</h3>
+                            <div className={styles.profile_basic_info}>
+                                <div className={styles.profile_image_con}>
+                                    <div className={styles.suggestion_form_image}>
+                                        <div className={styles.suggestion_form_image_col_2}>
+                                            {driver_car_picture.carContentURL && 
+                                            <div className={styles.profile_image}>
+                                                <Image width={300} height={300} src={driver_car_picture.carContentURL} />
+                                            </div>
+                                            }
+                                        </div>
+                                        <div onClick={() => uploadCarImage()} className={styles.suggestion_form_image_col_1}>
+                                            <div className={styles.suggestion_form_image_icon_con}>
+                                            <AddIcon className={styles.suggestion_form_image_icon} />
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                                <div className={styles.profile_form}>
+                                    <div className={styles.profile_form_group}>
+                                        <label htmlFor="driver_car_model" className={styles.profile_form_label}>
+                                        Car Name
+                                        </label>
+                                        <input 
+                                            type="text"
+                                            name="driver_car_model"
+                                            value={driver_car_model}
+                                            placeholder="Car Name"
+                                            onChange={handleChange}
+                                            className={styles.profile_form_input} />
+                                    </div>
+                                    <div className={styles.profile_form_col_2} style={{gridTemplateColumns: '3fr 1fr'}}>
+                                        <div className={styles.profile_form_group}>
+                                            <label htmlFor="vin" className={styles.profile_form_label}>Vin</label>
+                                            <input  name="vin" value={vin} onChange={handleChange} type="text" className={styles.profile_form_input} />
+                                            {/* {this.props.errors.vin && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
+                                        </div>
+                                        <div className={styles.profile_form_group}>
+                                            <label htmlFor="driver_car_color" className={styles.profile_form_label}>Color</label>
+                                            <input name="driver_car_color" value={driver_car_color} onChange={handleChange} type="text" className={styles.profile_form_input} />
+                                            {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.profile_form_group}>
+                                        <label htmlFor="driver_car_plate_number" className={styles.profile_form_label}>
+                                        Plate Number
+                                        </label>
+                                        <input
+                                        type="text"
+                                        name="driver_car_plate_number"
+                                        value={driver_car_plate_number}
+                                        placeholder="Your Plate Number"
+                                        onChange={handleChange}
+                                        className={styles.profile_form_input}
+                                        />
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        }
 
                         <div id='payment-method' className={styles.profile_basic_info_con}>
                             <h3>Payment Method</h3>

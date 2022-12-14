@@ -190,7 +190,12 @@ function handleSearchType (type){
         </div>
         <div className={styles.empty}></div>
         <div className={styles.center}>
-            {props.auth.authUser && props.auth.authUser.user_type === 'driver' && props.auth.authUser.driver_hours.length < 1 && <div className="alert-warning">Provide required data as a driver</div>}
+            {props.auth.authUser && props.auth.authUser.user_type === 'driver' && 
+            (props.auth.authUser.driver_hours.length < 1 || 
+            (props.auth.authUser.driver_car_plate_number && props.auth.authUser.driver_car_plate_number.length > 0) || 
+            (props.auth.authUser.driver_car_picture && props.auth.authUser.driver_car_picture.length > 0) || 
+            (props.auth.authUser.driver_car_model && props.auth.authUser.driver_car_model.length > 0)) && 
+            <div className="alert-warning">Provide required data as a driver</div>}
             <div className={styles.header2}>
                 <div className={styles.header2_col_1}>
                     <GoBack />
@@ -241,11 +246,13 @@ function handleSearchType (type){
                                     <h3 className={styles.box_name}>
                                         {props.auth.authUser.user_type === 'customer' && 'Completed Order'}
                                         {props.auth.authUser.user_type === 'admin' && 'Requests'}
+                                        {props.auth.authUser.user_type === 'supplier' && 'Total Sales'}
+                                        {props.auth.authUser.user_type === 'driver' && 'Total Revenue'}
                                     </h3>
                                     <p className={styles.value}>
                                         {props.auth.authUser.user_type === 'customer' && (orderCount)}
-                                        {props.auth.authUser.user_type === 'driver' && orderCount}
-                                        {props.auth.authUser.user_type === 'supplier' && 'Total Inventory Products'}
+                                        {props.auth.authUser.user_type === 'driver' && '$0'}
+                                        {props.auth.authUser.user_type === 'supplier' && '$0'}
                                         {props.auth.authUser.user_type === 'admin' && (mealCount+productCount+kitchenUtensilCount)}
                                     </p>
                                 </div>

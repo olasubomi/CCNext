@@ -20,6 +20,11 @@ import Sent from '../../src/components/dashboard/sent';
 import Popup2 from '../../src/components/popups/popup2';
 import Popup1 from '../../src/components/popups/popup1';
 import Product from '../../src/components/individualPage/Product';
+import AddIcon from '@mui/icons-material/Add';
+import { suggestion_form_image, suggestion_form_image_col_1, suggestion_form_image_icon, suggestion_form_image_icon_con } from "../../src/components/suggestionPages/suggestion.module.css";
+import Image from 'next/image';
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 const SuggestedMeals = (props) => {
     const router = useRouter()
@@ -46,6 +51,7 @@ const SuggestedMeals = (props) => {
     const [suggestionCount, setSuggestedCountState] = useState(0);
     const [status2, setStatus2State] = useState('');
     const [message, setMessageState] = useState('');
+    const [relateds, setRelatedsState] = useState([])
     
 
     useEffect(() => {
@@ -208,6 +214,37 @@ const SuggestedMeals = (props) => {
         }
       };
 
+    function searchRelated(val) {
+        console.log(val)
+        let url
+        if(searchType === 'Meal'){
+            if(props.auth.authUser.user_type === 'admin'){
+                url = '/meals/get-meals/1?meal_name='+val
+            }else{
+                url = '/meals/get-meals/1?user='+props.auth.authUser._id+'&meal_name='+val
+            }
+        }else if(searchType === 'Product'){
+            if(props.auth.authUser.user_type === 'admin'){
+                url = '/products/get-all-products/1?product_name='+val
+            }else{
+                url = '/products/get-all-products/1?user='+props.auth.authUser._id+'&product_name='+val
+            }
+        }
+
+        if(val.length>=1){
+            axios.get(url).then(data => {
+                console.log(data.data)
+                if(data.data.data){
+                    if(searchType === 'Meal'){
+                        setRelatedsState(data.data.data.meals)
+                    }else{
+                        setRelatedsState(data.data.data.products)
+                    }
+                }
+            })
+        }
+      };
+
     function toggleSearch(){
         setSearchState(!search);
     };
@@ -217,6 +254,7 @@ const SuggestedMeals = (props) => {
     }
 
     function toggleOpenMeal(meal){
+        console.log(meal)
         setSuggestionState(meal)
         setOpenSuggestionState(true)
     }
@@ -691,10 +729,63 @@ const SuggestedMeals = (props) => {
                         </div>
                     </div>
                     {searchType === 'Meal' ? 
-                        <Meal meal={suggestion} />
+                        <Meal meal={suggestion} show={false} />
                         :
                         searchType === 'Product' &&
                         <Product product={suggestion} />
+                    }
+
+                    {searchType === 'Meal' &&
+                    <div className={styles.form_group}>
+                        {/* <h3>Upload Background Picture</h3> */}
+                        <div className={styles.search_con}>
+                            {/* <div className={styles.search_box}> */}
+                                {/* <p onClick={searchSuggested} className={styles.search_icon}>
+                                    <SearchIcon className={styles.search_icon} />
+                                </p> */}
+                                <Autocomplete
+                                    multiple
+                                    id="tags-outlined"
+                                    freeSolo
+                                    className={styles.search_box}
+                                    // filterSelectedOptions
+                                    options={relateds.map((option) => option.meal_name)}
+                                    // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
+                                    onChange={(e, newValue) => searchRelated(newValue)}
+                                    // getOptionLabel={option => option}
+                                    // renderTags={() => {}}
+                                    // value={this.state.suggestedCategories}
+                                    renderInput={params => (
+                                        <TextField
+                                        {...params}
+                                        variant="outlined"
+                                        placeholder="Search for related"
+                                        fullWidth
+                                        />
+                                    )} 
+                                />
+                                {/* <input
+                                type="text"
+                                name="search"
+                                onChange={searchRelated}
+                                className={styles.search_input}
+                                placeholder="Search for related"
+                                /> */}
+                            {/* </div> */}
+                            <div className={styles.search_button}>Search</div>
+                        </div>
+                        <div className={suggestion_form_image}>
+                            <div className={suggestion_form_image_col_1}>
+                                {suggestion.similar_meals.map((images, index) => {
+                                    <Image key={index} width={300} height={300} src={images} alt="background" />
+                                })}
+                                
+                                <div className={suggestion_form_image_icon_con}>
+                                    <AddIcon className={suggestion_form_image_icon} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     }
                 </div>
             }
