@@ -300,13 +300,13 @@ const SuggestedMeals = (props) => {
                         url2 = '/categories/get-all-categories/1?user='+props.auth.authUser._id
                     }
                 }
-                getSuggestion(url2)
+                getSuggestion(url2, searchType)
             }
         })
         toggleChangeStatus()
     }
 
-    function getSuggestion(url, searchType=searchType){
+    function getSuggestion(url, searchTypeP=searchType){
         axios.get(url).then(data => {
             if(data.data.data){
                 
@@ -314,10 +314,12 @@ const SuggestedMeals = (props) => {
                 if(data.data.data.count > 10){
                     setPagesState(Math.ceil(data.data.data.count/10))
                 }
-                if(searchType === 'Meal'){
+                console.log(searchTypeP)
+                if(searchTypeP === 'Meal'){
+                    console.log(data.data.meals)
                     setFilteredSuggestionsState(data.data.data.meals)
                     setSuggestionsState(data.data.data.meals)
-                }else if(searchType === 'Product'){
+                }else if(searchTypeP === 'Product'){
                     setFilteredSuggestionsState(data.data.data.products)
                     setSuggestionsState(data.data.data.products)
                 }else{
@@ -512,11 +514,17 @@ const SuggestedMeals = (props) => {
                 }else{
                     url = '/meals/get-meals/'+newPage+'?user='+props.auth.authUser._id
                 }
-            }else{
+            }else if(searchType === 'Product'){
                 if(props.auth.authUser.user_type === 'admin'){
                     url = '/products/get-all-products/'+newPage
                 }else{
                     url = '/products/get-all-products/'+newPage+'?user='+props.auth.authUser._id
+                }
+            }else{
+                if(props.auth.authUser.user_type === 'admin'){
+                    url = '/categories/get-all-categories/'+newPage
+                }else{
+                    url = '/categories/get-all-categories/'+newPage+'?user='+props.auth.authUser._id
                 }
             }
             axios.get(url).then(data => {
@@ -530,9 +538,12 @@ const SuggestedMeals = (props) => {
                     if(searchType === 'Meal'){
                         setFilteredSuggestionsState(data.data.data.meals)
                         setSuggestionsState(data.data.data.meals)
-                    }else{
+                    }else if(searchType === 'Product'){
                         setFilteredSuggestionsState(data.data.data.products)
                         setSuggestionsState(data.data.data.products)
+                    }else{
+                        setFilteredSuggestionsState(data.data.data.categories)
+                        setSuggestionsState(data.data.data.categories)
                     }
                 }
             })
@@ -549,11 +560,17 @@ const SuggestedMeals = (props) => {
                 }else{
                     url = '/meals/get-meals/'+newPage+'?user='+props.auth.authUser._id
                 }
-            }else{
+            }else if(searchType === 'Product'){
                 if(props.auth.authUser.user_type === 'admin'){
                     url = '/products/get-all-products/'+newPage
                 }else{
                     url = '/products/get-all-products/'+newPage+'?user='+props.auth.authUser._id
+                }
+            }else{
+                if(props.auth.authUser.user_type === 'admin'){
+                    url = '/categories/get-all-categories/'+newPage
+                }else{
+                    url = '/categories/get-all-categories/'+newPage+'?user='+props.auth.authUser._id
                 }
             }
             axios.get(url).then(data => {
@@ -567,14 +584,19 @@ const SuggestedMeals = (props) => {
                     if(searchType === 'Meal'){
                         setFilteredSuggestionsState(data.data.data.meals)
                         setSuggestionsState(data.data.data.meals)
-                    }else{
+                    }else if(searchType === 'Product'){
                         setFilteredSuggestionsState(data.data.data.products)
                         setSuggestionsState(data.data.data.products)
+                    }else{
+                        setFilteredSuggestionsState(data.data.data.categories)
+                        setSuggestionsState(data.data.data.categories)
                     }
                 }
             })
         }
       };
+
+    console.log(filteredSuggestions)
 
     return (
     <div className={container + " " + col2}>
@@ -653,7 +675,7 @@ const SuggestedMeals = (props) => {
                         </div>
                         <div>
                             {
-                                filteredSuggestions.map((suggestion) => {
+                                filteredSuggestions && filteredSuggestions.map((suggestion) => {
                                     return(
                                         <SuggestedMealRow searchType={searchType} deleteSuggestion={deleteSuggestion} toggleSent={toggleSent} toggleTransferToInventory={toggleTransferToInventory} openMealDetailsModal={openMealDetailsModal} openDetailsModal={openDetailsModal} auth={props.auth} key={suggestion._id} suggestion={suggestion} toggleOpenMeal={toggleOpenMeal} />
                                     )

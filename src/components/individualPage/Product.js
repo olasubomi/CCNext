@@ -8,10 +8,10 @@ import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIco
 import Stores from "./stores";
 import Reviews from "./Reviews";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
-import { useRouter } from "next/router";
 
 function Product(props){
-    const router = useRouter()
+    const url = 'http://localhost:3000/'
+
     return (
         <>
             <Head>
@@ -86,15 +86,15 @@ function Product(props){
                     <div>
                         <p><ShareIcon />Share this product:</p>
                         <FacebookShareButton>
-                            <FacebookEIcon quote={props.product.product_name} url={router.href} />
+                            <FacebookEIcon quote={props.product.product_name} url={url+'product/'+props.product._id} />
                         </FacebookShareButton>
-                        <TwitterShareButton title={props.product.product_name} url={router.href}>
+                        <TwitterShareButton title={props.product.product_name} url={url+'product/'+props.product._id}>
                             <TwitterEIcon />
                         </TwitterShareButton>
-                        <InstapaperShareButton title={props.product.product_name} url={router.href}>
+                        <InstapaperShareButton title={props.product.product_name} url={url+'product/'+props.product._id}>
                             <InstaEIcon />
                         </InstapaperShareButton>
-                        <WhatsappShareButton title={props.product.product_name} url={router.href} >
+                        <WhatsappShareButton title={props.product.product_name} url={url+'product/'+props.product._id} >
                             <WhatsappEIcon />
                         </WhatsappShareButton> 
                     </div>

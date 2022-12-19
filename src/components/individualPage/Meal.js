@@ -8,12 +8,10 @@ import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIco
 import Stores from "./stores";
 import Reviews from "./Reviews";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
-import { useRouter } from "next/router";
 
 function Meal(props){
-    const router = useRouter()
+    const url = 'http://localhost:3000/'
 
-    console.log(router)
     return (
         <>
             <Head>
@@ -120,15 +118,15 @@ function Meal(props){
                     <div className={styles.hide}>
                         <p><ShareIcon />Share this product:</p>
                         <FacebookShareButton>
-                            <FacebookEIcon quote={props.meal.intro} url={router.query} />
+                            <FacebookEIcon quote={props.meal.intro} url={url+'meal/'+props.meal._id} />
                         </FacebookShareButton>
-                        <TwitterShareButton title={props.meal.meal_name} url={router.href}>
+                        <TwitterShareButton title={props.meal.meal_name} url={url+'meal/'+props.meal._id}>
                             <TwitterEIcon />
                         </TwitterShareButton>
-                        <InstapaperShareButton title={props.meal.meal_name} url={router.href}>
+                        <InstapaperShareButton title={props.meal.meal_name} url={url+'meal/'+props.meal._id}>
                             <InstaEIcon />
                         </InstapaperShareButton>
-                        <WhatsappShareButton title={props.meal.meal_name} url={router.href} >
+                        <WhatsappShareButton title={props.meal.meal_name} url={url+'meal/'+props.meal._id} >
                             <WhatsappEIcon />
                         </WhatsappShareButton>
                     </div>

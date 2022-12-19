@@ -60,6 +60,7 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 export default function TransferToInventory(props){
     const [restockOption, setRestockOption] = useState()
     const [restockTime, setRestockTime] = useState('1 day')
+    const [message, setMessage] = useState('')
     const [formState, setFormState] = useState({
         prepackagedMeal: false,
         ingredientsAvailable: [],
@@ -129,13 +130,15 @@ export default function TransferToInventory(props){
         if (response.status >= 200 && response.status < 300) {
             // this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
             console.log(response);
-            console.log("Display Meal submitted successfully");
+            console.log("Display Item submitted successfully");
+            setMessage('Item submitted successfully')
             // window.location.href = "/SuggestMeal"
         } else {
-            console.log("Something wrong happened ");
+            setMessage('Something wrong happened')
         }
         }).catch(error => {
-        console.log(error);
+            setMessage('Item already in store')
+            console.log(error);
         });
     }
 
@@ -153,6 +156,7 @@ export default function TransferToInventory(props){
             <div className={styles.transToIn}>
                 <div className={styles.transToIn_top}>
                     <h2>Transfer {' ' + item_type + ' '} to Inventory</h2>
+                    <p>{message}</p>
                     <div onClick={props.toggleTransferToInventory}>
                     <CancelIcon className={styles.transToIn_cancel_con} />
                     </div>
