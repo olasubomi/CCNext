@@ -174,16 +174,18 @@
 }
 
 .overview {
-    display: grid;
+    display: flex;
     grid-gap: 4rem;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-auto-flow: column;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    /* grid-template-columns: 1fr 1fr 1fr; */
+    /* grid-auto-flow: column; */
+    /* justify-content: space-between; */
 }
 
 .box {
     display: grid;
     width: 100%;
+    flex: 0 0 30%;
     height: 132px;
 
     background: #FFFFFF;
@@ -227,8 +229,8 @@
 }
 
 .value_con{
-    display: flex;
-    align-content: flex-start;
+    display: grid;
+    grid-auto-flow: column;
     align-items: center;
     gap: 10px;
 }
@@ -257,6 +259,7 @@
 
 .box2 {
     display: grid;
+    flex: 0 0 30%;
     width: 100%;
     height: 132px;
 
@@ -326,10 +329,11 @@
 }
 
 .chart_con{
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: 1fr 1fr;
-    justify-content: space-between;
+    display: flex;
+    /* grid-auto-flow: column; */
+    /* grid-template-columns: 1fr 1fr; */
+    /* justify-content: space-between; */
+    flex-wrap: wrap;
     grid-gap: 4rem;
 }
 
@@ -841,6 +845,7 @@
   .select_container{
     display: grid;
     grid-gap: 6px;
+    align-items: start;
 }
 
 .select_box{
@@ -955,8 +960,14 @@
 
 @media screen and (max-width: 980px) {
   .overview{
-    grid-template-columns: 1fr 1fr;
-    grid-auto-flow: unset;
+    /* grid-template-columns: 1fr 1fr; */
+    /* grid-auto-flow: unset; */
+    grid-gap: 2rem;
+    justify-content: space-between;
+  }
+
+  .box2{
+    flex: 0 0 45%;
   }
 }
 
@@ -1033,6 +1044,10 @@
 @media screen and (max-width: 485px) {
     .overview{
         grid-template-columns: 1fr;
+    }
+
+    .box2{
+      flex: unset;
     }
 
     .hideData{

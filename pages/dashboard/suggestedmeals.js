@@ -214,24 +214,25 @@ const SuggestedMeals = (props) => {
         }
       };
 
-    function searchRelated(val) {
-        console.log(val)
+    function searchRelated(e) {
+        let searchVal = e.target.value
+        console.log(searchVal)
         let url
         if(searchType === 'Meal'){
             if(props.auth.authUser.user_type === 'admin'){
-                url = '/meals/get-meals/1?meal_name='+val
+                url = '/meals/get-meals/1?publicly_available=Public&meal_name='+searchVal
             }else{
-                url = '/meals/get-meals/1?user='+props.auth.authUser._id+'&meal_name='+val
+                url = '/meals/get-meals/1?publicly_available=Public&user='+props.auth.authUser._id+'&meal_name='+searchVal
             }
         }else if(searchType === 'Product'){
             if(props.auth.authUser.user_type === 'admin'){
-                url = '/products/get-all-products/1?product_name='+val
+                url = '/products/get-all-products/1?publicly_available=Public&product_name='+searchVal
             }else{
-                url = '/products/get-all-products/1?user='+props.auth.authUser._id+'&product_name='+val
+                url = '/products/get-all-products/1?publicly_available=Public&user='+props.auth.authUser._id+'&product_name='+searchVal
             }
         }
 
-        if(val.length>=1){
+        if(searchVal.length>=1){
             axios.get(url).then(data => {
                 console.log(data.data)
                 if(data.data.data){
@@ -244,6 +245,54 @@ const SuggestedMeals = (props) => {
             })
         }
       };
+
+
+    function addRelated(val) {
+        console.log(val)
+        let url
+        if(searchType === 'Meal'){
+            url = '/meals/update/'
+        }else if(searchType === 'Product'){
+            url = '/products/update/'
+        }else{
+            url = '/categories/update/'
+        }
+        let similar_meals = suggestion.similar_meals
+
+        if(val && val.length>=1){
+            similar_meals.push(val.split('/')[1])
+            if(suggestion._id !== val.split('/')[1]){
+                axios.post(url+suggestion._id, {similar_meals: similar_meals}).then(data => {
+                    let meal = relateds.filter((rel) => rel._id === val.split('/')[1])
+                    console.log(meal)
+                    similar_meals[similar_meals.length-1] = meal[0]
+                    let url2
+                    if(searchType === 'Meal'){
+                        if(props.auth.authUser.user_type === 'admin'){
+                            url2 = '/meals/get-meals/1'
+                        }else{
+                            url2 = '/meals/get-meals/1?user='+props.auth.authUser._id
+                        }
+                    }else if(searchType === 'Product'){
+                        if(props.auth.authUser.user_type === 'admin'){
+                            url2 = '/products/get-all-products/1'
+                        }else{
+                            url2 = '/products/get-all-products/1?user='+props.auth.authUser._id
+                        }
+                    }else{
+                        if(props.auth.authUser.user_type === 'admin'){
+                            url2 = '/categories/get-all-categories/1'
+                        }else{
+                            url2 = '/categories/get-all-categories/1?user='+props.auth.authUser._id
+                        }
+                    }
+                    getSuggestion(url2, searchType)
+                })
+            }else{
+                console.log('the same id')
+            }
+        }
+    };
 
     function toggleSearch(){
         setSearchState(!search);
@@ -279,7 +328,7 @@ const SuggestedMeals = (props) => {
         }
         axios.post(url1+suggestion._id, {publicly_available: type}).then(res => {
             if(res.data.data){
-                setSuggestionState(res.data.data)
+                suggestion.publicly_available = type
                 let url2
                 if(searchType === 'Meal'){
                     if(props.auth.authUser.user_type === 'admin'){
@@ -309,7 +358,7 @@ const SuggestedMeals = (props) => {
     function getSuggestion(url, searchTypeP=searchType){
         axios.get(url).then(data => {
             if(data.data.data){
-                
+                console.log(data.data.data)
                 setSuggestedCountState(data.data.data.count)
                 if(data.data.data.count > 10){
                     setPagesState(Math.ceil(data.data.data.count/10))
@@ -596,7 +645,6 @@ const SuggestedMeals = (props) => {
         }
       };
 
-    console.log(filteredSuggestions)
 
     return (
     <div className={container + " " + col2}>
@@ -665,7 +713,7 @@ const SuggestedMeals = (props) => {
                             props.auth.authUser.user_type === 'customer' ? styles.customer_request_tr:
                             props.auth.authUser.user_type === 'supplier' ? styles.supplier_request_tr: '')}>
                             <input name='id' type="checkbox" />
-                            <p className={styles.request_th}>ID number</p>
+                            {/* <p className={styles.request_th}>ID number</p> */}
                             <p className={styles.request_th}>Name</p>
                             <p className={styles.request_th} style={{justifySelf: 'center'}}>Status <FillterIcon /></p>
                             <p className={styles.request_th + " " + styles.hideData}>Categories <FillterIcon /></p>
@@ -751,10 +799,10 @@ const SuggestedMeals = (props) => {
                         </div>
                     </div>
                     {searchType === 'Meal' ? 
-                        <Meal meal={suggestion} show={false} />
+                        <Meal meal={suggestion} auth={props.auth} show={false} />
                         :
                         searchType === 'Product' &&
-                        <Product product={suggestion} />
+                        <Product product={suggestion} auth={props.auth} />
                     }
 
                     {searchType === 'Meal' &&
@@ -766,20 +814,18 @@ const SuggestedMeals = (props) => {
                                     <SearchIcon className={styles.search_icon} />
                                 </p> */}
                                 <Autocomplete
-                                    multiple
                                     id="tags-outlined"
                                     freeSolo
-                                    className={styles.search_box}
                                     // filterSelectedOptions
-                                    options={relateds.map((option) => option.meal_name)}
+                                    options={relateds.map((option) => option.meal_name+'/'+option._id)}
                                     // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
-                                    onChange={(e, newValue) => searchRelated(newValue)}
+                                    onChange={(e, newValue) => addRelated(newValue)}
                                     // getOptionLabel={option => option}
                                     // renderTags={() => {}}
-                                    // value={this.state.suggestedCategories}
                                     renderInput={params => (
                                         <TextField
                                         {...params}
+                                        onChange={(e) => searchRelated(e)}
                                         variant="outlined"
                                         placeholder="Search for related"
                                         fullWidth
@@ -802,9 +848,9 @@ const SuggestedMeals = (props) => {
                                     <Image key={index} width={300} height={300} src={images} alt="background" />
                                 })}
                                 
-                                <div className={suggestion_form_image_icon_con}>
+                                {/* <div className={suggestion_form_image_icon_con}>
                                     <AddIcon className={suggestion_form_image_icon} />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

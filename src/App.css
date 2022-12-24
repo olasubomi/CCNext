@@ -306,3 +306,11 @@ color: #353535;
   border-color: #04D505 !important;
   outline-color: #04D505 !important;
 }
+
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+  font-size: 13px;
+}
+
+.MuiAutocomplete-popper > *{
+  font-size: 13px !important;
+}

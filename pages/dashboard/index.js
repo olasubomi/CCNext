@@ -25,9 +25,13 @@ const DashboardHomePage = (props) => {
     const [driverMode, setDriverModeState] = useState(false);
   const [page, setPageState] = useState(1);
   const [mealCount, setMealCountState] = useState(0);
+  const [pendingMealCount, setPendingMealCountState] = useState(0);
+  const [publicMealCount, setPublicMealCountState] = useState(0);
   const [userCount, setUserCountState] = useState(0);
   const [orderCount, setOrderCountState] = useState(0);
   const [productCount, setProductCountState] = useState(0);
+  const [pendingProductCount, setPendingProductCountState] = useState(0);
+  const [publicProductCount, setPublicProductCountState] = useState(0);
   const [kitchenUtensilCount, setKitchenUtensilCountState] = useState(0);
   const [changeType, setChangeTypeState] = useState(false);
   const [suggestions, setSuggestionsState] = useState([])
@@ -54,16 +58,23 @@ const DashboardHomePage = (props) => {
             axios.get('/analytics/get-users-count/').then(res =>{
                 setUserCountState(res.data.data.docCount)
             })
-            axios.get('/analytics/get-meals-count/').then(res =>{
-                setMealCountState(res.data.data.docCount)
+            axios.get('/analytics/get-meals-count/?publicly_available=Pending').then(res =>{
+                setPendingMealCountState(res.data.data.docCount )
+            })
+            axios.get('/analytics/get-meals-count/?publicly_available=Public').then(res =>{
+                setPublicMealCountState(res.data.data.docCount)
             })
             axios.get('/analytics/get-orders-count/').then(res =>{
                 console.log(res.data)
                 setOrderCountState(res.data.data.docCount)
             })
-            axios.get('/analytics/get-products-count/').then(res =>{
+            axios.get('/analytics/get-products-count/?publicly_available=Pending').then(res =>{
                 console.log(res.data)
-                setProductCountState(res.data.data.docCount)
+                setPendingProductCountState(res.data.data.docCount)
+            })
+            axios.get('/analytics/get-products-count/?publicly_available=Public').then(res =>{
+                console.log(res.data)
+                setPublicProductCountState(res.data.data.docCount)
             })
         }else if(props.auth.authUser.user_type === 'customer'){
             axios.get('/analytics/get-orders-count/').then(res =>{
@@ -109,11 +120,11 @@ const DashboardHomePage = (props) => {
 
     const requestChart = {
     datasets: [{
-        data: [mealCount, mealCount, kitchenUtensilCount],
+        data: [publicMealCount, publicProductCount, kitchenUtensilCount],
         backgroundColor: [
-        '#F40707',
         '#F47900',
-        '#04D505'
+        '#04D505',
+        '#F40707',
         ],
         borderWidth: 0,
         cutout: '70%'
@@ -124,9 +135,9 @@ const DashboardHomePage = (props) => {
         datasets: [{
             data: [300, 50, 100],
             backgroundColor: [
-            '#F40707',
-            '#F47900',
-            '#04D505'
+                '#F47900',
+                '#04D505',
+                '#F40707',
             ],
             borderWidth: 0,
             cutout: '70%'
@@ -220,8 +231,13 @@ function handleSearchType (type){
                         </div>
                         {changeType &&
                             <div className={styles.select_options2}>
+                                {props.auth.authUser.super_app_admin &&
+                                    <p onClick={() => toggleMode('admin')}>Admin</p>
+                                }
                                 <p onClick={() => toggleMode('customer')}>Customer</p>
-                                <p onClick={() => toggleMode('supplier')}>Supplier</p>
+                                {props.auth.authUser.sub_store_admin && 
+                                    <p onClick={() => toggleMode('supplier')}>Supplier</p>
+                                }
                                 <p onClick={() => toggleMode('driver')}>Driver</p>
                                 {/* <p onClick={() => handleSearchType('Kitchen Utensil')}>Kitchen Utensils</p> */}
                                 {/* <p onClick={() => handleSearchType('Category')}>Category</p> */}
@@ -253,7 +269,7 @@ function handleSearchType (type){
                                         {props.auth.authUser.user_type === 'customer' && (orderCount)}
                                         {props.auth.authUser.user_type === 'driver' && '$0'}
                                         {props.auth.authUser.user_type === 'supplier' && '$0'}
-                                        {props.auth.authUser.user_type === 'admin' && (mealCount+productCount+kitchenUtensilCount)}
+                                        {props.auth.authUser.user_type === 'admin' && (pendingMealCount+pendingProductCount+kitchenUtensilCount)}
                                     </p>
                                 </div>
                             </div>
@@ -325,7 +341,7 @@ function handleSearchType (type){
         
                                     <div className={styles.chart_circle_total}>
                                         <p>Total</p>
-                                        <h3>{mealCount+productCount+kitchenUtensilCount}</h3>
+                                        <h3>{publicMealCount+publicProductCount+kitchenUtensilCount}</h3>
                                     </div>
                                 </div>
                                 <div className={styles.chart_breakdown_con}>
@@ -334,11 +350,11 @@ function handleSearchType (type){
                                         <div className={styles.chart_breakdown_details}>
                                             <p>Meal</p>
                                             <div>
-                                                {mealCount > 0 ?
-                                                <h5>{Math.round((mealCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>:
+                                                {publicMealCount > 0 ?
+                                                <h5>{Math.round((publicMealCount/(publicProductCount+kitchenUtensilCount+publicMealCount))*100)}%</h5>:
                                                 <h5>0%</h5>
                                                 }
-                                                <h5>{mealCount}</h5>
+                                                <h5>{publicMealCount}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -347,12 +363,12 @@ function handleSearchType (type){
                                         <div className={styles.chart_breakdown_details}>
                                             <p>Product</p>
                                             <div>
-                                                {productCount > 0 ?
-                                                <h5>{Math.round((productCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>
+                                                {publicProductCount > 0 ?
+                                                <h5>{Math.round((publicProductCount/(publicProductCount+kitchenUtensilCount+publicMealCount))*100)}%</h5>
                                                 :
                                                 <h5>0%</h5>
                                                 }
-                                                <h5>{productCount}</h5>
+                                                <h5>{publicProductCount}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -362,7 +378,7 @@ function handleSearchType (type){
                                             <p>Kitchen Utensils</p>
                                             <div>
                                                 {kitchenUtensilCount > 0 ?
-                                                <h5>{Math.round((kitchenUtensilCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>
+                                                <h5>{Math.round((kitchenUtensilCount/(publicProductCount+kitchenUtensilCount+publicMealCount))*100)}%</h5>
                                                 :
                                                 <h5>0%</h5>
                                                 }
@@ -651,7 +667,7 @@ function handleSearchType (type){
 
                                     <div className={styles.chart_circle_total}>
                                         <p>Total</p>
-                                        <h3>{mealCount+productCount+kitchenUtensilCount}</h3>
+                                        <h3>{publicMealCount+publicProductCount+kitchenUtensilCount}</h3>
                                     </div>
                                 </div>
                                 <div className={styles.chart_breakdown_con}>
@@ -660,11 +676,11 @@ function handleSearchType (type){
                                         <div className={styles.chart_breakdown_details}>
                                             <p>Meal</p>
                                             <div>
-                                                {mealCount > 0 ?
-                                                <h5>{Math.round((mealCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>:
+                                                {publicMealCount > 0 ?
+                                                <h5>{Math.round((publicMealCount/(publicProductCount+kitchenUtensilCount+publicMealCount))*100)}%</h5>:
                                                 <h5>0%</h5>
                                                 }
-                                                <h5>{mealCount}</h5>
+                                                <h5>{publicMealCount}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -673,12 +689,12 @@ function handleSearchType (type){
                                         <div className={styles.chart_breakdown_details}>
                                             <p>Product</p>
                                             <div>
-                                                {productCount > 0 ?
-                                                <h5>{Math.round((productCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>
+                                                {publicProductCount > 0 ?
+                                                <h5>{Math.round((publicProductCount/(publicProductCount+kitchenUtensilCount+publicMealCount))*100)}%</h5>
                                                 :
                                                 <h5>0%</h5>
                                                 }
-                                                <h5>{productCount}</h5>
+                                                <h5>{publicProductCount}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -688,7 +704,7 @@ function handleSearchType (type){
                                             <p>Kitchen Utensils</p>
                                             <div>
                                                 {kitchenUtensilCount > 0 ?
-                                                <h5>{Math.round((kitchenUtensilCount/(productCount+kitchenUtensilCount+mealCount))*100)}%</h5>
+                                                <h5>{Math.round((kitchenUtensilCount/(publicProductCount+kitchenUtensilCount+publicMealCount))*100)}%</h5>
                                                 :
                                                 <h5>0%</h5>
                                                 }

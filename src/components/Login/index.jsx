@@ -67,7 +67,9 @@ function Login(props){
       <div className={styles.login}>
         <div className={styles.login_col_2}>
           <div className={styles.login_top}>
-            <h2></h2>
+          <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}>
+              <Image src={closeIcon} className={styles.login_cancel} />
+            </div>
             <Image
                 src={img_logo}
                 alt="logo"

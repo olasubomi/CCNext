@@ -33,7 +33,7 @@ function SuggestedMealRow(props){
                             props.auth.authUser.user_type === 'customer' ? styles.customer_request_tr:
                             props.auth.authUser.user_type === 'supplier' ? styles.supplier_request_tr: '')}>
                 <input name='id' type="checkbox" />
-                <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td}>{suggestion._id}</p>
+                {/* <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td}>{suggestion._id}</p> */}
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td}>{props.searchType === 'Meal' ? suggestion.meal_name : props.searchType === 'Product' ? suggestion.product_name: suggestion.category_name}</p>
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + status + " " + 
                     ((suggestion.publicly_available === 'Draft' || suggestion.publicly_available === 'Pending') ? pending :

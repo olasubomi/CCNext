@@ -415,6 +415,7 @@
 }
 
 .meal_details> div > h3{
+    margin: 0;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -432,6 +433,30 @@
     line-height: 19px;
 
     color: #353535;
+}
+
+.meal_details > div > div{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+
+    color: #353535;
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    grid-gap: 4px;
+}
+
+.meal_details > div > div > p{
+    cursor: pointer;
+    background-color: #F47900;
+    width: 17px;
+    height: 20px;
+    color: white;
+    font-size: 13px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
 }
 
 .meal_section_4{
@@ -498,7 +523,7 @@
     gap: 8px;
   }
 
-  .ingredients_tr:nth-child(even){
+  .ingredients_tr:nth-child(odd){
     background: #F5F5F5;
   }
   
@@ -841,7 +866,7 @@
     /* grid-template-rows: repeat(auto-fill, 514px); */
     grid-gap: 3rem;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: start;
     overflow-x: scroll;
   }
   
@@ -1008,6 +1033,11 @@
 
     .ingredients_tr{
         grid-template-columns: 5% 1fr 1fr 1fr;
+    }
+
+    .meal_details{
+        justify-items: start;
+        grid-template-columns: 1fr 1fr 1fr;
     }
 
     .hide{

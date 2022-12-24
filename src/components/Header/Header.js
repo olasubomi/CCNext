@@ -15,7 +15,7 @@ import { Auth } from "../auth";
 import { connect } from "react-redux";
 import { getPath } from "../../actions/Common";
 import { useRouter } from "next/router";
-import { userSignOut, verifyToken } from "../../actions";
+import { setOpenLogin, userSignOut, verifyToken } from "../../actions";
 
  
 function Header(props){
@@ -23,7 +23,6 @@ function Header(props){
   const [customerId, setCustomerIdState] = useState(null);
   const [username, setUsernameState] = useState(null);
   const [showNotif, setshowNotifState] = useState(true);
-  const [openLogin, setOpenLoginState] = useState(false);
   const router = useRouter()
 
   useEffect(() => {
@@ -147,7 +146,7 @@ function Header(props){
   }
 
   function toggleLogin (){
-    setOpenLoginState(!openLogin)
+    props.setOpenLogin(!props.openLogin)
   }
 
   function logout(){
@@ -389,7 +388,7 @@ function Header(props){
           </Link>
         </div>
       </div>
-      {openLogin &&
+      {props.openLogin &&
       <Auth toggleLogin={toggleLogin} />}
     </>
   )
@@ -400,6 +399,7 @@ function Header(props){
 function mapDispatchToProps(dispatch) {
   return {
     getPath: path => dispatch(getPath(path)),
+    setOpenLogin: login => dispatch(setOpenLogin(login)),
     logout: () => dispatch(userSignOut()),
     verifyToken: (user,token) => dispatch(verifyToken(user,token))
   };
@@ -409,6 +409,7 @@ function mapStateToProp(state) {
   return {
     path: state.Common.path,
     auth: state.Auth,
+    openLogin: state.Auth.openLogin,
     error: state.Common.error,
     message: state.Common.message,
   };

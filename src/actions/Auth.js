@@ -8,7 +8,8 @@ import {
     FETCH_SUCCESS,
     FETCH_ERROR,
     SIGNOUT_USER_SUCCESS,
-    IS_AUTHENTICATED
+    IS_AUTHENTICATED,
+    OPEN_LOGIN
 } from "../constants/ActionTypes";
 import axios from '../util/Api';
 
@@ -17,6 +18,12 @@ export const setInitUrl = (url) => {
         type: INIT_URL,
         payload: url
     };
+};
+
+export const setOpenLogin = (login) => {
+    return (dispatch) => {
+        dispatch({ type: OPEN_LOGIN, payload: login });
+    }
 };
 
 export const userSignUp = (form) => {

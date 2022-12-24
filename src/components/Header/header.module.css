@@ -667,6 +667,7 @@
 }
 
 .sidenav_link{
+  cursor: pointer;
   display: grid;
   grid-template-columns: max-content 1fr;
   grid-gap: 10px;

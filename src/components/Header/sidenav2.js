@@ -3,9 +3,19 @@ import Link from 'next/link';
 import styles from './header.module.css'
 import { connect } from "react-redux";
 import React from 'react';
+import { setOpenLogin, userSignOut } from '../../actions';
 
 function SideNav2(props){
     console.log(props)
+
+    function toggleLogin (){
+        props.setOpenLogin(!props.openLogin)
+    }
+
+    function logout(){
+        props.logout()
+        router.push('/')
+    }
 
     return(
         <div className={styles.sidenav_links_con}>
@@ -100,25 +110,38 @@ function SideNav2(props){
                 }
             </div>
             <div className={styles.side_bottom}>
-                {props.showBottom &&
-                <div className={styles.sidenav_link}>
+                {props.showBottom && props.auth.authUser &&
+                <div onClick={logout} className={styles.sidenav_link}>
                     <PowerIcon style={styles.sidenav_link_icon} />
-                    <Link href="/">
-                        <a >Logout</a>
-                    </Link>
+                        <p>Logout</p>
+                </div>}
+                {props.showBottom && !props.auth.authUser &&
+                <div onClick={toggleLogin} className={styles.sidenav_link}>
+                    <PowerIcon style={styles.sidenav_link_icon} />
+                        <p>Log In</p>
                 </div>}
             </div>
         </div>
     )
 }
+
+
+function mapDispatchToProps(dispatch) {
+    return {
+      logout: () => dispatch(userSignOut()),
+      setOpenLogin: (login) => dispatch(setOpenLogin(login)),
+    };
+  }
   
   function mapStateToProp(state) {
     return {
       path: state.Common.path,
+      openLogin: state.Auth.openLogin,
       auth: state.Auth
     };
   }
   
   export default connect(
     mapStateToProp,
+    mapDispatchToProps,
   )(SideNav2);

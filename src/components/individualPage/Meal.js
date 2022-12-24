@@ -1,16 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./meal.module.css";
 
 import Head from "next/head";
-import img_logo from "../../../public/assets/logos/sezzle.png"
 import Image from "next/image";
-import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIcon, TwitterEIcon, WhatsappEIcon } from "../icons";
+import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, TwitterEIcon, WhatsappEIcon } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
 function Meal(props){
     const url = 'http://localhost:3000/'
+    const [serves, setServes] = useState(parseInt(props.meal.servings))
+
+    // useEffect(() => {
+    //     setServes(parseInt(props.meal.servings))
+    // })
+
+    function addServe(val){
+        let s= serves + val;
+        if(s >= props.meal.servings){
+            setServes(s)
+        }
+    }
+
+    console.log(serves)
 
     return (
         <>
@@ -25,7 +38,7 @@ function Meal(props){
                     <div className={styles.meal_section_2_col_1}>
                         {props.meal.meal_images.length > 0&&
                         <>
-                        {props.meal.meal_images[0].length > 0 ? 
+                        {(props.meal.meal_images[0].length > 0 && props.meal.meal_images[0] !== "[object HTMLImageElement]") ? 
                         <Image
                             src={props.meal.meal_images[0]}
                             alt={props.meal.meal_name}
@@ -40,13 +53,13 @@ function Meal(props){
                             <>
                             {props.meal.meal_images.slice(1).map((image, index) => {
                                return(
-                                <>
+                                <React.Fragment key={index}>
                                 {image.length > 0 &&
                                 <Image key={index} alt={props.meal.meal_name} src={image}
                                 height={300} width={300}
                                 className={styles.meal_section_2_image} />
                                 }
-                                </>
+                                </React.Fragment>
                                ) 
                             })}
                             </>
@@ -59,16 +72,18 @@ function Meal(props){
                             <h2 className={styles.meal_section_2_name}>{props.meal.meal_name}</h2>
                             <div className={styles.store}>
                                 <h4>Chop Chow Store</h4>
+                                {props.auth.authUser && props.auth.authUser.user_type !== 'admin' &&
                                 <div>
                                     <LocationIcon style={styles.store_icon} />
                                     <p>6391 Elgin St. Celina, Delaware 10299</p>
                                 </div>
+                                }
                             </div>
                             <div className={styles.meal_section_32}>
                                 <div className={styles.meal_details}>
                                     <div className={styles.hide}>
                                         <h3>Serves: </h3>
-                                        <p>{props.meal.servings}</p>
+                                        <p>{serves}</p>
                                     </div>
                                     <div>
                                         <h3>PrepTime:</h3>
@@ -105,7 +120,7 @@ function Meal(props){
                             </div>
                         </div>
                         {
-                            props.meal.publicly_available === 'Public' &&
+                            props.meal.publicly_available === 'Public' && props.auth.authUser && props.auth.authUser.user_type !== 'admin' &&
                         
                             <div className={styles.meal_section_2_price}>
                                 <h3>Price</h3>
@@ -114,6 +129,7 @@ function Meal(props){
                         }
                     </div>
                 </div>
+                {props.auth.authUser && props.auth.authUser.user_type !== 'admin' &&
                 <div className={styles.section_2_footer}>
                     <div className={styles.hide}>
                         <p><ShareIcon />Share this product:</p>
@@ -135,17 +151,18 @@ function Meal(props){
                         <PrintEIcon />
                     </div>
                     {
-                            props.meal.publicly_available === 'Public' &&
+                            props.meal.publicly_available === 'Public' && props.auth.authUser && props.auth.authUser.user_type !== 'admin' &&
                     <div className={styles.btnGroup}>
                         <div className={styles.btnoutline}>Add to Grocery List</div>
                         <div className={styles.btnfill}>Add to Cart</div>
                     </div>}
                 </div>
+                }
                 <div className={styles.meal_section_3}>
                     <div className={styles.meal_details}>
                         <div className={styles.hide}>
                             <h3>Serves: </h3>
-                            <p>{props.meal.servings}</p>
+                            <div><p onClick={() => addServe(-1)}>-</p>{serves}<p onClick={() => addServe(1)}>+</p></div>
                         </div>
                         <div>
                             <h3>PrepTime:</h3>
@@ -164,7 +181,7 @@ function Meal(props){
                 {props.meal.formatted_instructions &&
                 <div className={styles.meal_section_4}>
                     <div className={styles.ingredient_container}>
-                        <h3>Add Ingredients</h3>
+                        <h3>Ingredients</h3>
                         <div className={styles.ingredient_groups}>
                             <div className={styles.ingredients_head} style={{backgroundColor: 'transparent'}}>
                                 <div></div>
@@ -175,27 +192,27 @@ function Meal(props){
                                 <div className={styles.ingredients_th}>Price</div>
                             </div>
                             <div className={styles.ingredients_body}>
-                                <table className={styles.ingredients_table}>
-                                    <tbody>
+                                <div className={styles.ingredients_table}>
+                                    <div>
                                         {props.meal.formatted_ingredients.length > 0 &&
                                         <>
                                         {JSON.parse(props.meal.formatted_ingredients[0]).map((ingredient, index) => {
                                             return(
-                                                <tr key={index} className={styles.ingredients_tr}>
+                                                <div key={index} className={styles.ingredients_tr}>
                                                     <input name='id' type="checkbox" />
-                                                    <td style={{color: '#000000'}} className={styles.ingredients_td}>{ingredient.productName}</td>
-                                                    <td className={styles.ingredients_td + ' ' + styles.hide} style={{textAlign: 'center'}}>{ingredient.quantity}</td>
-                                                    <td className={styles.ingredients_td + ' ' + styles.hide}>{ingredient.measurement}</td>
-                                                    <td className={styles.ingredients_td} style={{textAlign: 'center'}}></td>
-                                                    <td className={styles.ingredients_td}>Unavailable</td>
-                                                </tr>
+                                                    <div style={{color: '#000000'}} className={styles.ingredients_td}>{ingredient.productName}</div>
+                                                    <div className={styles.ingredients_td + ' ' + styles.hide} style={{textAlign: 'center'}}>{serves === parseInt(props.meal.servings) ? ingredient.quantity : ingredient.quantity * serves }</div>
+                                                    <div className={styles.ingredients_td + ' ' + styles.hide}>{ingredient.measurement}</div>
+                                                    <div className={styles.ingredients_td} style={{textAlign: 'center'}}></div>
+                                                    <div className={styles.ingredients_td}>Unavailable</div>
+                                                </div>
                                             )
                                         })}
                                         </>
                                         }
                                     
-                                    </tbody>
-                                </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className={styles.ingredient_radio}>
@@ -235,10 +252,11 @@ function Meal(props){
                                 </label>
                             </div>
                         </div>
+                        {props.auth.authUser && props.auth.authUser.user_type !== 'admin' &&
                         <div className={styles.btnGroup}>
                             <div className={styles.btnoutline}>Add to Grocery List</div>
                             <div className={styles.btnfill}>Add to Cart</div>
-                        </div>
+                        </div>}
                     </div>
                 </div>
                 }
@@ -305,15 +323,19 @@ function Meal(props){
                     </div>
                 </div>
 
+                {props.auth.authUser && props.auth.authUser.user_type !== 'admin' &&
                 <div className={styles.meal_section_8}>
                     <h3>Stores location</h3>
                     <Stores />
                 </div>
+                }
 
+                {props.auth.authUser && props.auth.authUser.user_type !== 'admin' &&
                 <div className={styles.meal_section_8}>
                     <h3>Add Review</h3>
                     <Reviews />
                 </div>
+                }
 
                 <div className={styles.productcard_row}>
                     <div className={styles.productcard_col_1}>
@@ -324,23 +346,25 @@ function Meal(props){
                             {props.meal.similar_meals.map((data, index) => {
                                 return(
                                 <div key={index} className={styles.productcard_productcard}>
+                                    {data.meal_images && 
                                     <div className={styles.productcard_productcard_img_container}>
-
+                                    {data.meal_images && data.meal_images.length > 0 && data.meal_images[0].length > 0 && data.meal_images[0] !== "[object HTMLImageElement]" }
                                     <Image
                                         priority
-                                        src={img_logo}
-                                        alt="Store"
+                                        src={data.meal_images[0]}
+                                        alt="Related Meal"
+                                        height={500} width={500}
                                         className={styles.productcard_productcard_img}
                                     />
-                                    </div>
+                                    </div>}
                                     <div className={styles.productcard_productcard_col}>
-                                        <h6 className={styles.productcard_productcard_name}>TagIcon</h6>
+                                        <h6 className={styles.productcard_productcard_name}>{data.meal_name}</h6>
                                         <p className={styles.productcard_productcard_duration}>
-                                            7 min
+                                            {data.cook_time} min
                                         </p>
                                     </div>
                                     <div className={styles.productcard_productcard_col}>
-                                        <div className={styles.product_review_rating_icons}>
+                                        {/* <div className={styles.product_review_rating_icons}>
                                             {
                                                 Array.from({ length: 5 }).map((i,j) => {
                                                     var rate = 4;
@@ -354,9 +378,9 @@ function Meal(props){
                                                         )}
                                                 })
                                             }
-                                        </div>
+                                        </div> */}
                                         <p className={styles.productcard_productcard_price}>
-                                            $666
+                                            {/* $666 */}
                                         </p>
                                     </div>
                                 </div>
