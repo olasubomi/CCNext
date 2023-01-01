@@ -22,10 +22,10 @@ const PublicMarket = () => {
   const [value, setValue] = useState("");
   const [items, setItems] = useState([]);
   const [store, setStore] = useState([]);
-  const [showLocation, setShowLocation] = useState(false)
-  const [showAddress, setShowAddress] = useState(false)
+  const [showLocation, setShowLocation] = useState(false);
+  const [showAddress, setShowAddress] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
-  const [showCurrentLocation, setShowCurrentLocation] = useState(false)
+  const [showCurrentLocation, setShowCurrentLocation] = useState(false);
   const addressRef = useRef();
 
   const ref = useRef();
@@ -145,17 +145,20 @@ const PublicMarket = () => {
           showCurrentLocation={showCurrentLocation}
           setShowCurrentLocation={setShowCurrentLocation}
         />
-        <div className={styles.location} style={{ cursor: 'pointer' }} onClick={() => {
-          addressRef.current?.handleGetStoreByLocation()
-          setShowLocation(!showLocation)
-          setShowCurrentLocation(true)
-          console.log(showLocation, 'showLocation')
-        }}>
-          <HiLocationMarker
-            size={17}
-            fill="#FFFFFF"
-          />
-          <p className={styles.title} style={{ marginLeft: '.4rem' }}>Use my current location</p>
+        <div
+          className={styles.location}
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            addressRef.current?.handleGetStoreByLocation();
+            setShowLocation(!showLocation);
+            setShowCurrentLocation(true);
+            console.log(showLocation, "showLocation");
+          }}
+        >
+          <HiLocationMarker size={17} fill="#FFFFFF" />
+          <p className={styles.title} style={{ marginLeft: ".4rem" }}>
+            Use my current location
+          </p>
         </div>
       </div>
       <div className={styles.header2}>
@@ -232,8 +235,8 @@ const PublicMarket = () => {
                 <div className={styles.searchDropdown}>
                   <>
                     <>
-                      {
-                        categories.find((ele) => ele.label === "Stores")?.value &&
+                      {categories.find((ele) => ele.label === "Stores")
+                        ?.value && (
                         <>
                           <h4 className={styles.storeTitle}>
                             Stores ({store.length})
@@ -244,7 +247,11 @@ const PublicMarket = () => {
                               Boolean(value) ? (
                                 <div className={styles.result}>
                                   <p>No Result Found</p>
-                                  <button onClick={() => router.push(`/suggest-store/${value}`)}>
+                                  <button
+                                    onClick={() =>
+                                      router.push(`/suggest-store/${value}`)
+                                    }
+                                  >
                                     Suggest Store
                                   </button>
                                 </div>
@@ -268,13 +275,11 @@ const PublicMarket = () => {
                             )}
                           </div>
                         </>
-                      }
-
+                      )}
                     </>
                   </>
                   <>
-                    {
-                      categories.find((ele) => ele.label === "Meals")?.value &&
+                    {categories.find((ele) => ele.label === "Meals")?.value && (
                       <>
                         <h4 className={styles.storeTitle}>
                           Meals ({filteredItem().length})
@@ -285,7 +290,9 @@ const PublicMarket = () => {
                             Boolean(value) ? (
                               <div className={styles.result}>
                                 <p>No Result Found</p>
-                                <button onClick={() => router.push("/suggestmeal")}>
+                                <button
+                                  onClick={() => router.push("/suggestmeal")}
+                                >
                                   Suggest Meal
                                 </button>
                               </div>
@@ -311,13 +318,12 @@ const PublicMarket = () => {
                           )}
                         </div>
                       </>
-                    }
-
+                    )}
                   </>
 
                   <>
-                    {
-                      categories.find((ele) => ele.label === "Products")?.value &&
+                    {categories.find((ele) => ele.label === "Products")
+                      ?.value && (
                       <>
                         <h4 className={styles.storeTitle}>
                           Products ({filteredProduct().length})
@@ -328,7 +334,9 @@ const PublicMarket = () => {
                             Boolean(value) ? (
                               <div className={styles.result}>
                                 <p>No Result Found</p>
-                                <button onClick={() => router.push("/suggestmeal")}>
+                                <button
+                                  onClick={() => router.push("/suggestmeal")}
+                                >
                                   Suggest Product
                                 </button>
                               </div>
@@ -354,13 +362,12 @@ const PublicMarket = () => {
                           )}
                         </div>
                       </>
-                    }
-
+                    )}
                   </>
 
                   <>
-                    {
-                      categories.find((ele) => ele.label === "Kitchen Utensils")?.value &&
+                    {categories.find((ele) => ele.label === "Kitchen Utensils")
+                      ?.value && (
                       <>
                         <h4 className={styles.storeTitle}>
                           Kitchen Utensils ({filteredUtensils().length})
@@ -371,7 +378,9 @@ const PublicMarket = () => {
                             Boolean(value) ? (
                               <div className={styles.result}>
                                 <p>No Result Found</p>
-                                <button onClick={() => router.push("/suggestmeal")}>
+                                <button
+                                  onClick={() => router.push("/suggestmeal")}
+                                >
                                   Suggest Utensil
                                 </button>
                               </div>
@@ -397,8 +406,7 @@ const PublicMarket = () => {
                           )}
                         </div>
                       </>
-                    }
-
+                    )}
                   </>
                 </div>
               )}
@@ -412,8 +420,8 @@ const PublicMarket = () => {
                   items.item_type === "Meal"
                     ? router.push(`/meal/${value}`)
                     : items.item_type === "Product"
-                      ? router.push(`/product/${value}`)
-                      : router.push(`/product/${value}`);
+                    ? router.push(`/product/${value}`)
+                    : router.push(`/product/${value}`);
                 }
               }}
             >
@@ -422,20 +430,23 @@ const PublicMarket = () => {
           </div>
         </div>
       </div>
-      <div className={styles.storeContainer} id="store">
+      <div className={styles.storeContainer}>
         {categories.find((ele) => ele.label === "Stores")?.value && <Stores />}
       </div>
       {categories.find((ele) => ele.label === "Meals")?.value && (
-        <div id="meals">
+        <div>
           <PopularMeals />
-
         </div>
       )}
       {categories.find((ele) => ele.label === "Products")?.value && (
-        <TopSellingProducts />
+        <div>
+          <TopSellingProducts />
+        </div>
       )}
       {categories.find((ele) => ele.label === "Kitchen Utensils")?.value && (
-        <SuggestedUtensils />
+        <div>
+          <SuggestedUtensils />
+        </div>
       )}
       <Footer />
     </div>
