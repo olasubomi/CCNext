@@ -1,7 +1,6 @@
 import React from 'react';
 // import './ProductModal.scss';
-import {  Row, Col} from "react-bootstrap";
-import { withRouter } from 'react-router-dom';
+import { Row, Col } from "react-bootstrap";
 
 class ProductModal extends React.Component {
     gotoViewPage = (customerId, productID) => {
@@ -9,7 +8,7 @@ class ProductModal extends React.Component {
         this.props.history.push(url);
     }
     render() {
-        const { product_img, product_name, productID, customerId} = this.props.state;
+        const { product_img, product_name, productID, customerId } = this.props.state;
         return (
             <div style={{
                 position: "fixed",
@@ -23,12 +22,12 @@ class ProductModal extends React.Component {
                 <div style={{ display: "flex", height: "100%" }}>
                     <div className="product-detail-modal">
                         <div className="product-detail-panel">
-                            <div className="close-btn" style={{ fontSize: "12px", textAlign: "right" }}  onClick={this.props.onCloseClicked}>
+                            <div className="close-btn" style={{ fontSize: "12px", textAlign: "right" }} onClick={this.props.onCloseClicked}>
                                 <i className="fa fa-remove"></i>
                             </div>
                             <Row>
                                 <Col md={6} style={{ textAlign: "center" }}>
-                                    <img src={product_img} width="100%" className="product-img" alt=""/>
+                                    <img src={product_img} width="100%" className="product-img" alt="" />
                                 </Col>
                                 <Col md={6}>
                                     <div className="detail-info-panel" style={{ marginLeft: "10px", marginRight: "20px" }}>
@@ -61,7 +60,7 @@ class ProductModal extends React.Component {
                             </Row>
                             <Row className="btn-panel">
                                 <Col md={6} style={{ textAlign: "center" }}>
-                                    <button className="product-btn"  onClick={() => this.gotoViewPage(customerId, productID)} >View Item</button>
+                                    <button className="product-btn" onClick={() => this.gotoViewPage(customerId, productID)} >View Item</button>
                                 </Col>
                                 <Col md={6} style={{ textAlign: "center" }}>
                                     <button className="product-btn">Add To Card</button>
@@ -74,4 +73,4 @@ class ProductModal extends React.Component {
         );
     }
 }
-export default withRouter(ProductModal);
+export default ProductModal;

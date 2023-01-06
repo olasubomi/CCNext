@@ -4,6 +4,7 @@ import '../src/App.css'
 // import '../src/components/Header/header.css'
 import { wrapper, store } from "../src/store/index";
 import { Provider } from "react-redux";
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 function MyApp({ Component, pageProps }) {
     return (
@@ -27,4 +28,4 @@ function MyApp({ Component, pageProps }) {
 //   return { ...appProps }
 // }
 
-export default  wrapper.withRedux(MyApp)
+export default wrapper.withRedux(MyApp)
