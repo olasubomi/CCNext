@@ -52,7 +52,9 @@ function SuggestedMealRow(props){
                 <div className={styles.request_td + " " + styles.actions_con}>
                     {props.auth.authUser.user_type !== 'admin' &&
                     <>
-                        <div onClick={props.toggleSent} className={styles.tableactionbutton}>Send for review</div>
+                        {suggestion.publicly_available === 'Draft' && 
+                        <div onClick={() => props.toggleSent(suggestion._id, props.searchType)} className={styles.tableactionbutton}>Send for review</div>
+                        }
                         {props.auth.authUser.user_type === 'supplier' &&
                         <>
                             {suggestion.publicly_available === 'Public' ? 

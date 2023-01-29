@@ -1643,7 +1643,7 @@ class SuggestMealForm extends Component {
                 </div>
                 <Stack direction="row" spacing={1} className={styles.stack}>
                   {
-                    this.state.instructionChunk1.instructionSteps.map((chip, index) => (
+                    this.state.instructionChunk1.instructionSteps?.map((chip, index) => (
                       <Chip
                         key={index}
                         label={chip}
@@ -1704,7 +1704,7 @@ class SuggestMealForm extends Component {
                     </div>
                     <Stack direction="row" spacing={1} className={styles.stack}>
                       {
-                        this.state["instructionChunk" + id].instructionSteps.map((chip, index) => (
+                        this.state["instructionChunk" + id].instructionSteps?.map((chip, index) => (
                           <Chip
                             key={index}
                             label={chip}

@@ -15,6 +15,21 @@ const individualProductPage = (props) => {
             window.location.assign('/')
         }
     })
+
+    const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ]
     return (
         <div>
             <Head>
@@ -30,7 +45,7 @@ const individualProductPage = (props) => {
                         <GoBack />
                     </div>
                     <div className={styles.meal_section_1_col_2}>
-                        <p className={styles.meal_section_1_col_2_p}> Choose type</p>
+                        <p className={styles.meal_section_1_col_2_p}>{props.product.data.products[0].createdAt && new Date(props.product.data.products[0].createdAt).getDate() + ' ' + months[new Date(props.product.data.products[0].createdAt).getMonth()] + ' ,'+ new Date(props.product.data.products[0].createdAt).getFullYear()}</p>
                         <div className={styles.select_container}>
                             <div className={styles.select_box}>
                             </div>

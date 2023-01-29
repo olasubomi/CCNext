@@ -4,9 +4,11 @@ import styles from './header.module.css'
 import { connect } from "react-redux";
 import React from 'react';
 import { setOpenLogin, userSignOut } from '../../actions';
+import { useRouter } from 'next/router';
 
 function SideNav2(props){
     console.log(props)
+    const router = useRouter()
 
     function toggleLogin (){
         props.setOpenLogin(!props.openLogin)

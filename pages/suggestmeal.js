@@ -64,6 +64,11 @@ class SuggestMeal extends Component {
 
         // get all Meal Names***
         var url = "http://localhost:5000/api/meals/get-meals";
+        if(localStorage.getItem('suggestionType')){
+            this.setState({
+                suggestionType: localStorage.getItem('suggestionType')
+            })
+        }
         axios.get(url).then((body) => {
             var mealList = body.data;
             if (mealList && mealList.data.length !== 0) {

@@ -244,25 +244,35 @@ const SuggestedMeals = (props) => {
                 }
             })
         }
-      };
+    };
 
 
     function addRelated(val) {
         console.log(val)
         let url
+        let similar_meals
         if(searchType === 'Meal'){
             url = '/meals/update/'
+            similar_meals = suggestion.similar_meals
         }else if(searchType === 'Product'){
             url = '/products/update/'
+            similar_meals = suggestion.product_alternatives
         }else{
             url = '/categories/update/'
         }
-        let similar_meals = suggestion.similar_meals
 
         if(val && val.length>=1){
             similar_meals.push(val.split('/')[1])
             if(suggestion._id !== val.split('/')[1]){
-                axios.post(url+suggestion._id, {similar_meals: similar_meals}).then(data => {
+                let body
+                if(searchType === 'Meal'){
+                    body = {similar_meals: similar_meals}
+                }else if(searchType === 'Product'){
+                    body = {product_alternatives: similar_meals}
+                }else{
+                    url = '/categories/update/'
+                }
+                axios.post(url+suggestion._id, body).then(data => {
                     let meal = relateds.filter((rel) => rel._id === val.split('/')[1])
                     console.log(meal)
                     similar_meals[similar_meals.length-1] = meal[0]
@@ -362,6 +372,8 @@ const SuggestedMeals = (props) => {
                 setSuggestedCountState(data.data.data.count)
                 if(data.data.data.count > 10){
                     setPagesState(Math.ceil(data.data.data.count/10))
+                }else{
+                    setPagesState(1)
                 }
                 console.log(searchTypeP)
                 if(searchTypeP === 'Meal'){
@@ -426,7 +438,42 @@ const SuggestedMeals = (props) => {
         setTransferToInventoryState(!transferToInventory)
     }
 
-    function toggleSent(){
+    function toggleSent(id, searchType){
+        if(typeof id === 'string'){
+            let url1
+            if(searchType === 'Meal'){
+                url1 = '/meals/update/'
+            }else if(searchType === 'Product'){
+                url1 = '/products/update/'
+            }else{
+                url1 = '/categories/update/'
+            }
+            axios.post(url1+id, {publicly_available: "Pending"}).then(res => {
+                if(res.data.data){
+                    let url2
+                    if(searchType === 'Meal'){
+                        if(props.auth.authUser.user_type === 'admin'){
+                            url2 = '/meals/get-meals/1'
+                        }else{
+                            url2 = '/meals/get-meals/1?user='+props.auth.authUser._id
+                        }
+                    }else if(searchType === 'Product'){
+                        if(props.auth.authUser.user_type === 'admin'){
+                            url2 = '/products/get-all-products/1'
+                        }else{
+                            url2 = '/products/get-all-products/1?user='+props.auth.authUser._id
+                        }
+                    }else{
+                        if(props.auth.authUser.user_type === 'admin'){
+                            url2 = '/categories/get-all-categories/1'
+                        }else{
+                            url2 = '/categories/get-all-categories/1?user='+props.auth.authUser._id
+                        }
+                    }
+                    getSuggestion(url2, searchType)
+                }
+            })
+        }
         setSentState(!sent)
     }
 
@@ -501,7 +548,7 @@ const SuggestedMeals = (props) => {
 
     function openMealDetailsModal(meal){
         setSuggestionState(meal)
-        if(meal.formatted_ingredients){
+        if(meal.formatted_ingredients?.length > 0){
             let ingredients =JSON.parse(meal.formatted_ingredients[0]);
             var ingredientsString = []
             for(let i=0; i<ingredients.length; i++){
@@ -855,6 +902,45 @@ const SuggestedMeals = (props) => {
                         </div>
                     </div>
                     }
+                    {searchType === 'Product' &&
+                    <div className={styles.form_group}>
+                        {/* <h3>Upload Background Picture</h3> */}
+                        <div className={styles.search_con}>
+                            {/* <div className={styles.search_box}> */}
+                                {/* <p onClick={searchSuggested} className={styles.search_icon}>
+                                    <SearchIcon className={styles.search_icon} />
+                                </p> */}
+                                <Autocomplete
+                                    id="tags-outlined"
+                                    freeSolo
+                                    // filterSelectedOptions
+                                    options={relateds.map((option) => option.product_name+'/'+option._id)}
+                                    // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
+                                    onChange={(e, newValue) => addRelated(newValue)}
+                                    // getOptionLabel={option => option}
+                                    // renderTags={() => {}}
+                                    renderInput={params => (
+                                        <TextField
+                                        {...params}
+                                        onChange={(e) => searchRelated(e)}
+                                        variant="outlined"
+                                        placeholder="Search for related"
+                                        fullWidth
+                                        />
+                                    )} 
+                                />
+                            <div className={styles.search_button}>Search</div>
+                        </div>
+                        <div className={suggestion_form_image}>
+                            <div className={suggestion_form_image_col_1}>
+                                {suggestion.product_alternatives.map((images, index) => {
+                                    <Image key={index} width={300} height={300} src={images} alt="background" />
+                                })}
+                                
+                            </div>
+                        </div>
+                    </div>
+                    }
                 </div>
             }
         </div>
@@ -862,18 +948,19 @@ const SuggestedMeals = (props) => {
             <Popup2 popupType='Meal Suggestion Preview' openModal={openModal} closeModal={closeModal}
               name={suggestion.meal_name} description={suggestion.meal_name}
               imageData={suggestion.meal_images[0]} image={suggestion.meal_images[0]}
-              imagesData={suggestion.meal_images.slice(1)} categories={JSON.parse(suggestion.meal_categories[0])}
+              imagesData={suggestion.meal_images.slice(1)} categories={suggestion.meal_categories}
               prepTime={suggestion.prep_time} cookTime={suggestion.cook_time}
               serves={suggestion.servings} chef={suggestion.chef}
-              ingredientsList={ingredientsStringSyntax} utensilsList={JSON.parse(suggestion.meal_categories[0])}
-              instructionChunk1={JSON.parse(suggestion.formatted_instructions[0])[1]} instructionChunk2={JSON.parse(suggestion.formatted_instructions[0])[2]}
-              instructionChunk3={JSON.parse(suggestion.formatted_instructions[0])[3]} instructionChunk4={JSON.parse(suggestion.formatted_instructions[0])[4]}
-              instructionChunk5={JSON.parse(suggestion.formatted_instructions[0])[5]} instructionChunk6={JSON.parse(suggestion.formatted_instructions[0])[6]}
+              ingredientsList={ingredientsStringSyntax} utensilsList={suggestion.kitchen_utensils}
+              instructionChunk1={[]} instructionChunk2={[]}
+              instructionChunk3={[]} instructionChunk4={[]}
+              instructionChunk5={[]} instructionChunk6={[]}
               chunk1Content={suggestion.image_or_video_content_1[0]} chunk2Content={suggestion.image_or_video_content_2[0]}
               chunk3Content={suggestion.image_or_video_content_3[0]} chunk4Content={suggestion.image_or_video_content_4[0]}
               chunk5Content={suggestion.image_or_video_content_5[0]} chunk6Content={suggestion.image_or_video_content_6[0]}
               instructionWordlength={suggestion.instructionWordlength}
               tips={JSON.parse(suggestion.tips[0])} mealImageData={suggestion.meal_images[0]}
+              suggested={true} id={suggestion.id}
             />
         }
 
@@ -884,6 +971,7 @@ const SuggestedMeals = (props) => {
                 image={suggestion.product_images[0]}
                 imagesData={suggestion.product_images.slice(1)} categories={suggestion.product_categories}
                 sizesList={[]} ingredientList={ingredientsStringSyntax}
+                suggested={true} id={suggestion.id}
           />
         }
         

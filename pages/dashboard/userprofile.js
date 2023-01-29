@@ -224,7 +224,8 @@ const UserProfile = (props) => {
             country: billing_country
         }
         const formData = new FormData();
-        if(profileImage.length > 0){
+        if(profileImage){
+            console.log('dddd')
             formData.append('profile_picture', profileImage);
         }
         formData.append('first_name', first_name);

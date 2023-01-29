@@ -52,13 +52,15 @@ export const userSignUp = (form) => {
                 dispatch({ type: FETCH_SUCCESS, payload: '' });
             }, 5000)
             window.location.assign('/dashboard')
-        }).catch((err,{request}) => {
+        }).catch(({request}) => {
             console.error("xxx userSignUp Request ERROR xxx");
-            console.log(err.response.status);
-            dispatch({ type: FETCH_ERROR, payload: 'Login error' });
             dispatch({ type: IS_AUTHENTICATED, payload: false });
-            if (err.response.status === 422) {
+            if(request.response){
+                console.error("xxx userSignIn Request ERROR xxx", JSON.parse(request.response).message.message);
                 dispatch({ type: FETCH_ERROR, payload: JSON.parse(request.response).message.message });
+            }else{
+                console.error("xxx userSignIn Request ERROR xxx", "Server error");
+                dispatch({ type: FETCH_ERROR, payload: "Server error" });
             }
             setTimeout(() => {
                 dispatch({ type: FETCH_ERROR, payload: '' });
@@ -98,9 +100,15 @@ export const userSignIn = ( email, password ) => {
             window.location.assign('/dashboard')
 
         }).catch(({request}) => {
-            console.error("xxx userSignIn Request ERROR xxx", JSON.parse(request.response).message.message);
+            console.log(request)
+            if(request.response){
+                console.error("xxx userSignIn Request ERROR xxx", JSON.parse(request.response).message.message);
+                dispatch({ type: FETCH_ERROR, payload: JSON.parse(request.response).message.message });
+            }else{
+                console.error("xxx userSignIn Request ERROR xxx", "Server error");
+                dispatch({ type: FETCH_ERROR, payload: "Server error" });
+            }
             dispatch({ type: IS_AUTHENTICATED, payload: false });
-            dispatch({ type: FETCH_ERROR, payload: JSON.parse(request.response).message.message });
             setTimeout(() => {
                 dispatch({ type: FETCH_ERROR, payload: '' });
             }, 5000)

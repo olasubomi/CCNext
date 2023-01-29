@@ -48,16 +48,16 @@ function Product(props){
                     <div className={styles.product_section_2_col_2}>
                         <div className={styles.product_section_2_details}>
                             <h2 className={styles.product_section_2_name}>{props.product.product_name}</h2>
-                            <div className={styles.store}>
+                            {/* <div className={styles.store}>
                                 <h4>Chop Chow Store</h4>
                                 <div>
                                     <LocationIcon style={styles.store_icon} />
                                     <p>6391 Elgin St. Celina, Delaware 10299</p>
                                 </div>
-                            </div>
-                            <p className={styles.product_section_2_description}>
+                            </div> */}
+                            {/* <p className={styles.product_section_2_description}>
                                 {props.product.product_name}
-                            </p>
+                            </p> */}
                             <div className={styles.product_section_2_details_col}>
                                 <div className={styles.product_section_2_categories}>
                                     <h3 className={styles.product_section_2_category_name}>Category</h3>
@@ -65,13 +65,10 @@ function Product(props){
                                 </div>
                                 <div className={styles.product_section_2_categories}>
                                     <h3 className={styles.product_section_2_category_name}>Product size</h3>
-                                    <p className={styles.product_section_2_category}>rewrg fvdsvsd</p>
+                                    <p className={styles.product_section_2_category}>{props.product.product_size}</p>
                                 </div>
 
-                                <div className={styles.product_section_2_categories}>
-                                    <h3 className={styles.product_section_2_category_name}>Quantity</h3>
-                                    {/* <p className={styles.product_section_2_category}>rewrg fvdsvsd</p> */}
-                                </div>
+                                
                             </div>
                         </div>
                         {
@@ -110,7 +107,7 @@ function Product(props){
                     </div>}
                 </div>
 
-                <div className={styles.productcard_row}>
+                {/* <div className={styles.productcard_row}>
                     <div className={styles.productcard_col_1}>
                         <h3>Featured In</h3>
                     </div>
@@ -160,11 +157,13 @@ function Product(props){
                             }
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <div className={styles.product_section_8}>
                     <h3>Stores location</h3>
-                    <Stores />
+                    {props.product.stores_available.length > 0 ? 
+                    <Stores /> :
+                    <p>Not Available</p>}
                 </div>
 
                 <div className={styles.product_section_8}>
@@ -178,24 +177,25 @@ function Product(props){
                     </div>
                     <div className={styles.productcard_col_2}>
                         <div className={styles.productcard_productcards}>
-                            {new Array(1,2,3,4,5).map((data, index) => {
+                            {props.product.product_alternatives.map((data, index) => {
                                 return(
                                 <div key={index} className={styles.productcard_productcard}>
                                     <div className={styles.productcard_productcard_img_container2}>
-
+                                    {data.product_images && data.product_images.length > 0 && data.product_images[0].length > 0 && data.product_images[0] !== "[object HTMLImageElement]" &&
                                     <Image
                                         priority
-                                        src={img_logo}
+                                        src={data.meal_images[0]}
                                         alt="Store"
                                         className={styles.productcard_productcard_img}
                                     />
+                                    }
                                     </div>
                                     <div className={styles.productcard_productcard_col}>
-                                        <h6 className={styles.productcard_productcard_name}>TagIcon</h6>
+                                        <h6 className={styles.productcard_productcard_name}>{data.product_name}</h6>
                                     </div>
-                                    <p>Chop Chow Official Store</p>
+                                    {/* <p>Chop Chow Official Store</p> */}
                                     <div className={styles.productcard_productcard_col}>
-                                        <div className={styles.product_review_rating_icons}>
+                                        {/* <div className={styles.product_review_rating_icons}>
                                             {
                                                 Array.from({ length: 5 }).map((i,j) => {
                                                     var rate = 4;
@@ -209,10 +209,10 @@ function Product(props){
                                                         )}
                                                 })
                                             }
-                                        </div>
-                                        <p className={styles.productcard_productcard_duration}>
+                                        </div> */}
+                                        {/* <p className={styles.productcard_productcard_duration}>
                                             7min
-                                        </p>
+                                        </p> */}
                                     </div>
                                 </div>
                                 )

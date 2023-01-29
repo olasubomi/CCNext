@@ -196,13 +196,13 @@ function Meal(props){
                                     <div>
                                         {props.meal.formatted_ingredients.length > 0 &&
                                         <>
-                                        {JSON.parse(props.meal.formatted_ingredients[0]).map((ingredient, index) => {
+                                        {props.meal.formatted_ingredients.map((ingredient, index) => {
                                             return(
                                                 <div key={index} className={styles.ingredients_tr}>
                                                     <input name='id' type="checkbox" />
-                                                    <div style={{color: '#000000'}} className={styles.ingredients_td}>{ingredient.productName}</div>
-                                                    <div className={styles.ingredients_td + ' ' + styles.hide} style={{textAlign: 'center'}}>{serves === parseInt(props.meal.servings) ? ingredient.quantity : ingredient.quantity * serves }</div>
-                                                    <div className={styles.ingredients_td + ' ' + styles.hide}>{ingredient.measurement}</div>
+                                                    <div style={{color: '#000000'}} className={styles.ingredients_td}>{JSON.parse(ingredient).product_name}</div>
+                                                    <div className={styles.ingredients_td + ' ' + styles.hide} style={{textAlign: 'center'}}>{serves === parseInt(props.meal.servings) ? JSON.parse(ingredient).quantity : JSON.parse(ingredient).quantity * serves }</div>
+                                                    <div className={styles.ingredients_td + ' ' + styles.hide}>{JSON.parse(ingredient).measurement}</div>
                                                     <div className={styles.ingredients_td} style={{textAlign: 'center'}}></div>
                                                     <div className={styles.ingredients_td}>Unavailable</div>
                                                 </div>
@@ -348,7 +348,7 @@ function Meal(props){
                                 <div key={index} className={styles.productcard_productcard}>
                                     {data.meal_images && 
                                     <div className={styles.productcard_productcard_img_container}>
-                                    {data.meal_images && data.meal_images.length > 0 && data.meal_images[0].length > 0 && data.meal_images[0] !== "[object HTMLImageElement]" }
+                                    {data.meal_images && data.meal_images.length > 0 && data.meal_images[0].length > 0 && data.meal_images[0] !== "[object HTMLImageElement]" &&
                                     <Image
                                         priority
                                         src={data.meal_images[0]}
@@ -356,6 +356,7 @@ function Meal(props){
                                         height={500} width={500}
                                         className={styles.productcard_productcard_img}
                                     />
+                                    }
                                     </div>}
                                     <div className={styles.productcard_productcard_col}>
                                         <h6 className={styles.productcard_productcard_name}>{data.meal_name}</h6>
