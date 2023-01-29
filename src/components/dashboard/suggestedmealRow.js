@@ -44,7 +44,7 @@ function SuggestedMealRow(props){
                 </p>
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + styles.hideData}>
                     {props.searchType === 'Meal' ? 
-                    suggestion.meal_categories && suggestion.meal_categories.length > 0 && JSON.parse(suggestion.meal_categories[0])[0] : 
+                    suggestion.meal_categories && suggestion.meal_categories.length > 0 && suggestion.meal_categories : 
                     suggestion.product_categories && suggestion.product_categories.length > 0 && suggestion.product_categories[0]
                     }
                 </p>
@@ -84,7 +84,7 @@ function SuggestedMealRow(props){
                     <h3 className={styles.suggested_category_name}>Category</h3>
                     <p className={styles.suggested_category}>
                         {props.searchType === 'Meal' ? 
-                        suggestion.meal_categories && suggestion.meal_categories.length > 0 && JSON.parse(suggestion.meal_categories[0])[0] : 
+                        suggestion.meal_categories && suggestion.meal_categories.length > 0 && suggestion.meal_categories : 
                         suggestion.product_categories && suggestion.product_categories.length > 0 && suggestion.product_categories[0]
                         }
                     </p>

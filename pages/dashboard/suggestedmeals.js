@@ -951,7 +951,7 @@ const SuggestedMeals = (props) => {
               imagesData={suggestion.meal_images.slice(1)} categories={suggestion.meal_categories}
               prepTime={suggestion.prep_time} cookTime={suggestion.cook_time}
               serves={suggestion.servings} chef={suggestion.chef}
-              ingredientsList={ingredientsStringSyntax} utensilsList={suggestion.kitchen_utensils}
+              ingredientsList={suggestion.formatted_ingredients.map(ingredient => JSON.parse(ingredient).properIngredientStringSyntax)} utensilsList={suggestion.kitchen_utensils}
               instructionChunk1={[]} instructionChunk2={[]}
               instructionChunk3={[]} instructionChunk4={[]}
               instructionChunk5={[]} instructionChunk6={[]}
@@ -961,6 +961,7 @@ const SuggestedMeals = (props) => {
               instructionWordlength={suggestion.instructionWordlength}
               tips={JSON.parse(suggestion.tips[0])} mealImageData={suggestion.meal_images[0]}
               suggested={true} id={suggestion.id}
+              ingredientGroupList={suggestion.formatted_ingredients.map(ingredient => JSON.parse(ingredient))}
             />
         }
 
@@ -970,8 +971,9 @@ const SuggestedMeals = (props) => {
                 imageData={suggestion.product_images[0]}
                 image={suggestion.product_images[0]}
                 imagesData={suggestion.product_images.slice(1)} categories={suggestion.product_categories}
-                sizesList={[]} ingredientList={ingredientsStringSyntax}
+                sizesList={[]} ingredientList={suggestion.ingredients_in_product.map(ingredient => JSON.parse(ingredient).properIngredientStringSyntax)}
                 suggested={true} id={suggestion.id}
+                ingredientGroupList={suggestion.ingredients_in_product.map(ingredient => JSON.parse(ingredient))}
           />
         }
         

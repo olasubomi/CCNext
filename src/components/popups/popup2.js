@@ -35,7 +35,7 @@ class Popup2 extends Component {
     }
 
     edit = () => {
-        const { name, description, categories, ingredientsList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6 } = this.props
+        const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6 } = this.props
         var stepInputs = []
         if(instructionChunk1){
             stepInputs = []
@@ -59,6 +59,20 @@ class Popup2 extends Component {
         if(instructionChunk6){
             stepInputs = [2,3,4,5,6]
         }
+
+        let group = ingredientGroupList.map(ingredient => {
+            return {
+                productName: ingredient.product_name?.join(" "),
+                // productImgFile: this.state.currentProductImgSrc,
+                productImgPath: null,
+          
+                // these are added to ingredient packets on submit, and not relevant in product object details
+                quantity: ingredient.quantity,
+                measurement: ingredient.measurement,
+                properIngredientStringSyntax: ingredient.properIngredientStringSyntax
+            }
+        })
+
         let meal = {
             mealId: this.props.id, 
             mealName: name,
@@ -66,7 +80,7 @@ class Popup2 extends Component {
   
             // ingredientNames,
             // do we need product group list AND strings ?
-            ingredientGroupList: ingredientsList,
+            ingredientGroupList: group,
             // store product names of inputted strings to compare with db products
             ingredientStrings: ingredientsList,
             // do we want to use current ingredient formats ? Yes.
@@ -109,6 +123,7 @@ class Popup2 extends Component {
             stepInputs: []
         }
         localStorage.setItem('suggestionType', 'Meal')
+        localStorage.setItem('mealId', this.props.id,)
         localStorage.setItem('suggestMealForm', JSON.stringify(meal))
         window.location.assign('/suggestmeal')
         

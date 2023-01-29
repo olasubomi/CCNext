@@ -15,16 +15,27 @@ class Popup1 extends Component {
     }
 
     edit = () => {
-        const { name, description, categories, ingredientList, sizesList } = this.props;
-
+        const { name, description, categories, ingredientList, sizesList, ingredientGroupList } = this.props;
+        let group = ingredientGroupList.map(ingredient => {
+            return {
+                productName: ingredient.product_name?.join(" "),
+                // productImgFile: this.state.currentProductImgSrc,
+                productImgPath: null,
+          
+                // these are added to ingredient packets on submit, and not relevant in product object details
+                quantity: ingredient.quantity,
+                measurement: ingredient.measurement,
+                properIngredientStringSyntax: ingredient.properIngredientStringSyntax
+            }
+        })
+        console.log(group)
         let product = {
-            productId: this.props.id,
             productName: name,
             productDescription: description,
   
             // ingredientNames,
             // do we need product group list AND strings ?
-            ingredientGroupList: ingredientList,
+            ingredientGroupList: group,
             // descriptionGroupList,
             sizeGroupList: sizesList,
             // store product names of inputted strings to compare with db products
@@ -51,6 +62,7 @@ class Popup1 extends Component {
             suggestedCategories: categories,
         }
         localStorage.setItem('suggestionType', 'Product')
+        localStorage.setItem('productId', this.props.id,)
         localStorage.setItem('suggestProductForm', JSON.stringify(product))
         window.location.assign('/suggestmeal')
         
@@ -59,6 +71,7 @@ class Popup1 extends Component {
     render() {
 
         const { popup, imageData, imagesData, name, description, categories, descriptionsList, ingredientList, sizesList } = this.props
+        console.log(ingredientList)
 
         return (
             <>

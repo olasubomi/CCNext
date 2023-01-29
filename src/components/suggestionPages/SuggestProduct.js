@@ -498,7 +498,7 @@ class SuggestProductForm extends Component {
     };
 
     // refactor to have one size object rather than size group list
-    this.setState({ sizeGroupList: [sizeObject] });
+    // this.setState({ sizeGroupList: [sizeObject] });
     this.setState({ descriptionGroupList: [...this.state.descriptionGroupList, descriptionObject] });
 
     // after adding product to ingredient group list
@@ -721,7 +721,7 @@ class SuggestProductForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedProductToDB = async (e) => {
-    const { productName, productImageName, intro, productImagesData,
+    const { productName, productImageName, productDescription, productImagesData,
       ingredientGroupList, descriptionGroupList, suggestedCategories,
       productImage1, productImage2, productImage3, productImage4 } = this.state;
 
@@ -807,7 +807,7 @@ class SuggestProductForm extends Component {
     suggestProductForm.append('product_images', productImage3);
     suggestProductForm.append('product_images', productImage4);
     // suggestProductForm.append('productImageName', productImageName);
-    suggestProductForm.append('product_details', intro);
+    suggestProductForm.append('product_details', productDescription);
     descriptionGroupList.map((individualDescriptions) => {
       console.log(individualDescriptions);
       suggestProductForm.append('product_descriptions', individualDescriptions);
@@ -832,7 +832,7 @@ class SuggestProductForm extends Component {
       suggestProductForm.append('product_categories', individualCategories);
     })
     suggestProductForm.append('product_type', JSON.stringify("Ingredient"));
-    suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
+    // suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
 
 
     //---------------------------------------------Submit Product to Mongo---------------------------------------------------

@@ -865,8 +865,8 @@ class SuggestMealForm extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   handleKitchenUtensilInputName = (val) => {
 
-    const productString = val;
-    const productWords = productString.split(" ");
+    // const productString = val;
+    const productWords = val;
 
     productWords.map((productWord) => {
       return productWord[0].toUpperCase() + productWord.substring(1);
@@ -1254,7 +1254,7 @@ class SuggestMealForm extends Component {
       console.log(individualInstructions);
       console.log(JSON.stringify(individualInstructions));
 
-      suggestMealForm.append('formatted_instructions', individualInstructions);
+      suggestMealForm.append('formatted_instructions', JSON.stringify(individualInstructions));
     })
 
     suggestMealForm.append('image_or_video_content_1', chunk1Content);
