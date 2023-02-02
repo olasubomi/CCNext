@@ -1330,16 +1330,15 @@ class SuggestMealForm extends Component {
     mealImages.forEach((file, i) => {
       suggestMealForm.append(`meal_images${i}`, file);
     });
+    let instructionTitles = [];
     let instructions = [];
+
 
     for (let i = 1; i < 7; i++) {
       if(this.state[`instructionChunk${i}`].title && this.state[`instructionChunk${i}`].instruction) {
-        suggestMealForm.append(`instruction${i}Title`, this.state[`instructionChunk${i}`].title );
-        suggestMealForm.append(`instruction${i}Instruction`, this.state[`instructionChunk${i}`].instruction);
-
+        instructionTitles.push(this.state[`instructionChunk${i}`].title);
+        instructions.push(this.state[`instructionChunk${i}`].instruction);
       }
-
-      
 
       
     }
@@ -1350,7 +1349,9 @@ class SuggestMealForm extends Component {
     suggestMealForm.append("tips", JSON.stringify(tips));
     suggestMealForm.append("chef", chef);
     suggestMealForm.append("servings", servings);
-    // suggestMealForm.append("instructions",JSON.stringify(instructions))
+    suggestMealForm.append("instructions",instructions)
+    suggestMealForm.append("instructionTitles",instructionTitles)
+
 
     // suggestMealForm.append('ingredientStrings', ingredientStrings);
     // list of products quantity measurements (created on submit meal)
