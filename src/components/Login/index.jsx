@@ -52,7 +52,7 @@ function Login(props){
   function Login(e){
     e.preventDefault();
     props.login(email, password);
-    props.toggleLogin()
+    //props.toggleLogin()
   }
 
   function togglePass(){
