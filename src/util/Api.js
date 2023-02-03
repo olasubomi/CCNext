@@ -2,8 +2,8 @@ import Axios from 'axios';
 
 
 console.error("______ process.env.NODE_ENV ____", process.env.NODE_ENV)
-// let base_url = `http://localhost:3000/api/`;
-let base_url = `https://chopchowdev.herokuapp.com/api/`;
+let base_url = `http://localhost:3000/api/`;
+// let base_url = `https://chopchowdev.herokuapp.com/api/`;
 
 if (process.env.NODE_ENV !== "development") {
     base_url = `https://chopchowdev.herokuapp.com/api/`;
