@@ -74,20 +74,17 @@ class SuggestMealForm extends Component {
       ],
       instructionChunk1: {
         title: "",
-        instruction: "",
         instructionSteps: [],
         dataName: "",
       },
       instructionChunk2: {
         title: "",
-        instruction: "",
         instructionSteps: [],
 
         dataName: "",
       },
       instructionChunk3: {
         title: "",
-        instruction: "",
         instructionSteps: [],
 
         dataName: "",
@@ -103,7 +100,6 @@ class SuggestMealForm extends Component {
 
       instructionChunk4: {
         title: "",
-        instruction: "",
         instructionSteps: [],
 
         dataName: "",
@@ -291,35 +287,30 @@ class SuggestMealForm extends Component {
           },
           instructionChunk1: {
             title: instructionChunk1.title,
-            instruction: "",
             instructionSteps: [],
 
             dataName: "",
           },
           instructionChunk2: {
             title: instructionChunk2.title,
-            instruction: "",
             instructionSteps: [],
 
             dataName: "",
           },
           instructionChunk3: {
             title: instructionChunk3.title,
-            instruction: "",
             instructionSteps: [],
 
             dataName: "",
           },
           instructionChunk4: {
             title: instructionChunk4.title,
-            instruction: "",
             instructionSteps: [],
 
             dataName: "",
           },
           instructionChunk5: {
             title: instructionChunk5.title,
-            instruction: "",
             instructionSteps: [],
 
             dataName: "",
@@ -721,7 +712,7 @@ class SuggestMealForm extends Component {
 
     switch (chunkIndex) {
       case 1:
-        particularArray = this.state.instructionChunk;
+        particularArray = this.state.instructionChunk1;
         particularArray.title = event.target.value;
         this.setState({ instructionChunk1: particularArray });
         break;
@@ -757,67 +748,68 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   handleAddInstructionStep(chip, chunkIndex) {
+
     var particularArray;
 
-    switch (chunkIndex) {
-      case 1:
-        
-        particularArray = this.state.instructionChunk1;
-        particularArray.instruction = chip.target.value;
+    console.log("Index is : " + chunkIndex);
+    // if(chip.split(' ').length > 150){
+    //   this.setState({
 
-        this.setState({
-          instructionChunk1: particularArray,
-        });
+    //     instructionWordlength: '10px'
+    //   })
+    // }
 
-        break;
-      case 2:
-        
-        particularArray = this.state.instructionChunk2;
-        particularArray.instruction = chip.target.value;
-        this.setState({
-          instructionChunk2: particularArray,
-        });
+    // let wordlength = this.state.instructionWordlength;
 
-        break;
-      case 3:
-        particularArray = this.state.instructionChunk3;
-        particularArray.instruction = chip.target.value;
-        this.setState({
-          instructionChunk3: particularArray,
-        });
+    // this.setState({
+    //   instructionWordlength: wordlength + chip.split(' ').length
+    // })console.log("Enter button pressed", );
+    if (chip.keyCode === 13) {
+      console.log("Enter button pressed", );
+      switch (chunkIndex) {
+        case 1:
+          particularArray = this.state.instructionChunk1;
 
-        break;
-      case 4:
-        particularArray = this.state.instructionChunk4;
-        particularArray.instruction = chip.target.value;
-        this.setState({
-          instructionChunk4: particularArray,
-        });
-
-        // document.getElementById("instructionChunk4").value = "";
-        break;
-      case 5:
-        particularArray = this.state.instructionChunk5;
-        particularArray.instruction = chip.target.value;
-        this.setState({
-          instructionChunk5: particularArray,
-        });
-
-        // document.getElementById("instructionChunk5").value = "";
-        break;
-      case 6:
-        particularArray = this.state.instructionChunk2;
-        particularArray.instruction = chip.target.value;
-
-        this.setState({
-          instructionChunk6: particularArray,
-        });
-
-        // document.getElementById("instructionChunk6").value = "";
-        break;
-      default:
-      // ..do nothing
+          particularArray.instructionSteps = [...this.state.instructionChunk1.instructionSteps, chip.target.value]
+          this.setState({ instructionChunk1: particularArray });
+          document.getElementById('instructionChunk1').value = '';
+          break;
+        case 2:
+          particularArray = this.state.instructionChunk2;
+          particularArray.instructionSteps = [...this.state.instructionChunk2.instructionSteps, chip.target.value]
+          this.setState({ instructionChunk2: particularArray });
+          document.getElementById('instructionChunk2').value = '';
+          break;
+        case 3:
+          particularArray = this.state.instructionChunk3;
+          particularArray.instructionSteps = [...this.state.instructionChunk3.instructionSteps, chip.target.value]
+          this.setState({ instructionChunk3: particularArray });
+          document.getElementById('instructionChunk3').value = '';
+          break;
+        case 4:
+          particularArray = this.state.instructionChunk4;
+          particularArray.instructionSteps = [...this.state.instructionChunk4.instructionSteps, chip.target.value]
+          this.setState({ instructionChunk4: particularArray });
+          document.getElementById('instructionChunk4').value = '';
+          break;
+        case 5:
+          console.log("Comes in here too");
+          particularArray = this.state.instructionChunk5;
+          particularArray.instructionSteps = [...this.state.instructionChunk5.instructionSteps, chip.target.value]
+          this.setState({ instructionChunk5: particularArray });
+          document.getElementById('instructionChunk5').value = '';
+          break;
+        case 6:
+          particularArray = this.state.instructionChunk6;
+          particularArray.instructionSteps = [...this.state.instructionChunk6.instructionSteps, chip.target.value]
+          this.setState({ instructionChunk6: particularArray });
+          document.getElementById('instructionChunk6').value = '';
+          break;
+        default:
+        // ..do nothing
+      }
     }
+
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -1324,23 +1316,20 @@ class SuggestMealForm extends Component {
     // console.log(singleTitleTest);
 
     //-------------Submit remainder data of meal to Mongo ------------------------------------------
-
+    
     let suggestMealForm = new FormData();
     suggestMealForm.append("meal_name", mealName);
     mealImages.forEach((file, i) => {
       suggestMealForm.append(`meal_images${i}`, file);
     });
-    let instructionTitles = [];
+    // let instructionTitles = [];
     let instructions = [];
 
 
     for (let i = 1; i < 7; i++) {
-      if(this.state[`instructionChunk${i}`].title && this.state[`instructionChunk${i}`].instruction) {
-        instructionTitles.push(this.state[`instructionChunk${i}`].title);
-        instructions.push(this.state[`instructionChunk${i}`].instruction);
-      }
-
-      
+      if(this.state[`instructionChunk${i}`].title && this.state[`instructionChunk${i}`].instructionSteps) {
+        instructions.push(JSON.stringify(this.state[`instructionChunk${i}`]));
+      } 
     }
     // suggestMealForm.append('meal_images', mealImages);
     suggestMealForm.append("prep_time", prepTime);
@@ -1349,8 +1338,8 @@ class SuggestMealForm extends Component {
     suggestMealForm.append("tips", JSON.stringify(tips));
     suggestMealForm.append("chef", chef);
     suggestMealForm.append("servings", servings);
-    suggestMealForm.append("instructions",instructions)
-    suggestMealForm.append("instructionTitles",instructionTitles)
+    suggestMealForm.append("formatted_instructions",instructions)
+    
 
 
     // suggestMealForm.append('ingredientStrings', ingredientStrings);
@@ -1364,14 +1353,13 @@ class SuggestMealForm extends Component {
 
     // RecipeSteps
     suggestMealForm.append("formatted_ingredients", ingredientStrings);
-    suggestMealForm.append("instruction_images1", chunk1Content);
-    suggestMealForm.append("instruction_images2", chunk2Content);
-    suggestMealForm.append("instruction_images3", chunk3Content);
-    suggestMealForm.append("instruction_images4", chunk4Content);
-    suggestMealForm.append("instruction_images5", chunk5Content);
-    suggestMealForm.append("instruction_images6", chunk6Content);
-    suggestMealForm.append("instruction1", chunk6Content);
-    suggestMealForm.append("instruction_images6", chunk6Content);
+    suggestMealForm.append("image_or_video_content_1", chunk1Content);
+    suggestMealForm.append("image_or_video_content_2", chunk2Content);
+    suggestMealForm.append("image_or_video_content_3", chunk3Content);
+    suggestMealForm.append("image_or_video_content_4", chunk4Content);
+    suggestMealForm.append("image_or_video_content_5", chunk5Content);
+    suggestMealForm.append("image_or_video_content_6", chunk6Content);
+    
 
 
 
@@ -1884,7 +1872,8 @@ class SuggestMealForm extends Component {
                   <TextField
                     fullWidth
                     id="instructionChunk1"
-                    onChange={(chip) => this.handleAddInstructionStep(chip, 1)}
+                    onKeyDown={(chip) => this.handleAddInstructionStep(chip, 1)}
+                    // onChange={(chip) => this.handleAddInstructionStep(chip, 1)}
                     variant="outlined"
                     required
                   />
@@ -1894,7 +1883,7 @@ class SuggestMealForm extends Component {
                       onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, 1)} variant="outlined" /> */}
                 </div>
                 <Stack direction="row" spacing={1} className={styles.stack}>
-                  {this.state.instructionChunk1.instructionSteps.map(
+                  {this.state.instructionChunk1?.instructionSteps?.map(
                     (chip, index) => (
                       <Chip
                         key={index}
@@ -1973,7 +1962,7 @@ class SuggestMealForm extends Component {
                       <TextField
                         fullWidth
                         id={"instructionChunk" + id}
-                        onChange={(chip) =>
+                        onKeyDown={(chip) =>
                           this.handleAddInstructionStep(chip, id)
                         }
                         variant="outlined"
