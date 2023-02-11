@@ -1066,17 +1066,6 @@ class SuggestMealForm extends Component {
     });
     const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
 
-    if (tmpcurrProductIndexInDBsProductsList !== -1) {
-      console.log("using already existing product object from db");
-
-      // necessary, but we first need to get the index of the product
-      // to assign the path to current object productImageLink
-      // if we are able to get this ingredient id then we can pass its image
-      // index in products list is different from that of ingredients group list
-
-      // currIngredientObject.productImgPath = this.productImageLink[this.state.currProductIndexInDBsProductsList];
-      console.log("DOES NOT ADD to new _product_ingredients");
-    } else {
       console.log("ADDs to new_product_ingredients");
 
       console.log("creating new product object");
@@ -1100,7 +1089,6 @@ class SuggestMealForm extends Component {
         ],
       });
       console.log(this.state.new_product_ingredients);
-    }
 
     this.setState({
       ingredientGroupList: [
@@ -1156,6 +1144,7 @@ class SuggestMealForm extends Component {
     } = this.state;
 
     console.log("This.state", this.state);
+    
 
     // handle edge case meal name, ingredienrs or image upload required to submit form
     if (mealName === "") {
@@ -1358,7 +1347,7 @@ class SuggestMealForm extends Component {
     suggestMealForm.append("kitchen_utensils", suggestedUtensils);
 
     // RecipeSteps
-    suggestMealForm.append("formatted_ingredients", ingredientStrings);
+    suggestMealForm.append("formatted_ingredients", JSON.stringify(ingredientGroupList));
     suggestMealForm.append("image_or_video_content_1", chunk1Content);
     suggestMealForm.append("image_or_video_content_2", chunk2Content);
     suggestMealForm.append("image_or_video_content_3", chunk3Content);
