@@ -1324,6 +1324,7 @@ class SuggestMealForm extends Component {
     });
     // let instructionTitles = [];
     let instructions = [];
+    
 
 
     for (let i = 1; i < 7; i++) {
@@ -1331,11 +1332,16 @@ class SuggestMealForm extends Component {
         instructions.push(JSON.stringify(this.state[`instructionChunk${i}`]));
       } 
     }
+
+    if(instructions.length === 0 || ingredientStrings.length === 0) {
+      alert("Instructions or Ingredents missing. Please add atleast one of each");
+      return;
+    }
     // suggestMealForm.append('meal_images', mealImages);
     suggestMealForm.append("prep_time", prepTime);
     suggestMealForm.append("cook_time", cookTime);
     suggestMealForm.append("intro", intro);
-    suggestMealForm.append("tips", JSON.stringify(tips));
+    suggestMealForm.append("tips", tips);
     suggestMealForm.append("chef", chef);
     suggestMealForm.append("servings", servings);
     suggestMealForm.append("formatted_instructions",instructions)
