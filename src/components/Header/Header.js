@@ -15,7 +15,7 @@ import { Auth } from "../auth";
 import { connect } from "react-redux";
 import { getPath } from "../../actions/Common";
 import { useRouter } from "next/router";
-import { userSignOut, verifyToken } from "../../actions";
+import { setOpenLogin, userSignOut, verifyToken } from "../../actions";
 
  
 function Header(props){
@@ -23,7 +23,6 @@ function Header(props){
   const [customerId, setCustomerIdState] = useState(null);
   const [username, setUsernameState] = useState(null);
   const [showNotif, setshowNotifState] = useState(true);
-  const [openLogin, setOpenLoginState] = useState(false);
   const router = useRouter()
 
   useEffect(() => {
@@ -147,7 +146,7 @@ function Header(props){
   }
 
   function toggleLogin (){
-    setOpenLoginState(!openLogin)
+    props.setOpenLogin(!props.openLogin)
   }
 
   function logout(){
@@ -160,6 +159,16 @@ function Header(props){
   return(
     <>
       <div className={styles.navbar}>
+        <div className="alert">
+          {props.message.length > 0 && 
+          <div className="alert-success">
+            {props.message}
+          </div>}
+          {props.error.length > 0 &&
+          <div className="alert-danger">
+            {props.error}
+          </div>}
+        </div>
         <div className={styles.navbar_top_container}>
           <div className={styles.navbar_top}>
             <Link href='/'>
@@ -172,7 +181,7 @@ function Header(props){
                 </a>
             </Link>
             <div className={styles.navbar_top_details}>
-              {(!props.auth.isAuthenticated && props.auth.authUser === null) ?
+              {(!props.auth.isAuthenticated || props.auth.authUser === null) ?
               // <Link href='/login'>
               // <a className={styles.navbar_user_loginbtn}>
                   <div onClick={toggleLogin} className={styles.navbar_user_loginbtn}>
@@ -182,8 +191,10 @@ function Header(props){
               // </Link>
               :
               <div className={styles.navbar_user_info}>
-                <img id="userImg" onClick={(e) => toggleUserDetails(e)} src='/assets/icons/user.png' alt='User' className={styles.navbar_user_img}/>
-                <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>{props.auth.authUser.username}</h2>
+                {props.auth.authUser.profile_picture ? 
+                <img id="userImg" onClick={(e) => toggleUserDetails(e)} src={props.auth.authUser.profile_picture} alt='User' className={styles.navbar_user_img}/>:
+                <UserIcon style={styles.navbar_main_link_icon} />}
+                <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>{props.auth.authUser.first_name}</h2>
                 <ArrowDownIcon id="usericon" onClick={(e) => toggleUserDetails(e)} style={styles.navbar_user_icon} />
                 <div id="userdetails" className={styles.navbar_user_signedin}>
                   <Link href='/dashboard'>
@@ -377,7 +388,7 @@ function Header(props){
           </Link>
         </div>
       </div>
-      {openLogin &&
+      {props.openLogin &&
       <Auth toggleLogin={toggleLogin} />}
     </>
   )
@@ -388,6 +399,7 @@ function Header(props){
 function mapDispatchToProps(dispatch) {
   return {
     getPath: path => dispatch(getPath(path)),
+    setOpenLogin: login => dispatch(setOpenLogin(login)),
     logout: () => dispatch(userSignOut()),
     verifyToken: (user,token) => dispatch(verifyToken(user,token))
   };
@@ -396,7 +408,10 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProp(state) {
   return {
     path: state.Common.path,
-    auth: state.Auth
+    auth: state.Auth,
+    openLogin: state.Auth.openLogin,
+    error: state.Common.error,
+    message: state.Common.message,
   };
 }
 

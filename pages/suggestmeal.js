@@ -19,6 +19,7 @@ import Header, { Header2 } from "../src/components/Header/Header";
 import SideNav from "../src/components/Header/sidenav";
 
 import Head from "next/head";
+import GoBack from "../src/components/CommonComponents/goBack";
 
 class SuggestMeal extends Component {
   allMealNames = [];
@@ -291,6 +292,7 @@ class SuggestMeal extends Component {
                       <p
                         onClick={() =>
                           this.handleSuggestionType("Kitchen Utensil")
+
                         }
                       >
                         Kitchen Utensils

@@ -28,12 +28,11 @@ class SuggestMealForm extends Component {
       mealImage: [],
       mealImages: [],
       mealImagesData: [],
-
+      mealImage0: "",
       mealImage1: "",
       mealImage0: "",
       mealImage2: "",
       mealImage3: "",
-      mealImage4: "",
       intro: "",
 
       ingredientNames: [],
@@ -689,6 +688,7 @@ class SuggestMealForm extends Component {
       // const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
       // console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
 
+
       // check if product name is an existing product
       // set product existense to index, so one will not need to edit
       // this.setState({ currProductIndexInDBsProductsList: tmpcurrMeasurementIndexInDBsMeasurementList });
@@ -905,7 +905,15 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   handleKitchenUtensilInputName = (val) => {
-    this.setState({ suggestedUtensils: val });
+
+    // const productString = val;
+    const productWords = val;
+
+    productWords.map((productWord) => {
+      return productWord[0].toUpperCase() + productWord.substring(1);
+    }).join(" ");
+
+    this.setState({ suggestedUtensils: productWords });
 
     // causees error when testing in request payload
     // var tmpKitchenUtenails = [...this.state.suggestedUtensils]
@@ -995,6 +1003,13 @@ class SuggestMealForm extends Component {
 
   addCategory = () => {
     let cat = this.state.categoryVal;
+    const categorySentence = cat;
+    const categoryWords = categorySentence.split(" ");
+
+    categoryWords.map((categoryWord) => {
+      return categoryWord[0].toUpperCase() + categoryWord.substring(1);
+    }).join(" ");
+
     let suggestedCategories = this.state.suggestedCategories;
     var index = suggestedCategories.indexOf(cat);
     if (index === -1) {
@@ -1004,6 +1019,7 @@ class SuggestMealForm extends Component {
       });
     }
   };
+
 
   ///////////////////////////////////////////////////////////////////////////////////////
   handleDeleteCategoryChip(chip) {
@@ -1159,6 +1175,7 @@ class SuggestMealForm extends Component {
 
     console.log("This.state", this.state);
 
+
     // handle edge case meal name, ingredienrs or image upload required to submit form
     if (mealName === "") {
       console.log("meal label blank");
@@ -1175,7 +1192,7 @@ class SuggestMealForm extends Component {
     Check if all products listed exist in the database.
     If not, let server create placeholder before submitting to db.
     Get list of new products and new Categories
-    This for loop is making sure we are building a product_slider.
+
     we could probably merge this in the above for loop easily, but we want to call this path function,
     so lets figure out what its even doing!*/
 
@@ -1232,6 +1249,7 @@ class SuggestMealForm extends Component {
     //     if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
     //   }
     // }
+
     //-------------to make new category data ------------------------------------------
     // get list of new categories to submit to mongo
 
@@ -1317,6 +1335,7 @@ class SuggestMealForm extends Component {
     // var singleTitleTest = JSON.stringify(keyValueData);
     // console.log(singleTitleTest);
 
+
     //-------------Submit remainder data of meal to Mongo ------------------------------------------
 
     let suggestMealForm = new FormData();
@@ -1371,6 +1390,7 @@ class SuggestMealForm extends Component {
     suggestMealForm.append("image_or_video_content_4", chunk4Content);
     suggestMealForm.append("image_or_video_content_5", chunk5Content);
     suggestMealForm.append("image_or_video_content_6", chunk6Content);
+
 
     // suggestMealForm.append('instructionsGroupList', instructionGroupData);
 
@@ -1894,6 +1914,7 @@ class SuggestMealForm extends Component {
                 <Stack direction="row" spacing={1} className={styles.stack}>
                   {this.state.instructionChunk1?.instructionSteps?.map(
                     (chip, index) => (
+
                       <Chip
                         key={index}
                         label={chip}

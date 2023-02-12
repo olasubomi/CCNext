@@ -1,0 +1,124 @@
+.sent_container{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    background-color: #00000047;
+    z-index: 200;
+}
+
+.sent{
+    width: 760px;
+    height: 419px;
+    
+    background: #FFFFFF;
+    border-radius: 11px;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 10% 80% 10%;
+}
+
+.sent_top{
+    display: grid;
+    grid-auto-flow: column;
+    /* width: max-content; */
+    justify-content: space-between;
+    /* grid-template-rows: 3rem; */
+    grid-template-columns: 1fr 4rem;
+    grid-template-columns: max-content max-content;
+    align-items: center;
+    align-items: center;
+    padding: 10px 1rem;
+}
+
+.sent_top > h2 {
+    margin: 0;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+
+    color: #000000;
+}
+
+.sent_cancel_con {
+    /* padding: 0 1.5rem; */
+    /* margin-top: 23px; */
+    color: #949494 !important;
+    font-size: 25px !important;
+    cursor: pointer
+}
+
+.sent_details_con{
+    justify-self: center;
+    display: grid;
+    grid-gap: 1rem;
+    padding: 2rem 3rem;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    justify-items: center;
+    align-content: center;
+}
+
+.icon_con{
+    border-radius: 50%;
+    width: 86px;
+    height: 86px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+
+    background: rgba(4, 213, 5, 0.21);
+}
+
+.sentIcon{
+    fill: #04D505;
+    width: 39px;
+}
+
+.h3{
+    margin: 0;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 30px;
+
+    color: #000000;
+}
+
+.p{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+
+    color: #6D6D6D;
+}
+
+.sent_footer{
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 1rem;
+    justify-content: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+    .sent{
+        width: 90%;
+        height: 90%;
+        grid-template-rows: 10% max-content 10%;
+    }
+
+    .sent_details_con{
+        width: 85%;
+    }
+}
