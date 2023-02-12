@@ -706,8 +706,6 @@ class SuggestMealForm extends Component {
   }
 
   handleInstructionTitle(event, chunkIndex) {
-    
-
     let particularArray;
 
     switch (chunkIndex) {
@@ -748,7 +746,6 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   handleAddInstructionStep(chip, chunkIndex) {
-
     var particularArray;
 
     console.log("Index is : " + chunkIndex);
@@ -765,51 +762,68 @@ class SuggestMealForm extends Component {
     //   instructionWordlength: wordlength + chip.split(' ').length
     // })console.log("Enter button pressed", );
     if (chip.keyCode === 13) {
-      console.log("Enter button pressed", );
+      console.log("Enter button pressed");
       switch (chunkIndex) {
         case 1:
           particularArray = this.state.instructionChunk1;
 
-          particularArray.instructionSteps = [...this.state.instructionChunk1.instructionSteps, chip.target.value]
+          particularArray.instructionSteps = [
+            ...this.state.instructionChunk1.instructionSteps,
+            chip.target.value,
+          ];
           this.setState({ instructionChunk1: particularArray });
-          document.getElementById('instructionChunk1').value = '';
+          document.getElementById("instructionChunk1").value = "";
           break;
         case 2:
           particularArray = this.state.instructionChunk2;
-          particularArray.instructionSteps = [...this.state.instructionChunk2.instructionSteps, chip.target.value]
+          particularArray.instructionSteps = [
+            ...this.state.instructionChunk2.instructionSteps,
+            chip.target.value,
+          ];
           this.setState({ instructionChunk2: particularArray });
-          document.getElementById('instructionChunk2').value = '';
+          document.getElementById("instructionChunk2").value = "";
           break;
         case 3:
           particularArray = this.state.instructionChunk3;
-          particularArray.instructionSteps = [...this.state.instructionChunk3.instructionSteps, chip.target.value]
+          particularArray.instructionSteps = [
+            ...this.state.instructionChunk3.instructionSteps,
+            chip.target.value,
+          ];
           this.setState({ instructionChunk3: particularArray });
-          document.getElementById('instructionChunk3').value = '';
+          document.getElementById("instructionChunk3").value = "";
           break;
         case 4:
           particularArray = this.state.instructionChunk4;
-          particularArray.instructionSteps = [...this.state.instructionChunk4.instructionSteps, chip.target.value]
+          particularArray.instructionSteps = [
+            ...this.state.instructionChunk4.instructionSteps,
+            chip.target.value,
+          ];
           this.setState({ instructionChunk4: particularArray });
-          document.getElementById('instructionChunk4').value = '';
+          document.getElementById("instructionChunk4").value = "";
           break;
         case 5:
           console.log("Comes in here too");
           particularArray = this.state.instructionChunk5;
-          particularArray.instructionSteps = [...this.state.instructionChunk5.instructionSteps, chip.target.value]
+          particularArray.instructionSteps = [
+            ...this.state.instructionChunk5.instructionSteps,
+            chip.target.value,
+          ];
           this.setState({ instructionChunk5: particularArray });
-          document.getElementById('instructionChunk5').value = '';
+          document.getElementById("instructionChunk5").value = "";
           break;
         case 6:
           particularArray = this.state.instructionChunk6;
-          particularArray.instructionSteps = [...this.state.instructionChunk6.instructionSteps, chip.target.value]
+          particularArray.instructionSteps = [
+            ...this.state.instructionChunk6.instructionSteps,
+            chip.target.value,
+          ];
           this.setState({ instructionChunk6: particularArray });
-          document.getElementById('instructionChunk6').value = '';
+          document.getElementById("instructionChunk6").value = "";
           break;
         default:
         // ..do nothing
       }
     }
-
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -1066,29 +1080,29 @@ class SuggestMealForm extends Component {
     });
     const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
 
-      console.log("ADDs to new_product_ingredients");
+    console.log("ADDs to new_product_ingredients");
 
-      console.log("creating new product object");
+    console.log("creating new product object");
 
-      // edit product details for new product object
-      // currIngredientObject.productImgFile = null;
-      currIngredientObject.productIndex = 0;
-      // currIngredientObject.calories = 0;
+    // edit product details for new product object
+    // currIngredientObject.productImgFile = null;
+    currIngredientObject.productIndex = 0;
+    // currIngredientObject.calories = 0;
 
-      // append String to new Products array if not
-      // var tmpNewProducts = [...this.state.new_product_ingredients];
-      // var tmpNewProducts = this.state.new_product_ingredients;
-      // var updatedProductList = [tmpNewProducts, currIngredientObject];
+    // append String to new Products array if not
+    // var tmpNewProducts = [...this.state.new_product_ingredients];
+    // var tmpNewProducts = this.state.new_product_ingredients;
+    // var updatedProductList = [tmpNewProducts, currIngredientObject];
 
-      // this.setState({ new_product_ingredients: updatedProductList })
-      console.log("Current ingredient", currIngredientObject);
-      this.setState({
-        new_product_ingredients: [
-          ...this.state.new_product_ingredients,
-          currIngredientObject,
-        ],
-      });
-      console.log(this.state.new_product_ingredients);
+    // this.setState({ new_product_ingredients: updatedProductList })
+    console.log("Current ingredient", currIngredientObject);
+    this.setState({
+      new_product_ingredients: [
+        ...this.state.new_product_ingredients,
+        currIngredientObject,
+      ],
+    });
+    console.log(this.state.new_product_ingredients);
 
     this.setState({
       ingredientGroupList: [
@@ -1144,7 +1158,6 @@ class SuggestMealForm extends Component {
     } = this.state;
 
     console.log("This.state", this.state);
-    
 
     // handle edge case meal name, ingredienrs or image upload required to submit form
     if (mealName === "") {
@@ -1235,77 +1248,77 @@ class SuggestMealForm extends Component {
     const contentNameToContentImageOrVideoMapForS3 = new FormData();
 
     // max recipe chunks is 6
-    for (let i = 1; i < 7; i++) {
-      var contentKey = "instructionChunkContent" + (i + 1);
-      console.log(this.state.instructionChunk[i]);
-      // add image or video to recipecontent array
-      if (this.state.instructionimagesAndVideos[i] !== undefined) {
-        // console.log("Comes in here to send individual content");
-        // console.log(this.state.instructionimagesAndVideos[i]);
-        // contentNameToContentImageOrVideoMapForS3.append( "mealContentName" , contentKey);
-        contentNameToContentImageOrVideoMapForS3.append(
-          contentKey,
-          this.state.instructionimagesAndVideos[i]
-        );
-        console.log(contentNameToContentImageOrVideoMapForS3);
-      }
+    // for (let i = 1; i < 7; i++) {
+    //   var contentKey = "instructionChunkContent" + (i + 1);
+    //   console.log(this.state.instructionChunk[i]);
+    //   // add image or video to recipecontent array
+    //   if (this.state.instructionimagesAndVideos[i] !== undefined) {
+    //     // console.log("Comes in here to send individual content");
+    //     // console.log(this.state.instructionimagesAndVideos[i]);
+    //     // contentNameToContentImageOrVideoMapForS3.append( "mealContentName" , contentKey);
+    //     contentNameToContentImageOrVideoMapForS3.append(
+    //       contentKey,
+    //       this.state.instructionimagesAndVideos[i]
+    //     );
+    //     console.log(contentNameToContentImageOrVideoMapForS3);
+    //   }
 
-      let currInstructionChunk = [];
-      // let chunkContent;
-      // start cases with 0 to include all step slide content
-      switch (i) {
-        case 0:
-          currInstructionChunk = this.state.instructionChunk1;
-          // currInstructionChunk.dataName = this.state.chunk1Content.filename;
-          break;
-        case 1:
-          currInstructionChunk = this.state.instructionChunk2;
-          // currInstructionChunk.dataName = this.state.chunk2Content.filename;
-          break;
-        case 2:
-          currInstructionChunk = this.state.instructionChunk3;
-          // currInstructionChunk.dataName = this.state.chunk3Content.filename;
-          break;
-        case 3:
-          currInstructionChunk = this.state.instructionChunk4;
-          // currInstructionChunk.dataName = this.state.chunk4Content.filename;
-          break;
-        case 4:
-          currInstructionChunk = this.state.instructionChunk5;
-          // currInstructionChunk.dataName = this.state.chunk5Content.filename;
-          break;
-        case 5:
-          currInstructionChunk = this.state.instructionChunk6;
-          // currInstructionChunk.dataName = this.state.chunk6Content.filename;
-          break;
-        default:
-          currInstructionChunk = "null";
-      }
+    //   let currInstructionChunk = [];
+    //   // let chunkContent;
+    //   // start cases with 0 to include all step slide content
+    //   switch (i) {
+    //     case 0:
+    //       currInstructionChunk = this.state.instructionChunk1;
+    //       // currInstructionChunk.dataName = this.state.chunk1Content.filename;
+    //       break;
+    //     case 1:
+    //       currInstructionChunk = this.state.instructionChunk2;
+    //       // currInstructionChunk.dataName = this.state.chunk2Content.filename;
+    //       break;
+    //     case 2:
+    //       currInstructionChunk = this.state.instructionChunk3;
+    //       // currInstructionChunk.dataName = this.state.chunk3Content.filename;
+    //       break;
+    //     case 3:
+    //       currInstructionChunk = this.state.instructionChunk4;
+    //       // currInstructionChunk.dataName = this.state.chunk4Content.filename;
+    //       break;
+    //     case 4:
+    //       currInstructionChunk = this.state.instructionChunk5;
+    //       // currInstructionChunk.dataName = this.state.chunk5Content.filename;
+    //       break;
+    //     case 5:
+    //       currInstructionChunk = this.state.instructionChunk6;
+    //       // currInstructionChunk.dataName = this.state.chunk6Content.filename;
+    //       break;
+    //     default:
+    //       currInstructionChunk = "null";
+    //   }
 
-      // let submitable_recipe_chunk = {
-      //   // do not include and submite a step zero..
-      //   step: i+1,
-      //   // title is defined in instruction chunk
-      //   instructionChunk: currInstructionChunk,
-      //   // dataname : null
-      // }
-      // allMealsInstructionimagesAndVideosCombined.push(contentNameToContentImageOrVideoMapForS3);
-      instructionGroupData.push(currInstructionChunk);
-    }
+    //   // let submitable_recipe_chunk = {
+    //   //   // do not include and submite a step zero..
+    //   //   step: i+1,
+    //   //   // title is defined in instruction chunk
+    //   //   instructionChunk: currInstructionChunk,
+    //   //   // dataname : null
+    //   // }
+    //   // allMealsInstructionimagesAndVideosCombined.push(contentNameToContentImageOrVideoMapForS3);
+    //   instructionGroupData.push(currInstructionChunk);
+    // }
 
-    contentNameToContentImageOrVideoMapForS3.append(
-      "mealContentName",
-      this.state.mealName
-    );
-    console.log(contentNameToContentImageOrVideoMapForS3);
-    var keyValueData = { mealContentName: this.state.mealName };
+    // contentNameToContentImageOrVideoMapForS3.append(
+    //   "mealContentName",
+    //   this.state.mealName
+    // );
+    // console.log(contentNameToContentImageOrVideoMapForS3);
+    // var keyValueData = { mealContentName: this.state.mealName };
     // console.log("Stringified version:");
     // console.log(keyValueData);
-    var singleTitleTest = JSON.stringify(keyValueData);
+    // var singleTitleTest = JSON.stringify(keyValueData);
     // console.log(singleTitleTest);
 
     //-------------Submit remainder data of meal to Mongo ------------------------------------------
-    
+
     let suggestMealForm = new FormData();
     suggestMealForm.append("meal_name", mealName);
     mealImages.forEach((file, i) => {
@@ -1313,17 +1326,20 @@ class SuggestMealForm extends Component {
     });
     // let instructionTitles = [];
     let instructions = [];
-    
-
 
     for (let i = 1; i < 7; i++) {
-      if(this.state[`instructionChunk${i}`].title && this.state[`instructionChunk${i}`].instructionSteps) {
+      if (
+        this.state[`instructionChunk${i}`].title &&
+        this.state[`instructionChunk${i}`].instructionSteps
+      ) {
         instructions.push(JSON.stringify(this.state[`instructionChunk${i}`]));
-      } 
+      }
     }
 
-    if(instructions.length === 0 || ingredientStrings.length === 0) {
-      alert("Instructions or Ingredents missing. Please add atleast one of each");
+    if (instructions.length === 0 || ingredientStrings.length === 0) {
+      alert(
+        "Instructions or Ingredents missing. Please add atleast one of each"
+      );
       return;
     }
     // suggestMealForm.append('meal_images', mealImages);
@@ -1333,9 +1349,7 @@ class SuggestMealForm extends Component {
     suggestMealForm.append("tips", tips);
     suggestMealForm.append("chef", chef);
     suggestMealForm.append("servings", servings);
-    suggestMealForm.append("formatted_instructions",instructions)
-    
-
+    suggestMealForm.append("formatted_instructions", instructions);
 
     // suggestMealForm.append('ingredientStrings', ingredientStrings);
     // list of products quantity measurements (created on submit meal)
@@ -1347,16 +1361,16 @@ class SuggestMealForm extends Component {
     suggestMealForm.append("kitchen_utensils", suggestedUtensils);
 
     // RecipeSteps
-    suggestMealForm.append("formatted_ingredients", JSON.stringify(ingredientGroupList));
+    suggestMealForm.append(
+      "formatted_ingredients",
+      JSON.stringify(ingredientGroupList)
+    );
     suggestMealForm.append("image_or_video_content_1", chunk1Content);
     suggestMealForm.append("image_or_video_content_2", chunk2Content);
     suggestMealForm.append("image_or_video_content_3", chunk3Content);
     suggestMealForm.append("image_or_video_content_4", chunk4Content);
     suggestMealForm.append("image_or_video_content_5", chunk5Content);
     suggestMealForm.append("image_or_video_content_6", chunk6Content);
-    
-
-
 
     // suggestMealForm.append('instructionsGroupList', instructionGroupData);
 
