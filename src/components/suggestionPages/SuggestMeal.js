@@ -1346,7 +1346,7 @@ class SuggestMealForm extends Component {
     suggestMealForm.append("prep_time", prepTime);
     suggestMealForm.append("cook_time", cookTime);
     suggestMealForm.append("intro", intro);
-    suggestMealForm.append("tips", tips);
+    suggestMealForm.append("tips", JSON.stringify(tips));
     suggestMealForm.append("chef", chef);
     suggestMealForm.append("servings", servings);
     suggestMealForm.append("formatted_instructions", instructions);
