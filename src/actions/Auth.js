@@ -8,7 +8,8 @@ import {
     FETCH_SUCCESS,
     FETCH_ERROR,
     SIGNOUT_USER_SUCCESS,
-    IS_AUTHENTICATED
+    IS_AUTHENTICATED,
+    OPEN_LOGIN
 } from "../constants/ActionTypes";
 import axios from '../util/Api';
 
@@ -17,6 +18,12 @@ export const setInitUrl = (url) => {
         type: INIT_URL,
         payload: url
     };
+};
+
+export const setOpenLogin = (login) => {
+    return (dispatch) => {
+        dispatch({ type: OPEN_LOGIN, payload: login });
+    }
 };
 
 export const userSignUp = (form) => {
@@ -34,20 +41,30 @@ export const userSignUp = (form) => {
             localStorage.setItem('in', Date.now());
             localStorage.setItem('user', JSON.stringify(data.data.user));
 
-            dispatch({ type: FETCH_SUCCESS });
+            dispatch({ type: FETCH_SUCCESS, payload: 'Sign up successful' });
             dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
             dispatch({ type: USER_ROLE, payload: data.data.role });
             dispatch({ type: USER_DATA, payload: data.data.user });
             dispatch({ type: IS_AUTHENTICATED, payload: true });
             // dispatch({ type: USER_DATA, payload: data.user });
             // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
-        }).catch(err => {
+            setTimeout(() => {
+                dispatch({ type: FETCH_SUCCESS, payload: '' });
+            }, 5000)
+            window.location.assign('/dashboard')
+        }).catch(({request}) => {
             console.error("xxx userSignUp Request ERROR xxx");
-            console.log(err.response.status);
             dispatch({ type: IS_AUTHENTICATED, payload: false });
-            if (err.response.status === 422) {
-                dispatch({ type: FETCH_ERROR, payload: "Email address was already taken. If you are owner, please proceed to login with this email." });
+            if(request.response){
+                console.error("xxx userSignIn Request ERROR xxx", JSON.parse(request.response).message.message);
+                dispatch({ type: FETCH_ERROR, payload: JSON.parse(request.response).message.message });
+            }else{
+                console.error("xxx userSignIn Request ERROR xxx", "Server error");
+                dispatch({ type: FETCH_ERROR, payload: "Server error" });
             }
+            setTimeout(() => {
+                dispatch({ type: FETCH_ERROR, payload: '' });
+            }, 5000)
         });
     }
 };
@@ -70,31 +87,47 @@ export const userSignIn = ( email, password ) => {
             localStorage.setItem('in', Date.now());
             localStorage.setItem('user', JSON.stringify(data.data.user));
 
-            dispatch({ type: FETCH_SUCCESS });
+            dispatch({ type: FETCH_SUCCESS, payload: 'Login successfull' });
             dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
             dispatch({ type: USER_ROLE, payload: data.data.role });
             dispatch({ type: USER_DATA, payload: data.data.user });
             dispatch({ type: IS_AUTHENTICATED, payload: true });
             // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
             // console.log(" ___ userSignIn customerID ", data.customerID);
+            setTimeout(() => {
+                dispatch({ type: FETCH_SUCCESS, payload: '' });
+            }, 5000)
+            window.location.assign('/dashboard')
 
-        }).catch(err => {
-            console.error("xxx userSignIn Request ERROR xxx", err);
+        }).catch(({request}) => {
+            console.log(request)
+            if(request.response){
+                console.error("xxx userSignIn Request ERROR xxx", JSON.parse(request.response).message.message);
+                dispatch({ type: FETCH_ERROR, payload: JSON.parse(request.response).message.message });
+            }else{
+                console.error("xxx userSignIn Request ERROR xxx", "Server error");
+                dispatch({ type: FETCH_ERROR, payload: "Server error" });
+            }
             dispatch({ type: IS_AUTHENTICATED, payload: false });
-            dispatch({ type: FETCH_ERROR, payload: "Error during user sign in request" });
+            setTimeout(() => {
+                dispatch({ type: FETCH_ERROR, payload: '' });
+            }, 5000)
         });
     }
 };
 
-export const getUser = () => {
+export const getUser = (id) => {
     return (dispatch) => {
         dispatch({ type: FETCH_START });
-        axios.get('/authenticate-app-page',
+        axios.get('/user/findUser/'+id,
         ).then(({ data }) => {
-            console.log(" ___ getUser RESPONSE ___ ", data);
+            console.log(" ___ getUser RESPONSE ___ ", data.data);
             dispatch({ type: FETCH_SUCCESS });
-            dispatch({ type: USER_DATA, payload: data.username });
-            dispatch({ type: CUSTOMER_ID, payload: data.data });
+            // dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+            // dispatch({ type: USER_ROLE, payload: data.data.role });
+            localStorage.setItem('user', JSON.stringify(data.data));
+            dispatch({ type: USER_DATA, payload: data.data });
+            dispatch({ type: IS_AUTHENTICATED, payload: true });
 
         }).catch(err => {
             console.error("xxx getUser Request ERROR xxx", err);
@@ -109,32 +142,38 @@ export const verifyToken = (user,token) => {
         dispatch({ type: FETCH_START });
         axios.get('/user/verifyToken').then(({ data }) => {
             console.log(" ___ verifyUser RESPONSE ___ ", data);
-            // if(data.success){
+            if(data.data.id){
                 localStorage.setItem('x-auth-token', token);
                 localStorage.setItem('in', Date.now());
-                localStorage.setItem('user', JSON.stringify(user));
-                console.log(user, token)
+                // localStorage.setItem('user', JSON.stringify(user));
+                console.log(user)
                 dispatch({ type: FETCH_SUCCESS });
                 dispatch({ type: USER_DATA, payload: user });
                 dispatch({ type: USER_TOKEN_SET, payload: token });
                 dispatch({ type: IS_AUTHENTICATED, payload: true });
-            // }else{
-            //     console.log('logout')
-            //     localStorage.removeItem('x-auth-token');
-            //     localStorage.removeItem('in');
-            //     localStorage.removeItem('user');
-            //     dispatch({ type: FETCH_SUCCESS });
-            //     dispatch({ type: USER_DATA, payload: [] });
-            //     dispatch({ type: USER_TOKEN_SET, payload: '' });
-            //     dispatch({ type: IS_AUTHENTICATED, payload: false });
-            // }
+            }else{
+                console.log('logout')
+                localStorage.removeItem('x-auth-token');
+                localStorage.removeItem('in');
+                localStorage.removeItem('user');
+                dispatch({ type: USER_DATA, payload: [] });
+                dispatch({ type: USER_TOKEN_SET, payload: '' });
+                dispatch({ type: IS_AUTHENTICATED, payload: false });
+                window.location.assign('/')
+            }
             
         }).catch(err => {
             console.error("xxx verifyUser Request ERROR xxx", err);
-            dispatch({ type: FETCH_ERROR, payload: "Error during get me request with this token" });
+            // dispatch({ type: FETCH_ERROR, payload: "Error during get me request with this token" });
+            localStorage.removeItem('x-auth-token');
+                localStorage.removeItem('in');
+                localStorage.removeItem('user');
             dispatch({ type: SIGNOUT_USER_SUCCESS });
             dispatch({ type: IS_AUTHENTICATED, payload: false });
-            window.location.assign('/')
+            // window.location.assign('/')
+            setTimeout(() => {
+                dispatch({ type: FETCH_ERROR, payload: '' });
+            }, 5000)
         });
     }
 };

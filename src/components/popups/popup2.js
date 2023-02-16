@@ -34,6 +34,101 @@ class Popup2 extends Component {
         })
     }
 
+    edit = () => {
+        const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6 } = this.props
+        var stepInputs = []
+        if(instructionChunk1){
+            stepInputs = []
+        }
+        if(instructionChunk2){
+            stepInputs = [2]
+        }
+
+        if(instructionChunk3){
+            stepInputs = [2,3]
+        }
+
+        if(instructionChunk4){
+            stepInputs = [2,3,4]
+        }
+
+        if(instructionChunk5){
+            stepInputs = [2,3,4,5]
+        }
+
+        if(instructionChunk6){
+            stepInputs = [2,3,4,5,6]
+        }
+
+        let group = ingredientGroupList.map(ingredient => {
+            return {
+                productName: ingredient.product_name?.join(" "),
+                // productImgFile: this.state.currentProductImgSrc,
+                productImgPath: null,
+          
+                // these are added to ingredient packets on submit, and not relevant in product object details
+                quantity: ingredient.quantity,
+                measurement: ingredient.measurement,
+                properIngredientStringSyntax: ingredient.properIngredientStringSyntax
+            }
+        })
+
+        let meal = {
+            mealId: this.props.id, 
+            mealName: name,
+            intro: description,
+  
+            // ingredientNames,
+            // do we need product group list AND strings ?
+            ingredientGroupList: group,
+            // store product names of inputted strings to compare with db products
+            ingredientStrings: ingredientsList,
+            // do we want to use current ingredient formats ? Yes.
+            // currentIngredient,
+            // currentIngredientMeasurement,
+            // currentIngredientQuantity,
+            // currentProductImgSrc,
+            // currentProductDisplayIndex,
+  
+            // currentStore,
+  
+            // we need to update how we create image paths
+            // productImg_path,
+            // new_product_ingredients,
+            // suggested_stores,
+            // currProductIndexInDBsProductsList,
+            // currStoreIndexIfExistsInProductsList,
+            suggestedUtensils: this.props.utensilsList,
+  
+            cookTime: cookTime,
+            prepTime: prepTime,
+  
+            instructionChunk6: this.props.instructionChunk6,
+            instructionChunk1: this.props.instructionChunk1,
+            instructionChunk2: this.props.instructionChunk2,
+            instructionChunk3: this.props.instructionChunk3,
+            instructionChunk4: this.props.instructionChunk4,
+            instructionChunk5: this.props.instructionChunk5,
+            instructionWordlength: this.props.instructionWordlength,
+  
+            // do we want all the instruction variables ?
+            // instructionGroupList:[],
+  
+            // instructionimagesAndVideos,
+  
+            // chef,
+            suggestedCategories: categories,
+            servings: serves,
+            tips: this.props.tips,
+            stepInputs: []
+        }
+        localStorage.setItem('suggestionType', 'Meal')
+        localStorage.setItem('mealId', this.props.id,)
+        localStorage.setItem('suggestMealForm', JSON.stringify(meal))
+        window.location.assign('/suggestmeal')
+        
+    }
+
     render() {
 
         const { popupType, imageData, imagesData, name, description, categories, ingredientsList } = this.props
@@ -131,7 +226,7 @@ class Popup2 extends Component {
                                                 <div className={styles.del}>
                                                     <h2 className={styles.popup2_step_name}>{this.props['instructionChunk' + curIn].title}</h2>
                                                     <p className={styles.popup2_instructions}>
-                                                        {this.props['instructionChunk' + curIn].instructionSteps.map((step, index) => (index + 1) + ". " + step + " ")}
+                                                        {this.props['instructionChunk' + curIn].instructionSteps && this.props['instructionChunk' + curIn].instructionSteps.map((step, index) => (index + 1) + ". " + step + " ")}
                                                     </p>
                                                 </div>
                                             </>
@@ -161,6 +256,9 @@ class Popup2 extends Component {
                                     }}
                                     content={() => this.componentRef}
                                 />
+                                {this.props.suggested && 
+                                <button onClick={this.edit} className={styles.edit_button2}>Edit</button>
+                                }
                                 <div style={{ display: 'none' }}>
                                     <ComponentToPrint ref={el => (this.componentRef = el)}
                                         mealName={this.props.name} mealImage={this.props.image}

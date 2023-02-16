@@ -14,9 +14,64 @@ class Popup1 extends Component {
         };
     }
 
+    edit = () => {
+        const { name, description, categories, ingredientList, sizesList, ingredientGroupList } = this.props;
+        let group = ingredientGroupList.map(ingredient => {
+            return {
+                productName: ingredient.product_name?.join(" "),
+                // productImgFile: this.state.currentProductImgSrc,
+                productImgPath: null,
+          
+                // these are added to ingredient packets on submit, and not relevant in product object details
+                quantity: ingredient.quantity,
+                measurement: ingredient.measurement,
+                properIngredientStringSyntax: ingredient.properIngredientStringSyntax
+            }
+        })
+        console.log(group)
+        let product = {
+            productName: name,
+            productDescription: description,
+  
+            // ingredientNames,
+            // do we need product group list AND strings ?
+            ingredientGroupList: group,
+            // descriptionGroupList,
+            sizeGroupList: sizesList,
+            // store product names of inputted strings to compare with db products
+            ingredientStrings: ingredientList,
+            // nutritionalStrings,
+            sizeStrings: sizesList,
+            // do we want to use current ingredient formats ? Yes.
+            // currentIngredient,
+            // currentIngredientMeasurement,
+            // sizeQuantity,
+            // sizeMeasurement,
+            // currentIngredientQuantity,
+            // currentProductImgSrc,
+            // currentProductDisplayIndex,
+  
+            // currentStore,
+            // quantity,
+  
+            // we need to update how we create image paths
+            // productImg_path,
+            // new_product_ingredients,
+            // currProductIndexInDBsProductsList,
+            // currStoreIndexIfExistsInProductsList,
+            suggestedCategories: categories,
+        }
+        localStorage.setItem('suggestionType', 'Product')
+        localStorage.setItem('productId', this.props.id,)
+        localStorage.setItem('suggestProductForm', JSON.stringify(product))
+        window.location.assign('/suggestmeal')
+        
+    }
+
     render() {
 
         const { popup, imageData, imagesData, name, description, categories, descriptionsList, ingredientList, sizesList } = this.props
+        console.log(ingredientList)
 
         return (
             <>
@@ -100,6 +155,9 @@ class Popup1 extends Component {
                                         <p className={styles.popup_category}>{categories.map((cat) => cat + ', ')}</p>
                                     </div>
                                 </div>
+                                {this.props.suggested && 
+                                <button onClick={this.edit} className={styles.edit_button2}>Edit</button>
+                                }
                             </div>
 
 

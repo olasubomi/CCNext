@@ -565,6 +565,10 @@
   cursor: pointer;
 }
 
+.show{
+  display: none;
+}
+
 @media screen and (max-width: 1450px) {
   .login{
     width: 70%;
@@ -584,6 +588,10 @@
 
   .login_col_1{
     display: none;
+  }
+
+  .show{
+    display: block;
   }
 
   .login_col_2{
