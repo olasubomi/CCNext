@@ -4,143 +4,17 @@ import Header, { Header2 } from "../../src/components/Header/Header";
 import Footer from "../../src/components/Footer/Footer";
 import indexStyles from "./index.module.css";
 import GlobalSearchBar from "../../src/components/GlobalComponents/GlobalSearchBar";
-//import ItemsBody from "../../src/components/GroceryPage/GroceryList/ItemsBody/Index";
 import MainGroceryList from "../../src/components/GroceryPage/GroceryList/MainGroceryList/Index";
 import SuggestedMeals from "../../src/components/GroceryPage/GroceryList/SuggestedMeals/Index";
 import Cart from "../../src/components/Cart/Index";
 import CartProvider from "../store/CartProvider";
 
-const dummyGrocerylist = [
-  {
-    id: "List1",
-    listName: "Veggie List",
-    dummyItems: [
-      {
-        id: "List11",
-        name: "Banana Hanger",
-        img: "/assets/grocery_list/bananaImg.svg",
-        quantity: 1,
-        price: "$40.00",
-        store: "Oriental Store",
-        pickUpTime: "30 minutes",
-      },
-      {
-        id: "List12",
-        name: "Spinach",
-        img: "/assets/grocery_list/spinachImg.svg",
-        quantity: 3,
-        price: "$5.43",
-        store: "Lizy Gidy",
-        pickUpTime: "34 minutes",
-      },
-      {
-        id: "List13",
-        name: "Australian RIce",
-        img: "/assets/grocery_list/austRiceImg.svg",
-        quantity: 1,
-        price: "$43.34",
-        store: "Metron",
-        pickUpTime: "22 minutes",
-      },
-      {
-        id: "List14",
-        name: "PP Beans",
-        img: "/assets/grocery_list/ppBeansImg.svg",
-        quantity: 2,
-        price: "$8.45",
-        store: "Cold Stone",
-        pickUpTime: "11 minutes",
-      },
-    ],
-  },
-  {
-    id: "List2",
-    listName: "Utensils List",
-    dummyItems: [
-      {
-        id: "List21",
-        name: "Spoon",
-        img: "/assets/grocery_list/bananaImg.svg",
-        quantity: 1,
-        price: "$1.00",
-        store: "Oriental Store",
-        pickUpTime: "30 minutes",
-      },
-      {
-        id: "List22",
-        name: "Sieve",
-        img: "/assets/grocery_list/spinachImg.svg",
-        quantity: 3,
-        price: "$5.43",
-        store: "Lizy Gidy",
-        pickUpTime: "34 minutes",
-      },
-      {
-        id: "List23",
-        name: "Kettle",
-        img: "/assets/grocery_list/austRiceImg.svg",
-        quantity: 1,
-        price: "$43.34",
-        store: "Metron",
-        pickUpTime: "22 minutes",
-      },
-      {
-        id: "List24",
-        name: "Plates",
-        img: "/assets/grocery_list/ppBeansImg.svg",
-        quantity: 2,
-        price: "$8.45",
-        store: "Cold Stone",
-        pickUpTime: "11 minutes",
-      },
-    ],
-  },
-  {
-    id: "List3",
-    listName: "ingredients List",
-    dummyItems: [
-      {
-        id: "List31",
-        name: "Curry Powder",
-        img: "/assets/grocery_list/bananaImg.svg",
-        quantity: 1,
-        price: "$40.00",
-        store: "Oriental Store",
-        pickUpTime: "30 minutes",
-      },
-      {
-        id: "List32",
-        name: "Maggi cubes",
-        img: "/assets/grocery_list/spinachImg.svg",
-        quantity: 3,
-        price: "$5.43",
-        store: "Lizy Gidy",
-        pickUpTime: "34 minutes",
-      },
-      {
-        id: "List33",
-        name: "Pepper sauce",
-        img: "/assets/grocery_list/austRiceImg.svg",
-        quantity: 1,
-        price: "$43.34",
-        store: "Metron",
-        pickUpTime: "22 minutes",
-      },
-      {
-        id: "List34",
-        name: "Coconut Flavor",
-        img: "/assets/grocery_list/ppBeansImg.svg",
-        quantity: 2,
-        price: "$8.45",
-        store: "Cold Stone",
-        pickUpTime: "11 minutes",
-      },
-    ],
-  },
-];
-
 const index = () => {
   const [showCart, setShowCart] = useState(false);
+  const [userData, setUserData] = useState([]);
+  const [userErrData, setUserErrData] = useState({});
+  const [user, setUser] = useState("");
+  const [userToken, setUserToken] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -153,6 +27,42 @@ const index = () => {
   const closeCart = () => {
     setShowCart(false);
   };
+
+  useEffect(() => {
+    async function fetchUserGrocery() {
+      const userDetails = JSON.parse(localStorage.getItem("user"));
+      const token = localStorage.getItem("x-auth-token");
+      if (userDetails) {
+        setUser(userDetails._id);
+        localStorage.setItem("user_id", JSON.stringify(user));
+        setUserToken(token);
+
+        const response = await fetch(
+          `http://localhost:5000/api/groceries/${user}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: userToken,
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (data.data === undefined) {
+          setUserErrData(data);
+        } else {
+          setUserData(data.data[0]);
+        }
+      }
+    }
+
+    fetchUserGrocery();
+  }, [user]);
+
+  const grocery = userData.groceryList;
+
   return (
     <CartProvider>
       {showCart ? (
@@ -199,11 +109,11 @@ const index = () => {
                 </div>
               </div>
               <div className={indexStyles.groceryListCard}>
-                {dummyGrocerylist.map((list) => (
+                {grocery?.map((list) => (
                   <MainGroceryList
-                    id={list.id}
+                    id={list._id}
                     listName={list.listName}
-                    dummyItems={list.dummyItems}
+                    groceryItems={list.groceryItems}
                   />
                 ))}
               </div>
