@@ -2,6 +2,8 @@ export const FETCH_START = 'fetch_start';
 export const FETCH_SUCCESS = 'fetch_success';
 export const FETCH_ERROR = 'fetch_error';
 export const GET_PATH = 'get_path';
+export const TRIGGER_SNACK = 'trigger_snack';
+
 
 export const SIGNIN_USER = 'signin_user';
 export const SIGNIN_USER_SUCCESS = 'signin_user_success';

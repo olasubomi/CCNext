@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import React from 'react';
 
 function SideNav2(props){
-    console.log(props)
 
     return(
         <div className={styles.sidenav_links_con}>
@@ -115,7 +114,10 @@ function SideNav2(props){
   function mapStateToProp(state) {
     return {
       path: state.Common.path,
-      auth: state.Auth
+      auth: state.Auth,
+      showSnack: state.showSnack,
+      snackMessage: state.snackMessage,
+        snackDuration:state.snackDuration
     };
   }
   
