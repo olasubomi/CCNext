@@ -1,18 +1,20 @@
-// import App from 'next/app'
-import '../src/App.css'
-// import '../src/components/Footer/Footer.css'
-// import '../src/components/Header/header.css'
+import "../src/App.css";
 import { wrapper, store } from "../src/store/index";
 import { Provider } from "react-redux";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function MyApp({ Component, pageProps }) {
-    return (
-        <>
-            <Provider store={store}>
-                <Component {...pageProps} />
-            </Provider>
-        </>
-    )
+  return (
+    <>
+      //
+      <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
+        <Provider store={store}>
+          <Component {...pageProps} />
+        </Provider>
+      </GoogleOAuthProvider>
+    </>
+  );
 }
 
 // Only uncomment this method if you have blocking data requirements for
@@ -27,4 +29,4 @@ function MyApp({ Component, pageProps }) {
 //   return { ...appProps }
 // }
 
-export default  wrapper.withRedux(MyApp)
+export default wrapper.withRedux(MyApp);

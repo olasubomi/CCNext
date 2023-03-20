@@ -1,13 +1,11 @@
 import React from "react";
-import "./style.css";
+import styles from "./style.module.css";
 import PageTitle from "../CommonComponents/PageTitle";
 import { Container, Alert, Card, Col, Row, Button } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
 import ProductDetail from './ProductDetail/ProductModal'
 import { connect } from 'react-redux';
-import { withRouter } from "react-router-dom";
 import axios from '../../util/Api';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 
 //////////////////////////////////////////////////////////////////////
@@ -427,14 +425,14 @@ class GroceryPage extends React.Component {
           <PageTitle title=" Your Grocery List" />
             <div>
               <Button
-                  className="yourlist__buttonDeleteList"
+              className={styles.yourlist__buttonDeleteList}
                   variant="danger"
                   onClick={(e) => { e.stopPropagation(); this.handleDeleteList();}}>
                   Delete List Items
               </Button>
 
               <br></br>
-              <Container className="page__container" fluid>
+              <Container className={styles.page__container} fluid>
                 {/* display grocery list, for any authenticated customer */}
                 {
                 customerList ? (
@@ -452,7 +450,7 @@ class GroceryPage extends React.Component {
                               <img
                                 src={customer_grocery_product_item.product_image}
                                 alt="product_img "
-                                className="card-img"
+                                className={styles.card_img}
                                 onClick = {() => this.handleProductClick(
                                   customer_grocery_product_item.product_image,
                                    customer_grocery_product_item.product_name, productID,
@@ -462,14 +460,14 @@ class GroceryPage extends React.Component {
                               <img
                                 src={`/images/products/${customer_grocery_product_item.product_image}`}
                                 alt="product_img "
-                                className="card-img"
+                                className={styles.card_img}
                                 onClick = {() => this.handleProductClick(customer_grocery_product_item.product_image, customer_grocery_product_item.product_name, productID, true)}
                               />
                             )}
                         </Col>
 
                         <Col key={customer_grocery_product_item.product_name+'details'}>
-                          <Card.Title className="grocery_item_card-header">
+                          <Card.Title >
                             Product Name :{" "}
                             {customer_grocery_product_item.product_name}
                           </Card.Title>
@@ -489,7 +487,7 @@ class GroceryPage extends React.Component {
                         </Col>
                         <Col>
                           <i
-                            className="fa fa-remove"
+                            // className={styles.fa styles.fa-remove}
                             onClick={(e) => {e.stopPropagation();this.handleShowDeleteItem(
                                 customer_grocery_product_item.product_name,
                                 customer_grocery_product_item.productID,
@@ -518,9 +516,13 @@ class GroceryPage extends React.Component {
     );
   }
 }
-const mapStateToProps = ({ auth }) => {
-  const { authUser, role, customer_id } = auth;
-  return { authUser, role, customer_id }
-};
 
-export default connect(mapStateToProps, ()=>({}))(withRouter(GroceryPage));
+// const mapStateToProps = ({ auth }) => {
+//   const { authUser, role, customer_id } = auth;
+//   return { authUser, role, customer_id }
+// };
+
+export default
+  // connect(
+  // mapStateToProps, () => ({}))
+  (GroceryPage);

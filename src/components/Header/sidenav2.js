@@ -19,6 +19,7 @@ function SideNav2(props){
         router.push('/')
     }
 
+
     return(
         <div className={styles.sidenav_links_con}>
             <div className={styles.sidenav_links}>
@@ -139,7 +140,10 @@ function mapDispatchToProps(dispatch) {
     return {
       path: state.Common.path,
       openLogin: state.Auth.openLogin,
-      auth: state.Auth
+      auth: state.Auth,
+      showSnack: state.showSnack,
+      snackMessage: state.snackMessage,
+        snackDuration:state.snackDuration
     };
   }
   
