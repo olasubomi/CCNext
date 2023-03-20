@@ -218,3 +218,99 @@ a{
   color: inherit;
   height: max-content;
 }
+
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input{
+  font-weight: 400 !important;
+font-size: 13px !important;
+line-height: 19px;
+
+color: #353535;
+}
+
+.alert {
+  position: fixed;
+  top: 25px;
+  right: 13px;
+  z-index: 300000;
+}
+
+.alert-success {
+  margin-bottom: 20px;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  height: 43px;
+  width: calc(100vw - 66px);
+  background-color: #00A701;
+  
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+.alert-warning {
+  margin-bottom: 20px;
+  display: grid;
+  align-items: center;
+  /* justify-items: center; */
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 4px;
+  color: #333333;
+  height: 43px;
+  width: 100%;
+  background-color: #fffbbb;
+  
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+}
+
+.alert-danger {
+  margin-bottom: 20px;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  height: 43px;
+  width: calc(100vw - 66px);
+  background-color: #FF1B1B;
+  
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input{
+    height: 38px;
+    width: 100%;
+    padding: 1rem;
+    outline: none;
+    height: 40px;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: rgba(0, 0, 0, 0.9);
+}
+
+.css-8ewcdo-MuiInputBase-root-MuiOutlinedInput-root:hover{
+  border-color: #04D505 !important;
+  outline-color: #04D505 !important;
+}
+
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+  font-size: 13px;
+}
+
+.MuiAutocomplete-popper > *{
+  font-size: 13px !important;
+}

@@ -1,4 +1,5 @@
 import {
+
   INIT_URL,
   USER_DATA,
   USER_TOKEN_SET,
@@ -10,6 +11,7 @@ import {
   SIGNOUT_USER_SUCCESS,
   IS_AUTHENTICATED,
   TRIGGER_SNACK,
+  OPEN_LOGIN
 } from "../constants/ActionTypes";
 import axios from "../util/Api";
 import Alert from "@mui/material/Alert";
@@ -19,6 +21,12 @@ export const setInitUrl = (url) => {
     type: INIT_URL,
     payload: url,
   };
+};
+
+export const setOpenLogin = (login) => {
+    return (dispatch) => {
+        dispatch({ type: OPEN_LOGIN, payload: login });
+    }
 };
 
 export const userSignUp = (form) => {
@@ -56,6 +64,7 @@ export const userSignUp = (form) => {
               "Email address was already taken. If you are owner, please proceed to login with this email.",
           });
         }
+
       });
   };
 };
@@ -109,60 +118,67 @@ export const userSignIn = (email, password) => {
   };
 };
 
-export const getUser = () => {
-  return (dispatch) => {
-    dispatch({ type: FETCH_START });
-    axios
-      .get("/authenticate-app-page")
-      .then(({ data }) => {
-        console.log(" ___ getUser RESPONSE ___ ", data);
-        dispatch({ type: FETCH_SUCCESS });
-        dispatch({ type: USER_DATA, payload: data.username });
-        dispatch({ type: CUSTOMER_ID, payload: data.data });
-      })
-      .catch((err) => {
-        console.error("xxx getUser Request ERROR xxx", err);
-        dispatch({
-          type: FETCH_ERROR,
-          payload: "Error during get me request with this token",
+export const getUser = (id) => {
+    return (dispatch) => {
+        dispatch({ type: FETCH_START });
+        axios.get('/user/findUser/'+id,
+        ).then(({ data }) => {
+            console.log(" ___ getUser RESPONSE ___ ", data.data);
+            dispatch({ type: FETCH_SUCCESS });
+            // dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+            // dispatch({ type: USER_ROLE, payload: data.data.role });
+            localStorage.setItem('user', JSON.stringify(data.data));
+            dispatch({ type: USER_DATA, payload: data.data });
+            dispatch({ type: IS_AUTHENTICATED, payload: true });
+
+        }).catch(err => {
+            console.error("xxx getUser Request ERROR xxx", err);
+            dispatch({ type: FETCH_ERROR, payload: "Error during get me request with this token" });
+            dispatch({ type: SIGNOUT_USER_SUCCESS });
         });
         dispatch({ type: SIGNOUT_USER_SUCCESS });
       });
   };
 };
 
-export const verifyToken = (user, token) => {
-  return (dispatch) => {
-    dispatch({ type: FETCH_START });
-    axios
-      .get("/user/verifyToken")
-      .then(({ data }) => {
-        console.log(" ___ verifyUser RESPONSE ___ ", data);
-        // if(data.success){
-        localStorage.setItem("x-auth-token", token);
-        localStorage.setItem("in", Date.now());
-        localStorage.setItem("user", JSON.stringify(user));
-        console.log(user, token);
-        dispatch({ type: FETCH_SUCCESS });
-        dispatch({ type: USER_DATA, payload: user });
-        dispatch({ type: USER_TOKEN_SET, payload: token });
-        dispatch({ type: IS_AUTHENTICATED, payload: true });
-        // }else{
-        //     console.log('logout')
-        //     localStorage.removeItem('x-auth-token');
-        //     localStorage.removeItem('in');
-        //     localStorage.removeItem('user');
-        //     dispatch({ type: FETCH_SUCCESS });
-        //     dispatch({ type: USER_DATA, payload: [] });
-        //     dispatch({ type: USER_TOKEN_SET, payload: '' });
-        //     dispatch({ type: IS_AUTHENTICATED, payload: false });
-        // }
-      })
-      .catch((err) => {
-        console.error("xxx verifyUser Request ERROR xxx", err);
-        dispatch({
-          type: FETCH_ERROR,
-          payload: "Error during get me request with this token",
+export const verifyToken = (user,token) => {
+    return (dispatch) => {
+        dispatch({ type: FETCH_START });
+        axios.get('/user/verifyToken').then(({ data }) => {
+            console.log(" ___ verifyUser RESPONSE ___ ", data);
+            if(data.data.id){
+                localStorage.setItem('x-auth-token', token);
+                localStorage.setItem('in', Date.now());
+                // localStorage.setItem('user', JSON.stringify(user));
+                console.log(user)
+                dispatch({ type: FETCH_SUCCESS });
+                dispatch({ type: USER_DATA, payload: user });
+                dispatch({ type: USER_TOKEN_SET, payload: token });
+                dispatch({ type: IS_AUTHENTICATED, payload: true });
+            }else{
+                console.log('logout')
+                localStorage.removeItem('x-auth-token');
+                localStorage.removeItem('in');
+                localStorage.removeItem('user');
+                dispatch({ type: USER_DATA, payload: [] });
+                dispatch({ type: USER_TOKEN_SET, payload: '' });
+                dispatch({ type: IS_AUTHENTICATED, payload: false });
+                window.location.assign('/')
+            }
+            
+        }).catch(err => {
+            console.error("xxx verifyUser Request ERROR xxx", err);
+            // dispatch({ type: FETCH_ERROR, payload: "Error during get me request with this token" });
+            localStorage.removeItem('x-auth-token');
+                localStorage.removeItem('in');
+                localStorage.removeItem('user');
+            dispatch({ type: SIGNOUT_USER_SUCCESS });
+            dispatch({ type: IS_AUTHENTICATED, payload: false });
+            // window.location.assign('/')
+            setTimeout(() => {
+                dispatch({ type: FETCH_ERROR, payload: '' });
+            }, 5000)
+
         });
         dispatch({ type: SIGNOUT_USER_SUCCESS });
         dispatch({ type: IS_AUTHENTICATED, payload: false });

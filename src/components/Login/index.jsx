@@ -66,7 +66,11 @@ function Login(props) {
 
   async function Login(e) {
     e.preventDefault();
-    setLoginLoading(true);
+    props.login(email, password);
+    // check redux
+    props.toggleLogin() // then redirect to dashboard
+
+setLoginLoading(true);
     await props.login(email, password);
     if (props.auth.isAuthenticated) {
       setLoginLoading(false);
@@ -91,12 +95,15 @@ function Login(props) {
 
   return (
     <>
-      {!signUp && !forgetPassword && (
-        <div className={styles.login}>
-          <div className={styles.login_col_2}>
-            <div className={styles.login_top}>
-              <h2></h2>
-              <Image
+      {!signUp && !forgetPassword &&
+      <div className={styles.login}>
+        <div className={styles.login_col_2}>
+          <div className={styles.login_top}>
+          <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}>
+              <Image src={closeIcon} className={styles.login_cancel} />
+            </div>
+            <Image
+
                 src={img_logo}
                 alt="logo"
                 className={styles.login_main_logo_img}

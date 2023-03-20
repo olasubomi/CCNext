@@ -15,6 +15,7 @@ export const USER_TOKEN_SET = 'user_token_set';
 export const USER_ROLE = 'user_role_set';
 export const CUSTOMER_ID = 'customer_id';
 export const IS_AUTHENTICATED = 'isAuthenticated';
+export const OPEN_LOGIN = 'openLogin';
 
 export const SEARCH_TITLE = 'search_title';
 export const CART_LIST = 'cart_list';

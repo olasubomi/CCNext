@@ -246,6 +246,26 @@
     color: #353535;
 }
 
+.edit_button2{
+    width: 110px;
+    height: 40px;
+    
+    background: #04D505;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+
+    color: #FFFFFF;
+    outline: none;
+    border: none;
+    align-self: end;
+    justify-self: end;
+}
+
 @media screen and (max-width: 985px) {
     .popup {
         width: 95%;

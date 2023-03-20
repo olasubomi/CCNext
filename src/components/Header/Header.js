@@ -24,16 +24,16 @@ import { Auth } from "../auth";
 import { connect } from "react-redux";
 import { getPath } from "../../actions/Common";
 import { useRouter } from "next/router";
-import { userSignOut, verifyToken } from "../../actions";
+import { userSignOut, verifyToken, setOpenLogin } from "../../actions";
 import { SimpleSnackbar } from "../../common";
 import { triggerAlert } from "../../actions/";
-
 
 function Header(props) {
   const [isAuthenticated, setIsAuthenticatedState] = useState(false);
   const [customerId, setCustomerIdState] = useState(null);
   const [username, setUsernameState] = useState(null);
   const [showNotif, setshowNotifState] = useState(true);
+
   const [openLogin, setOpenLoginState] = useState(false);
   const router = useRouter();
 
@@ -152,8 +152,10 @@ function Header(props) {
     window.event.returnValue = false;
   }
 
-  function toggleLogin() {
-    setOpenLoginState(!openLogin);
+  function toggleLogin (){
+    props.setOpenLogin(!props.openLogin)
+ // function toggleLogin() {
+   // setOpenLoginState(!openLogin);
   }
 
   function logout() {
@@ -164,6 +166,16 @@ function Header(props) {
   return (
     <>
       <div className={styles.navbar}>
+        <div className="alert">
+          {props.message.length > 0 && 
+          <div className="alert-success">
+            {props.message}
+          </div>}
+          {props.error.length > 0 &&
+          <div className="alert-danger">
+            {props.error}
+          </div>}
+        </div>
         <div className={styles.navbar_top_container}>
           <div className={styles.navbar_top}>
             <Link href="/">
@@ -172,89 +184,45 @@ function Header(props) {
               </a>
             </Link>
             <div className={styles.navbar_top_details}>
-              <SimpleSnackbar
-                message={props.snackMessage}
-                showSnack={props.showSnack}
-                snackDuration={props.snackDuration}
-                resetSnack ={props.resetSnack}
-              />
-              {!props.auth.isAuthenticated && props.auth.authUser === null ? (
-                // <Link href='/login'>
-                // <a className={styles.navbar_user_loginbtn}>
-                <div
-                  onClick={toggleLogin}
-                  className={styles.navbar_user_loginbtn}
-                >
-                  Log In/Register
-                </div>
-              ) : (
-                // </a>[//\\][//\\][Aa1]
-                // </Link>
-                <div className={styles.navbar_user_info}>
-                  <img
-                    id="userImg"
-                    onClick={(e) => toggleUserDetails(e)}
-                    src="/assets/icons/user.png"
-                    alt="User"
-                    className={styles.navbar_user_img}
-                  />
-                  <h2
-                    id="userName"
-                    onClick={(e) => toggleUserDetails(e)}
-                    className={styles.navbar_user_name}
-                  >
-                    {props.auth.authUser.username}
-                  </h2>
-                  <ArrowDownIcon
-                    id="usericon"
-                    onClick={(e) => toggleUserDetails(e)}
-                    style={styles.navbar_user_icon}
-                  />
-                  <div id="userdetails" className={styles.navbar_user_signedin}>
-                    <Link href="/dashboard">
-                      <a>
-                        <div
-                          className={
-                            styles.navbar_user_signedin_link +
-                            " " +
-                            styles.black
-                          }
-                        >
-                          <DashBoardIcon style={styles.navbar_main_link_icon} />
-                          <h3>Dashboard</h3>
-                        </div>
-                      </a>
-                    </Link>
-                    <Link href="/dashboard/userprofile">
-                      <a>
-                        <div
-                          className={
-                            styles.navbar_user_signedin_link +
-                            " " +
-                            styles.black
-                          }
-                        >
-                          {/* <Image src={openIcon} alt="profile" /> */}
-                          <UserIcon style={styles.navbar_main_link_icon} />
-                          <h3>Profile</h3>
-                        </div>
-                      </a>
-                    </Link>
-                    <div className={styles.navbar_user_signedin_logout}>
-                      <div>
-                        <div
-                          onClick={logout}
-                          className={
-                            styles.navbar_user_signedin_link +
-                            " " +
-                            styles.white
-                          }
-                        >
-                          <ArrowLeftFillIcon
-                            style={styles.navbar_main_link_icon2}
-                          />
-                          <h3>Logout</h3>
-                        </div>
+              {(!props.auth.isAuthenticated || props.auth.authUser === null) ?
+              // <Link href='/login'>
+              // <a className={styles.navbar_user_loginbtn}>
+                  <div onClick={toggleLogin} className={styles.navbar_user_loginbtn}>
+                    Log In/Register
+                  </div>
+              // </a>[//\\][//\\][Aa1]
+              // </Link>
+              :
+              <div className={styles.navbar_user_info}>
+                {props.auth.authUser.profile_picture ? 
+                <img id="userImg" onClick={(e) => toggleUserDetails(e)} src={props.auth.authUser.profile_picture} alt='User' className={styles.navbar_user_img}/>:
+                <UserIcon style={styles.navbar_main_link_icon} />}
+                <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>{props.auth.authUser.first_name}</h2>
+                <ArrowDownIcon id="usericon" onClick={(e) => toggleUserDetails(e)} style={styles.navbar_user_icon} />
+                <div id="userdetails" className={styles.navbar_user_signedin}>
+                  <Link href='/dashboard'>
+                    <a>
+                      <div className={styles.navbar_user_signedin_link  + " " + styles.black}>
+                        <DashBoardIcon style={styles.navbar_main_link_icon} />
+                        <h3>Dashboard</h3>
+                      </div>
+                    </a>
+                  </Link>
+                  <Link href='/dashboard/userprofile'>
+                    <a>
+                      <div className={styles.navbar_user_signedin_link  + " " + styles.black}>
+                        {/* <Image src={openIcon} alt="profile" /> */}
+                        <UserIcon style={styles.navbar_main_link_icon} />
+                        <h3>Profile</h3>
+                      </div>
+                    </a>
+                  </Link>
+                  <div className={styles.navbar_user_signedin_logout}>
+                    <div>
+                      <div onClick={logout} className={styles.navbar_user_signedin_link + " " + styles.white}>
+                        <ArrowLeftFillIcon style={styles.navbar_main_link_icon2} />
+                        <h3>Logout</h3>
+
                       </div>
                     </div>
                   </div>
@@ -458,7 +426,9 @@ function Header(props) {
           </Link>
         </div>
       </div>
-      {openLogin && <Auth toggleLogin={toggleLogin} />}
+      {props.openLogin &&
+      <Auth toggleLogin={toggleLogin} />}
+   //   {openLogin && <Auth toggleLogin={toggleLogin} />}
     </>
   );
 }
@@ -467,7 +437,9 @@ function Header(props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getPath: (path) => dispatch(getPath(path)),
+    getPath: path => dispatch(getPath(path)),
+    setOpenLogin: login => dispatch(setOpenLogin(login)),
+
     logout: () => dispatch(userSignOut()),
     verifyToken: (user, token) => dispatch(verifyToken(user, token)),
         resetSnack: (showSnack, snackMessage) =>
@@ -479,6 +451,9 @@ function mapStateToProp(state) {
   return {
     path: state.Common.path,
     auth: state.Auth,
+    openLogin: state.Auth.openLogin,
+    error: state.Common.error,
+    message: state.Common.message,
     showSnack: state?.Common?.showSnack,
     snackMessage: state?.Common?.snackMessage,
     snackDuration: state?.Common?.snackDuration,

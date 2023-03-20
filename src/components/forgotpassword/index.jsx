@@ -24,6 +24,7 @@ function ForgetPassword(props){
   function formSubmit(e){
     e.preventDefault();
     props.forgotpassword(email)
+    props.closeForgetPassword()
   };
 
     return(
