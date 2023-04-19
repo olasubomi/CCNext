@@ -70,7 +70,7 @@ function Login(props) {
     // check redux
     props.toggleLogin() // then redirect to dashboard
 
-setLoginLoading(true);
+    setLoginLoading(true);
     await props.login(email, password);
     if (props.auth.isAuthenticated) {
       setLoginLoading(false);
@@ -96,13 +96,13 @@ setLoginLoading(true);
   return (
     <>
       {!signUp && !forgetPassword &&
-      <div className={styles.login}>
-        <div className={styles.login_col_2}>
-          <div className={styles.login_top}>
-          <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}>
-              <Image src={closeIcon} className={styles.login_cancel} />
-            </div>
-            <Image
+        (<div className={styles.login}>
+          <div className={styles.login_col_2}>
+            <div className={styles.login_top}>
+              <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}>
+                <Image src={closeIcon} className={styles.login_cancel} />
+              </div>
+              <Image
 
                 src={img_logo}
                 alt="logo"
@@ -227,7 +227,7 @@ setLoginLoading(true);
             <h3>Add Convenience to your Home Made Meals</h3>
           </div>
         </div>
-      )}
+        )}
       {forgetPassword && (
         <ForgetPassword closeForgetPassword={closeForgetPassword} />
       )}

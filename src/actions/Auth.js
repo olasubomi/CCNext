@@ -137,9 +137,9 @@ export const getUser = (id) => {
             dispatch({ type: SIGNOUT_USER_SUCCESS });
         });
         dispatch({ type: SIGNOUT_USER_SUCCESS });
-      });
-  };
-};
+      }
+  }
+
 
 export const verifyToken = (user,token) => {
     return (dispatch) => {
@@ -183,9 +183,9 @@ export const verifyToken = (user,token) => {
         dispatch({ type: SIGNOUT_USER_SUCCESS });
         dispatch({ type: IS_AUTHENTICATED, payload: false });
         window.location.assign("/");
-      });
+      }
   };
-};
+
 
 export const forgotPassword = (email) => {
   return (dispatch) => {
