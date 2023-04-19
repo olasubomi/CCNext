@@ -431,7 +431,7 @@ function Header(props) {
         </div>
         {props.openLogin &&
           <Auth toggleLogin={toggleLogin} />}
-   //   {openLogin && <Auth toggleLogin={toggleLogin} />}
+     {openLogin && <Auth toggleLogin={toggleLogin} />}
       </div>
     </>
   );
