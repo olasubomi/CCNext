@@ -3,6 +3,9 @@ import { wrapper, store } from "../src/store/index";
 import { Provider } from "react-redux";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -11,6 +14,7 @@ function MyApp({ Component, pageProps }) {
       <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
         <Provider store={store}>
           <Component {...pageProps} />
+          <ToastContainer />
         </Provider>
       </GoogleOAuthProvider>
     </>

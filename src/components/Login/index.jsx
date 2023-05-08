@@ -14,6 +14,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Loader, SimpleSnackbar } from "../../common";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
+import { toast } from 'react-toastify';
 
 function Login(props) {
   const [forgetPassword, setForgetPasswordState] = useState(false);
@@ -63,7 +64,7 @@ function Login(props) {
       setLoginLoading(false);
     }
   }, [props.auth.isAuthenticated]);
-
+console.log(props)
   async function Login(e) {
     e.preventDefault();
     props.login(email, password);
@@ -72,11 +73,15 @@ function Login(props) {
 
     setLoginLoading(true);
     await props.login(email, password);
-    if (props.auth.isAuthenticated) {
-      setLoginLoading(false);
-    } else {
-      setLoginLoading(false);
-    }
+
+    // if (props.auth.isAuthenticated) {
+    //   setLoginLoading(false);
+    //   toast.success("Login Successful")
+    // } else {
+    //   setLoginLoading(false);
+    //   toast.success("Login Sucessful")
+
+    // }
   }
 
   async function handleSocialLogin(credentialResponse) {

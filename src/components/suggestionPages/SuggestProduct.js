@@ -828,9 +828,11 @@ class SuggestProductForm extends Component {
     // suggestProductForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
 
     // suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
-    suggestedCategories.map((individualCategories) => {
-      suggestProductForm.append('product_categories', individualCategories);
+
+    suggestedCategories.map(data => {
+      suggestProductForm.append('product_categories', data);
     })
+
     suggestProductForm.append('product_type', JSON.stringify("Ingredient"));
     // suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
 

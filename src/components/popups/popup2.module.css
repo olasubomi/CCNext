@@ -13,8 +13,7 @@
 
 .popup2 {
     width: 973px;
-    height: 709px;
-
+    height: 90%;
     background: #FFFFFF;
     border-radius: 11px;
     overflow: hidden;
@@ -46,14 +45,14 @@
     align-items: center;
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    padding: 10px 1rem;
+    padding: 3px 1rem;
 }
 
 .popup2_top>h2 {
     margin: 0;
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 15px;
     line-height: 22px;
 
     color: #000000;
@@ -69,12 +68,16 @@
     /* text-transform: uppercase; */
     color: #2B2B2B;
 }
-
+.popup2 .img_col{
+    height: auto;
+}
 .popup2_main_img {
-    width: 314px;
-    height: 207px;
+    height: 100%;
+    width: 324px;
     border-radius: 8px;
     filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1));
+    background-size: cover;
+    background-position: center;
 }
 
 .popup2_images {
@@ -86,7 +89,7 @@
 
 .popup2_image {
     width: 75px;
-    height: 72px;
+    height: 30px;
     border-radius: 8px;
     filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1));
 }
@@ -103,6 +106,7 @@
     align-content: start;
     grid-gap: 10px;
     overflow: hidden;
+    height: 100%;
 }
 
 .popup2_col_2 {
@@ -145,14 +149,15 @@
     width: 100%;
 }
 
-.th,.td {
+.th,
+.td {
     text-align: center;
     padding: 8px;
 }
 
 .th {
     font-style: normal;
-    font-weight: 400;
+    font-weight: 300;
     font-size: 11px;
     line-height: 13px;
 
@@ -162,9 +167,10 @@
 .td {
     font-style: normal;
     font-weight: 400;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 16px;
     /* identical to box height */
+    color: #353535;
 
 
     color: #353535;
@@ -178,7 +184,7 @@
     margin: 0;
     font-style: normal;
     font-weight: 500;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
 
     color: #000000;
@@ -189,21 +195,20 @@
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
-    line-height: 135.02%;
-    /* or 16px */
-
-
-    color: #000000;
+    margin-top: 3rem;
+    color: #6D6D6D;
     overflow-y: scroll;
 }
 
 .popup2_del {
-    margin: 0;
+    margin: 1rem 0 0 0;
     list-style-type: none;
     display: grid;
     grid-template-columns: 1fr 1fr;
     justify-items: start;
     grid-gap: 6px;
+    column-gap: 3.3rem;
+    row-gap: 1.5rem;
 }
 
 .popup2_del>li {
@@ -245,7 +250,7 @@
     margin: 0;
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 12.5px;
     line-height: 149.52%;
     /* identical to box height, or 21px */
 
@@ -256,7 +261,7 @@
 .popup2_category {
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 149.52%;
     /* or 21px */
 
@@ -363,7 +368,7 @@
     grid-gap: 10px;
     height: 100%;
     overflow: hidden;
-    padding-right: 1rem;
+    padding-right: 6rem;
 }
 
 .popup2_step_img {
@@ -372,21 +377,70 @@
 }
 
 .popup2_step_name {
-    margin: 0;
+    margin: 2rem 0 0 0;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
     line-height: 17px;
+    text-align: justify;
     /* identical to box height */
 
 
     color: #000000;
 }
+.iconSpan{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 2px solid blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.iconSpan1{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 2px solid #F47900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.iconSpan2{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 2px solid #55ACEE;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.iconSpan3{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 2px solid #3ABF4C
+    ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.icons{
+    border-radius: 50%;
+    object-position: center;
+    object-fit: contain;
+    display: flex;
+    justify-content: center;
+}
+.para{
+    font-size: 1.2rem;
+    margin-right: .7rem;
+}
 
 .popup2_instructions {
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 140%;
     /* or 22px */
 
@@ -428,10 +482,10 @@
     grid-gap: 10px;
 }
 
-.edit_button2{
+.edit_button2 {
     width: 110px;
     height: 40px;
-    
+
     background: #04D505;
     border-radius: 4px;
     font-style: normal;

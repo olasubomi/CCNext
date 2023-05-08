@@ -28,6 +28,7 @@ import { userSignOut, verifyToken, setOpenLogin } from "../../actions";
 import { SimpleSnackbar } from "../../common";
 import { triggerAlert } from "../../actions/";
 
+
 function Header(props) {
   const [isAuthenticated, setIsAuthenticatedState] = useState(false);
   const [customerId, setCustomerIdState] = useState(null);
@@ -38,25 +39,26 @@ function Header(props) {
   const router = useRouter();
 
   useEffect(() => {
+    
     props.getPath(router.pathname);
     let token = localStorage.getItem("x-auth-token");
     let time = localStorage.getItem("in");
-    if (token !== null && time !== null) {
-      const msInMinute = 60 * 1000;
-      let min = Math.abs(Date.now() - time) / msInMinute;
-      if (min > 30) {
-        localStorage.removeItem("x-auth-token");
-        localStorage.removeItem("in");
-        localStorage.removeItem("user");
-      } else {
-        let user = JSON.parse(localStorage.getItem("user"));
-        props.verifyToken(user, token);
-      }
-    } else {
-      localStorage.removeItem("x-auth-token");
-      localStorage.removeItem("in");
-      localStorage.removeItem("user");
-    }
+    // if (token !== null && time !== null) {
+    //   const msInMinute = 60 * 1000;
+    //   let min = Math.abs(Date.now() - time) / msInMinute;
+    //   if (min > 30) {
+    //     localStorage.removeItem("x-auth-token");
+    //     localStorage.removeItem("in");
+    //     localStorage.removeItem("user");
+    //   } else {
+    //     let user = JSON.parse(localStorage.getItem("user"));
+    //     props.verifyToken(user, token);
+    //   }
+    // } else {
+    //   localStorage.removeItem("x-auth-token");
+    //   localStorage.removeItem("in");
+    //   localStorage.removeItem("user");
+    // }
   }, []);
 
   function updateLogInStatus(customerId, username) {
@@ -162,19 +164,27 @@ function Header(props) {
     props.logout();
     router.push("/");
   }
+  // useEffect(() => {
+  //   if(props.message || props.error){
+  //     console.log(props.error)
+  //     if(props.message.length){
+  //       
+  //   }
+  // },[props.message.length, props.error.length])
+  // console.log(props, "propsssss")
 
   return (
     <>
       <div className={styles.navbar}>
         <div className="alert">
-          {props.message.length > 0 &&
+          {/* {props.message.length > 0 &&
             <div className="alert-success">
               {props.message}
             </div>}
           {props.error.length > 0 &&
             <div className="alert-danger">
               {props.error}
-            </div>}
+            </div>} */}
         </div>
         <div className={styles.navbar_top_container}>
           <div className={styles.navbar_top}>

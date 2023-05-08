@@ -23,6 +23,7 @@ class SuggestMealForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      username: "",
       mealName: "",
       allMealNames: [],
       mealImage: [],
@@ -164,6 +165,8 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
+    console.log(this.state.new_product_ingredients, "i love ayowale");
+
     // get all Meal Names***
     // var url = "/meals/get-meals/1";
     // axios.get(url).then((body) => {
@@ -179,6 +182,14 @@ class SuggestMealForm extends Component {
     //   });
 
     console.log("all meals", this.props.allMealNames);
+    const currentUser = JSON.parse(localStorage.getItem('user')) || {};
+
+    if(Object.keys(currentUser).length){
+      this.setState({
+        ...this.state,
+        username: currentUser?.first_name?.concat(' ', currentUser?.last_name)
+      })
+    }
     // get all store names*, if NEW products section exists.
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
@@ -197,6 +208,7 @@ class SuggestMealForm extends Component {
         }, 100);
       }
 
+      console.log('This is the state ', this.state)
       if (localStorage.getItem("suggestMealForm")) {
         let {
           mealName,
@@ -286,31 +298,37 @@ class SuggestMealForm extends Component {
           },
           instructionChunk1: {
             title: instructionChunk1.title,
-            instructionSteps: [],
+            instructionSteps: instructionChunk1?.instructionSteps || [], //[],
 
             dataName: "",
           },
           instructionChunk2: {
             title: instructionChunk2.title,
-            instructionSteps: [],
+            instructionSteps: instructionChunk2?.instructionSteps || [],
 
             dataName: "",
           },
           instructionChunk3: {
             title: instructionChunk3.title,
-            instructionSteps: [],
+            instructionSteps: instructionChunk3?.instructionSteps || [],
 
             dataName: "",
           },
           instructionChunk4: {
             title: instructionChunk4.title,
-            instructionSteps: [],
+            instructionSteps: instructionChunk4?.instructionSteps || [],
 
             dataName: "",
           },
           instructionChunk5: {
             title: instructionChunk5.title,
-            instructionSteps: [],
+            instructionSteps: instructionChunk5?.instructionSteps || [],
+
+            dataName: "",
+          },
+          instructionChunk6: {
+            title: instructionChunk6.title,
+            instructionSteps: instructionChunk6?.instructionSteps || [],
 
             dataName: "",
           },
@@ -680,6 +698,7 @@ class SuggestMealForm extends Component {
     // }
 
     console.log("In handleIngredientMeasurement . \n val is: " + val);
+    
 
     if (val) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
@@ -767,6 +786,7 @@ class SuggestMealForm extends Component {
             ...this.state.instructionChunk1.instructionSteps,
             chip.target.value,
           ];
+          console.log('This is the data', particularArray)
           this.setState({ instructionChunk1: particularArray });
           document.getElementById("instructionChunk1").value = "";
           break;
@@ -1110,11 +1130,12 @@ class SuggestMealForm extends Component {
     console.log("Current ingredient", currIngredientObject);
     this.setState({
       new_product_ingredients: [
-        ...this.state.new_product_ingredients,
+        // ...this?.state?.new_product_ingredients,
         currIngredientObject,
       ],
     });
-    console.log(this.state.new_product_ingredients);
+    console.log(this.state.new_product_ingredients,currIngredientObject, "i love ayowale");
+
 
     this.setState({
       ingredientGroupList: [
@@ -1170,6 +1191,9 @@ class SuggestMealForm extends Component {
     } = this.state;
 
     console.log("This.state", this.state);
+
+    console.log('User data from local storage ', localStorage.getItem('user'))
+
 
 
     // handle edge case meal name, ingredienrs or image upload required to submit form
@@ -1459,7 +1483,7 @@ class SuggestMealForm extends Component {
       // var url = "/addMealSuggestion/";
       var url = "http://localhost:5000/api/meals/create/";
 
-      const config = {
+      const config_ = {
         method: "POST",
         data: suggestMealForm,
         url: url,
@@ -1744,7 +1768,9 @@ class SuggestMealForm extends Component {
                     </label>
                     <TextField
                       id="chef"
-                      value={this.state.chef}
+                      // value={this.state.chef}
+                      value={this.state.username}
+                      disabled={true}
                       fullWidth
                       onChange={this.updateChef}
                       variant="outlined"
@@ -2326,6 +2352,7 @@ class SuggestMealForm extends Component {
     }
   }
 
-}
+
+
 
 export default SuggestMealForm;

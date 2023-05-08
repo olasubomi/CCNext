@@ -10,6 +10,8 @@ import instagramImage from "../../../public/assets/logos/instagram.png";
 import styles from './popup2.module.css';
 import ReactToPrint from 'react-to-print';
 import ComponentToPrint from "../mealsPage/ComponentToPrint";
+import {BsFillShareFill} from "react-icons/bs"
+
 
 
 class Popup2 extends Component {
@@ -37,27 +39,27 @@ class Popup2 extends Component {
     edit = () => {
         const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6 } = this.props
         var stepInputs = []
-        if(instructionChunk1){
+        if (instructionChunk1) {
             stepInputs = []
         }
-        if(instructionChunk2){
+        if (instructionChunk2) {
             stepInputs = [2]
         }
 
-        if(instructionChunk3){
-            stepInputs = [2,3]
+        if (instructionChunk3) {
+            stepInputs = [2, 3]
         }
 
-        if(instructionChunk4){
-            stepInputs = [2,3,4]
+        if (instructionChunk4) {
+            stepInputs = [2, 3, 4]
         }
 
-        if(instructionChunk5){
-            stepInputs = [2,3,4,5]
+        if (instructionChunk5) {
+            stepInputs = [2, 3, 4, 5]
         }
 
-        if(instructionChunk6){
-            stepInputs = [2,3,4,5,6]
+        if (instructionChunk6) {
+            stepInputs = [2, 3, 4, 5, 6]
         }
 
         let group = ingredientGroupList.map(ingredient => {
@@ -65,7 +67,7 @@ class Popup2 extends Component {
                 productName: ingredient.product_name?.join(" "),
                 // productImgFile: this.state.currentProductImgSrc,
                 productImgPath: null,
-          
+
                 // these are added to ingredient packets on submit, and not relevant in product object details
                 quantity: ingredient.quantity,
                 measurement: ingredient.measurement,
@@ -74,10 +76,10 @@ class Popup2 extends Component {
         })
 
         let meal = {
-            mealId: this.props.id, 
+            mealId: this.props.id,
             mealName: name,
             intro: description,
-  
+
             // ingredientNames,
             // do we need product group list AND strings ?
             ingredientGroupList: group,
@@ -89,9 +91,9 @@ class Popup2 extends Component {
             // currentIngredientQuantity,
             // currentProductImgSrc,
             // currentProductDisplayIndex,
-  
+
             // currentStore,
-  
+
             // we need to update how we create image paths
             // productImg_path,
             // new_product_ingredients,
@@ -99,10 +101,10 @@ class Popup2 extends Component {
             // currProductIndexInDBsProductsList,
             // currStoreIndexIfExistsInProductsList,
             suggestedUtensils: this.props.utensilsList,
-  
+
             cookTime: cookTime,
             prepTime: prepTime,
-  
+
             instructionChunk6: this.props.instructionChunk6,
             instructionChunk1: this.props.instructionChunk1,
             instructionChunk2: this.props.instructionChunk2,
@@ -110,12 +112,12 @@ class Popup2 extends Component {
             instructionChunk4: this.props.instructionChunk4,
             instructionChunk5: this.props.instructionChunk5,
             instructionWordlength: this.props.instructionWordlength,
-  
+
             // do we want all the instruction variables ?
             // instructionGroupList:[],
-  
+
             // instructionimagesAndVideos,
-  
+
             // chef,
             suggestedCategories: categories,
             servings: serves,
@@ -126,7 +128,7 @@ class Popup2 extends Component {
         localStorage.setItem('mealId', this.props.id,)
         localStorage.setItem('suggestMealForm', JSON.stringify(meal))
         window.location.assign('/suggestmeal')
-        
+
     }
 
     render() {
@@ -153,7 +155,7 @@ class Popup2 extends Component {
                                                 src={imageData}
                                                 alt="pop up"
                                                 className={styles.popup2_main_img}
-                                                height={"100%"} width={"100%"}
+                                                height={"160%"} width={"100%"}
                                             />}
                                         {imagesData.length > 0 &&
                                             <div className={styles.popup2_images}>
@@ -161,7 +163,7 @@ class Popup2 extends Component {
                                                     imagesData.map((data, index) =>
                                                         <Image key={index} alt="pop up" src={data}
                                                             className={styles.popup2_image}
-                                                            height={"100%"} width={"100%"} />
+                                                            height={"70%"} width={"100%"} />
                                                     )
                                                 }
 
@@ -170,10 +172,10 @@ class Popup2 extends Component {
                                     <div className={styles.del}>
                                         <h2 className={styles.popup2_name}>{name}</h2>
                                         <ul className={styles.popup2_del}>
-                                            <li><p>CookTime:</p><h5>{this.props.cookTime} Minute{parseInt(this.props.cookTime) > 1 ? 's' : ''}</h5></li>
-                                            <li><p>PrepTime:</p><h5>{this.props.prepTime} Minute{parseInt(this.props.prepTime) > 1 ? 's' : ''}</h5></li>
-                                            <li><p>Serves:</p><h5>{this.props.serves} {parseInt(this.props.serves) > 1 ? 'people' : 'person'}</h5></li>
-                                            <li><p>Chef:</p><h5>{this.props.chef}</h5></li>
+                                            <li><p style={{ color: "#6D6D6D" }}>CookTime:</p><h5>{this.props.cookTime} Minute{parseInt(this.props.cookTime) > 1 ? 's' : ''}</h5></li>
+                                            <li><p style={{ color: "#6D6D6D" }}>PrepTime:</p><h5>{this.props.prepTime} Minute{parseInt(this.props.prepTime) > 1 ? 's' : ''}</h5></li>
+                                            <li><p style={{ color: "#6D6D6D" }}>Serves:</p><h5>{this.props.serves} {parseInt(this.props.serves) > 1 ? 'people' : 'person'}</h5></li>
+                                            <li><p style={{ color: "#6D6D6D" }}>Chef:</p><h5>{this.props.chef}</h5></li>
                                         </ul>
                                         <p className={styles.popup2_description}>
                                             Intro:<br />
@@ -185,17 +187,17 @@ class Popup2 extends Component {
                                     <div className={styles.popup2_details}>
                                         <div style={{ overflowY: "scroll" }}>
                                             <h3 className={styles.popup2_category_name}>Ingredients</h3>
-                                            <table>
+                                            <table className={styles.table}>
                                                 <tr>
-                                                    <th>Names</th>
-                                                    <th>Quantity</th>
-                                                    <th>Measurement</th>
+                                                    <th className={styles.th}>Names</th>
+                                                    <th className={styles.th}>Quantity</th>
+                                                    <th className={styles.th}>Measurement</th>
                                                 </tr>
                                                 {ingredientsList.map((ingredient, index) => (
-                                                    <tr key={index}>
-                                                        <td>{ingredient.split('of').length > 1 ? ingredient.split('of')[1] : ingredient.split(' ')[1]}</td>
-                                                        <td>{ingredient.split('of').length > 1 ? ingredient.split(' ')[0] : ingredient.split(' ')[0]}</td>
-                                                        <td>{ingredient.split('of').length > 1 ? ingredient.split(' ')[1] : ''}</td>
+                                                    <tr style={{ background: index % 2 === 0 ? "#F1F1F1" : "#FFFFFF" }} key={index}>
+                                                        <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split('of')[1] : ingredient.split(' ')[1]}</td>
+                                                        <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[0] : ingredient.split(' ')[0]}</td>
+                                                        <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[1] : ''}</td>
                                                     </tr>
                                                 ))}
                                             </table>
@@ -216,7 +218,7 @@ class Popup2 extends Component {
                                                         src={this.props['chunk' + curIn + 'Content']}
                                                         alt={this.props['instructionChunk' + curIn].title}
                                                         className={styles.popup2_step_img}
-                                                        height={"100%"} width={"100%"}
+                                                        height={"150%"} width={"70%"}
                                                     />}
 
                                                 {allowedVideoExtensions.exec(this.props['instructionChunk' + curIn].dataName) && this.props['chunk' + curIn + 'Content'] !== undefined &&
@@ -239,25 +241,41 @@ class Popup2 extends Component {
                                 </div>
                             </div>
                             <div className={styles.popup2_footer}>
-                                <p>Share this product</p>
-                                <Image src={facebookImage} alt='facebook'
-                                    height={"100%"} width={"100%"} />
-                                <Image src={instagramImage} alt='instagram'
-                                    height={"100%"} width={"100%"} />
-                                <Image src={twitterImage} alt='twitter'
-                                    height={"100%"} width={"100%"} />
+                                <p style={{display: "flex", alignItems: "center"}}>
+                                <BsFillShareFill style={{marginRight: ".5rem"}} />
+                                    Share this product:
+                                    
+                                    </p>
+                                <span className={styles.iconSpan}>
+                                    <Image src="/assets/icons/Vector.svg" alt='facebook'
+                                        height={"17%"} width={"17%"} className={styles.icons} />
+                                </span>
+                                <span className={styles.iconSpan1}>
+                                    <Image src="/assets/icons/Vector (2).svg" alt='instagram'
+                                        height={"17%"} width={"17%"} className={styles.icons} />
+                                </span>
+                                <span className={styles.iconSpan2}>
+                                    <Image src="/assets/icons/Vector (1).svg" alt='twitter'
+                                        height={"17%"} width={"17%"} className={styles.icons} />
+                                </span>
+                                <span className={styles.iconSpan3}>
+                                    <Image src="/assets/icons/logos_whatsapp-icon.svg" alt='whatsapp'
+                                        height={"17%"} width={"17%"} className={styles.icons} />
+                                </span>
+
                                 <ReactToPrint
                                     trigger={() => {
                                         // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
                                         // to the root node of the returned component as it will be overwritten.
-                                        return <div>
-                                            <Image alt='print' src={printImage}
-                                                height={"100%"} width={"100%"} /></div>;
+                                        return <div style={{display: "flex", alignItems: "center", marginLeft: "4rem"}}> 
+                                            <p className={styles.para}>Print Preview</p>
+                                            <Image alt='print' src="/assets/icons/Vector (3).svg"
+                                                height={"20%"} width={"20%"} className={styles.printIcon} /></div>;
                                     }}
                                     content={() => this.componentRef}
                                 />
-                                {this.props.suggested && 
-                                <button onClick={this.edit} className={styles.edit_button2}>Edit</button>
+                                {this.props.suggested &&
+                                    <button onClick={this.edit} className={styles.edit_button2}>Edit</button>
                                 }
                                 <div style={{ display: 'none' }}>
                                     <ComponentToPrint ref={el => (this.componentRef = el)}

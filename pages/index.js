@@ -5,6 +5,9 @@ import LandingPage from "./landingpage";
 import { useEffect } from 'react';
 import Head from "next/head";
 
+  import { ToastContainer, toast } from 'react-toast'
+
+
 // import { Route, Switch, Redirect } from "react-router-dom";
 // import HomePage from "./components/HomePage";
 // import MealsPage from "./components/mealsPage/MealsPage";

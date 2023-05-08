@@ -15,7 +15,7 @@ import {
 } from "../constants/ActionTypes";
 import axios from "../util/Api";
 import Alert from "@mui/material/Alert";
-
+import { toast } from 'react-toastify';
 export const setInitUrl = (url) => {
   return {
     type: INIT_URL,
@@ -52,10 +52,11 @@ export const userSignUp = (form) => {
         dispatch({ type: IS_AUTHENTICATED, payload: true });
         // dispatch({ type: USER_DATA, payload: data.user });
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
+        
       })
       .catch((err) => {
         console.error("xxx userSignUp Request ERROR xxx");
-        console.log(err.response.status);
+        console.log(err.response);
         dispatch({ type: IS_AUTHENTICATED, payload: false });
         if (err.response.status === 422) {
           dispatch({
@@ -70,6 +71,7 @@ export const userSignUp = (form) => {
 };
 
 export const userSignIn = (email, password) => {
+  const customId = "custom-id-yes";
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     dispatch({ type: USER_TOKEN_SET, payload: null });
@@ -95,11 +97,14 @@ export const userSignIn = (email, password) => {
         dispatch({ type: USER_DATA, payload: data.data.user });
         dispatch({ type: IS_AUTHENTICATED, payload: true });
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
+      
 
         return true;
       })
       .catch((err) => {
-        console.error("xxx userSignIn Request ERROR xxx", err);
+        const customId = "custom-id-yes";
+        console.error("xxx userSignIn Request ERROR xxx", err.response.data.message.message);
+        toast.error(err.response.data.message.message, {toastId: customId})
         dispatch({ type: IS_AUTHENTICATED, payload: false });
         dispatch({
           type: FETCH_ERROR,
@@ -112,7 +117,6 @@ export const userSignIn = (email, password) => {
             snackMessage: "signin operation failed",
           },
         });
-
         return false;
       });
   };
