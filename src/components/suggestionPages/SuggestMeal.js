@@ -1420,6 +1420,54 @@ class SuggestMealForm extends Component {
     // var url = "/addMealSuggestion/";
     var url = "http://localhost:5000/api/meals/create/";
 
+    for (let i = 1; i < 7; i++) {
+      if (this.state[`instructionChunk${i}`].title && this.state[`instructionChunk${i}`].instruction) {
+        instructionTitles.push(this.state[`instructionChunk${i}`].title);
+        instructions.push(this.state[`instructionChunk${i}`].instruction);
+      }
+
+
+    }
+    // suggestMealForm.append('meal_images', mealImages);
+    suggestMealForm.append("prep_time", prepTime);
+    suggestMealForm.append("cook_time", cookTime);
+    suggestMealForm.append("intro", intro);
+    suggestMealForm.append("tips", JSON.stringify(tips));
+    suggestMealForm.append("chef", chef);
+    suggestMealForm.append("servings", servings);
+    suggestMealForm.append("instructions", instructions)
+    suggestMealForm.append("instructionTitles", instructionTitles)
+
+
+    // suggestMealForm.append('ingredientStrings', ingredientStrings);
+    // list of products quantity measurements (created on submit meal)
+    // suggestMealForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
+
+    // new suggested products
+    suggestMealForm.append("meal_categories", suggestedCategories);
+
+    suggestMealForm.append("kitchen_utensils", suggestedUtensils);
+
+    // RecipeSteps
+    suggestMealForm.append("formatted_ingredients", ingredientStrings);
+    suggestMealForm.append("instruction_images1", chunk1Content);
+    suggestMealForm.append("instruction_images2", chunk2Content);
+    suggestMealForm.append("instruction_images3", chunk3Content);
+    suggestMealForm.append("instruction_images4", chunk4Content);
+    suggestMealForm.append("instruction_images5", chunk5Content);
+    suggestMealForm.append("instruction_images6", chunk6Content);
+    suggestMealForm.append("instruction1", chunk6Content);
+    suggestMealForm.append("instruction_images6", chunk6Content);
+
+
+
+    // suggestMealForm.append('instructionsGroupList', instructionGroupData);
+
+    // chunk content should be passed as file
+    //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
+    // var url = "/addMealSuggestion/";
+    var url = "http://localhost:5000/api/meals/create/";
+
     const config = {
       method: "POST",
       data: suggestMealForm,
@@ -1454,34 +1502,34 @@ class SuggestMealForm extends Component {
       suggestMealForm.append("instructionTitles", instructionTitles)
 
 
-      // suggestMealForm.append('ingredientStrings', ingredientStrings);
-      // list of products quantity measurements (created on submit meal)
-      // suggestMealForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
+    // suggestMealForm.append('ingredientStrings', ingredientStrings);
+    // list of products quantity measurements (created on submit meal)
+    // suggestMealForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
 
-      // new suggested products
-      suggestMealForm.append("meal_categories", suggestedCategories);
+    // new suggested products
+    suggestMealForm.append("meal_categories", suggestedCategories);
 
-      suggestMealForm.append("kitchen_utensils", suggestedUtensils);
+    suggestMealForm.append("kitchen_utensils", suggestedUtensils);
 
-      // RecipeSteps
-      suggestMealForm.append("formatted_ingredients", ingredientStrings);
-      suggestMealForm.append("instruction_images1", chunk1Content);
-      suggestMealForm.append("instruction_images2", chunk2Content);
-      suggestMealForm.append("instruction_images3", chunk3Content);
-      suggestMealForm.append("instruction_images4", chunk4Content);
-      suggestMealForm.append("instruction_images5", chunk5Content);
-      suggestMealForm.append("instruction_images6", chunk6Content);
-      suggestMealForm.append("instruction1", chunk6Content);
-      suggestMealForm.append("instruction_images6", chunk6Content);
+    // RecipeSteps
+    suggestMealForm.append("formatted_ingredients", ingredientStrings);
+    suggestMealForm.append("instruction_images1", chunk1Content);
+    suggestMealForm.append("instruction_images2", chunk2Content);
+    suggestMealForm.append("instruction_images3", chunk3Content);
+    suggestMealForm.append("instruction_images4", chunk4Content);
+    suggestMealForm.append("instruction_images5", chunk5Content);
+    suggestMealForm.append("instruction_images6", chunk6Content);
+    suggestMealForm.append("instruction1", chunk6Content);
+    suggestMealForm.append("instruction_images6", chunk6Content);
 
 
 
-      // suggestMealForm.append('instructionsGroupList', instructionGroupData);
+    // suggestMealForm.append('instructionsGroupList', instructionGroupData);
 
-      // chunk content should be passed as file
-      //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
-      // var url = "/addMealSuggestion/";
-      var url = "http://localhost:5000/api/meals/create/";
+    // chunk content should be passed as file
+    //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
+    // var url = "/addMealSuggestion/";
+    var url = "http://localhost:5000/api/meals/create/";
 
       const config_ = {
         method: "POST",
@@ -1496,233 +1544,269 @@ class SuggestMealForm extends Component {
         },
       };
 
-      // var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
-      // console.log(instructionData);
+    // var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
+    // console.log(instructionData);
 
-      axios(config)
-        .then((response) => {
-          if (response.status >= 200 && response.status < 300) {
-            this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
-            console.log(response);
-            console.log("Display Meal submitted successfully");
-            localStorage.removeItem("suggestMealForm");
-          } else {
-            console.log("Something wrong happened ");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
+    axios(config)
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
+          console.log(response);
+          console.log("Display Meal submitted successfully");
+          localStorage.removeItem("suggestMealForm");
+        } else {
+          console.log("Something wrong happened ");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-    uploadMediaStep = (id) => {
-      // <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent1" name="instructionChunkContent1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 1)} />
-      const input = document.createElement("input");
-      input.accept = "image/*,video/mp4,video/x-m4v,video/*";
-      input.id = "instructionChunkContent" + id;
-      input.name = "instructionChunkContent" + id;
-      input.type = "file";
-      input.onchange = (ev) => this.onhandleInstructionImg(ev, id);
-      input.hidden = true;
-      input.click();
-    };
+  uploadMediaStep = (id) => {
+    // <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent1" name="instructionChunkContent1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 1)} />
+    const input = document.createElement("input");
+    input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+    input.id = "instructionChunkContent" + id;
+    input.name = "instructionChunkContent" + id;
+    input.type = "file";
+    input.onchange = (ev) => this.onhandleInstructionImg(ev, id);
+    input.hidden = true;
+    input.click();
+  };
 
-    uploadMealImage = () => {
-      // <input accept="image/*,video/mp4,video/mov,video/x-m4v,video/*" id="mealImage" name="mealImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onUpdateMealImage(ev)} />
-      const input = document.createElement("input");
-      input.accept = "image/*,video/mp4,video/x-m4v,video/*";
-      input.id = "mealImage";
-      input.name = "mealImage";
-      input.type = "file";
-      let id = this.state.mealImagesData.length;
-      input.onchange = (ev) => this.onUpdateMealImage(ev, id);
-      input.hidden = true;
-      input.click();
-    };
+  uploadMealImage = () => {
+    // <input accept="image/*,video/mp4,video/mov,video/x-m4v,video/*" id="mealImage" name="mealImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onUpdateMealImage(ev)} />
+    const input = document.createElement("input");
+    input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+    input.id = "mealImage";
+    input.name = "mealImage";
+    input.type = "file";
+    let id = this.state.mealImagesData.length;
+    input.onchange = (ev) => this.onUpdateMealImage(ev, id);
+    input.hidden = true;
+    input.click();
+  };
 
-    addMoreStep = () => {
-      let stepInputs = this.state.stepInputs;
+  addMoreStep = () => {
+    let stepInputs = this.state.stepInputs;
 
-      let id = stepInputs.length + 2;
+    let id = stepInputs.length + 2;
 
       stepInputs.push(id);
       this.setState({
         stepInputs,
       });
+  };
+
+  uploadMediaStep = (id) => {
+    // <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent1" name="instructionChunkContent1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 1)} />
+    const input = document.createElement("input");
+    input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+    input.id = "instructionChunkContent" + id;
+    input.name = "instructionChunkContent" + id;
+    input.type = "file";
+    input.onchange = (ev) => this.onhandleInstructionImg(ev, id);
+    input.hidden = true;
+    input.click();
+  };
+
+  uploadMealImage = () => {
+    // <input accept="image/*,video/mp4,video/mov,video/x-m4v,video/*" id="mealImage" name="mealImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onUpdateMealImage(ev)} />
+    const input = document.createElement("input");
+    input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+    input.id = "mealImage";
+    input.name = "mealImage";
+    input.type = "file";
+    let id = this.state.mealImagesData.length;
+    input.onchange = (ev) => this.onUpdateMealImage(ev, id);
+    input.hidden = true;
+    input.click();
+  };
+
+  addMoreStep = () => {
+    let stepInputs = this.state.stepInputs;
+
+    let id = stepInputs.length + 2;
+
+    stepInputs.push(id);
+    this.setState({
+      stepInputs,
+    });
+  };
+
+  removeStep = (n) => {
+    let stepInputs = this.state.stepInputs;
+    var index = stepInputs.indexOf(n);
+    stepInputs.splice(index, 1);
+
+    // let instruction = this.state['instructionChunk'+n];
+
+    this.state["instructionChunk" + n] = {
+      title: "",
+      instructionSteps: [],
+      dataName: "",
     };
 
-    removeStep = (n) => {
-      let stepInputs = this.state.stepInputs;
-      var index = stepInputs.indexOf(n);
-      stepInputs.splice(index, 1);
+    this.state["chunk" + n + "Content"] = "";
+    const input = document.getElementById("instructionChunkContent" + n);
+    if (input) {
+      input.accept = "";
+      input.id = "";
+      input.name = "";
+      input.type = "";
+      input.onchange = null;
+      input.hidden = true;
 
-      // let instruction = this.state['instructionChunk'+n];
+      var imageElementId = "chunk" + n + "Image";
+      var videoElementId = "chunk" + n + "Video";
+      var image = document.getElementById(imageElementId);
+      var video = document.getElementById(videoElementId);
+      image.style.display = "none";
+      video.style.display = "none";
 
-      this.state["instructionChunk" + n] = {
-        title: "",
-        instructionSteps: [],
-        dataName: "",
-      };
+      image.src = "";
+      video.src = "";
+    }
 
-      this.state["chunk" + n + "Content"] = "";
-      const input = document.getElementById("instructionChunkContent" + n);
-      if (input) {
-        input.accept = "";
-        input.id = "";
-        input.name = "";
-        input.type = "";
-        input.onchange = null;
-        input.hidden = true;
+    this.setState({
+      stepInputs,
+    });
+  };
 
-        var imageElementId = "chunk" + n + "Image";
-        var videoElementId = "chunk" + n + "Video";
-        var image = document.getElementById(imageElementId);
-        var video = document.getElementById(videoElementId);
-        image.style.display = "none";
-        video.style.display = "none";
+  ///////////////////////////////////////////////////////////////////////////////////////
+  render() {
+    // const [ingredientInput, setIngredientInput] = useState('');
 
-        image.src = "";
-        video.src = "";
-      }
+    // const theme = createMuiTheme({
+    //   palette: { primary: green },
+    // });
 
-      this.setState({
-        stepInputs,
-      });
-    };
+    // console.log(this.props.categories);
+    const { ingredientStrings, stepInputs } = this.state;
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    render(){
-      // const [ingredientInput, setIngredientInput] = useState('');
-
-      // const theme = createMuiTheme({
-      //   palette: { primary: green },
-      // });
-
-      // console.log(this.props.categories);
-      const { ingredientStrings, stepInputs } = this.state;
-
-      return (
-        <div className={styles.suggestion_section_2}>
-          <form
-            id="formmeal"
-            className={styles.suggestion_forms}
-            noValidate
-            autoComplete="off"
-            encType="multipart/form-data"
-            method="post"
-          >
-            <h3>Begin Suggesting Meal</h3>
-            <div className={styles.suggestion_form}>
-              <div className={styles.suggestion_form_group}>
-                <label
-                  htmlFor="mealName"
-                  className={styles.suggestion_form_label}
-                >
-                  Meal Name
-                </label>
-                <Autocomplete
-                  id="mealName"
-                  options={this.props.allMealNames}
-                  // onChange={(ev, val) => this.onInputChange(ev, val)}
-                  onInputChange={(ev, val) => this.onInputChange(ev, val)}
-                  freeSolo
-                  renderInput={(params) => (
-                    <TextField {...params} variant="outlined" />
-                  )}
-                  fullWidth
-                  value={this.state.mealName}
-                />
-              </div>
-              <div className={styles.suggestion_form_2_col}>
-                <div className={styles.suggestion_form_2_col_1}>
-                  <div className={styles.suggestion_form_group}>
-                    <label
-                      htmlFor="prepTime"
-                      className={styles.suggestion_form_label}
-                    >
-                      PrepTime (Minutes)
-                    </label>
-                    <TextField
-                      value={this.state.prepTime}
-                      id="prepTime"
-                      type="number"
-                      fullWidth
-                      onChange={this.onTextFieldChange}
-                      variant="outlined"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className={styles.suggestion_form_2_col_2}>
-                  <div className={styles.suggestion_form_group}>
-                    <label
-                      htmlFor="cookTime"
-                      className={styles.suggestion_form_label}
-                    >
-                      CookTime (Minutes)
-                    </label>
-                    <TextField
-                      value={this.state.cookTime}
-                      id="cookTime"
-                      type="number"
-                      fullWidth
-                      onChange={this.onTextFieldChange}
-                      variant="outlined"
-                      required
-                    />
-                  </div>
+    return (
+      <div className={styles.suggestion_section_2}>
+        <form
+          id="formmeal"
+          className={styles.suggestion_forms}
+          noValidate
+          autoComplete="off"
+          encType="multipart/form-data"
+          method="post"
+        >
+          <h3>Begin Suggesting Meal</h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label
+                htmlFor="mealName"
+                className={styles.suggestion_form_label}
+              >
+                Meal Name
+              </label>
+              <Autocomplete
+                id="mealName"
+                options={this.props.allMealNames}
+                // onChange={(ev, val) => this.onInputChange(ev, val)}
+                onInputChange={(ev, val) => this.onInputChange(ev, val)}
+                freeSolo
+                renderInput={(params) => (
+                  <TextField {...params} variant="outlined" />
+                )}
+                fullWidth
+                value={this.state.mealName}
+              />
+            </div>
+            <div className={styles.suggestion_form_2_col}>
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label
+                    htmlFor="prepTime"
+                    className={styles.suggestion_form_label}
+                  >
+                    PrepTime (Minutes)
+                  </label>
+                  <TextField
+                    value={this.state.prepTime}
+                    id="prepTime"
+                    type="number"
+                    fullWidth
+                    onChange={this.onTextFieldChange}
+                    variant="outlined"
+                    required
+                  />
                 </div>
               </div>
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label
+                    htmlFor="cookTime"
+                    className={styles.suggestion_form_label}
+                  >
+                    CookTime (Minutes)
+                  </label>
+                  <TextField
+                    value={this.state.cookTime}
+                    id="cookTime"
+                    type="number"
+                    fullWidth
+                    onChange={this.onTextFieldChange}
+                    variant="outlined"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
 
-              <h3>
-                Upload Images <em>(Up to 4)</em>
-              </h3>
-              {this.state.mealImagesData.length < 4 && (
-                <div className={styles.suggestion_form_image}>
-                  <div className={styles.suggestion_form_image_col_1}>
-                    <div
-                      onClick={() => this.uploadMealImage()}
-                      className={styles.suggestion_form_image_icon_con}
-                    >
-                      <AddIcon className={styles.suggestion_form_image_icon} />
-                    </div>
-                  </div>
-                  <div className={styles.suggestion_form_image_col_2}>
-                    <p>
-                      Upload picture with : Jpeg or Png format and not more than
-                      500kb
-                    </p>
+            <h3>
+              Upload Images <em>(Up to 4)</em>
+            </h3>
+            {this.state.mealImagesData.length < 4 && (
+              <div className={styles.suggestion_form_image}>
+                <div className={styles.suggestion_form_image_col_1}>
+                  <div
+                    onClick={() => this.uploadMealImage()}
+                    className={styles.suggestion_form_image_icon_con}
+                  >
+                    <AddIcon className={styles.suggestion_form_image_icon} />
                   </div>
                 </div>
-              )}
-              <Row>
+                <div className={styles.suggestion_form_image_col_2}>
+                  <p>
+                    Upload picture with : Jpeg or Png format and not more than
+                    500kb
+                  </p>
+                </div>
+              </div>
+            )}
+            <Row>
+              <Col md={12} style={{ marginTop: "20px" }}>
+                <p>
+                  <img
+                    id="mealImage0"
+                    width="100%"
+                    height="100%"
+                    alt="main_Meal_Image"
+                    style={{ display: "none" }}
+                  />
+                </p>
+              </Col>
+            </Row>
+            {this.state.mealImagesData.map((data, index) => (
+              <Row key={index}>
                 <Col md={12} style={{ marginTop: "20px" }}>
                   <p>
-                    <img
-                      id="mealImage0"
+                    <Image
+                      src={data}
+                      id={"mealImage" + { index }}
                       width="100%"
                       height="100%"
-                      alt="main_Meal_Image"
-                      style={{ display: "none" }}
+                      alt="other_meal_images"
                     />
                   </p>
                 </Col>
               </Row>
-              {this.state.mealImagesData.map((data, index) => (
-                <Row key={index}>
-                  <Col md={12} style={{ marginTop: "20px" }}>
-                    <p>
-                      <Image
-                        src={data}
-                        id={"mealImage" + { index }}
-                        width="100%"
-                        height="100%"
-                        alt="other_meal_images"
-                      />
-                    </p>
-                  </Col>
-                </Row>
-              ))}
+            ))}
 
               <h3>Add more details</h3>
               <div className={styles.suggestion_form_group}>
@@ -1768,9 +1852,7 @@ class SuggestMealForm extends Component {
                     </label>
                     <TextField
                       id="chef"
-                      // value={this.state.chef}
-                      value={this.state.username}
-                      disabled={true}
+                      value={this.state.chef}
                       fullWidth
                       onChange={this.updateChef}
                       variant="outlined"
@@ -1828,157 +1910,157 @@ class SuggestMealForm extends Component {
                   </div>
                 </div>
 
-                <div className={styles.suggestion_form_2_col_2}>
-                  <div className={styles.suggestion_form_group}>
-                    <label
-                      htmlFor="currentIngredientMeasurement"
-                      className={styles.suggestion_form_label}
-                    >
-                      Measurements
-                    </label>
-                    <Autocomplete
-                      id="currentIngredientMeasurement"
-                      options={this.props.measurements.map((option) => option)}
-                      value={this.state.currentIngredientMeasurement}
-                      onChange={this.handleIngredientMeasurement}
-                      freeSolo
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          value={this.state.currentIngredientMeasurement}
-                          id="currentIngredientMeasurement"
-                          variant="outlined"
-                          type="text"
-                        />
-                      )}
-                    />
-                  </div>
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label
+                    htmlFor="currentIngredientMeasurement"
+                    className={styles.suggestion_form_label}
+                  >
+                    Measurements
+                  </label>
+                  <Autocomplete
+                    id="currentIngredientMeasurement"
+                    options={this.props.measurements.map((option) => option)}
+                    value={this.state.currentIngredientMeasurement}
+                    onChange={this.handleIngredientMeasurement}
+                    freeSolo
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        value={this.state.currentIngredientMeasurement}
+                        id="currentIngredientMeasurement"
+                        variant="outlined"
+                        type="text"
+                      />
+                    )}
+                  />
                 </div>
+              </div>
 
+              <Button
+                variant="contained"
+                disableRipple
+                onClick={this.addIngredientToMeal}
+                className={styles.ingredient_button}
+                style={{ width: "max-content" }}
+              >
+                {" "}
+                Add Ingredient
+              </Button>
+            </div>
+            {/* // show all ingredients in two column table format */}
+            {/* Show all Products in display format as expected in Meal Page*/}
+
+            <Stack direction="row" spacing={1} className={styles.stack}>
+              {ingredientStrings.map((data, index) => (
+                <Chip
+                  key={index}
+                  label={data}
+                  className={styles.chip}
+                  onClick={() => this.handleDeleteIngredientChip(data)}
+                  onDelete={() => this.handleDeleteIngredientChip(data)}
+                />
+              ))}
+            </Stack>
+          </div>
+
+          <h3>
+            Kitchen Utensils<em>(optional)</em>
+          </h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label
+                htmlFor="kitchen_utensils"
+                className={styles.suggestion_form_label}
+              >
+                Utensils Name
+              </label>
+              <div className={styles.input_button}>
+                <Autocomplete
+                  multiple
+                  id="kitchen_utensils"
+                  freeSolo
+                  clearOnBlur
+                  onBlur={this.kitBlur}
+                  options={this.props.kitchenUtensils.map((option) => option)}
+                  // onChange={(ev,val)=>this.handleUtensilsDropdownChange(ev,val)}
+                  onChange={(e, val) => this.handleKitchenUtensilInputName(val)}
+                  renderInput={(params) => (
+                    <TextField {...params} variant="outlined" />
+                  )}
+                  fullWidth
+                  value={this.state.suggestedUtensils}
+                />
                 <Button
                   variant="contained"
                   disableRipple
-                  onClick={this.addIngredientToMeal}
+                  onClick={this.addKitchenUtensil}
                   className={styles.ingredient_button}
                   style={{ width: "max-content" }}
                 >
                   {" "}
-                  Add Ingredient
+                  Add Kitchen Utensils
                 </Button>
               </div>
-              {/* // show all ingredients in two column table format */}
-              {/* Show all Products in display format as expected in Meal Page*/}
-
-              <Stack direction="row" spacing={1} className={styles.stack}>
-                {ingredientStrings.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data}
-                    className={styles.chip}
-                    onClick={() => this.handleDeleteIngredientChip(data)}
-                    onDelete={() => this.handleDeleteIngredientChip(data)}
-                  />
-                ))}
-              </Stack>
+              {/* <ChipInput label=" className={styles.mb-2} fullWidth id="utensils" onChange={(chip) => this.updateUtensils(chip)} variant="outlined" /> */}
             </div>
+            <Stack
+              direction="row"
+              justifyContent="flex-start"
+              spacing={1}
+              className={styles.stack}
+            >
+              {this.state.suggestedUtensils.map((data, index) => (
+                <Chip
+                  key={index}
+                  label={data}
+                  className={styles.chip}
+                  onClick={() => this.deleteUtensil(data)}
+                  onDelete={() => this.deleteUtensil(data)}
+                />
+              ))}
+            </Stack>
+          </div>
 
-            <h3>
-              Kitchen Utensils<em>(optional)</em>
-            </h3>
-            <div className={styles.suggestion_form}>
-              <div className={styles.suggestion_form_group}>
-                <label
-                  htmlFor="kitchen_utensils"
-                  className={styles.suggestion_form_label}
-                >
-                  Utensils Name
-                </label>
-                <div className={styles.input_button}>
-                  <Autocomplete
-                    multiple
-                    id="kitchen_utensils"
-                    freeSolo
-                    clearOnBlur
-                    onBlur={this.kitBlur}
-                    options={this.props.kitchenUtensils.map((option) => option)}
-                    // onChange={(ev,val)=>this.handleUtensilsDropdownChange(ev,val)}
-                    onChange={(e, val) => this.handleKitchenUtensilInputName(val)}
-                    renderInput={(params) => (
-                      <TextField {...params} variant="outlined" />
-                    )}
-                    fullWidth
-                    value={this.state.suggestedUtensils}
-                  />
-                  <Button
-                    variant="contained"
-                    disableRipple
-                    onClick={this.addKitchenUtensil}
-                    className={styles.ingredient_button}
-                    style={{ width: "max-content" }}
-                  >
-                    {" "}
-                    Add Kitchen Utensils
-                  </Button>
-                </div>
-                {/* <ChipInput label=" className={styles.mb-2} fullWidth id="utensils" onChange={(chip) => this.updateUtensils(chip)} variant="outlined" /> */}
-              </div>
-              <Stack
-                direction="row"
-                justifyContent="flex-start"
-                spacing={1}
-                className={styles.stack}
-              >
-                {this.state.suggestedUtensils.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data}
-                    className={styles.chip}
-                    onClick={() => this.deleteUtensil(data)}
-                    onDelete={() => this.deleteUtensil(data)}
-                  />
-                ))}
-              </Stack>
-            </div>
+          {/* add kitchen slider template here? */}
 
-            {/* add kitchen slider template here? */}
-
-            <h3>Add Recipe Steps</h3>
-            <div className={styles.suggestion_form}>
-              {/* <Row>
+          <h3>Add Recipe Steps</h3>
+          <div className={styles.suggestion_form}>
+            {/* <Row>
                     <Col md={12}>
                       <ChipInput label="Instructions"  className={styles.mb-2} fullWidth  value={this.state.instructionsChip} onAdd={(chip) => this.handleAddInstructionStep(chip)} onDelete={(chip, index) =>this.handleDeleteInstructionsStep(chip, index)}   variant="outlined" />
                     </Col>               
                   </Row> */}
 
-              <p> Upload photos/videos for different parts of recipe steps</p>
+            <p> Upload photos/videos for different parts of recipe steps</p>
 
-              {/* <Col md={12}  className="mb-2}>
+            {/* <Col md={12}  className="mb-2}>
                       <input accept="image/*,video/mp4,video/x-m4v,video/*" id="imgSrc1" type="file" className="mb-2" onChange={(ev)=>this.onhandleInstructionImg(ev)} />
                     </Col>    */}
 
-              {/* <Col md={4}  style={{textAlign:"center", margin: "auto"}}> 
+            {/* <Col md={4}  style={{textAlign:"center", margin: "auto"}}> 
                       <Button variant="contained" color="primary"  disableRipple style={{color:"white", width:"300px"}}  onClick={this.addInstructionList}  > ADD NEW INSTRUCTION SET</Button>
                     </Col> */}
 
-              <div
-                className={
-                  stepInputs.length > 0
-                    ? "suggestion_recipe_steps more_steps"
-                    : "suggestion_recipe_steps"
-                }
-              >
-                <div className={styles.suggestion_recipe_step}>
-                  <div className={styles.suggestion_form_group}>
-                    <label className={styles.suggestion_form_label}>
-                      Step 1 Title
-                    </label>
-                    <TextField
-                      value={this.state.instructionChunk1.title}
-                      id="chunk1Title"
-                      onChange={(ev) => this.handleInstructionTitle(ev, 1)}
-                      variant="outlined"
-                    />
-                  </div>
+            <div
+              className={
+                stepInputs.length > 0
+                  ? "suggestion_recipe_steps more_steps"
+                  : "suggestion_recipe_steps"
+              }
+            >
+              <div className={styles.suggestion_recipe_step}>
+                <div className={styles.suggestion_form_group}>
+                  <label className={styles.suggestion_form_label}>
+                    Step 1 Title
+                  </label>
+                  <TextField
+                    value={this.state.instructionChunk1.title}
+                    id="chunk1Title"
+                    onChange={(ev) => this.handleInstructionTitle(ev, 1)}
+                    variant="outlined"
+                  />
+                </div>
 
                 <div className={styles.suggestion_form_group}>
                   <label className={styles.suggestion_form_label}>
@@ -2020,57 +2102,57 @@ class SuggestMealForm extends Component {
 
                     <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent1" name="instructionChunkContent1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 1)} />
                     </div> */}
-                  <div className={styles.suggestion_form_image}>
-                    <div
-                      onClick={() => this.uploadMediaStep(1)}
-                      className={styles.suggestion_form_image_col_1}
-                    >
-                      <div className={styles.suggestion_form_image_icon_con}>
-                        <AddIcon className={styles.suggestion_form_image_icon} />
-                      </div>
-                    </div>
-                    <div className={styles.suggestion_form_image_col_2}>
-                      <p>
-                        Upload picture/video with : Jpeg,png,mp4,mpeg format and
-                        not more than 2mb
-                      </p>
+                <div className={styles.suggestion_form_image}>
+                  <div
+                    onClick={() => this.uploadMediaStep(1)}
+                    className={styles.suggestion_form_image_col_1}
+                  >
+                    <div className={styles.suggestion_form_image_icon_con}>
+                      <AddIcon className={styles.suggestion_form_image_icon} />
                     </div>
                   </div>
-
-                  <p>
-                    <img
-                      id="chunk1Image"
-                      className={styles.suggestion_image}
-                      alt="recipe_step1_image_or_video"
-                      height={"100%"}
-                      width={"100%"}
-                      style={{ display: "none" }}
-                    />
-                    <video
-                      className={styles.suggestion_image}
-                      id="chunk1Video"
-                      style={{ display: "none" }}
-                      controls
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                  </p>
+                  <div className={styles.suggestion_form_image_col_2}>
+                    <p>
+                      Upload picture/video with : Jpeg,png,mp4,mpeg format and
+                      not more than 2mb
+                    </p>
+                  </div>
                 </div>
 
-                {stepInputs.map((id, index) => {
-                  return (
-                    <div key={index} className={styles.suggestion_recipe_step}>
-                      <div className={styles.suggestion_form_group}>
-                        <label className={styles.suggestion_form_label}>
-                          Step {id} Title
-                        </label>
-                        <TextField
-                          id={"chunk" + id + "Title"}
-                          value={this.state["instructionChunk" + id].title}
-                          onChange={(ev) => this.handleInstructionTitle(ev, id)}
-                          variant="outlined"
-                        />
-                      </div>
+                <p>
+                  <img
+                    id="chunk1Image"
+                    className={styles.suggestion_image}
+                    alt="recipe_step1_image_or_video"
+                    height={"100%"}
+                    width={"100%"}
+                    style={{ display: "none" }}
+                  />
+                  <video
+                    className={styles.suggestion_image}
+                    id="chunk1Video"
+                    style={{ display: "none" }}
+                    controls
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                </p>
+              </div>
+
+              {stepInputs.map((id, index) => {
+                return (
+                  <div key={index} className={styles.suggestion_recipe_step}>
+                    <div className={styles.suggestion_form_group}>
+                      <label className={styles.suggestion_form_label}>
+                        Step {id} Title
+                      </label>
+                      <TextField
+                        id={"chunk" + id + "Title"}
+                        value={this.state["instructionChunk" + id].title}
+                        onChange={(ev) => this.handleInstructionTitle(ev, id)}
+                        variant="outlined"
+                      />
+                    </div>
 
                     <div className={styles.suggestion_form_group}>
                       <label className={styles.suggestion_form_label}>
@@ -2090,224 +2172,221 @@ class SuggestMealForm extends Component {
                           value={this.state.instructionChunk2.instructionSteps} 
                           onAdd={(chip) => this.handleAddInstructionStep(chip, id)} 
                           onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, id)} variant="outlined" /> */}
-                      </div>
-                      <Stack direction="row" spacing={1} className={styles.stack}>
-                        {this.state["instructionChunk" + id].instructionSteps.map(
-                          (chip, index) => (
-                            <Chip
-                              key={index}
-                              label={chip}
-                              className={styles.chip}
-                              onClick={() =>
-                                this.handleDeleteInstructionsStep(chip, id)
-                              }
-                              onDelete={() =>
-                                this.handleDeleteInstructionsStep(chip, id)
-                              }
-                            />
-                          )
-                        )}
-                      </Stack>
-                      <h3>Upload Media</h3>
-                      {/* <div className="suggestion_form_group}>
+                    </div>
+                    <Stack direction="row" spacing={1} className={styles.stack}>
+                      {this.state["instructionChunk" + id].instructionSteps.map(
+                        (chip, index) => (
+                          <Chip
+                            key={index}
+                            label={chip}
+                            className={styles.chip}
+                            onClick={() =>
+                              this.handleDeleteInstructionsStep(chip, id)
+                            }
+                            onDelete={() =>
+                              this.handleDeleteInstructionsStep(chip, id)
+                            }
+                          />
+                        )
+                      )}
+                    </Stack>
+                    <h3>Upload Media</h3>
+                    {/* <div className="suggestion_form_group}>
                         <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent2" name="instructionChunkContent2" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 2)} />
                         </div> */}
-                      <div className={styles.suggestion_form_image}>
-                        <div
-                          onClick={() => this.uploadMediaStep(id)}
-                          className={styles.suggestion_form_image_col_1}
-                        >
-                          <div className={styles.suggestion_form_image_icon_con}>
-                            <AddIcon
-                              className={styles.suggestion_form_image_icon}
-                            />
-                          </div>
-                        </div>
-                        <div className={styles.suggestion_form_image_col_2}>
-                          <p>
-                            Upload picture/video with : Jpeg,png,mp4,mpeg format
-                            and not more than 2mb
-                          </p>
+                    <div className={styles.suggestion_form_image}>
+                      <div
+                        onClick={() => this.uploadMediaStep(id)}
+                        className={styles.suggestion_form_image_col_1}
+                      >
+                        <div className={styles.suggestion_form_image_icon_con}>
+                          <AddIcon
+                            className={styles.suggestion_form_image_icon}
+                          />
                         </div>
                       </div>
-
-                      <p>
-                        <img
-                          id={"chunk" + id + "Image"}
-                          height={"100%"}
-                          width={"100%"}
-                          className={styles.suggestion_image}
-                          alt={"recipe_step" + id + "_image_or_video"}
-                          style={{ display: "none" }}
-                        />
-                        <video
-                          className={styles.suggestion_image}
-                          id={"chunk" + id + "Video"}
-                          style={{ display: "none" }}
-                          controls
-                        >
-                          Your browser does not support the video tag.
-                        </video>
-                      </p>
+                      <div className={styles.suggestion_form_image_col_2}>
+                        <p>
+                          Upload picture/video with : Jpeg,png,mp4,mpeg format
+                          and not more than 2mb
+                        </p>
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
-              <div className={styles.input_button}>
-                {stepInputs.length > 0 && (
-                  <Button
-                    variant="contained"
-                    disableRipple
-                    onClick={() =>
-                      this.removeStep(stepInputs[stepInputs.length - 1])
-                    }
-                    className={styles.ingredient_button}
-                    style={{ width: "209px" }}
-                  >
-                    {" "}
-                    REMOVE STEP
-                  </Button>
-                )}
-                {stepInputs.length < 5 && (
-                  <Button
-                    variant="contained"
-                    disableRipple
-                    onClick={this.addMoreStep}
-                    className={styles.ingredient_button}
-                    style={{ width: "209px" }}
-                  >
-                    {" "}
-                    ADD MORE
-                  </Button>
-                )}
-              </div>
-            </div>
 
-            <h3>Add Meal Categories</h3>
-            <div className={styles.suggestion_form}>
-              <div className={styles.suggestion_form_group}>
-                <label
-                  htmlFor="tags-outlined"
-                  className={styles.suggestion_form_label}
-                >
-                  Suggest category for this meal
-                </label>
-                <div className={styles.input_button}>
-                  <Autocomplete
-                    multiple
-                    id="tags-outlined"
-                    freeSolo
-                    clearOnBlur
-                    onBlur={this.categoryBlur}
-                    // filterSelectedOptions
-                    options={this.props.categories?.map((option) => option)}
-                    // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
-                    onChange={(e, newValue) =>
-                      this.handleCategoryDropdownChange(newValue)
-                    }
-                    // getOptionLabel={option => option}
-                    // renderTags={() => {}}
-                    value={this.state.suggestedCategories}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        variant="outlined"
-                        placeholder="Suggest categories for this meal.."
-                        fullWidth
+                    <p>
+                      <img
+                        id={"chunk" + id + "Image"}
+                        height={"100%"}
+                        width={"100%"}
+                        className={styles.suggestion_image}
+                        alt={"recipe_step" + id + "_image_or_video"}
+                        style={{ display: "none" }}
                       />
-                    )}
-                  />
-                  <Button
-                    variant="contained"
-                    disableRipple
-                    onClick={this.addCategory}
-                    className={styles.ingredient_button}
-                    style={{ width: "max-content" }}
-                  >
-                    {" "}
-                    Add Category
-                  </Button>
-                </div>
-              </div>
-              <Stack direction="row" spacing={1} className={styles.stack}>
-                {this.state.suggestedCategories.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data}
-                    className={styles.chip}
-                    onClick={() => this.handleDeleteCategoryChip(data)}
-                    onDelete={() => this.handleDeleteCategoryChip(data)}
-                  />
-                ))}
-              </Stack>
+                      <video
+                        className={styles.suggestion_image}
+                        id={"chunk" + id + "Video"}
+                        style={{ display: "none" }}
+                        controls
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                    </p>
+                  </div>
+                );
+              })}
             </div>
-
-            <h3>
-              Tips <em>(optional)</em>
-            </h3>
-            <div className={styles.suggestion_form}>
-              <div className={styles.suggestion_form_group}>
-                <label htmlFor="tips" className={styles.suggestion_form_label}>
-                  Include any modifications to this meal you will like to add
-                </label>
-                <div className={styles.input_button}>
-                  {/* <ChipInput label="tips" className="mb-2" fullWidth value={this.state.tips} onAdd={(chip) => this.updateTip(chip)} onDelete={(chip, index) => this.deleteTip(chip, index)} variant="outlined" /> */}
-                  <TextField
-                    id="tips"
-                    value={this.state.tip}
-                    fullWidth
-                    onChange={this.handleTip}
-                    onKeyUp={this.handleTip}
-                    variant="outlined"
-                    required
-                  />
-                  {/* <ChipInput id="tips"
-                    fullWidth value={this.state.tips} 
-                    onAdd={(chip) => this.updateTip(chip)} 
-                    onDelete={(chip, index) => this.deleteTip(chip, index)} variant="outlined" /> */}
-                  <Button
-                    variant="contained"
-                    disableRipple
-                    onClick={this.updateTip}
-                    className={styles.ingredient_button}
-                    style={{ width: "max-content" }}
-                  >
-                    {" "}
-                    Add Tip
-                  </Button>
-                </div>
-              </div>
-              <Stack direction="row" spacing={1} className={styles.stack}>
-                {this.state.tips.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data}
-                    className={styles.chip}
-                    onClick={() => this.deleteTip(data)}
-                    onDelete={() => this.deleteTip(data)}
-                  />
-                ))}
-              </Stack>
+            <div className={styles.input_button}>
+              {stepInputs.length > 0 && (
+                <Button
+                  variant="contained"
+                  disableRipple
+                  onClick={() =>
+                    this.removeStep(stepInputs[stepInputs.length - 1])
+                  }
+                  className={styles.ingredient_button}
+                  style={{ width: "209px" }}
+                >
+                  {" "}
+                  REMOVE STEP
+                </Button>
+              )}
+              {stepInputs.length < 5 && (
+                <Button
+                  variant="contained"
+                  disableRipple
+                  onClick={this.addMoreStep}
+                  className={styles.ingredient_button}
+                  style={{ width: "209px" }}
+                >
+                  {" "}
+                  ADD MORE
+                </Button>
+              )}
             </div>
-            <u style={{ color: "#F47900" }} onClick={this.openMealDetailsModal}>
-              {" "}
-              Show Preview
-            </u>
+          </div>
 
-            {/* <Row>
+          <h3>Add Meal Categories</h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label
+                htmlFor="tags-outlined"
+                className={styles.suggestion_form_label}
+              >
+                Suggest category for this meal
+              </label>
+              <div className={styles.input_button}>
+                <Autocomplete
+                  multiple
+                  id="tags-outlined"
+                  freeSolo
+                  clearOnBlur
+                  onBlur={this.categoryBlur}
+                  // filterSelectedOptions
+                  options={this.props.categories?.map((option) => option)}
+                  // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
+                  onChange={(e, newValue) =>
+                    this.handleCategoryDropdownChange(newValue)
+                  }
+                  // getOptionLabel={option => option}
+                  // renderTags={() => {}}
+                  value={this.state.suggestedCategories}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      placeholder="Suggest categories for this meal.."
+                      fullWidth
+                    />
+                  )}
+                />
+                <Button
+                  variant="contained"
+                  disableRipple
+                  onClick={this.addCategory}
+                  className={styles.ingredient_button}
+                  style={{ width: "max-content" }}
+                >
+                  {" "}
+                  Add Category
+                </Button>
+              </div>
+            </div>
+            <Stack direction="row" spacing={1} className={styles.stack}>
+              {this.state.suggestedCategories.map((data, index) => (
+                <Chip
+                  key={index}
+                  label={data}
+                  className={styles.chip}
+                  onClick={() => this.handleDeleteCategoryChip(data)}
+                  onDelete={() => this.handleDeleteCategoryChip(data)}
+                />
+              ))}
+            </Stack>
+          </div>
+
+          <h3>
+            Tips <em>(optional)</em>
+          </h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="tips" className={styles.suggestion_form_label}>
+                Include any modifications to this meal you will like to add
+              </label>
+              <div className={styles.input_button}>
+                {/* <ChipInput label="tips" className="mb-2" fullWidth value={this.state.tips} onAdd={(chip) => this.updateTip(chip)} onDelete={(chip, index) => this.deleteTip(chip, index)} variant="outlined" /> */}
+                <TextField
+                  id="tips"
+                  value={this.state.tip}
+                  fullWidth
+                  onChange={this.handleTip}
+                  onKeyUp={this.handleTip}
+                  variant="outlined"
+                  required
+                />
+
+                <Button
+                  variant="contained"
+                  disableRipple
+                  onClick={this.updateTip}
+                  className={styles.ingredient_button}
+                  style={{ width: "max-content" }}
+                >
+                  {" "}
+                  Add Tip
+                </Button>
+              </div>
+            </div>
+            <Stack direction="row" spacing={1} className={styles.stack}>
+              {this.state.tips.map((data, index) => (
+                <Chip
+                  key={index}
+                  label={data}
+                  className={styles.chip}
+                  onClick={() => this.deleteTip(data)}
+                  onDelete={() => this.deleteTip(data)}
+                />
+              ))}
+            </Stack>
+          </div>
+          <u style={{ color: "#F47900" }} onClick={this.openMealDetailsModal}>
+            {" "}
+            Show Preview
+          </u>
+
+          {/* <Row>
                 <Col md={12}> */}
-            {/* <ThemeProvider theme={theme}> */}
-            <Button
-              variant="contained"
-              className={styles.ingredient_button}
-              style={{ width: "100%" }}
-              onClick={() => this.sendSuggestedMealToDB()}
-            >
-              {" "}
-              Add Meal
-            </Button>
-            {/* </ThemeProvider> */}
-            {/* </Col>
+          {/* <ThemeProvider theme={theme}> */}
+          <Button
+            variant="contained"
+            className={styles.ingredient_button}
+            style={{ width: "100%" }}
+            onClick={() => this.sendSuggestedMealToDB()}
+          >
+            {" "}
+            Add Meal
+          </Button>
+          {/* </ThemeProvider> */}
+          {/* </Col>
                 
               </Row> */}
             <u>View privacy policy</u>
@@ -2351,8 +2430,5 @@ class SuggestMealForm extends Component {
       );
     }
   }
-
-
-
 
 export default SuggestMealForm;
