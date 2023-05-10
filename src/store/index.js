@@ -32,7 +32,7 @@ import logger from "redux-logger";
 const initalState = {};
 
 // middleware
-const middleware = [thunk, logger];
+const middleware = [thunk];
 
 // creating store
 export const store = createStore(

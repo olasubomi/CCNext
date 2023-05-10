@@ -55,16 +55,19 @@ function Login(props) {
   }
 
   useEffect(() => {
-    if (props.auth.isAuthenticated) {
+    const user = JSON.parse(localStorage.getItem("user"))
+    if (props.auth.isAuthenticated && user) {
       props.auth.authUser.super_app_admin
+      // user.super_app_admin
         ? router.push("/admin")
         : router.push("/dashboard");
       props.toggleLogin();
     } else {
-      setLoginLoading(false);
+      // setLoginLoading(false);
     }
   }, [props.auth.isAuthenticated]);
-console.log(props)
+
+  console.log(props)
   async function Login(e) {
     e.preventDefault();
     props.login(email, password);
@@ -73,6 +76,11 @@ console.log(props)
 
     setLoginLoading(true);
     await props.login(email, password);
+
+    // setTimeout(() => {
+    //   setLoginLoading(false)
+    // }, 3000);
+    
 
     // if (props.auth.isAuthenticated) {
     //   setLoginLoading(false);

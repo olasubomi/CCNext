@@ -16,6 +16,7 @@ import Popup2 from "../popups/popup2";
 var FormData = require("form-data");
 // var fs = require('fs');
 import Image from "next/image";
+import {AiOutlineClose} from "react-icons/ai"
 
 class SuggestMealForm extends Component {
   ingredientsQuantityMeasurements = [];
@@ -165,8 +166,8 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-    console.log(this.state.new_product_ingredients, "i love ayowale");
 
+    console.log(JSON.parse(localStorage.getItem('user')))
     // get all Meal Names***
     // var url = "/meals/get-meals/1";
     // axios.get(url).then((body) => {
@@ -184,7 +185,7 @@ class SuggestMealForm extends Component {
     console.log("all meals", this.props.allMealNames);
     const currentUser = JSON.parse(localStorage.getItem('user')) || {};
 
-    if(Object.keys(currentUser).length){
+    if (Object.keys(currentUser).length) {
       this.setState({
         ...this.state,
         username: currentUser?.first_name?.concat(' ', currentUser?.last_name)
@@ -698,7 +699,7 @@ class SuggestMealForm extends Component {
     // }
 
     console.log("In handleIngredientMeasurement . \n val is: " + val);
-    
+
 
     if (val) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
@@ -1134,7 +1135,7 @@ class SuggestMealForm extends Component {
         currIngredientObject,
       ],
     });
-    console.log(this.state.new_product_ingredients,currIngredientObject, "i love ayowale");
+    console.log(this.state.new_product_ingredients, currIngredientObject, "i love ayowale");
 
 
     this.setState({
@@ -1483,23 +1484,23 @@ class SuggestMealForm extends Component {
 
 
 
-      for (let i = 1; i < 7; i++) {
-        if (this.state[`instructionChunk${i}`].title && this.state[`instructionChunk${i}`].instruction) {
-          instructionTitles.push(this.state[`instructionChunk${i}`].title);
-          instructions.push(this.state[`instructionChunk${i}`].instruction);
-        }
-
-
+    for (let i = 1; i < 7; i++) {
+      if (this.state[`instructionChunk${i}`].title && this.state[`instructionChunk${i}`].instruction) {
+        instructionTitles.push(this.state[`instructionChunk${i}`].title);
+        instructions.push(this.state[`instructionChunk${i}`].instruction);
       }
-      // suggestMealForm.append('meal_images', mealImages);
-      suggestMealForm.append("prep_time", prepTime);
-      suggestMealForm.append("cook_time", cookTime);
-      suggestMealForm.append("intro", intro);
-      suggestMealForm.append("tips", JSON.stringify(tips));
-      suggestMealForm.append("chef", chef);
-      suggestMealForm.append("servings", servings);
-      suggestMealForm.append("instructions", instructions)
-      suggestMealForm.append("instructionTitles", instructionTitles)
+
+
+    }
+    // suggestMealForm.append('meal_images', mealImages);
+    suggestMealForm.append("prep_time", prepTime);
+    suggestMealForm.append("cook_time", cookTime);
+    suggestMealForm.append("intro", intro);
+    suggestMealForm.append("tips", JSON.stringify(tips));
+    suggestMealForm.append("chef", chef);
+    suggestMealForm.append("servings", servings);
+    suggestMealForm.append("instructions", instructions)
+    suggestMealForm.append("instructionTitles", instructionTitles)
 
 
     // suggestMealForm.append('ingredientStrings', ingredientStrings);
@@ -1531,18 +1532,18 @@ class SuggestMealForm extends Component {
     // var url = "/addMealSuggestion/";
     var url = "http://localhost:5000/api/meals/create/";
 
-      const config_ = {
-        method: "POST",
-        data: suggestMealForm,
-        url: url,
-        headers: {
-          // 'application/json' is the modern content-type for JSON, but some
-          // older servers may use 'text/json'.
-          // See: http://bit.ly/text-json
-          // application/x-www-form-urlencoded
-          // 'content-type': 'multipart/form-data'
-        },
-      };
+    const config_ = {
+      method: "POST",
+      data: suggestMealForm,
+      url: url,
+      headers: {
+        // 'application/json' is the modern content-type for JSON, but some
+        // older servers may use 'text/json'.
+        // See: http://bit.ly/text-json
+        // application/x-www-form-urlencoded
+        // 'content-type': 'multipart/form-data'
+      },
+    };
 
     // var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
     // console.log(instructionData);
@@ -1593,10 +1594,10 @@ class SuggestMealForm extends Component {
 
     let id = stepInputs.length + 2;
 
-      stepInputs.push(id);
-      this.setState({
-        stepInputs,
-      });
+    stepInputs.push(id);
+    this.setState({
+      stepInputs,
+    });
   };
 
   uploadMediaStep = (id) => {
@@ -1674,6 +1675,12 @@ class SuggestMealForm extends Component {
     });
   };
 
+  //fuction to delete selected image
+  deleteImage(id) {
+    const delImages = this.state.mealImagesData
+    delImages.splice(id, 1)
+    this.setState({...this.state, mealImagesData: delImages})
+  }
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
     // const [ingredientInput, setIngredientInput] = useState('');
@@ -1780,7 +1787,7 @@ class SuggestMealForm extends Component {
               </div>
             )}
             <Row>
-              <Col md={12} style={{ marginTop: "20px" }}>
+              <Col md={12} style={{ marginTop: "20px"}}>
                 <p>
                   <img
                     id="mealImage0"
@@ -1794,121 +1801,127 @@ class SuggestMealForm extends Component {
             </Row>
             {this.state.mealImagesData.map((data, index) => (
               <Row key={index}>
-                <Col md={12} style={{ marginTop: "20px" }}>
-                  <p>
+                <Col md={12} style={{ marginTop: "20px", width: "100%" }}>
+                  <p className={styles.mealImg}>
                     <Image
                       src={data}
                       id={"mealImage" + { index }}
                       width="100%"
                       height="100%"
                       alt="other_meal_images"
+                      
                     />
                   </p>
+                  <div className={styles.close} onClick={() => this.deleteImage(index)}>
+                  <AiOutlineClose className={styles.closeIcon}/>
+                  </div>
                 </Col>
               </Row>
             ))}
 
-              <h3>Add more details</h3>
-              <div className={styles.suggestion_form_group}>
-                <label htmlFor="intro" className={styles.suggestion_form_label}>
-                  Intro (150 words)
-                </label>
-                <TextField
-                  multiline
-                  value={this.state.intro}
-                  id="intro"
-                  fullWidth
-                  onChange={this.onTextFieldChange}
-                  variant="outlined"
-                />
-              </div>
-              <div className={styles.suggestion_form_2_col}>
-                <div className={styles.suggestion_form_2_col_1}>
-                  <div className={styles.suggestion_form_group}>
-                    <label
-                      htmlFor="servings"
-                      className={styles.suggestion_form_label}
-                    >
-                      People to serve
-                    </label>
-                    <TextField
-                      value={this.state.servings}
-                      id="servings"
-                      fullWidth
-                      type="number"
-                      onChange={this.onTextFieldChange}
-                      variant="outlined"
-                      placeholder="1 person, 2, 4 or 10 people"
-                    />
-                  </div>
+            <h3>Add more details</h3>
+            <div className={styles.suggestion_form_group}>
+              <label htmlFor="intro" className={styles.suggestion_form_label}>
+                Intro (150 words)
+              </label>
+              <TextField
+                multiline
+                value={this.state.intro}
+                id="intro"
+                fullWidth
+                onChange={this.onTextFieldChange}
+                variant="outlined"
+              />
+            </div>
+            <div className={styles.suggestion_form_2_col}>
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label
+                    htmlFor="servings"
+                    className={styles.suggestion_form_label}
+                  >
+                    People to serve
+                  </label>
+                  <TextField
+                    value={this.state.servings}
+                    id="servings"
+                    fullWidth
+                    type="number"
+                    onChange={this.onTextFieldChange}
+                    variant="outlined"
+                    placeholder="1 person, 2, 4 or 10 people"
+                  />
                 </div>
-                <div className={styles.suggestion_form_2_col_2}>
-                  <div className={styles.suggestion_form_group}>
-                    <label
-                      htmlFor="chef"
-                      className={styles.suggestion_form_label}
-                    >
-                      Name of Chef
-                    </label>
-                    <TextField
-                      id="chef"
-                      value={this.state.chef}
-                      fullWidth
-                      onChange={this.updateChef}
-                      variant="outlined"
-                    />
-                  </div>
+              </div>
+              <div className={styles.suggestion_form_2_col_2}>
+                <div className={styles.suggestion_form_group}>
+                  <label
+                    htmlFor="chef"
+                    className={styles.suggestion_form_label}
+                  >
+                    Name of Chef
+                  </label>
+                  <TextField
+                    id="chef"
+                    // value={this.state.chef}
+                    disabled
+                    value={this.state.username}
+                    fullWidth
+                    onChange={this.updateChef}
+                    variant="outlined"
+                  />
                 </div>
               </div>
             </div>
-            <h3>Add Ingredients</h3>
-            <div className={styles.suggestion_form}>
-              <div className={styles.suggestion_form_group}>
-                <label
-                  htmlFor="currentIngredient"
-                  className={styles.suggestion_form_label}
-                >
-                  Ingredient Name
-                </label>
-                <Autocomplete
-                  id="currentIngredient"
-                  options={this.props.productNames.map((option) => option)}
-                  // onChange={(ev)=>this.onTextFieldChange(ev)}
-                  value={this.state.currentIngredient}
-                  onChange={(ev, val) => this.handleProductNameInput(ev, val)}
-                  freeSolo
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      id="currentIngredient"
-                      value={this.state.currentIngredient}
-                      variant="outlined"
-                      type="text"
-                    />
-                  )}
-                  fullWidth
-                />
-              </div>
-              <div className={styles.suggestion_form_2_col}>
-                <div className={styles.suggestion_form_2_col_1}>
-                  <div className={styles.suggestion_form_group}>
-                    <label
-                      htmlFor="currentIngredientQuantity"
-                      className={styles.suggestion_form_label}
-                    >
-                      Quantity
-                    </label>
-                    <TextField
-                      fullWidth
-                      id="currentIngredientQuantity"
-                      type="number"
-                      onChange={this.onTextFieldChange}
-                      variant="outlined"
-                      placeholder="1.."
-                      value={this.state.currentIngredientQuantity}
-                    />
-                  </div>
+          </div>
+          <h3>Add Ingredients</h3>
+          <div className={styles.suggestion_form}>
+            <div className={styles.suggestion_form_group}>
+              <label
+                htmlFor="currentIngredient"
+                className={styles.suggestion_form_label}
+              >
+                Ingredient Name
+              </label>
+              <Autocomplete
+                id="currentIngredient"
+                options={this.props.productNames.map((option) => option)}
+                // onChange={(ev)=>this.onTextFieldChange(ev)}
+                value={this.state.currentIngredient}
+                onChange={(ev, val) => this.handleProductNameInput(ev, val)}
+                freeSolo
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    id="currentIngredient"
+                    value={this.state.currentIngredient}
+                    variant="outlined"
+                    type="text"
+                  />
+                )}
+                fullWidth
+              />
+            </div>
+            <div className={styles.suggestion_form_2_col}>
+              <div className={styles.suggestion_form_2_col_1}>
+                <div className={styles.suggestion_form_group}>
+                  <label
+                    htmlFor="currentIngredientQuantity"
+                    className={styles.suggestion_form_label}
+                  >
+                    Quantity
+                  </label>
+                  <TextField
+                    fullWidth
+                    id="currentIngredientQuantity"
+                    type="number"
+                    onChange={this.onTextFieldChange}
+                    variant="outlined"
+                    placeholder="1.."
+                    value={this.state.currentIngredientQuantity}
+                  />
                 </div>
+              </div>
 
               <div className={styles.suggestion_form_2_col_2}>
                 <div className={styles.suggestion_form_group}>
@@ -2389,46 +2402,46 @@ class SuggestMealForm extends Component {
           {/* </Col>
                 
               </Row> */}
-            <u>View privacy policy</u>
-            <div id="ProductAdditionalDataDisplayed">
-              <Popup2
-                popupType="Meal Suggestion Preview"
-                openModal={this.state.openModal}
-                closeModal={this.closeModal}
-                name={this.state.mealName}
-                description={this.state.intro}
-                imageData={this.state.mealImagesData[0]}
-                image={this.state.mealImage[0]}
-                imagesData={this.state.mealImagesData.slice(1)}
-                categories={this.state.suggestedCategories}
-                prepTime={this.state.prepTime}
-                cookTime={this.state.cookTime}
-                serves={this.state.servings}
-                chef={this.state.chef}
-                ingredientsList={this.state.ingredientStrings}
-                utensilsList={this.state.suggestedUtensils}
-                instructionChunk1={this.state.instructionChunk1}
-                instructionChunk2={this.state.instructionChunk2}
-                instructionChunk3={this.state.instructionChunk3}
-                instructionChunk4={this.state.instructionChunk4}
-                instructionChunk5={this.state.instructionChunk5}
-                instructionChunk6={this.state.instructionChunk6}
-                chunk1Content={this.state.chunk1ContentURL}
-                chunk2Content={this.state.chunk2ContentURL}
-                chunk3Content={this.state.chunk3ContentURL}
-                chunk4Content={this.state.chunk4ContentURL}
-                chunk5Content={this.state.chunk5ContentURL}
-                chunk6Content={this.state.chunk6ContentURL}
-                instructionWordlength={this.state.instructionWordlength}
-                tips={this.state.tips}
-                mealImageData={this.state.mealImagesData}
-              />
-            </div>
-            {/* <Popup1></Popup1> */}
-          </form>
-        </div>
-      );
-    }
+          <u>View privacy policy</u>
+          <div id="ProductAdditionalDataDisplayed">
+            <Popup2
+              popupType="Meal Suggestion Preview"
+              openModal={this.state.openModal}
+              closeModal={this.closeModal}
+              name={this.state.mealName}
+              description={this.state.intro}
+              imageData={this.state.mealImagesData[0]}
+              image={this.state.mealImage[0]}
+              imagesData={this.state.mealImagesData.slice(1)}
+              categories={this.state.suggestedCategories}
+              prepTime={this.state.prepTime}
+              cookTime={this.state.cookTime}
+              serves={this.state.servings}
+              chef={this.state.chef}
+              ingredientsList={this.state.ingredientStrings}
+              utensilsList={this.state.suggestedUtensils}
+              instructionChunk1={this.state.instructionChunk1}
+              instructionChunk2={this.state.instructionChunk2}
+              instructionChunk3={this.state.instructionChunk3}
+              instructionChunk4={this.state.instructionChunk4}
+              instructionChunk5={this.state.instructionChunk5}
+              instructionChunk6={this.state.instructionChunk6}
+              chunk1Content={this.state.chunk1ContentURL}
+              chunk2Content={this.state.chunk2ContentURL}
+              chunk3Content={this.state.chunk3ContentURL}
+              chunk4Content={this.state.chunk4ContentURL}
+              chunk5Content={this.state.chunk5ContentURL}
+              chunk6Content={this.state.chunk6ContentURL}
+              instructionWordlength={this.state.instructionWordlength}
+              tips={this.state.tips}
+              mealImageData={this.state.mealImagesData}
+            />
+          </div>
+          {/* <Popup1></Popup1> */}
+        </form>
+      </div>
+    );
   }
+}
 
 export default SuggestMealForm;

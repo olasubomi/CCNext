@@ -97,6 +97,9 @@ export const userSignIn = (email, password) => {
         dispatch({ type: USER_DATA, payload: data.data.user });
         dispatch({ type: IS_AUTHENTICATED, payload: true });
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
+        const customId = "custom-id-no";
+        toast.success("Login Successful", {toastId: customId})
+
       
 
         return true;
