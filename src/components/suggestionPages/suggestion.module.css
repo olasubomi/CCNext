@@ -116,7 +116,30 @@
     background: rgba(255, 255, 255, 0.45);
     background-blend-mode: overlay;
 }
+.closed {
+    opacity: 0;
+    color: black;
+    position: absolute;
+    font-size: 16px;
+    background-color: #04d505;
+    /* top: 11.85%; */
+    margin-top: -13rem;
+    width: 2%;
+    height: .6%;
+    right: 80.5%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.45);
+    background-blend-mode: overlay;
+}
 .close:hover{
+    display: block;
+    opacity: 1;
+    cursor: pointer;
+}
+.closed:hover{
     display: block;
     opacity: 1;
     cursor: pointer;

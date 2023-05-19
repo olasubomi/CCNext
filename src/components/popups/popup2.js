@@ -20,7 +20,9 @@ class Popup2 extends Component {
         super(props);
         this.state = {
             product_fetched: false,
-            curIn: 1
+            curIn: 1,
+            length: 0,
+            resave: 0
         };
     }
 
@@ -36,6 +38,7 @@ class Popup2 extends Component {
         })
     }
 
+    
     edit = () => {
         const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6 } = this.props
         var stepInputs = []
@@ -130,11 +133,29 @@ class Popup2 extends Component {
         window.location.assign('/suggestmeal')
 
     }
+    
+    componentDidMount(){
+        console.log(this.props, 'props----')
+        let length = 0;
 
+        
+        setTimeout(() => {
+            for(let i = 1; i <=6;  i++){
+                console.log(this.props['instructionChunk'+i]?.title && this.props['instructionChunk'+i]?.instructionSteps?.length, 'geee')
+                if(this.props['instructionChunk'+i]?.title && this.props['instructionChunk'+i]?.instructionSteps?.length){
+                    length = length + 1;
+                }
+            }
+            this.setState({
+                ...this.state,length
+            })
+        }, 1000);
+        console.log(length, 'length')
+    }
     render() {
 
         const { popupType, imageData, imagesData, name, description, categories, ingredientsList } = this.props
-        const { curIn } = this.state;
+        const { curIn, length } = this.state;
 
         var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
         var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
@@ -233,7 +254,7 @@ class Popup2 extends Component {
                                                 </div>
                                             </>
                                         }
-                                        {this.props['instructionChunk' + (curIn + 1)] !== undefined &&
+                                        {this.props['instructionChunk' + (curIn + 1)] !== undefined && curIn < length &&
                                             <ArrowCircleRightIcon onClick={this.incIn} className={styles.popup2_inc_con} />}
                                         {curIn > 1 &&
                                             <ArrowCircleLeftIcon onClick={this.decIn} className={styles.popup2_dec_con} />}

@@ -14,7 +14,8 @@ import AddIcon from '@mui/icons-material/Add';
 import styles from "./suggestion.module.css";
 import Popup1 from "../popups/popup1";
 import Image from 'next/image';
-
+import { AiOutlineClose } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 
 class SuggestKitchenUtensilForm extends Component {
@@ -73,7 +74,8 @@ class SuggestKitchenUtensilForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-
+    console.log(this.props, "whales")
+    console.log(this.props.categories, "sssssssss")
     // get all Meal Names***
     var url = "/get-all-products";
     var url = "http://localhost:5000/api/products/get-all-products";
@@ -549,14 +551,22 @@ class SuggestKitchenUtensilForm extends Component {
         this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
         console.log(response);
         console.log("Display Product submitted successfully");
+        toast.success("Kitchen Utensils submitted successfully")
         // window.location.href = "/SuggestProduct"
       } else {
         console.log("Something wrong happened ");
       }
     }).catch(error => {
       console.log(error);
+      toast.error(error.message)
     });
 
+  }
+
+  deleteImages(id) {
+    const delImages = this.state.utensilImagesData
+    delImages.splice(id, 1)
+    this.setState({ ...this.state, utensilImagesData: delImages})
   }
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
@@ -599,6 +609,9 @@ class SuggestKitchenUtensilForm extends Component {
                   <Col md={12} style={{ marginTop: "20px" }}>
                     <p><Image id="UtensilsMainImages" src={data} width="100%" height="100%" alt="main_Utensil_Image" />
                     </p>
+                    <div className={styles.close} onClick={() => this.deleteImages(index)}>
+                    <AiOutlineClose className={styles.closeIcon} />
+                  </div>
                   </Col>
                 </Row>
               )

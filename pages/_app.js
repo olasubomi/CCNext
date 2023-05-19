@@ -14,7 +14,18 @@ function MyApp({ Component, pageProps }) {
       <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
         <Provider store={store}>
           <Component {...pageProps} />
-          <ToastContainer />
+          <ToastContainer 
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          style={{width: "100%", height: "20rem"}}/>
         </Provider>
       </GoogleOAuthProvider>
     </>

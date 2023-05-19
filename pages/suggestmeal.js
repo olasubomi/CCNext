@@ -121,6 +121,7 @@ class SuggestMeal extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
     // get all Meal Names***
+    console.log(this.categories, "categories")
     var url = "/meals/get-meals/1";
     axios
       .get(url)
@@ -179,7 +180,8 @@ class SuggestMeal extends Component {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-    this.categories = this.props.categories;
+    this.categories = this.props.categories || this.categories;
+    console.log('PROPER', this.props.categories)
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////

@@ -12,6 +12,8 @@ import AddIcon from '@mui/icons-material/Add';
 import styles from "./suggestion.module.css";
 import Popup1 from "../popups/popup1";
 import Image from 'next/image';
+import { AiOutlineClose } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 
 class SuggestProductForm extends Component {
@@ -184,7 +186,7 @@ class SuggestProductForm extends Component {
           sizeGroupList,
           // store product names of inputted strings to compare with db products
           ingredientStrings,
-          // nutritionalStrings,
+          nutritionalStrings,
           sizeStrings,
           // do we want to use current ingredient formats ? Yes.
           currentIngredient,
@@ -225,7 +227,7 @@ class SuggestProductForm extends Component {
           sizeGroupList,
           // store product names of inputted strings to compare with db products
           ingredientStrings,
-          // nutritionalStrings,
+          nutritionalStrings,
           sizeStrings,
           // do we want to use current ingredient formats ? Yes.
           currentIngredient,
@@ -545,6 +547,7 @@ class SuggestProductForm extends Component {
   }
 
   handleDeleteNutritionalInfoChip(chip) {
+    console.log(chip, "hello")
     var array = this.state.nutritionalStrings; // make a separate copy of the array
     var removeFromGroup = this.state.ingredientGroupList;
 
@@ -555,6 +558,7 @@ class SuggestProductForm extends Component {
 
       this.setState({ nutritionalStrings: array });
     }
+
   }
   handleAddIngredientChip(chip) {
     this.setState({
@@ -562,9 +566,16 @@ class SuggestProductForm extends Component {
     });
   }
 
-  handleDeleteIngredientChip(chip) {
+  handleDeleteIngredientChip(chip, element) {
     var array = this.state.ingredientStrings; // make a separate copy of the array
     var removeFromGroup = this.state.ingredientGroupList;
+
+    if (Boolean(element)) {
+      let copy = this.state.nutritionalStrings;
+      copy.splice(this.state.nutritionalStrings.indexOf(chip), 1);
+
+      this.setState({ ...this.state, nutritionalStrings: copy })
+    }
 
     var index = array.indexOf(chip);
     if (index !== -1) {
@@ -863,13 +874,21 @@ class SuggestProductForm extends Component {
         console.log(response);
         console.log("Display Product submitted successfully");
         // window.location.href = "/SuggestProduct"
+        toast.success("Product submitted sucessfully")
       } else {
         console.log("Something wrong happened ");
       }
     }).catch(error => {
-      console.log(error);
+      toast.error(error.message)
+      console.log(error.message);
     });
 
+  }
+
+  deleteImages(id) {
+    const deleteImg = this.state.productImagesData
+    deleteImg.splice(id, 1)
+    this.setState({ ...this.state, productImagesData: deleteImg })
   }
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
@@ -924,6 +943,9 @@ class SuggestProductForm extends Component {
                   <Col md={12} style={{ marginTop: "20px" }}>
                     <p><Image src={data} width="100%" height="100%" alt="main_product_Images" />
                     </p>
+                    <div className={styles.close} onClick={() => this.deleteImages(index)}>
+                    <AiOutlineClose className={styles.closeIcon} />
+                  </div>
                   </Col>
                 </Row>
               )
@@ -1117,8 +1139,8 @@ class SuggestProductForm extends Component {
                     key={index}
                     label={data}
                     className={styles.chip}
-                    onClick={() => this.handleDeleteIngredientChip(data)}
-                    onDelete={() => this.handleDeleteIngredientChip(data)}
+                    onClick={() => this.handleDeleteIngredientChip(data, 'nutritional')}
+                    onDelete={() => this.handleDeleteIngredientChip(data, 'nutritional')}
                   />
                 ))
               }
@@ -1159,13 +1181,13 @@ class SuggestProductForm extends Component {
             </div >
             <Stack direction="row" spacing={1} className={styles.stack}>
               {
-                this.state.suggestedCategories.map((data, index) => (
+                nutritionalStrings.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
                     className={styles.chip}
-                    onClick={() => this.handleDeleteCategoryChip(data)}
-                    onDelete={() => this.handleDeleteCategoryChip(data)}
+                    onClick={() => this.handleDeleteIngredientChip(data)}
+                    onDelete={() => this.handleDeleteIngredientChip(data)}
                   />
                 ))
               }
@@ -1193,6 +1215,7 @@ class SuggestProductForm extends Component {
               image={this.state.productImagesData[0]}
               imagesData={this.state.productImagesData.slice(1)} categories={this.state.suggestedCategories}
               sizesList={this.state.sizeStrings} ingredientList={ingredientStrings}
+              nutritionalStrings={this.state.nutritionalStrings}
             />
           </div>
         </form >

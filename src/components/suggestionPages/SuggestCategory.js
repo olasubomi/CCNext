@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import styles from "./suggestion.module.css";
+import { toast } from "react-toastify";
 
 
 class SuggestCategoryForm extends Component {
@@ -181,11 +182,13 @@ class SuggestCategoryForm extends Component {
         console.log(response);
         console.log("Display Product submitted successfully");
         // window.location.href = "/SuggestProduct"
+        toast.success("Category submitted sucessfully")
       } else {
         console.log("Something wrong happened ");
       }
     }).catch(error => {
       console.log(error);
+      toast.error(error.message)
     });
 
   }

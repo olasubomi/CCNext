@@ -64,13 +64,14 @@ class ComponentToPrint extends React.Component {
       mealFont = '70px'
       lineHeight = '30px'
     }
-    console.log("categories are:")
-    console.log(this.props.categories);
+    console.log("categories are:", this.props)
+    console.log(this.props.mealImageData);
+    console.log(displayedIngredients, "coding")
     console.log("displayed categories are:")
     console.log(displayedCategories);
     console.log("mealImageData");
 
-    console.log(this.props.mealImageData);
+    console.log(this.props.mealImageData, "helloo");
 
     var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
     var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
@@ -79,17 +80,21 @@ class ComponentToPrint extends React.Component {
         <div className={styles.print}>
           <div className={styles.print_page_1}>
             <div className={styles.print_page_1_row_1}>
-              <img className={styles.print_main_logo_im} alt="print_main_logo_image" src={this.props.mealImageData} ></img>
+              <img className={styles.print_main_logo_img1} alt="print_main_logo_image" src={this.props.mealImageData} />
             </div>
             <div className={styles.print_page_1_row_2}>
               <div className={styles.print_page_1_col_1}>
-                <div className={styles.print_categories}>
+                <div className={styles.print_categories} style={{display: "flex", alignItems: "center"}}>
+                  <p>MEAL CATERGORY: </p>
                   <h5 className={styles.print_category}>{this.props.categories.join(', ')}</h5>
+
+                </div>
+                <div className={styles.border}>
 
                 </div>
                 <div className={styles.meal_details}>
                   <div className={styles.col_2}>
-                    <div className={styles.meal_detail}>
+                    <div className={styles.meal_detail} style={{marginLeft: "2rem"}}>
                       <img className={styles.meal_detail_icon} alt="meal_detail_icon" src='/assets/icons/meal_preview_imgs/prep_time.jpg' />
                       <h2>Prep Time:</h2>
                       <p>{this.props.prepTime} mins</p>
@@ -97,28 +102,48 @@ class ComponentToPrint extends React.Component {
                   </div>
                   <div className={styles.col_2}>
                     <div className={styles.meal_detail}>
-                      <img className='meal_detail_icon' alt="meal_detail_icon" src='/assets/icons/meal_preview_imgs/cook_time.jpg' />
-                      <h2>Cook Time:</h2>
+                      {
+                        this.props.mealImageData ? null : <img className='meal_detail_icon' alt="meal_detail_icon" src='/assets/icons/meal_preview_imgs/cook_time.jpg' />
+                      }
+                      {/* <img className='meal_detail_icon' alt="meal_detail_icon" src='/assets/icons/meal_preview_imgs/cook_time.jpg' /> */}
+                      <h2 style={{marginLeft: "3rem"}}>Cook Time:</h2>
                       <p>{this.props.cookTime} mins</p>
                     </div>
                     <div className={styles.meal_detail}>
-                      <img className='meal_detail_icon' alt="meal_detail_icon" src='/assets/icons/meal_preview_imgs/serves.jpg' />
-                      <h2>Serves</h2>
+
+                      {
+                        this.props.mealImageData ? null : <img className='meal_detail_icon' alt="meal_detail_icon" src='/assets/icons/meal_preview_imgs/serves.jpg' />
+                      }
+
+                      {/* <img className='meal_detail_icon' alt="meal_detail_icon" src='/assets/icons/meal_preview_imgs/serves.jpg' /> */}
+                      <h2 style={{marginLeft: "3rem"}}>Serves</h2>
                       <p>{this.props.serves} {this.props.serves > 1 ? " people" : " person"}</p>
                     </div>
                   </div>
                 </div>
 
                 <div className={styles.print_top2}>
-                  <img className={styles.print_top_logo_img} alt="print_top_logo_img" src={img_logo} />
                   <h2 style={{ fontSize: mealFont, lineHeight: lineHeight }}>{this.props.mealName}</h2>
+                  <img className={styles.print_top_logo_img} alt="" src="/assets/logos/CC_Logo_no_bg.png" />
                 </div>
               </div>
-              <div className={styles.print_col_1_detail}>
-                <h2>Ingredients</h2>
-                <ul style={{ fontSize: fontSize }}>{displayedIngredients}</ul>
-                <h2>Utensils Needed</h2>
-                <ul style={{ fontSize: fontSize }}>{displayedUtensils}</ul>
+              <div style={{display: "flex", flexDirection: "column", position: "absolute", right: "3%", top:"5%", height: "90%", }}>
+                <div className={styles.print_col_1_detail}style={{marginBottom: "2rem"}}>
+                  <h2>Ingredients</h2>
+                  <ul className={styles.ul} style={{listStyle: "disc", listStyleType: "disc", fontSize: fontSize}}>
+                    {displayedIngredients?.map((elem) => (
+                      <li key={elem}>{elem.toString().slice(0,elem.indexOf(","))}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className={styles.print_col_1_detail}>
+                  <h2>Utensils Needed</h2>
+                  <ul className={styles.ul} style={{listStyle: "disc", listStyleType: "disc", fontSize: fontSize, display: "flex", flexDirection: "column"}}>
+                    {displayedUtensils?.map((element) => (
+                      <li key={element}>{element.toString().slice(0,element.indexOf(","))}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

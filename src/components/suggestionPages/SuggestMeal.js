@@ -16,7 +16,8 @@ import Popup2 from "../popups/popup2";
 var FormData = require("form-data");
 // var fs = require('fs');
 import Image from "next/image";
-import {AiOutlineClose} from "react-icons/ai"
+import { AiOutlineClose } from "react-icons/ai"
+import { toast } from 'react-toastify';
 
 class SuggestMealForm extends Component {
   ingredientsQuantityMeasurements = [];
@@ -1364,7 +1365,7 @@ class SuggestMealForm extends Component {
     mealImages.forEach((file, i) => {
       suggestMealForm.append(`meal_images${i}`, file);
     });
-    // let instructionTitles = [];
+    let instructionTitles = [];
     let instructions = [];
 
     for (let i = 1; i < 7; i++) {
@@ -1372,6 +1373,7 @@ class SuggestMealForm extends Component {
         this.state[`instructionChunk${i}`].title &&
         this.state[`instructionChunk${i}`].instructionSteps
       ) {
+        console.log(this.state[`instructionChunk${i}`], 'eeeeee')
         instructions.push(JSON.stringify(this.state[`instructionChunk${i}`]));
 
       }
@@ -1397,21 +1399,21 @@ class SuggestMealForm extends Component {
     // suggestMealForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
 
     // new suggested products
-    suggestMealForm.append("meal_categories", suggestedCategories);
+    // suggestMealForm.append("meal_categories", suggestedCategories.split(','));
 
-    suggestMealForm.append("kitchen_utensils", suggestedUtensils);
+    // suggestMealForm.append("kitchen_utensils", suggestedUtensils.split(','));
 
-    // RecipeSteps
-    suggestMealForm.append(
-      "formatted_ingredients",
-      JSON.stringify(ingredientGroupList)
-    );
-    suggestMealForm.append("image_or_video_content_1", chunk1Content);
-    suggestMealForm.append("image_or_video_content_2", chunk2Content);
-    suggestMealForm.append("image_or_video_content_3", chunk3Content);
-    suggestMealForm.append("image_or_video_content_4", chunk4Content);
-    suggestMealForm.append("image_or_video_content_5", chunk5Content);
-    suggestMealForm.append("image_or_video_content_6", chunk6Content);
+    // // RecipeSteps
+    // suggestMealForm.append(
+    //   "formatted_ingredients",
+    //   JSON.stringify(ingredientGroupList)
+    // );
+    // suggestMealForm.append("image_or_video_content_1", chunk1Content);
+    // suggestMealForm.append("image_or_video_content_2", chunk2Content);
+    // suggestMealForm.append("image_or_video_content_3", chunk3Content);
+    // suggestMealForm.append("image_or_video_content_4", chunk4Content);
+    // suggestMealForm.append("image_or_video_content_5", chunk5Content);
+    // suggestMealForm.append("image_or_video_content_6", chunk6Content);
 
 
     // suggestMealForm.append('instructionsGroupList', instructionGroupData);
@@ -1445,20 +1447,20 @@ class SuggestMealForm extends Component {
     // suggestMealForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
 
     // new suggested products
-    suggestMealForm.append("meal_categories", suggestedCategories);
+    // suggestMealForm.append("meal_categories", suggestedCategories.split(','));
 
-    suggestMealForm.append("kitchen_utensils", suggestedUtensils);
+    // suggestMealForm.append("kitchen_utensils", suggestedUtensils.split(','));
 
-    // RecipeSteps
-    suggestMealForm.append("formatted_ingredients", ingredientStrings);
-    suggestMealForm.append("instruction_images1", chunk1Content);
-    suggestMealForm.append("instruction_images2", chunk2Content);
-    suggestMealForm.append("instruction_images3", chunk3Content);
-    suggestMealForm.append("instruction_images4", chunk4Content);
-    suggestMealForm.append("instruction_images5", chunk5Content);
-    suggestMealForm.append("instruction_images6", chunk6Content);
-    suggestMealForm.append("instruction1", chunk6Content);
-    suggestMealForm.append("instruction_images6", chunk6Content);
+    // // RecipeSteps
+    // suggestMealForm.append("formatted_ingredients", ingredientStrings);
+    // suggestMealForm.append("instruction_images1", chunk1Content);
+    // suggestMealForm.append("instruction_images2", chunk2Content);
+    // suggestMealForm.append("instruction_images3", chunk3Content);
+    // suggestMealForm.append("instruction_images4", chunk4Content);
+    // suggestMealForm.append("instruction_images5", chunk5Content);
+    // suggestMealForm.append("instruction_images6", chunk6Content);
+    // suggestMealForm.append("instruction1", chunk6Content);
+    // suggestMealForm.append("instruction_images6", chunk6Content);
 
 
 
@@ -1468,6 +1470,11 @@ class SuggestMealForm extends Component {
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
     var url = "http://localhost:5000/api/meals/create/";
+
+    const formDataObj = {};
+    suggestMealForm.forEach((value, key) => (formDataObj[key] = value));
+
+    console.log('form', formDataObj)
 
     const config = {
       method: "POST",
@@ -1508,10 +1515,10 @@ class SuggestMealForm extends Component {
     // suggestMealForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
 
     // new suggested products
-    suggestMealForm.append("meal_categories", suggestedCategories);
-
+    suggestMealForm.append("meal_categories", JSON.stringify(suggestedCategories));
+    console.log(suggestedCategories, "suggests")
     suggestMealForm.append("kitchen_utensils", suggestedUtensils);
-
+    console.log(suggestedUtensils, "utensils")
     // RecipeSteps
     suggestMealForm.append("formatted_ingredients", ingredientStrings);
     suggestMealForm.append("instruction_images1", chunk1Content);
@@ -1547,6 +1554,7 @@ class SuggestMealForm extends Component {
 
     // var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
     // console.log(instructionData);
+    console.log(config, "config")
 
     axios(config)
       .then((response) => {
@@ -1558,9 +1566,11 @@ class SuggestMealForm extends Component {
         } else {
           console.log("Something wrong happened ");
         }
+        toast.success("Meal submitted sucessfully")
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message, "errors");
+        toast.error(error.message)
       });
   };
 
@@ -1679,7 +1689,15 @@ class SuggestMealForm extends Component {
   deleteImage(id) {
     const delImages = this.state.mealImagesData
     delImages.splice(id, 1)
-    this.setState({...this.state, mealImagesData: delImages})
+    this.setState({ ...this.state, mealImagesData: delImages })
+  }
+  //function to delete instruction image
+  deleteImg(id) {
+    var image = document.getElementById(id);
+    image.style.display = 'none';
+    // const delImage = this.state["instructionChunk1"]
+    // delImage.slice(id, 1)
+    // this.setState({ ...this.state, instructionChunk1: delImage })
   }
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
@@ -1787,7 +1805,7 @@ class SuggestMealForm extends Component {
               </div>
             )}
             <Row>
-              <Col md={12} style={{ marginTop: "20px"}}>
+              <Col md={12} style={{ marginTop: "20px" }}>
                 <p>
                   <img
                     id="mealImage0"
@@ -1809,11 +1827,11 @@ class SuggestMealForm extends Component {
                       width="100%"
                       height="100%"
                       alt="other_meal_images"
-                      
+
                     />
                   </p>
                   <div className={styles.close} onClick={() => this.deleteImage(index)}>
-                  <AiOutlineClose className={styles.closeIcon}/>
+                    <AiOutlineClose className={styles.closeIcon} />
                   </div>
                 </Col>
               </Row>
@@ -2140,6 +2158,7 @@ class SuggestMealForm extends Component {
                     height={"100%"}
                     width={"100%"}
                     style={{ display: "none" }}
+
                   />
                   <video
                     className={styles.suggestion_image}
@@ -2149,6 +2168,9 @@ class SuggestMealForm extends Component {
                   >
                     Your browser does not support the video tag.
                   </video>
+                  <div className={styles.closed} onClick={() => this.deleteImg("chunk" + 1 + "Image")}>
+                        <AiOutlineClose className={styles.closeIcon} />
+                   </div>
                 </p>
               </div>
 
@@ -2243,6 +2265,9 @@ class SuggestMealForm extends Component {
                       >
                         Your browser does not support the video tag.
                       </video>
+                      <div className={styles.closed} onClick={() => this.deleteImg("chunk" + id + "Image")}>
+                        <AiOutlineClose className={styles.closeIcon} />
+                      </div>
                     </p>
                   </div>
                 );

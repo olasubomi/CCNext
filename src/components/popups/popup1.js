@@ -28,6 +28,7 @@ class Popup1 extends Component {
                 properIngredientStringSyntax: ingredient.properIngredientStringSyntax
             }
         })
+        console.log(this.props, DISPLAY)
         console.log(group)
         let product = {
             productName: name,
@@ -70,8 +71,9 @@ class Popup1 extends Component {
 
     render() {
 
-        const { popup, imageData, imagesData, name, description, categories, descriptionsList, ingredientList, sizesList } = this.props
-        console.log(ingredientList)
+        // const { popup, imageData, imagesData, name, description, categories, descriptionsList, ingredientList, sizesList, nutritionalStrings } = this.props
+        // console.log(ingredientList)
+        console.log(this.props, "DISPLAY")
 
         return (
             <>
@@ -133,6 +135,11 @@ class Popup1 extends Component {
 
                                                 </div>
                                             </div>
+                                            {/* <div>
+                                                <p>
+                                                    {nutritionalStrings}
+                                                </p>
+                                            </div> */}
                                         </React.Fragment>
                                     }
                                     {popup === 'kitchen' &&
