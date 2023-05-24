@@ -53,10 +53,13 @@ export const userSignUp = (form) => {
         // dispatch({ type: USER_DATA, payload: data.user });
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
         
+        toast.success("Registration successful")
+        
       })
       .catch((err) => {
         console.error("xxx userSignUp Request ERROR xxx");
         console.log(err.response);
+        toast.error(err.response.data.message.message)
         dispatch({ type: IS_AUTHENTICATED, payload: false });
         if (err.response.status === 422) {
           dispatch({
