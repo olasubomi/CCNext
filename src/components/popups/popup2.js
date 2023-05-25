@@ -10,7 +10,7 @@ import instagramImage from "../../../public/assets/logos/instagram.png";
 import styles from './popup2.module.css';
 import ReactToPrint from 'react-to-print';
 import ComponentToPrint from "../mealsPage/ComponentToPrint";
-import {BsFillShareFill} from "react-icons/bs"
+import { BsFillShareFill } from "react-icons/bs"
 
 
 
@@ -38,7 +38,7 @@ class Popup2 extends Component {
         })
     }
 
-    
+
     edit = () => {
         const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6 } = this.props
         var stepInputs = []
@@ -133,21 +133,21 @@ class Popup2 extends Component {
         window.location.assign('/suggestmeal')
 
     }
-    
-    componentDidMount(){
+
+    componentDidMount() {
         console.log(this.props, 'props----')
         let length = 0;
 
-        
+
         setTimeout(() => {
-            for(let i = 1; i <=6;  i++){
-                console.log(this.props['instructionChunk'+i]?.title && this.props['instructionChunk'+i]?.instructionSteps?.length, 'geee')
-                if(this.props['instructionChunk'+i]?.title && this.props['instructionChunk'+i]?.instructionSteps?.length){
+            for (let i = 1; i <= 6; i++) {
+                console.log(this.props['instructionChunk' + i]?.title && this.props['instructionChunk' + i]?.instructionSteps?.length, 'geee')
+                if (this.props['instructionChunk' + i]?.title && this.props['instructionChunk' + i]?.instructionSteps?.length) {
                     length = length + 1;
                 }
             }
             this.setState({
-                ...this.state,length
+                ...this.state, length
             })
         }, 1000);
         console.log(length, 'length')
@@ -177,6 +177,8 @@ class Popup2 extends Component {
                                                 alt="pop up"
                                                 className={styles.popup2_main_img}
                                                 height={"160%"} width={"100%"}
+                                                objectFit="cover"
+                                                objectPosition="center"
                                             />}
                                         {imagesData.length > 0 &&
                                             <div className={styles.popup2_images}>
@@ -184,7 +186,9 @@ class Popup2 extends Component {
                                                     imagesData.map((data, index) =>
                                                         <Image key={index} alt="pop up" src={data}
                                                             className={styles.popup2_image}
-                                                            height={"70%"} width={"100%"} />
+                                                            height={"70%"} width={"100%"}
+                                                            objectFit="cover"
+                                                            objectPosition="center" />
                                                     )
                                                 }
 
@@ -240,6 +244,8 @@ class Popup2 extends Component {
                                                         alt={this.props['instructionChunk' + curIn].title}
                                                         className={styles.popup2_step_img}
                                                         height={"150%"} width={"70%"}
+                                                        objectFit="cover"
+                                                        objectPosition="center"
                                                     />}
 
                                                 {allowedVideoExtensions.exec(this.props['instructionChunk' + curIn].dataName) && this.props['chunk' + curIn + 'Content'] !== undefined &&
@@ -262,33 +268,41 @@ class Popup2 extends Component {
                                 </div>
                             </div>
                             <div className={styles.popup2_footer}>
-                                <p style={{display: "flex", alignItems: "center"}}>
-                                <BsFillShareFill style={{marginRight: ".5rem"}} />
+                                <p style={{ display: "flex", alignItems: "center" }}>
+                                    <BsFillShareFill style={{ marginRight: ".5rem" }} />
                                     Share this product:
-                                    
-                                    </p>
+
+                                </p>
                                 <span className={styles.iconSpan}>
                                     <Image src="/assets/icons/Vector.svg" alt='facebook'
-                                        height={"17%"} width={"17%"} className={styles.icons} />
+                                        height={"17%"} width={"17%"} className={styles.icons}
+                                        objectFit="cover"
+                                        objectPosition="center" />
                                 </span>
                                 <span className={styles.iconSpan1}>
                                     <Image src="/assets/icons/Vector (2).svg" alt='instagram'
-                                        height={"17%"} width={"17%"} className={styles.icons} />
+                                        height={"17%"} width={"17%"} className={styles.icons}
+                                        objectFit="cover"
+                                        objectPosition="center" />
                                 </span>
                                 <span className={styles.iconSpan2}>
                                     <Image src="/assets/icons/Vector (1).svg" alt='twitter'
-                                        height={"17%"} width={"17%"} className={styles.icons} />
+                                        height={"17%"} width={"17%"} className={styles.icons}
+                                        objectFit="cover"
+                                        objectPosition="center" />
                                 </span>
                                 <span className={styles.iconSpan3}>
                                     <Image src="/assets/icons/logos_whatsapp-icon.svg" alt='whatsapp'
-                                        height={"17%"} width={"17%"} className={styles.icons} />
+                                        height={"17%"} width={"17%"} className={styles.icons}
+                                        objectFit="cover"
+                                        objectPosition="center" />
                                 </span>
 
                                 <ReactToPrint
                                     trigger={() => {
                                         // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
                                         // to the root node of the returned component as it will be overwritten.
-                                        return <div style={{display: "flex", alignItems: "center", marginLeft: "4rem"}}> 
+                                        return <div style={{ display: "flex", alignItems: "center", marginLeft: "4rem" }}>
                                             <p className={styles.para}>Print Preview</p>
                                             <Image alt='print' src="/assets/icons/Vector (3).svg"
                                                 height={"20%"} width={"20%"} className={styles.printIcon} /></div>;

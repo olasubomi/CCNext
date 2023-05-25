@@ -1827,6 +1827,8 @@ class SuggestMealForm extends Component {
                       width="100%"
                       height="100%"
                       alt="other_meal_images"
+                      objectFit="cover"
+                      objectPosition="center"
 
                     />
                   </p>
@@ -2157,7 +2159,7 @@ class SuggestMealForm extends Component {
                     alt="recipe_step1_image_or_video"
                     height={"100%"}
                     width={"100%"}
-                    style={{ display: "none" }}
+                    style={{ display: "none", objectFit: "cover", objectPosition: "center" }}
 
                   />
                   <video
@@ -2169,8 +2171,8 @@ class SuggestMealForm extends Component {
                     Your browser does not support the video tag.
                   </video>
                   <div className={styles.closed} onClick={() => this.deleteImg("chunk" + 1 + "Image")}>
-                        <AiOutlineClose className={styles.closeIcon} />
-                   </div>
+                    <AiOutlineClose className={styles.closeIcon} />
+                  </div>
                 </p>
               </div>
 
@@ -2255,7 +2257,7 @@ class SuggestMealForm extends Component {
                         width={"100%"}
                         className={styles.suggestion_image}
                         alt={"recipe_step" + id + "_image_or_video"}
-                        style={{ display: "none" }}
+                        style={{ display: "none", objectFit: "cover", objectPosition: "center" }}
                       />
                       <video
                         className={styles.suggestion_image}

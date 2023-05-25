@@ -26,6 +26,7 @@
     "jquery": "^3.5.1",
     "jwt-decode": "^3.1.2",
     "next": "^12.3.1",
+    "next-auth": "^4.22.1",
     "next-redux-wrapper": "^8.0.0",
     "os": "^0.1.2",
     "passport-facebook": "^3.0.0",

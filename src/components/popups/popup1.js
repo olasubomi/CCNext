@@ -21,7 +21,7 @@ class Popup1 extends Component {
                 productName: ingredient.product_name?.join(" "),
                 // productImgFile: this.state.currentProductImgSrc,
                 productImgPath: null,
-          
+
                 // these are added to ingredient packets on submit, and not relevant in product object details
                 quantity: ingredient.quantity,
                 measurement: ingredient.measurement,
@@ -33,7 +33,7 @@ class Popup1 extends Component {
         let product = {
             productName: name,
             productDescription: description,
-  
+
             // ingredientNames,
             // do we need product group list AND strings ?
             ingredientGroupList: group,
@@ -51,10 +51,10 @@ class Popup1 extends Component {
             // currentIngredientQuantity,
             // currentProductImgSrc,
             // currentProductDisplayIndex,
-  
+
             // currentStore,
             // quantity,
-  
+
             // we need to update how we create image paths
             // productImg_path,
             // new_product_ingredients,
@@ -66,13 +66,13 @@ class Popup1 extends Component {
         localStorage.setItem('productId', this.props.id,)
         localStorage.setItem('suggestProductForm', JSON.stringify(product))
         window.location.assign('/suggestmeal')
-        
+
     }
 
     render() {
 
-        // const { popup, imageData, imagesData, name, description, categories, descriptionsList, ingredientList, sizesList, nutritionalStrings } = this.props
-        // console.log(ingredientList)
+        const { popup, imageData, imagesData, name, description, categories, descriptionsList, ingredientList, sizesList, nutritionalStrings } = this.props
+        console.log(ingredientList)
         console.log(this.props, "DISPLAY")
 
         return (
@@ -81,19 +81,31 @@ class Popup1 extends Component {
                     <div className={styles.popup_container}>
                         <div className={styles.popup}>
                             <div className={styles.popup_col_1}>
-                                <Image
-                                    src={imageData}
-                                    alt="pop up"
-                                    className={styles.popup_main_img}
-                                    height={"100%"} width={"100%"}
-                                />
+                                <div>
+                                    <Image
+                                        fill
+                                        src={imageData}
+                                        className={styles.popup_main_img}
+                                        alt="pop up"
+                                        height={250} width={410}
+                                        objectFit="cover"
+                                        objectPosition="center"
+                                        filter="drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1))"
+                                        border-radius="8px"
+
+                                    />
+                                </div>
                                 <div className={styles.popup_images}>
                                     {/* {console.log(imageData)} */}
                                     {
                                         imagesData.map((data, index) =>
                                             <Image key={index} alt="pop up" src={data}
                                                 height={"100%"} width={"100%"}
-                                                className={styles.popup_image} />
+                                                className={styles.popup_image}
+                                                objectFit="cover"
+                                                objectPosition="center"
+                                                filter="drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.9))"
+                                            />
                                         )
                                     }
 
@@ -124,17 +136,7 @@ class Popup1 extends Component {
                                                 })}
                                                 </p>
                                             </div>
-                                            <div className={styles.popup_sizes}>
-                                                <h3>Size</h3>
-                                                <div className={styles.popup_size}>
-                                                    {sizesList.map((sizeSyntax, index) =>
-                                                        <React.Fragment key={index}>
-                                                            <p>{sizeSyntax}</p>
-                                                        </React.Fragment>
-                                                    )}
 
-                                                </div>
-                                            </div>
                                             {/* <div>
                                                 <p>
                                                     {nutritionalStrings}
@@ -159,11 +161,24 @@ class Popup1 extends Component {
                                     }
                                     <div className={styles.popup_categories}>
                                         <h3 className={styles.popup_category_name}>Product Category</h3>
-                                        <p className={styles.popup_category}>{categories.map((cat) => cat + ', ')}</p>
+                                        <p className={styles.popup_category}>{categories.length !== 1
+                                        ?categories.map((cat) => cat + ', ') : categories.map((cat) => cat)}</p>
+                                    </div>
+                                    <div className={styles.popup_sizes}>
+                                        <h3>Size</h3>
+                                        <div className={styles.popup_size}>
+                                            {sizesList.map((sizeSyntax, index) =>
+                                                <React.Fragment key={index}>
+                                                    <p>{sizeSyntax}</p>
+                                                </React.Fragment>
+                                            )}
+
+                                        </div>
                                     </div>
                                 </div>
-                                {this.props.suggested && 
-                                <button onClick={this.edit} className={styles.edit_button2}>Edit</button>
+
+                                {this.props.suggested &&
+                                    <button onClick={this.edit} className={styles.edit_button2}>Edit</button>
                                 }
                             </div>
 

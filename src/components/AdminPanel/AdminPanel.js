@@ -5,7 +5,7 @@ import img_oil from "../../assets/images/ola_ola_palm_oil.jpg";
 import img_logo from "../../assets/images/logo2.png";
 import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { connect } from 'react-redux';
-import { withRouter } from "react-router-dom";
+import { withRouter } from "next/router";
 // import axios from '../../util/Api';
 
 //////////////////////////////////////////////////////////////////////

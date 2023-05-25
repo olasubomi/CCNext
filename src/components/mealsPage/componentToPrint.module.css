@@ -520,6 +520,8 @@
   font-weight: normal !important;
   font-size: 14px;
   text-transform: capitalize;
+  display: flex;
+  flex-direction: column;
 }
 
 .instruction_img {
