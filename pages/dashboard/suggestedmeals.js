@@ -745,7 +745,7 @@ const SuggestedMeals = (props) => {
                         <div className={styles.suggestedmeal_row2_col2}>
                             {/* <h5>Remove Sections(s)</h5> */}
                             <div>
-                                <div onClick={togglePublicMeal} className={styles.tableactionbutton}>+ Add public meal</div>
+                                {/* <div onClick={togglePublicMeal} className={styles.tableactionbutton}>+ Add public meal</div> */}
                                 <div className={styles.tableactionbutton}>
                                     <Link href='/suggestmeal' >
                                         <a>
