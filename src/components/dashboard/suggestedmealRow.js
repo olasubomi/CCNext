@@ -22,6 +22,7 @@ function SuggestedMealRow(props){
       ]
 
     const {suggestion} = props;
+    // console.log(JSON.parse(suggestion.meal_categories).toString(), "meal categories")
 
     function showDropDown(){
         setShowState(!show)
@@ -44,7 +45,7 @@ function SuggestedMealRow(props){
                 </p>
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + styles.hideData}>
                     {props.searchType === 'Meal' ? 
-                    suggestion.meal_categories && suggestion.meal_categories.length > 0 && suggestion.meal_categories : 
+                    suggestion.meal_categories && suggestion.meal_categories.length > 0 && JSON.parse(suggestion.meal_categories).toString().split(',').join(', ') : 
                     suggestion.product_categories && suggestion.product_categories.length > 0 && suggestion.product_categories[0]
                     }
                 </p>

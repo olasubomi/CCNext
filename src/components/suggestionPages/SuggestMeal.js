@@ -1386,12 +1386,12 @@ class SuggestMealForm extends Component {
       return;
     }
     // suggestMealForm.append('meal_images', mealImages);
-    suggestMealForm.append("prep_time", prepTime);
-    suggestMealForm.append("cook_time", cookTime);
-    suggestMealForm.append("intro", intro);
+    // suggestMealForm.append("prep_time", prepTime);
+    // suggestMealForm.append("cook_time", cookTime);
+    // suggestMealForm.append("intro", intro);
     suggestMealForm.append("tips", JSON.stringify(tips));
-    suggestMealForm.append("chef", chef);
-    suggestMealForm.append("servings", servings);
+    // suggestMealForm.append("chef", chef);
+    // suggestMealForm.append("servings", servings);
     suggestMealForm.append("formatted_instructions", instructions);
 
     // suggestMealForm.append('ingredientStrings', ingredientStrings);
@@ -1432,12 +1432,12 @@ class SuggestMealForm extends Component {
 
     }
     // suggestMealForm.append('meal_images', mealImages);
-    suggestMealForm.append("prep_time", prepTime);
-    suggestMealForm.append("cook_time", cookTime);
-    suggestMealForm.append("intro", intro);
+    // suggestMealForm.append("prep_time", prepTime);
+    // suggestMealForm.append("cook_time", cookTime);
+    // suggestMealForm.append("intro", intro);
     suggestMealForm.append("tips", JSON.stringify(tips));
-    suggestMealForm.append("chef", chef);
-    suggestMealForm.append("servings", servings);
+    // suggestMealForm.append("chef", chef);
+    // suggestMealForm.append("servings", servings);
     suggestMealForm.append("instructions", instructions)
     suggestMealForm.append("instructionTitles", instructionTitles)
 
@@ -1504,7 +1504,7 @@ class SuggestMealForm extends Component {
     suggestMealForm.append("cook_time", cookTime);
     suggestMealForm.append("intro", intro);
     suggestMealForm.append("tips", JSON.stringify(tips));
-    suggestMealForm.append("chef", chef);
+    suggestMealForm.append("chef", this.state.username);
     suggestMealForm.append("servings", servings);
     suggestMealForm.append("instructions", instructions)
     suggestMealForm.append("instructionTitles", instructionTitles)
@@ -1515,12 +1515,12 @@ class SuggestMealForm extends Component {
     // suggestMealForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
 
     // new suggested products
-    suggestMealForm.append("meal_categories", JSON.stringify(suggestedCategories));
+    suggestMealForm.append("meal_categories", JSON.stringify(suggestedCategories))
     console.log(suggestedCategories, "suggests")
-    suggestMealForm.append("kitchen_utensils", suggestedUtensils);
+    suggestMealForm.append("kitchen_utensils", JSON.stringify(suggestedUtensils));
     console.log(suggestedUtensils, "utensils")
     // RecipeSteps
-    suggestMealForm.append("formatted_ingredients", ingredientStrings);
+    suggestMealForm.append("formatted_ingredients", JSON.stringify(ingredientStrings));
     suggestMealForm.append("instruction_images1", chunk1Content);
     suggestMealForm.append("instruction_images2", chunk2Content);
     suggestMealForm.append("instruction_images3", chunk3Content);
@@ -2352,7 +2352,7 @@ class SuggestMealForm extends Component {
               </div>
             </div>
             <Stack direction="row" spacing={1} className={styles.stack}>
-              {this.state.suggestedCategories.map((data, index) => (
+              {this.state.suggestedCategories?.map((data, index) => ( 
                 <Chip
                   key={index}
                   label={data}
@@ -2444,7 +2444,7 @@ class SuggestMealForm extends Component {
               prepTime={this.state.prepTime}
               cookTime={this.state.cookTime}
               serves={this.state.servings}
-              chef={this.state.chef}
+              chef={this.state.chef || this.state.username}
               ingredientsList={this.state.ingredientStrings}
               utensilsList={this.state.suggestedUtensils}
               instructionChunk1={this.state.instructionChunk1}

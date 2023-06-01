@@ -26,20 +26,34 @@ import { composeWithDevTools } from "@redux-devtools/extension";
 import { createWrapper } from "next-redux-wrapper";
 import rootReducer from "../reducers/index";
 import logger from "redux-logger";
+import storage from 'redux-persist/lib/storage'
+import { persistStore, persistReducer } from 'redux-persist'
+
 // import rootReducer from "../reducers/Common";
 
 // initial states here
 const initalState = {};
+
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 // middleware
 const middleware = [thunk];
 
 // creating store
 export const store = createStore(
-  rootReducer,
+  persistedReducer,
   composeWithDevTools(applyMiddleware(...middleware))
 );
 // assigning store to next wrapper
 const makeStore = () => store;
 
+export let persistor = persistStore(store)
+
 export const wrapper = createWrapper(makeStore);
+
+

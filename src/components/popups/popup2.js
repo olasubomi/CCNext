@@ -11,6 +11,8 @@ import styles from './popup2.module.css';
 import ReactToPrint from 'react-to-print';
 import ComponentToPrint from "../mealsPage/ComponentToPrint";
 import { BsFillShareFill } from "react-icons/bs"
+import { ShareSocial } from 'react-share-social'
+import { FacebookShareButton, FacebookIcon, TwitterShareButton } from 'react-share';
 
 
 
@@ -133,6 +135,10 @@ class Popup2 extends Component {
         window.location.assign('/suggestmeal')
 
     }
+    handleShareClick = () => {
+        const shareUrl = 'https://www.instagram.com/share/create/?url=' + encodeURIComponent('http://localhost:3000/suggestmeal');
+        window.open(shareUrl, '_blank');
+    };
 
     componentDidMount() {
         console.log(this.props, 'props----')
@@ -152,11 +158,13 @@ class Popup2 extends Component {
         }, 1000);
         console.log(length, 'length')
     }
+
     render() {
 
         const { popupType, imageData, imagesData, name, description, categories, ingredientsList } = this.props
         const { curIn, length } = this.state;
 
+        console.log('ingredientsList', ingredientsList)
         var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
         var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
         return (
@@ -218,7 +226,7 @@ class Popup2 extends Component {
                                                     <th className={styles.th}>Quantity</th>
                                                     <th className={styles.th}>Measurement</th>
                                                 </tr>
-                                                {ingredientsList.map((ingredient, index) => (
+                                                {ingredientsList?.map((ingredient, index) => (
                                                     <tr style={{ background: index % 2 === 0 ? "#F1F1F1" : "#FFFFFF" }} key={index}>
                                                         <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split('of')[1] : ingredient.split(' ')[1]}</td>
                                                         <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[0] : ingredient.split(' ')[0]}</td>
@@ -236,33 +244,33 @@ class Popup2 extends Component {
                                 <div className={styles.popup2_col_3}>
                                     <h2>Recipe Steps</h2>
                                     <div className={styles.popup2_steps}>
-                                        {this.props['instructionChunk' + curIn].title !== '' &&
+                                        {this.props['instructionChunk' + curIn]?.title !== '' &&
                                             <>
-                                                {allowedImageExtensions.exec(this.props['instructionChunk' + curIn].dataName) && this.props['chunk' + curIn + 'Content'] !== undefined &&
+                                                {allowedImageExtensions.exec(this.props['instructionChunk' + curIn]?.dataName) && this.props['chunk' + curIn + 'Content'] !== undefined &&
                                                     <Image
                                                         src={this.props['chunk' + curIn + 'Content']}
-                                                        alt={this.props['instructionChunk' + curIn].title}
+                                                        alt={this.props['instructionChunk' + curIn]?.title}
                                                         className={styles.popup2_step_img}
                                                         height={"150%"} width={"70%"}
                                                         objectFit="cover"
                                                         objectPosition="center"
                                                     />}
 
-                                                {allowedVideoExtensions.exec(this.props['instructionChunk' + curIn].dataName) && this.props['chunk' + curIn + 'Content'] !== undefined &&
+                                                {allowedVideoExtensions.exec(this.props['instructionChunk' + curIn]?.dataName) && this.props['chunk' + curIn + 'Content'] !== undefined &&
                                                     <video className={styles.popup2_step_img} src={this.props['chunk' + curIn + 'Content']} controls>
                                                         Your browser does not support the video tag.
                                                     </video>}
                                                 <div className={styles.del}>
-                                                    <h2 className={styles.popup2_step_name}>{this.props['instructionChunk' + curIn].title}</h2>
+                                                    <h2 className={styles.popup2_step_name}>{this.props['instructionChunk' + curIn]?.title}</h2>
                                                     <p className={styles.popup2_instructions}>
-                                                        {this.props['instructionChunk' + curIn].instructionSteps && this.props['instructionChunk' + curIn].instructionSteps.map((step, index) => (index + 1) + ". " + step + " ")}
+                                                        {this.props['instructionChunk' + curIn]?.instructionSteps && this.props['instructionChunk' + curIn]?.instructionSteps.map((step, index) => (index + 1) + ". " + step + " ")}
                                                     </p>
                                                 </div>
                                             </>
                                         }
                                         {this.props['instructionChunk' + (curIn + 1)] !== undefined && curIn < length &&
                                             <ArrowCircleRightIcon onClick={this.incIn} className={styles.popup2_inc_con} />}
-                                        {curIn > 1 &&
+                                        {
                                             <ArrowCircleLeftIcon onClick={this.decIn} className={styles.popup2_dec_con} />}
                                     </div>
                                 </div>
@@ -273,24 +281,46 @@ class Popup2 extends Component {
                                     Share this product:
 
                                 </p>
-                                <span className={styles.iconSpan}>
-                                    <Image src="/assets/icons/Vector.svg" alt='facebook'
-                                        height={"17%"} width={"17%"} className={styles.icons}
-                                        objectFit="cover"
-                                        objectPosition="center" />
-                                </span>
-                                <span className={styles.iconSpan1}>
-                                    <Image src="/assets/icons/Vector (2).svg" alt='instagram'
-                                        height={"17%"} width={"17%"} className={styles.icons}
-                                        objectFit="cover"
-                                        objectPosition="center" />
-                                </span>
-                                <span className={styles.iconSpan2}>
-                                    <Image src="/assets/icons/Vector (1).svg" alt='twitter'
-                                        height={"17%"} width={"17%"} className={styles.icons}
-                                        objectFit="cover"
-                                        objectPosition="center" />
-                                </span>
+                                <div>
+                                    <FacebookShareButton
+                                        url={'https://localhost:3000/suggestmeal'}
+                                        quote={'Dummy text!'}
+                                        hashtag="#muo"
+                                    >
+                                        <span className={styles.iconSpan}>
+                                            <Image src="/assets/icons/Vector.svg" alt='facebook'
+                                                height={"17%"} width={"17%"} className={styles.icons}
+                                                objectFit="cover"
+                                                objectPosition="center" />
+                                        </span>
+                                    </FacebookShareButton>
+
+                                </div>
+                                <div onClick={() => this.handleShareClick()} style={{ cursor: "pointer" }}>
+                                    <span className={styles.iconSpan1}>
+                                        <Image src="/assets/icons/Vector (2).svg" alt='instagram'
+                                            height={"17%"} width={"17%"} className={styles.icons}
+                                            objectFit="cover"
+                                            objectPosition="center" />
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <TwitterShareButton
+                                        url={'https://twitter.com/VillageParrot/status/1661378988491538434?s=20'}
+                                        quote={'Dummy text!'}
+                                        hashtag="#muo"
+                                    >
+                                        <span className={styles.iconSpan2}>
+                                            <Image src="/assets/icons/Vector (1).svg" alt='twitter'
+                                                height={"17%"} width={"17%"} className={styles.icons}
+                                                objectFit="cover"
+                                                objectPosition="center" />
+                                        </span>
+                                    </TwitterShareButton>
+
+                                </div>
+
                                 <span className={styles.iconSpan3}>
                                     <Image src="/assets/icons/logos_whatsapp-icon.svg" alt='whatsapp'
                                         height={"17%"} width={"17%"} className={styles.icons}

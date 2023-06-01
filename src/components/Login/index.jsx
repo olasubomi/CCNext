@@ -15,6 +15,8 @@ import { Loader, SimpleSnackbar } from "../../common";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { toast } from 'react-toastify';
+import FacebookLogin from 'react-facebook-login';
+
 
 function Login(props) {
   const [forgetPassword, setForgetPasswordState] = useState(false);
@@ -30,6 +32,7 @@ function Login(props) {
   const [loginLoading, setLoginLoading] = useState(false);
   const { email, password, rememberPassword } = formState;
 
+  const [showFacebook, setShowFacebook] = useState(false)
   const router = useRouter();
 
   console.log(process.env.GOOGLE_CLIENT_ID);
@@ -53,12 +56,14 @@ function Login(props) {
   function onChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   }
-
+  const responseFacebook = (response) => {
+    console.log(response);
+  }
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"))
     if (props.auth.isAuthenticated && user) {
       props.auth.authUser.super_app_admin
-      // user.super_app_admin
+        // user.super_app_admin
         ? router.push("/admin")
         : router.push("/dashboard");
       props.toggleLogin();
@@ -70,9 +75,9 @@ function Login(props) {
   console.log(props)
   async function Login(e) {
     e.preventDefault();
-    props.login(email, password);
+    // props.login(email, password);
     // check redux
-    props.toggleLogin() // then redirect to dashboard
+    // props.toggleLogin() // then redirect to dashboard
 
     setLoginLoading(true);
     await props.login(email, password);
@@ -80,7 +85,7 @@ function Login(props) {
     // setTimeout(() => {
     //   setLoginLoading(false)
     // }, 3000);
-    
+
 
     // if (props.auth.isAuthenticated) {
     //   setLoginLoading(false);
@@ -201,10 +206,27 @@ function Login(props) {
               <h3>Login with social media</h3>
 
               <div className={styles.login_socials}>
-                <div className={styles.login_social + " " + styles.blue}>
+                {/* <div className={styles.login_social + " " + styles.blue}>
                   <Image src={facebook} />
                   <h4>Facebook</h4>
-                </div>
+                </div> */}
+                {
+                  showFacebook &&
+                  <FacebookLogin
+                    appId="791475055678094"
+                    autoLoad={true}
+                    fields="name,email,picture"
+                    cssClass= {styles.blue}
+                    callback={responseFacebook}
+                    render={renderProps => (
+                      <button className={styles.blue} onClick={() => {
+                        renderProps.onClick();
+                        setShowFacebook(false)
+                      }}>This is my custom FB button</button>
+                    )} />
+                }
+                {!showFacebook && <button className={styles.blue} onClick={() => setShowFacebook(true)}>Login with Facebook</button>
+                }
                 <div className={styles.login_social}>
                   <GoogleLogin
                     onSuccess={async (credentialResponse) =>

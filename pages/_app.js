@@ -1,10 +1,12 @@
 import "../src/App.css";
-import { wrapper, store } from "../src/store/index";
+import { wrapper, } from "../src/store/index";
+import { persistor, store} from '../src/store/index'
 import { Provider } from "react-redux";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PersistGate } from 'redux-persist/integration/react'
 
 
 function MyApp({ Component, pageProps }) {
@@ -13,6 +15,7 @@ function MyApp({ Component, pageProps }) {
       //
       <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
         <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
           <Component {...pageProps} />
           <ToastContainer 
           position="top-center"
@@ -26,6 +29,7 @@ function MyApp({ Component, pageProps }) {
           pauseOnHover
           theme="colored"
           style={{width: "100%", height: "20rem"}}/>
+          </PersistGate>
         </Provider>
       </GoogleOAuthProvider>
     </>

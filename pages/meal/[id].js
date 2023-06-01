@@ -47,7 +47,7 @@ const individualMealPage = (props) => {
                         <GoBack />
                     </div>
                     <div className={styles.meal_section_1_col_2}>
-                        <p className={styles.meal_section_1_col_2_p}> {props.meal.data.meals[0].createdAt && new Date(props.meal.data.meals[0].createdAt).getDate() + ' ' + months[new Date(props.meal.data.meals[0].createdAt).getMonth()] + ' ,'+ new Date(props.meal.data.meals[0].createdAt).getFullYear()}</p>
+                        <p className={styles.meal_section_1_col_2_p}> {props?.meal?.data?.meals[0]?.createdAt && new Date(props?.meal?.data?.meals[0]?.createdAt).getDate() + ' ' + months[new Date(props?.meal?.data?.meals[0]?.createdAt).getMonth()] + ' ,'+ new Date(props?.meal?.data?.meals[0]?.createdAt).getFullYear()}</p>
                         <div className={styles.select_container}>
                             <div className={styles.select_box}>
                             </div>
@@ -56,7 +56,7 @@ const individualMealPage = (props) => {
                 </div>
                 <div style={{width: '95%'}}>
                     {props.meal && props.meal.data && props.meal.data.meals.length > 0 &&
-                    <Meal auth={props.auth} meal={props.meal.data.meals[0]} />}
+                    <Meal auth={props.auth} meal={props?.meal?.data?.meals[0]} />}
                 </div>
             </div>
         </div>
@@ -82,7 +82,7 @@ export async function getServerSideProps(context){
     let {id} = context.params
     let meal = await axios.get('/meals/get-meals/1?publicly_available=Public&_id='+id)
 
-    // console.log(meal.data)
+    console.log(meal.data, 'meal data')
 
     return {
         props: {

@@ -72,6 +72,7 @@ const SuggestedMeals = (props) => {
                     if(data.data.data.count > 10){
                         setPagesState(Math.ceil(data.data.data.count/10))
                     }
+                    console.log('data.data.data.meals', data.data.data.meals)
                     setFilteredSuggestionsState(data.data.data.meals)
                     setSuggestionsState(data.data.data.meals)
                 }
@@ -313,7 +314,7 @@ const SuggestedMeals = (props) => {
     }
 
     function toggleOpenMeal(meal){
-        console.log(meal)
+        console.log("meal", meal)
         setSuggestionState(meal)
         setOpenSuggestionState(true)
     }
@@ -569,6 +570,10 @@ const SuggestedMeals = (props) => {
             setIngredientsString(ingredientsString)
         }
         setOpenModalState(true)
+        // console.log(typeof suggestion.formatted_instructions[0], "find instructionss")
+        // console.log(eval('(' + suggestion.formatted_instructions[0] + ')'), "help")
+        console.log(suggestion, "suggests")
+
     }
 
     function openDetailsModal(product){
@@ -691,7 +696,6 @@ const SuggestedMeals = (props) => {
             })
         }
       };
-
 
     return (
     <div className={container + " " + col2}>
@@ -948,11 +952,16 @@ const SuggestedMeals = (props) => {
             <Popup2 popupType='Meal Suggestion Preview' openModal={openModal} closeModal={closeModal}
               name={suggestion.meal_name} description={suggestion.meal_name}
               imageData={suggestion.meal_images[0]} image={suggestion.meal_images[0]}
-              imagesData={suggestion.meal_images.slice(1)} categories={suggestion.meal_categories}
+              imagesData={suggestion.meal_images.slice(1)} categories={JSON.parse(suggestion.meal_categories).toString().split(',')}
               prepTime={suggestion.prep_time} cookTime={suggestion.cook_time}
               serves={suggestion.servings} chef={suggestion.chef}
-              ingredientsList={suggestion.formatted_ingredients.map(ingredient => JSON.parse(ingredient).properIngredientStringSyntax)} utensilsList={suggestion.kitchen_utensils}
-              instructionChunk1={[]} instructionChunk2={[]}
+              ingredientsList={
+                suggestion.formatted_ingredients?.length 
+                ? JSON.parse(suggestion.formatted_ingredients)?.toString()?.split(',') 
+                : []} 
+            utensilsList={suggestion.kitchen_utensils}
+            //   ingredientsList={suggestion.formatted_ingredients.map(ingredient => JSON.parse(ingredient).properIngredientStringSyntax)} utensilsList={suggestion.kitchen_utensils}
+              instructionChunk1={eval('(' + suggestion.instructions[0] + ')')} instructionChunk2={eval('(' + suggestion?.instructions[1] + ')')}
               instructionChunk3={[]} instructionChunk4={[]}
               instructionChunk5={[]} instructionChunk6={[]}
               chunk1Content={suggestion.image_or_video_content_1[0]} chunk2Content={suggestion.image_or_video_content_2[0]}
