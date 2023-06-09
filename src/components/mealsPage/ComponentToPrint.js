@@ -43,7 +43,7 @@ class ComponentToPrint extends React.Component {
   render() {
     const { ingredientsList, categories, utensilsList } = this.props;
     let displayedCategories = ''
-    displayedCategories = categories.map((cat) => cat + ', ');
+    displayedCategories = categories?.map((cat) => cat + ', ');
     let displayedIngredients = ingredientsList.map((ingredientSyntax) => ingredientSyntax + ', ');
     let displayedUtensils = utensilsList.map((utensil) => utensil + ', ');
     //  displayedCategories+= '</div>'
@@ -86,7 +86,7 @@ class ComponentToPrint extends React.Component {
               <div className={styles.print_page_1_col_1}>
                 <div className={styles.print_categories} style={{display: "flex", alignItems: "center"}}>
                   <p>MEAL CATERGORY: </p>
-                  <h5 className={styles.print_category}>{this.props.categories.join(', ')}</h5>
+                  <h5 className={styles.print_category}>{this.props?.categories?.join(', ')}</h5>
 
                 </div>
                 <div className={styles.border}>

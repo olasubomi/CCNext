@@ -311,7 +311,7 @@ class SuggestMealForm extends Component {
             dataName: "",
           },
           instructionChunk3: {
-            title: instructionChunk3.title,
+            title: instructionChunk3?.title,
             instructionSteps: instructionChunk3?.instructionSteps || [],
 
             dataName: "",

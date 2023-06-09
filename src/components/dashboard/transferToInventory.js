@@ -74,8 +74,8 @@ export default function TransferToInventory(props){
     useEffect(() => {
         if(props.type === "Meal" && props.meal.meal_categories.length > 0){
             let ingredientsAvailablee = []
-            let ingredients = JSON.parse(props.meal.formatted_ingredients[0])
-            for(let i=0; i<ingredients.length; i++){
+            let ingredients = eval('(' + props.meal.formatted_ingredients[0] + ')')
+            for(let i=0; i<ingredients?.length; i++){
                 ingredientsAvailablee.push({
                     name: ingredients[i].productName,
                     quantity: ingredients[i].quantity,

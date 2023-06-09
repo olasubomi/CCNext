@@ -29,15 +29,18 @@ class Popup2 extends Component {
     }
 
     incIn = () => {
-        this.setState({
-            curIn: this.state.curIn + 1
-        })
+            this.setState({
+                curIn: this.state.curIn + 1
+            })
+        
     }
 
     decIn = () => {
-        this.setState({
-            curIn: this.state.curIn - 1
-        })
+        if(this.state.curIn > 1){
+            this.setState({
+                curIn: this.state.curIn - 1
+            })
+        }
     }
 
 
@@ -164,7 +167,7 @@ class Popup2 extends Component {
         const { popupType, imageData, imagesData, name, description, categories, ingredientsList } = this.props
         const { curIn, length } = this.state;
 
-        console.log('ingredientsList', ingredientsList)
+        console.log('propss', this.props)
         var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
         var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
         return (
@@ -188,7 +191,7 @@ class Popup2 extends Component {
                                                 objectFit="cover"
                                                 objectPosition="center"
                                             />}
-                                        {imagesData.length > 0 &&
+                                        {imagesData?.length > 0 &&
                                             <div className={styles.popup2_images}>
                                                 {
                                                     imagesData.map((data, index) =>
@@ -237,7 +240,7 @@ class Popup2 extends Component {
                                         </div>
                                         <div className={styles.popup2_categories}>
                                             <h3 className={styles.popup2_category_name}>Meal Category</h3>
-                                            <p className={styles.popup2_category}>{categories.map((cat) => <span>{cat} &nbsp; &nbsp;</span>)}</p>
+                                            <p className={styles.popup2_category}>{categories?.map((cat) => <span>{cat} &nbsp; &nbsp;</span>)}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -268,10 +271,10 @@ class Popup2 extends Component {
                                                 </div>
                                             </>
                                         }
-                                        {this.props['instructionChunk' + (curIn + 1)] !== undefined && curIn < length &&
+                                        {this.props['instructionChunk' + (curIn + 1)] !== undefined && curIn < length && 
                                             <ArrowCircleRightIcon onClick={this.incIn} className={styles.popup2_inc_con} />}
                                         {
-                                            <ArrowCircleLeftIcon onClick={this.decIn} className={styles.popup2_dec_con} />}
+                                           curIn > 1 &&  <ArrowCircleLeftIcon onClick={this.decIn} className={styles.popup2_dec_con} />}
                                     </div>
                                 </div>
                             </div>

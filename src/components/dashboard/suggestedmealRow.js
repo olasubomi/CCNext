@@ -22,6 +22,9 @@ function SuggestedMealRow(props){
       ]
 
     const {suggestion} = props;
+    console.log(props.searchType , "suggest food")
+    console.log( typeof suggestion.status, "foodstatus")
+    console.log(suggestion, "Meal id")
     // console.log(JSON.parse(suggestion.meal_categories).toString(), "meal categories")
 
     function showDropDown(){
@@ -37,11 +40,13 @@ function SuggestedMealRow(props){
                 {/* <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td}>{suggestion._id}</p> */}
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td}>{props.searchType === 'Meal' ? suggestion.meal_name : props.searchType === 'Product' ? suggestion.product_name: suggestion.category_name}</p>
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + status + " " + 
-                    ((suggestion.publicly_available === 'Draft' || suggestion.publicly_available === 'Pending') ? pending :
-                    suggestion.publicly_available === 'Public' ? approve :
-                    suggestion.publicly_available === 'Rejected' ? rejected : '')}
+                    ((suggestion.status === 'Draft' || suggestion.status === 'Pending') ? pending :
+                    suggestion.status === 'Public' ? approve :
+                    suggestion.status === 'Rejected' ? rejected : '')}
                 >
-                    {props.searchType === 'Category' ? suggestion.status : suggestion.publicly_available}
+                    {props.searchType !== 'Category' ? suggestion.status : suggestion.publicly_available}
+                    {/* {suggestion.status} */}
+
                 </p>
                 <p onClick={props.auth.authUser.user_type === 'admin' ? () => props.toggleOpenMeal(suggestion): props.searchType === 'Meal' ? () => props.openMealDetailsModal(suggestion) : () => props.openDetailsModal(suggestion)} className={styles.request_td + " " + styles.hideData}>
                     {props.searchType === 'Meal' ? 
@@ -53,12 +58,12 @@ function SuggestedMealRow(props){
                 <div className={styles.request_td + " " + styles.actions_con}>
                     {props.auth.authUser.user_type !== 'admin' &&
                     <>
-                        {suggestion.publicly_available === 'Draft' && 
+                        {suggestion.status === 'Draft' && 
                         <div onClick={() => props.toggleSent(suggestion._id, props.searchType)} className={styles.tableactionbutton}>Send for review</div>
                         }
                         {props.auth.authUser.user_type === 'supplier' &&
                         <>
-                            {suggestion.publicly_available === 'Public' ? 
+                            {suggestion.status === 'Public' ? 
                             <div onClick={() => props.toggleTransferToInventory(suggestion)} className={styles.tableactionbutton} style={{background: '#F47900', color:'white', border: 'none'}}>Send for Inventory</div> 
                             :
                             <div className={styles.tableactionbutton} style={{background: '#D9D9D9', color:'white', border: 'none'}}>Send for Inventory</div> 

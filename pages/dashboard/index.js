@@ -473,19 +473,19 @@ function handleSearchType (type){
                                                 <td className={styles.request_td}>{suggestion._id}</td>
                                                 <td className={styles.request_td}>{searchType === 'Meal' ? suggestion.meal_name : searchType === 'Product' ? suggestion.product_name : suggestion.category_name}</td>
                                                 <td className={styles.request_td + " " + styles.hideData}>
-                                                    {searchType === 'Meal' ? 
+                                                    {/* {searchType === 'Meal' ? 
                                                     suggestion.meal_categories && suggestion.meal_categories.length > 0 && JSON.parse(suggestion.meal_categories[0])[0] :
                                                     searchType === 'Product' ?
                                                     suggestion.product_categories && suggestion.product_categories.length > 0 && suggestion.product_categories[0] :
                                                     suggestion.product_categories && suggestion.product_categories.length > 0 && suggestion.product_categories[0]
-                                                    }
+                                                    } */}
                                                 </td>
                                                 <td className={styles.request_td + " " + styles.status + " " + 
-                                                    ((suggestion.publicly_available === 'Draft' || suggestion.publicly_available === 'Pending') ? styles.pending :
-                                                    suggestion.publicly_available === 'Public' ? styles.approve :
-                                                    suggestion.publicly_available === 'Rejected' ? styles.rejected : '')}
+                                                    ((suggestion.status === 'Draft' || suggestion.status === 'Pending') ? styles.pending :
+                                                    suggestion.status === 'Public' ? styles.approve :
+                                                    suggestion.status === 'Rejected' ? styles.rejected : '')}
                                                 >
-                                                    {searchType === 'Category' ? suggestion.status : suggestion.publicly_available}
+                                                    {searchType === 'Category' ? suggestion.publicly_available : suggestion.status}
                                                 </td>
                                                 {/* <td className={styles.request_td + " " + styles.hideData}>afa</td> */}
                                                 <td className={styles.request_td + " " + styles.hideData}>{suggestion.createdAt && new Date(suggestion.createdAt).getDate() + ' ' + months[new Date(suggestion.createdAt).getMonth()] + ' ,'+ new Date(suggestion.createdAt).getFullYear()}</td>

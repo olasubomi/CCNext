@@ -172,7 +172,7 @@ function Header(props) {
   //   }
   // },[props.message.length, props.error.length])
   // console.log(props, "propsssss")
-
+// console.log(props.auth.authUser.profile_picture, "images")
   return (
     <>
       <div className={styles.navbar}>
@@ -204,10 +204,12 @@ function Header(props) {
                 // </Link>
                 :
                 <div className={styles.navbar_user_info}>
-                  {props.auth.authUser.profile_picture &&
+                  
                     <>
+                    {props.auth.authUser.profile_picture ? 
                       <img id="userImg" onClick={(e) => toggleUserDetails(e)} src={props.auth.authUser.profile_picture} alt='User' className={styles.navbar_user_img} />:
                       <UserIcon style={styles.navbar_main_link_icon} />
+                    }
                       <h2 id="userName" onClick={(e) => toggleUserDetails(e)} className={styles.navbar_user_name}>{props.auth.authUser.first_name}</h2>
                       <ArrowDownIcon id="usericon" onClick={(e) => toggleUserDetails(e)} style={styles.navbar_user_icon} />
                       <div id="userdetails" className={styles.navbar_user_signedin}>
@@ -239,7 +241,7 @@ function Header(props) {
                         </div>
                       </div>
                     </>
-                  }
+                  
                   <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
                   <div className={styles.navbar_top_details_col}>
                     <div id="noticon" onClick={(e) => toggleNotification(e)}>
