@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: auto;
     width: 100%;
     background: #F5F5F5;
@@ -257,11 +258,8 @@
 
 .greenButton {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 10px;
-    gap: 10px;
     width: 215px;
     height: 45px;
     background: #00A001;
@@ -279,4 +277,129 @@
     line-height: 17px;
     color: #FFFFFF;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+    .couponPrice {
+        margin-top: 20px;
+    }
+    
+    .coupon {
+        width: 150px;
+    }
+    
+    .couponBlack {
+        gap: 2px;
+        width: 80px;
+        height: 41px;
+    }
+    
+    .couponBlack > p {
+        width: 50px;
+        font-size: 8px;
+    }
+    
+    .couponWhite {
+        width: 70px;
+        height: 41px;
+    }
+    
+    .couponWhite > p {
+        width: 50px;
+        font-size: 8px;
+    }
+    
+    .whiteButton {
+        width: 70px;
+    }
+    
+    .whiteButton > label {
+        width: 50px;
+        font-size: 10px;
+    }
+    
+    .greenButton {
+        width: 90px;
+        padding-left: 20px;
+    }
+    
+    .greenButton > label {
+        font-size: 10px;
+    }
+}
+
+@media only screen and (max-width: 375px) {
+    .cartMainBody {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .couponPrice {
+        margin-top: 20px;
+    }
+    
+    .coupon {
+        width: 150px;
+    }
+    
+    .couponBlack {
+        gap: 2px;
+        width: 80px;
+        height: 41px;
+    }
+    
+    .couponBlack > p {
+        width: 50px;
+        font-size: 8px;
+    }
+    
+    .couponWhite {
+        width: 70px;
+        height: 41px;
+    }
+    
+    .couponWhite > p {
+        width: 50px;
+        font-size: 8px;
+    }
+    
+    .priceRow {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .mainPrice {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    
+    .mainPrice > label {
+        width: 60px;
+        font-size: 10px;
+    }
+
+    .checkoutButton {
+        gap: 5px; 
+    }
+    
+    .whiteButton {
+        width: 70px;
+    }
+    
+    .whiteButton > label {
+        width: 50px;
+        font-size: 10px;
+    }
+    
+    .greenButton {
+        width: 90px;
+        padding-left: 20px;
+    }
+    
+    .greenButton > label {
+        font-size: 10px;
+    }
 }

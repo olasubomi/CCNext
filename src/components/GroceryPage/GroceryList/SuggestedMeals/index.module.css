@@ -22,6 +22,7 @@
     flex-direction: row;
     gap: 50px;
     flex-wrap: wrap;
+    flex-basis: 33.333333%;
 }
 
 .mealCard {
@@ -115,4 +116,31 @@
     font-weight: 400;
     font-size: 12px;
     color: #000000;
+}
+
+
+@media only screen and (max-width: 1200px) {
+
+    .mainBody {
+        align-items: center;
+        justify-content: center;
+        margin-top: 50px;
+    }
+
+    .mealBody {
+        justify-content: center;
+        gap: 30px;
+    }
+    .mainBody > label {
+        width: 400px;
+        font-size: 18px;
+    }
+    
+}
+
+@media only screen and (max-width: 390px) {
+    .mainBody > label {
+        width: 280px;
+        font-size: 12px;
+    }
 }

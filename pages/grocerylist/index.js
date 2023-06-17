@@ -1,6 +1,8 @@
 import React, { useEffect, useState, Fragment } from "react";
+import styled from "styled-components";
 import Link from "next/link";
 import Header, { Header2 } from "../../src/components/Header/Header";
+import SideNav from "../../src/components/Header/sidenav";
 import Footer from "../../src/components/Footer/Footer";
 import indexStyles from "./index.module.css";
 import GlobalSearchBar from "../../src/components/GlobalComponents/GlobalSearchBar";
@@ -8,13 +10,69 @@ import MainGroceryList from "../../src/components/GroceryPage/GroceryList/MainGr
 import SuggestedMeals from "../../src/components/GroceryPage/GroceryList/SuggestedMeals/Index";
 import Cart from "../../src/components/Cart/Index";
 import CartProvider from "../store/CartProvider";
+import Items from "../../src/components/items/Items";
 
 const index = () => {
   const [showCart, setShowCart] = useState(false);
   const [userData, setUserData] = useState([]);
   const [userErrData, setUserErrData] = useState({});
-  const [user, setUser] = useState("");
-  const [userToken, setUserToken] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeCard, setActiveCard] = useState("");
+  const [itemsData, setItemsData] = useState([]);
+  const [productErrData, setProductErrData] = useState({});
+
+  async function fetchItems() {
+    const response = await fetch(`http://localhost:5000/api/items`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (data.data === undefined) {
+      setProductErrData(data);
+    } else {
+      setItemsData(data.data);
+    }
+  }
+
+  async function fetchUserGrocery() {
+    const userDetails = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("x-auth-token");
+    const user_id = userDetails._id;
+
+    if (userDetails) {
+      localStorage.setItem("user_id", JSON.stringify(user_id));
+
+      const response = await fetch(
+        `http://localhost:5000/api/groceries/${user_id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+
+      const data = await response.json();
+      
+      if (data.data === undefined) {
+        setUserErrData(data);
+      } else {
+        setUserData(data.data[0]);
+      }
+    } else {
+      setUserData([]);
+    }
+  }
+
+  useEffect(() => {
+    fetchItems();
+    fetchUserGrocery();
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -28,41 +86,14 @@ const index = () => {
     setShowCart(false);
   };
 
-  useEffect(() => {
-    async function fetchUserGrocery() {
-      const userDetails = JSON.parse(localStorage.getItem("user"));
-      const token = localStorage.getItem("x-auth-token");
-      if (userDetails) {
-        setUser(userDetails._id);
-        localStorage.setItem("user_id", JSON.stringify(user));
-        setUserToken(token);
+  //const grocery = userData.groceryList;
 
-        const response = await fetch(
-          `http://localhost:5000/api/groceries/${user}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: userToken,
-            },
-          }
-        );
-
-        const data = await response.json();
-
-        if (data.data === undefined) {
-          setUserErrData(data);
-        } else {
-          setUserData(data.data[0]);
-        }
-      }
-    }
-
-    fetchUserGrocery();
-  }, [user]);
-
+  //const grocery = productGrocery[0].groceryList;
   const grocery = userData.groceryList;
 
+  //console.log("gl", userData);
+
+  const items = itemsData;
   return (
     <CartProvider>
       {showCart ? (
@@ -71,6 +102,7 @@ const index = () => {
         <div className={indexStyles.allBody}>
           <Header route="groceryList" openCart={openCart} />
           <Header2 />
+          <SideNav />
           <div className={indexStyles.groceryBody}>
             <div className={indexStyles.groceryMainBody}>
               <div className={indexStyles.arrowBack}>
@@ -90,16 +122,45 @@ const index = () => {
               </div>
               <h2>Add new item from Store</h2>
               <div className={indexStyles.searchBody}>
-                <GlobalSearchBar
-                  height="39px"
-                  borderBottom="1px solid #05e105"
-                  borderTop="1px solid #05e105"
-                  borderLeft="1px solid #05e105"
-                  borderRight="1px solid #05e105"
-                  iconMl="30px"
-                  inputPlaceholder="Search Meals, Ingredient and Products"
-                  inputPadding="60px"
-                />
+                <div className={indexStyles.searchInput}>
+                  <img
+                    src="/assets/grocery_list/Search.svg"
+                    alt="search icon"
+                  />
+                  <input
+                    placeholder="Search Meals, Ingredient and Products"
+                    value={searchTerm}
+                    onChange={(event) => {
+                      if (event.target.value === "") {
+                        setSearchTerm("");
+                        setActiveCard("");
+                      } else {
+                        setSearchTerm(event.target.value);
+                        setActiveCard(event.target.value);
+                      }
+                    }}
+                  />
+                </div>
+                {items
+                  .filter((item) => {
+                    if (searchTerm == "") {
+                      return null;
+                    } else if (
+                      item.item_name
+                        ?.toLowerCase()
+                        .includes(searchTerm.toLowerCase()) &&
+                      item.item_status[0]?.status === "Draft"
+                    ) {
+                      return item;
+                    }
+                  })
+                  .map((item) => (
+                    <Items
+                      itemName={item.item_name}
+                      itemPrice={item.item_price}
+                      itemStore={item.store_name}
+                    />
+                  ))}
               </div>
               <div className={indexStyles.itemsHeader}>
                 <label>Items</label>

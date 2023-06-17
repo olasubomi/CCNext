@@ -6,8 +6,13 @@ import indexStyles from "./Index.module.css";
 import CartItem from "../GroceryPage/CartPage/CartItem/Index";
 import Footer from "../Footer/Footer";
 import CartContext from "../../../pages/store/cart-context";
+import SideNav from "../Header/sidenav";
+import { useMobileMedia } from '../../customhooks/useResponsive';
 
 function Index(props) {
+
+  const mobileScreen = useMobileMedia();
+
   const cartCtx = useContext(CartContext);
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
@@ -42,6 +47,7 @@ function Index(props) {
       </Head>
       <Header route="groceryList" />
       <Header2 />
+      <SideNav/> 
       <TimeBar />
       <div className={indexStyles.cartBody}>
         <div className={indexStyles.cartMainBody}>
@@ -57,7 +63,7 @@ function Index(props) {
             </div>
             <h1>CART</h1>
           </div>
-          <div className={indexStyles.cartHeader}>
+          {!mobileScreen ? <div className={indexStyles.cartHeader}>
             <div className={indexStyles.cartHeaderRow1}>
               <label>Product</label>
             </div>
@@ -70,7 +76,7 @@ function Index(props) {
               <label>Subtotal</label>
               <label>Action</label>
             </div>
-          </div>
+          </div> : "Items"}
           {cartCtx.items.map((item) => (
             <CartItem
               key={item.id}

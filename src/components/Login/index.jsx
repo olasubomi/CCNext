@@ -58,7 +58,7 @@ function Login(props){
   function togglePass(){
     setShowPassState(!showPass)
   }
-  {console.log("signedin", props.auth)}
+  //{console.log("signedin", props.auth)}
   return(
     <>
       {!signUp && !forgetPassword &&

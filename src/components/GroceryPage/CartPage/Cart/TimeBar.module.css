@@ -20,3 +20,21 @@
     color: #FFFFFF;
 }
 
+@media only screen and (max-width: 768px) {
+    .timeContainer {
+        margin-top: 100px;
+    }
+    .timeContainer > label {
+        width: 360px;
+        font-size: 14px;
+    }
+    
+}
+
+@media only screen and (max-width: 360px) {
+    .timeContainer > label {
+        width: 300px;
+        font-size: 10px;
+    }
+    
+}

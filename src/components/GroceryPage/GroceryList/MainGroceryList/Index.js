@@ -15,7 +15,7 @@ function Index(props) {
       <div className={GroceryListStyles.listMain}>
         <label>{props.listName}</label>
         <p>
-          This is the list of all grocery items for Name of list
+          This is the list of all grocery items for Name of list {""}
           {props.listName}
         </p>
         <div className={GroceryListStyles.buttonDiv} onClick={showListDetails}>

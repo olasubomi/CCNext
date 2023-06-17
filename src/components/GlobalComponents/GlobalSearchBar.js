@@ -2,10 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 function GlobalSearchBar({
-  placeHolder,
-  searchId,
-  searchName,
-  searchValue,
   width,
   height,
   inputPlaceholder,
@@ -39,13 +35,7 @@ function GlobalSearchBar({
       iconMl={iconMl}
       placeholderColor={placeholderColor}
     >
-      <input
-        type="text"
-        id={searchId}
-        name={searchName}
-        value={searchValue}
-        placeholder={inputPlaceholder}
-      />
+      <input type="text" placeholder={inputPlaceholder} />
       <img src="/assets/grocery_list/Search.svg" alt="search icon" />
     </ContainerGroup>
   );
