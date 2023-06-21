@@ -5,11 +5,14 @@ import GoBack from '../../src/components/CommonComponents/goBack';
 import styles from "../../src/components/individualPage/meal.module.css";
 import Header, { Header2 } from '../../src/components/Header/Header';
 import Sidenav from '../../src/components/Header/sidenav';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from '../../src/util/Api';
 import { connect } from "react-redux";
+import { useRouter } from "next/router";
 
-const individualMealPage = (props) => {
+const individualMealPage = () => {
+    const [props, setProps] = useState({})
+    const router = useRouter();
     useEffect(() => {
         console.log(props)
         if(props.meal && props.meal.data && props.meal.data.meals?.length === 0){
@@ -32,6 +35,19 @@ const individualMealPage = (props) => {
         "Dec",
       ]
 console.log(props, "mealsssss")
+console.log(router.query.id, "this meal")
+const getMeal = async (id) => {
+    let meal = await axios.get(`/meals/get-meal/${id}`)
+    console.log(meal.data.data.meal, "get props")
+
+    setProps(meal.data.data)
+
+}
+useEffect(() => {
+    if(router.query?.id){
+        getMeal(router.query.id)
+    }
+},[router.query?.id])
     return (
         <div>
             <Head>
@@ -56,7 +72,7 @@ console.log(props, "mealsssss")
                 </div>
                 <div style={{width: '95%'}}>
                     
-                    <Meal props={props.meal.data} />
+                    <Meal props={props} />
                 </div>
             </div>
         </div>
@@ -75,24 +91,24 @@ function mapStateToProp(state) {
     mapStateToProp,
   )(individualMealPage);
 
-export async function getServerSideProps(context){
-    // const res = await fetch('https://.../posts')
-    // const posts = await res.json()
-    // console.log(context)
-    let {id} = context.params
-    // let meal = await axios.get('/meals/get-meals/1?publicly_available=Public&_id='+id)
-    let meal = await axios.get('/meals/get-meal/64766a7dfef9ac800955946e')
+// export async function getServerSideProps(context){
+//     // const res = await fetch('https://.../posts')
+//     // const posts = await res.json()
+//     // console.log(context)
+//     let {id} = context.params
+//     console.log(context, "this meal id")
+//     // let meal = await axios.get('/meals/get-meals/1?publicly_available=Public&_id='+id)
 
-    console.log(meal.data, 'meal data')
-    console.log(id, "id")
+//     // console.log(meal.data, 'meal data')
+    
 
-    return {
-        props: {
-            meal: meal.data
-        },
-        // Next.js will attempt to re-generate the page:
-        // - When a request comes in
-        // - At most once every second
-        // revalidate: 86400, // In seconds
-    }
-}
+//     // return {
+//     //     props: {
+//     //         meal: meal.data
+//     //     },
+//     //     // Next.js will attempt to re-generate the page:
+//     //     // - When a request comes in
+//     //     // - At most once every second
+//     //     // revalidate: 86400, // In seconds
+//     // }
+// }

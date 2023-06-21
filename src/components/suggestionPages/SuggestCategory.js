@@ -142,11 +142,15 @@ class SuggestCategoryForm extends Component {
       // though all will still be attached to product, as mentioned
       let index = this.props.categories?.indexOf(categoryWords);
       if (index === -1) {
-        let category_object = {};
-        category_object.category_name = categoryWords;
-        category_object.affiliated_objects = "ANY";
-        category_object.publicly_available = "Draft";
-        new_categories.push(category_object);
+        if (categoryWords.length) {
+          for (let ele of categoryWords) {
+            let category_object = {};
+            category_object.category_name = ele;
+            category_object.affiliated_objects = "ANY";
+            category_object.publicly_available = "Draft";
+            new_categories.push(category_object);
+          }
+        }
       }
       else {
         console.log("does not append to string")

@@ -734,8 +734,10 @@ class SuggestProductForm extends Component {
   sendSuggestedProductToDB = async (e) => {
     const { productName, productImageName, productDescription, productImagesData,
       ingredientGroupList, descriptionGroupList, suggestedCategories,
-      productImage1, productImage2, productImage3, productImage4 } = this.state;
+      productImage1, productImage2, productImage3, productImage4, productImages, ingredientStrings, sizeStrings, nutritionalStrings } = this.state;
 
+
+    console.log('nutritionalStrings', nutritionalStrings)
     // handle edge case Product name, ingredienrs or image upload required to submit form
     if (productName === "") { console.log("product label blank"); return; }
     if (productImagesData === null || productImagesData === undefined ||
@@ -812,45 +814,77 @@ class SuggestProductForm extends Component {
 
     //-------------Submit remainder data of product to Mongo ------------------------------------------
     let suggestProductForm = new FormData();
-    suggestProductForm.append('product_name', productName);
-    suggestProductForm.append('product_images', productImage1);
-    suggestProductForm.append('product_images', productImage2);
-    suggestProductForm.append('product_images', productImage3);
-    suggestProductForm.append('product_images', productImage4);
+    suggestProductForm.append('item_name', productName);
+    suggestProductForm.append('item_images', productImage1);
+    suggestProductForm.append('item_images', productImage2);
+    suggestProductForm.append('item_images', productImage3);
+    suggestProductForm.append('item_images', productImage4);
+
+    // suggestProductForm.append('product_images', productImage2);
+    // suggestProductForm.append('product_images', productImage3);
+    // suggestProductForm.append('product_images', productImage4);
     // suggestProductForm.append('productImageName', productImageName);
-    suggestProductForm.append('product_details', productDescription);
+    suggestProductForm.append('item_intro', productDescription);
     descriptionGroupList.map((individualDescriptions) => {
       console.log(individualDescriptions);
       suggestProductForm.append('product_descriptions', individualDescriptions);
     })
 
-    // suggestProductForm.append('ingredientStrings', ingredientStrings);
+    const arr = nutritionalStrings.map(ele => {
+      let obj = {}
+      let information = ele.split(':')[0]?.trim()?.toLowerCase();
+      let value = ele.split(':')[1]?.trim()?.toLowerCase()
+      information = information?.split(' ')?.length > 1 ? information?.split(' ').map(ele => ele.toLowerCase()).join('_') : information;
+      obj[information] = value;
+      return obj
+    })
+
+    const productObject = {
+      product_size: sizeStrings,
+      product_name: productName
+    }
+
+    if (arr.length) {
+      for (let ele of arr) {
+        for (let val in ele) {
+          productObject[val] = ele[val]
+        }
+      }
+    }
+
+    suggestProductForm.append("item_data", JSON.stringify(productObject))
+
+    suggestProductForm.append("formatted_ingredients", JSON.stringify(ingredientStrings));
+    suggestProductForm.append("store_available", '63d426b416b83177aaeaed96');
+    suggestProductForm.append("item_type", this.props.suggestionType)
+    suggestProductForm.append("user", JSON.parse(localStorage.getItem('user'))._id);
     // list of products quantity measurements (created on submit Product)
     // suggestProductForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
-    suggestProductForm.append('new_measurements', JSON.stringify(new_measurements));
+    // suggestProductForm.append('new_measurements', JSON.stringify(new_measurements));
 
     // suggestProductForm.append('product_slider', JSON.stringify(product_slider));
     // suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
     all_ingredients_formatted.map((individualIngredients) => {
       console.log(individualIngredients);
-      suggestProductForm.append('ingredients_in_product', JSON.stringify(individualIngredients));
+      suggestProductForm.append('hidden_ingredients_in_product', JSON.stringify(individualIngredients));
     })
     // new suggested products
     // suggestProductForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
 
-    // suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
+    suggestProductForm.append('item_categories', JSON.stringify(suggestedCategories));
 
-    suggestedCategories.map(data => {
-      suggestProductForm.append('product_categories', data);
-    })
+    // suggestedCategories.map(data => {
+    //   suggestProductForm.append("item_categories", JSON.stringify(suggestedCategories));
+    // })
 
-    suggestProductForm.append('product_type', JSON.stringify("Ingredient"));
+    // suggestProductForm.append('product_type', JSON.stringify("Ingredient"));
     // suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
 
 
     //---------------------------------------------Submit Product to Mongo---------------------------------------------------
     // var url = "/createProduct/";
-    var url = "http://localhost:5000/api/products/create/";
+    // var url = "http://localhost:5000/api/products/create/";
+    var url = "http://localhost:5000/api/items/";
 
     const config = {
       method: 'POST', data: suggestProductForm, url: url,
@@ -944,8 +978,8 @@ class SuggestProductForm extends Component {
                     <p><Image src={data} width="100%" height="100%" alt="main_product_Images" />
                     </p>
                     <div className={styles.close} onClick={() => this.deleteImages(index)}>
-                    <AiOutlineClose className={styles.closeIcon} />
-                  </div>
+                      <AiOutlineClose className={styles.closeIcon} />
+                    </div>
                   </Col>
                 </Row>
               )

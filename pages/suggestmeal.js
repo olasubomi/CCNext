@@ -120,16 +120,20 @@ class SuggestMeal extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
+
+    console.log('suggestionType---', this.state.suggestionType)
     // get all Meal Names***
     console.log(this.categories, "categories")
-    var url = "/meals/get-meals/1";
+    // var url = "/meals/get-meals/1";
+    var url = "/items";
     axios
       .get(url)
       .then((body) => {
         var mealList = body.data;
         if (mealList) {
           mealList.data.meals.map((meal) =>
-            this.allMealNames.push(meal.meal_name)
+            // this.allMealNames.push(meal.meal_name)
+            this.allMealNames.push(meal.item_name)
           );
         } else {
           console.log("get all meal names function does not return");
@@ -314,6 +318,7 @@ class SuggestMeal extends Component {
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}
                 categories={this.categories}
+                suggestionType={this.state.suggestionType}
               ></SuggestMealForm>
             )}
             {suggestionType === "Product" && (
@@ -323,6 +328,7 @@ class SuggestMeal extends Component {
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}
                 categories={this.categories}
+                suggestionType={this.state.suggestionType}
               ></SuggestProductForm>
             )}
             {suggestionType === "Kitchen Utensil" && (
@@ -330,11 +336,13 @@ class SuggestMeal extends Component {
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}
                 categories={this.categories}
+                suggestionType={this.state.suggestionType}
               ></SuggestKitchenUtensilForm>
             )}
             {suggestionType === "Category" && (
               <SuggestCategoryForm
                 categories={this.categories}
+                suggestionType={this.state.suggestionType} 
               ></SuggestCategoryForm>
             )}
           </div>

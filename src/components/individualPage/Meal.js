@@ -32,7 +32,7 @@ function Meal(props){
                 <title>Meal</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
-            {props.props.meal &&
+            {props.props?.meal &&
             <div className={styles.meal_sections}>
                 
                 <div className={styles.meal_section_2}>

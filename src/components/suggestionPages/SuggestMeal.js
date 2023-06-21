@@ -22,22 +22,26 @@ import { toast } from 'react-toastify';
 class SuggestMealForm extends Component {
   ingredientsQuantityMeasurements = [];
 
+
   constructor(props) {
     super(props);
     this.state = {
       username: "",
       mealName: "",
+      itemMealName: "",
       allMealNames: [],
       mealImage: [],
-      mealImages: [],
+      itemMealImages: [],
       mealImagesData: [],
       mealImage0: "",
       mealImage1: "",
-      mealImage0: "",
       mealImage2: "",
       mealImage3: "",
+      itemmealImage0: "",
+      itemmealImage1: "",
+      itemmealImage2: "",
+      itemmealImage3: "",
       intro: "",
-
       ingredientNames: [],
       // do we need product group list AND strings ?
       ingredientGroupList: [],
@@ -144,6 +148,7 @@ class SuggestMealForm extends Component {
       //mealsModal controller
       openModal: false,
       stepInputs: [],
+      itemIntro: ''
     };
 
     this.handleIngredientMeasurement =
@@ -168,6 +173,7 @@ class SuggestMealForm extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
 
+    console.log('this.props.suggestionType---**', this.props)
     console.log(JSON.parse(localStorage.getItem('user')))
     // get all Meal Names***
     // var url = "/meals/get-meals/1";
@@ -214,8 +220,9 @@ class SuggestMealForm extends Component {
       if (localStorage.getItem("suggestMealForm")) {
         let {
           mealName,
+          itemMealName,
           intro,
-
+          ItemIntro,
           ingredientNames,
           // do we need product group list AND strings ?
           ingredientGroupList,
@@ -266,8 +273,9 @@ class SuggestMealForm extends Component {
 
         this.setState({
           mealName,
+          itemMealName,
           intro,
-
+          ItemIntro,
           ingredientNames,
           // do we need product group list AND strings ?
           ingredientGroupList,
@@ -400,6 +408,7 @@ class SuggestMealForm extends Component {
     // console.log(e.target.id)
     // console.log(" " + [e.target.id] + " " + e.target.value);
     this.setState({ mealName: val });
+    this.setState({ itemMealName: val });
   };
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -412,18 +421,23 @@ class SuggestMealForm extends Component {
     if (allowedImageExtensions.exec(event.target.files[0].name)) {
       this.setState({
         // mealImageName: event.target.files[0].name,
-        mealImages: [...this.state.mealImages, event.target.files[0]],
+        // mealImages: [...this.state.mealImages, event.target.files[0]],
+        itemMealImages: [...this.state.itemMealImages, event.target.files[0]],
         mealImagesData: [
           ...this.state.mealImagesData,
           URL.createObjectURL(event.target.files[0]),
         ],
       });
 
-      console.log(this.state.mealImages);
+      console.log(this.state.itemMealImages);
       let particularArray;
 
-      if (this.state.mealImage0 == "") {
-        this.setState({ mealImage0: event.target.files[0] });
+      // if (this.state.mealImage0 == "") {
+      //   this.setState({ mealImage0: event.target.files[0] });
+      //   this.setState({ mealImage0: event.target.files[0] });
+      if (this.state.itemmealImage0 == "") {
+        this.setState({ itemmealImage0: event.target.files[0] });
+        this.setState({ itemmealImage0: event.target.files[0] });
 
         // var imageElementId = "mealImage0";
         // var image = document.getElementById(imageElementId);
@@ -433,12 +447,19 @@ class SuggestMealForm extends Component {
         // console.log(imageElementId);
         // image.style.display = "block";
         // image.src = image.src = URL.createObjectURL(event.target.files[0]);
-      } else if (this.state.mealImage1 == "") {
-        this.setState({ mealImage1: event.target.files[0] });
-      } else if (this.state.mealImage2 == "") {
-        this.setState({ mealImage2: event.target.files[0] });
+        // } else if (this.state.mealImage1 == "") {
+        //   this.setState({ mealImage1: event.target.files[0] });
+        // } else if (this.state.mealImage2 == "") {
+        //   this.setState({ mealImage2: event.target.files[0] });
+        // } else {
+        //   this.setState({ mealImage3: event.target.files[0] });
+        // }
+      } else if (this.state.itemmealImage1 == "") {
+        this.setState({ itemmealImage1: event.target.files[0] });
+      } else if (this.state.itemmealImage2 == "") {
+        this.setState({ itemmealImage2: event.target.files[0] });
       } else {
-        this.setState({ mealImage3: event.target.files[0] });
+        this.setState({ itemmealImage3: event.target.files[0] });
       }
 
       // this.setState({ instructionimagesAndVideos: recipeChunkImageOrVideo });
@@ -1136,7 +1157,7 @@ class SuggestMealForm extends Component {
         currIngredientObject,
       ],
     });
-    console.log(this.state.new_product_ingredients, currIngredientObject, "i love ayowale");
+    console.log(this.state.new_product_ingredients, currIngredientObject);
 
 
     this.setState({
@@ -1162,10 +1183,12 @@ class SuggestMealForm extends Component {
     // document.getElementById("currentIngredientMeasurement").value = 'Removed';
   }
 
+
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedMealToDB = async (e) => {
     const {
       mealName,
+      itemMealName,
       prepTime,
       cookTime,
       mealImage,
@@ -1186,10 +1209,11 @@ class SuggestMealForm extends Component {
       chunk5Content,
       chunk6Content,
       mealImages,
-      mealImage0,
-      mealImage1,
-      mealImage2,
-      mealImage3,
+      itemMealImages,
+      itemmealImage0,
+      itemmealImage1,
+      itemmealImage2,
+      itemmealImage3,
     } = this.state;
 
     console.log("This.state", this.state);
@@ -1201,6 +1225,10 @@ class SuggestMealForm extends Component {
     // handle edge case meal name, ingredienrs or image upload required to submit form
     if (mealName === "") {
       console.log("meal label blank");
+      return;
+    }
+    if (itemMealName === "") {
+      console.log("item meal label blank");
       return;
     }
     // if (ingredientStrings.length === 0) { window.alert("Suggested meal requires adding at least one ingredient to submit"); return; }
@@ -1361,10 +1389,19 @@ class SuggestMealForm extends Component {
     //-------------Submit remainder data of meal to Mongo ------------------------------------------
 
     let suggestMealForm = new FormData();
-    suggestMealForm.append("meal_name", mealName);
-    mealImages.forEach((file, i) => {
-      suggestMealForm.append(`meal_images${i}`, file);
-    });
+    // suggestMealForm.append("meal_name", mealName);
+    suggestMealForm.append("item_name", itemMealName);
+    // mealImages.forEach((file, i) => {
+    //   itemMealImages.forEach((file, i) => {
+    //   // suggestMealForm.append(`meal_images${i}`, file);
+    //   suggestMealForm.append(`item_images${i}`, file);
+    // });
+    suggestMealForm.append('item_images', itemMealImages[0]);
+    suggestMealForm.append('item_images', itemMealImages[1]);
+    suggestMealForm.append('item_images', itemMealImages[2]);
+    suggestMealForm.append('item_images', itemMealImages[3]);
+
+    console.log(itemMealImages, "itemImagess")
     let instructionTitles = [];
     let instructions = [];
 
@@ -1389,10 +1426,10 @@ class SuggestMealForm extends Component {
     // suggestMealForm.append("prep_time", prepTime);
     // suggestMealForm.append("cook_time", cookTime);
     // suggestMealForm.append("intro", intro);
-    suggestMealForm.append("tips", JSON.stringify(tips));
+    // suggestMealForm.append("tips", JSON.stringify(tips));
     // suggestMealForm.append("chef", chef);
     // suggestMealForm.append("servings", servings);
-    suggestMealForm.append("formatted_instructions", instructions);
+    suggestMealForm.append("formatted_instructions", JSON.stringify([JSON.stringify(instructions)]));
 
     // suggestMealForm.append('ingredientStrings', ingredientStrings);
     // list of products quantity measurements (created on submit meal)
@@ -1408,12 +1445,21 @@ class SuggestMealForm extends Component {
     //   "formatted_ingredients",
     //   JSON.stringify(ingredientGroupList)
     // );
-    // suggestMealForm.append("image_or_video_content_1", chunk1Content);
-    // suggestMealForm.append("image_or_video_content_2", chunk2Content);
-    // suggestMealForm.append("image_or_video_content_3", chunk3Content);
-    // suggestMealForm.append("image_or_video_content_4", chunk4Content);
-    // suggestMealForm.append("image_or_video_content_5", chunk5Content);
-    // suggestMealForm.append("image_or_video_content_6", chunk6Content);
+
+    if (chunk1Content) {
+      suggestMealForm.append("instruction_images", chunk1Content);
+    }
+    if (chunk2Content) {
+      suggestMealForm.append("instruction_images", chunk2Content);
+    } if (chunk3Content) {
+      suggestMealForm.append("instruction_images", chunk3Content);
+    } if (chunk4Content) {
+      suggestMealForm.append("instruction_images", chunk4Content);
+    } if (chunk5Content) {
+      suggestMealForm.append("instruction_images", chunk5Content);
+    } if (chunk6Content) {
+      suggestMealForm.append("instruction_images", chunk6Content);
+    }
 
 
     // suggestMealForm.append('instructionsGroupList', instructionGroupData);
@@ -1421,7 +1467,7 @@ class SuggestMealForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
-    var url = "http://localhost:5000/api/meals/create/";
+    var url = "http://localhost:5000/api/items/";
 
     for (let i = 1; i < 7; i++) {
       if (this.state[`instructionChunk${i}`].title && this.state[`instructionChunk${i}`].instruction) {
@@ -1435,11 +1481,11 @@ class SuggestMealForm extends Component {
     // suggestMealForm.append("prep_time", prepTime);
     // suggestMealForm.append("cook_time", cookTime);
     // suggestMealForm.append("intro", intro);
-    suggestMealForm.append("tips", JSON.stringify(tips));
+    // suggestMealForm.append("tips", JSON.stringify(tips));
     // suggestMealForm.append("chef", chef);
     // suggestMealForm.append("servings", servings);
-    suggestMealForm.append("instructions", instructions)
-    suggestMealForm.append("instructionTitles", instructionTitles)
+    // suggestMealForm.append("instructions", instructions)
+    // suggestMealForm.append("instructionTitles", instructionTitles)
 
 
     // suggestMealForm.append('ingredientStrings', ingredientStrings);
@@ -1469,25 +1515,14 @@ class SuggestMealForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
-    var url = "http://localhost:5000/api/meals/create/";
+    var url = "http://localhost:5000/api/items";
 
     const formDataObj = {};
     suggestMealForm.forEach((value, key) => (formDataObj[key] = value));
 
     console.log('form', formDataObj)
 
-    const config = {
-      method: "POST",
-      data: suggestMealForm,
-      url: url,
-      headers: {
-        // 'application/json' is the modern content-type for JSON, but some
-        // older servers may use 'text/json'.
-        // See: http://bit.ly/text-json
-        // application/x-www-form-urlencoded
-        // 'content-type': 'multipart/form-data'
-      },
-    };
+
 
 
 
@@ -1498,16 +1533,29 @@ class SuggestMealForm extends Component {
       }
 
 
+
     }
     // suggestMealForm.append('meal_images', mealImages);
-    suggestMealForm.append("prep_time", prepTime);
-    suggestMealForm.append("cook_time", cookTime);
-    suggestMealForm.append("intro", intro);
-    suggestMealForm.append("tips", JSON.stringify(tips));
-    suggestMealForm.append("chef", this.state.username);
-    suggestMealForm.append("servings", servings);
-    suggestMealForm.append("instructions", instructions)
-    suggestMealForm.append("instructionTitles", instructionTitles)
+
+    // suggestMealForm.append("intro", intro);
+    suggestMealForm.append("item_intro", intro);
+    // suggestMealForm.append("instructions", instructions)
+    // suggestMealForm.append("instructionTitles", instructionTitles)
+    suggestMealForm.append("item_type", this.props.suggestionType)
+
+    const MealObject = {
+      prep_time: prepTime,
+      cook_time: cookTime,
+      chef: this.state.username,
+      servings,
+      kitchen_utensils: JSON.stringify(suggestedUtensils),
+      tips,
+      meal_name: itemMealName,
+      intro
+    }
+    suggestMealForm.append("item_data", JSON.stringify(MealObject))
+
+    // if(this.props.suggestionType === '')
 
 
     // suggestMealForm.append('ingredientStrings', ingredientStrings);
@@ -1515,20 +1563,21 @@ class SuggestMealForm extends Component {
     // suggestMealForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
 
     // new suggested products
-    suggestMealForm.append("meal_categories", JSON.stringify(suggestedCategories))
+    // suggestMealForm.append("meal_categories", JSON.stringify(suggestedCategories))
     console.log(suggestedCategories, "suggests")
-    suggestMealForm.append("kitchen_utensils", JSON.stringify(suggestedUtensils));
     console.log(suggestedUtensils, "utensils")
     // RecipeSteps
     suggestMealForm.append("formatted_ingredients", JSON.stringify(ingredientStrings));
-    suggestMealForm.append("instruction_images1", chunk1Content);
-    suggestMealForm.append("instruction_images2", chunk2Content);
-    suggestMealForm.append("instruction_images3", chunk3Content);
-    suggestMealForm.append("instruction_images4", chunk4Content);
-    suggestMealForm.append("instruction_images5", chunk5Content);
-    suggestMealForm.append("instruction_images6", chunk6Content);
-    suggestMealForm.append("instruction1", chunk6Content);
-    suggestMealForm.append("instruction_images6", chunk6Content);
+    suggestMealForm.append("store_available", '63d426b416b83177aaeaed96');
+    suggestMealForm.append("user", JSON.parse(localStorage.getItem('user'))._id);
+    // suggestMealForm.append("instruction_images1", chunk1Content);
+    // suggestMealForm.append("instruction_images2", chunk2Content);
+    // suggestMealForm.append("instruction_images3", chunk3Content);
+    // suggestMealForm.append("instruction_images4", chunk4Content);
+    // suggestMealForm.append("instruction_images5", chunk5Content);
+    // suggestMealForm.append("instruction_images6", chunk6Content);
+    // suggestMealForm.append("instruction1", chunk6Content);
+    // suggestMealForm.append("instruction_images6", chunk6Content);
 
 
 
@@ -1537,7 +1586,7 @@ class SuggestMealForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
-    var url = "http://localhost:5000/api/meals/create/";
+    var url = "http://localhost:5000/api/items";
 
     const config_ = {
       method: "POST",
@@ -1554,9 +1603,23 @@ class SuggestMealForm extends Component {
 
     // var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
     // console.log(instructionData);
-    console.log(config, "config")
+    const config = {
+      method: "POST",
+      data: suggestMealForm,
+      url: url,
+      headers: {
+        // 'application/json' is the modern content-type for JSON, but some
+        // older servers may use 'text/json'.
+        // See: http://bit.ly/text-json
+        // application/x-www-form-urlencoded
+        // 'content-type': 'multipart/form-data'
+      },
+    };
 
-    axios(config)
+    console.log(config, "config")
+    suggestMealForm.append("item_categories", JSON.stringify(suggestedCategories));
+
+    await axios(config)
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
@@ -1724,13 +1787,15 @@ class SuggestMealForm extends Component {
           <div className={styles.suggestion_form}>
             <div className={styles.suggestion_form_group}>
               <label
-                htmlFor="mealName"
+                // htmlFor="mealName"
+                htmlFor="itemMealName"
                 className={styles.suggestion_form_label}
               >
                 Meal Name
               </label>
               <Autocomplete
-                id="mealName"
+                // id="mealName"
+                id="itemMealName"
                 options={this.props.allMealNames}
                 // onChange={(ev, val) => this.onInputChange(ev, val)}
                 onInputChange={(ev, val) => this.onInputChange(ev, val)}
@@ -1739,7 +1804,8 @@ class SuggestMealForm extends Component {
                   <TextField {...params} variant="outlined" />
                 )}
                 fullWidth
-                value={this.state.mealName}
+                // value={this.state.mealName}
+                value={this.state.itemMealName}
               />
             </div>
             <div className={styles.suggestion_form_2_col}>
@@ -1808,7 +1874,8 @@ class SuggestMealForm extends Component {
               <Col md={12} style={{ marginTop: "20px" }}>
                 <p>
                   <img
-                    id="mealImage0"
+                    // id="mealImage0"
+                    id="itemmealImage0"
                     width="100%"
                     height="100%"
                     alt="main_Meal_Image"
@@ -1823,7 +1890,7 @@ class SuggestMealForm extends Component {
                   <p className={styles.mealImg}>
                     <Image
                       src={data}
-                      id={"mealImage" + { index }}
+                      id={"itemmealImage" + { index }}
                       width="100%"
                       height="100%"
                       alt="other_meal_images"
@@ -1841,13 +1908,16 @@ class SuggestMealForm extends Component {
 
             <h3>Add more details</h3>
             <div className={styles.suggestion_form_group}>
-              <label htmlFor="intro" className={styles.suggestion_form_label}>
+              {/* <label htmlFor="intro" className={styles.suggestion_form_label}> */}
+              <label htmlFor="itemIntro" className={styles.suggestion_form_label}>
                 Intro (150 words)
               </label>
               <TextField
                 multiline
                 value={this.state.intro}
+                // value={this.state.itemIntro}
                 id="intro"
+                // id="itemIntro"
                 fullWidth
                 onChange={this.onTextFieldChange}
                 variant="outlined"
@@ -2352,7 +2422,7 @@ class SuggestMealForm extends Component {
               </div>
             </div>
             <Stack direction="row" spacing={1} className={styles.stack}>
-              {this.state.suggestedCategories?.map((data, index) => ( 
+              {this.state.suggestedCategories?.map((data, index) => (
                 <Chip
                   key={index}
                   label={data}
@@ -2435,8 +2505,10 @@ class SuggestMealForm extends Component {
               popupType="Meal Suggestion Preview"
               openModal={this.state.openModal}
               closeModal={this.closeModal}
-              name={this.state.mealName}
-              description={this.state.intro}
+              // name={this.state.mealName}
+              name={this.state.itemMealName}
+              // description={this.state.intro}
+              description={this.state.itemIntro}
               imageData={this.state.mealImagesData[0]}
               image={this.state.mealImage[0]}
               imagesData={this.state.mealImagesData.slice(1)}

@@ -57,7 +57,8 @@ class ComponentToPrint extends React.Component {
       fontSize = '14px'
     }
     let mealFont;
-    if (this.props.mealName.length > 16) {
+    if (this.props.itemMealName.length > 16) {
+      // if (this.props.mealName.length > 16) {
       mealFont = '20px'
       lineHeight = '20px'
     } else {
@@ -129,7 +130,8 @@ class ComponentToPrint extends React.Component {
                 </div>
 
                 <div className={styles.print_top2}>
-                  <h2 style={{ fontSize: mealFont, lineHeight: lineHeight }}>{this.props.mealName}</h2>
+                  <h2 style={{ fontSize: mealFont, lineHeight: lineHeight }}>{this.props.ItemMealName}</h2>
+                  {/* <h2 style={{ fontSize: mealFont, lineHeight: lineHeight }}>{this.props.mealName}</h2> */}
                   <img className={styles.print_top_logo_img} alt="" src="/assets/logos/CC_Logo_no_bg 2.svg" />
                 </div>
               </div>
