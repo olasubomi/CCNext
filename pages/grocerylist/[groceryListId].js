@@ -14,132 +14,6 @@ import CartProvider from "../store/CartProvider";
 import { useMobileMedia } from "../../src/customhooks/useResponsive";
 import Items from "../../src/components/items/Items";
 
-const productGrocery = [
-  {
-    _id: "642f7fd172d63112db71e8fe",
-    userId: "642f7625c49c7410bbae2751",
-    groceryList: [
-      { 
-          _id: "soupId",
-          listName: "Soup List",
-          groceryItems: [
-            {
-            _id: "spinach",
-            product_id: "spinachId",
-            product: {
-            name: "Spinach",
-            store: "Oriental Store",
-            price: "2.05",
-            quantity: 8,
-            pickUpTime: "45 mins",
-            image: "/assets/grocery_list/spinachImg.svg"
-            }
-          },
-          {
-            _id: "austRice",
-            product_id: "austRiceId",
-            product: {
-              name: "Australia rice",
-              store: "Gidy Lizy",
-              price: "8.30",
-              quantity: 4,
-              pickUpTime: "26 mins",
-              image: "/assets/grocery_list/austRiceImg.svg"
-            }
-            
-          },
-          {
-            _id: "ppBeans",
-            product_id: "ppBeansId",
-            product: {
-            name: "PP Beans",
-            store: "Flava mall",
-            price: "25.34",
-            quantity: 12,
-            pickUpTime: "34 mins",
-            image: "/assets/grocery_list/ppBeansImg.svg"
-            }
-          },
-          {
-            _id: "banana",
-            product_id: "bananaId",
-            product: {
-            name: "Banana Hanger",
-            store: "Oriental Store",
-            price: "12.00",
-            quantity: 6,
-            pickUpTime: "50 mins",
-            image: "/assets/grocery_list/bananaImg.svg"
-            }
-          },
-          {
-            _id: "gbegiri",
-            product_id: "gbegiriId",
-            product: {
-            name: "Gbegiri",
-            store: "Panshak",
-            price: "7.15",
-            quantity: 1,
-            pickUpTime: "39 mins",
-            image: "/assets/grocery_list/suggestedmeals/gbegiriImg.svg"
-            }
-          },
-          {
-            _id: "ijebuRice",
-            product_id: "ijebuRiceId",
-            product: {
-            name: "Ijebu Rice",
-            store: "Market square",
-            price: "11.25",
-            quantity: 5,
-            pickUpTime: "20 mins",
-            image: "/assets/grocery_list/suggestedmeals/ijebuRiceImg.svg"
-            }
-          },
-          {
-            _id: "guguru",
-            product_id: "guguruId",
-            product: {
-            name: "Guguru",
-            store: "Ebeano supermarket",
-            price: "24.02",
-            quantity: 9,
-            pickUpTime: "47 mins",
-            image: "/assets/grocery_list/suggestedmeals/guguruImg.svg"
-            }
-          },
-          {
-            _id: "goatMeat",
-            product_id: "goatMeatId",
-            product: {
-            name: "Asun",
-            store: "Tunishi square",
-            price: "32.20",
-            quantity: 3,
-            pickUpTime: "44 mins",
-            image: "/assets/grocery_list/suggestedmeals/goatMeatImg.svg"
-            }
-          },
-          {
-            _id: "ewa",
-            product_id: "ewaId",
-            product: {
-            name: "Ewa Iganyi",
-            store: "Ebbos shop",
-            price: "17.55",
-            quantity: 2,
-            pickUpTime: "54 mins",
-            image: "/assets/grocery_list/suggestedmeals/ewaIganyiImg.svg"
-            }
-          },
-         
-        ]
-      }
-      ],
-  }
-];
-
-
 const GroceryPage = (props) => {
   const [showCart, setShowCart] = useState(false);
   const [userData, setUserData] = useState([]);
@@ -158,51 +32,61 @@ const GroceryPage = (props) => {
   }, [showCart]);
 
   async function fetchItems() {
-    const response = await fetch(`http://localhost:5000/api/items`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await response.json();
-
-    if (data.data === undefined) {
-      setProductErrData(data);
-    } else {
-      setItemsData(data.data);
+    try {
+      const response = await fetch(`http://localhost:5000/api/items`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      const data = await response.json();
+  
+      if (data.data === undefined) {
+        setProductErrData(data);
+      } else {
+        setItemsData(data.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
+   
   }
 
   async function fetchUserGrocery() {
-    const userDetails = JSON.parse(localStorage.getItem("user"));
-    const token = localStorage.getItem("x-auth-token");
-    const user_id = userDetails._id;
-
-    if (userDetails) {
-      localStorage.setItem("user_id", JSON.stringify(user_id));
-
-      const response = await fetch(
-        `http://localhost:5000/api/groceries/${user_id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
+    try {
+      const userDetails = JSON.parse(localStorage.getItem("user"));
+      const token = localStorage.getItem("x-auth-token");
+      const user_id = userDetails._id;
+  
+      if (userDetails) {
+        localStorage.setItem("user_id", JSON.stringify(user_id));
+  
+        const response = await fetch(
+          `http://localhost:5000/api/groceries/${user_id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+  
+        const data = await response.json();
+        
+        if (data.data === undefined) {
+          setUserErrData(data);
+        } else {
+          setUserData(data.data[0]);
         }
-      );
-
-      const data = await response.json();
-      
-      if (data.data === undefined) {
-        setUserErrData(data);
       } else {
-        setUserData(data.data[0]);
+        setUserData([]);
       }
-    } else {
-      setUserData([]);
+    } catch (error) {
+      console.log(error);
     }
+   
   }
 
 
@@ -223,9 +107,6 @@ const GroceryPage = (props) => {
 
   const items = itemsData;
 
-// const groceryObj = productGrocery[0].groceryList?.find((obj) => {
-//    return obj._id === listId;
-//  });
   const openCart = () => {
     setShowCart(true);
   };
@@ -233,8 +114,6 @@ const GroceryPage = (props) => {
   const closeCart = () => {
     setShowCart(false);
   };
-
-  //const products = productData;
 
   return (
     <CartProvider>

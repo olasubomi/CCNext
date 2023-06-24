@@ -22,51 +22,61 @@ const index = () => {
   const [productErrData, setProductErrData] = useState({});
 
   async function fetchItems() {
-    const response = await fetch(`http://localhost:5000/api/items`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await response.json();
-
-    if (data.data === undefined) {
-      setProductErrData(data);
-    } else {
-      setItemsData(data.data);
+    try {
+      const response = await fetch(`http://localhost:5000/api/items`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      const data = await response.json();
+  
+      if (data.data === undefined) {
+        setProductErrData(data);
+      } else {
+        setItemsData(data.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
+   
   }
 
   async function fetchUserGrocery() {
-    const userDetails = JSON.parse(localStorage.getItem("user"));
-    const token = localStorage.getItem("x-auth-token");
-    const user_id = userDetails._id;
-
-    if (userDetails) {
-      localStorage.setItem("user_id", JSON.stringify(user_id));
-
-      const response = await fetch(
-        `http://localhost:5000/api/groceries/${user_id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
+    try {
+      const userDetails = JSON.parse(localStorage.getItem("user"));
+      const token = localStorage.getItem("x-auth-token");
+      const user_id = userDetails?._id;
+  
+      if (userDetails) {
+        localStorage.setItem("user_id", JSON.stringify(user_id));
+  
+        const response = await fetch(
+          `http://localhost:5000/api/groceries/${user_id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+  
+        const data = await response.json();
+        
+        if (data.data === undefined) {
+          setUserErrData(data);
+        } else {
+          setUserData(data.data[0]);
         }
-      );
-
-      const data = await response.json();
-      
-      if (data.data === undefined) {
-        setUserErrData(data);
       } else {
-        setUserData(data.data[0]);
+        setUserData([]);
       }
-    } else {
-      setUserData([]);
+    } catch(error) {
+      console.log(error);
     }
+   
   }
 
   useEffect(() => {
