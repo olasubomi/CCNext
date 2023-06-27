@@ -1396,12 +1396,10 @@ class SuggestMealForm extends Component {
     //   // suggestMealForm.append(`meal_images${i}`, file);
     //   suggestMealForm.append(`item_images${i}`, file);
     // });
-    suggestMealForm.append('item_images', itemMealImages[0]);
-    suggestMealForm.append('item_images', itemMealImages[1]);
-    suggestMealForm.append('item_images', itemMealImages[2]);
-    suggestMealForm.append('item_images', itemMealImages[3]);
+    itemMealImages.map(ele => {
+      suggestMealForm.append('item_images', ele);
+    })
 
-    console.log(itemMealImages, "itemImagess")
     let instructionTitles = [];
     let instructions = [];
 
@@ -1429,7 +1427,7 @@ class SuggestMealForm extends Component {
     // suggestMealForm.append("tips", JSON.stringify(tips));
     // suggestMealForm.append("chef", chef);
     // suggestMealForm.append("servings", servings);
-    suggestMealForm.append("formatted_instructions", JSON.stringify([JSON.stringify(instructions)]));
+    suggestMealForm.append("formatted_instructions", JSON.stringify(instructions.map(ele => JSON.parse(ele))));
 
     // suggestMealForm.append('ingredientStrings', ingredientStrings);
     // list of products quantity measurements (created on submit meal)
@@ -1550,8 +1548,8 @@ class SuggestMealForm extends Component {
       servings,
       kitchen_utensils: JSON.stringify(suggestedUtensils),
       tips,
-      meal_name: itemMealName,
-      intro
+      
+      meal_name: itemMealName
     }
     suggestMealForm.append("item_data", JSON.stringify(MealObject))
 
@@ -1568,7 +1566,7 @@ class SuggestMealForm extends Component {
     console.log(suggestedUtensils, "utensils")
     // RecipeSteps
     suggestMealForm.append("formatted_ingredients", JSON.stringify(ingredientStrings));
-    suggestMealForm.append("store_available", '63d426b416b83177aaeaed96');
+    // suggestMealForm.append("store_available", '63d426b416b83177aaeaed96');
     suggestMealForm.append("user", JSON.parse(localStorage.getItem('user'))._id);
     // suggestMealForm.append("instruction_images1", chunk1Content);
     // suggestMealForm.append("instruction_images2", chunk2Content);
@@ -2497,6 +2495,7 @@ class SuggestMealForm extends Component {
           </Button>
           {/* </ThemeProvider> */}
           {/* </Col>
+          
                 
               </Row> */}
           <u>View privacy policy</u>
@@ -2508,7 +2507,7 @@ class SuggestMealForm extends Component {
               // name={this.state.mealName}
               name={this.state.itemMealName}
               // description={this.state.intro}
-              description={this.state.itemIntro}
+              description={this.state.intro}
               imageData={this.state.mealImagesData[0]}
               image={this.state.mealImage[0]}
               imagesData={this.state.mealImagesData.slice(1)}
@@ -2519,12 +2518,20 @@ class SuggestMealForm extends Component {
               chef={this.state.chef || this.state.username}
               ingredientsList={this.state.ingredientStrings}
               utensilsList={this.state.suggestedUtensils}
-              instructionChunk1={this.state.instructionChunk1}
-              instructionChunk2={this.state.instructionChunk2}
-              instructionChunk3={this.state.instructionChunk3}
-              instructionChunk4={this.state.instructionChunk4}
-              instructionChunk5={this.state.instructionChunk5}
-              instructionChunk6={this.state.instructionChunk6}
+              instructionChunk1={this.state.instructionChunk1?.title}
+              instructionChunk2={this.state.instructionChunk2?.title}
+              instructionChunk3={this.state.instructionChunk3?.title}
+              instructionChunk4={this.state.instructionChunk4?.title}
+              instructionChunk5={this.state.instructionChunk5?.title}
+              instructionChunk6={this.state.instructionChunk6?.title}
+
+              instructionChunk1Step={this.state.instructionChunk1?.instructionSteps}
+              instructionChunk2Step={this.state.instructionChunk2?.instructionSteps}
+              instructionChunk3Step={this.state.instructionChunk3?.instructionSteps}
+              instructionChunk4Step={this.state.instructionChunk4?.instructionSteps}
+              instructionChunk5Step={this.state.instructionChunk5?.instructionSteps}
+              instructionChunk6Step={this.state.instructionChunk6?.instructionSteps}
+
               chunk1Content={this.state.chunk1ContentURL}
               chunk2Content={this.state.chunk2ContentURL}
               chunk3Content={this.state.chunk3ContentURL}

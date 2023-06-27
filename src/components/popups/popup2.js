@@ -29,14 +29,14 @@ class Popup2 extends Component {
     }
 
     incIn = () => {
-            this.setState({
-                curIn: this.state.curIn + 1
-            })
-        
+        this.setState({
+            curIn: this.state.curIn + 1
+        })
+
     }
 
     decIn = () => {
-        if(this.state.curIn > 1){
+        if (this.state.curIn > 1) {
             this.setState({
                 curIn: this.state.curIn - 1
             })
@@ -45,7 +45,7 @@ class Popup2 extends Component {
 
 
     edit = () => {
-        const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6 } = this.props
+        const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6, chunk1Content} = this.props
         var stepInputs = []
         if (instructionChunk1) {
             stepInputs = []
@@ -150,8 +150,8 @@ class Popup2 extends Component {
 
         setTimeout(() => {
             for (let i = 1; i <= 6; i++) {
-                console.log(this.props['instructionChunk' + i]?.title && this.props['instructionChunk' + i]?.instructionSteps?.length, 'geee')
-                if (this.props['instructionChunk' + i]?.title && this.props['instructionChunk' + i]?.instructionSteps?.length) {
+                console.log(this.props['instructionChunk' + i] && this.props['instructionChunk' + i + 'Step']?.length, 'geee')
+                if (this.props['instructionChunk' + i] && this.props['instructionChunk' + i + "Step"]?.length) {
                     length = length + 1;
                 }
             }
@@ -247,9 +247,14 @@ class Popup2 extends Component {
                                 <div className={styles.popup2_col_3}>
                                     <h2>Recipe Steps</h2>
                                     <div className={styles.popup2_steps}>
-                                        {this.props['instructionChunk' + curIn]?.title !== '' &&
+                                        {this.props['instructionChunk' + curIn] !== '' &&
                                             <>
-                                                {allowedImageExtensions.exec(this.props['instructionChunk' + curIn]?.dataName) && this.props['chunk' + curIn + 'Content'] !== undefined &&
+                                                {
+                                                    // allowedImageExtensions
+                                                    // .exec(this.props['instructionChunk' + curIn]?.dataName) 
+                                                    // && this.props['chunk' + curIn + 'Content'] 
+                                                    // !== undefined 
+                                                    // && 
                                                     <Image
                                                         src={this.props['chunk' + curIn + 'Content']}
                                                         alt={this.props['instructionChunk' + curIn]?.title}
@@ -257,24 +262,31 @@ class Popup2 extends Component {
                                                         height={"150%"} width={"70%"}
                                                         objectFit="cover"
                                                         objectPosition="center"
-                                                    />}
+                                                    />
+                                                }
 
                                                 {allowedVideoExtensions.exec(this.props['instructionChunk' + curIn]?.dataName) && this.props['chunk' + curIn + 'Content'] !== undefined &&
                                                     <video className={styles.popup2_step_img} src={this.props['chunk' + curIn + 'Content']} controls>
                                                         Your browser does not support the video tag.
                                                     </video>}
-                                                <div className={styles.del}>
-                                                    <h2 className={styles.popup2_step_name}>{this.props['instructionChunk' + curIn]?.title}</h2>
+                                                <div className={styles.del}> 
+                                                    <h2 className={styles.popup2_step_name}>{this.props['instructionChunk' + curIn]}</h2>
                                                     <p className={styles.popup2_instructions}>
-                                                        {this.props['instructionChunk' + curIn]?.instructionSteps && this.props['instructionChunk' + curIn]?.instructionSteps.map((step, index) => (index + 1) + ". " + step + " ")}
+                                                        {this.props['instructionChunk' + curIn + "Step"]?.map((step, index) => (
+                                                            <div key={index}>
+                                                                {index + 1}. {step}
+                                                                <br />
+                                                            </div>
+                                                        ))}
                                                     </p>
                                                 </div>
                                             </>
                                         }
-                                        {this.props['instructionChunk' + (curIn + 1)] !== undefined && curIn < length && 
+                                        {
+                                        this.props['instructionChunk' + (curIn + 1)] !== undefined && curIn <= length &&
                                             <ArrowCircleRightIcon onClick={this.incIn} className={styles.popup2_inc_con} />}
                                         {
-                                           curIn > 1 &&  <ArrowCircleLeftIcon onClick={this.decIn} className={styles.popup2_dec_con} />}
+                                            curIn > 1 && <ArrowCircleLeftIcon onClick={this.decIn} className={styles.popup2_dec_con} />}
                                     </div>
                                 </div>
                             </div>
@@ -356,6 +368,10 @@ class Popup2 extends Component {
                                         instructionChunk1={this.props.instructionChunk1} instructionChunk2={this.props.instructionChunk2}
                                         instructionChunk3={this.props.instructionChunk3} instructionChunk4={this.props.instructionChunk4}
                                         instructionChunk5={this.props.instructionChunk5} instructionChunk6={this.props.instructionChunk6}
+                                        instructionChunk1Step={this.props.instructionChunk1Step}
+                                        instructionChunk2Step={this.props.instructionChunk2Step}
+                                        instructionChunk3Step={this.props.instructionChunk3Step}
+                                        instructionChunk4Step={this.props.instructionChunk4Step}
                                         chunk1Content={this.props.chunk1Content} chunk2Content={this.props.chunk2Content}
                                         chunk3Content={this.props.chunk3Content} chunk4Content={this.props.chunk4Content}
                                         chunk5Content={this.props.chunk5Content} chunk6Content={this.props.chunk6Content}

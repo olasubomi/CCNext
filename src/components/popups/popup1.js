@@ -71,8 +71,8 @@ class Popup1 extends Component {
 
     render() {
 
-        const { popup, imageData, imagesData, name, description, categories, descriptionsList, ingredientList, sizesList, nutritionalStrings } = this.props
-        console.log(ingredientList)
+        const { popup, imageData, imagesData, name, description, categories, descriptionsList, ingredientList, sizesList, nutritionalStrings, ingredientGroupList } = this.props
+        console.log(imageData, 'imageData')
         console.log(this.props, "DISPLAY")
 
         return (
@@ -84,7 +84,7 @@ class Popup1 extends Component {
                                 <div>
                                     <Image
                                         fill
-                                        src={imageData}
+                                        src={Array.isArray(imageData) ? imageData[0] : imageData}
                                         className={styles.popup_main_img}
                                         alt="pop up"
                                         height={250} width={410}
@@ -96,16 +96,23 @@ class Popup1 extends Component {
                                     />
                                 </div>
                                 <div className={styles.popup_images}>
-                                    {/* {console.log(imageData)} */}
                                     {
-                                        imagesData.map((data, index) =>
-                                            <Image key={index} alt="pop up" src={data}
-                                                height={"100%"} width={"100%"}
-                                                className={styles.popup_image}
-                                                objectFit="cover"
-                                                objectPosition="center"
-                                                filter="drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.9))"
-                                            />
+                                        (Array.isArray(imageData) ? [...imageData.slice(1, )] : imagesData).map((data, index) => {
+                                            console.log('data', data)
+                                            return (
+                                                <Image key={index}
+                                                    alt="pop up"
+                                                    src={data}
+
+                                                    height={"100%"}
+                                                    width={"100%"}
+                                                    className={styles.popup_image}
+                                                    objectFit="cover"
+                                                    objectPosition="center"
+                                                    filter="drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.9))"
+                                                />
+                                            )
+                                        }
                                         )
                                     }
 
@@ -129,11 +136,17 @@ class Popup1 extends Component {
                                         <React.Fragment>
                                             <div className={styles.popup_categories}>
                                                 <h3 className={styles.popup_category_name}>Product Ingredients</h3>
-                                                <p className={styles.popup_category}>{ingredientList.map((ingredient) => {
-                                                    return (ingredient.split('of').length > 1 ?
-                                                        ingredient.split('of')[1] + '(' + ingredient.split(' ')[0] + ingredient.split(' ')[1] + ')' :
-                                                        ingredient.split(' ')[1] + ingredient.split(' ')[0]) + ', '
-                                                })}
+                                                {/* <p className={styles.popup_category}>
+                                                    {
+                                                        ingredientList?.map((ingredient) => {
+                                                            return (ingredient.split('of').length > 1 ?
+                                                                ingredient.split('of')[1] + '(' + ingredient.split(' ')[0] + ingredient.split(' ')[1] + ')' :
+                                                                ingredient.split(' ')[1] + ingredient.split(' ')[0]) + ', '
+                                                        })}
+                                                </p> */}
+                                                <p className={styles.popup_category}>
+                                                    {
+                                                        ingredientGroupList?.map((ingredient, idx) => <div>{ingredient}, </div>)}
                                                 </p>
                                             </div>
 
@@ -162,7 +175,7 @@ class Popup1 extends Component {
                                     <div className={styles.popup_categories}>
                                         <h3 className={styles.popup_category_name}>Product Category</h3>
                                         <p className={styles.popup_category}>{categories.length !== 1
-                                        ?categories.map((cat) => cat + ', ') : categories.map((cat) => cat)}</p>
+                                            ? categories.map((cat) => cat + ', ') : categories.map((cat) => cat)}</p>
                                     </div>
                                     <div className={styles.popup_sizes}>
                                         <h3>Size</h3>

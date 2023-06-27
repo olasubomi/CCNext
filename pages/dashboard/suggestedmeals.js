@@ -25,6 +25,7 @@ import { suggestion_form_image, suggestion_form_image_col_1, suggestion_form_ima
 import Image from 'next/image';
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import SuggestedProductRow from '../../src/components/dashboard/suggestedproductRow';
 
 const SuggestedMeals = (props) => {
     const router = useRouter()
@@ -53,6 +54,13 @@ const SuggestedMeals = (props) => {
     const [message, setMessageState] = useState('');
     const [relateds, setRelatedsState] = useState([])
 
+    //
+    const [data, setData] = useState({
+        meals: [],
+        products: []
+    });
+
+
 
     useEffect(() => {
         if (props.auth.authUser) {
@@ -61,20 +69,25 @@ const SuggestedMeals = (props) => {
             if (props.auth.authUser.user_type === 'admin') {
                 url = '/meals/get-meals/' + page
             } else {
-                url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
+                // url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
+                url = '/items/user-items/' + ':?userId=' + props.auth.authUser._id
             }
 
             axios.get(url).then(data => {
                 console.log(searchType)
                 if (data.data.data) {
 
-                    setSuggestedCountState(data.data.data.count)
-                    if (data.data.data.count > 10) {
-                        setPagesState(Math.ceil(data.data.data.count / 10))
+                    console.log('data', data.data.data)
+                    setSuggestedCountState(data.data.data.length)
+                    if (data.data.data.length > 10) {
+                        setPagesState(Math.ceil(data.data.data.length / 10))
                     }
-                    console.log('data.data.data.meals', data.data.data.meals)
-                    setFilteredSuggestionsState(data.data.data.meals)
-                    setSuggestionsState(data.data.data.meals)
+                    console.log('data.data.data.meals', data.data.data)
+                    const products = data.data.data.filter(ele => ele.item_type === 'Product');
+                    const meals = data.data.data.filter(ele => ele.item_type === 'Meal');
+                    setData({ products, meals })
+                    setFilteredSuggestionsState(data.data.data)
+                    setSuggestionsState(data.data.data)
                 }
             })
         }
@@ -549,54 +562,60 @@ const SuggestedMeals = (props) => {
 
     function openMealDetailsModal(meal) {
         setSuggestionState(meal)
-        if (meal.formatted_ingredients?.length > 0) {
-            let ingredients = JSON.parse(meal.formatted_ingredients[0]);
-            var ingredientsString = []
-            for (let i = 0; i < ingredients.length; i++) {
-                let properIngredientStringSyntax = ''
-                if (ingredients[i].quantity === "") {
-                    properIngredientStringSyntax = ingredients[i].productName;
-                } else if (ingredients[i].measurement === "" && ingredients[i].quantity !== "") {
-                    // MAKE sure we are using the right and tested variables to display the right type of string at all times.
-                    properIngredientStringSyntax = "" + ingredients[i].quantity + " " + ingredients[i].productName;
-                } else {
-                    properIngredientStringSyntax =
-                        "" + ingredients[i].quantity + " " + ingredients[i].measurement +
-                        " of " + ingredients[i].productName;
-                }
-                ingredientsString.push(properIngredientStringSyntax)
-            }
-            console.log(ingredientsString)
-            setIngredientsString(ingredientsString)
-        }
+        // if (meal.formatted_ingredients?.length > 0) {
+        //     // let ingredients = JSON.parse(meal.formatted_ingredients[0]);
+        //     let ingredients = meal.formatted_ingredients
+        //     var ingredientsString = []
+        //     for (let i = 0; i < ingredients.length; i++) {
+        //         let properIngredientStringSyntax = ''
+        //         if (ingredients[i].quantity === "") {
+        //             properIngredientStringSyntax = ingredients[i].productName;
+        //         } else if (ingredients[i].measurement === "" && ingredients[i].quantity !== "") {
+        //             // MAKE sure we are using the right and tested variables to display the right type of string at all times.
+        //             properIngredientStringSyntax = "" + ingredients[i].quantity + " " + ingredients[i].productName;
+        //         } else {
+        //             properIngredientStringSyntax =
+        //                 "" + ingredients[i].quantity + " " + ingredients[i].measurement +
+        //                 " of " + ingredients[i].productName;
+        //         }
+        //         ingredientsString.push(properIngredientStringSyntax)
+        //     }
+        //     console.log(ingredientsString)
+        //     setIngredientsString(ingredientsString)
+        // }
+        setIngredientsString(meal.formatted_ingredients)
+
         setOpenModalState(true)
         // console.log(typeof suggestion.formatted_instructions[0], "find instructionss")
         // console.log(eval('(' + suggestion.instructions + ')'), "help")
         console.log(suggestion, "suggests")
-        console.log(suggestion.instructions, "wordlength")
-        console.log(suggestion.id, "show the id")
+        // console.log(suggestion.instructions, "wordlength")
+        // console.log(suggestion.id, "show the id")
     }
 
     function openDetailsModal(product) {
         // if(searchType == 'Product'){
         setSuggestionState(product)
-        let ingredients = product.ingredients_in_product;
-        var ingredientsString = []
-        for (let i = 0; i < ingredients.length; i++) {
-            let properIngredientStringSyntax = ''
-            if (ingredients[i].quantity === "") {
-                properIngredientStringSyntax = ingredients[i].productName;
-            } else if (ingredients[i].measurement === "" && ingredients[i].quantity !== "") {
-                // MAKE sure we are using the right and tested variables to display the right type of string at all times.
-                properIngredientStringSyntax = "" + ingredients[i].quantity + " " + ingredients[i].productName;
-            } else {
-                properIngredientStringSyntax =
-                    "" + ingredients[i].quantity + " " + ingredients[i].measurement +
-                    " of " + ingredients[i].productName;
-            }
-            ingredientsString.push(properIngredientStringSyntax)
-        }
-        setIngredientsString(ingredientsString)
+
+        setSuggestionState(product)
+        // let ingredients = product.ingredients_in_product;
+        // var ingredientsString = []
+        // for (let i = 0; i < ingredients.length; i++) {
+        //     let properIngredientStringSyntax = ''
+        //     if (ingredients[i].quantity === "") {
+        //         properIngredientStringSyntax = ingredients[i].productName;
+        //     } else if (ingredients[i].measurement === "" && ingredients[i].quantity !== "") {
+        //         // MAKE sure we are using the right and tested variables to display the right type of string at all times.
+        //         properIngredientStringSyntax = "" + ingredients[i].quantity + " " + ingredients[i].productName;
+        //     } else {
+        //         properIngredientStringSyntax =
+        //             "" + ingredients[i].quantity + " " + ingredients[i].measurement +
+        //             " of " + ingredients[i].productName;
+        //     }
+        //     ingredientsString.push(properIngredientStringSyntax)
+        // }
+        setIngredientsString(product.formatted_ingredients)
+
         setOpenModal2State(true)
         // }
     }
@@ -775,21 +794,47 @@ const SuggestedMeals = (props) => {
                                         </div>
                                         <div>
                                             {
-                                                filteredSuggestions && filteredSuggestions.map((suggestion) => {
-                                                    return (
-                                                        <SuggestedMealRow
-                                                            searchType={searchType}
-                                                            deleteSuggestion={deleteSuggestion}
-                                                            toggleSent={toggleSent}
-                                                            toggleTransferToInventory={toggleTransferToInventory}
-                                                            openMealDetailsModal={openMealDetailsModal}
-                                                            openDetailsModal={openDetailsModal}
-                                                            auth={props.auth} key={suggestion._id}
-                                                            suggestion={suggestion}
-                                                            toggleOpenMeal={toggleOpenMeal}
-                                                        />
-                                                    )
-                                                })
+                                                searchType === 'Meal' && <>
+                                                    {
+                                                        data.meals && data.meals.map((suggestion) => {
+                                                            return (
+                                                                <SuggestedMealRow
+                                                                    searchType={searchType}
+                                                                    deleteSuggestion={deleteSuggestion}
+                                                                    toggleSent={toggleSent}
+                                                                    toggleTransferToInventory={toggleTransferToInventory}
+                                                                    openMealDetailsModal={openMealDetailsModal}
+                                                                    openDetailsModal={openMealDetailsModal}
+                                                                    auth={props.auth} key={suggestion._id}
+                                                                    suggestion={suggestion}
+                                                                    toggleOpenMeal={toggleOpenMeal}
+                                                                />
+                                                            )
+                                                        })
+                                                    }
+                                                </>
+                                            }
+
+                                            {
+                                                searchType === 'Product' && <>
+                                                    {
+                                                        data.products && data.products.map((suggestion) => {
+                                                            return (
+                                                                <SuggestedProductRow
+                                                                    searchType={searchType}
+                                                                    deleteSuggestion={deleteSuggestion}
+                                                                    toggleSent={toggleSent}
+                                                                    toggleTransferToInventory={toggleTransferToInventory}
+                                                                    openMealDetailsModal={openDetailsModal}
+                                                                    openDetailsModal={openDetailsModal}
+                                                                    auth={props.auth} key={suggestion._id}
+                                                                    suggestion={suggestion}
+                                                                    toggleOpenMeal={toggleOpenMeal}
+                                                                />
+                                                            )
+                                                        })
+                                                    }
+                                                </>
                                             }
 
                                         </div>
@@ -960,40 +1005,74 @@ const SuggestedMeals = (props) => {
                 }
             </div>
             {openModal &&
-                <Popup2 popupType='Meal Suggestion Preview' openModal={openModal} closeModal={closeModal}
-                    name={suggestion.meal_name} description={suggestion.meal_name}
-                    imageData={suggestion.meal_images[0]} image={suggestion.meal_images[0]}
+                <Popup2
+                    popupType='Meal Suggestion Preview'
+                    openModal={openModal}
+                    closeModal={closeModal}
+                    name={suggestion.meal_name}
+                    description={suggestion.item_name}
+                    imageData={suggestion.item_images[0]}
+                    image={suggestion.item_images[0]}
                     // imagesData={suggestion.meal_images.slice(1)} categories={JSON.parse(suggestion.meal_categories).toString().split(',')}
-                    prepTime={suggestion.prep_time} cookTime={suggestion.cook_time}
-                    serves={suggestion.servings} chef={suggestion.chef}
+                    prepTime={suggestion.prep_time}
+                    cookTime={suggestion.cook_time}
+                    serves={suggestion.servings}
+                    chef={suggestion.chef}
                     ingredientsList={
                         suggestion.formatted_ingredients?.length
-                            ? JSON.parse(suggestion.formatted_ingredients)?.toString()?.split(',')
+                            ? suggestion.formatted_ingredients
                             : []}
                     utensilsList={suggestion.kitchen_utensils}
                     //   ingredientsList={suggestion.formatted_ingredients.map(ingredient => JSON.parse(ingredient).properIngredientStringSyntax)} utensilsList={suggestion.kitchen_utensils}
-                    instructionChunk1={eval('(' + suggestion.instructions[0] + ')')} instructionChunk2={eval('(' + suggestion?.instructions[1] + ')')}
-                    instructionChunk3={eval('(' + suggestion?.instructions[2] + ')')} instructionChunk4={eval('(' + suggestion?.instructions[3] + ')')}
-                    instructionChunk5={[]} instructionChunk6={[]}
-                    chunk1Content={suggestion.image_or_video_content_1[0]} chunk2Content={suggestion.image_or_video_content_2[0]}
-                    chunk3Content={suggestion.image_or_video_content_3[0]} chunk4Content={suggestion.image_or_video_content_4[0]}
-                    chunk5Content={suggestion.image_or_video_content_5[0]} chunk6Content={suggestion.image_or_video_content_6[0]}
+                    instructionChunk1={suggestion.formatted_instructions[0]?.title}
+                    instructionChunk2={suggestion.formatted_instructions[1]?.title}
+                    instructionChunk3={suggestion.formatted_instructions[2]?.title}
+                    instructionChunk4={suggestion.formatted_instructions[3]?.title}
+                    instructionChunk5={suggestion.formatted_instructions[4]?.title}
+                    instructionChunk6={suggestion.formatted_instructions[5]?.title}
+
+                    instructionChunk1Step={suggestion.formatted_instructions[0]?.instructionSteps}
+                    instructionChunk2Step={suggestion.formatted_instructions[1]?.instructionSteps}
+                    instructionChunk3Step={suggestion.formatted_instructions[2]?.instructionSteps}
+                    instructionChunk4Step={suggestion.formatted_instructions[3]?.instructionSteps}
+                    instructionChunk5Step={suggestion.formatted_instructions[4]?.instructionSteps}
+                    instructionChunk6Step={suggestion.formatted_instructions[5]?.instructionSteps}
+
+                    chunk1Content={suggestion?.item_data?.image_or_video_content_1}
+                    chunk2Content={suggestion?.item_data?.image_or_video_content_2}
+                    chunk3Content={suggestion?.item_data?.image_or_video_content_3}
+                    chunk4Content={suggestion?.item_data?.image_or_video_content_4}
+                    chunk5Content={suggestion?.item_data?.image_or_video_content_5}
+                    chunk6Content={suggestion?.item_data?.image_or_video_content_6}
                     instructionWordlength={suggestion.instructionWordlength}
-                    tips={JSON.parse(suggestion.tips[0])} mealImageData={suggestion.meal_images[0]}
-                    suggested={true} id={suggestion.id}
-                    ingredientGroupList={suggestion.formatted_ingredients.map(ingredient => JSON.parse(ingredient))}
+                    tips={suggestion?.item_data?.tips}
+                    mealImageData={suggestion.itemImage0}
+                    suggested={true}
+                    id={suggestion.id}
+                    categories={suggestion?.item_categories?.map(ele => ele?.category_name)}
+                    ingredientGroupList={suggestion.formatted_ingredients}
                 />
             }
 
             {openModal2 &&
-                <Popup1 popup='product' openModal={openModal2} closeModal={closeModal}
-                    name={suggestion.product_name} description={suggestion.product_details}
-                    imageData={suggestion.product_images[0]}
-                    image={suggestion.product_images[0]}
-                    imagesData={suggestion.product_images.slice(1)} categories={suggestion.product_categories}
-                    sizesList={[]} ingredientList={suggestion.ingredients_in_product.map(ingredient => JSON.parse(ingredient).properIngredientStringSyntax)}
-                    suggested={true} id={suggestion.id}
-                    ingredientGroupList={suggestion.ingredients_in_product.map(ingredient => JSON.parse(ingredient))}
+                <Popup1
+                    popup='product'
+                    openModal={openModal2}
+                    closeModal={closeModal}
+                    name={suggestion.meal_name}
+                    description={suggestion.item_name}
+                    imageData={suggestion.item_images}
+                    image={suggestion.item_images[0]}
+                    // imagesData={suggestion.product_images.slice(1)}
+                    categories={suggestion?.item_categories?.map(ele => ele?.category_name)}
+                    sizesList={suggestion.item_data?.product_size}
+                    ingredientsList={
+                        suggestion.formatted_ingredients?.length
+                            ? suggestion.formatted_ingredients
+                            : []} 
+                    suggested={true}
+                    id={suggestion.id}
+                    ingredientGroupList={suggestion.formatted_ingredients}
                 />
             }
 

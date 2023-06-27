@@ -41,7 +41,7 @@ class ComponentToPrint extends React.Component {
   }
 
   render() {
-    const { ingredientsList, categories, utensilsList } = this.props;
+    const { ingredientsList = [], categories = [], utensilsList = [] } = this.props;
     let displayedCategories = ''
     displayedCategories = categories?.map((cat) => cat + ', ');
     let displayedIngredients = ingredientsList.map((ingredientSyntax) => ingredientSyntax + ', ');
@@ -57,7 +57,7 @@ class ComponentToPrint extends React.Component {
       fontSize = '14px'
     }
     let mealFont;
-    if (this.props.itemMealName.length > 16) {
+    if (this.props.itemMealName?.length > 16) {
       // if (this.props.mealName.length > 16) {
       mealFont = '20px'
       lineHeight = '20px'
@@ -66,7 +66,7 @@ class ComponentToPrint extends React.Component {
       lineHeight = '30px'
     }
     console.log("categories are:", this.props)
-    console.log(this.props.mealImageData);
+    console.log(this.props.mealImageData, );
     console.log(displayedIngredients, "coding")
     console.log("displayed categories are:")
     console.log(displayedCategories);
@@ -81,7 +81,7 @@ class ComponentToPrint extends React.Component {
         <div className={styles.print}>
           <div className={styles.print_page_1}>
             <div className={styles.print_page_1_row_1}>
-              <img className={styles.print_main_logo_img1} alt="print_main_logo_image" src={this.props.mealImageData} />
+              <img className={styles.print_main_logo_img1} alt="print_main_logo_image" src={this.props.mealImage} />
             </div>
             <div className={styles.print_page_1_row_2}>
               <div className={styles.print_page_1_col_1}>
@@ -159,12 +159,12 @@ class ComponentToPrint extends React.Component {
             <div className={styles.print_body}>
               <div className={styles.meal_instructions}>
               <h2>STEPS/INSTRUCTIONS</h2>
-                <div style={(this.props.instructionChunk4?.instructionSteps?.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) ? { flexWrap: 'wrap' } : {}} className={styles.meal_instruction}>
-                  {(this.props.instructionChunk1?.instructionSteps?.length > 0 || this.props.instructionChunk1?.title || this.props.chunk1Content) &&
-                    <div style={(this.props.instructionChunk4?.instructionSteps?.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
+                <div style={(this.propsinstructionChunk4Step?.length > 0 || this.props.instructionChunk4 || this.props.chunk4Content) ? { flexWrap: 'wrap' } : {}} className={styles.meal_instruction}>
+                  {(this.props.instructionChunk2Step?.length > 0 || this.props.instructionChunk1 || this.props.chunk1Content) &&
+                    <div style={(this.props.instructionChunk4Step?.length > 0 || this.props.instructionChunk4 || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
                       <div className={styles.instruction_step_top}>
                         {/* <h4>1</h4> */}
-                        {(allowedImageExtensions.exec(this.props.instructionChunk1?.dataName) && this.props.chunk1Content !== '') &&
+                        {(allowedImageExtensions.exec(this.props.chunk1Content) && this.props.chunk1Content !== '') &&
                           <img
                             src={this.props.chunk1Content}
                             alt={this.props.instructionChunk1?.title}
@@ -177,28 +177,28 @@ class ComponentToPrint extends React.Component {
                           </video>
                         }
                         {!this.props.chunk1Content &&
-                          <h4 className={styles.title}>{this.props.instructionChunk1?.title}</h4>}
+                          <h4 className={styles.title}>{this.props.instructionChunk1}</h4>}
                       </div>
                       {this.props.chunk1Content &&
-                        <h4 className={styles.title}>{this.props.instructionChunk1?.title}</h4>}
+                        <h4 className={styles.title}>{this.props.instructionChunk1}</h4>}
                       {/* <div>{this.props.instructionChunk1?.dataName}</div> */}
                       <div className={styles.instruction_steps}>
                         <div className={styles.instruction_step} style={{ fontSize: this.state.instructionFontSize }}>
-                          {this.props.instructionChunk1?.instructionSteps?.map((step, index) => (index + 1) + ". " + step + " ")}
+                          {this.props.instructionChunk1Step?.map((step, index) => (index + 1) + ". " + step + " ")}
                         </div>
                       </div>
                       {/* <div>{this.props.instructionChunk1?.instructionSteps?}</div> */}
 
                     </div>
                   }
-                  {(this.props.instructionChunk2?.instructionSteps?.length > 0 || this.props.instructionChunk2?.title || this.props.chunk2Content) &&
-                    <div style={(this.props.instructionChunk4?.instructionSteps?.length > 0 || this.props.instructionChunk4?.title || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
+                  {(this.props.instructionChunk2Step?.length > 0 || this.props.instructionChunk2 || this.props.chunk2Content) &&
+                    <div style={(this.props.instructionChunk4Step?.length > 0 || this.props.instructionChunk4 || this.props.chunk4Content) ? { flex: '0 0 32.5%' } : {}}>
                       <div className={styles.instruction_step_top}>
                         {/* <h4>2</h4> */}
                         {(allowedImageExtensions.exec(this.props.instructionChunk2?.dataName) && this.props.chunk2Content !== '') &&
                           <img
                             src={this.props.chunk2Content}
-                            alt={this.props.instructionChunk2?.title}
+                            alt={this.props.instructionChunk2}
                             className={styles.instruction_img} />
                         }
 
@@ -208,14 +208,14 @@ class ComponentToPrint extends React.Component {
                           </video>
                         }
                         {!this.props.chunk2Content &&
-                          <h4 className={styles.title}>{this.props.instructionChunk2?.title}</h4>}
+                          <h4 className={styles.title}>{this.props.instructionChunk2}</h4>}
                       </div>
                       {this.props.chunk2Content &&
-                        <h4 className={styles.title}>{this.props.instructionChunk2?.title}</h4>}
+                        <h4 className={styles.title}>{this.props.instructionChunk2}</h4>}
                       {/* <div>{this.props.instructionChunk4?.dataName}</div> */}
                       <div className={styles.instruction_steps}>
                         <div className={styles.instruction_step} style={{ fontSize: this.state.instructionFontSize }}>
-                          {this.props.instructionChunk2?.instructionSteps?.map((step, index) => (this.props.instructionChunk1?.instructionSteps?.length + index + 1) + ". " + step + " ")}
+                          {this.props.instructionChunk2Step?.map((step, index) => (this.props.instructionChunk1Step?.length + index + 1) + ". " + step + " ")}
                         </div>
                       </div>
                     </div>
@@ -347,7 +347,7 @@ class ComponentToPrint extends React.Component {
 
               </div>
             </div>
-            {this.props.tips.length > 0 &&
+            {this.props?.tips?.length > 0 &&
               <div className={styles.tips}>
                 <h2>TIPS</h2>
                 {/* {this.props.tips} */}

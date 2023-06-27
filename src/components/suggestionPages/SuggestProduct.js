@@ -815,10 +815,17 @@ class SuggestProductForm extends Component {
     //-------------Submit remainder data of product to Mongo ------------------------------------------
     let suggestProductForm = new FormData();
     suggestProductForm.append('item_name', productName);
-    suggestProductForm.append('item_images', productImage1);
-    suggestProductForm.append('item_images', productImage2);
-    suggestProductForm.append('item_images', productImage3);
-    suggestProductForm.append('item_images', productImage4);
+
+    if (productImage1) {
+      suggestProductForm.append('item_images', productImage1);
+    }
+    if (productImage2) {
+      suggestProductForm.append('item_images', productImage2);
+    } if (productImage3) {
+      suggestProductForm.append('item_images', productImage3);
+    } if (productImage4) {
+      suggestProductForm.append('item_images', productImage4);
+    }
 
     // suggestProductForm.append('product_images', productImage2);
     // suggestProductForm.append('product_images', productImage3);
@@ -827,7 +834,7 @@ class SuggestProductForm extends Component {
     suggestProductForm.append('item_intro', productDescription);
     descriptionGroupList.map((individualDescriptions) => {
       console.log(individualDescriptions);
-      suggestProductForm.append('product_descriptions', individualDescriptions);
+      // suggestProductForm.append('product_descriptions', individualDescriptions);
     })
 
     const arr = nutritionalStrings.map(ele => {
@@ -835,7 +842,7 @@ class SuggestProductForm extends Component {
       let information = ele.split(':')[0]?.trim()?.toLowerCase();
       let value = ele.split(':')[1]?.trim()?.toLowerCase()
       information = information?.split(' ')?.length > 1 ? information?.split(' ').map(ele => ele.toLowerCase()).join('_') : information;
-      obj[information] = value;
+      obj[information] = value; 
       return obj
     })
 
@@ -1243,12 +1250,15 @@ class SuggestProductForm extends Component {
               </Row> */}
           <u >View privacy policy</u>
           <div id="ProductAdditionalDataDisplayed" >
-            <Popup1 popup='product' openModal={this.state.openModal} closeModal={this.closeModal}
+            <Popup1 
+            popup='product' openModal={this.state.openModal} closeModal={this.closeModal}
               name={this.state.productName} description={this.state.productDescription}
               imageData={this.state.productImagesData[0]}
               image={this.state.productImagesData[0]}
               imagesData={this.state.productImagesData.slice(1)} categories={this.state.suggestedCategories}
-              sizesList={this.state.sizeStrings} ingredientList={ingredientStrings}
+              sizesList={this.state.sizeStrings} 
+              ingredientList={ingredientStrings}
+              ingredientGroupList={ingredientStrings}
               nutritionalStrings={this.state.nutritionalStrings}
             />
           </div>
