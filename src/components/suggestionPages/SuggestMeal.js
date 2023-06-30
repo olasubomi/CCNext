@@ -1445,18 +1445,18 @@ class SuggestMealForm extends Component {
     // );
 
     if (chunk1Content) {
-      suggestMealForm.append("instruction_images", chunk1Content);
+      suggestMealForm.append("image_or_video_content_1", chunk1Content);
     }
     if (chunk2Content) {
-      suggestMealForm.append("instruction_images", chunk2Content);
+      suggestMealForm.append("image_or_video_content_2", chunk2Content);
     } if (chunk3Content) {
-      suggestMealForm.append("instruction_images", chunk3Content);
+      suggestMealForm.append("image_or_video_content_3", chunk3Content);
     } if (chunk4Content) {
-      suggestMealForm.append("instruction_images", chunk4Content);
+      suggestMealForm.append("image_or_video_content_4", chunk4Content);
     } if (chunk5Content) {
-      suggestMealForm.append("instruction_images", chunk5Content);
+      suggestMealForm.append("image_or_video_content_5", chunk5Content);
     } if (chunk6Content) {
-      suggestMealForm.append("instruction_images", chunk6Content);
+      suggestMealForm.append("image_or_video_content_6", chunk6Content);
     }
 
 
@@ -1619,15 +1619,18 @@ class SuggestMealForm extends Component {
 
     await axios(config)
       .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
+        console.log(typeof response.data.success, 'response data')
+        const status = response?.data.success;
+        if (response.status >= 200 && response.status < 300 && typeof status === "undefined") {
           this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
           console.log(response);
           console.log("Display Meal submitted successfully");
           localStorage.removeItem("suggestMealForm");
-        } else {
+          toast.success("Meal submitted sucessfully")
+        } else if(response?.data.success === false && response?.data?.message === 'Token is not valid') {
+          toast.error(response?.data?.message)
           console.log("Something wrong happened ");
         }
-        toast.success("Meal submitted sucessfully")
       })
       .catch((error) => {
         console.log(error.message, "errors");
@@ -2511,6 +2514,7 @@ class SuggestMealForm extends Component {
               imageData={this.state.mealImagesData[0]}
               image={this.state.mealImage[0]}
               imagesData={this.state.mealImagesData.slice(1)}
+              allImagesData={this.state.mealImagesData}
               categories={this.state.suggestedCategories}
               prepTime={this.state.prepTime}
               cookTime={this.state.cookTime}

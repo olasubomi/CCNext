@@ -10,7 +10,7 @@ import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, Whatsap
 
 function Meal(props){
     const url = 'http://localhost:3000/'
-    const [serves, setServes] = useState(parseInt(props.meal?.servings))
+    const [serves, setServes] = useState(parseInt(props.props?.meal?.servings))
 
     // useEffect(() => {
     //     setServes(parseInt(props.props.meal.servings))
@@ -18,17 +18,13 @@ function Meal(props){
 
     function addServe(val){
         let s= serves + val;
-        if(s >= props.meal.servings){
+        if(s >= props.props.meal.servings){
             setServes(s)
         }
     }
     console.log(props.meal, 'individual meal')
     console.log(serves)
-    console.log(props.meal.item_data.servings, 'serve me')
-    console.log(props.meal.item_categories[0], 'item categories')
-    console.log(props.meal.formatted_ingredients, 'fmingredients')
     // console.log(props.props.props.props.meal, "meal props.props")
-    let num = 0
 
     return (
         <>
@@ -36,17 +32,17 @@ function Meal(props){
                 <title>Meal</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
-            {props.meal &&
+            {props.props?.meal &&
             <div className={styles.meal_sections}>
                 
                 <div className={styles.meal_section_2}>
                     <div className={styles.meal_section_2_col_1}>
-                        {props.meal.item_images.length > 0&&
+                        {props.props.meal.meal_images.length > 0&&
                         <>
-                        {(props.meal.itemImage0.length > 0 && props.meal.itemImage0 !== "[object HTMLImageElement]") ? 
+                        {(props.props.meal.meal_images[0].length > 0 && props.props.meal.meal_images[0] !== "[object HTMLImageElement]") ? 
                         <Image
-                            src={props.meal.itemImage0}
-                            alt={props.meal.item_name}
+                            src={props.props.meal.meal_images[0]}
+                            alt={props.props.meal.meal_name}
                             className={styles.meal_section_2_main_img}
                             height={500} width={500}
                         />:<span></span>
@@ -54,13 +50,13 @@ function Meal(props){
                         </>
                         }
                         <div className={styles.meal_section_2_images}>
-                            {props.meal.item_images.length > 1 &&
+                            {props.props.meal.meal_images.length > 1 &&
                             <>
-                            {props.meal.item_images.slice(1).map((image, index) => {
+                            {props.props.meal.meal_images.slice(1).map((image, index) => {
                                return(
                                 <React.Fragment key={index}>
                                 {image.length > 0 &&
-                                <Image key={index} alt={props.meal.item_name} src={image}
+                                <Image key={index} alt={props.props.meal.meal_name} src={image}
                                 height={300} width={300}
                                 className={styles.meal_section_2_image} />
                                 }
@@ -74,7 +70,7 @@ function Meal(props){
                     </div>
                     <div className={styles.meal_section_2_col_2}>
                         <div className={styles.meal_section_2_details}>
-                            <h2 className={styles.meal_section_2_name}>{props.meal.item_name}</h2>
+                            <h2 className={styles.meal_section_2_name}>{props.props.meal.meal_name}</h2>
                             <div className={styles.store}>
                                 <h4>Chop Chow Store</h4>
                                 {/* {props.props.auth.authUser && props.props.auth.authUser.user_type !== 'admin' &&
@@ -88,30 +84,30 @@ function Meal(props){
                                 <div className={styles.meal_details}>
                                     <div className={styles.hide}>
                                         <h3>Serves: </h3>
-                                        <p>{props.meal.item_data.servings}</p>
+                                        <p>{serves}</p>
                                     </div>
                                     <div>
                                         <h3>PrepTime:</h3>
-                                        <p>{props.meal.item_data.prep_time} Minutes</p>
+                                        <p>{props.props.meal.prep_time} Minutes</p>
                                     </div>
                                     <div>
                                         <h3>CookTime : </h3>
-                                        <p>{props.meal.item_data?.cook_time} Minutes </p>
+                                        <p>{props.props.meal.cook_time} Minutes </p>
                                     </div>
                                     <div>
                                         <h3>Chef:</h3>
-                                        <p>{props.meal.item_data?.chef}</p>
+                                        <p>{props.props.meal.chef}</p>
                                     </div>
                                 </div>
                                 <div className={styles.meal_details}>
                                     <div>
                                         <h3>intro: </h3>
-                                        <p>{props.meal.item_intro}</p>
+                                        <p>{props.props.meal.intro}</p>
                                     </div>
                                 </div>
                             </div>
                             <p className={styles.meal_section_2_description}>
-                                {props.meal.item_intro}
+                                {props.props.meal.intro}
                             </p>
                             <div className={styles.meal_section_2_categories}>
                                 <h3 className={styles.meal_section_2_category_name}>Product Category</h3>
@@ -125,7 +121,7 @@ function Meal(props){
                             </div>
                         </div>
                         {
-                            props.meal.publicly_available === 'Public' && props.auth.authUser && props.auth.authUser.user_type !== 'admin' &&
+                            props.props.meal.publicly_available === 'Public' && props.props.auth.authUser && props.props.auth.authUser.user_type !== 'admin' &&
                         
                             <div className={styles.meal_section_2_price}>
                                 <h3>Price</h3>
@@ -167,23 +163,23 @@ function Meal(props){
                     <div className={styles.meal_details}>
                         <div className={styles.hide}>
                             <h3>Serves: </h3>
-                            <div><p onClick={() => addServe(-1)}>-</p>{props.meal.item_data.servings}<p onClick={() => addServe(1)}>+</p></div>
+                            <div><p onClick={() => addServe(-1)}>-</p>{serves}<p onClick={() => addServe(1)}>+</p></div>
                         </div>
                         <div>
                             <h3>PrepTime:</h3>
-                            <p>{props.meal.item_data.prep_time} Minutes</p>
+                            <p>{props.props.meal.prep_time} Minutes</p>
                         </div>
                         <div>
                             <h3>CookTime : </h3>
-                            <p>{props.meal.item_data.cook_time} Minutes </p>
+                            <p>{props.props.meal.cook_time} Minutes </p>
                         </div>
                         <div>
                             <h3>Chef:</h3>
-                            <p>{props.meal.item_data.chef}</p>
+                            <p>{props.props.meal.chef}</p>
                         </div>
                     </div>
                 </div>
-                {props.meal.formatted_instructions &&
+                {props.props.meal.formatted_instructions &&
                 <div className={styles.meal_section_4}>
                     <div className={styles.ingredient_container}>
                         <h3>Ingredients</h3>
@@ -198,16 +194,16 @@ function Meal(props){
                             </div>
                             <div className={styles.ingredients_body}>
                                 <div className={styles.ingredients_table}>
-                                    {/* <div>
-                                        {props.meal.formatted_ingredients.length > 0 &&
+                                    <div>
+                                        {props.props.meal.formatted_ingredients.length > 0 &&
                                         <>
-                                        {props.meal.formatted_ingredients.map((ingredient, index) => {
+                                        {props.props.meal.formatted_ingredients.map((ingredient, index) => {
                                             return(
                                                 <div key={index} className={styles.ingredients_tr}>
                                                     <input name='id' type="checkbox" />
-                                                    <div style={{color: '#000000'}} className={styles.ingredients_td}>{ingredient.product_name}</div>
-                                                    <div className={styles.ingredients_td + ' ' + styles.hide} style={{textAlign: 'center'}}>{serves === parseInt(props.meal.servings) ? (ingredient).quantity : (ingredient).quantity * serves }</div>
-                                                    <div className={styles.ingredients_td + ' ' + styles.hide}>{ingredient.measurement}</div>
+                                                    <div style={{color: '#000000'}} className={styles.ingredients_td}>{JSON.parse(ingredient).product_name}</div>
+                                                    <div className={styles.ingredients_td + ' ' + styles.hide} style={{textAlign: 'center'}}>{serves === parseInt(props.props.meal.servings) ? JSON.parse(ingredient).quantity : JSON.parse(ingredient).quantity * serves }</div>
+                                                    <div className={styles.ingredients_td + ' ' + styles.hide}>{JSON.parse(ingredient).measurement}</div>
                                                     <div className={styles.ingredients_td} style={{textAlign: 'center'}}></div>
                                                     <div className={styles.ingredients_td}>Unavailable</div>
                                                 </div>
@@ -216,7 +212,7 @@ function Meal(props){
                                         </>
                                         }
                                     
-                                    </div> */}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -265,59 +261,58 @@ function Meal(props){
                     </div>
                 </div>
                 }
-                {props.meal.formatted_instructions &&
+                {props.props.meal.formatted_instructions &&
                 <div className={styles.meal_section_5}>
                     <h3>Steps</h3>
-                    {props.meal.formatted_instructions.length > 0 &&
+                    {/* {props.props.meal.formatted_instructions.length > 0 &&
                     <>
-                        {props.meal.formatted_instructions?.map((instruction, index) => {
-                            num = index + 1
-                            console.log(index + 1)
+                        {JSON.parse(props.props.meal.formatted_instructions[0]).map((instruction, index) => {
                             return(
                                 <div key={index} className={styles.meal_section_5_row}>
                                     <div className={styles.meal_section_5_row_1}>
-                                        {props.meal.item_data.hasOwnProperty([`image_or_video_content_${Math.abs(index + 1)}`]) &&
+                                        {props.props.meal['image_or_video_content_'+index+1] && props.props.meal['image_or_video_content_'+index][0] !== '' ? 
                                         <Image
                                         width={300}
                                         height={300}
-                                            src={props.meal.item_data[`image_or_video_content_${Math.abs(index + 1)}`]}
+                                            src={props.props.meal['image_or_video_content_'+index+1][0]}
                                             alt="home"
                                             className={styles.meal_section_5_row_1}
-                                        />}
+                                        />:
+                                        <p></p>}
                                     </div>
                                     <div className={styles.meal_section_5_row_2}>
                                         <h3 className={styles.meal_section_5_row_2_h3}>
                                             {instruction.title}
                                         </h3>
                                         <p className={styles.meal_section_5_row_2_p}>
-                                            {instruction.instructionSteps?.map((int) => <> {int + ', '} </>) }
+                                            {instruction.instructionSteps?.map((int) => <> {int + ' '} </>) }
                                         </p>
                                     </div>
                                 </div>
                             )
                         })}
                     </>
-                    }
+                    } */}
                     
                 </div>}
 
                 <div className={styles.meal_section_6}>
                     <h3>Meal Categories</h3>
-                    <ul>
-                        {props.meal.item_categories.length > 0 &&
+                    {/* <ul>
+                        {props.props.meal.meal_categories.length > 0 &&
                         <>
-                        {props.meal.item_categories.map((cat, index) => <li key={index}>{cat.category_name}</li>)}
+                        {JSON.parse(props.props.meal.meal_categories[0]).map((cat, index) => <li key={index}>{cat}</li>)}
                         </>
                         }
-                    </ul>
+                    </ul> */}
                 </div>
 
                 <div className={styles.meal_section_7}>
                     <h3>Tips</h3>
                     <div>
-                        {props.meal.item_data.tips && props.meal.item_data.tips.length > 0 &&
+                        {props.props.meal.tips && props.props.meal.tips.length > 0 &&
                         <ul>
-                            {props.meal.item_data.tips.map((tip, index) => {
+                            {JSON.parse(props.props.meal.tips[0]).map((tip, index) => {
                                 return(
                                     <li key={index}>{tip}</li>
                                 )
@@ -349,7 +344,7 @@ function Meal(props){
                     </div>
                     <div className={styles.productcard_col_2}>
                         <div className={styles.productcard_productcards}>
-                            {/* {props.meal.similar_meals.map((data, index) => {
+                            {props.props.meal.similar_meals.map((data, index) => {
                                 return(
                                 <div key={index} className={styles.productcard_productcard}>
                                     {data.meal_images && 
@@ -386,14 +381,14 @@ function Meal(props){
                                                 })
                                             }
                                         </div> */}
-                                        {/* <p className={styles.productcard_productcard_price}> */}
+                                        <p className={styles.productcard_productcard_price}>
                                             {/* $666 */}
-                                        {/* </p>
+                                        </p>
                                     </div>
-                                </div> */}
-                                
-                            
-                            
+                                </div>
+                                )
+                            })
+                            }
                         </div>
                     </div>
                 </div>

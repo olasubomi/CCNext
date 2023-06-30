@@ -26,6 +26,7 @@ import Image from 'next/image';
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import SuggestedProductRow from '../../src/components/dashboard/suggestedproductRow';
+import { toast } from 'react-toastify';
 
 const SuggestedMeals = (props) => {
     const router = useRouter()
@@ -63,11 +64,15 @@ const SuggestedMeals = (props) => {
 
 
     useEffect(() => {
+        getUserItems()
+    }, [props.auth]);
+
+    const getUserItems = () => {
         if (props.auth.authUser) {
             setSearchType("Meal")
             let url
             if (props.auth.authUser.user_type === 'admin') {
-                url = '/meals/get-meals/' + page
+                url = '/items'
             } else {
                 // url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
                 url = '/items/user-items/' + ':?userId=' + props.auth.authUser._id
@@ -91,7 +96,7 @@ const SuggestedMeals = (props) => {
                 }
             })
         }
-    }, [props.auth]);
+    }
 
     function togglePublicMeal() {
         setAddPublicMeal(!addPublicMeal)
@@ -445,6 +450,23 @@ const SuggestedMeals = (props) => {
                 setMessageState('')
             }, 5000)
         });
+    }
+    const deleteItem = async (id) => {
+        try {
+            const res = await axios.delete(`/items/delete/${id}`)
+            console.log('resss', res)
+            if(res.status === 202){
+                getUserItems()
+                toast.success("Deleted successful")
+            }
+            else{
+                toast.error("This Item does not exist!")
+
+            }
+
+        } catch (e) {
+            console.log(e, 'errr')
+        }
     }
 
     function toggleTransferToInventory(meal) {
@@ -808,6 +830,7 @@ const SuggestedMeals = (props) => {
                                                                     auth={props.auth} key={suggestion._id}
                                                                     suggestion={suggestion}
                                                                     toggleOpenMeal={toggleOpenMeal}
+                                                                    deleteItem={deleteItem}
                                                                 />
                                                             )
                                                         })
@@ -830,6 +853,7 @@ const SuggestedMeals = (props) => {
                                                                     auth={props.auth} key={suggestion._id}
                                                                     suggestion={suggestion}
                                                                     toggleOpenMeal={toggleOpenMeal}
+                                                                    deleteItem={deleteItem}
                                                                 />
                                                             )
                                                         })
@@ -951,7 +975,7 @@ const SuggestedMeals = (props) => {
                                 </div>
                                 <div className={suggestion_form_image}>
                                     <div className={suggestion_form_image_col_1}>
-                                        {suggestion.similar_meals.map((images, index) => {
+                                        {suggestion.similar_meals?.map((images, index) => {
                                             <Image key={index} width={300} height={300} src={images} alt="background" />
                                         })}
 
@@ -1069,7 +1093,7 @@ const SuggestedMeals = (props) => {
                     ingredientsList={
                         suggestion.formatted_ingredients?.length
                             ? suggestion.formatted_ingredients
-                            : []} 
+                            : []}
                     suggested={true}
                     id={suggestion.id}
                     ingredientGroupList={suggestion.formatted_ingredients}

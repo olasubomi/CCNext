@@ -106,7 +106,10 @@ function SuggestedProductRow(props) {
                             }
                         </>
                     }
-                    <i className={styles.hideData} onClick={() => props.deleteSuggestion(suggestion._id)}>
+                    <i className={styles.hideData} onClick={() => {
+                        props.deleteItem(suggestion._id)
+                        // props.deleteSuggestion(suggestion._id)
+                    }}>
                         <CloseFillIcon style={actionIcon} /></i>
                     {show ?
                         <i onClick={showDropDown} className={styles.showData}>

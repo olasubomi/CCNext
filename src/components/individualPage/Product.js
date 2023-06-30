@@ -22,7 +22,7 @@ function Product(props){
                 
                 <div className={styles.product_section_2}>
                     <div className={styles.product_section_2_col_1}>
-                        {props.product.product_images.length > 0 ?
+                        {props.product.product_images?.length > 0 ?
                             <Image
                                 src={props.product.product_images[0]}
                                 alt={props.product.product_name}
@@ -32,7 +32,7 @@ function Product(props){
                             <span></span>
                         }
                         <div className={styles.product_section_2_images}>
-                            {props.product.product_images.length > 1 &&
+                            {props.product.product_images?.length > 1 &&
                                 <>
                                 {props.product.product_images.slice(1).map((image, index) => {
                                     <Image key={index} alt={props.product.product_name} src={image}

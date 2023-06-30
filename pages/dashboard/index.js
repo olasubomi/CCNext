@@ -56,32 +56,32 @@ const DashboardHomePage = (props) => {
     if(props.auth.authUser !== null){
         if(props.auth.authUser.user_type === 'admin'){
             axios.get('/analytics/get-users-count/').then(res =>{
-                setUserCountState(res.data.data.docCount)
+                setUserCountState(res.data.data?.docCount)
             })
             axios.get('/analytics/get-meals-count/?publicly_available=Pending').then(res =>{
-                setPendingMealCountState(res.data.data.docCount )
+                setPendingMealCountState(res.data.data?.docCount )
             })
             axios.get('/analytics/get-meals-count/?publicly_available=Public').then(res =>{
-                setPublicMealCountState(res.data.data.docCount)
+                setPublicMealCountState(res.data.data?.docCount)
             })
             axios.get('/analytics/get-orders-count/').then(res =>{
                 console.log(res.data)
-                setOrderCountState(res.data.data.docCount)
+                setOrderCountState(res.data.data?.docCount)
             })
             axios.get('/analytics/get-products-count/?publicly_available=Pending').then(res =>{
                 console.log(res.data)
-                setPendingProductCountState(res.data.data.docCount)
+                setPendingProductCountState(res.data.data?.docCount)
             })
             axios.get('/analytics/get-products-count/?publicly_available=Public').then(res =>{
                 console.log(res.data)
-                setPublicProductCountState(res.data.data.docCount)
+                setPublicProductCountState(res.data.data?.docCount)
             })
         }else if(props.auth.authUser.user_type === 'customer'){
             axios.get('/analytics/get-orders-count/').then(res =>{
                 console.log(res.data)
             })
             axios.get('/analytics/get-meals-count/?user='+props.auth.authUser._id).then(res =>{
-                setMealCountState(res.data.data.docCount)
+                setMealCountState(res.data.data?.docCount)
             })
             axios.get('/analytics/get-orders-count/').then(res =>{
                 console.log(res.data)

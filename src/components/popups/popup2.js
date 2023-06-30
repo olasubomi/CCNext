@@ -359,8 +359,9 @@ class Popup2 extends Component {
                                 }
                                 <div style={{ display: 'none' }}>
                                     <ComponentToPrint ref={el => (this.componentRef = el)}
-                                        mealName={this.props.name} mealImage={this.props.image}
+                                        mealName={this.props.name} mealImage={this.props.image || this.props.imagesData}
                                         categories={this.props.categories}
+                                        allImagesData={this.props.allImagesData}
                                         prepTime={this.props.prepTime} cookTime={this.props.cookTime}
                                         serves={this.props.serves} componentRef={this.componentRef}
                                         openModal={this.props.openModal} closeModal={this.props.closeModal}
