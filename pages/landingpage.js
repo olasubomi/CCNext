@@ -231,7 +231,7 @@ class LandingPage extends Component {
                                 WELL-ESTABLISHED LOCAL AND INTERNATIONAL FOOD SUPPLIERS
                             </h3>
                             <p className={styles.home_section_3_row_2_p}>
-                                One of the most important features of ChopChow is that we make it easy for you to order food products from well established local and international food suppliers to add convenience to cooking from home.
+                                One of the most important features of ChopChow is that we make it easy for you to order food products from well established Local and international food suppliers to add convenience to cooking from home.
                             </p>
                             <div className={styles.home_section_3_row_2_link}>
                                 <p>Use Your Grocery List</p>
