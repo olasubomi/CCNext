@@ -198,17 +198,16 @@ function Meal(props){
                             </div>
                             <div className={styles.ingredients_body}>
                                 <div className={styles.ingredients_table}>
-                                    {/* <div>
+                                    <div>
                                         {props.meal.formatted_ingredients.length > 0 &&
                                         <>
                                         {props.meal.formatted_ingredients.map((ingredient, index) => {
                                             return(
                                                 <div key={index} className={styles.ingredients_tr}>
                                                     <input name='id' type="checkbox" />
-                                                    <div style={{color: '#000000'}} className={styles.ingredients_td}>{ingredient.product_name}</div>
-                                                    <div className={styles.ingredients_td + ' ' + styles.hide} style={{textAlign: 'center'}}>{serves === parseInt(props.meal.servings) ? (ingredient).quantity : (ingredient).quantity * serves }</div>
-                                                    <div className={styles.ingredients_td + ' ' + styles.hide}>{ingredient.measurement}</div>
-                                                    <div className={styles.ingredients_td} style={{textAlign: 'center'}}></div>
+                                                    <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split('of')[1] : ingredient.split(' ')[1]}</td>
+                                                        <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[0] : ingredient.split(' ')[0]}</td>
+                                                        <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[1] : ''}</td>
                                                     <div className={styles.ingredients_td}>Unavailable</div>
                                                 </div>
                                             )
@@ -216,7 +215,7 @@ function Meal(props){
                                         </>
                                         }
                                     
-                                    </div> */}
+                                    </div>
                                 </div>
                             </div>
                         </div>

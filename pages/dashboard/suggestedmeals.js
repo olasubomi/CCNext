@@ -1017,7 +1017,7 @@ const SuggestedMeals = (props) => {
                                 </div>
                                 <div className={suggestion_form_image}>
                                     <div className={suggestion_form_image_col_1}>
-                                        {suggestion.product_alternatives.map((images, index) => {
+                                        {suggestion.product_alternatives?.map((images, index) => {
                                             <Image key={index} width={300} height={300} src={images} alt="background" />
                                         })}
 
