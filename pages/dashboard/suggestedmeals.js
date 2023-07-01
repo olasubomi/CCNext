@@ -345,43 +345,79 @@ const SuggestedMeals = (props) => {
         setChangeStatusState(!changeStatus)
     }
 
-    function handleStatusType(type) {
-        setStatusTypeState(type)
-        let url1
-        if (searchType === 'Meal') {
-            url1 = '/meals/update/'
-        } else if (searchType === 'Product') {
-            url1 = '/products/update/'
-        } else {
-            url1 = '/categories/update/'
-        }
-        axios.post(url1 + suggestion._id, { status: type }).then(res => {
-            if (res.data.data) {
-                suggestion.publicly_available = type
-                let url2
-                if (searchType === 'Meal') {
-                    if (props.auth.authUser.user_type === 'admin') {
-                        url2 = '/meals/get-meals/1'
-                    } else {
-                        url2 = '/meals/get-meals/1?user=' + props.auth.authUser._id
-                    }
-                } else if (searchType === 'Product') {
-                    if (props.auth.authUser.user_type === 'admin') {
-                        url2 = '/products/get-all-products/1'
-                    } else {
-                        url2 = '/products/get-all-products/1?user=' + props.auth.authUser._id
-                    }
-                } else {
-                    if (props.auth.authUser.user_type === 'admin') {
-                        url2 = '/categories/get-all-categories/1'
-                    } else {
-                        url2 = '/categories/get-all-categories/1?user=' + props.auth.authUser._id
-                    }
-                }
-                getSuggestion(url2, searchType)
+    // function handleStatusType(type) {
+    //     setStatusTypeState(type)
+    //     let url1
+    //     if (searchType === 'Meal') {
+    //         url1 = '/meals/update/'
+    //     } else if (searchType === 'Product') {
+    //         url1 = '/products/update/'
+    //     } else {
+    //         url1 = '/categories/update/'
+    //     }
+    //     axios.post(url1 + suggestion._id, { status: type }).then(res => {
+    //         if (res.data.data) {
+    //             suggestion.publicly_available = type
+    //             let url2
+    //             if (searchType === 'Meal') {
+    //                 if (props.auth.authUser.user_type === 'admin') {
+    //                     url2 = '/meals/get-meals/1'
+    //                 } else {
+    //                     url2 = '/meals/get-meals/1?user=' + props.auth.authUser._id
+    //                 }
+    //             } else if (searchType === 'Product') {
+    //                 if (props.auth.authUser.user_type === 'admin') {
+    //                     url2 = '/products/get-all-products/1'
+    //                 } else {
+    //                     url2 = '/products/get-all-products/1?user=' + props.auth.authUser._id
+    //                 }
+    //             } else {
+    //                 if (props.auth.authUser.user_type === 'admin') {
+    //                     url2 = '/categories/get-all-categories/1'
+    //                 } else {
+    //                     url2 = '/categories/get-all-categories/1?user=' + props.auth.authUser._id
+    //                 }
+    //             }
+    //             getSuggestion(url2, searchType)
+    //         }
+    //     })
+    //     toggleChangeStatus()
+    // }
+    //  const handleStatusType = async (type) => {
+    //   try(
+    //     setStatusTypeState(type)
+    //     let url = 'items/item-control'
+    //    await axios.post(url, {
+    //         itemId: suggestion._id,
+    //         "status": type,
+    //         })
+    //         toggleChangeStatus()
+    //   )catch(e){
+    //     console.log(e)
+    //   }
+    // }
+    const handleStatusType = async (type) => {
+        try {
+            setStatusTypeState(type)
+            const res = await axios.post(`/items/item-control`, {
+                itemId: suggestion._id,
+                "status": type,
+            })
+            toggleChangeStatus()
+            console.log('resss', res)
+            if (res.status === 200) {
+                
+                getUserItems()
+                toast.success("Item status successfully updated")
             }
-        })
-        toggleChangeStatus()
+            else {
+                toast.error("")
+
+            }
+
+        } catch (e) {
+            console.log(e, 'errr')
+        }
     }
 
     function getSuggestion(url, searchTypeP = searchType) {
@@ -455,11 +491,11 @@ const SuggestedMeals = (props) => {
         try {
             const res = await axios.delete(`/items/delete/${id}`)
             console.log('resss', res)
-            if(res.status === 202){
+            if (res.status === 202) {
                 getUserItems()
                 toast.success("Deleted successful")
             }
-            else{
+            else {
                 toast.error("This Item does not exist!")
 
             }
