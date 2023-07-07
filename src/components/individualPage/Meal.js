@@ -22,11 +22,11 @@ function Meal(props){
             setServes(s)
         }
     }
-    console.log(props.meal, 'individual meal')
-    console.log(serves)
-    console.log(props.meal.item_data.servings, 'serve me')
-    console.log(props.meal.item_categories[0], 'item categories')
-    console.log(props.meal.formatted_ingredients, 'fmingredients')
+    // console.log(props.meal, 'individual meal')
+    // console.log(serves)
+    // // console.log(props.meal.item_data.servings, 'serve me')
+    // console.log(props.meal.item_categories[0], 'item categories')
+    // console.log(props.meal.formatted_ingredients, 'fmingredients')
     // console.log(props.props.props.props.meal, "meal props.props")
     let num = 0
 
@@ -41,7 +41,7 @@ function Meal(props){
                 
                 <div className={styles.meal_section_2}>
                     <div className={styles.meal_section_2_col_1}>
-                        {props.meal.item_images.length > 0&&
+                        {props.meal.item_images?.length > 0&&
                         <>
                         {(props.meal.itemImage0.length > 0 && props.meal.itemImage0 !== "[object HTMLImageElement]") ? 
                         <Image
@@ -54,7 +54,7 @@ function Meal(props){
                         </>
                         }
                         <div className={styles.meal_section_2_images}>
-                            {props.meal.item_images.length > 1 &&
+                            {props.meal.item_images?.length > 1 &&
                             <>
                             {props.meal.item_images.slice(1).map((image, index) => {
                                return(
@@ -88,11 +88,11 @@ function Meal(props){
                                 <div className={styles.meal_details}>
                                     <div className={styles.hide}>
                                         <h3>Serves: </h3>
-                                        <p>{props.meal.item_data.servings}</p>
+                                        <p>{props.meal.item_data?.servings}</p>
                                     </div>
                                     <div>
                                         <h3>PrepTime:</h3>
-                                        <p>{props.meal.item_data.prep_time} Minutes</p>
+                                        <p>{props.meal.item_data?.prep_time} Minutes</p>
                                     </div>
                                     <div>
                                         <h3>CookTime : </h3>
@@ -167,19 +167,19 @@ function Meal(props){
                     <div className={styles.meal_details}>
                         <div className={styles.hide}>
                             <h3>Serves: </h3>
-                            <div><p onClick={() => addServe(-1)}>-</p>{props.meal.item_data.servings}<p onClick={() => addServe(1)}>+</p></div>
+                            <div><p onClick={() => addServe(-1)}>-</p>{props.meal.item_data?.servings}<p onClick={() => addServe(1)}>+</p></div>
                         </div>
                         <div>
                             <h3>PrepTime:</h3>
-                            <p>{props.meal.item_data.prep_time} Minutes</p>
+                            <p>{props.meal.item_data?.prep_time} Minutes</p>
                         </div>
                         <div>
                             <h3>CookTime : </h3>
-                            <p>{props.meal.item_data.cook_time} Minutes </p>
+                            <p>{props.meal.item_data?.cook_time} Minutes </p>
                         </div>
                         <div>
                             <h3>Chef:</h3>
-                            <p>{props.meal.item_data.chef}</p>
+                            <p>{props.meal.item_data?.chef}</p>
                         </div>
                     </div>
                 </div>
@@ -303,7 +303,7 @@ function Meal(props){
                 <div className={styles.meal_section_6}>
                     <h3>Meal Categories</h3>
                     <ul>
-                        {props.meal.item_categories.length > 0 &&
+                        {props.meal.item_categories?.length > 0 &&
                         <>
                         {props.meal.item_categories.map((cat, index) => <li key={index}>{cat.category_name}</li>)}
                         </>
@@ -314,7 +314,7 @@ function Meal(props){
                 <div className={styles.meal_section_7}>
                     <h3>Tips</h3>
                     <div>
-                        {props.meal.item_data.tips && props.meal.item_data.tips.length > 0 &&
+                        {props.meal.item_data?.tips && props.meal.item_data.tips?.length > 0 &&
                         <ul>
                             {props.meal.item_data.tips.map((tip, index) => {
                                 return(

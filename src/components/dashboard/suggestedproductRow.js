@@ -93,7 +93,7 @@ function SuggestedProductRow(props) {
                     {props.auth.authUser.user_type !== 'admin' &&
                         <>
                             {suggestion.item_status[0].status === 'Draft' &&
-                                <div onClick={() => props.toggleSent(suggestion._id, props.searchType)} className={styles.tableactionbutton}>Send for review</div>
+                                <div onClick={() => props.handleSendForReview(suggestion._id, 'Pending')} className={styles.tableactionbutton}>Send for review</div>
                             }
                             {props.auth.authUser.user_type === 'supplier' &&
                                 <>

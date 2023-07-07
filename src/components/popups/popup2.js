@@ -45,7 +45,7 @@ class Popup2 extends Component {
 
 
     edit = () => {
-        const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6, chunk1Content} = this.props
+        const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6, chunk1Content } = this.props
         var stepInputs = []
         if (instructionChunk1) {
             stepInputs = []
@@ -250,11 +250,9 @@ class Popup2 extends Component {
                                         {this.props['instructionChunk' + curIn] !== '' &&
                                             <>
                                                 {
-                                                    // allowedImageExtensions
-                                                    // .exec(this.props['instructionChunk' + curIn]?.dataName) 
-                                                    // && this.props['chunk' + curIn + 'Content'] 
-                                                    // !== undefined 
-                                                    // && 
+                                                    allowedImageExtensions
+                                                        .exec(this.props[`instructionChunk${curIn}DataName`])
+                                                    &&
                                                     <Image
                                                         src={this.props['chunk' + curIn + 'Content']}
                                                         alt={this.props['instructionChunk' + curIn]?.title}
@@ -265,11 +263,14 @@ class Popup2 extends Component {
                                                     />
                                                 }
 
-                                                {allowedVideoExtensions.exec(this.props['instructionChunk' + curIn]?.dataName) && this.props['chunk' + curIn + 'Content'] !== undefined &&
-                                                    <video className={styles.popup2_step_img} src={this.props['chunk' + curIn + 'Content']} controls>
+                                                {allowedVideoExtensions.exec(this.props[`instructionChunk${curIn}DataName`]) &&
+                                                    <video controls className={styles.popup2_step_img}
+                                                        height={"150%"} width={"70%"}>
+                                                        <source
+                                                            src={this.props['chunk' + curIn + 'Content']} type="video/mp4" />
                                                         Your browser does not support the video tag.
                                                     </video>}
-                                                <div className={styles.del}> 
+                                                <div className={styles.del}>
                                                     <h2 className={styles.popup2_step_name}>{this.props['instructionChunk' + curIn]}</h2>
                                                     <p className={styles.popup2_instructions}>
                                                         {this.props['instructionChunk' + curIn + "Step"]?.map((step, index) => (
@@ -283,7 +284,7 @@ class Popup2 extends Component {
                                             </>
                                         }
                                         {
-                                        this.props['instructionChunk' + (curIn + 1)] !== undefined && curIn <= length &&
+                                            this.props['instructionChunk' + (curIn + 1)] !== undefined && curIn <= length &&
                                             <ArrowCircleRightIcon onClick={this.incIn} className={styles.popup2_inc_con} />}
                                         {
                                             curIn > 1 && <ArrowCircleLeftIcon onClick={this.decIn} className={styles.popup2_dec_con} />}

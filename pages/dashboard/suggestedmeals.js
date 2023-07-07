@@ -67,29 +67,29 @@ const SuggestedMeals = (props) => {
         getUserItems()
     }, [props.auth]);
 
-    const getUserItems = () => {
+    const getUserItems = (newPage) => {
         if (props.auth.authUser) {
+
             setSearchType("Meal")
             let url
             if (props.auth.authUser.user_type === 'admin') {
-                url = '/items'
+                url = `/items/${newPage ? newPage : page}?type=Product,Meal`
             } else {
                 // url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
-                url = '/items/user-items/' + ':?userId=' + props.auth.authUser._id
+                url = `/items/user-items/${newPage ? newPage : page}?type=Product,Meal` + '&userId=' + props.auth.authUser._id
             }
+
 
             axios.get(url).then(data => {
                 console.log(searchType)
                 if (data.data.data) {
-
                     console.log('data', data.data.data)
-                    setSuggestedCountState(data.data.data.length)
-                    if (data.data.data.length > 10) {
-                        setPagesState(Math.ceil(data.data.data.length / 10))
-                    }
-                    console.log('data.data.data.meals', data.data.data)
-                    const products = data.data.data.filter(ele => ele.item_type === 'Product');
-                    const meals = data.data.data.filter(ele => ele.item_type === 'Meal');
+                    setSuggestedCountState(data.data.data.count)
+                    setPagesState(Math.ceil(data.data.data.count / 10))
+                    console.log('data.data.data.count', data.data.data.count)
+                    console.log('data.data', data.data.data.items)
+                    const products = data.data.data.items?.filter(ele => ele.item_type === 'Product');
+                    const meals = data.data.data.items?.filter(ele => ele.item_type === 'Meal');
                     setData({ products, meals })
                     setFilteredSuggestionsState(data.data.data)
                     setSuggestionsState(data.data.data)
@@ -406,9 +406,32 @@ const SuggestedMeals = (props) => {
             toggleChangeStatus()
             console.log('resss', res)
             if (res.status === 200) {
-                
+
                 getUserItems()
                 toast.success("Item status successfully updated")
+            }
+            else {
+                toast.error("")
+
+            }
+
+        } catch (e) {
+            console.log(e, 'errr')
+        }
+    }
+    const handleSendForReview = async (id, type) => {
+        try {
+            setStatusTypeState(type)
+            const res = await axios.post(`/items/item-control`, {
+                itemId: id,
+                "status": type,
+            })
+            toggleChangeStatus()
+            console.log('resss', res)
+            if (res.status === 200) {
+
+                getUserItems()
+                toast.success("Item successfully sent for review")
             }
             else {
                 toast.error("")
@@ -775,6 +798,20 @@ const SuggestedMeals = (props) => {
         }
     };
 
+    const handleNext = () => {
+        if (page <= pages) {
+            getUserItems(page + 1);
+            setPageState(prev => prev + 1)
+        }
+    }
+
+    const handlePrev = () => {
+        if (page !== 0) {
+            getUserItems(page - 1);
+            setPageState(prev => prev - 1)
+        }
+    }
+
     return (
         <div className={container + " " + col2}>
             <div className="alert">
@@ -867,6 +904,7 @@ const SuggestedMeals = (props) => {
                                                                     suggestion={suggestion}
                                                                     toggleOpenMeal={toggleOpenMeal}
                                                                     deleteItem={deleteItem}
+                                                                    handleSendForReview={handleSendForReview}
                                                                 />
                                                             )
                                                         })
@@ -890,6 +928,8 @@ const SuggestedMeals = (props) => {
                                                                     suggestion={suggestion}
                                                                     toggleOpenMeal={toggleOpenMeal}
                                                                     deleteItem={deleteItem}
+                                                                    handleSendForReview={handleSendForReview}
+
                                                                 />
                                                             )
                                                         })
@@ -905,16 +945,23 @@ const SuggestedMeals = (props) => {
                                                 {
                                                     page > 1 &&
                                                     <>
-                                                        <p onClick={() => prevPage(1)} className={styles.paginate_btn}>&lt;&lt;</p>
-                                                        <p onClick={() => prevPage()} className={styles.paginate_btn}>&lt;</p>
+                                                        <p onClick={() => {
+                                                            // prevPage(1)
+                                                            handlePrev()
+                                                        }} className={styles.paginate_btn}>&lt;&lt;</p>
+                                                        {/* <p onClick={() => prevPage()} className={styles.paginate_btn}>&lt;</p> */}
                                                     </>
                                                 }
 
                                                 {
                                                     page < pages &&
                                                     <>
-                                                        <p onClick={() => nextPage()} className={styles.paginate_btn}>&gt;</p>
-                                                        <p onClick={() => nextPage(pages)} className={styles.paginate_btn}>&gt;&gt;</p>
+                                                        {/* <p onClick={() => nextPage()} className={styles.paginate_btn}>&gt;</p> */}
+                                                        <p onClick={() => {
+                                                            // nextPage(pages)
+                                                            handleNext()
+                                                        }
+                                                        } className={styles.paginate_btn}>&gt;&gt;</p>
                                                     </>
                                                 }
 
@@ -1097,6 +1144,13 @@ const SuggestedMeals = (props) => {
                     instructionChunk4Step={suggestion.formatted_instructions[3]?.instructionSteps}
                     instructionChunk5Step={suggestion.formatted_instructions[4]?.instructionSteps}
                     instructionChunk6Step={suggestion.formatted_instructions[5]?.instructionSteps}
+
+                    instructionChunk1DataName={suggestion.formatted_instructions[0]?.dataName}
+                    instructionChunk2DataName={suggestion.formatted_instructions[1]?.dataName}
+                    instructionChunk3DataName={suggestion.formatted_instructions[2]?.dataName}
+                    instructionChunk4DataName={suggestion.formatted_instructions[3]?.dataName}
+                    instructionChunk5DataName={suggestion.formatted_instructions[4]?.dataName}
+                    instructionChunk6DataName={suggestion.formatted_instructions[5]?.dataName}
 
                     chunk1Content={suggestion?.item_data?.image_or_video_content_1}
                     chunk2Content={suggestion?.item_data?.image_or_video_content_2}

@@ -37,10 +37,11 @@ const individualMealPage = () => {
 console.log(props, "mealsssss")
 console.log(router.query.id, "this meal")
 const getMeal = async (id) => {
-    let meal = await axios.get(`/meals/get-meal/${id}`)
+    // let meal = await axios.get(`/meals/get-meal/${id}`)
+    let meal = await axios.get(`/items/user/${id}`)
     console.log(meal.data.data.meal, "get props")
 
-    setProps(meal.data.data)
+    setProps(meal.data.data[0] || {})
 
 }
 useEffect(() => {
@@ -48,6 +49,7 @@ useEffect(() => {
         getMeal(router.query.id)
     }
 },[router.query?.id])
+console.log(props, 'meals id page')
     return (
         <div>
             <Head>
@@ -72,7 +74,7 @@ useEffect(() => {
                 </div>
                 <div style={{width: '95%'}}>
                     
-                    <Meal props={props} />
+                    <Meal meal={props} />
                 </div>
             </div>
         </div>

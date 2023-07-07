@@ -11,7 +11,7 @@ import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, Whatsap
 
 function Product(props) {
     const url = 'http://localhost:3000/'
-    console.log(props.product.item_data.product_size, 'item_data')
+    // console.log(props.product.item_data.product_size, 'item_data')
     // console.log(props.product.item_data.product_size?.map((elem, id) => (
     //     <div key={id}>
     //         <p>{elem}</p>
@@ -70,7 +70,7 @@ function Product(props) {
                                 </div>
                                 <div className={styles.product_section_2_categories}>
                                     <h3 className={styles.product_section_2_category_name}>Product size</h3>
-                                    <p className={styles.product_section_2_category}>{props.product.item_data.product_size && Array.isArray(props.product.item_data.product_size) && (
+                                    <p className={styles.product_section_2_category}>{props.product.item_data?.product_size && Array.isArray(props.product.item_data.product_size) && (
                                             props.product.item_data.product_size.map((elem, id) => (
                                                 <div key={id}>
                                                     <p>{elem}</p>
