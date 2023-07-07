@@ -1,8 +1,8 @@
 
-
 import Head from "next/head";
 
 const TermsOfService = () => {
+
     return <div>
         <Head>
             <title>Chop Chow Subscriptions Page</title>
@@ -26,3 +26,4 @@ const TermsOfService = () => {
 }
 
 export default TermsOfService
+

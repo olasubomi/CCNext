@@ -1,5 +1,4 @@
-
-.suggestion_container{
+.suggestion_container {
     position: relative;
     background: #FCFCFC;
     display: grid;
@@ -7,14 +6,14 @@
     margin-top: 155px;
 }
 
-.suggestion_sections{
+.suggestion_sections {
     display: grid;
     padding: 2rem 0;
     width: 85%;
     grid-gap: 2rem;
 }
 
-.suggestion_section_1{
+.suggestion_section_1 {
     display: flex;
     flex-wrap: wrap;
     grid-gap: 1rem;
@@ -22,14 +21,14 @@
     align-items: center;
 }
 
-.suggestion_section_1_col_1_ul{
+.suggestion_section_1_col_1_ul {
     list-style-type: none;
     display: grid;
     grid-auto-flow: column;
     grid-gap: 1rem;
 }
 
-.suggestion_section_1_col_1_li{
+.suggestion_section_1_col_1_li {
     cursor: pointer;
     padding: 1rem 2rem;
     width: max-content;
@@ -75,20 +74,20 @@
 
     color: #353535;
 }
-  
+
 .suggestion_header_page_arrow {
     font-size: 20px !important;
     color: #353535;
 }
 
-.suggestion_section_1_col_2{
+.suggestion_section_1_col_2 {
     display: grid;
     grid-auto-flow: column;
     grid-gap: 1rem;
     align-items: center;
 }
 
-.suggestion_section_1_col_2_p{
+.suggestion_section_1_col_2_p {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -99,12 +98,70 @@
     color: #353535;
 }
 
-.select_container{
+.close {
+    opacity: 0;
+    color: black;
+    position: absolute;
+    font-size: 16px;
+    background-color: #04d505;
+    /* top: 11.85%; */
+    margin-top: -10.5rem;
+    width: 2%;
+    height: .6%;
+    right: 83.1%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.45);
+    background-blend-mode: overlay;
+}
+.closed {
+    opacity: 0;
+    color: black;
+    position: absolute;
+    font-size: 16px;
+    background-color: #04d505;
+    /* top: 11.85%; */
+    margin-top: -13rem;
+    width: 2%;
+    height: .6%;
+    right: 80.5%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.45);
+    background-blend-mode: overlay;
+}
+.close:hover{
+    display: block;
+    opacity: 1;
+    cursor: pointer;
+}
+.closed:hover{
+    display: block;
+    opacity: 1;
+    cursor: pointer;
+}
+.closeIcon{
+    font-size: 1.7rem;
+    color: #201f1f;
+    text-align: center;
+    height: auto;
+    font-weight: 700;
+}
+.mealImg:hover ~ .close {
+    display: block;
+    opacity: 1;
+}
+
+.select_container {
     display: grid;
     grid-gap: 6px;
 }
 
-.select_box{
+.select_box {
     width: 162px;
     background: #FFFFFF;
     box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
@@ -116,7 +173,7 @@
     grid-auto-flow: column;
 }
 
-.select_box > p{
+.select_box>p {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -127,12 +184,12 @@
     color: #6D6D6D;
 }
 
-.select_box_icon{
+.select_box_icon {
     font-size: 20px !important;
     color: #353535;
 }
 
-.select_options{
+.select_options {
     top: 70px;
     width: 162px;
     position: absolute;
@@ -145,7 +202,7 @@
     z-index: 5;
 }
 
-.select_options > p{
+.select_options>p {
     cursor: pointer;
 }
 
@@ -153,7 +210,7 @@
     margin: 0;
 } */
 
-.suggestion_section_1_col_2_h3{
+.suggestion_section_1_col_2_h3 {
     width: 8rem;
     font-style: normal;
     font-weight: normal;
@@ -166,17 +223,17 @@
     border: none;
 }
 
-.suggestion_section_2{
+.suggestion_section_2 {
     display: grid;
     grid-gap: 1rem;
 }
 
-.suggestion_forms{
+.suggestion_forms {
     display: grid;
     grid-gap: 3rem;
 }
 
-.suggestion_form{
+.suggestion_form {
     display: grid;
     grid-gap: 2rem;
     background: #FFFFFF;
@@ -184,7 +241,8 @@
     border-radius: 8px;
     padding: 2rem;
 }
-.suggestion_forms > h3 {
+
+.suggestion_forms>h3 {
     margin: 0;
     margin-bottom: -3rem;
     font-style: normal;
@@ -198,7 +256,7 @@
     color: #353535;
 }
 
-.suggestion_form > p {
+.suggestion_form>p {
     margin: 0;
     font-style: normal;
     font-weight: 400;
@@ -208,7 +266,7 @@
     color: #000000;
 }
 
-.suggestion_form > h3 {
+.suggestion_form>h3 {
     margin: 0;
     margin-bottom: -0.8rem;
     font-style: normal;
@@ -221,14 +279,14 @@
     color: #000000;
 }
 
-.suggestion_form_group{
+.suggestion_form_group {
     position: relative;
     display: grid;
     grid-gap: 2px;
     width: 100%;
 }
 
-.suggestion_form_group >label{
+.suggestion_form_group>label {
     margin: 0;
     margin-left: 7px;
     font-style: normal;
@@ -241,7 +299,7 @@
     color: rgba(0, 0, 0, 0.45);
 }
 
-.suggestion_form_group >input{
+.suggestion_form_group>input {
     width: 100%;
     padding: 14.5px 12px 14.5px 1.5rem !important;
     outline: none;
@@ -253,16 +311,16 @@
     border-radius: 3px;
 }
 
-.suggestion_form_group > input:hover{
+.suggestion_form_group>input:hover {
     border-color: #04d505 !important;
 }
 
-.suggestion_form_group >fieldset{
+.suggestion_form_group>fieldset {
     border: 0 !important;
     border-color: none !important;
 }
 
-.suggestion_form_group >textarea{
+.suggestion_form_group>textarea {
     width: 100%;
     padding: 14.5px 12px 14.5px 1rem !important;
     outline: none;
@@ -274,15 +332,15 @@
     border-radius: 3px;
 }
 
-.suggestion_form_group >textarea:hover{
+.suggestion_form_group>textarea:hover {
     border-color: #04d505 !important;
 }
 
-.MuiOutlinedInput-root{
+.MuiOutlinedInput-root {
     padding: 0 !important;
 }
 
-.suggestion_form_2_col{
+.suggestion_form_2_col {
     display: grid;
     grid-template-columns: 1fr 1fr max-content;
     grid-gap: 7px;
@@ -290,11 +348,11 @@
     align-items: center;
 }
 
-.suggestion_form_2_col_1{
+.suggestion_form_2_col_1 {
     width: 100%;
 }
 
-.ingredient_button{
+.ingredient_button {
     width: 134px;
     height: 46px !important;
 
@@ -312,12 +370,12 @@
     align-self: end;
 }
 
-.stack{
+.stack {
     width: 100%;
     overflow: hidden;
 }
 
-.chip{
+.chip {
     background-color: #D9D9D9 !important;
     border-radius: 28px !important;
     font-style: normal;
@@ -330,34 +388,34 @@
     overflow: hidden;
 }
 
-.chip > span{
+.chip>span {
     white-space: unset;
     padding: 9px 12px;
     word-break: break-all;
 }
 
-.chip > svg{
+.chip>svg {
     color: #000000 !important;
 }
 
-.input_button{
+.input_button {
     display: grid;
     grid-template-columns: 1fr max-content;
     grid-gap: 7px;
 }
 
-.suggestion_recipe_steps{
+.suggestion_recipe_steps {
     display: grid;
     grid-template-columns: 1fr;
     /* grid-template-rows: repeat(auto-fill, 410px); */
     grid-gap: 1rem;
 }
 
-.more_steps{
+.more_steps {
     grid-template-columns: 1fr 1fr;
 }
 
-.suggestion_recipe_step > h3 {
+.suggestion_recipe_step>h3 {
     margin: 0;
     font-style: normal;
     font-weight: 500;
@@ -369,13 +427,13 @@
     color: #000000;
 }
 
-.suggestion_recipe_step{
+.suggestion_recipe_step {
     display: grid;
     grid-gap: 1rem;
     align-content: start;
 }
 
-.suggestion_forms >u{
+.suggestion_forms>u {
     text-align: center;
     text-decoration: none;
     font-style: normal;
@@ -385,7 +443,7 @@
     cursor: pointer;
 }
 
-.suggestion_form_image{
+.suggestion_form_image {
     display: grid;
     grid-auto-flow: column;
     grid-gap: 2.5rem;
@@ -393,7 +451,7 @@
     align-items: center;
 }
 
-.suggestion_form_image_icon_con{
+.suggestion_form_image_icon_con {
     width: 75px;
     height: 72px;
     left: 0px;
@@ -406,11 +464,11 @@
     justify-items: center;
 }
 
-.suggestion_form_image_icon{
+.suggestion_form_image_icon {
     color: #F47900;
 }
 
-.suggestion_form_image_col_2 > p{
+.suggestion_form_image_col_2>p {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -421,7 +479,7 @@
     color: #949494;
 }
 
-.suggestion_form_image_col_1{
+.suggestion_form_image_col_1 {
     display: grid;
     grid-auto-flow: column;
     grid-gap: 1.5rem;
@@ -429,101 +487,101 @@
     align-items: center;
 }
 
-.suggestion_form_image_col_1 > span{
+.suggestion_form_image_col_1>span {
     width: 132px !important;
     height: 132px !important;
 }
 
-.suggestion_image{
+.suggestion_image {
     width: 130px;
     height: 130px;
 }
 
-.MuiAutocomplete-tag{
+.MuiAutocomplete-tag {
     display: none !important;
 }
 
-.stack{
+.stack {
     flex-wrap: wrap;
 }
 
 @media screen and (max-width: 650px) {
-    .suggestion_container{
+    .suggestion_container {
         margin-top: 102px;
     }
 }
 
 @media screen and (max-width: 650px) {
 
-    .more_steps{
+    .more_steps {
         grid-template-columns: 1fr;
     }
 }
 
 @media screen and (max-width: 620px) {
-    
-    .suggestion_form_2_col{
+
+    .suggestion_form_2_col {
         grid-template-columns: 1fr 1fr;
         grid-gap: 1rem;
     }
 
-    .input_button{
+    .input_button {
         grid-template-columns: 1fr;
         grid-gap: 1rem;
     }
 
-    .more_steps{
+    .more_steps {
         grid-template-columns: 1fr;
     }
 }
 
 @media screen and (max-width: 450px) {
-    .suggestion_sections{
+    .suggestion_sections {
         width: 90%;
     }
 
-    .suggestion_form{
+    .suggestion_form {
         padding: 2rem 1rem;
         grid-gap: 1rem;
     }
 
-    .suggestion_forms > h3{
+    .suggestion_forms>h3 {
         font-size: 16px;
         line-height: 19px;
     }
 
-    .suggestion_form > h3{
+    .suggestion_form>h3 {
         font-size: 12px;
         line-height: 15px;
     }
 
-    .suggestion_form > p{
+    .suggestion_form>p {
         display: none;
     }
 
-    .suggestion_form_image{
+    .suggestion_form_image {
         grid-auto-flow: row;
         grid-gap: 1rem;
     }
 
-    .suggestion_section_1_col_2_p{
+    .suggestion_section_1_col_2_p {
         display: none;
     }
 
-    .suggestion_form_image_col_2{
+    .suggestion_form_image_col_2 {
         grid-row: 1/2;
     }
 
-    .suggestion_form_image_col_2 > p{
+    .suggestion_form_image_col_2>p {
         font-size: 10px;
         line-height: 12px;
     }
 
-    .suggestion_form_group >label{
+    .suggestion_form_group>label {
         font-size: 10px;
     }
 
-    .ingredient_button{
+    .ingredient_button {
         font-size: 12px !important;
         line-height: 15px !important;
         height: 35px !important;

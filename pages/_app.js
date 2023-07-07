@@ -1,18 +1,39 @@
-// import App from 'next/app'
-import '../src/App.css'
-// import '../src/components/Footer/Footer.css'
-// import '../src/components/Header/header.css'
-import { wrapper, store } from "../src/store/index";
+import "../src/App.css";
+import { wrapper, } from "../src/store/index";
+import { persistor, store} from '../src/store/index'
 import { Provider } from "react-redux";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { PersistGate } from 'redux-persist/integration/react'
+
 
 function MyApp({ Component, pageProps }) {
-    return (
-        <>
-            <Provider store={store}>
-                <Component {...pageProps} />
-            </Provider>
-        </>
-    )
+  return (
+    <>
+      //
+      <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
+        <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Component {...pageProps} />
+          <ToastContainer 
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          style={{width: "100%", height: "20rem"}}/>
+          </PersistGate>
+        </Provider>
+      </GoogleOAuthProvider>
+    </>
+  );
 }
 
 // Only uncomment this method if you have blocking data requirements for
@@ -27,4 +48,4 @@ function MyApp({ Component, pageProps }) {
 //   return { ...appProps }
 // }
 
-export default  wrapper.withRedux(MyApp)
+export default wrapper.withRedux(MyApp);

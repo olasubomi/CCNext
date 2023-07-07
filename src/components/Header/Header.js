@@ -3,6 +3,7 @@ import styles from "./header.module.css";
 
 import Link from "next/link";
 import React, { useEffect, useState, useContext } from "react";
+
 import openIcon from "../../../public/assets/icons/eva_menu-open.png";
 import messageIcon from "../../../public/assets/icons/message.png";
 import orderIcon from "../../../public/assets/icons/orderIcon.png";
@@ -24,14 +25,18 @@ import { Auth } from "../auth";
 import { connect } from "react-redux";
 import { getPath } from "../../actions/Common";
 import { useRouter } from "next/router";
-import { userSignOut, verifyToken } from "../../actions";
+import { userSignOut, verifyToken, setOpenLogin } from "../../actions";
+import { SimpleSnackbar } from "../../common";
+import { triggerAlert } from "../../actions/";
 import CartContext from "../../../pages/store/cart-context";
+
 
 function Header(props) {
   const [isAuthenticated, setIsAuthenticatedState] = useState(false);
   const [customerId, setCustomerIdState] = useState(null);
   const [username, setUsernameState] = useState(null);
   const [showNotif, setshowNotifState] = useState(true);
+
   const [openLogin, setOpenLoginState] = useState(false);
   const router = useRouter();
 
@@ -71,8 +76,10 @@ function Header(props) {
     setCustomerIdState(customerId);
     setUsernameState(username);
 
-    console.log("updates log in status after");
-    console.log("customerID is:" + customerId);
+
+    setIsAuthenticatedState(true);
+    setCustomerIdState(customerId);
+    setUsernameState(username);
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -163,6 +170,7 @@ function Header(props) {
 
   function toggleLogin() {
     setOpenLoginState(!openLogin);
+
   }
 
   function logout() {
@@ -173,6 +181,16 @@ function Header(props) {
   return (
     <>
       <div className={styles.navbar}>
+        <div className="alert">
+          {/* {props.message.length > 0 &&
+            <div className="alert-success">
+              {props.message}
+            </div>}
+          {props.error.length > 0 &&
+            <div className="alert-danger">
+              {props.error}
+            </div>} */}
+        </div>
         <div className={styles.navbar_top_container}>
           <div className={styles.navbar_top}>
             <Link href="/">
@@ -303,61 +321,106 @@ function Header(props) {
                           <p className={styles.summary_notification_time}>
                             2 sec
                           </p>
-                        </div>
-                      </div>
-                      <div className={styles.summary_notification}>
-                        <Image
-                          src={messageIcon}
-                          alt="notification"
-                          className={styles.summary_notification_Img}
-                        />
-                        <div className={styles.summary_notification_Details}>
-                          <h3 className={styles.summary_notification_desc}>
-                            Suggested meal : Baking with Flour approved
-                          </h3>
-                          <p className={styles.summary_notification_time}>
-                            2 sec
-                          </p>
-                        </div>
-                      </div>
 
-                      <div className={styles.summary_notification}>
-                        <Image
-                          src={verifiedIcon}
-                          alt="notification"
-                          className={styles.summary_notification_Img}
-                        />
-                        <div className={styles.summary_notification_Details}>
-                          <h3 className={styles.summary_notification_desc}>
-                            Suggested meal : Baking with Flour approved
-                          </h3>
-                          <p className={styles.summary_notification_link}>
-                            Track Order
-                          </p>
-                          <p className={styles.summary_notification_time}>
-                            2 sec
-                          </p>
                         </div>
                       </div>
+                    </>
+                  
+                  <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
+                  <div className={styles.navbar_top_details_col}>
+                    <div id="noticon" onClick={(e) => toggleNotification(e)}>
+                      <NotificationIcon
+                        id="notImg"
+                        style={styles.navbar_top_details_col_icon}
+                      />
+                      <span
+                        id="notNo"
+                        style={{ background: "#04D505" }}
+                        className={styles.numberofitems}
+                      >
+                        3
+                      </span>
+                    </div>
+                    <h5 id="notText" onClick={(e) => toggleNotification(e)}>
+                      Notification
+                    </h5>
+                    <div id="notification" className={styles.summaries_min}>
+                      <div className={styles.summary_min}>
+                        <div className={styles.summary_min_head}>
+                          <h3 className={styles.summary_min_h3}>Notification</h3>
+                        </div>
+                        <div className={styles.summary_min_notifications}>
+                          <div className={styles.summary_notification}>
+                            <Image
+                              src={orderIcon}
+                              alt="order"
+                              className={styles.summary_notification_Img}
+                            />
+                            <div className={styles.summary_notification_Details}>
+                              <h3 className={styles.summary_notification_desc}>
+                                hhh
+                              </h3>
+                              <p className={styles.summary_notification_link}>
+                                View Order
+                              </p>
+                              <p className={styles.summary_notification_time}>
+                                2 sec
+                              </p>
+                            </div>
+                          </div>
+                          <div className={styles.summary_notification}>
+                            <Image
+                              src={messageIcon}
+                              alt="notification"
+                              className={styles.summary_notification_Img}
+                            />
+                            <div className={styles.summary_notification_Details}>
+                              <h3 className={styles.summary_notification_desc}>
+                                Suggested meal : Baking with Flour approved
+                              </h3>
+                              <p className={styles.summary_notification_time}>
+                                2 sec
+                              </p>
+                            </div>
+                          </div>
 
-                      <div className={styles.summary_notification}>
-                        <Image
-                          src={verifiedIcon}
-                          alt="notification"
-                          className={styles.summary_notification_Img}
-                        />
-                        <div className={styles.summary_notification_Details}>
-                          <h3 className={styles.summary_notification_desc}>
-                            Suggested meal : Baking with Flour approved
-                          </h3>
-                          <p className={styles.summary_notification_link}>
-                            View Inventory
-                          </p>
-                          <p className={styles.summary_notification_time}>
-                            2 sec
-                          </p>
-                        </div>
-                      </div>
+                          <div className={styles.summary_notification}>
+                            <Image
+                              src={verifiedIcon}
+                              alt="notification"
+                              className={styles.summary_notification_Img}
+                            />
+                            <div className={styles.summary_notification_Details}>
+                              <h3 className={styles.summary_notification_desc}>
+                                Suggested meal : Baking with Flour approved
+                              </h3>
+                              <p className={styles.summary_notification_link}>
+                                Track Order
+                              </p>
+                              <p className={styles.summary_notification_time}>
+                                2 sec
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className={styles.summary_notification}>
+                            <Image
+                              src={verifiedIcon}
+                              alt="notification"
+                              className={styles.summary_notification_Img}
+                            />
+                            <div className={styles.summary_notification_Details}>
+                              <h3 className={styles.summary_notification_desc}>
+                                Suggested meal : Baking with Flour approved
+                              </h3>
+                              <p className={styles.summary_notification_link}>
+                                View Inventory
+                              </p>
+                              <p className={styles.summary_notification_time}>
+                                2 sec
+                              </p>
+                            </div>
+                          </div>
 
                       <div className={styles.summary_notification}>
                         <Image
@@ -461,9 +524,14 @@ function Header(props) {
               <p>Cart</p>
             </a>
           </Link>
+
         </div>
+        {props.openLogin &&
+          <Auth toggleLogin={toggleLogin} />}
+     {openLogin && <Auth toggleLogin={toggleLogin} />}
       </div>
       {openLogin && <Auth toggleLogin={toggleLogin} />}
+
     </>
   );
 }
@@ -472,9 +540,14 @@ function Header(props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getPath: (path) => dispatch(getPath(path)),
+
+    getPath: path => dispatch(getPath(path)),
+    setOpenLogin: login => dispatch(setOpenLogin(login)),
+
     logout: () => dispatch(userSignOut()),
     verifyToken: (user, token) => dispatch(verifyToken(user, token)),
+    resetSnack: (showSnack, snackMessage) =>
+      dispatch(triggerAlert({ snackMessage, showSnack })),
   };
 }
 
@@ -482,6 +555,12 @@ function mapStateToProp(state) {
   return {
     path: state.Common.path,
     auth: state.Auth,
+    openLogin: state.Auth.openLogin,
+    error: state.Common.error,
+    message: state.Common.message,
+    showSnack: state?.Common?.showSnack,
+    snackMessage: state?.Common?.snackMessage,
+    snackDuration: state?.Common?.snackDuration,
   };
 }
 

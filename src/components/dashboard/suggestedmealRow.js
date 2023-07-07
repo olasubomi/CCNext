@@ -5,6 +5,7 @@ import {status, approve, pending, rejected, actionIcon } from './dashboard.modul
 import { useState } from 'react';
 import { ArrowDropUp } from '@mui/icons-material';
 function SuggestedMealRow(props){
+
     const [show, setShowState] = useState(false)
     const months = [
         "Jan",
@@ -76,6 +77,7 @@ function SuggestedMealRow(props){
                     <i onClick={showDropDown} className={styles.showData}>
                         <ArrowDropDownIcon className={styles.arrowDown} />
                     </i>
+
                     }
                 </div>
             </div>
@@ -104,6 +106,7 @@ function SuggestedMealRow(props){
         </div>
     )
     
+
 }
 
 export default SuggestedMealRow;

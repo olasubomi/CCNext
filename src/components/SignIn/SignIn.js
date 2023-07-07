@@ -55,6 +55,7 @@ export default function SignIn() {
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           {/* <LockOutlinedIcon /> */}
+          Hello again
           avatar
         </Avatar>
         <Typography component="h1" variant="h5">

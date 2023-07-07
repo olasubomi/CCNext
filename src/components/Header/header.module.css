@@ -41,6 +41,7 @@
   grid-gap: 3rem;
   justify-items: end;
   align-items: center;
+  z-index: 2;
   font-size: 12px;}
 
 .navbar_top_logo_img{
@@ -90,6 +91,7 @@
 .navbar_user_img{
   width: 27px;
   height: 27px;
+  border-radius: 50%;
 }
 
 .navbar_user_name{
@@ -510,91 +512,6 @@
   border-radius: 4px;
 }
 
-@media only screen and (max-width: 768px){
-  .navbar{
-    grid-template-rows: 55px;
-  }
-
-  .navbar2{
-    top: 54px;
-    grid-template-rows: 48px;
-  }
-
-  .navbar_user_loginbtn{
-    display: none;
-  }
-
-  .navbar_user_upgradebtn{
-    display: none;
-  }
-  
-  .navbar_user_info{
-    display: none;
-  }
-
-  .hide{
-    display: none;
-  }
-
-  .navbar_link{
-      display: none;
-  }
-
-  .openbtn{
-      display: block;
-  }
-
-  .navbar_down{
-    display: grid;
-  }
-
-  .navbar_top{
-      grid-gap: 1rem;
-      width: 90%;
-  }
-
-  .navbar_main{
-    width: 90%;
-    grid-template-columns: 1fr;
-  }
-
-  .navbar_main_link{
-    margin: 0;
-  }
-
-  .navbar_main_grocery{
-    display: none;
-  }
-
-  .navbar_top_logo_img{
-    width: 66px !important;
-    height: 33px !important;
-    margin-left: 2.5rem;
-  }
-
-  .navbar_top_details_col > h5{
-    display: none;
-  }
-
-  .numberofitems{
-    top: 7px;
-    right: -3px;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .navbar_main_links{
-    display: grid;
-    grid-auto-flow: column;
-    grid-gap: 10px;
-    justify-content: space-between;
-    font-weight: 400;
-    font-size: 10px;
-    line-height: 12px;
-  }
-
-}
-
 #myBtn {
   display: none; /* Hidden by default */
   position: fixed; /* Fixed/sticky position */
@@ -620,7 +537,6 @@
   grid-auto-flow: row;
   position: fixed;
   top: 0;
-  width: 8%;
   z-index: 200;
   grid-template-rows: 88px;
   grid-template-columns: 100%;
@@ -671,6 +587,10 @@
   grid-gap: 10px;
   align-items: start;
   margin-top: -3rem;
+}
+
+.sidenav_top_row_2 > span{
+  border-radius: 50%;
 }
 
 .sidenav_top_row_2_img{
@@ -748,6 +668,7 @@
 }
 
 .sidenav_link{
+  cursor: pointer;
   display: grid;
   grid-template-columns: max-content 1fr;
   grid-gap: 10px;
@@ -807,4 +728,93 @@
   font-weight: 700;
   text-decoration: none;
   color: #8c1d5a;
+}
+
+@media only screen and (max-width: 768px){
+  .navbar{
+    grid-template-rows: 55px;
+  }
+
+  .navbar2{
+    top: 54px;
+    grid-template-rows: 48px;
+  }
+
+  .navbar_user_loginbtn{
+    display: none;
+  }
+
+  .navbar_user_upgradebtn{
+    display: none;
+  }
+  
+  .navbar_user_info{
+    display: none;
+  }
+
+  .hide{
+    display: none;
+  }
+
+  .navbar_link{
+      display: none;
+  }
+  
+  .navbar_side{
+    width: 8%;
+  }
+
+  .openbtn{
+      display: block;
+  }
+
+  .navbar_down{
+    display: grid;
+  }
+
+  .navbar_top{
+      grid-gap: 1rem;
+      width: 90%;
+  }
+
+  .navbar_main{
+    width: 90%;
+    grid-template-columns: 1fr;
+  }
+
+  .navbar_main_link{
+    margin: 0;
+  }
+
+  .navbar_main_grocery{
+    display: none;
+  }
+
+  .navbar_top_logo_img{
+    width: 66px !important;
+    height: 33px !important;
+    margin-left: 2.5rem;
+  }
+
+  .navbar_top_details_col > h5{
+    display: none;
+  }
+
+  .numberofitems{
+    top: 7px;
+    right: -3px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .navbar_main_links{
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 10px;
+    justify-content: space-between;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+  }
+
 }
