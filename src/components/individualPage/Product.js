@@ -9,14 +9,10 @@ import Stores from "./stores";
 import Reviews from "./Reviews";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
-function Product(props) {
+function Product(props){
     const url = 'http://localhost:3000/'
-    console.log(props.product.item_data.product_size, 'item_data')
-    // console.log(props.product.item_data.product_size?.map((elem, id) => (
-    //     <div key={id}>
-    //         <p>{elem}</p>
-    //     </div>
-    // )), 'hellooo')
+
+
     return (
         <>
             <Head>
@@ -24,6 +20,7 @@ function Product(props) {
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <div className={styles.product_sections}>
+
 
                 <div className={styles.product_section_2}>
                     <div className={styles.product_section_2_col_1}>
@@ -52,6 +49,7 @@ function Product(props) {
                     </div>
                     <div className={styles.product_section_2_col_2}>
                         <div className={styles.product_section_2_details}>
+
                             <h2 className={styles.product_section_2_name}>{props.product.item_name}</h2>
                             {/* <div className={styles.store}>
                                 <h4>Chop Chow Store</h4>
@@ -66,6 +64,7 @@ function Product(props) {
                             <div className={styles.product_section_2_details_col}>
                                 <div className={styles.product_section_2_categories}>
                                     <h3 className={styles.product_section_2_category_name}>Category</h3>
+
                                     <p className={styles.product_section_2_category}>{props.product.item_categories?.map((cat, j) => <span key={j}>{cat.category_name} &nbsp; &nbsp;</span>)}</p>
                                 </div>
                                 <div className={styles.product_section_2_categories}>
@@ -81,11 +80,11 @@ function Product(props) {
                                     </p>
                                 </div>
 
-
                             </div>
                         </div>
                         {
                             props.product.publicly_available === 'Public' &&
+
                             <div className={styles.product_section_2_price}>
                                 <h3>Price</h3>
                                 <p>$7.65<span>/piece</span></p>
@@ -96,6 +95,7 @@ function Product(props) {
                     <div>
                         <p><ShareIcon />Share this product:</p>
                         <FacebookShareButton>
+
                             <FacebookEIcon quote={props.product.product_name} url={url + 'product/' + props.product._id} />
                         </FacebookShareButton>
                         <TwitterShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>
@@ -113,6 +113,7 @@ function Product(props) {
                         <PrintEIcon />
                     </div>
                     {
+
                         props.product.publicly_available === 'Public' &&
                         <div className={styles.btnGroup}>
                             <div className={styles.btnoutline}>Add to Grocery List</div>
@@ -174,6 +175,7 @@ function Product(props) {
 
                 <div className={styles.product_section_8}>
                     <h3>Stores location</h3>
+
                     {props.product.stores_available?.length > 0 ?
                         <Stores /> :
                         <p>Not Available</p>}
@@ -190,6 +192,7 @@ function Product(props) {
                     </div>
                     <div className={styles.productcard_col_2}>
                         <div className={styles.productcard_productcards}>
+
                             {props.product.product_alternatives?.map((data, index) => {
                                 return (
                                     <div key={index} className={styles.productcard_productcard}>
@@ -223,11 +226,12 @@ function Product(props) {
                                                 })
                                             }
                                         </div> */}
-                                            {/* <p className={styles.productcard_productcard_duration}>
+                                        {/* <p className={styles.productcard_productcard_duration}>
                                             7min
                                         </p> */}
-                                        </div>
                                     </div>
+                                </div>
+
                                 )
                             })
                             }

@@ -75,6 +75,7 @@ function Login(props) {
   console.log(props)
   async function Login(e) {
     e.preventDefault();
+
     // props.login(email, password);
     // check redux
     // props.toggleLogin() // then redirect to dashboard
@@ -110,8 +111,9 @@ function Login(props) {
   function togglePass() {
     setShowPassState(!showPass);
   }
+  //{console.log("signedin", props.auth)}
+  return(
 
-  return (
     <>
       {!signUp && !forgetPassword &&
         (<div className={styles.login}>
