@@ -39,9 +39,9 @@ const GroceryPage = (props) => {
           "Content-Type": "application/json",
         },
       });
-  
+
       const data = await response.json();
-  
+
       if (data.data === undefined) {
         setProductErrData(data);
       } else {
@@ -50,7 +50,7 @@ const GroceryPage = (props) => {
     } catch (error) {
       console.log(error);
     }
-   
+
   }
 
   async function fetchUserGrocery() {
@@ -58,10 +58,10 @@ const GroceryPage = (props) => {
       const userDetails = JSON.parse(localStorage.getItem("user"));
       const token = localStorage.getItem("x-auth-token");
       const user_id = userDetails._id;
-  
+
       if (userDetails) {
         localStorage.setItem("user_id", JSON.stringify(user_id));
-  
+
         const response = await fetch(
           `http://localhost:5000/api/groceries/${user_id}`,
           {
@@ -72,9 +72,9 @@ const GroceryPage = (props) => {
             },
           }
         );
-  
+
         const data = await response.json();
-        
+
         if (data.data === undefined) {
           setUserErrData(data);
         } else {
@@ -86,7 +86,7 @@ const GroceryPage = (props) => {
     } catch (error) {
       console.log(error);
     }
-   
+
   }
 
 
@@ -95,10 +95,10 @@ const GroceryPage = (props) => {
     fetchUserGrocery();
   }, []);
 
-  const grocery = userData.groceryList;
+  const grocery = userData?.groceryList;
 
   const router = useRouter();
- 
+
   const listId = router.query.groceryListId;
 
   const groceryObj = grocery?.find((obj) => {
@@ -131,7 +131,7 @@ const GroceryPage = (props) => {
           </Head>
           <Header route="groceryList" openCart={openCart} />
           <Header2 />
-          <SideNav/>
+          <SideNav />
           <div className={itemsStyles.groceryBody}>
             <div className={itemsStyles.groceryMainBody}>
               <div className={itemsStyles.arrowBack}>
@@ -151,8 +151,8 @@ const GroceryPage = (props) => {
               </div>
               <h2>Add new item from Store</h2>
               <div className={itemsStyles.searchBody}>
-              <div className={itemsStyles.searchInput}>
-              <img
+                <div className={itemsStyles.searchInput}>
+                  <img
                     src="/assets/grocery_list/Search.svg"
                     alt="search icon"
                   />
@@ -169,8 +169,8 @@ const GroceryPage = (props) => {
                       }
                     }}
                   />
-              </div>
-              {items
+                </div>
+                {items
                   .filter((item) => {
                     if (searchTerm == "") {
                       return null;
@@ -184,10 +184,10 @@ const GroceryPage = (props) => {
                   })
                   .map((item) => (
                     <Items
-                    itemName={item.item_name}
-                    itemPrice={item.item_price}
-                    itemStore={item.store_name}
-                  />
+                      itemName={item.item_name}
+                      itemPrice={item.item_price}
+                      itemStore={item.store_name}
+                    />
                   ))}
               </div>
               <div className={itemsStyles.itemsHeader}>

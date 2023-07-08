@@ -48,27 +48,27 @@ function Header(props) {
     return curNumber + item.amount;
   }, 0);
 
-  useEffect(() => {
-    props.getPath(router.pathname);
-    let token = localStorage.getItem("x-auth-token");
-    let time = localStorage.getItem("in");
-    if (token !== null && time !== null) {
-      const msInMinute = 60 * 1000;
-      let min = Math.abs(Date.now() - time) / msInMinute;
-      if (min > 30) {
-        localStorage.removeItem("x-auth-token");
-        localStorage.removeItem("in");
-        localStorage.removeItem("user");
-      } else {
-        let user = JSON.parse(localStorage.getItem("user"));
-        props.verifyToken(user, token);
-      }
-    } else {
-      localStorage.removeItem("x-auth-token");
-      localStorage.removeItem("in");
-      localStorage.removeItem("user");
-    }
-  }, []);
+  // useEffect(() => {
+  //   props.getPath(router.pathname);
+  //   let token = localStorage.getItem("x-auth-token");
+  //   let time = localStorage.getItem("in");
+  //   if (token !== null && time !== null) {
+  //     const msInMinute = 60 * 1000;
+  //     let min = Math.abs(Date.now() - time) / msInMinute;
+  //     if (min > 30) {
+  //       localStorage.removeItem("x-auth-token");
+  //       localStorage.removeItem("in");
+  //       localStorage.removeItem("user");
+  //     } else {
+  //       let user = JSON.parse(localStorage.getItem("user"));
+  //       props.verifyToken(user, token);
+  //     }
+  //   } else {
+  //     localStorage.removeItem("x-auth-token");
+  //     localStorage.removeItem("in");
+  //     localStorage.removeItem("user");
+  //   }
+  // }, []);
 
   function updateLogInStatus(customerId, username) {
     console.log("updates log in status before");
@@ -324,219 +324,221 @@ function Header(props) {
 
                         </div>
                       </div>
-                    </>
-                  
-                  <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
-                  <div className={styles.navbar_top_details_col}>
-                    <div id="noticon" onClick={(e) => toggleNotification(e)}>
-                      <NotificationIcon
-                        id="notImg"
-                        style={styles.navbar_top_details_col_icon}
-                      />
-                      <span
-                        id="notNo"
-                        style={{ background: "#04D505" }}
-                        className={styles.numberofitems}
-                      >
-                        3
-                      </span>
-                    </div>
-                    <h5 id="notText" onClick={(e) => toggleNotification(e)}>
-                      Notification
-                    </h5>
-                    <div id="notification" className={styles.summaries_min}>
-                      <div className={styles.summary_min}>
-                        <div className={styles.summary_min_head}>
-                          <h3 className={styles.summary_min_h3}>Notification</h3>
+                      {/* </> */}
+
+                      <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
+                      <div className={styles.navbar_top_details_col}>
+                        <div id="noticon" onClick={(e) => toggleNotification(e)}>
+                          <NotificationIcon
+                            id="notImg"
+                            style={styles.navbar_top_details_col_icon}
+                          />
+                          <span
+                            id="notNo"
+                            style={{ background: "#04D505" }}
+                            className={styles.numberofitems}
+                          >
+                            3
+                          </span>
                         </div>
-                        <div className={styles.summary_min_notifications}>
-                          <div className={styles.summary_notification}>
-                            <Image
-                              src={orderIcon}
-                              alt="order"
-                              className={styles.summary_notification_Img}
-                            />
-                            <div className={styles.summary_notification_Details}>
-                              <h3 className={styles.summary_notification_desc}>
-                                hhh
-                              </h3>
-                              <p className={styles.summary_notification_link}>
-                                View Order
-                              </p>
-                              <p className={styles.summary_notification_time}>
-                                2 sec
-                              </p>
+                        <h5 id="notText" onClick={(e) => toggleNotification(e)}>
+                          Notification
+                        </h5>
+                        <div id="notification" className={styles.summaries_min}>
+                          <div className={styles.summary_min}>
+                            <div className={styles.summary_min_head}>
+                              <h3 className={styles.summary_min_h3}>Notification</h3>
                             </div>
-                          </div>
-                          <div className={styles.summary_notification}>
-                            <Image
-                              src={messageIcon}
-                              alt="notification"
-                              className={styles.summary_notification_Img}
-                            />
-                            <div className={styles.summary_notification_Details}>
-                              <h3 className={styles.summary_notification_desc}>
-                                Suggested meal : Baking with Flour approved
-                              </h3>
-                              <p className={styles.summary_notification_time}>
-                                2 sec
-                              </p>
-                            </div>
-                          </div>
+                            <div className={styles.summary_min_notifications}>
+                              <div className={styles.summary_notification}>
+                                <Image
+                                  src={orderIcon}
+                                  alt="order"
+                                  className={styles.summary_notification_Img}
+                                />
+                                <div className={styles.summary_notification_Details}>
+                                  <h3 className={styles.summary_notification_desc}>
+                                    hhh
+                                  </h3>
+                                  <p className={styles.summary_notification_link}>
+                                    View Order
+                                  </p>
+                                  <p className={styles.summary_notification_time}>
+                                    2 sec
+                                  </p>
+                                </div>
+                              </div>
+                              <div className={styles.summary_notification}>
+                                <Image
+                                  src={messageIcon}
+                                  alt="notification"
+                                  className={styles.summary_notification_Img}
+                                />
+                                <div className={styles.summary_notification_Details}>
+                                  <h3 className={styles.summary_notification_desc}>
+                                    Suggested meal : Baking with Flour approved
+                                  </h3>
+                                  <p className={styles.summary_notification_time}>
+                                    2 sec
+                                  </p>
+                                </div>
+                              </div>
 
-                          <div className={styles.summary_notification}>
-                            <Image
-                              src={verifiedIcon}
-                              alt="notification"
-                              className={styles.summary_notification_Img}
-                            />
-                            <div className={styles.summary_notification_Details}>
-                              <h3 className={styles.summary_notification_desc}>
-                                Suggested meal : Baking with Flour approved
-                              </h3>
-                              <p className={styles.summary_notification_link}>
-                                Track Order
-                              </p>
-                              <p className={styles.summary_notification_time}>
-                                2 sec
-                              </p>
+                              <div className={styles.summary_notification}>
+                                <Image
+                                  src={verifiedIcon}
+                                  alt="notification"
+                                  className={styles.summary_notification_Img}
+                                />
+                                <div className={styles.summary_notification_Details}>
+                                  <h3 className={styles.summary_notification_desc}>
+                                    Suggested meal : Baking with Flour approved
+                                  </h3>
+                                  <p className={styles.summary_notification_link}>
+                                    Track Order
+                                  </p>
+                                  <p className={styles.summary_notification_time}>
+                                    2 sec
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className={styles.summary_notification}>
+                                <Image
+                                  src={verifiedIcon}
+                                  alt="notification"
+                                  className={styles.summary_notification_Img}
+                                />
+                                <div className={styles.summary_notification_Details}>
+                                  <h3 className={styles.summary_notification_desc}>
+                                    Suggested meal : Baking with Flour approved
+                                  </h3>
+                                  <p className={styles.summary_notification_link}>
+                                    View Inventory
+                                  </p>
+                                  <p className={styles.summary_notification_time}>
+                                    2 sec
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className={styles.summary_notification}>
+                                <Image
+                                  src={cancelredIcon}
+                                  alt="notification"
+                                  className={styles.summary_notification_Img}
+                                />
+                                <div className={styles.summary_notification_Details}>
+                                  <h3 className={styles.summary_notification_desc}>
+                                    Suggested meal : Gbegiri rejected
+                                  </h3>
+                                  <p className={styles.summary_notification_link}>
+                                    View
+                                  </p>
+                                  <p className={styles.summary_notification_time}>
+                                    2 sec
+                                  </p>
+                                </div>
+                              </div>
                             </div>
                           </div>
-
-                          <div className={styles.summary_notification}>
-                            <Image
-                              src={verifiedIcon}
-                              alt="notification"
-                              className={styles.summary_notification_Img}
-                            />
-                            <div className={styles.summary_notification_Details}>
-                              <h3 className={styles.summary_notification_desc}>
-                                Suggested meal : Baking with Flour approved
-                              </h3>
-                              <p className={styles.summary_notification_link}>
-                                View Inventory
-                              </p>
-                              <p className={styles.summary_notification_time}>
-                                2 sec
-                              </p>
-                            </div>
-                          </div>
-
-                      <div className={styles.summary_notification}>
-                        <Image
-                          src={cancelredIcon}
-                          alt="notification"
-                          className={styles.summary_notification_Img}
+                        </div>
+                      </div>
+                      <div
+                        className={styles.navbar_top_details_col + " " + styles.hide}
+                      >
+                        <CartIcon
+                          style={styles.navbar_top_details_col_icon}
+                          cartOpen={props.openCart}
                         />
-                        <div className={styles.summary_notification_Details}>
-                          <h3 className={styles.summary_notification_desc}>
-                            Suggested meal : Gbegiri rejected
-                          </h3>
-                          <p className={styles.summary_notification_link}>
-                            View
-                          </p>
-                          <p className={styles.summary_notification_time}>
-                            2 sec
-                          </p>
+                        <div>
+                          <a>
+                            <h5 onClick={props.openCart}>Cart</h5>
+                          </a>
+                          <span
+                            style={{ background: "#F47900" }}
+                            className={styles.numberofitems}
+                            onClick={props.openCart}
+                          >
+                            {numberOfCartItems}
+                          </span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div
-                className={styles.navbar_top_details_col + " " + styles.hide}
-              >
-                <CartIcon
-                  style={styles.navbar_top_details_col_icon}
-                  cartOpen={props.openCart}
-                />
-                <div>
-                  <a>
-                    <h5 onClick={props.openCart}>Cart</h5>
-                  </a>
-                  <span
-                    style={{ background: "#F47900" }}
-                    className={styles.numberofitems}
-                    onClick={props.openCart}
-                  >
-                    {numberOfCartItems}
-                  </span>
+              <div className={styles.navbar_down}>
+                <div
+                  className={
+                    styles.navbar_down_col +
+                    " " +
+                    (props.path === "/" && styles.activeLinkDown)
+                  }
+                >
+                  <Link href="/">
+                    <a>
+                      <HomeIcon style={styles.navbar_down_col_icon} />
+                      <p>Home</p>
+                    </a>
+                  </Link>
                 </div>
+                <div
+                  className={
+                    styles.navbar_down_col +
+                    " " +
+                    (props.path === "/dashboard/orders/orders" && styles.activeLinkDown)
+                  }
+                >
+                  <Link href="/dashboard/orders/orders">
+                    <a>
+                      <Order2Icon style={styles.navbar_down_col_icon} />
+                      <p>Order</p>
+                    </a>
+                  </Link>
+                </div>
+                <div
+                  className={
+                    styles.navbar_down_col +
+                    " " +
+                    (props.path === "/grocery-list" && styles.activeLinkDown)
+                  }
+                >
+                  <Link href="/grocerylist">
+                    <a>
+                      <BasketIcon style={styles.navbar_down_col_icon} />
+                      <p>Grocery List</p>
+                    </a>
+                  </Link>
+                </div>
+                <div
+                  className={
+                    styles.navbar_down_col +
+                    " " +
+                    (props.path === "/cart" && styles.activeLinkDown)
+                  }
+                >
+                  <Link href="/cart">
+                    <a>
+                      <CartIcon style={styles.navbar_down_col_icon} />
+                      <p>Cart</p>
+                    </a>
+                  </Link>
+
+                </div>
+                {props.openLogin &&
+                  <Auth toggleLogin={toggleLogin} />}
+                {openLogin && <Auth toggleLogin={toggleLogin} />}
               </div>
+              {openLogin && <Auth toggleLogin={toggleLogin} />}
+
             </div>
           </div>
         </div>
       </div>
-      <div className={styles.navbar_down}>
-        <div
-          className={
-            styles.navbar_down_col +
-            " " +
-            (props.path === "/" && styles.activeLinkDown)
-          }
-        >
-          <Link href="/">
-            <a>
-              <HomeIcon style={styles.navbar_down_col_icon} />
-              <p>Home</p>
-            </a>
-          </Link>
-        </div>
-        <div
-          className={
-            styles.navbar_down_col +
-            " " +
-            (props.path === "/dashboard/orders/orders" && styles.activeLinkDown)
-          }
-        >
-          <Link href="/dashboard/orders/orders">
-            <a>
-              <Order2Icon style={styles.navbar_down_col_icon} />
-              <p>Order</p>
-            </a>
-          </Link>
-        </div>
-        <div
-          className={
-            styles.navbar_down_col +
-            " " +
-            (props.path === "/grocery-list" && styles.activeLinkDown)
-          }
-        >
-          <Link href="/grocerylist">
-            <a>
-              <BasketIcon style={styles.navbar_down_col_icon} />
-              <p>Grocery List</p>
-            </a>
-          </Link>
-        </div>
-        <div
-          className={
-            styles.navbar_down_col +
-            " " +
-            (props.path === "/cart" && styles.activeLinkDown)
-          }
-        >
-          <Link href="/cart">
-            <a>
-              <CartIcon style={styles.navbar_down_col_icon} />
-              <p>Cart</p>
-            </a>
-          </Link>
-
-        </div>
-        {props.openLogin &&
-          <Auth toggleLogin={toggleLogin} />}
-     {openLogin && <Auth toggleLogin={toggleLogin} />}
-      </div>
-      {openLogin && <Auth toggleLogin={toggleLogin} />}
-
     </>
   );
 }
-
-// export default Header;
 
 function mapDispatchToProps(dispatch) {
   return {
