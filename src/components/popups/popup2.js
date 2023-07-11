@@ -182,9 +182,9 @@ class Popup2 extends Component {
                             <div className={styles.popup2_row_2}>
                                 <div className={styles.popup2_col_1}>
                                     <div className={styles.img_col}>
-                                        {imageData !== '' &&
+                                        {imagesData?.length  !== 0 &&
                                             <Image
-                                                src={imageData}
+                                                src={imagesData[0]}
                                                 alt="pop up"
                                                 className={styles.popup2_main_img}
                                                 height={"160%"} width={"100%"}
@@ -194,7 +194,7 @@ class Popup2 extends Component {
                                         {imagesData?.length > 0 &&
                                             <div className={styles.popup2_images}>
                                                 {
-                                                    imagesData.map((data, index) =>
+                                                    imagesData.slice(1).map((data, index) =>
                                                         <Image key={index} alt="pop up" src={data}
                                                             className={styles.popup2_image}
                                                             height={"70%"} width={"100%"}
@@ -208,8 +208,8 @@ class Popup2 extends Component {
                                     <div className={styles.del}>
                                         <h2 className={styles.popup2_name}>{name}</h2>
                                         <ul className={styles.popup2_del}>
-                                            <li><p style={{ color: "#6D6D6D" }}>CookTime:</p><h5>{this.props.cookTime} Minute{parseInt(this.props.cookTime) > 1 ? 's' : ''}</h5></li>
-                                            <li><p style={{ color: "#6D6D6D" }}>PrepTime:</p><h5>{this.props.prepTime} Minute{parseInt(this.props.prepTime) > 1 ? 's' : ''}</h5></li>
+                                            <li><p style={{ color: "#6D6D6D" }}>Cook time:</p><h5>{this.props.cookTime} Minute{parseInt(this.props.cookTime) > 1 ? 's' : ''}</h5></li>
+                                            <li><p style={{ color: "#6D6D6D" }}>Prep time:</p><h5>{this.props.prepTime} Minute{parseInt(this.props.prepTime) > 1 ? 's' : ''}</h5></li>
                                             <li><p style={{ color: "#6D6D6D" }}>Serves:</p><h5>{this.props.serves} {parseInt(this.props.serves) > 1 ? 'people' : 'person'}</h5></li>
                                             <li><p style={{ color: "#6D6D6D" }}>Chef:</p><h5>{this.props.chef}</h5></li>
                                         </ul>

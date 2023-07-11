@@ -1,5 +1,4 @@
-
-.meal_container{
+.meal_container {
     position: relative;
     background: #FCFCFC;
     display: grid;
@@ -7,14 +6,73 @@
     margin-top: 155px;
 }
 
-.meal_sections{
+.reject_card {
+    background-color: white;
+    height: 35rem;
+    display: flex;
+    flex-direction: column;
+
+}
+.cards{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.flex{
+    display: flex;
+}
+
+.users {
+    fill: #000000;
+    width: 17px;
+}
+.info{
+    margin-left: .8rem;
+}
+.flex_card{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 60%;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    margin-top: 1rem;
+}
+.admin_buttons{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 3rem;
+}
+.submit_button{
+    padding: .9rem 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    text-align: center;
+    border: 1px solid grey;
+}
+.submit_button2{
+   padding: 1rem 3rem;
+    text-align: center;
+    margin-left: 1.2rem;
+    background-color: #04D505;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.meal_sections {
     display: grid;
     padding: 2rem 0;
     width: 100%;
     grid-gap: 2rem;
 }
 
-.meal_section_1{
+.meal_section_1 {
     padding-top: 2rem;
     width: 95%;
     display: flex;
@@ -93,7 +151,7 @@
     justify-content: start;
 }
 
-.meal_section_2_images > span{
+.meal_section_2_images>span {
     width: 75px !important;
     height: 72px !important;
 }
@@ -111,7 +169,7 @@
     grid-gap: 1rem;
 }
 
-.meal_section_2_col_1 > span{
+.meal_section_2_col_1>span {
     width: 434px !important;
     height: 315px !important;
 }
@@ -143,13 +201,13 @@
     word-break: break-all;
 }
 
-.store{
+.store {
     display: grid;
     grid-gap: 1rem;
     grid-auto-flow: column;
 }
 
-.store > h4{
+.store>h4 {
     margin: 0;
     font-style: normal;
     font-weight: 400;
@@ -159,18 +217,18 @@
     color: #F47900;
 }
 
-.store > div{
+.store>div {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.store_icon{
+.store_icon {
     fill: #F47900;
     width: 19px;
 }
 
-.store > div > p{
+.store>div>p {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -262,13 +320,13 @@
     color: #353535;
 }
 
-.meal_section_2_price{
+.meal_section_2_price {
     display: grid;
     justify-self: end;
     align-self: end;
 }
 
-.meal_section_2_price > h3{
+.meal_section_2_price>h3 {
     margin: 0;
     font-style: normal;
     font-weight: 500;
@@ -280,7 +338,7 @@
     color: #000000;
 }
 
-.meal_section_2_price > p{
+.meal_section_2_price>p {
     font-style: normal;
     font-weight: 500;
     font-size: 40px;
@@ -289,7 +347,7 @@
     color: #000000;
 }
 
-.meal_section_2_price > p > span{
+.meal_section_2_price>p>span {
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
@@ -299,7 +357,7 @@
     color: #949494;
 }
 
-.section_2_footer{
+.section_2_footer {
     display: grid;
     gap: 10px;
     grid-auto-flow: column;
@@ -309,7 +367,7 @@
     padding: 1rem 0 3rem;
 }
 
-.section_2_footer > div {
+.section_2_footer>div {
     display: grid;
     grid-auto-flow: column;
     grid-gap: 1rem;
@@ -318,7 +376,7 @@
     justify-self: start;
 }
 
-.section_2_footer > div > p {
+.section_2_footer>div>p {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -329,7 +387,7 @@
     color: #000000;
 }
 
-.section_2_footer > div > p > svg{
+.section_2_footer>div>p>svg {
     width: 12px;
     fill: #353535;
 }
@@ -345,13 +403,13 @@
     grid-gap: 10px;
 }
 
-.btnGroup{
+.btnGroup {
     justify-self: end !important;
     display: flex;
     gap: 10px;
 }
 
-.btnoutline{
+.btnoutline {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -371,7 +429,7 @@
     color: #353535;
 }
 
-.btnfill{
+.btnfill {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -390,31 +448,31 @@
     color: #FFFFFF;
 }
 
-.meal_section_3{
+.meal_section_3 {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     padding: 1rem 0 3rem;
 }
 
-.meal_section_32{
+.meal_section_32 {
     display: none;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     padding: 1rem 0 3rem;
 }
 
-.meal_details{
+.meal_details {
     display: grid;
     grid-auto-flow: column;
     justify-items: center;
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
-.meal_details> div{
+.meal_details>div {
     display: flex;
     gap: 5px;
     align-items: center;
 }
 
-.meal_details> div > h3{
+.meal_details>div>h3 {
     margin: 0;
     font-style: normal;
     font-weight: 400;
@@ -426,7 +484,7 @@
     color: #6D6D6D;
 }
 
-.meal_details > div > p{
+.meal_details>div>p {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -435,7 +493,7 @@
     color: #353535;
 }
 
-.meal_details > div > div{
+.meal_details>div>div {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -447,7 +505,7 @@
     grid-gap: 4px;
 }
 
-.meal_details > div > div > p{
+.meal_details>div>div>p {
     cursor: pointer;
     background-color: #F47900;
     width: 17px;
@@ -459,17 +517,17 @@
     justify-items: center;
 }
 
-.meal_section_4{
+.meal_section_4 {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     padding: 1rem 0 3rem;
 }
 
-.ingredient_container{
+.ingredient_container {
     display: grid;
     grid-gap: 1rem;
-  }
+}
 
-.ingredient_container > h3{
+.ingredient_container>h3 {
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -480,20 +538,20 @@
     margin: 0;
 }
 
-.ingredient_groups{
+.ingredient_groups {
 
     background: #FFFFFF;
     overflow: hidden;
-  }
+}
 
-  .ingredients_table {
+.ingredients_table {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
     overflow: scroll;
-  }
+}
 
-  .ingredients_head{
+.ingredients_head {
     display: grid;
     grid-template-columns: 2% 84px 69px 109px 14% 65px;
     justify-content: space-between;
@@ -501,18 +559,18 @@
     padding: 1rem;
     background: #F5F5F5;
     gap: 8px;
-  }
+}
 
-  .ingredients_body{
+.ingredients_body {
     height: 100%;
     overflow: scroll;
-  }
+}
 
-  .ingredients_table > tbody{
-      background: #FFFFFF;
-  }
+.ingredients_table>tbody {
+    background: #FFFFFF;
+}
 
-  .ingredients_tr{
+.ingredients_tr {
     display: grid;
     grid-template-columns: 2% 84px 69px 109px 14% 65px;
     justify-content: space-between;
@@ -521,29 +579,29 @@
     padding: 1rem;
     border-radius: 4px;
     gap: 8px;
-  }
+}
 
-  .ingredients_tr:nth-child(odd){
+.ingredients_tr:nth-child(odd) {
     background: #F5F5F5;
-  }
-  
-  .ingredients_tr > td:first-child{
+}
+
+.ingredients_tr>td:first-child {
     text-decoration-line: underline;
     color: #F47900 !important;
-  }
+}
 
-  .ingredients_tr > input{
+.ingredients_tr>input {
     color: #F47900;
     margin-right: -5rem;
     width: 15px;
-    }
+}
 
-    .ingredients_tr > input[type='checkbox']{
-        accent-color: #F47900;
-        background-color: #F47900;
-    }
+.ingredients_tr>input[type='checkbox'] {
+    accent-color: #F47900;
+    background-color: #F47900;
+}
 
-  .ingredients_th{
+.ingredients_th {
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -552,9 +610,9 @@
     color: #000000;
     text-align: start;
     overflow-wrap: break-word;
-  }
+}
 
-  .ingredients_td{
+.ingredients_td {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -564,9 +622,9 @@
 
     color: #353535;
     overflow-wrap: break-word;
-  }
+}
 
-  .ingredient_radio{
+.ingredient_radio {
     /* background-color: #f8f8f8; */
     /* padding: 2rem; */
     /* height: 6rem; */
@@ -577,7 +635,7 @@
     padding: 3rem 0;
 }
 
-.ingredient_radio_radio_button{
+.ingredient_radio_radio_button {
     width: 19px;
     height: 19px;
     border-radius: 50%;
@@ -593,7 +651,7 @@
     z-index: 1;
 }
 
-.ingredient_radio_radio_button::after{
+.ingredient_radio_radio_button::after {
     content: '';
     width: 13px;
     height: 13px;
@@ -605,18 +663,18 @@
 }
 
 
-.ingredient_radio_radioInput{
+.ingredient_radio_radioInput {
     display: none;
 }
 
-.ingredient_radio_radioLabel{
+.ingredient_radio_radioLabel {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
     /* identical to box height */
-    
-    
+
+
     color: #000000;
     grid-column: 2/3;
     grid-row: 1/2;
@@ -624,7 +682,7 @@
     z-index: 1;
 }
 
-.ingredient_radio_radioLabel > span{
+.ingredient_radio_radioLabel>span {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -635,11 +693,11 @@
     color: #04D505;
 }
 
-.ingredient_radio_radioInput:checked + .ingredient_radio_radio_button::after{
+.ingredient_radio_radioInput:checked+.ingredient_radio_radio_button::after {
     display: block;
 }
 
-.ingredient_radio_option{
+.ingredient_radio_option {
     display: grid;
     grid-auto-flow: column;
     /* justify-content: start; */
@@ -650,7 +708,7 @@
     grid-column-gap: 6px;
 }
 
-.meal_section_5{
+.meal_section_5 {
     display: grid;
     grid-gap: 3rem;
     justify-items: center;
@@ -658,7 +716,7 @@
     padding: 1rem 0 3rem;
 }
 
-.meal_section_5 > h3{
+.meal_section_5>h3 {
     width: 100%;
     margin: 0;
     font-style: normal;
@@ -670,30 +728,30 @@
     color: #000000;
 }
 
-.meal_section_5_row{
+.meal_section_5_row {
     display: grid;
     grid-template-columns: max-content 1fr;
     grid-gap: 3rem;
     width: 95%;
 }
 
-.meal_section_5_row_1 > span{
+.meal_section_5_row_1>span {
     width: 238px !important;
     height: 174px !important;
 }
 
-.meal_section_5_row_2{
+.meal_section_5_row_2 {
     display: grid;
     grid-gap: 1rem;
     align-content: flex-start;
 }
 
-.row_reverse{
+.row_reverse {
     grid-column: 2/3;
     grid-row: 1/2;
 }
 
-.meal_section_5_row_2_h3{
+.meal_section_5_row_2_h3 {
     margin: 0;
     font-style: normal;
     font-weight: 500;
@@ -705,7 +763,7 @@
     color: #000000;
 }
 
-.meal_section_5_row_2_p{
+.meal_section_5_row_2_p {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -716,7 +774,7 @@
     color: #353535;
 }
 
-.meal_section_6{
+.meal_section_6 {
     display: grid;
     grid-gap: 3rem;
     justify-items: center;
@@ -724,7 +782,7 @@
     padding: 1rem 0 3rem;
 }
 
-.meal_section_6 > h3{
+.meal_section_6>h3 {
     width: 100%;
     margin: 0;
     font-style: normal;
@@ -736,7 +794,7 @@
     color: #000000;
 }
 
-.meal_section_6 > ul{
+.meal_section_6>ul {
     width: 95%;
     list-style-type: none;
     display: flex;
@@ -749,7 +807,7 @@
     color: #000000;
 }
 
-.meal_section_7{
+.meal_section_7 {
     display: grid;
     grid-gap: 3rem;
     justify-items: center;
@@ -757,7 +815,7 @@
     padding: 1rem 0 3rem;
 }
 
-.meal_section_7 > h3{
+.meal_section_7>h3 {
     width: 100%;
     margin: 0;
     font-style: normal;
@@ -769,14 +827,14 @@
     color: #000000;
 }
 
-.meal_section_7 > div{
+.meal_section_7>div {
     width: 100%;
     background: #F1F1F1;
     border-radius: 4px;
     padding: 2rem 3rem;
 }
 
-.meal_section_7 > div > ul{
+.meal_section_7>div>ul {
     list-style-type: none;
     display: grid;
     gap: 2rem;
@@ -788,7 +846,7 @@
     color: #000000;
 }
 
-.meal_section_8{
+.meal_section_8 {
     display: grid;
     grid-gap: 3rem;
     justify-items: center;
@@ -796,7 +854,7 @@
     padding: 1rem 0 3rem;
 }
 
-.meal_section_8 > h3{
+.meal_section_8>h3 {
     width: 100%;
     margin: 0;
     font-style: normal;
@@ -808,7 +866,7 @@
     color: #000000;
 }
 
-.productcard_row{
+.productcard_row {
     display: grid;
     grid-gap: 3rem;
     align-content: start;
@@ -816,11 +874,11 @@
     width: 100%;
 }
 
-.productcard_col_1{
+.productcard_col_1 {
     justify-self: start;
 }
 
-.productcard_col_1 > h3{
+.productcard_col_1>h3 {
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
@@ -831,18 +889,18 @@
 
 }
 
-.productcard_col_2{
+.productcard_col_2 {
     width: 100%;
     display: grid;
     grid-gap: 2rem;
     justify-items: center;
 }
 
-.productcard_col_3{
+.productcard_col_3 {
     justify-self: center;
 }
 
-.productcard_col_3 > h5{
+.productcard_col_3>h5 {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -855,9 +913,9 @@
     display: grid;
     grid-gap: 8px;
     height: 100%;
-  }
-  
-  .productcard_productcards {
+}
+
+.productcard_productcards {
     width: 100%;
     height: max-content;
     display: grid;
@@ -868,17 +926,17 @@
     flex-wrap: wrap;
     justify-content: start;
     overflow-x: scroll;
-  }
-  
-  /* .productcard_productcard {
+}
+
+/* .productcard_productcard {
     display: grid;
     grid-gap: 1rem;
     animation: opacity 0.3s linear;
     position: relative;
     height: 100%;
   } */
-  
-  .productcard_productcard_name {
+
+.productcard_productcard_name {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -886,49 +944,49 @@
 
     color: #000000;
     margin: 0;
-  }
-  
-  .productcard_productcard_col {
+}
+
+.productcard_productcard_col {
     /* display: none; */
     display: grid;
     grid-gap: 5px;
     grid-auto-flow: column;
     justify-content: space-between;
-  }
-  
-  .productcard_productcard_category {
+}
+
+.productcard_productcard_category {
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
     line-height: 21px;
     text-transform: capitalize;
     /* identical to box height, or 150% */
-  
+
     color: #222321;
     margin-top: -10px;
-  }
-  
-  .productcard_productcard_price {
+}
+
+.productcard_productcard_price {
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 19px;
 
     color: #000000;
-  }
-  
-  .productcard_productcard_img_container {
+}
+
+.productcard_productcard_img_container {
     width: 100%;
     height: 161px;
     /* display: grid; */
-  }
+}
 
-  .productcard_productcard_img_container > span{
+.productcard_productcard_img_container>span {
     width: 180px !important;
     height: 161px !important;
-  }
-  
-  .productcard_productcard_img {
+}
+
+.productcard_productcard_img {
     width: 100%;
     height: 161px;
     grid-column: 1/-1;
@@ -937,9 +995,9 @@
     background-size: 100% 100%;
     filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1));
     border-radius: 8px;
-  }
+}
 
-  .productcard_productcard > p{
+.productcard_productcard>p {
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -948,41 +1006,41 @@
 
 
     color: #6D6D6D;
-  }
+}
 
-  .productcard_productcard_duration{
-   font-style: normal;
-   font-weight: 400;
-   font-size: 16px;
-   line-height: 19px;
-   
-   color: #6D6D6D; 
-  }
+.productcard_productcard_duration {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
 
-  .product_review_rating_icons{
+    color: #6D6D6D;
+}
+
+.product_review_rating_icons {
     justify-self: start;
     display: flex;
 }
 
-.product_review_rating_icon{
+.product_review_rating_icon {
     width: 14px;
     height: 13px;
     fill: #04D505;
 }
 
-.product_review_rating_icon2{
+.product_review_rating_icon2 {
     width: 14px;
     height: 13px;
     fill: #D9D9D9;
 }
 
 @media screen and (max-width: 1165px) {
-    .meal_section_2_col_1 > span{
+    .meal_section_2_col_1>span {
         width: 234px !important;
         height: 115px !important;
     }
 
-    .section_2_footer{
+    .section_2_footer {
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
@@ -990,16 +1048,16 @@
 }
 
 @media screen and (max-width: 1005px) {
-    .meal_section_2{
+    .meal_section_2 {
         grid-template-columns: 1fr;
     }
 
-    .meal_section_2_col_1 > span{
+    .meal_section_2_col_1>span {
         width: 434px !important;
         height: 315px !important;
     }
 
-    .section_2_footer{
+    .section_2_footer {
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
@@ -1017,7 +1075,7 @@
         height: 200px;
     }
 
-    .store{
+    .store {
         display: flex;
         flex-wrap: wrap;
     }
@@ -1027,43 +1085,43 @@
         height: 45px;
     }
 
-    .ingredients_head{
+    .ingredients_head {
         grid-template-columns: 5% 1fr 1fr 1fr;
     }
 
-    .ingredients_tr{
+    .ingredients_tr {
         grid-template-columns: 5% 1fr 1fr 1fr;
     }
 
-    .meal_details{
+    .meal_details {
         justify-items: start;
         grid-template-columns: 1fr 1fr 1fr;
     }
 
-    .hide{
+    .hide {
         display: none !important;
     }
 
-    .meal_section_2_details{
+    .meal_section_2_details {
         width: 100%;
         grid-gap: 1rem;
     }
 
-    .meal_section_2_description{
+    .meal_section_2_description {
         display: none;
     }
 
-    .meal_section_32{
+    .meal_section_32 {
         display: grid;
         grid-gap: 1rem;
         border: none;
     }
-    
-    .section_2_footer{
+
+    .section_2_footer {
         justify-content: end;
     }
 
-    .btnoutline{
+    .btnoutline {
         width: 122px;
         height: 35px;
         font-weight: 400;
@@ -1072,7 +1130,7 @@
         padding: 0;
     }
 
-    .btnfill{
+    .btnfill {
         width: 94px;
         height: 35px;
         background: #04D505;
@@ -1082,7 +1140,7 @@
         line-height: 13px;
     }
 
-    .meal_section_3{
+    .meal_section_3 {
         display: none;
     }
 }
@@ -1104,7 +1162,7 @@
         height: 163px;
     }
 
-    .meal_section_2_col_1 > span{
+    .meal_section_2_col_1>span {
         width: 100% !important;
     }
 
@@ -1126,105 +1184,105 @@
         line-height: 22px;
     }
 
-    .store > h4{
+    .store>h4 {
         font-weight: 400;
         font-size: 11px;
         line-height: 13px;
     }
 
-    .store_icon{
+    .store_icon {
         width: 10px;
     }
 
-    .store > div > p{
+    .store>div>p {
         font-weight: 400;
         font-size: 11px;
         line-height: 13px;
     }
 
-    .meal_details{
+    .meal_details {
         grid-auto-flow: unset;
         grid-template-columns: 1fr 1fr;
         justify-items: unset;
         grid-gap: 10px;
     }
 
-    .meal_details > div > h3{
+    .meal_details>div>h3 {
         font-weight: 400;
         font-size: 10px;
         line-height: 12px;
         margin: 0;
     }
 
-    .meal_details > div > p{
+    .meal_details>div>p {
         font-weight: 400;
         font-size: 12px;
 
     }
 
-    .meal_section_2_price > h3{
+    .meal_section_2_price>h3 {
         display: none;
     }
 
-    .meal_section_2_price > p{
+    .meal_section_2_price>p {
         font-weight: 500;
         font-size: 20px;
         line-height: 24px;
     }
 
-    .ingredients_th{
+    .ingredients_th {
         font-weight: 400;
         font-size: 12px;
         line-height: 15px;
         text-align: start !important;
     }
 
-    .ingredients_td{
+    .ingredients_td {
         font-weight: 400;
         font-size: 12px;
         line-height: 15px;
         text-align: start !important;
     }
 
-    .ingredient_radio_radioLabel{
+    .ingredient_radio_radioLabel {
         font-weight: 400;
         font-size: 12px;
         line-height: 15px;
     }
 
-    .ingredient_radio_radioLabel > span{
+    .ingredient_radio_radioLabel>span {
         font-weight: 400;
         font-size: 12px;
         line-height: 15px;
     }
 
-    .meal_section_6{
+    .meal_section_6 {
         grid-gap: 1rem;
     }
 
-    .meal_section_6 > h3{
+    .meal_section_6>h3 {
         font-weight: 500;
         font-size: 14px;
         line-height: 17px;
     }
 
-    .meal_section_6 > ul{
+    .meal_section_6>ul {
         font-weight: 400;
         font-size: 11px;
         line-height: 13px;
     }
 
-    .meal_section_7{
+    .meal_section_7 {
         grid-gap: 1rem;
     }
 
-    .meal_section_7 > h3{
+    .meal_section_7>h3 {
         font-weight: 500;
         font-size: 14px;
         line-height: 17px;
     }
 
-    .meal_section_7 > div > ul{
+    .meal_section_7>div>ul {
         font-weight: 400;
         font-size: 11px;
         line-height: 13px;
@@ -1245,12 +1303,12 @@
         width: 100%;
     }
 
-    .meal_section_2_col_1 > span{
+    .meal_section_2_col_1>span {
         width: 272px !important;
         height: 168px !important;
     }
 
-    .meal_section_2_images > span{
+    .meal_section_2_images>span {
         width: 46px !important;
         height: 46px !important;
     }

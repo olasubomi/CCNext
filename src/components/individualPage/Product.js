@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./product.module.css";
 
 import Head from "next/head";
@@ -10,6 +10,7 @@ import Reviews from "./Reviews";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
 function Product(props) {
+    const [formatted_ingredients, set_formatted_ingredients] = useState([''])
     const url = 'http://localhost:3000/'
     // console.log(props.product.item_data.product_size, 'item_data')
     // console.log(props.product.item_data.product_size?.map((elem, id) => (
@@ -17,6 +18,14 @@ function Product(props) {
     //         <p>{elem}</p>
     //     </div>
     // )), 'hellooo')
+
+    useEffect(() => {
+        if (props.product.formatted_ingredients) {
+            set_formatted_ingredients(props.product.formatted_ingredients)
+        }
+    }, [props.product.formatted_ingredients])
+
+    console.log('props.product.formatted_ingredients', props.product.formatted_ingredients)
     return (
         <>
             <Head>
@@ -71,12 +80,12 @@ function Product(props) {
                                 <div className={styles.product_section_2_categories}>
                                     <h3 className={styles.product_section_2_category_name}>Product size</h3>
                                     <p className={styles.product_section_2_category}>{props.product.item_data?.product_size && Array.isArray(props.product.item_data.product_size) && (
-                                            props.product.item_data.product_size.map((elem, id) => (
-                                                <div key={id}>
-                                                    <p>{elem}</p>
-                                                </div>
-                                            ))
-                                        )
+                                        props.product.item_data.product_size.map((elem, id) => (
+                                            <div key={id}>
+                                                <p>{elem}</p>
+                                            </div>
+                                        ))
+                                    )
                                     }
                                     </p>
                                 </div>
@@ -172,6 +181,17 @@ function Product(props) {
                     </div>
                 </div> */}
 
+                <div className={styles.product_section_8}>
+                    <h3>Product Ingredients</h3>
+                    {formatted_ingredients.length &&
+                        formatted_ingredients.map((ele, idx) => {
+                            if(idx !== formatted_ingredients.length - 1){
+                                return ele.concat(', ')
+                            } else {
+                                return ele
+                            }
+                        })}
+                </div>
                 <div className={styles.product_section_8}>
                     <h3>Stores location</h3>
                     {props.product.stores_available?.length > 0 ?

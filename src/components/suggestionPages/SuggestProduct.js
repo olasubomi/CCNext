@@ -101,6 +101,7 @@ class SuggestProductForm extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
 
+    console.log('nutritional-strings=-=-=-', this.state)
     // get all product Names***
     // var url = "https://chopchowdev/api/products/getAllProducts";
     var url = "http://localhost:5000/api/products/getAllProducts";
@@ -586,19 +587,25 @@ class SuggestProductForm extends Component {
     }
   }
 
-  addNutritionalFactToProduct = (event) => {
-    console.log("COMES IN addIngredientToProduct");
+  addNutritionalFactToProduct = (
+    event,
+    id = 'currentIngredient',
+    qty = 'currentIngredientQuantity',
+    msr = 'currentIngredientMeasurement') => {
+
+
+    console.log("COMES IN addIngredientToProduct", this.state.nutritionalStrings);
     event.preventDefault();
     var properIngredientStringSyntax;
-    var ingredientValue = document.getElementById("currentIngredient").value;
-    var quantityValue = document.getElementById("currentIngredientQuantity").value;
+    var ingredientValue = document.getElementById(id).value;
+    var quantityValue = document.getElementById(qty).value;
     // best to get the measurement from the state
     // perhaps becuse inner html is defined before state is updated
     // var measurementValue = this.state.currentIngredientMeasurement;
-    var measurementValue = document.getElementById("currentIngredientMeasurement").value;
+    var measurementValue = document.getElementById(msr).value;
 
 
-    if (ingredientValue === "") { window.alert("Enter an ingredient to add to product"); return; }
+    if (ingredientValue === "") { window.alert("Enter an ingredient to add to product@@"); return; }
     // update ingredient string syntax for no quantity or no measurement.
 
     // Calories: 5g, 5%
@@ -842,7 +849,7 @@ class SuggestProductForm extends Component {
       let information = ele.split(':')[0]?.trim()?.toLowerCase();
       let value = ele.split(':')[1]?.trim()?.toLowerCase()
       information = information?.split(' ')?.length > 1 ? information?.split(' ').map(ele => ele.toLowerCase()).join('_') : information;
-      obj[information] = value; 
+      obj[information] = value;
       return obj
     })
 
@@ -851,18 +858,37 @@ class SuggestProductForm extends Component {
       product_name: productName
     }
 
+    let description = {}
+
     if (arr.length) {
       for (let ele of arr) {
         for (let val in ele) {
-          productObject[val] = ele[val]
+          productObject[val] = ele[val];
+          description[val] = ele[val];
         }
       }
+    }
+    let arr2 = []
+
+    const capitalizeFirstLetter = (str) => {
+      return str.replace(/\b\w/g, (match) => match.toUpperCase());
+    };
+
+    for (let ele of Object.keys(description)) {
+      arr2.push({
+        object_name: ele,
+        object_quantity: description[ele].match(/\d+/)[0],
+        object_measurement: description[ele].match(/[a-zA-Z]+/)[0],
+        formatted_string: `${ele.split('_').map(capitalizeFirstLetter).join(' ')}: ${description[ele]}`
+      })
     }
 
     suggestProductForm.append("item_data", JSON.stringify(productObject))
 
+    suggestProductForm.append('description', JSON.stringify(arr2));
+
     suggestProductForm.append("formatted_ingredients", JSON.stringify(ingredientStrings));
-    suggestProductForm.append("store_available", '63d426b416b83177aaeaed96');
+    // suggestProductForm.append("store_available", '63d426b416b83177aaeaed96');
     suggestProductForm.append("item_type", this.props.suggestionType)
     suggestProductForm.append("user", JSON.parse(localStorage.getItem('user'))._id);
     // list of products quantity measurements (created on submit Product)
@@ -873,7 +899,7 @@ class SuggestProductForm extends Component {
     // suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
     all_ingredients_formatted.map((individualIngredients) => {
       console.log(individualIngredients);
-      suggestProductForm.append('hidden_ingredients_in_product', JSON.stringify(individualIngredients));
+      // suggestProductForm.append('hidden_ingredients_in_product', JSON.stringify(individualIngredients));
     })
     // new suggested products
     // suggestProductForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
@@ -935,6 +961,7 @@ class SuggestProductForm extends Component {
   render() {
 
     const { ingredientStrings, sizeStrings, nutritionalStrings } = this.state;
+
 
     return (
       <div className={styles.suggestion_section_2}>
@@ -1131,7 +1158,7 @@ class SuggestProductForm extends Component {
                 options={this.nutritionFacts.map((option) => option)}
                 // onChange={(ev)=>this.onTextFieldChange(ev)}
                 value={this.state.currentNutritionName}
-                onChange={(ev, val) => this.handleProductNameInput(ev, val)}
+                onChange={(ev, val) => this.handleProductNameInput(ev, val, 'currentNutritionName')}
                 freeSolo
                 renderInput={(params) => (<TextField {...params} id="currentNutritionName"
                   value={this.state.currentNutritionName} variant="outlined" type="text"
@@ -1154,23 +1181,23 @@ class SuggestProductForm extends Component {
 
               <div className={styles.suggestion_form_2_col_2}>
                 <div className={styles.suggestion_form_group}>
-                  <label htmlFor="currentIngredientMeasurement" className={styles.suggestion_form_label}>
+                  <label htmlFor="currentIngredientMeasurement1" className={styles.suggestion_form_label}>
                     Measurements
                   </label>
                   <Autocomplete
-                    id="currentIngredientMeasurement"
+                    id="currentIngredientMeasurement1"
                     options={this.measurements.map((option) => option)}
                     value={this.state.currentIngredientMeasurement}
                     onChange={this.handleIngredientMeasurement}
                     freeSolo
                     renderInput={(params) => (<TextField {...params}
-                      value={this.state.currentIngredientMeasurement} id="currentIngredientMeasurement"
+                      value={this.state.currentIngredientMeasurement} id="currentIngredientMeasurement1"
                       variant="outlined" type="text" />)}
                   />
                 </div>
               </div >
 
-              <Button variant="contained" disableRipple onClick={this.addNutritionalFactToProduct} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Nutrition info</Button>
+              <Button variant="contained" disableRipple onClick={(event) => this.addNutritionalFactToProduct(event, 'currentNutritionName', 'currentIngredientQuantity', 'currentIngredientMeasurement1')} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Nutrition info</Button>
             </div >
 
             <Stack direction="row" spacing={1} className={styles.stack}>
@@ -1222,7 +1249,7 @@ class SuggestProductForm extends Component {
             </div >
             <Stack direction="row" spacing={1} className={styles.stack}>
               {
-                nutritionalStrings.map((data, index) => (
+                [].map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
@@ -1250,13 +1277,13 @@ class SuggestProductForm extends Component {
               </Row> */}
           <u >View privacy policy</u>
           <div id="ProductAdditionalDataDisplayed" >
-            <Popup1 
-            popup='product' openModal={this.state.openModal} closeModal={this.closeModal}
+            <Popup1
+              popup='product' openModal={this.state.openModal} closeModal={this.closeModal}
               name={this.state.productName} description={this.state.productDescription}
               imageData={this.state.productImagesData[0]}
               image={this.state.productImagesData[0]}
               imagesData={this.state.productImagesData.slice(1)} categories={this.state.suggestedCategories}
-              sizesList={this.state.sizeStrings} 
+              sizesList={this.state.sizeStrings}
               ingredientList={ingredientStrings}
               ingredientGroupList={ingredientStrings}
               nutritionalStrings={this.state.nutritionalStrings}

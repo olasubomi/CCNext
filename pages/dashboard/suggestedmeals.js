@@ -811,7 +811,7 @@ const SuggestedMeals = (props) => {
             setPageState(prev => prev - 1)
         }
     }
-
+    // console.log(suggestion.prepime, 'prep time not showing')
     return (
         <div className={container + " " + col2}>
             <div className="alert">
@@ -1011,6 +1011,14 @@ const SuggestedMeals = (props) => {
                                     {suggestion.publicly_available}
                                 </p>
                             </div>
+                            <div className={styles.status}>
+                                {suggestion.item_status.map((elem) => (
+                                    <p className={elem.status === 'Public'
+                                        ? styles.statusText : elem.status === 'Pending'
+                                            ? styles.statusText2 : elem.status === 'Rejected'
+                                                ? styles.rejected : styles.statusText2} >{elem.status}</p>
+                                ))}
+                            </div>
                         </div>
                         {searchType === 'Meal' ?
                             <Meal meal={suggestion} auth={props.auth} show={false} />
@@ -1119,12 +1127,13 @@ const SuggestedMeals = (props) => {
                     name={suggestion.meal_name}
                     description={suggestion.item_name}
                     imageData={suggestion.item_images[0]}
+                    imagesData={suggestion.item_images}
                     image={suggestion.item_images[0]}
                     // imagesData={suggestion.meal_images.slice(1)} categories={JSON.parse(suggestion.meal_categories).toString().split(',')}
-                    prepTime={suggestion.prep_time}
-                    cookTime={suggestion.cook_time}
-                    serves={suggestion.servings}
-                    chef={suggestion.chef}
+                    prepTime={suggestion.item_data.prep_time}
+                    cookTime={suggestion.item_data.cook_time}
+                    serves={suggestion.item_data.servings}
+                    chef={suggestion.item_data.chef}
                     ingredientsList={
                         suggestion.formatted_ingredients?.length
                             ? suggestion.formatted_ingredients

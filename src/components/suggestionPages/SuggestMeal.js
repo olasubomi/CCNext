@@ -2513,7 +2513,7 @@ class SuggestMealForm extends Component {
               description={this.state.intro}
               imageData={this.state.mealImagesData[0]}
               image={this.state.mealImage[0]}
-              imagesData={this.state.mealImagesData.slice(1)}
+              imagesData={this.state.mealImagesData}
               allImagesData={this.state.mealImagesData}
               categories={this.state.suggestedCategories}
               prepTime={this.state.prepTime}

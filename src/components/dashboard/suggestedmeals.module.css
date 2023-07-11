@@ -10,7 +10,28 @@
     grid-template-columns: 1fr;
     align-items: center;
 }
+.statusText{
+    background-color: #DEEDE5;
+    padding: .5rem 2rem;
+    font-size: 1.32rem;
+    border-radius: 1.4rem;
+    color: #5CA37B;
 
+}
+.statusText2{
+    background-color: rgba(137, 62, 233, 0.25);
+    padding: .5rem 1.7rem;
+    font-size: 1.32rem;
+    border-radius: 1.4rem;
+    color: #893EE9;
+}
+.rejected{
+    background-color: rgba(244, 7, 7, 0.25);
+    color: #F63636;
+    font-size: 1.32rem;
+    border-radius: 1.4rem;
+    padding: .5rem 1.5rem;
+}
 .suggestedmeal_search_con >div{
     justify-self: center;
 }
@@ -708,7 +729,10 @@
         justify-content: space-between;
         align-items: center;
     }
-
+    .status{
+        position: absolute;
+        right: 3%;
+    }
     .goback_header_pages {
         cursor: pointer;
         list-style-type: none;
