@@ -31,19 +31,21 @@ const individualProductPage = () => {
         "Nov",
         "Dec",
       ]
-      const getProduct = async (id) => {
+      const getProduct = async (name) => {
+        console.log('name', name)
         // let meal = await axios.get(`/meals/get-meal/${id}`)
-        let product = await axios.get(`/items/user/${id}`)
+        let product = await axios.get(`/items/user/${name}`)
         console.log(product.data.data.meal, "get props")
     
         setProps(product.data.data[0] || {})
     
     }
     useEffect(() => {
-        if(router.query?.id){
-            getProduct(router.query.id)
+        console.log('query--', router.query?.name)
+        if(router.query?.name){
+            getProduct(router.query?.name)
         }
-    },[router.query?.id])
+    },[router.query?.name])
 
 
     return (
@@ -86,14 +88,14 @@ export async function getServerSideProps(context){
     // const res = await fetch('https://.../posts')
     // const posts = await res.json()
     // console.log(context)
-    let {id} = context.params
-    let product = await axios.get('/products/get-all-products/1?publicly_available=Public&_id='+id)
+    // let {name} = context.params
+    // let product = await axios.get('/products/get-all-products/1?publicly_available=Public&_id='+name)
 
     // console.log(meal.data)
 
     return {
         props: {
-            product: product.data
+            // product: product.data
         },
         // Next.js will attempt to re-generate the page:
         // - When a request comes in

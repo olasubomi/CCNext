@@ -18,7 +18,7 @@ const individualMealPage = () => {
         if(props.meal && props.meal.data && props.meal.data.meals?.length === 0){
             // window.location.assign('/')
         }
-    })
+    }, [])
 
     const months = [
         "Jan",
@@ -36,19 +36,19 @@ const individualMealPage = () => {
       ]
 console.log(props, "mealsssss")
 console.log(router.query.id, "this meal")
-const getMeal = async (id) => {
+const getMeal = async (name) => {
     // let meal = await axios.get(`/meals/get-meal/${id}`)
-    let meal = await axios.get(`/items/user/${id}`)
+    let meal = await axios.get(`/items/user/${name}`)
     console.log(meal.data.data.meal, "get props")
 
     setProps(meal.data.data[0] || {})
 
 }
 useEffect(() => {
-    if(router.query?.id){
-        getMeal(router.query.id)
+    if(router.query?.name){
+        getMeal(router.query?.name)
     }
-},[router.query?.id])
+},[router.query?.name])
 console.log(props, 'meals id page')
     return (
         <div>

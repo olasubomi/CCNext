@@ -1226,6 +1226,9 @@ class SuggestProductForm extends Component {
                   multiple
                   id="tags-outlined"
                   freeSolo
+                  style={{
+                    textTransform: 'capitalize'
+                  }}
                   clearOnBlur
                   onBlur={this.categoryBlur}
                   // filterSelectedOptions

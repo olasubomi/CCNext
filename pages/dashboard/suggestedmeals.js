@@ -27,6 +27,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import SuggestedProductRow from '../../src/components/dashboard/suggestedproductRow';
 import { toast } from 'react-toastify';
+import { SuggestedDescription } from '../../src/components/dashboard/suggesteddescriptionRow';
+import { SuggestedMeasurement } from '../../src/components/dashboard/suggestedmeasurementRow';
 
 const SuggestedMeals = (props) => {
     const router = useRouter()
@@ -60,11 +62,15 @@ const SuggestedMeals = (props) => {
         meals: [],
         products: []
     });
-
+    const [allDescriptions, setAllDescriptions] = useState([]);
+    const [allMeasurement, setAllMeasurement] = useState([]);
 
 
     useEffect(() => {
+
         getUserItems()
+        getAllDescriptions()
+        getAllMeasurement()
     }, [props.auth]);
 
     const getUserItems = (newPage) => {
@@ -95,6 +101,77 @@ const SuggestedMeals = (props) => {
                     setSuggestionsState(data.data.data)
                 }
             })
+        }
+    }
+
+    const getAllDescriptions = async () => {
+        try {
+            const resp = await axios.get('/description');
+            if (Array.isArray(resp?.data?.data) && resp?.data?.data?.length) {
+                setAllDescriptions(resp.data.data)
+            }
+        } catch (e) {
+            console.log('err', e)
+        }
+
+    }
+
+    const updateDescription = async (payload) => {
+        try {
+            const resp = await axios.patch('/description', payload)
+            if (resp.data.status === 200) {
+                toast.success('Decription status updated')
+                getAllDescriptions()
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const deleteDescription = async (id) => {
+        try {
+            const resp = await axios.delete(`/description/${id}`)
+            if (resp.data.status === 200) {
+                toast.success('Decription deleted')
+                getAllDescriptions()
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const getAllMeasurement = async () => {
+        try {
+            const resp = await axios.get('/measurement');
+            if (Array.isArray(resp?.data?.data) && resp?.data?.data?.length) {
+                setAllMeasurement(resp.data.data)
+            }
+        } catch (e) {
+            console.log('err', e)
+        }
+    }
+
+    const updateMeasurement = async (payload) => {
+        try {
+            const resp = await axios.post(`/measurement/update`, payload)
+            if (resp.data.status === 200) {
+                toast.success('Measurement updated')
+                getAllMeasurement()
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const deleteMeasurement = async (payload) => {
+        try {
+            const resp = await axios.post(`/measurement/delete`, payload)
+            if (resp.data.status === 200) {
+                toast.success('Measurement deleted')
+                getAllMeasurement()
+            }
+        } catch (e) {
+            console.log(e)
         }
     }
 
@@ -855,6 +932,9 @@ const SuggestedMeals = (props) => {
                                         <div onClick={() => handleSearchType2('Meal')} className={styles.mode + ' ' + styles.left_mode + ' ' + (searchType === 'Meal' ? styles.active_mode : '')}>Meal</div>
                                         <div onClick={() => handleSearchType2('Product')} className={styles.mode + ' ' + ' ' + (searchType === 'Product' ? styles.active_mode : '')}>Product</div>
                                         <div onClick={() => handleSearchType2('Category')} className={styles.mode + ' ' + styles.right_mode + ' ' + (searchType === 'Category' ? styles.active_mode : '')}>Category</div>
+                                        <div onClick={() => handleSearchType2('Description')} className={styles.mode + ' ' + styles.right_mode + ' ' + (searchType === 'Description' ? styles.active_mode : '')}>Description</div>
+                                        <div onClick={() => handleSearchType2('Measurement')} className={styles.mode + ' ' + styles.right_mode + ' ' + (searchType === 'Measurement' ? styles.active_mode : '')}>Measurement</div>
+
                                     </div>
                                     {props.auth.authUser.user_type !== 'admin' &&
                                         <div className={styles.suggestedmeal_row2_col2}>
@@ -874,19 +954,22 @@ const SuggestedMeals = (props) => {
                                 </div>
                                 <div className={styles.suggestedmeal}>
                                     <div className={styles.request_table}>
-                                        <div>
-                                            <div className={styles.request_tr + ' ' + (props.auth.authUser.user_type === 'admin' ? styles.admin_request_tr :
-                                                props.auth.authUser.user_type === 'customer' ? styles.customer_request_tr :
-                                                    props.auth.authUser.user_type === 'supplier' ? styles.supplier_request_tr : '')}>
-                                                <input name='id' type="checkbox" />
-                                                {/* <p className={styles.request_th}>ID number</p> */}
-                                                <p className={styles.request_th}>Name</p>
-                                                <p className={styles.request_th} style={{ justifySelf: 'center' }}>Status <FillterIcon /></p>
-                                                <p className={styles.request_th + " " + styles.hideData}>Categories <FillterIcon /></p>
-                                                <p className={styles.request_th + " " + styles.hideData}>Date Created <FillterIcon /></p>
-                                                <p className={styles.request_th} style={{ textAlign: 'center' }}>Action</p>
+                                        {
+                                            searchType !== 'Description' && searchType !== 'Measurement'
+                                            && <div>
+                                                <div className={styles.request_tr + ' ' + (props.auth.authUser.user_type === 'admin' ? styles.admin_request_tr :
+                                                    props.auth.authUser.user_type === 'customer' ? styles.customer_request_tr :
+                                                        props.auth.authUser.user_type === 'supplier' ? styles.supplier_request_tr : '')}>
+                                                    <input name='id' type="checkbox" />
+                                                    {/* <p className={styles.request_th}>ID number</p> */}
+                                                    <p className={styles.request_th}>Name</p>
+                                                    <p className={styles.request_th} style={{ justifySelf: 'center' }}>Status <FillterIcon /></p>
+                                                    <p className={styles.request_th + " " + styles.hideData}>Categories <FillterIcon /></p>
+                                                    <p className={styles.request_th + " " + styles.hideData}>Date Created <FillterIcon /></p>
+                                                    <p className={styles.request_th} style={{ textAlign: 'center' }}>Action</p>
+                                                </div>
                                             </div>
-                                        </div>
+                                        }
                                         <div>
                                             {
                                                 searchType === 'Meal' && <>
@@ -935,6 +1018,22 @@ const SuggestedMeals = (props) => {
                                                         })
                                                     }
                                                 </>
+                                            }
+
+                                            {
+                                                searchType === 'Description'
+                                                && <SuggestedDescription
+                                                    updateDescription={updateDescription}
+                                                    deleteDescription={deleteDescription}
+                                                    descriptions={allDescriptions}
+                                                />
+                                            }
+                                            {
+                                                searchType === 'Measurement'
+                                                && <SuggestedMeasurement
+                                                    deleteMeasurement={deleteMeasurement}
+                                                    updateMeasurement={updateMeasurement}
+                                                    measurements={allMeasurement} />
                                             }
 
                                         </div>
@@ -1196,6 +1295,7 @@ const SuggestedMeals = (props) => {
                     suggested={true}
                     id={suggestion.id}
                     ingredientGroupList={suggestion.formatted_ingredients}
+                    item_description={suggestion.item_description}
                 />
             }
 

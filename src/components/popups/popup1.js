@@ -71,9 +71,10 @@ class Popup1 extends Component {
 
     render() {
 
-        const { popup, imageData, imagesData, name, description, categories, descriptionsList, ingredientList, sizesList, nutritionalStrings, ingredientGroupList } = this.props
+        const { popup, imageData, imagesData, name, description, categories, descriptionsList, ingredientList, sizesList, nutritionalStrings, ingredientGroupList, item_description } = this.props
         console.log(imageData, 'imageData')
         console.log(this.props, "DISPLAY")
+        console.log('item_description', item_description)
 
         return (
             <>
@@ -97,7 +98,7 @@ class Popup1 extends Component {
                                 </div>
                                 <div className={styles.popup_images}>
                                     {
-                                        (Array.isArray(imageData) ? [...imageData.slice(1, )] : imagesData).map((data, index) => {
+                                        (Array.isArray(imageData) ? [...imageData.slice(1,)] : imagesData).map((data, index) => {
                                             console.log('data', data)
                                             return (
                                                 <Image key={index}
@@ -121,6 +122,7 @@ class Popup1 extends Component {
                                     <h3 className={styles.popup_category_name}>Product Category</h3>
                                     <p className={styles.popup_category}>{categories.map((cat) => cat + ', ')}</p>
                                 </div>
+
                             </div>
                             <div className={styles.popup_col_2}>
                                 <div className={styles.popup_top}>
@@ -148,6 +150,16 @@ class Popup1 extends Component {
                                                     {
                                                         ingredientGroupList?.map((ingredient, idx) => <div>{ingredient}, </div>)}
                                                 </p>
+                                            </div>
+                                            <div className={styles.popup_categories}>
+                                                <h3 className={styles.popup_category_name}>Product Description</h3>
+                                                <p className={styles.popup_category}>{item_description.map((descrip) => (
+                                                    <div key={descrip._id}>
+                                                        <div>{descrip?.formatted_string}</div><br />
+                                                    </div>
+                                                ))}
+                                                </p>
+                                                
                                             </div>
 
                                             {/* <div>

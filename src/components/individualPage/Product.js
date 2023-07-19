@@ -20,6 +20,7 @@ function Product(props) {
     // )), 'hellooo')
 
     useEffect(() => {
+        console.log('props', props.product)
         if (props.product.formatted_ingredients) {
             set_formatted_ingredients(props.product.formatted_ingredients)
         }
@@ -191,6 +192,13 @@ function Product(props) {
                                 return ele
                             }
                         })}
+                </div>
+                <div className={styles.product_section_8}>
+                    <h3>Product Description</h3>
+                    {props?.product?.item_description?.length &&
+                        props.product.item_description.map((ele, idx) => (
+                            <div key={idx}>{ele?.formatted_string}</div>
+                        ))}
                 </div>
                 <div className={styles.product_section_8}>
                     <h3>Stores location</h3>
