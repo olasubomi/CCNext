@@ -1,18 +1,39 @@
 import styles from './suggesteddescription.module.css'
 import axios from '../../util/Api'
+import { CloseFillIcon, FillterIcon } from '../../components/icons'
 
-export const SuggestedDescription = ({ descriptions, updateDescription, deleteDescription }) => {
 
+export const SuggestedDescription = ({ descriptions, updateDescription, deleteDescription, status, setStatus }) => {
+
+    const handleStatus = () => {
+        if(status === 'all'){
+            setStatus('Pending')
+        } else if(status === 'Pending'){
+            setStatus('Rejected')
+        } else if(status === 'Rejected'){
+            setStatus('Draft')
+        } else if(status === 'Draft'){
+            setStatus('Public')
+        } else { 
+            setStatus('all')
+        }
+    }
     return (
         <div className={styles.container}>
-            <table>
+            <table style={{width: '100%'}}>
                 <thead>
                     <tr>
-                        <td className={styles.td}>Description name</td>
-                        <td className={styles.td}>Quantity</td>
-                        <td className={styles.td}>Measurement</td>
-                        <td className={styles.td}>Formatted string</td>
-                        <td className={styles.td}>Status</td>
+                        <td className={styles.td}>Name</td>
+                        <td className={styles.td}>
+                            <p>Formatted string <FillterIcon style={styles.FillterIcon}/></p>
+                            
+                        </td>
+                        <td className={styles.td}>
+                            <p style={{cursor: 'pointer'}}  onClick={handleStatus}>Status <FillterIcon style={styles.FillterIcon}/></p>
+                        </td>
+                        <td className={styles.td}>
+                            <p>Date created <FillterIcon style={styles.FillterIcon}/></p>
+                        </td>
                         <td className={styles.td}>Action</td>
                     </tr>
                 </thead>
@@ -21,10 +42,14 @@ export const SuggestedDescription = ({ descriptions, updateDescription, deleteDe
                         descriptions.map((element) => (
                             <tr key={element?._id}>
                                 <td className={styles.td}>{element?.description_key?.split('_').join(' ')}</td>
-                                <td className={styles.td}>{element?.object_quantity}</td>
-                                <td className={styles.td}>{element?.object_measurement}</td>
                                 <td className={styles.td}>{element?.formatted_string}</td>
-                                <td className={styles.td}>{element?.status}</td>
+                                <td  className={styles.td}>
+                                    <p  className={element.status === 'Public'
+                                        ? styles.statusText : element.status === 'Pending'
+                                            ? styles.statusText2 : element.status === 'Rejected'
+                                                ? styles.rejected : styles.statusText2} style={{textTransform: 'capitalize'}} >{element?.status}</p>
+                                    </td>
+                                    <td className={styles.td}>{new Date(element?.createdAt)?.toLocaleDateString()}</td>
                                 <td className={styles.td}>
                                     <select onChange={(e) => {
                                         if (e.target.value !== 'DELETE') {
@@ -33,20 +58,20 @@ export const SuggestedDescription = ({ descriptions, updateDescription, deleteDe
                                             deleteDescription(element._id)
                                         )
                                     }}>
-                                        <option selected={element.status === 'PUBLIC'} value='PUBLIC'>
-                                            PUBLIC
+                                        <option selected={element.status === 'Public'} value='Public'>
+                                            Public
                                         </option>
-                                        <option selected={element.status === 'REJECTED'} value='REJECTED'>
-                                            REJECTED
+                                        <option selected={element.status === 'Rejected'} value='Rejected'>
+                                            Rejected
                                         </option>
-                                        <option selected={element.status === 'PENDING'} value='PENDING'>
-                                            PENDING
+                                        <option selected={element.status === 'Pending'} value='Pending'>
+                                            Pending
                                         </option>
-                                        <option selected={element.status === 'DRAFT'} value='DRAFT'>
-                                            DRAFT
+                                        <option selected={element.status === 'Draft'} value='Draft'>
+                                            Draft
                                         </option>
                                         <option value='DELETE'>
-                                            DELETE
+                                            Delete
                                         </option>
                                     </select>
                                 </td>

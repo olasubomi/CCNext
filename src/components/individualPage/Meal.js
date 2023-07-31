@@ -28,7 +28,9 @@ function Meal(props) {
     // console.log(props.meal.item_categories[0], 'item categories')
     // console.log(props.meal.formatted_ingredients, 'fmingredients')
     // console.log(props.props.props.props.meal, "meal props.props")
-    let num = 0
+    let num = 0;
+
+    console.log('meald data', props.meal)
 
     return (
         <>
@@ -327,7 +329,7 @@ function Meal(props) {
                             }
                         </div>
                     </div>
-                    <div className={styles.reject_card}>
+                    {/* <div className={styles.reject_card}>
                         <h3>Posted By</h3>
                         <div className={styles.flex_card}>
                             <div className={styles.cards}>
@@ -361,21 +363,21 @@ function Meal(props) {
                                 <p>Accept Request</p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
-                    {/* {props.props.auth.authUser && props.props.auth.authUser.user_type !== 'admin' &&
+                    {props.props?.auth?.authUser && props.props?.auth?.authUser?.user_type !== 'admin' &&
                 <div className={styles.meal_section_8}>
                     <h3>Stores location</h3>
                     <Stores />
                 </div>
-                } */}
+                } 
 
-                    {/* {props.props.auth.authUser && props.props.auth.authUser.user_type !== 'admin' &&
+                   {/* {props.props?.auth?.authUser && props.props?.auth?.authUser?.user_type !== 'admin' && */}
                 <div className={styles.meal_section_8}>
                     <h3>Add Review</h3>
-                    <Reviews />
+                    <Reviews itemId={props.meal._id} />
                 </div>
-                } */}
+                
 
                     <div className={styles.productcard_row}>
                         <div className={styles.productcard_col_1}>

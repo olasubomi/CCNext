@@ -1019,7 +1019,7 @@ class SuggestProductForm extends Component {
               )
             }
 
-            < h3 > Product Description</h3 >
+            < h3 > Product Intro</h3 >
             <div className={styles.suggestion_form_group}>
               <label htmlFor="productDescription" className={styles.suggestion_form_label
               }>
@@ -1147,7 +1147,7 @@ class SuggestProductForm extends Component {
               }
             </Stack>
           </div >
-          <h3>Nutritional Information</h3>
+          <h3>Product Description</h3>
           <div className={styles.suggestion_form}>
             <div className={styles.suggestion_form_group}>
               <label htmlFor="currentIngredient" className={styles.suggestion_form_label}>

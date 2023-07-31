@@ -25,7 +25,7 @@ function Product(props) {
             set_formatted_ingredients(props.product.formatted_ingredients)
         }
     }, [props.product.formatted_ingredients])
-
+    console.log(props.product.item_description, 'descrptionn')
     console.log('props.product.formatted_ingredients', props.product.formatted_ingredients)
     return (
         <>
@@ -73,6 +73,7 @@ function Product(props) {
                             {/* <p className={styles.product_section_2_description}>
                                 {props.product.product_name}
                             </p> */}
+                            <p>{props.product.item_intro}</p>
                             <div className={styles.product_section_2_details_col}>
                                 <div className={styles.product_section_2_categories}>
                                     <h3 className={styles.product_section_2_category_name}>Category</h3>
@@ -181,12 +182,12 @@ function Product(props) {
                         </div>
                     </div>
                 </div> */}
-
+              
                 <div className={styles.product_section_8}>
                     <h3>Product Ingredients</h3>
                     {formatted_ingredients.length &&
                         formatted_ingredients.map((ele, idx) => {
-                            if(idx !== formatted_ingredients.length - 1){
+                            if (idx !== formatted_ingredients.length - 1) {
                                 return ele.concat(', ')
                             } else {
                                 return ele
@@ -195,10 +196,10 @@ function Product(props) {
                 </div>
                 <div className={styles.product_section_8}>
                     <h3>Product Description</h3>
-                    {props?.product?.item_description?.length &&
+                    {props?.product?.item_description?.length ?
                         props.product.item_description.map((ele, idx) => (
                             <div key={idx}>{ele?.formatted_string}</div>
-                        ))}
+                        )) : 'No description available'}
                 </div>
                 <div className={styles.product_section_8}>
                     <h3>Stores location</h3>
@@ -209,7 +210,7 @@ function Product(props) {
 
                 <div className={styles.product_section_8}>
                     <h3>Add Review</h3>
-                    <Reviews />
+                    <Reviews itemId={props.product._id}/>
                 </div>
 
                 <div className={styles.productcard_row}>

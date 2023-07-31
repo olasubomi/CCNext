@@ -151,7 +151,7 @@ class Popup1 extends Component {
                                                         ingredientGroupList?.map((ingredient, idx) => <div>{ingredient}, </div>)}
                                                 </p>
                                             </div>
-                                            <div className={styles.popup_categories}>
+                                            {/* <div className={styles.popup_categories}>
                                                 <h3 className={styles.popup_category_name}>Product Description</h3>
                                                 <p className={styles.popup_category}>{item_description.map((descrip) => (
                                                     <div key={descrip._id}>
@@ -160,7 +160,7 @@ class Popup1 extends Component {
                                                 ))}
                                                 </p>
                                                 
-                                            </div>
+                                            </div> */}
 
                                             {/* <div>
                                                 <p>

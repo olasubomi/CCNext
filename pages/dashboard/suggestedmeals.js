@@ -57,6 +57,12 @@ const SuggestedMeals = (props) => {
     const [message, setMessageState] = useState('');
     const [relateds, setRelatedsState] = useState([])
 
+    //status filter all "Draft", "Pending", "Public", "Rejected"
+    const [status, setStatus] = useState('all')
+    const [mealStatus, setMealStatus] = useState("all")
+    const [dateFilter, setDateFilter] = useState(false);
+    const [itemStatus, setItemStatus] = useState("all")
+
     //
     const [data, setData] = useState({
         meals: [],
@@ -67,11 +73,16 @@ const SuggestedMeals = (props) => {
 
 
     useEffect(() => {
-
         getUserItems()
+    }, [props.auth, itemStatus]);
+
+    useEffect(() => {
         getAllDescriptions()
-        getAllMeasurement()
-    }, [props.auth]);
+    }, [status, props.auth])
+
+    useEffect(() => {
+        getAllMeasurement();
+    }, [mealStatus, props.auth])
 
     const getUserItems = (newPage) => {
         if (props.auth.authUser) {
@@ -79,7 +90,7 @@ const SuggestedMeals = (props) => {
             setSearchType("Meal")
             let url
             if (props.auth.authUser.user_type === 'admin') {
-                url = `/items/${newPage ? newPage : page}?type=Product,Meal`
+                url = `/items/${newPage ? newPage : page}?type=Product,Meal&status=${itemStatus}`
             } else {
                 // url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
                 url = `/items/user-items/${newPage ? newPage : page}?type=Product,Meal` + '&userId=' + props.auth.authUser._id
@@ -87,7 +98,6 @@ const SuggestedMeals = (props) => {
 
 
             axios.get(url).then(data => {
-                console.log(searchType)
                 if (data.data.data) {
                     console.log('data', data.data.data)
                     setSuggestedCountState(data.data.data.count)
@@ -104,9 +114,28 @@ const SuggestedMeals = (props) => {
         }
     }
 
+    const filterItemByDate = () => {
+        let meals = [];
+        let products = []
+        if (!dateFilter) {
+            meals = data.meals.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            products = data.products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            setDateFilter(!dateFilter)
+        } else {
+            meals = data.meals.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+            products = data.products.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+            setDateFilter(!dateFilter)
+        }
+
+        setData({
+            meals,
+            products
+        })
+    }
+
     const getAllDescriptions = async () => {
         try {
-            const resp = await axios.get('/description');
+            const resp = await axios.get(`/description/1?status=${status}`);
             if (Array.isArray(resp?.data?.data) && resp?.data?.data?.length) {
                 setAllDescriptions(resp.data.data)
             }
@@ -142,7 +171,7 @@ const SuggestedMeals = (props) => {
 
     const getAllMeasurement = async () => {
         try {
-            const resp = await axios.get('/measurement');
+            const resp = await axios.get(`/measurement/1?status=${mealStatus}`);
             if (Array.isArray(resp?.data?.data) && resp?.data?.data?.length) {
                 setAllMeasurement(resp.data.data)
             }
@@ -888,6 +917,20 @@ const SuggestedMeals = (props) => {
             setPageState(prev => prev - 1)
         }
     }
+
+    const handleStatus = () => {
+        if(itemStatus === 'all'){
+            setItemStatus('Pending')
+        } else if(itemStatus === 'Pending'){
+            setItemStatus('Rejected')
+        } else if(itemStatus === 'Rejected'){
+            setItemStatus('Draft')
+        } else if(itemStatus === 'Draft'){
+            setItemStatus('Public')
+        } else { 
+            setItemStatus('all')
+        }
+    }
     // console.log(suggestion.prepime, 'prep time not showing')
     return (
         <div className={container + " " + col2}>
@@ -932,8 +975,14 @@ const SuggestedMeals = (props) => {
                                         <div onClick={() => handleSearchType2('Meal')} className={styles.mode + ' ' + styles.left_mode + ' ' + (searchType === 'Meal' ? styles.active_mode : '')}>Meal</div>
                                         <div onClick={() => handleSearchType2('Product')} className={styles.mode + ' ' + ' ' + (searchType === 'Product' ? styles.active_mode : '')}>Product</div>
                                         <div onClick={() => handleSearchType2('Category')} className={styles.mode + ' ' + styles.right_mode + ' ' + (searchType === 'Category' ? styles.active_mode : '')}>Category</div>
-                                        <div onClick={() => handleSearchType2('Description')} className={styles.mode + ' ' + styles.right_mode + ' ' + (searchType === 'Description' ? styles.active_mode : '')}>Description</div>
-                                        <div onClick={() => handleSearchType2('Measurement')} className={styles.mode + ' ' + styles.right_mode + ' ' + (searchType === 'Measurement' ? styles.active_mode : '')}>Measurement</div>
+                                        {
+                                            props.auth.authUser.user_type === 'admin' &&
+                                            <>
+                                                <div onClick={() => handleSearchType2('Description')} className={styles.mode + ' ' + styles.right_mode + ' ' + (searchType === 'Description' ? styles.active_mode : '')}>Description</div>
+                                                <div onClick={() => handleSearchType2('Measurement')} className={styles.mode + ' ' + styles.right_mode + ' ' + (searchType === 'Measurement' ? styles.active_mode : '')}>Measurement</div>
+
+                                            </>
+                                        }
 
                                     </div>
                                     {props.auth.authUser.user_type !== 'admin' &&
@@ -963,10 +1012,17 @@ const SuggestedMeals = (props) => {
                                                     <input name='id' type="checkbox" />
                                                     {/* <p className={styles.request_th}>ID number</p> */}
                                                     <p className={styles.request_th}>Name</p>
-                                                    <p className={styles.request_th} style={{ justifySelf: 'center' }}>Status <FillterIcon /></p>
+                                                    <p className={styles.request_th}
+                                                        onClick={handleStatus}
+                                                        style={{ justifySelf: 'center', cursor: 'pointer' }}>Status <FillterIcon /></p>
                                                     <p className={styles.request_th + " " + styles.hideData}>Categories <FillterIcon /></p>
-                                                    <p className={styles.request_th + " " + styles.hideData}>Date Created <FillterIcon /></p>
+
+                                                    <p onClick={filterItemByDate}
+                                                        style={{ cursor: 'pointer' }}
+                                                        className={styles.request_th + " " + styles.hideData}>Date Created <FillterIcon /></p>
                                                     <p className={styles.request_th} style={{ textAlign: 'center' }}>Action</p>
+
+
                                                 </div>
                                             </div>
                                         }
@@ -974,7 +1030,7 @@ const SuggestedMeals = (props) => {
                                             {
                                                 searchType === 'Meal' && <>
                                                     {
-                                                        data.meals && data.meals.map((suggestion) => {
+                                                        data.meals && data.meals.reverse().map((suggestion) => {
                                                             return (
                                                                 <SuggestedMealRow
                                                                     searchType={searchType}
@@ -998,7 +1054,7 @@ const SuggestedMeals = (props) => {
                                             {
                                                 searchType === 'Product' && <>
                                                     {
-                                                        data.products && data.products.map((suggestion) => {
+                                                        data.products && data.products.reverse().map((suggestion) => {
                                                             return (
                                                                 <SuggestedProductRow
                                                                     searchType={searchType}
@@ -1021,20 +1077,31 @@ const SuggestedMeals = (props) => {
                                             }
 
                                             {
-                                                searchType === 'Description'
-                                                && <SuggestedDescription
-                                                    updateDescription={updateDescription}
-                                                    deleteDescription={deleteDescription}
-                                                    descriptions={allDescriptions}
-                                                />
+                                                props.auth.authUser.user_type === 'admin' && <>
+                                                    {
+                                                        searchType === 'Description'
+                                                        && <SuggestedDescription
+                                                            updateDescription={updateDescription}
+                                                            deleteDescription={deleteDescription}
+                                                            descriptions={allDescriptions}
+                                                            status={status}
+                                                            setStatus={setStatus}
+                                                        />
+                                                    }
+                                                    {
+                                                        searchType === 'Measurement'
+                                                        && <SuggestedMeasurement
+                                                            deleteMeasurement={deleteMeasurement}
+                                                            updateMeasurement={updateMeasurement}
+                                                            measurements={allMeasurement}
+                                                            status={mealStatus}
+                                                            setStatus={setMealStatus}
+                                                        />
+                                                    }
+
+                                                </>
                                             }
-                                            {
-                                                searchType === 'Measurement'
-                                                && <SuggestedMeasurement
-                                                    deleteMeasurement={deleteMeasurement}
-                                                    updateMeasurement={updateMeasurement}
-                                                    measurements={allMeasurement} />
-                                            }
+
 
                                         </div>
                                     </div>

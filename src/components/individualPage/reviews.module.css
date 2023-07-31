@@ -59,7 +59,33 @@
     display: grid;
     grid-gap: 1rem;
 }
+.review_input_container{
+    width: 80vw;
+}
+.profile_button{
+    justify-self: end;
+    margin-top: 2rem;
+    width: 212px;
+    height: 40px;
 
+    background: #F47900;
+    border-radius: 4px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    padding: 6px 16px;
+    cursor: pointer;
+    /* identical to box height */
+
+
+    color: #FFFFFF;
+    outline: none;
+    border: none;
+}
 .product_review_name_ab{
     font-weight: normal;
     font-size: 12px;

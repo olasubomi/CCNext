@@ -979,6 +979,10 @@ class SuggestMealForm extends Component {
     }
   };
 
+  capitalizeWords(text) {
+    return text.replace(/\b\w/g, (match) => match.toUpperCase());
+  }
+
   deleteUtensil(chip) {
     let suggestedUtensils = this.state.suggestedUtensils;
     console.log(chip);
@@ -1089,6 +1093,7 @@ class SuggestMealForm extends Component {
       window.alert("Enter ingredient to add to meal");
       return;
     }
+    ingredientValue = this.capitalizeWords(ingredientValue)
     if (quantityValue === "") {
       window.alert("Enter quantity to add to meal");
       return;
@@ -1614,8 +1619,8 @@ class SuggestMealForm extends Component {
       },
     };
 
-    console.log(config, "config")
-    suggestMealForm.append("item_categories", JSON.stringify(suggestedCategories));
+    const capitalizedSuggestedCategories = suggestedCategories.map(ele => capitalizeWords(ele))
+    suggestMealForm.append("item_categories", JSON.stringify(capitalizedSuggestedCategories));
 
     await axios(config)
       .then((response) => {
@@ -2426,7 +2431,7 @@ class SuggestMealForm extends Component {
               {this.state.suggestedCategories?.map((data, index) => (
                 <Chip
                   key={index}
-                  label={data}
+                  label={this.capitalizeWords(data)}
                   className={styles.chip}
                   onClick={() => this.handleDeleteCategoryChip(data)}
                   onDelete={() => this.handleDeleteCategoryChip(data)}
