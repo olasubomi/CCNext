@@ -6,15 +6,16 @@ import GoBack from '../../src/components/CommonComponents/goBack';
 import Header, { Header2 } from '../../src/components/Header/Header';
 import Sidenav from '../../src/components/Header/sidenav';
 import axios from '../../src/util/Api';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-const individualProductPage = (props) => {
+const individualProductPage = () => {
     const router = useRouter()
-    useEffect(() => {
-        if(props.product && props.product.data && props.product.data.products.length === 0){
-            window.location.assign('/')
-        }
-    })
+    const [props, setProps] = useState({})
+    // useEffect(() => {
+    //     if(props.product && props.product.data && props.product.data.products.length === 0){
+    //         window.location.assign('/')
+    //     }
+    // })
 
     const months = [
         "Jan",
@@ -30,6 +31,23 @@ const individualProductPage = (props) => {
         "Nov",
         "Dec",
       ]
+      const getProduct = async (name) => {
+        console.log('name', name)
+        // let meal = await axios.get(`/meals/get-meal/${id}`)
+        let product = await axios.get(`/items/user/${name}`)
+        console.log(product.data.data.meal, "get props")
+    
+        setProps(product.data.data[0] || {})
+    
+    }
+    useEffect(() => {
+        console.log('query--', router.query?.name)
+        if(router.query?.name){
+            getProduct(router.query?.name)
+        }
+    },[router.query?.name])
+
+
     return (
         <div>
             <Head>
@@ -45,7 +63,9 @@ const individualProductPage = (props) => {
                         <GoBack />
                     </div>
                     <div className={styles.meal_section_1_col_2}>
-                        <p className={styles.meal_section_1_col_2_p}>{props.product.data.products[0].createdAt && new Date(props.product.data.products[0].createdAt).getDate() + ' ' + months[new Date(props.product.data.products[0].createdAt).getMonth()] + ' ,'+ new Date(props.product.data.products[0].createdAt).getFullYear()}</p>
+                    <p className={styles.meal_section_1_col_2_p}>{new Date(props?.createdAt).toLocaleDateString()}</p>
+
+                        {/* <p className={styles.meal_section_1_col_2_p}>{props.product.data.products[0]?.createdAt && new Date(props.product.data.products[0]?.createdAt).getDate() + ' ' + months[new Date(props.product.data.products[0]?.createdAt).getMonth()] + ' ,'+ new Date(props.product.data.products[0]?.createdAt).getFullYear()}</p> */}
                         <div className={styles.select_container}>
                             <div className={styles.select_box}>
                             </div>
@@ -53,8 +73,8 @@ const individualProductPage = (props) => {
                     </div>
                 </div>
                 <div style={{width: '95%'}}>
-                    {props.product && props.product.data && props.product.data.products.length > 0 &&
-                    <Product product={props.product.data.products[0]} />}
+                    {/* {props.product && props.product.data && props.product.data.products.length > 0 && */}
+                    <Product product={props} />
                 </div>
             </div>
             
@@ -68,14 +88,14 @@ export async function getServerSideProps(context){
     // const res = await fetch('https://.../posts')
     // const posts = await res.json()
     // console.log(context)
-    let {id} = context.params
-    let product = await axios.get('/products/get-all-products/1?publicly_available=Public&_id='+id)
+    // let {name} = context.params
+    // let product = await axios.get('/products/get-all-products/1?publicly_available=Public&_id='+name)
 
     // console.log(meal.data)
 
     return {
         props: {
-            product: product.data
+            // product: product.data
         },
         // Next.js will attempt to re-generate the page:
         // - When a request comes in

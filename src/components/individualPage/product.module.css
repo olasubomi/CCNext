@@ -441,7 +441,7 @@ product_section_2_details_col
 .product_section_8{
     display: grid;
     grid-gap: 3rem;
-    justify-items: center;
+    justify-content: start;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     padding: 1rem 0 3rem;
 }

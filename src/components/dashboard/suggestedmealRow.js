@@ -59,10 +59,20 @@ function SuggestedMealRow(props){
                         }
                         {props.auth.authUser.user_type === 'supplier' &&
                         <>
-                            {suggestion.publicly_available === 'Public' ? 
-                            <div onClick={() => props.toggleTransferToInventory(suggestion)} className={styles.tableactionbutton} style={{background: '#F47900', color:'white', border: 'none'}}>Send for Inventory</div> 
-                            :
-                            <div className={styles.tableactionbutton} style={{background: '#D9D9D9', color:'white', border: 'none'}}>Send for Inventory</div> 
+
+                            {suggestion.item_status[0].status === 'Draft' &&
+                                // <div onClick={() => props.toggleSent(suggestion._id, props.searchType)} className={styles.tableactionbutton}>Send for review</div>
+                                <div onClick={() => props.handleSendForReview(suggestion._id, 'Pending')} className={styles.tableactionbutton}>Send for review</div>
+
+                            }
+                            {props.auth.authUser.user_type === 'supplier' &&
+                                <>
+                                    {suggestion.item_status[0].status === 'Public' ?
+                                        <div onClick={() => props.toggleTransferToInventory(suggestion)} className={styles.tableactionbutton} style={{ background: '#F47900', color: 'white', border: 'none' }}>Send for Inventory</div>
+                                        :
+                                        <div className={styles.tableactionbutton} style={{ background: '#D9D9D9', color: 'white', border: 'none' }}>Send for Inventory</div>
+                                    }
+                                </>
                             }
                         </>
                         }

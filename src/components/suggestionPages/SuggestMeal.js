@@ -979,6 +979,10 @@ class SuggestMealForm extends Component {
     }
   };
 
+  capitalizeWords(text) {
+    return text.replace(/\b\w/g, (match) => match.toUpperCase());
+  }
+
   deleteUtensil(chip) {
     let suggestedUtensils = this.state.suggestedUtensils;
     console.log(chip);
@@ -1089,6 +1093,7 @@ class SuggestMealForm extends Component {
       window.alert("Enter ingredient to add to meal");
       return;
     }
+    ingredientValue = this.capitalizeWords(ingredientValue)
     if (quantityValue === "") {
       window.alert("Enter quantity to add to meal");
       return;
@@ -1548,7 +1553,7 @@ class SuggestMealForm extends Component {
       servings,
       kitchen_utensils: JSON.stringify(suggestedUtensils),
       tips,
-      
+
       meal_name: itemMealName
     }
     suggestMealForm.append("item_data", JSON.stringify(MealObject))
@@ -1614,8 +1619,8 @@ class SuggestMealForm extends Component {
       },
     };
 
-    console.log(config, "config")
-    suggestMealForm.append("item_categories", JSON.stringify(suggestedCategories));
+    const capitalizedSuggestedCategories = suggestedCategories.map(ele => capitalizeWords(ele))
+    suggestMealForm.append("item_categories", JSON.stringify(capitalizedSuggestedCategories));
 
     await axios(config)
       .then((response) => {
@@ -1627,7 +1632,7 @@ class SuggestMealForm extends Component {
           console.log("Display Meal submitted successfully");
           localStorage.removeItem("suggestMealForm");
           toast.success("Meal submitted sucessfully")
-        } else if(response?.data.success === false && response?.data?.message === 'Token is not valid') {
+        } else if (response?.data.success === false && response?.data?.message === 'Token is not valid') {
           toast.error(response?.data?.message)
           console.log("Something wrong happened ");
         }
@@ -2426,7 +2431,7 @@ class SuggestMealForm extends Component {
               {this.state.suggestedCategories?.map((data, index) => (
                 <Chip
                   key={index}
-                  label={data}
+                  label={this.capitalizeWords(data)}
                   className={styles.chip}
                   onClick={() => this.handleDeleteCategoryChip(data)}
                   onDelete={() => this.handleDeleteCategoryChip(data)}
@@ -2513,7 +2518,7 @@ class SuggestMealForm extends Component {
               description={this.state.intro}
               imageData={this.state.mealImagesData[0]}
               image={this.state.mealImage[0]}
-              imagesData={this.state.mealImagesData.slice(1)}
+              imagesData={this.state.mealImagesData}
               allImagesData={this.state.mealImagesData}
               categories={this.state.suggestedCategories}
               prepTime={this.state.prepTime}
@@ -2535,6 +2540,13 @@ class SuggestMealForm extends Component {
               instructionChunk4Step={this.state.instructionChunk4?.instructionSteps}
               instructionChunk5Step={this.state.instructionChunk5?.instructionSteps}
               instructionChunk6Step={this.state.instructionChunk6?.instructionSteps}
+
+              instructionChunk1DataName={this.state.instructionChunk1?.dataName}
+              instructionChunk2DataName={this.state.instructionChunk2?.dataName}
+              instructionChunk3DataName={this.state.instructionChunk3?.dataName}
+              instructionChunk4DataName={this.state.instructionChunk4?.dataName}
+              instructionChunk5DataName={this.state.instructionChunk5?.dataName}
+              instructionChunk6DataName={this.state.instructionChunk6?.dataName}
 
               chunk1Content={this.state.chunk1ContentURL}
               chunk2Content={this.state.chunk2ContentURL}
