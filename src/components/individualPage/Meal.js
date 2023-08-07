@@ -10,6 +10,7 @@ import { UserIcon} from "../icons";
 
 function Meal(props) {
     const url = 'http://localhost:3000/'
+
     const [serves, setServes] = useState(parseInt(props.meal?.servings))
 
     // useEffect(() => {
@@ -22,11 +23,7 @@ function Meal(props) {
             setServes(s)
         }
     }
-    // console.log(props.meal, 'individual meal')
-    // console.log(serves)
-    // // console.log(props.meal.item_data.servings, 'serve me')
-    // console.log(props.meal.item_categories[0], 'item categories')
-    // console.log(props.meal.formatted_ingredients, 'fmingredients')
+
     // console.log(props.props.props.props.meal, "meal props.props")
     let num = 0;
 
@@ -39,6 +36,7 @@ function Meal(props) {
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             {props.meal &&
+
                 <div className={styles.meal_sections}>
 
                     <div className={styles.meal_section_2}>
@@ -74,6 +72,7 @@ function Meal(props) {
 
                             </div>
                         </div>
+
                         <div className={styles.meal_section_2_col_2}>
                             <div className={styles.meal_section_2_details}>
                                 <h2 className={styles.meal_section_2_name}>{props.meal.item_name}</h2>
@@ -84,6 +83,7 @@ function Meal(props) {
                                     <LocationIcon style={styles.store_icon} />
                                     <p>6391 Elgin St. Celina, Delaware 10299</p>
                                 </div>
+
                                 } */}
                                 </div>
                                 <div className={styles.meal_section_32}>
@@ -136,11 +136,13 @@ function Meal(props) {
                             }
                         </div>
                     </div>
+
                     {/* {props.props.auth.authUser && props.props.auth.authUser.user_type !== 'admin' &&
                 <div className={styles.section_2_footer}>
                     <div className={styles.hide}>
                         <p><ShareIcon />Share this product:</p>
                         <FacebookShareButton>
+
                             <FacebookEIcon quote={props.props.meal.intro} url={url+'meal/'+props.props.meal._id} />
                         </FacebookShareButton>
                         <TwitterShareButton title={props.props.meal.meal_name} url={url+'meal/'+props.props.meal._id}>
@@ -158,12 +160,14 @@ function Meal(props) {
                         <PrintEIcon />
                     </div>
                     {
-                            props.props.meal.publicly_available === 'Public' && props.props.auth.authUser && props.props.auth.authUser.user_type !== 'admin' &&
+                            props.meal.publicly_available === 'Public' && props.auth.authUser && props.auth.authUser.user_type !== 'admin' &&
+
                     <div className={styles.btnGroup}>
                         <div className={styles.btnoutline}>Add to Grocery List</div>
                         <div className={styles.btnfill}>Add to Cart</div>
                     </div>}
                 </div>
+
                 } */}
                     <div className={styles.meal_section_3}>
                         <div className={styles.meal_details}>
@@ -184,6 +188,7 @@ function Meal(props) {
                                 <p>{props.meal.item_data?.chef}</p>
                             </div>
                         </div>
+
                     </div>
                     {props.meal.formatted_instructions &&
                         <div className={styles.meal_section_4}>
@@ -313,6 +318,7 @@ function Meal(props) {
                         </ul>
                     </div>
 
+
                     <div className={styles.meal_section_7}>
                         <h3>Tips</h3>
                         <div>
@@ -370,6 +376,7 @@ function Meal(props) {
                     <h3>Stores location</h3>
                     <Stores />
                 </div>
+
                 } 
 
                    {/* {props.props?.auth?.authUser && props.props?.auth?.authUser?.user_type !== 'admin' && */}
@@ -377,6 +384,7 @@ function Meal(props) {
                     <h3>Add Review</h3>
                     <Reviews itemId={props.meal._id} />
                 </div>
+
                 
 
                     <div className={styles.productcard_row}>

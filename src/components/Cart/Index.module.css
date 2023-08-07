@@ -1,0 +1,405 @@
+.cartBackground {
+    background: #F5F5F5;
+}
+
+.cartBody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    width: 100%;
+    background: #F5F5F5;
+}
+
+.cartMainBody {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    width: 95%;
+    background: #F5F5F5;
+}
+
+.arrowBack {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: auto;
+    width: auto;
+    margin-top: 20px;
+}
+
+.arrowBack > h1 {
+    width: 248px;
+    height: 36px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 36px;
+    color: #000000;
+}
+
+
+.mainArrowRow {
+    display: flex;
+    flex-direction: row;
+    gap: 9px;
+    height: 20px;
+    width: 80px;
+}
+
+.mainArrowRow > img {
+    height: 19px;
+    width: 19px;
+    cursor: pointer;
+}
+
+.mainArrowRow > label {
+    width: 37px;
+    height: 19px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #353535;
+    cursor: pointer;
+}
+
+.cartHeader {
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    justify-self:center;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-top: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.cartHeaderRow1 {
+    width: 25%;
+    display: flex;
+    align-items: flex-start;
+}
+.cartHeaderRow2 {
+    width: 20%;
+    display: flex;
+    align-items: flex-start;
+}
+
+.cartHeaderRow3 {
+    width: 55%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.cartHeaderRow1 > label {
+    width: 20%;
+    height: 29px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-transform: capitalize;
+    color: #000000;
+}
+
+.cartHeaderRow2 > label {
+    width: 20%;
+    height: 29px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-transform: capitalize;
+    color: #000000;
+}
+
+.cartHeaderRow3 > label {
+    height: 29px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-transform: capitalize;
+    color: hsl(0, 0%, 0%);
+}
+
+.couponPrice {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 80px;
+}
+
+.coupon {
+    display: flex;
+    flex-direction: row;
+    width: 284px;
+
+}
+
+.couponBlack {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    width: 142px;
+    height: 41px;
+    background: #000000;
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.05);
+    border-radius: 4px 0px 0px 4px;
+    cursor: pointer;
+}
+
+.couponBlack > p {
+    width: 82px;
+    height: 15px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.couponWhite {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 142px;
+    height: 41px;
+    background: #ffffff;
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.05);
+    border-radius: 4px 0px 0px 4px;
+}
+
+.couponWhite > p {
+    width: 100px;
+    height: 17px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #353535;
+}
+
+.priceRow {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.mainPrice {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.mainPrice > label {
+    width: 97px;
+    height: 22px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    color: #000000;
+}
+
+.checkoutButton {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+}
+
+.whiteButton {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 141px;
+    height: 45px;
+    border: 1px solid #949494;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.whiteButton > label {
+    width: 68px;
+    height: 17px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #6D6D6D;
+    cursor: pointer;
+}
+
+.greenButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 215px;
+    height: 45px;
+    background: #00A001;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.greenButton > label {
+    width: 71px;
+    height: 17px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+    .couponPrice {
+        margin-top: 20px;
+    }
+    
+    .coupon {
+        width: 150px;
+    }
+    
+    .couponBlack {
+        gap: 2px;
+        width: 80px;
+        height: 41px;
+    }
+    
+    .couponBlack > p {
+        width: 50px;
+        font-size: 8px;
+    }
+    
+    .couponWhite {
+        width: 70px;
+        height: 41px;
+    }
+    
+    .couponWhite > p {
+        width: 50px;
+        font-size: 8px;
+    }
+    
+    .whiteButton {
+        width: 70px;
+    }
+    
+    .whiteButton > label {
+        width: 50px;
+        font-size: 10px;
+    }
+    
+    .greenButton {
+        width: 90px;
+        padding-left: 20px;
+    }
+    
+    .greenButton > label {
+        font-size: 10px;
+    }
+}
+
+@media only screen and (max-width: 375px) {
+    .cartMainBody {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .couponPrice {
+        margin-top: 20px;
+    }
+    
+    .coupon {
+        width: 150px;
+    }
+    
+    .couponBlack {
+        gap: 2px;
+        width: 80px;
+        height: 41px;
+    }
+    
+    .couponBlack > p {
+        width: 50px;
+        font-size: 8px;
+    }
+    
+    .couponWhite {
+        width: 70px;
+        height: 41px;
+    }
+    
+    .couponWhite > p {
+        width: 50px;
+        font-size: 8px;
+    }
+    
+    .priceRow {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .mainPrice {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    
+    .mainPrice > label {
+        width: 60px;
+        font-size: 10px;
+    }
+
+    .checkoutButton {
+        gap: 5px; 
+    }
+    
+    .whiteButton {
+        width: 70px;
+    }
+    
+    .whiteButton > label {
+        width: 50px;
+        font-size: 10px;
+    }
+    
+    .greenButton {
+        width: 90px;
+        padding-left: 20px;
+    }
+    
+    .greenButton > label {
+        font-size: 10px;
+    }
+}
