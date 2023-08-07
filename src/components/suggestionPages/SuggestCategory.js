@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import TextField from "@mui/material/TextField";
 // import Chip from "@mui/material/Chip";
-import { Autocomplete } from "@mui/lab/Autocomplete"; // createFilterOptions,
+import Autocomplete from "@mui/material/Autocomplete";
 // import axios from 'axios';
 import axios from '../../util/Api';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import styles from "./suggestion.module.css";
+import { toast } from "react-toastify";
 
 
 class SuggestCategoryForm extends Component {
@@ -85,10 +86,10 @@ class SuggestCategoryForm extends Component {
   }
 
   handleCategoryDropdownChange = (val) => {
-    console.log(this.state.suggestedCategories)
     this.setState({ suggestedCategories: val });
     // below setstate causes an error to make each new set a sum of all previous.
     // this.setState({ suggestedCategories: [...this.state.suggestedCategories, val] });
+    console.log(this.state.suggestedCategories)
 
   }
 
@@ -102,6 +103,15 @@ class SuggestCategoryForm extends Component {
     cat.value = '';
   }
 
+  handleDeleteCategoryChip(chip) {
+    var array = [...this.state.suggestedCategories]; // make a separate copy of the array
+    var index = array.indexOf(chip);
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ suggestedCategories: array });
+    }
+  }
+
   closeModal() {
     this.setState({ openModal: false });
     // this.props.openModal = false;
@@ -110,29 +120,55 @@ class SuggestCategoryForm extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedCategoriesToDB = async (e) => {
     const { suggestedCategories } = this.state;
+    console.log(suggestedCategories);
+
+    console.log(this.props.categories);
+
+
 
     //-------------to make new category data ------------------------------------------
     // get list of new categories to submit to mongo
     let new_categories = [];
-    for (i = 0; i < suggestedCategories.length; i++) {
+    for (var i = 0; i < suggestedCategories.length; i++) {
+
+      const categorySentence = suggestedCategories[i];
+      const categoryWords = categorySentence.split(" ");
+
+      categoryWords.map((categoryWord) => {
+        return categoryWord[0].toUpperCase() + categoryWord.substring(1);
+      }).join(" ");
+
       // check if categories already exist, only add new categories to db,
       // though all will still be attached to product, as mentioned
-      let index = this.props.categories?.indexOf(suggestedCategories[i]);
-      if (index === -1) new_categories.push(suggestedCategories[i]);
+      let index = this.props.categories?.indexOf(categoryWords);
+      if (index === -1) {
+        if (categoryWords.length) {
+          for (let ele of categoryWords) {
+            let category_object = {};
+            category_object.category_name = ele;
+            category_object.affiliated_objects = "ANY";
+            category_object.publicly_available = "Draft";
+            new_categories.push(category_object);
+          }
+        }
+      }
+      else {
+        console.log("does not append to string")
+      }
     }
 
-    //-------------Submit remainder data of product to Mongo ------------------------------------------
-    let suggestProductForm = new FormData();
-
+    //-------------Submit remainder data of category to Mongo ------------------------------------------
     // new suggested products
-    suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
     // chunk content should be passed as file
     //---------------------------------------------Submit Product to Mongo---------------------------------------------------
     // var url = "/createProduct/";
-    var url = "http://localhost:5000/api/products/create/";
+    var url = "http://localhost:5000/api/categories/create/";
+
+    console.log(new_categories);
+    // console.log({ new_categories });
 
     const config = {
-      method: 'POST', data: suggestProductForm, url: url,
+      method: 'POST', data: new_categories, url: url,
       headers: {
         // 'application/json' is the modern content-type for JSON, but some
         // older servers may use 'text/json'.
@@ -144,20 +180,19 @@ class SuggestCategoryForm extends Component {
 
     console.log("Printing Chunk Contents");
 
-    var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
-    console.log(instructionData);
-
     axios(config).then(response => {
       if (response.status >= 200 && response.status < 300) {
         this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
         console.log(response);
         console.log("Display Product submitted successfully");
         // window.location.href = "/SuggestProduct"
+        toast.success("Category submitted sucessfully")
       } else {
         console.log("Something wrong happened ");
       }
     }).catch(error => {
       console.log(error);
+      toast.error(error.message)
     });
 
   }

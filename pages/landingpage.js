@@ -112,7 +112,7 @@ class LandingPage extends Component {
                         <div className={styles.mySlides}>
                             <div className={styles.slide_wrapper}></div>
                             <div className={styles.slide_text}>
-                                <h2>Get the Best Ingredients for your meal</h2>
+                                <h2>Get the Best Ingredients for your Meals</h2>
                                 <a href="/" className={styles.slide_button}>
                                     Shop Now
                                 </a>
@@ -130,7 +130,7 @@ class LandingPage extends Component {
                             <div className={styles.slide_text}>
                                 <h2>
                                     Well Established
-                                    Local and
+                                    local and
                                     international
                                     food suppliers
                                 </h2>
@@ -231,10 +231,10 @@ class LandingPage extends Component {
                                 WELL-ESTABLISHED LOCAL AND INTERNATIONAL FOOD SUPPLIERS
                             </h3>
                             <p className={styles.home_section_3_row_2_p}>
-                                One of the most important features of ChopChow is that we make it easy for you to order food products from well established local and international food suppliers to add convenience to cooking from home.
+                                One of the most important features of ChopChow is that we make it easy for you to order food products from well established Local and international food suppliers to add convenience to cooking from home.
                             </p>
                             <div className={styles.home_section_3_row_2_link}>
-                                <p>Learn More</p>
+                                <p>Use Your Grocery List</p>
                                 <EastIcon className={styles.home_section_3_row_2_link_icon} />
                             </div>
                         </div>
@@ -260,7 +260,7 @@ class LandingPage extends Component {
                                 recommend different twists on how to make them.
                             </p>
                             <div className={styles.home_section_3_row_2_link}>
-                                <p>Shop Now</p>
+                                <p><a href="/suggestmeal">Suggest A Meal </a> </p>
                                 <EastIcon className={styles.home_section_3_row_2_link_icon} />
                             </div>
                         </div>
@@ -290,7 +290,7 @@ class LandingPage extends Component {
                                 It's never been easier or more fun to learn how to cook!
                             </p>
                             <div className={styles.home_section_3_row_2_link}>
-                                <p>See Collections</p>
+                                <p>Shop Now</p>
                                 <EastIcon className={styles.home_section_3_row_2_link_icon} />
                             </div>
                         </div>

@@ -19,6 +19,7 @@ import Header, { Header2 } from "../src/components/Header/Header";
 import SideNav from "../src/components/Header/sidenav";
 
 import Head from "next/head";
+import GoBack from "../src/components/CommonComponents/goBack";
 
 class SuggestMeal extends Component {
   allMealNames = [];
@@ -119,15 +120,20 @@ class SuggestMeal extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
+
+    console.log('suggestionType---', this.state.suggestionType)
     // get all Meal Names***
-    var url = "/meals/get-meals/1";
+    console.log(this.categories, "categories")
+    // var url = "/meals/get-meals/1";
+    var url = "/items";
     axios
       .get(url)
       .then((body) => {
         var mealList = body.data;
         if (mealList) {
           mealList.data.meals.map((meal) =>
-            this.allMealNames.push(meal.meal_name)
+            // this.allMealNames.push(meal.meal_name)
+            this.allMealNames.push(meal.item_name)
           );
         } else {
           console.log("get all meal names function does not return");
@@ -178,7 +184,8 @@ class SuggestMeal extends Component {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-    this.categories = this.props.categories;
+    this.categories = this.props.categories || this.categories;
+    console.log('PROPER', this.props.categories)
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -291,6 +298,7 @@ class SuggestMeal extends Component {
                       <p
                         onClick={() =>
                           this.handleSuggestionType("Kitchen Utensil")
+
                         }
                       >
                         Kitchen Utensils
@@ -310,6 +318,7 @@ class SuggestMeal extends Component {
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}
                 categories={this.categories}
+                suggestionType={this.state.suggestionType}
               ></SuggestMealForm>
             )}
             {suggestionType === "Product" && (
@@ -319,6 +328,7 @@ class SuggestMeal extends Component {
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}
                 categories={this.categories}
+                suggestionType={this.state.suggestionType}
               ></SuggestProductForm>
             )}
             {suggestionType === "Kitchen Utensil" && (
@@ -326,11 +336,13 @@ class SuggestMeal extends Component {
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}
                 categories={this.categories}
+                suggestionType={this.state.suggestionType}
               ></SuggestKitchenUtensilForm>
             )}
             {suggestionType === "Category" && (
               <SuggestCategoryForm
                 categories={this.categories}
+                suggestionType={this.state.suggestionType} 
               ></SuggestCategoryForm>
             )}
           </div>

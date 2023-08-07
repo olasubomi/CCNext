@@ -1,0 +1,367 @@
+.allBody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /*background: #F5F5F5;*/
+}
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 24px;
+}
+
+.selectAll {
+    display: flex;
+    flex-direction: row;
+    gap: 9px;
+    width: 20%;
+}
+
+.selectAll > label {
+    width: 62px;
+    height: 17px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000000;
+
+}
+
+.headerItems {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 60%;
+}
+
+.headerItems > p {
+    display: flex;
+    justify-self: center;
+    align-self: center;
+    width: 127px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.divSpan {
+    display: flex;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    width: 18%;
+}
+
+.divSpan > span {    
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+   
+}
+
+.listItemBody {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 106px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.checkB {
+    display: flex;
+    flex-direction: row;
+    gap: 30%;
+    width: 20%;
+}
+
+.productImageDiv > img {
+    width: 68px;
+    height: 100%;
+}
+
+.checkImageDiv {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.listItems {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 65%;
+}
+
+.listItems > label {
+    display: flex;
+    align-self: center;
+    justify-self: center;
+    width: 127px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.listItemAction {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: center;
+    width: 18%;
+    height: 100%;
+}
+
+.listItemAction > img {
+    cursor: pointer;
+}
+
+.addToCart {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 160px;
+    height: 35px;
+    background: #00A001;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.addToCart > label {
+    width: 114px;
+    height: 15px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+/*TABLET SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    .listItemAction {
+        gap: 10px;
+    }
+    
+}
+
+@media only screen and (max-width: 868px) {
+    .addToCart {
+        padding: 10px;
+        width: 100px;
+    }
+    
+    .addToCart > label {
+        width: 70px;
+        font-size: 8px;
+    }
+    
+}
+
+@media only screen and (max-width: 768px) {
+    .listItemBody {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        /*align-items: center;*/
+        height: 77px;
+    }
+}
+
+/*MOBILE SCREEN*/
+
+.mobileLeft {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+    width: 70%;
+    height: 77px;
+}
+
+.mobileCheck {
+    display: flex;
+    flex-direction: row;
+    gap: 20%;
+    height: 77px;
+    width: 20%;
+}
+
+.mobileCheck > img {
+    height: 100%;
+    width: 60px;
+}
+
+.mobileListItems {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+    justify-content: center;
+    height: 77px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.mobileListItems > label {
+    width: 57px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #000000;
+}
+
+.supplierDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3px;
+    height: 10px;
+}
+
+.supplierDiv > h2 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 10px;
+    color: #6D6D6D;
+}
+
+.supplierDiv > h5 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 10px;
+    color: #000000;
+}
+
+.quantityDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3px;
+    height: 10px;
+}
+
+.quantityDiv > p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 10px;
+    color: #6D6D6D;
+}
+
+.quantityDiv > h4 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 10px;
+    color: #000000;
+}
+
+.mobileRight {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 30%;
+    height: 77px;
+    justify-content: center;
+    align-items: flex-end;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.priceDiv {
+    display: flex;
+    flex-direction: row;
+    gap: 10%;
+    height: 15px;
+   justify-content: flex-end;
+   
+}
+
+.priceDiv > label {
+    width: 44px;
+    height: 15px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #000000;
+}
+
+.addToMobileCart {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 35px;
+    background: #00A001;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.addToMobileCart > label {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 15px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 580px) {
+    .mobileLeft {
+        gap: 10%;
+    }
+}
+
+@media only screen and (max-width: 470px) {
+    .mobileLeft {
+        gap: 15%;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .mobileLeft {
+        gap: 20%;
+    }
+}
+
+@media only screen and (max-width: 360px) {
+    .mobileLeft {
+        gap: 25%;
+    }
+}

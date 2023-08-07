@@ -2,8 +2,12 @@ import React, { Component } from "react";
 import Header, { Header2 } from "../src/components/Header/Header";
 import Footer from "../src/components/Footer/Footer";
 import LandingPage from "./landingpage";
-import { useEffect } from 'react';
+import { useEffect } from "react";
+import CartProvider from "./store/CartProvider";
 import Head from "next/head";
+
+  import { ToastContainer, toast } from 'react-toast'
+
 
 // import { Route, Switch, Redirect } from "react-router-dom";
 // import HomePage from "./components/HomePage";
@@ -22,69 +26,124 @@ import Head from "next/head";
 // import ViewSuggestedMeals from "./components/ViewSuggestedMeals";
 // import AdminPanel from "./components/AdminPanel/AdminPanel";
 import { setInitUrl, getUser } from "../src/actions";
-import { connect } from 'react-redux';
-import axios from '../src/util/Api';
-import productsObj from '../src/custom_data/products.json';
+import { connect } from "react-redux";
+import axios from "../src/util/Api";
+import productsObj from "../src/custom_data/products.json";
 import SideNav from "../src/components/Header/sidenav";
 // import { createMuiTheme, ThemeProvider } from '@mui/material';
 
-
-
 class App extends Component {
-    allMealNames = [];
-    productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
-        "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
-        "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes", "Beef", "Green Pepper",
-        "Garlic", "Ginger", "Vegetable Oil", "Lemon", "Rosemary Powder"];
-    productImageLink = [];
-    categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
-    measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
-        "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
-    kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
-        "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
-        "Wire Mesh", "Zester"];
-    // productDisplayBooleansOutOfState = [];
-    availableLocations = ["African Carribean Market", "Abule", "Scotch Bonnet Restaurant", "Ralphs", "Target", "Walmart", "Vons"];
+  allMealNames = [];
+  productNames = [
+    "Spinach",
+    "Brown Beans",
+    "Ijebu Garri",
+    "Honey Beans",
+    "Kale",
+    "Water",
+    "Squash Potatoes",
+    "Oregano",
+    "Cashews",
+    "Palm Oil",
+    "Pineapple",
+    "Onions",
+    "Flour",
+    "Butter",
+    "Sugar",
+    "Hawaiian Bread",
+    "Avocados",
+    "Tomatoes",
+    "Beef",
+    "Green Pepper",
+    "Garlic",
+    "Ginger",
+    "Vegetable Oil",
+    "Lemon",
+    "Rosemary Powder",
+  ];
+  productImageLink = [];
+  categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
+  measurements = [
+    "mL",
+    "oz",
+    "L",
+    "cup(s)",
+    "Tbsp",
+    "tsp",
+    "pt",
+    "g",
+    "kg",
+    "lb",
+    "qt",
+    "gallon",
+    "dash/pinch",
+    "Leaves",
+    "cloves",
+    "cubes",
+    "Large",
+    "medium",
+    "small",
+  ];
+  kitchenUtensils = [
+    "Baking Sheet",
+    "Colander",
+    "Cooking Oil",
+    "Cutting Board",
+    "Fridge",
+    "Knife Set",
+    "Mixing Bowls",
+    "Pot",
+    "Pan",
+    "Peeler",
+    "Thermometer",
+    "Wire Mesh",
+    "Zester",
+  ];
+  // productDisplayBooleansOutOfState = [];
+  availableLocations = [
+    "African Carribean Market",
+    "Abule",
+    "Scotch Bonnet Restaurant",
+    "Ralphs",
+    "Target",
+    "Walmart",
+    "Vons",
+  ];
 
+  groceryList = [];
+  locationAddressComponent = [];
 
-    groceryList = [];
-    locationAddressComponent = [];
+  //////////////////////////////////////////////////////////////////////
 
+  render() {
+    // const { customer_id } = this.props;
 
+    return (
+      <CartProvider>
+        <Head>
+          <title>Chop Chow Landing Page</title>
+          <meta
+            key="title"
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
+        </Head>
 
+        <Header />
+        <Header2 />
+        <SideNav />
 
-    //////////////////////////////////////////////////////////////////////
-
-
-
-    render() {
-        // const { customer_id } = this.props;
-
-        return <div>
-            <Head>
-                <title>Chop Chow Landing Page</title>
-                <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
-            </Head>
-
-            <Header />
-            <Header2 />
-            <SideNav />
-
-            <LandingPage />
-            <Footer />
-
-        </div>
-
-
-
-    }
+        <LandingPage />
+        <Footer />
+      </CartProvider>
+    );
+  }
 }
-
-
 
 // export default App;
 export default App;
-{/* <Switch>
+{
+  /* <Switch>
                     <Route exact path="/login"
                         render={() => (<Login openFlag={true} />)}
                     />
@@ -134,4 +193,5 @@ export default App;
                             measurements={this.measurements} />} />
                     {/* <Route path="/product-detail/:customerId/:productId" render={(props) => (customer_id !== undefined) ? <ProductFullDetail /> : (<Redirect to={{ pathname: "#" }} />)} /> 
                     {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> 
-                </Switch> */}
+                </Switch> */
+}
