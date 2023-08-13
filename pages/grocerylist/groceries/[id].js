@@ -1,16 +1,16 @@
 import { useRouter } from 'next/router';
 import Head from "next/head";
-import Header, { Header2 } from '../../src/components/Header/Header';
-import GoBack from '../../src/components/CommonComponents/goBack';
-import styles from '../../src/components/grocery/grocery.module.css'
+import Header, { Header2 } from '../../../src/components/Header/Header';
+import GoBack from '../../../src/components/CommonComponents/goBack';
+import styles from '../../../src/components/grocery/grocery.module.css'
 import { AiFillEyeInvisible } from 'react-icons/ai'
-import girl from "../../public/assets/icons/girl.jpg"
+import girl from '../../../public/assets/icons/girl.jpg'
 import Image from 'next/image';
 
 
 const GroceryPage = () => {
     const router = useRouter()
-    const { _id } = router.query
+    const { id } = router.query
 
     return <div>
         <Head>
