@@ -63,7 +63,7 @@ class App extends Component {
     render() {
         // const { customer_id } = this.props;
 
-        return <div>
+        return <div className="modal">
             <Head>
                 <title>Chop Chow Landing Page</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />

@@ -863,11 +863,15 @@ class SuggestProductForm extends Component {
     if (arr.length) {
       for (let ele of arr) {
         for (let val in ele) {
-          productObject[val] = ele[val];
+          // productObject[val] = ele[val];
           description[val] = ele[val];
         }
       }
     }
+
+    productObject.product_size = sizeStrings.toString();
+
+
     let arr2 = []
 
     const capitalizeFirstLetter = (str) => {

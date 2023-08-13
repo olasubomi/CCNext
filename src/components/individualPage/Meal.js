@@ -45,7 +45,7 @@ function Meal(props) {
                         <div className={styles.meal_section_2_col_1}>
                             {props.meal.item_images?.length > 0 &&
                                 <>
-                                    {(props.meal.itemImage0.length > 0 && props.meal.itemImage0 !== "[object HTMLImageElement]") ?
+                                    {(props.meal.itemImage0?.length > 0 && props.meal.itemImage0 !== "[object HTMLImageElement]") ?
                                         <Image
                                             src={props.meal.itemImage0}
                                             alt={props.meal.item_name}

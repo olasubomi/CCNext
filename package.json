@@ -19,6 +19,7 @@
     "@react-oauth/google": "^0.8.0",
     "@redux-devtools/extension": "3.0.0",
     "axios": "^0.27.2",
+    "body-scroll-lock": "^4.0.0-beta.0",
     "chart.js": "^4.0.1",
     "connected-react-router": "^6.8.0",
     "dayjs": "^1.11.6",

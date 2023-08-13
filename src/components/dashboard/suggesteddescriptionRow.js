@@ -1,38 +1,40 @@
 import styles from './suggesteddescription.module.css'
 import axios from '../../util/Api'
 import { CloseFillIcon, FillterIcon } from '../../components/icons'
+import { IoMdCloseCircle } from 'react-icons/io'
+
 
 
 export const SuggestedDescription = ({ descriptions, updateDescription, deleteDescription, status, setStatus }) => {
 
     const handleStatus = () => {
-        if(status === 'all'){
+        if (status === 'all') {
             setStatus('Pending')
-        } else if(status === 'Pending'){
+        } else if (status === 'Pending') {
             setStatus('Rejected')
-        } else if(status === 'Rejected'){
+        } else if (status === 'Rejected') {
             setStatus('Draft')
-        } else if(status === 'Draft'){
+        } else if (status === 'Draft') {
             setStatus('Public')
-        } else { 
+        } else {
             setStatus('all')
         }
     }
     return (
         <div className={styles.container}>
-            <table style={{width: '100%'}}>
+            <table style={{ width: '100%', display: 'grid', gridTemplateColumns: '1fr' }}>
                 <thead>
-                    <tr>
+                    <tr className={styles.th1}>
                         <td className={styles.td}>Name</td>
                         <td className={styles.td}>
-                            <p>Formatted string <FillterIcon style={styles.FillterIcon}/></p>
-                            
+                            <p>Formatted string <FillterIcon style={styles.FillterIcon} /></p>
+
                         </td>
                         <td className={styles.td}>
-                            <p style={{cursor: 'pointer'}}  onClick={handleStatus}>Status <FillterIcon style={styles.FillterIcon}/></p>
+                            <p style={{ cursor: 'pointer' }} onClick={handleStatus}>Status <FillterIcon style={styles.FillterIcon} /></p>
                         </td>
                         <td className={styles.td}>
-                            <p>Date created <FillterIcon style={styles.FillterIcon}/></p>
+                            <p>Date created <FillterIcon style={styles.FillterIcon} /></p>
                         </td>
                         <td className={styles.td}>Action</td>
                     </tr>
@@ -40,24 +42,20 @@ export const SuggestedDescription = ({ descriptions, updateDescription, deleteDe
                 <tbody>
                     {
                         descriptions.map((element) => (
-                            <tr key={element?._id}>
-                                <td className={styles.td}>{element?.description_key?.split('_').join(' ')}</td>
-                                <td className={styles.td}>{element?.formatted_string}</td>
-                                <td  className={styles.td}>
-                                    <p  className={element.status === 'Public'
+                            <tr key={element?._id} className={styles.tr1}>
+                                <td className={styles.td1}>{element?.description_key?.split('_').join(' ')}</td>
+                                <td className={styles.td1}>{element?.formatted_string}</td>
+                                <td className={styles.td1}>
+                                    <p className={element.status === 'Public'
                                         ? styles.statusText : element.status === 'Pending'
                                             ? styles.statusText2 : element.status === 'Rejected'
-                                                ? styles.rejected : styles.statusText2} style={{textTransform: 'capitalize'}} >{element?.status}</p>
-                                    </td>
-                                    <td className={styles.td}>{new Date(element?.createdAt)?.toLocaleDateString()}</td>
-                                <td className={styles.td}>
+                                                ? styles.rejected : styles.statusText2} style={{ textTransform: 'capitalize' }} >{element?.status}</p>
+                                </td>
+                                <td className={styles.td1}>{new Date(element?.createdAt)?.toLocaleDateString()}</td>
+                                <td className={styles.td1}>
                                     <select onChange={(e) => {
-                                        if (e.target.value !== 'DELETE') {
-                                            updateDescription({ status: e.target.value, _id: element?._id })
-                                        } else (
-                                            deleteDescription(element._id)
-                                        )
-                                    }}>
+                                        updateDescription({ status: e.target.value, _id: element?._id })
+                                    }} className={styles.selected}>
                                         <option selected={element.status === 'Public'} value='Public'>
                                             Public
                                         </option>
@@ -74,6 +72,7 @@ export const SuggestedDescription = ({ descriptions, updateDescription, deleteDe
                                             Delete
                                         </option>
                                     </select>
+                                    <IoMdCloseCircle size={22} style={{ marginLeft: '.8rem', cursor: 'pointer' }} color='grey' onClick={() => deleteDescription(element._id)} />
                                 </td>
                             </tr>
                         ))

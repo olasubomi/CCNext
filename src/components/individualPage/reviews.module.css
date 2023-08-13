@@ -1,6 +1,6 @@
 .products_reviews_container{
-    width: 90%;
-    display: grid;
+    width: 100%;
+    display: block;
     grid-gap: 1rem;
     justify-items: center;
 }
@@ -30,6 +30,7 @@
 }
 
 .product_review_col_1{
+    width: 100%;
     display: grid;
     grid-template-columns: 57px 1fr;
     grid-gap: 3rem;
@@ -48,11 +49,11 @@
 }
 
 .review_details_top{
-    display: grid;
-    grid-auto-flow: column;
+    width: 100%;
+    /* grid-auto-flow: column; */
     justify-content: space-between;
     align-items: center;
-    grid-gap: 10px;
+    /* grid-gap: 10px; */
 }
 
 .review_details_top1{
@@ -60,7 +61,8 @@
     grid-gap: 1rem;
 }
 .review_input_container{
-    width: 80vw;
+    /* width: 60vw; */
+    width: 100%;
 }
 .profile_button{
     justify-self: end;
@@ -157,6 +159,7 @@
 }
 
 .review_details_top2{
+    width: 30%;
     display: grid;
     grid-auto-flow: column;
     align-items: center;
