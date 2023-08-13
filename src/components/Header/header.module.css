@@ -155,6 +155,7 @@
 .navbar_top_details_col_icon{
   width: 19px;
   fill: #6D6D6D;
+  cursor: pointer;
 }
 
 .navbar_main_container{

@@ -10,7 +10,7 @@ import Image from 'next/image';
 
 const GroceryPage = () => {
     const router = useRouter()
-    const { id } = router.query
+    const { _id } = router.query
 
     return <div>
         <Head>

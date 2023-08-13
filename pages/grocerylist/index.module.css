@@ -1,0 +1,388 @@
+.allBody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /*background: #F5F5F5;*/
+}
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 24px;
+}
+
+.selectAll {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 9px;
+    width: 20%;
+}
+
+.selectAll > label {
+    width: 62px;
+    height: 17px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000000;
+
+}
+
+.headerItems {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 65%;
+}
+
+.headerItems > p {
+    display: flex;
+    justify-self: center;
+    align-self: center;
+    width: 127px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.divSpan {
+    display: flex;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    width: 18%;
+}
+
+.divSpan > span {    
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+   
+}
+
+.listItemBody {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 106px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.checkB {
+    display: flex;
+    flex-direction: row;
+    gap: 30%;
+    width: 20%;
+}
+
+.checkB > img {
+    width: 68px;
+    height: 100%;
+}
+
+.listItems {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 60%;
+}
+
+.listItems > label {
+    display: flex;
+    align-self: center;
+    justify-self: center;
+    width: 127px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.listItemAction {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: center;
+    width: 18%;
+    height: 100%;
+}
+
+.listItemAction > img {
+    cursor: pointer;
+}
+
+.addToCart {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 160px;
+    height: 35px;
+    background: #00A001;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.addToCart > label {
+    width: 114px;
+    height: 15px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.groceryBody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 150px;
+    background: #F5F5F5;
+    height: auto;
+    width: 100%;
+}
+
+.groceryMainBody {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 40px;
+    height: auto;
+    width: 95%;
+    background: #F5F5F5;
+}
+
+.arrowBack {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: auto;
+    width: auto;
+    
+}
+
+.arrowBack > h1 {
+    width: 248px;
+    height: 36px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 36px;
+    color: #000000;
+}
+
+
+.mainArrowRow {
+    display: flex;
+    flex-direction: row;
+    gap: 9px;
+    height: 20px;
+    width: 80px;
+    
+}
+
+.mainArrowRow > img {
+    height: 19px;
+    width: 19px;
+    cursor: pointer;
+}
+
+.mainArrowRow > label {
+    width: 37px;
+    height: 19px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #353535;
+    cursor: pointer;
+}
+.groceryMainBody > h2 {
+    margin-top: px;
+    width: 214px;
+    height: 22px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    color: #000000;
+}
+
+.searchBody {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    width: 100%;
+    height: auto;      
+}
+
+.searchInput {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    padding: 11px 18px 11px 21px;
+    width: 100%;
+    height: 39px;
+    border: 1px solid rgba(4, 213, 5, 0.6);
+    border-radius: 4px;
+}
+
+.searchInput > input {
+    border: none;
+    height: 35px;
+    width: 700px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #6D6D6D;
+    background-color: transparent;
+    outline: none;
+}
+.itemsHeader {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-top: 50px;
+    align-items: center;
+}
+
+.itemsHeader > label {
+    width: 64px;
+    height: 29px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-transform: capitalize;
+    color: #000000;
+}
+
+.addDeleteText {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.addDeleteText > label {
+    width: 155px;
+    height: 19px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #00A001;
+}
+
+.addDeleteText > p {
+    width: 140px;
+    height: 19px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: rgba(255, 0, 0, 0.85);
+}
+
+.groceryListCard {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 33.333333%;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.goToCart {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-end;
+    padding: 10px;
+    gap: 10px;
+    cursor: pointer;
+    width: 215px;
+    height: 45px;
+    background: #00A001;
+    border-radius: 4px;
+    margin-top: 30px;
+}
+
+.goToCart > label {
+    color: #ffffff;
+    cursor: pointer;
+}
+
+/*MOBILE SCREEN*/
+@media only screen and (max-width: 680px) {
+    .groceryBody {
+        margin-top: 80px;
+    }
+
+    .groceryListCard {
+      justify-content: center;
+      margin-top: 20px;
+      gap: 25px;
+    }
+
+    .goToCart {
+        width: 133px;
+        margin-top: 0px;
+    }
+}
+
+@media only screen and (max-width: 390px) {
+    .itemsHeader {
+       gap: 10px;
+    }
+    .addDeleteText {
+        gap: 10px;
+    }
+
+    .addDeleteText > label {
+        width: 100px;
+        font-size: 10px;
+    }
+    
+    .addDeleteText > p {
+        width: 100px;
+        font-size: 10px;
+    }
+}
