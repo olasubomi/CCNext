@@ -374,7 +374,7 @@ const GroceryPage = () => {
                                 <thead style={{ textAlign: 'left', paddingBottom: '4rem', width: '100%' }}>
                                     <div className={styles.thead}>
                                         <th style={{ display: 'flex', alignItems: 'center' }} className={styles.th}>
-                                            <input type='checkbox' />
+                                            <input type='checkbox'  style={{width: '2rem', height: '2rem'}}/>
                                             <p style={{ marginLeft: '2rem', }}>Select All</p>
                                         </th>
                                         <th className={styles.th}>Name</th>
@@ -396,7 +396,7 @@ const GroceryPage = () => {
                                                         onChange={(e) => {
                                                             addItemsToCart(element.item, true)
                                                         }}
-                                                        type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)'}} />
+                                                        type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem'}} />
                                                     {
                                                         element.item.itemImage0 ?
                                                             <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={yellow} height={50} width={55} style={{ borderRadius: '5px' }} />

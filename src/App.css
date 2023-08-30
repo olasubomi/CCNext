@@ -322,10 +322,20 @@ color: #353535;
   width: 1000px !important;
 
 }
-input[type="radio"]:checked {
-  color: #F47900 !important;
+
+input[type=radio] {
+  appearance:inherit;
+  padding: 7.5px;
+  background-color: transparent;
+  border-radius:50%;
 }
-input[type="checkbox" i]{
-  background-color: #F47900 !important;
-  color: red !important;
+input[type=radio]:checked {
+  background-color: #F47900;
+}
+input[type="checkbox"]:checked{
+  accent-color: #F47900 !important;
+  color: #fff;
+  background-color: #fff;
+  padding: 7.5px;
+  background-color: transparent;
 }

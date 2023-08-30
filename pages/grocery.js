@@ -120,24 +120,38 @@ const Grocery = () => {
                                                     <MdDelete size={19} color='#F47900' />
                                                     <p className={styles.text3} style={{ marginLeft: '.5rem' }}>Delete List</p>
                                                 </div>
-                                                <div className={styles.flex}
-                                                    style={{
-                                                        justifyContent: 'flex-start',
-                                                        cursor: 'pointer',
-                                                        padding: '.8rem',
-                                                        opacity: ele?.groceryItems?.length ? '1' : '0.4'
-                                                    }}>
-                                                    <MdRemoveRedEye size={17} color='#F47900' />
-                                                    <p className={styles.text3} style={{ marginLeft: '.5rem' }} onClick={() => {
-                                                        setDetails({
-                                                            listName: ele.listName,
-                                                            description: ele.description,
-                                                            status: ele?.status,
-                                                            id: ele._id
-                                                        })
-                                                        setOpenModal(true)
-                                                    }}>Make Public</p>
-                                                </div>
+                                                {
+                                                    ele.groceryItems.length ? <div className={styles.flex}
+                                                        style={{
+                                                            justifyContent: 'flex-start',
+                                                            cursor: 'pointer',
+                                                            padding: '.8rem',
+                                                            opacity: ele?.groceryItems?.length ? '1' : '0.4'
+
+                                                        }}>
+                                                        <MdRemoveRedEye size={17} color='#F47900' />
+                                                        <p className={styles.text3} style={{ marginLeft: '.5rem' }} onClick={() => {
+                                                            setDetails({
+                                                                listName: ele.listName,
+                                                                description: ele.description,
+                                                                status: ele?.status,
+                                                                id: ele._id
+                                                            })
+                                                            setOpenModal(true)
+                                                        }}>Make Public</p>
+                                                    </div>
+                                                        : <div className={styles.flex}
+                                                            style={{
+                                                                justifyContent: 'flex-start',
+                                                                cursor: 'pointer',
+                                                                padding: '.8rem',
+                                                                opacity: ele?.groceryItems?.length ? '1' : '0.4'
+
+                                                            }}>
+                                                            <MdRemoveRedEye size={17} color='#F47900' />
+                                                            <p className={styles.text3} style={{ marginLeft: '.5rem' }} >Make Public</p>
+                                                        </div>
+                                                }
                                             </div>
                                         </Popup>
                                     </div>

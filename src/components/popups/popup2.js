@@ -242,8 +242,8 @@ class Popup2 extends Component {
                                                         :
 
                                                         <>
-                                                            {ingredientsInItem.map((elem) => (
-                                                                <tr>
+                                                            {ingredientsInItem.map((elem, index) => (
+                                                                <tr style={{ background: index % 2 === 0 ? "#F1F1F1" : "#FFFFFF" }} key={index}>
                                                                     <td className={styles.td}>{elem.item_quantity}</td>
                                                                     <td className={styles.td}>{elem.item_measurement}</td>
                                                                     <td className={styles.td}>{elem.item_name}</td>

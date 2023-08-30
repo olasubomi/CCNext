@@ -23,7 +23,7 @@ export const GroceryModal = ({
     const handleEdit = async () => {
 
         try {
-            const response = await axios(`/groceries/create/${details.id}`, {
+            await axios(`/groceries/create/${details.id}`, {
                 method: 'PATCH',
                 data: {
                     listName: details.listName,
@@ -33,10 +33,11 @@ export const GroceryModal = ({
 
 
             })
-            refetch()
+
 
             toast.success('Grocery list updated successfully')
-            setOpenModal(!openModal)
+            setOpenModal(false)
+            refetch()
         }
         catch (error) {
             console.log(error)
@@ -71,15 +72,17 @@ export const GroceryModal = ({
                     <p className={styles.sub}>Control who can see your list by selecting either public or private settings.</p>
                 </div>
                 <div className={styles.radio}>
-                    <input
-                        type='radio'
-                        name='private'
-                        id='option1'
-                        value='Private'
-                        color='#F47900'
-                        checked={selectedOption === "Private"}
-                        onChange={() => handleRadioChange("Private")} 
+                    <div className={styles.border}>
+                        <input
+                            type='radio'
+                            name='private'
+                            id='option1'
+                            value='Private'
+                            color='#F47900'
+                            checked={selectedOption === "Private"}
+                            onChange={() => handleRadioChange("Private")}
                         />
+                    </div>
                     <AiFillEyeInvisible style={{ marginLeft: '.5rem' }} />
                     <div className={styles.radiosub} >
                         <label htmlFor="option1" className={styles.radioLabel}>Private</label>
@@ -87,16 +90,18 @@ export const GroceryModal = ({
                     </div>
                 </div>
                 <div className={styles.radio}>
-                    <input
-                        type='radio'
-                        name='label'
-                        id='option2'
-                        value='Public'
-                        color='#F47900'
-                        checked={selectedOption === "Public"}
-                        onChange={() => handleRadioChange("Public")} />
+                    <div className={styles.border}>
+                        <input
+                            type='radio'
+                            name='label'
+                            id='option2'
+                            value='Public'
+                            color='#F47900'
+                            checked={selectedOption === "Public"}
+                            onChange={() => handleRadioChange("Public")} />
+                    </div>
                     <AiFillEye style={{ marginLeft: '.5rem' }} />
-                    <div  className={styles.radiosub}>
+                    <div className={styles.radiosub}>
                         <label htmlFor="option2" className={styles.radioLabel}>Public</label>
                         <p className={styles.text2}>Make your grocery list visible to others</p>
                     </div>
