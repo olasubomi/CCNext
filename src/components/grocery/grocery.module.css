@@ -3,6 +3,17 @@
     height: 100%;
     background: #FAFAFA;
     padding-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.container1 {
+    width: 100%;
+    height: 100%;
+    background: #FAFAFA;
+    padding-top: 3rem;
+    padding-bottom: 6rem;
 }
 
 .grocery_container {
@@ -23,7 +34,7 @@
 
 .title {
     color: #000;
-    font-size: 30px;
+    font-size: 27px;
     font-weight: 500;
     margin-left: 2rem;
 }
@@ -84,16 +95,66 @@
 }
 
 .card2 {
-    width: 40%;
-    margin-left: 3%;
     margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     margin-bottom: -3rem;
     padding: 1rem 2rem;
-    height: 230px;
-    flex-shrink: 0;
+    width: 437px;
     border-radius: 8px;
     background: #FFF;
     box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
+}
+
+.images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 1rem;
+    height: 190px;
+    width: 100%;
+    margin-top: -3.5rem;
+}
+
+.noImages {
+    height: 0px;
+}
+
+.oneImage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+}
+
+.name2 {
+    font-size: 11.3px;
+    margin-top: .7rem;
+    text-align: center;
+}
+
+.bord {
+    border-left: 1px solid #CCC;
+    height: 9.5rem;
+    margin-top: -2rem;
+}
+
+.bb {
+    border: none;
+}
+
+.length {
+    padding-top: 2rem;
+    color: #6D6D6D;
+    font-size: 13px;
+    display: block;
+    padding-bottom: 1rem;
+}
+
+.length2 {
+    display: none;
 }
 
 .flex2 {
@@ -112,11 +173,20 @@
     font-weight: 400;
     line-height: normal;
     margin-left: 1.5rem;
+    text-transform: capitalize;
 }
 
 .text {
     color: #353535;
     font-size: 14px;
+    font-weight: 400;
+    line-height: 2rem;
+    width: 95%;
+}
+
+.text3 {
+    color: #353535;
+    font-size: 12px;
     font-weight: 400;
     line-height: 2rem;
     width: 95%;
@@ -159,8 +229,390 @@
     align-items: center;
     gap: 10px;
 }
-.button_text2{
+
+.two4 {
+    border-radius: 4px;
+    background: #F47900;
+    display: flex;
+    width: 152px;
+    padding: 12px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.button_text2 {
     width: 94%;
     margin: auto;
+
+}
+
+.grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.1fr .7fr .7fr .4fr;
+    grid-column-gap: .7rem;
+}
+
+.inputbg {
+    border-radius: 4px;
+    border: 1px solid rgba(4, 213, 5, 0.60);
+    outline: none;
+    height: 51px;
+    color: #6D6D6D;
+    font-size: 15px;
+    font-weight: 200;
+    padding-left: 1.5rem;
+}
+
+.btn {
+    color: #FFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    height: 51px;
+    padding: 10px;
+    border-radius: 4px;
+    background: #00A001;
+    border: none;
+    outline: none;
+}
+
+.th {
+    font-weight: 200;
+    color: #000;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    width: 100%;
+}
+
+.tr {
+    background: #FFF;
+    box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
+    height: 90px;
+    width: 100%;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    margin-top: 3rem;
+}
+
+.td {
+    display: flex;
+    align-items: center;
+    font-weight: 100;
+    font-size: 13.5px;
+}
+
+.all_cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 5rem;
+    width: 90%;
+    row-gap: 4rem;
+    margin: 0 auto 2rem auto;
+    height: auto;
+    padding-bottom: 10rem;
+}
+
+.border {
+    width: 100%;
+    border-bottom: .5px solid grey;
+    opacity: .5;
+    padding: .4rem;
+    margin-bottom: .7rem;
+}
+
+.popup_overlay {
+    background: 'red';
+}
+
+.popup-content {
+    width: 10px !important;
+}
+
+.data {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.flex3 {
+    display: flex;
+    width: 40%;
+}
+
+.second {
+    width: 40%;
+    margin-left: 5%;
+}
+
+.third {
+    width: 15%;
+}
+
+.sub {
+    display: flex;
+    align-items: center;
+}
+
+.labelName {
+    font-size: 13.5px;
+    color: #000;
+    font-weight: 300;
+    opacity: .8;
+    text-align: left;
+}
+
+.thead {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    padding: 0 2.5rem;
+}
+
+.cartBtns {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 2.5rem;
+}
+
+.cartbtn1 {
+    width: 238px;
+    height: 51px;
+    top: 668px;
+    outline: none;
+    left: 941px;
+    padding: 12px 20px 12px 20px;
+    border-radius: 4px;
+    border: 1px solid rgba(53, 53, 53, 1);
+    gap: 10px;
+    background-color: transparent;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+    margin-right: 1.3rem;
+}
+
+.cartbtn2 {
+    width: 207px;
+    height: 51px;
+    top: 668px;
+    left: 1190px;
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    gap: 10px;
+    background: rgba(0, 160, 1, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    color: #ffffff;
+}
+
+.sugImages {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-column-gap: 2.3rem;
+    width: 82%;
+}
+
+.top {
+    margin-top: 9rem;
+}
+
+.sugTitle {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin-bottom: 3rem;
+}
+
+.name2 {
+    font-size: 13.5px;
+    text-align: left;
+    color: rgba(0, 0, 0, 1);
+    margin-top: -.2rem;
+}
+
+.name3 {
+    font-size: 13px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: rgba(0, 0, 0, 1);
+    margin-top: .3rem;
+
+}
+
+.store2 {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: rgba(109, 109, 109, 1);
+
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    width: 40%;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.minutes {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: left;
+    color: rgba(109, 109, 109, 1);
+
+}
+
+.box {
+    width: 20px;
+    height: 20px;
+    background-color: #F47900;
+    color: #ffffff;
+    text-align: center;
+    margin-right: 1rem;
+    font-size: 12px;
+
+}
+
+.price {
+    text-align: right;
+    margin-top: 5rem;
+    margin-right: 3rem;
+
+}
+
+.cartbtn3 {
+    width: 141px;
+    height: 45px;
+    outline: none;
+    left: 941px;
+    padding: 12px 20px 12px 20px;
+    border-radius: 4px;
+    border: 1px solid rgba(148, 148, 148, 1);
+    gap: 10px;
+    background-color: transparent;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+    margin-right: 1.3rem;
+}
+
+.cartbtn4 {
+    width: 215px;
+    height: 45px;
+    outline: none;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    gap: 10px;
+    background: rgba(0, 160, 1, 1);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+    margin-right: 1.3rem;
+    color: #ffffff;
+}
+
+.check {
+    color: #F47900;
+    text-decoration: underline;
+    text-decoration-color: #F47900;
+}
+
+.no_item {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 17px;
+    letter-spacing: 0em;
+    color: rgba(109, 109, 109, 1);
+    padding-top: 2rem;
+}
+
+.btn3 {
+    width: 212px;
+    height: 39px;
+    padding: 11px 17px 14px 17px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 16px;
+    color: rgba(255, 255, 255, 1);
+    background: rgba(244, 121, 0, 1);
+    text-align: center;
+    border: none;
+    outline: none;
+    margin-top: 2rem;
+}
+
+.line {
+    width: 45%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+}
+
+.or {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 17px;
+
+}
+
+.add {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    padding-top: 2rem;
+}
+.add2{
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: .5rem;
+}
+
+.btnOutline {
+    width: 212px;
+    height: 40px;
+    border-radius: 4px;
+    border: 1px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    outline: none;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    margin-top: 1rem;
+}
+.noOptions{
+    padding-bottom: 2rem;
+}
+.popup_content2{
+    background-color: #FFF;
+    z-index: 1000;
+    width: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+    left: 75%;
+    position: absolute;
+    top: 46%;
     
 }

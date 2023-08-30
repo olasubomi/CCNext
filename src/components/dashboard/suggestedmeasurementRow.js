@@ -58,9 +58,7 @@ export const SuggestedMeasurement = ({ measurements, updateMeasurement, deleteMe
                                         <option selected={element.status === 'Draft'} value='Draft'>
                                             Draft
                                         </option>
-                                        <option value='DELETE'>
-                                            Delete
-                                        </option>
+                                       
                                     </select>
                                     <IoMdCloseCircle size={22} style={{ marginLeft: '.8rem', cursor: 'pointer' }} color='grey' onClick={() => deleteMeasurement({ measurement_name: element?.measurement_name })} />
                                 </td>

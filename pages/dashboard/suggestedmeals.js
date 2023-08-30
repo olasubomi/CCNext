@@ -1135,7 +1135,7 @@ const SuggestedMeals = (props) => {
                                                 <div className={props.auth.authUser.user_type === 'supplier' ? styles.request_tr : styles.request_tr1}>
                                                     {/* <input name='id' type="checkbox" /> */}
                                                     {/* <p className={styles.request_th}>ID number</p> */}
-                                                    <p onClick={handleFilterFirstLetter} className={styles.request_th}>Name</p>
+                                                    <p onClick={handleFilterFirstLetter} className={styles.request_th}>Name <FillterIcon /></p>
                                                     <p className={styles.request_th + " " + styles.hide}
                                                         onClick={handleFilterByType}
                                                     >Item Type <FillterIcon /></p>
@@ -1433,52 +1433,56 @@ const SuggestedMeals = (props) => {
                     popupType='Meal Suggestion Preview'
                     openModal={openModal}
                     closeModal={closeModal}
-                    name={suggestion.meal_name}
-                    description={suggestion.item_name}
+                    name={suggestion.item_name}
+                    description={suggestion.item_intro}
                     imageData={suggestion.item_images[0]}
                     imagesData={suggestion.item_images}
                     image={suggestion.item_images[0]}
                     // imagesData={suggestion.meal_images.slice(1)} categories={JSON.parse(suggestion.meal_categories).toString().split(',')}
-                    prepTime={suggestion.item_data.prep_time}
-                    cookTime={suggestion.item_data.cook_time}
-                    serves={suggestion.item_data.servings}
-                    chef={suggestion.item_data.chef}
-                    ingredientsList={
-                        suggestion.formatted_ingredients?.length
-                            ? suggestion.formatted_ingredients
-                            : []}
-                    utensilsList={suggestion.kitchen_utensils}
+                    prepTime={suggestion.meal_prep_time}
+                    cookTime={suggestion.meal_cook_time}
+                    serves={suggestion.meal_servings}
+                    chef={suggestion.meal_chef}
+                    isDashboard={true}
+                    // ingredientsList={
+                    //     suggestion.formatted_ingredients?.length
+                    //         ? suggestion.formatted_ingredients
+                    //         : []}
+                    ingredientsInItem={
+                        suggestion.ingredeints_in_item
+                    }
+                    utensilsList={suggestion.meal_kitchen_utensils}
                     //   ingredientsList={suggestion.formatted_ingredients.map(ingredient => JSON.parse(ingredient).properIngredientStringSyntax)} utensilsList={suggestion.kitchen_utensils}
-                    instructionChunk1={suggestion.formatted_instructions[0]?.title}
-                    instructionChunk2={suggestion.formatted_instructions[1]?.title}
-                    instructionChunk3={suggestion.formatted_instructions[2]?.title}
-                    instructionChunk4={suggestion.formatted_instructions[3]?.title}
-                    instructionChunk5={suggestion.formatted_instructions[4]?.title}
-                    instructionChunk6={suggestion.formatted_instructions[5]?.title}
+                    instructionChunk1={suggestion.meal_formatted_instructions[0]?.title}
+                    instructionChunk2={suggestion.meal_formatted_instructions[1]?.title}
+                    instructionChunk3={suggestion.meal_formatted_instructions[2]?.title}
+                    instructionChunk4={suggestion.meal_formatted_instructions[3]?.title}
+                    instructionChunk5={suggestion.meal_formatted_instructions[4]?.title}
+                    instructionChunk6={suggestion.meal_formatted_instructions[5]?.title}
 
-                    instructionChunk1Step={suggestion.formatted_instructions[0]?.instructionSteps}
-                    instructionChunk2Step={suggestion.formatted_instructions[1]?.instructionSteps}
-                    instructionChunk3Step={suggestion.formatted_instructions[2]?.instructionSteps}
-                    instructionChunk4Step={suggestion.formatted_instructions[3]?.instructionSteps}
-                    instructionChunk5Step={suggestion.formatted_instructions[4]?.instructionSteps}
-                    instructionChunk6Step={suggestion.formatted_instructions[5]?.instructionSteps}
+                    instructionChunk1Step={suggestion.meal_formatted_instructions[0]?.instructionSteps}
+                    instructionChunk2Step={suggestion.meal_formatted_instructions[1]?.instructionSteps}
+                    instructionChunk3Step={suggestion.meal_formatted_instructions[2]?.instructionSteps}
+                    instructionChunk4Step={suggestion.meal_formatted_instructions[3]?.instructionSteps}
+                    instructionChunk5Step={suggestion.meal_formatted_instructions[4]?.instructionSteps}
+                    instructionChunk6Step={suggestion.meal_formatted_instructions[5]?.instructionSteps}
 
-                    instructionChunk1DataName={suggestion.formatted_instructions[0]?.dataName}
-                    instructionChunk2DataName={suggestion.formatted_instructions[1]?.dataName}
-                    instructionChunk3DataName={suggestion.formatted_instructions[2]?.dataName}
-                    instructionChunk4DataName={suggestion.formatted_instructions[3]?.dataName}
-                    instructionChunk5DataName={suggestion.formatted_instructions[4]?.dataName}
-                    instructionChunk6DataName={suggestion.formatted_instructions[5]?.dataName}
+                    instructionChunk1DataName={suggestion.meal_formatted_instructions[0]?.dataName}
+                    instructionChunk2DataName={suggestion.meal_formatted_instructions[1]?.dataName}
+                    instructionChunk3DataName={suggestion.meal_formatted_instructions[2]?.dataName}
+                    instructionChunk4DataName={suggestion.meal_formatted_instructions[3]?.dataName}
+                    instructionChunk5DataName={suggestion.meal_formatted_instructions[4]?.dataName}
+                    instructionChunk6DataName={suggestion.meal_formatted_instructions[5]?.dataName}
 
-                    chunk1Content={suggestion?.item_data?.image_or_video_content_1}
-                    chunk2Content={suggestion?.item_data?.image_or_video_content_2}
-                    chunk3Content={suggestion?.item_data?.image_or_video_content_3}
-                    chunk4Content={suggestion?.item_data?.image_or_video_content_4}
-                    chunk5Content={suggestion?.item_data?.image_or_video_content_5}
-                    chunk6Content={suggestion?.item_data?.image_or_video_content_6}
-                    instructionWordlength={suggestion.instructionWordlength}
-                    tips={suggestion?.item_data?.tips}
-                    mealImageData={suggestion.itemImage0}
+                    chunk1Content={suggestion?.meal_image_or_video_content1}
+                    chunk2Content={suggestion?.meal_image_or_video_content2}
+                    chunk3Content={suggestion?.meal_image_or_video_content3}
+                    chunk4Content={suggestion?.meal_image_or_video_content4}
+                    chunk5Content={suggestion?.meal_image_or_video_content5}
+                    chunk6Content={suggestion?.meal_image_or_video_content6}
+                    instructionWordlength={suggestion?.instructionWordlength}
+                    tips={suggestion?.meal_tips}
+                    mealImageData={suggestion?.itemImage0}
                     suggested={true}
                     id={suggestion.id}
                     categories={suggestion?.item_categories?.map(ele => ele?.category_name)}

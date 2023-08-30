@@ -314,3 +314,18 @@ color: #353535;
 .MuiAutocomplete-popper > *{
   font-size: 13px !important;
 }
+
+[role=tooltip].popup-content{
+  width: 155px !important;
+}
+[role=tooltip].popup_content2{
+  width: 1000px !important;
+
+}
+input[type="radio"]:checked {
+  color: #F47900 !important;
+}
+input[type="checkbox" i]{
+  background-color: #F47900 !important;
+  color: red !important;
+}

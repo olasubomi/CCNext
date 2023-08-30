@@ -45,7 +45,7 @@ class Popup2 extends Component {
 
 
     edit = () => {
-        const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6, chunk1Content } = this.props
+        const { name, description, categories, ingredientsList, ingredientGroupList, cookTime, prepTime, serves, instructionChunk1, instructionChunk2, instructionChunk3, instructionChunk4, instructionChunk5, instructionChunk6, chunk1Content, ingredeints_in_item } = this.props
         var stepInputs = []
         if (instructionChunk1) {
             stepInputs = []
@@ -93,6 +93,7 @@ class Popup2 extends Component {
             ingredientGroupList: group,
             // store product names of inputted strings to compare with db products
             ingredientStrings: ingredientsList,
+            ingredeintsInItem: ingredeints_in_item,
             // do we want to use current ingredient formats ? Yes.
             // currentIngredient,
             // currentIngredientMeasurement,
@@ -164,7 +165,7 @@ class Popup2 extends Component {
 
     render() {
 
-        const { popupType, imageData, imagesData, name, description, categories, ingredientsList } = this.props
+        const { popupType, imageData, imagesData, name, description, categories, ingredientsList, ingredientsInItem, isDashboard } = this.props
         const { curIn, length } = this.state;
 
         console.log('propss', this.props)
@@ -172,7 +173,7 @@ class Popup2 extends Component {
         var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
         return (
             <>
-                {this.props.openModal &&
+                {this.props.openModal && 
                     <div className={styles.popup2_container}>
                         <div className={styles.popup2}>
                             <div className={styles.popup2_top}>
@@ -182,7 +183,7 @@ class Popup2 extends Component {
                             <div className={styles.popup2_row_2}>
                                 <div className={styles.popup2_col_1}>
                                     <div className={styles.img_col}>
-                                        {imagesData?.length  !== 0 &&
+                                        {imagesData?.length !== 0 &&
                                             <Image
                                                 src={imagesData[0]}
                                                 alt="pop up"
@@ -229,13 +230,27 @@ class Popup2 extends Component {
                                                     <th className={styles.th}>Quantity</th>
                                                     <th className={styles.th}>Measurement</th>
                                                 </tr>
-                                                {ingredientsList?.map((ingredient, index) => (
-                                                    <tr style={{ background: index % 2 === 0 ? "#F1F1F1" : "#FFFFFF" }} key={index}>
-                                                        <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split('of')[1] : ingredient.split(' ')[1]}</td>
-                                                        <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[0] : ingredient.split(' ')[0]}</td>
-                                                        <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[1] : ''}</td>
-                                                    </tr>
-                                                ))}
+                                                {
+                                                    !isDashboard ?
+
+                                                        ingredientsList?.map((ingredient, index) => (
+                                                            <tr style={{ background: index % 2 === 0 ? "#F1F1F1" : "#FFFFFF" }} key={index}>
+                                                                <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split('of')[1] : ingredient.split(' ')[1]}</td>
+                                                                <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[0] : ingredient.split(' ')[0]}</td>
+                                                                <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[1] : ''}</td>
+                                                            </tr>))
+                                                        :
+
+                                                        <>
+                                                            {ingredientsInItem.map((elem) => (
+                                                                <tr>
+                                                                    <td className={styles.td}>{elem.item_quantity}</td>
+                                                                    <td className={styles.td}>{elem.item_measurement}</td>
+                                                                    <td className={styles.td}>{elem.item_name}</td>
+                                                                </tr>
+                                                            ))}</>
+
+                                                }
                                             </table>
                                         </div>
                                         <div className={styles.popup2_categories}>

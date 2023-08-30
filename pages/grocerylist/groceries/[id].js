@@ -3,14 +3,228 @@ import Head from "next/head";
 import Header, { Header2 } from '../../../src/components/Header/Header';
 import GoBack from '../../../src/components/CommonComponents/goBack';
 import styles from '../../../src/components/grocery/grocery.module.css'
-import { AiFillEyeInvisible } from 'react-icons/ai'
+import { AiFillEyeInvisible, AiFillEye, AiFillStar, AiOutlineStar } from 'react-icons/ai'
+import { BsArrowRight } from 'react-icons/bs'
 import girl from '../../../public/assets/icons/girl.jpg'
 import Image from 'next/image';
+import noteGif from '../../../public/assets/icons/gif.gif'
+import { DropDownSelect } from '../../../src/components/select/select';
+import { useEffect, useState } from 'react';
+import { Modal } from '../../../src/components/modal/popup-modal';
+import Footer from '../../../src/components/Footer/Footer';
+import yellow from '../../../public/assets/meal_pics/yellow.jpeg'
+import { IoMdCloseCircle } from 'react-icons/io'
+import axios from '../../../src/util/Api';
+import { toast } from 'react-toastify';
+import { GroceryModal } from '../../../src/components/modal/grocery-modal';
+import Popup1 from '../../../src/components/popups/popup1';
+import Popup2 from '../../../src/components/popups/popup2';
+import { SugMeals } from '../../../src/sug-meals';
+import { useCart } from '../../../src/context/cart.context';
+import Popup from 'reactjs-popup';
+import { SuggestModal } from '../../../src/components/modal/suggest-modal';
 
+
+const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+];
+const customNoOptionsMessage = ({ isShow, setIsShow }) => {
+    return (
+        <div className={styles.noOptions}>
+            <p className={styles.no_item}>Item Not Found</p>
+            <button className={styles.btn3}>Add Item to List</button>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2rem' }}>
+                <div className={styles.line}></div>
+                <p className={styles.or}>OR</p>
+                <div className={styles.line}></div>
+            </div>
+            <p className={styles.add}>Add Details to Suggested Item</p>
+            <button className={styles.btnOutline} onClick={() => setIsShow(true)}>Suggest Item</button>
+
+        </div>
+    );
+};
 
 const GroceryPage = () => {
-    const router = useRouter()
-    const { id } = router.query
+    const [isShow, setIsShow] = useState(false)
+    const [show, setShow] = useState(false)
+    const [itemList, setItemList] = useState({})
+    const [similar, setSimilar] = useState([])
+    const [openModal, setOpenModal,] = useState(false)
+    const [openModal1, setOpenModalState] = useState(false)
+    const [openModal2, setOpenModal2State] = useState(false)
+    const [suggestion, setSuggestionState] = useState({})
+    const router = useRouter();
+    const [checked, setChecked] = useState([])
+    const { addItemsToCart, cartItems, cartHasItem } = useCart()
+    const [measurements, setMeasurement] = useState([{
+        value: '',
+        label: ''
+    }])
+    const [item, setItems] = useState([{
+        value: '',
+        label: ''
+    }])
+    const [itemsToAdd, setItemsToAdd] = useState({
+        itemId: '',
+        quantity: '',
+        measurement: ''
+    });
+    const [details, setDetails] = useState({
+        listName: '',
+        description: '',
+        id: '',
+        status: ""
+    })
+
+    function closeModal() {
+        setOpenModalState(false);
+        setOpenModal2State(false)
+    }
+
+    const id = router?.query?.id;
+
+    console.log('cartItems-', cartItems)
+
+    const getAllMeasurement = async (newPage) => {
+        try {
+            const resp = await axios.get(`/measurement/1?status=Public`);
+            if (Array.isArray(resp?.data?.data?.measurement) && resp?.data?.data?.measurement?.length) {
+                console.log('resp.data.data?.measurement',)
+                const response = resp.data.data?.measurement.map(element => {
+                    return {
+                        label: element.measurement_name?.split('_').join(' '),
+                        value: element._id
+                    }
+                })
+                setMeasurement(response)
+            }
+        } catch (e) {
+            console.log('err', e)
+        }
+    }
+
+
+
+    const addItemToGrocery = async () => {
+        const user = JSON.parse(localStorage.getItem('user'))
+        const payload = {
+            userId: user._id,
+            groceryList: {
+                listName: itemList.listName,
+                groceryItems: {
+                    itemId: itemsToAdd.itemId,
+                    quantity: itemsToAdd.quantity,
+                    measurement: itemsToAdd.measurement
+                }
+            }
+        }
+        console.log(payload, 'payload')
+        try {
+            const response = await axios(`/groceries`, {
+                method: 'post',
+                data: payload
+            })
+            setItemsToAdd({
+                itemId: '',
+                quantity: '',
+                measurement: ''
+            })
+            console.log(response.data.data)
+            getList()
+            toast.success('Item added successfully')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getList = async () => {
+        try {
+            const response = await axios(`/groceries/list/${id}`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            console.log(response.data, 'yello')
+            setItemList(response.data.data.data.groceryList)
+            setSimilar(response.data.data.data.similar[0])
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getItem = async (name) => {
+        try {
+            const response = await axios.get(`/items/filter/${name}`)
+            const resp = response.data.data.map(element => {
+                return {
+                    label: element.item_name,
+                    value: element._id,
+                    image: element?.itemImage0,
+                    price: element?.item_price ? `$${element?.item_price}` : 'No Price',
+                    store: element?.store_available?.store_name || 'No store'
+                }
+            })
+            setItems(resp)
+            console.log(resp, 'resp')
+        } catch (error) {
+            console.log(error)
+        }
+        return name
+    }
+
+    console.log()
+
+    const deleteItemFromGrocery = async (id) => {
+        try {
+            await axios.patch(`/groceries/remove/${itemList._id}/${id}`)
+            getList()
+            toast.success('Delete Success')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleEdit = async (status) => {
+        try {
+            const response = await axios(`/groceries/create/${itemList._id}`, {
+                method: 'PATCH',
+                data: {
+                    listName: itemList.listName,
+                    description: itemList.description,
+                    status
+                }
+            })
+            getList()
+
+            toast.success('Grocery list edited successfully')
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    const toggle = (selection) => {
+        console.log('selection', selection?.item)
+        setSuggestionState(selection?.item)
+        if (selection?.item?.item_type === 'Meal') {
+            setOpenModalState(true)
+        } else {
+            setOpenModal2State(true)
+        }
+
+    }
+
+
+
+    useEffect(() => {
+        getAllMeasurement()
+        getList()
+    }, [])
+    console.log(similar)
 
     return <div>
         <Head>
@@ -19,37 +233,324 @@ const GroceryPage = () => {
         </Head>
         <Header />
         <Header2 />
-        <div className={styles.container}>
+        <div className={styles.container1}>
             <div className={styles.header}>
                 <div className={styles.one}>
                     <GoBack />
                     <p className={styles.title3}>My Grocery List </p>
-                    <p style={{ marginLeft: '1rem' }}>/ Breakfast</p>
+                    <p style={{ marginLeft: '1rem' }}>/ {itemList.listName}</p>
                 </div>
-                <div className={styles.two3}>
-                    <p className={styles.button_text} onClick={() => setShow(!show)}>
-                        <AiFillEyeInvisible size={20} style={{ marginRight: '.6rem' }} />
-                        Make Public</p>
-                </div>
+
+                {
+                    itemList?.groceryItems?.length === 0 ?
+                        <div className={styles.two3} style={{ background: 'rgba(148, 148, 148, 1)' }}>
+                            <p className={styles.button_text}>
+                                <AiFillEyeInvisible size={20} style={{ marginRight: '.6rem' }} />
+                                Make Public
+                            </p>
+                        </div> :
+                        <div onClick={() => {
+                            setDetails({
+                                listName: itemList.listName,
+                                description: itemList.description,
+                                status: itemList?.status,
+                                id: itemList._id
+                            })
+                            setOpenModal(true)
+                        }}
+                            className={styles.two3} style={{ background: '#F47900' }}>
+                            <p className={styles.button_text}>
+                                <AiFillEye size={20} style={{ marginRight: '.6rem' }} />
+                                Make Public
+                            </p>
+                        </div>
+                }
+                {
+                    openModal &&
+                    <GroceryModal
+                        details={details}
+                        openModal={openModal}
+                        setOpenModal={setOpenModal}
+                        refetch={() => fetchList()}
+                    />
+                }
+
             </div>
             <div className={styles.button_text2}>
-                <h4 className={styles.title2}>Breakfast</h4>
+                <h4 className={styles.title2}>{itemList.listName}</h4>
 
                 <p className={styles.text} style={{ width: '85%', fontSize: '12px' }}>
-                    Everything I need to start my day right.
-                    From wholesome cereals and fresh fruits to delightful
-                    pastries and energizing beverages, this grocery list
-                    has your breakfast essentials covered.
+                    {itemList.description}
                 </p>
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: '2rem'}}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: '2rem' }}>
                     <Image src={girl} width={40} height={40} className={styles.person} />
-                    <p className={styles.text}>Ecuador Victor</p>
+                    <p className={styles.text} style={{ marginLeft: '1rem', textTransform: 'capitalize' }}>{itemList.user?.first_name} {itemList.user?.last_name}</p>
                 </div>
+                <div style={{ marginTop: '5rem' }}>
+                    <h5>Add new item from store</h5>
+                    <div className={styles.grid}>
+                        <DropDownSelect
+                            onChange={(value) => {
+                                getItem(value)
+                            }}
+                            noOptionsMessage={
+                                () => (
+                                    <div className={styles.noOptions}>
+                                        <p className={styles.no_item}>Item Not Found</p>
+                                        <button className={styles.btn3}>Add Item to List</button>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2rem' }}>
+                                            <div className={styles.line}></div>
+                                            <p className={styles.or}>OR</p>
+                                            <div className={styles.line}></div>
+                                        </div>
+                                        <p className={styles.add}>Add Details to Suggested Item</p>
+                                        <button className={styles.btnOutline} onClick={() => setIsShow(true)}>Suggest Item</button>
+
+                                    </div>
+                                )
+                            }
+                            options={item}
+                            onSelect={(option) => setItemsToAdd({ ...itemsToAdd, itemId: option.value })}
+                            placeholder="Search meals, products and ingredients"
+                            formatOptionLabel={(e, { context }) => context === 'value' ?
+                                <div>
+                                    <p>{e.label}</p>
+                                </div> :
+                                <div className={styles.data}>
+                                    <div className={styles.flex3}>
+                                        {
+                                            e.image ?
+                                                <Image src={e.image} width={40} objectPosition='center' objectFit='cover'
+                                                    height={40} borderRadius='4px' style={{ borderRadius: '4px' }} />
+                                                :
+                                                <Image src={yellow} width={40} height={40} objectPosition='center' objectFit='cover' borderRadius='10px' style={{ borderRadius: '4px' }} />
+                                        }
+                                        <p className={styles.labelName} style={{ marginLeft: '13px' }}>{e.label}</p>
+                                    </div>
+                                    <div className={styles.second}>
+                                        <p className={styles.labelName}>{e.store}</p>
+                                    </div>
+                                    <div className={styles.third}>
+                                        <p className={styles.labelName} style={{ textAlign: 'center' }}> {e.price}</p>
+                                    </div>
+
+                                </div>
+
+                            }
+
+                        />
+                        <input
+                            placeholder='Quantity'
+                            value={itemsToAdd.quantity}
+                            onChange={(e) => setItemsToAdd({ ...itemsToAdd, quantity: e.target.value })}
+                            className={styles.inputbg} />
+                        <DropDownSelect
+                            onChange={(value) => console.log(value)}
+                            onSelect={(option) => setItemsToAdd({ ...itemsToAdd, measurement: option.value })}
+                            options={measurements}
+                            placeholder="Measurement"
+                        />
+                        <button className={styles.btn} onClick={() => addItemToGrocery()}>Add New Item</button>
+                    </div>
+                </div>
+                {
+                    itemList?.groceryItems?.length === 0 ?
+                        <>
+                            <h5>Items</h5>
+                            <div className={styles.card} style={{ width: '100%' }}>
+                                <Image src={noteGif} height={200} width={250} className={styles.image} />
+                                <div className={styles.flex}>
+                                    <p className={styles.card_text}>No item in your Grocery list.</p>
+                                    <div>
+                                        <p className={styles.card_text} style={{ color: '#F47900', marginLeft: '.5rem', cursor: 'pointer' }}>Add new items</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                        :
+                        <div style={{ width: '100%', marginTop: '5rem' }}>
+                            <h5>Items</h5>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', borderSpacing: '20px' }}>
+                                <thead style={{ textAlign: 'left', paddingBottom: '4rem', width: '100%' }}>
+                                    <div className={styles.thead}>
+                                        <th style={{ display: 'flex', alignItems: 'center' }} className={styles.th}>
+                                            <input type='checkbox' />
+                                            <p style={{ marginLeft: '2rem', }}>Select All</p>
+                                        </th>
+                                        <th className={styles.th}>Name</th>
+                                        <th className={styles.th}>Quantity</th>
+                                        <th className={styles.th}>Price</th>
+                                        <th className={styles.th}>Store</th>
+                                        <th className={styles.th}>Action</th>
+                                    </div>
+                                </thead>
+                                <tbody style={{ height: '100%' }}>
+                                    {
+                                        itemList?.groceryItems?.map((element, idx) => (
+                                            <tr key={element?._id} className={styles.tr}>
+                                                <td className={styles.td}>
+                                                    <input
+                                                        name={element.item.item_name}
+                                                        value={element.item.item_name}
+                                                        checked={cartHasItem(element.item)}
+                                                        onChange={(e) => {
+                                                            addItemsToCart(element.item, true)
+                                                        }}
+                                                        type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)'}} />
+                                                    {
+                                                        element.item.itemImage0 ?
+                                                            <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={yellow} height={50} width={55} style={{ borderRadius: '5px' }} />
+                                                    }
+                                                </td>
+                                                <td className={styles.td} onClick={() => {
+                                                toggle(element)
+                                            }} style={{cursor: 'pointer'}}>
+                                                    <p>{element.item.item_name}</p>
+                                                </td>
+                                                <td className={styles.td} style={{ textAlign: 'center' }}>{element.quantity} {element.measurement.measurement_name}</td>
+                                                <td className={styles.td}>{element?.item?.item_price ? `$${element?.item?.item_price}` : 'N/A'}</td>
+                                                <td className={styles.td} style={{ textAlign: 'center' }}>{element?.item?.store_name ? element?.item?.store_name : '-'}</td>
+                                                <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                            <div className={styles.cartBtns}>
+                                <button className={styles.cartbtn1}>
+                                    Add Selection to Cart
+                                </button>
+                                <button className={styles.cartbtn2} onClick={() => router.push('/cart/cart')}>
+                                    Go to Cart
+                                    <BsArrowRight size={18} />
+                                </button>
+                            </div>
+                            <div className={styles.top}>
+                                <h5 className={styles.sugTitle}>Suggested Meals Based On Items In Your Grocery List</h5>
+                                <div className={styles.sugImages}>
+                                    {
+                                        similar?.map((elem) => (
+                                            <div>
+                                                <Image src={elem.itemImage0} width={160} height={130} style={{ boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: '8px' }} objectFit='cover' objectPosition='center' />
+                                                <div className={styles.flex2} style={{ width: '88%' }}>
+                                                    <p className={styles.name2}>{elem.item_name}</p>
+                                                    <p className={styles.name3}>{elem?.item_price ? elem?.item_price : 'N/A'}</p>
+                                                </div>
+                                                <p className={styles.store2}>{elem?.store ? elem?.store : 'No Store'}</p>
+                                                <div className={styles.flex2} style={{ width: '91%' }}>
+                                                    <div className={styles.rating}>
+                                                        <AiFillStar size={15} color='rgba(4, 213, 5, 1)' />
+                                                        <AiFillStar size={15} color='rgba(4, 213, 5, 1)' />
+                                                        <AiFillStar size={15} color='rgba(4, 213, 5, 1)' />
+                                                        <AiFillStar color='grey'  size={15} />
+                                                        <AiFillStar color='grey' size={15} />
+                                                    </div>
+                                                    <p className={styles.minutes}>{Number(elem.meal_cook_time || 0) + Number(elem.meal_prep_time || 0)} Mins</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+                }
             </div>
+            {
+                show &&
+                <Modal show={show} setShow={setShow} />
+            }
+            {
+                isShow && <SuggestModal isShow={isShow} setIsShow={setIsShow} />
+            }
+            {openModal2 &&
+                <Popup1
+                    popup='product'
+                    openModal={openModal2}
+                    closeModal={closeModal}
+                    name={suggestion?.meal_name}
+                    description={suggestion?.item_name}
+                    imageData={suggestion?.item_images}
+                    image={suggestion?.item_images[0]}
+                    // imagesData={suggestion.product_images.slice(1)}
+                    categories={suggestion?.item_categories?.map(ele => ele?.category_name)}
+                    sizesList={suggestion.item_data?.product_size}
+                    ingredientsList={
+                        suggestion.formatted_ingredients?.length
+                            ? suggestion.formatted_ingredients
+                            : []}
+                    suggested={true}
+                    id={suggestion.id}
+                    ingredientGroupList={suggestion.formatted_ingredients}
+                    item_description={suggestion.item_description}
+                />
+            }
+            {openModal1 &&
+                <Popup2
+                    popupType='Meal Suggestion Preview'
+                    openModal={openModal1}
+                    closeModal={closeModal}
+                    name={suggestion.item_name}
+                    isDashboard={true}
+                    description={suggestion.item_intro}
+                    // imageData={suggestion?.item_images[0]}
+                    imagesData={suggestion?.item_images}
+                    // image={suggestion?.item_images[0]}
+                    // imagesData={suggestion.meal_images.slice(1)} categories={JSON.parse(suggestion.meal_categories).toString().split(',')}
+                    prepTime={suggestion.meal_prep_time}
+                    cookTime={suggestion.meal_cook_time}
+                    serves={suggestion.meal_servings}
+                    chef={suggestion.meal_chef}
+                    ingredientsList={
+                        suggestion.formatted_ingredients?.length
+                            ? suggestion.formatted_ingredients
+                            : []}
+                    utensilsList={suggestion.meal_kitchen_utensils}
+                    ingredientsInItem={
+                        suggestion.ingredeints_in_item
+                    }
+                    instructionChunk1={suggestion.meal_formatted_instructions[0]?.title}
+                    instructionChunk2={suggestion.meal_formatted_instructions[1]?.title}
+                    instructionChunk3={suggestion.meal_formatted_instructions[2]?.title}
+                    instructionChunk4={suggestion.meal_formatted_instructions[3]?.title}
+                    instructionChunk5={suggestion.meal_formatted_instructions[4]?.title}
+                    instructionChunk6={suggestion.meal_formatted_instructions[5]?.title}
+
+                    instructionChunk1Step={suggestion.meal_formatted_instructions[0]?.instructionSteps}
+                    instructionChunk2Step={suggestion.meal_formatted_instructions[1]?.instructionSteps}
+                    instructionChunk3Step={suggestion.meal_formatted_instructions[2]?.instructionSteps}
+                    instructionChunk4Step={suggestion.meal_formatted_instructions[3]?.instructionSteps}
+                    instructionChunk5Step={suggestion.meal_formatted_instructions[4]?.instructionSteps}
+                    instructionChunk6Step={suggestion.meal_formatted_instructions[5]?.instructionSteps}
+
+                    instructionChunk1DataName={suggestion.meal_formatted_instructions[0]?.dataName}
+                    instructionChunk2DataName={suggestion.meal_formatted_instructions[1]?.dataName}
+                    instructionChunk3DataName={suggestion.meal_formatted_instructions[2]?.dataName}
+                    instructionChunk4DataName={suggestion.meal_formatted_instructions[3]?.dataName}
+                    instructionChunk5DataName={suggestion.meal_formatted_instructions[4]?.dataName}
+                    instructionChunk6DataName={suggestion.meal_formatted_instructions[5]?.dataName}
+
+                    chunk1Content={suggestion?.meal_image_or_video_content1}
+                    chunk2Content={suggestion?.meal_image_or_video_content2}
+                    chunk3Content={suggestion?.meal_image_or_video_content3}
+                    chunk4Content={suggestion?.meal_image_or_video_content4}
+                    chunk5Content={suggestion?.meal_image_or_video_content5}
+                    chunk6Content={suggestion?.meal_image_or_video_content6}
+                    instructionWordlength={suggestion?.instructionWordlength}
+                    tips={suggestion?.meal_tips}
+                    mealImageData={suggestion?.itemImage0}
+                    suggested={true}
+                    id={suggestion.id}
+                    categories={suggestion?.item_categories?.map(ele => ele?.category_name)}
+                    ingredientGroupList={suggestion.formatted_ingredients}
+                />
+            }
         </div>
 
         {/* GroceryPage: {id} */}
-    </div>
+        <Footer />
+    </div >
 }
 
 export default GroceryPage

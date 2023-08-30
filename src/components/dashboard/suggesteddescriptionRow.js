@@ -68,9 +68,7 @@ export const SuggestedDescription = ({ descriptions, updateDescription, deleteDe
                                         <option selected={element.status === 'Draft'} value='Draft'>
                                             Draft
                                         </option>
-                                        <option value='DELETE'>
-                                            Delete
-                                        </option>
+                                       
                                     </select>
                                     <IoMdCloseCircle size={22} style={{ marginLeft: '.8rem', cursor: 'pointer' }} color='grey' onClick={() => deleteDescription(element._id)} />
                                 </td>
