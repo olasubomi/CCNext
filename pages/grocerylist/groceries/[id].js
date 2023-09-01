@@ -57,7 +57,7 @@ const GroceryPage = () => {
     const [openModal2, setOpenModal2State] = useState(false)
     const [suggestion, setSuggestionState] = useState({})
     const router = useRouter();
-    const [checked, setChecked] = useState([])
+    const [value, setValue] = useState("")
     const { addItemsToCart, cartItems, cartHasItem } = useCart()
     const [measurements, setMeasurement] = useState([{
         value: '',
@@ -292,6 +292,7 @@ const GroceryPage = () => {
                         <DropDownSelect
                             onChange={(value) => {
                                 getItem(value)
+                                setValue(value)
                             }}
                             noOptionsMessage={
                                 () => (
@@ -374,7 +375,7 @@ const GroceryPage = () => {
                                 <thead style={{ textAlign: 'left', paddingBottom: '4rem', width: '100%' }}>
                                     <div className={styles.thead}>
                                         <th style={{ display: 'flex', alignItems: 'center' }} className={styles.th}>
-                                            <input type='checkbox'  style={{width: '2rem', height: '2rem'}}/>
+                                            <input type='checkbox' style={{ width: '2rem', height: '2rem' }} />
                                             <p style={{ marginLeft: '2rem', }}>Select All</p>
                                         </th>
                                         <th className={styles.th}>Name</th>
@@ -396,18 +397,18 @@ const GroceryPage = () => {
                                                         onChange={(e) => {
                                                             addItemsToCart(element.item, true)
                                                         }}
-                                                        type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem'}} />
+                                                        type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
                                                     {
                                                         element.item.itemImage0 ?
                                                             <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={yellow} height={50} width={55} style={{ borderRadius: '5px' }} />
                                                     }
                                                 </td>
                                                 <td className={styles.td} onClick={() => {
-                                                toggle(element)
-                                            }} style={{cursor: 'pointer'}}>
+                                                    toggle(element)
+                                                }} style={{ cursor: 'pointer' }}>
                                                     <p>{element.item.item_name}</p>
                                                 </td>
-                                                <td className={styles.td} style={{ textAlign: 'center' }}>{element.quantity} {element.measurement.measurement_name}</td>
+                                                <td className={styles.td} style={{ textAlign: 'center' }}>{element?.quantity} {element?.measurement?.measurement_name}</td>
                                                 <td className={styles.td}>{element?.item?.item_price ? `$${element?.item?.item_price}` : 'N/A'}</td>
                                                 <td className={styles.td} style={{ textAlign: 'center' }}>{element?.item?.store_name ? element?.item?.store_name : '-'}</td>
                                                 <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
@@ -426,10 +427,14 @@ const GroceryPage = () => {
                                 </button>
                             </div>
                             <div className={styles.top}>
-                                <h5 className={styles.sugTitle}>Suggested Meals Based On Items In Your Grocery List</h5>
+                                {
+                                
+                                similar?.length ? <h5 className={styles.sugTitle}>Suggested Meals Based On Items In Your Grocery List</h5> :
+                                ''
+                                }
                                 <div className={styles.sugImages}>
                                     {
-                                        similar?.map((elem) => (
+                                        similar?.slice(0,5).map((elem) => (
                                             <div>
                                                 <Image src={elem.itemImage0} width={160} height={130} style={{ boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: '8px' }} objectFit='cover' objectPosition='center' />
                                                 <div className={styles.flex2} style={{ width: '88%' }}>
@@ -442,7 +447,7 @@ const GroceryPage = () => {
                                                         <AiFillStar size={15} color='rgba(4, 213, 5, 1)' />
                                                         <AiFillStar size={15} color='rgba(4, 213, 5, 1)' />
                                                         <AiFillStar size={15} color='rgba(4, 213, 5, 1)' />
-                                                        <AiFillStar color='grey'  size={15} />
+                                                        <AiFillStar color='grey' size={15} />
                                                         <AiFillStar color='grey' size={15} />
                                                     </div>
                                                     <p className={styles.minutes}>{Number(elem.meal_cook_time || 0) + Number(elem.meal_prep_time || 0)} Mins</p>
@@ -462,7 +467,12 @@ const GroceryPage = () => {
                 <Modal show={show} setShow={setShow} />
             }
             {
-                isShow && <SuggestModal isShow={isShow} setIsShow={setIsShow} />
+                isShow && <SuggestModal
+                    value={value}
+                    refetch={() => getList()}
+                    listName={itemList.listName} 
+                    isShow={isShow} 
+                    setIsShow={setIsShow} />
             }
             {openModal2 &&
                 <Popup1

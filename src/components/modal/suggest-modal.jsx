@@ -11,14 +11,12 @@ import Frame from '../../../public/assets/logos/Frame.png'
 export const SuggestModal = ({
     isShow,
     setIsShow,
-    details = {
-        listName: "",
-        description: ''
-    }
-
+    listName,
+    value = '',
+    refetch
 }) => {
     const [selectedOption, setSelectedOption] = useState(null);
-    const [itemName, setItemName] = useState('')
+    const [itemName, setItemName] = useState(value)
     const handleRadioChange = (value) => {
         setSelectedOption(value);
     };
@@ -28,15 +26,9 @@ export const SuggestModal = ({
     })
     const ref = useRef();
     const targetElementRef = useRef(null);
-    const [modalState, setModalState] = useState({
-        listName: details.listName,
-        description: details.description
-    })
-    const { listName, description } = modalState
+   
+    console.log('value', value)
 
-    function onChange(e) {
-        setModalState({ ...modalState, [e.target.name]: e.target.value });
-    }
 
     useEffect(() => {
         const targetElement = targetElementRef.current;
@@ -60,6 +52,7 @@ export const SuggestModal = ({
             form.append('item_name', itemName)
             form.append('item_images', itemImage.file)
             form.append("user", JSON.parse(localStorage.getItem('user'))._id);
+            form.append('listName', listName)
 
             const response = await axios(`/items`, {
                 method: 'POST',
@@ -68,6 +61,7 @@ export const SuggestModal = ({
                     'Content-Type': 'multipart/form-data'
                 }
             })           
+            refetch()
             toast.success('Grocery list edited successfully')
             setIsShow(!isShow)
         }
