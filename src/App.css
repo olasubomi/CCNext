@@ -317,11 +317,9 @@ color: #353535;
 
 [role=tooltip].popup-content{
   width: 155px !important;
-}
-[role=tooltip].popup_content2{
-  width: 1000px !important;
 
 }
+
 
 input[type=radio] {
   appearance:inherit;
@@ -338,4 +336,27 @@ input[type="checkbox"]:checked{
   background-color: #fff;
   padding: 7.5px;
   background-color: transparent;
+}
+
+.custom div[class*='placeholder'] {
+  font-size: 15px !important;
+}
+
+@media only screen and (max-width: 470px){
+  .custom div[class*='placeholder'] {
+    font-size: 11px !important;
+  }
+  .css-13849sg-control{
+    font-size: 11px;
+  }
+  .css-1dimb5e-singleValue{
+    font-size: 11px;
+  }
+  [role=tooltip].popup-content{
+    width: 130px !important;
+  }
+  
+}
+.eye{
+  font-size: 30px;
 }

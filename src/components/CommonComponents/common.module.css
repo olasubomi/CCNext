@@ -3,20 +3,30 @@
 .goback_header_pages {
     cursor: pointer;
     list-style-type: none;
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: start;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     grid-gap: 4px;
-    margin: 0;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
-    line-height: 19px;
-
     color: #353535;
 }
   
 .goback_header_page_arrow {
     font-size: 20px !important;
     color: #353535;
+}
+@media only screen and (max-width: 500px){
+    .goback_header_pages{
+        font-size: 11px;
+    }
+    .goback_header_page_arrow {
+        font-size: 15px !important;
+        color: #353535;
+    }
+    .li{
+        display: none;
+    }
+   
 }

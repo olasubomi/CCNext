@@ -99,11 +99,11 @@ const Grocery = () => {
                     <div className={styles.all_cards}>
 
                         {groceryList.map((ele, id) => (
-                            <div className={styles.card2} key={id}>
+                            <div className={ele.groceryItems.length > 0 ? styles.card2 : styles.noImages} key={id}>
                                 <div className={styles.column1}>
                                     <div className={styles.flex2}>
                                         <h4 className={styles.title2}>{ele.listName}</h4>
-                                        <Popup trigger={<div> <HiDotsHorizontal size={26} /> </div>} position="bottom center" className={styles.popup_content}>
+                                        <Popup trigger={<div> <HiDotsHorizontal className={styles.dots} /> </div>} position="bottom right" className={styles.popup_content}>
                                             <div>
                                                 <div onClick={() => {
                                                     setDetails({
@@ -121,25 +121,26 @@ const Grocery = () => {
                                                     <p className={styles.text3} style={{ marginLeft: '.5rem' }}>Delete List</p>
                                                 </div>
                                                 {
-                                                    ele.groceryItems.length ? <div className={styles.flex}
-                                                        style={{
-                                                            justifyContent: 'flex-start',
-                                                            cursor: 'pointer',
-                                                            padding: '.8rem',
-                                                            opacity: ele?.groceryItems?.length ? '1' : '0.4'
+                                                    ele.groceryItems.length ?
+                                                        <div className={styles.flex}
+                                                            style={{
+                                                                justifyContent: 'flex-start',
+                                                                cursor: 'pointer',
+                                                                padding: '.8rem',
+                                                                opacity: ele?.groceryItems?.length ? '1' : '0.4'
 
-                                                        }}>
-                                                        <MdRemoveRedEye size={17} color='#F47900' />
-                                                        <p className={styles.text3} style={{ marginLeft: '.5rem' }} onClick={() => {
-                                                            setDetails({
-                                                                listName: ele.listName,
-                                                                description: ele.description,
-                                                                status: ele?.status,
-                                                                id: ele._id
-                                                            })
-                                                            setOpenModal(true)
-                                                        }}>Make Public</p>
-                                                    </div>
+                                                            }}>
+                                                            <MdRemoveRedEye size={17} color='#F47900' />
+                                                            <p className={styles.text3} style={{ marginLeft: '.5rem' }} onClick={() => {
+                                                                setDetails({
+                                                                    listName: ele.listName,
+                                                                    description: ele.description,
+                                                                    status: ele?.status,
+                                                                    id: ele._id
+                                                                })
+                                                                setOpenModal(true)
+                                                            }}>Make Public</p>
+                                                        </div>
                                                         : <div className={styles.flex}
                                                             style={{
                                                                 justifyContent: 'flex-start',
@@ -166,7 +167,7 @@ const Grocery = () => {
                                                     <div className={styles.oneImage}>
                                                         {
 
-                                                            elem.item.item_images ? <Image src={elem?.item?.item_images[0]} width={95} height={95} objectFit='cover' objectPosition='center' /> :
+                                                            elem.item.itemImage0 ? <Image src={elem?.item?.itemImage0} width={95} height={100} className={styles.imgs} /> :
                                                                 <Image src={yellow} width={95} height={95} objectFit='cover' objectPosition='center' />
                                                         }
                                                         <p className={styles.name2}>{elem?.item?.item_name}</p>
@@ -179,7 +180,7 @@ const Grocery = () => {
                                         }
                                     </div>
                                 </div>
-                                <div className={styles.flex2} style={{ marginBottom: '1rem', }}>
+                                <div className={styles.flex2} style={{ marginBottom: '1rem', marginTop: '1rem'}}>
                                     <div className={styles.flex}>
                                         <Image src={girl} width={40} height={40} className={styles.person} />
                                         <p className={styles.name}>{ele.user.first_name} {ele.user.last_name}</p>

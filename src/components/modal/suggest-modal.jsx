@@ -22,11 +22,11 @@ export const SuggestModal = ({
     };
     const [itemImage, setItemImage] = useState({
         url: '',
-        file: {}
+        file: null
     })
     const ref = useRef();
     const targetElementRef = useRef(null);
-   
+
     console.log('value', value)
 
 
@@ -41,26 +41,26 @@ export const SuggestModal = ({
         }
     }, [isShow])
 
- 
+
 
     const handlAdd = async () => {
-        console.log(selectedOption, 'selectedOptionselectedOption')
         try {
             const form = new FormData();
             let value = selectedOption === 'Meal' ? 'Meal' : "Product"
             form.append('item_type', value)
             form.append('item_name', itemName)
-            form.append('item_images', itemImage.file)
             form.append("user", JSON.parse(localStorage.getItem('user'))._id);
             form.append('listName', listName)
-
+            if (itemImage.file) {
+                form.append('item_images', itemImage.file)
+            }
             const response = await axios(`/items`, {
                 method: 'POST',
                 data: form,
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
-            })           
+            })
             refetch()
             toast.success('Grocery list edited successfully')
             setIsShow(!isShow)
@@ -105,7 +105,7 @@ export const SuggestModal = ({
                                     url: URL.createObjectURL(e.target.files[0]),
                                     file: e.target.files[0]
                                 })
-                                
+
                             }} ref={ref} name='itemImage' style={{ display: 'none' }} />
                         </div>
                         <p className={styles.label2} style={{ marginTop: '3rem' }}>Product Category</p>

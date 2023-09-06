@@ -3,7 +3,7 @@ import Head from "next/head";
 import Header, { Header2 } from '../../../src/components/Header/Header';
 import GoBack from '../../../src/components/CommonComponents/goBack';
 import styles from '../../../src/components/grocery/grocery.module.css'
-import { AiFillEyeInvisible, AiFillEye, AiFillStar, AiOutlineStar } from 'react-icons/ai'
+import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
 import { BsArrowRight } from 'react-icons/bs'
 import girl from '../../../public/assets/icons/girl.jpg'
 import Image from 'next/image';
@@ -19,11 +19,13 @@ import { toast } from 'react-toastify';
 import { GroceryModal } from '../../../src/components/modal/grocery-modal';
 import Popup1 from '../../../src/components/popups/popup1';
 import Popup2 from '../../../src/components/popups/popup2';
-import { SugMeals } from '../../../src/sug-meals';
 import { useCart } from '../../../src/context/cart.context';
-import Popup from 'reactjs-popup';
 import { SuggestModal } from '../../../src/components/modal/suggest-modal';
-
+import { useMediaQuery } from '../../../src/hooks/usemediaquery';
+import { MobileTable } from '../../../src/components/mobile/table.mobile';
+import { MobileInputs } from '../../../src/components/mobile/inputs.mobile';
+import { Cards } from '../../../src/components/cards/cards';
+import { CardDropdown } from '../../../src/components/dropdown/dropdown';
 
 const options = [
     { value: 'chocolate', label: 'Chocolate' },
@@ -48,7 +50,12 @@ const customNoOptionsMessage = ({ isShow, setIsShow }) => {
 };
 
 const GroceryPage = () => {
+    const matches = useMediaQuery('(min-width: 920px)')
     const [isShow, setIsShow] = useState(false)
+    const [open, setOpen] = useState({
+        isOpen: false,
+        id: ''
+    })
     const [show, setShow] = useState(false)
     const [itemList, setItemList] = useState({})
     const [similar, setSimilar] = useState([])
@@ -107,7 +114,6 @@ const GroceryPage = () => {
     }
 
 
-
     const addItemToGrocery = async () => {
         const user = JSON.parse(localStorage.getItem('user'))
         const payload = {
@@ -116,10 +122,15 @@ const GroceryPage = () => {
                 listName: itemList.listName,
                 groceryItems: {
                     itemId: itemsToAdd.itemId,
-                    quantity: itemsToAdd.quantity,
-                    measurement: itemsToAdd.measurement
                 }
             }
+        }
+        if (itemsToAdd.quantity) {
+            payload.groceryList.groceryItems.quantity = itemsToAdd.quantity
+        }
+        if (itemsToAdd.measurement) {
+            payload.groceryList.groceryItems.measurement = itemsToAdd.measurement
+
         }
         console.log(payload, 'payload')
         try {
@@ -218,13 +229,11 @@ const GroceryPage = () => {
 
     }
 
-
-
     useEffect(() => {
         getAllMeasurement()
         getList()
     }, [])
-    console.log(similar)
+    console.log(itemList?.groceryItems, 'amen')
 
     return <div>
         <Head>
@@ -238,14 +247,14 @@ const GroceryPage = () => {
                 <div className={styles.one}>
                     <GoBack />
                     <p className={styles.title3}>My Grocery List </p>
-                    <p style={{ marginLeft: '1rem' }}>/ {itemList.listName}</p>
+                    <p className={styles.title3}>/ {itemList.listName}</p>
                 </div>
 
                 {
                     itemList?.groceryItems?.length === 0 ?
                         <div className={styles.two3} style={{ background: 'rgba(148, 148, 148, 1)' }}>
                             <p className={styles.button_text}>
-                                <AiFillEyeInvisible size={20} style={{ marginRight: '.6rem' }} />
+                                <AiFillEyeInvisible className={styles.eye} style={{ marginRight: '.6rem' }} />
                                 Make Public
                             </p>
                         </div> :
@@ -260,7 +269,7 @@ const GroceryPage = () => {
                         }}
                             className={styles.two3} style={{ background: '#F47900' }}>
                             <p className={styles.button_text}>
-                                <AiFillEye size={20} style={{ marginRight: '.6rem' }} />
+                                <AiFillEye className={styles.eye} style={{ marginRight: '.6rem' }} />
                                 Make Public
                             </p>
                         </div>
@@ -282,82 +291,96 @@ const GroceryPage = () => {
                 <p className={styles.text} style={{ width: '85%', fontSize: '12px' }}>
                     {itemList.description}
                 </p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: '2rem' }}>
+                <div className={styles.top1}>
                     <Image src={girl} width={40} height={40} className={styles.person} />
                     <p className={styles.text} style={{ marginLeft: '1rem', textTransform: 'capitalize' }}>{itemList.user?.first_name} {itemList.user?.last_name}</p>
                 </div>
-                <div style={{ marginTop: '5rem' }}>
-                    <h5>Add new item from store</h5>
-                    <div className={styles.grid}>
-                        <DropDownSelect
-                            onChange={(value) => {
-                                getItem(value)
-                                setValue(value)
-                            }}
-                            noOptionsMessage={
-                                () => (
-                                    <div className={styles.noOptions}>
-                                        <p className={styles.no_item}>Item Not Found</p>
-                                        <button className={styles.btn3}>Add Item to List</button>
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2rem' }}>
-                                            <div className={styles.line}></div>
-                                            <p className={styles.or}>OR</p>
-                                            <div className={styles.line}></div>
+                <div className={styles.top2}>
+                    <h5 className={styles.text4}>Add new item from store</h5>
+
+                    {
+                        matches ?
+                            <div className={styles.grid}>
+                                <DropDownSelect
+                                    onChange={(value) => {
+                                        getItem(value)
+                                        setValue(value)
+                                    }}
+                                    noOptionsMessage={
+                                        () => (
+                                            <div className={styles.noOptions}>
+                                                <p className={styles.no_item}>Item Not Found</p>
+                                                <button className={styles.btn3}>Add Item to List</button>
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2rem' }}>
+                                                    <div className={styles.line}></div>
+                                                    <p className={styles.or}>OR</p>
+                                                    <div className={styles.line}></div>
+                                                </div>
+                                                <p className={styles.add}>Add Details to Suggested Item</p>
+                                                <button className={styles.btnOutline} onClick={() => setIsShow(true)}>Suggest Item</button>
+
+                                            </div>
+                                        )
+                                    }
+                                    options={item}
+                                    onSelect={(option) => setItemsToAdd({ ...itemsToAdd, itemId: option.value })}
+                                    placeholder="Search meals, products and ingredients"
+
+                                    formatOptionLabel={(e, { context }) => context === 'value' ?
+                                        <div>
+                                            <p className={styles.labelName}>{e.label}</p>
+                                        </div> :
+                                        <div className={styles.data}>
+                                            <div className={styles.flex3}>
+                                                {
+                                                    e.image ?
+                                                        <Image src={e.image} width={40} objectPosition='center' objectFit='cover'
+                                                            height={40} borderRadius='4px' style={{ borderRadius: '4px' }} />
+                                                        :
+                                                        <Image src={yellow} width={40} height={40} objectPosition='center' objectFit='cover' borderRadius='10px' style={{ borderRadius: '4px' }} />
+                                                }
+                                                <p className={styles.labelName} style={{ marginLeft: '13px' }}>{e.label}</p>
+                                            </div>
+                                            <div className={styles.second}>
+                                                <p className={styles.labelName}>{e.store}</p>
+                                            </div>
+                                            <div className={styles.third}>
+                                                <p className={styles.labelName} style={{ textAlign: 'center' }}> {e.price}</p>
+                                            </div>
+
                                         </div>
-                                        <p className={styles.add}>Add Details to Suggested Item</p>
-                                        <button className={styles.btnOutline} onClick={() => setIsShow(true)}>Suggest Item</button>
 
-                                    </div>
-                                )
-                            }
-                            options={item}
-                            onSelect={(option) => setItemsToAdd({ ...itemsToAdd, itemId: option.value })}
-                            placeholder="Search meals, products and ingredients"
-                            formatOptionLabel={(e, { context }) => context === 'value' ?
-                                <div>
-                                    <p>{e.label}</p>
-                                </div> :
-                                <div className={styles.data}>
-                                    <div className={styles.flex3}>
-                                        {
-                                            e.image ?
-                                                <Image src={e.image} width={40} objectPosition='center' objectFit='cover'
-                                                    height={40} borderRadius='4px' style={{ borderRadius: '4px' }} />
-                                                :
-                                                <Image src={yellow} width={40} height={40} objectPosition='center' objectFit='cover' borderRadius='10px' style={{ borderRadius: '4px' }} />
-                                        }
-                                        <p className={styles.labelName} style={{ marginLeft: '13px' }}>{e.label}</p>
-                                    </div>
-                                    <div className={styles.second}>
-                                        <p className={styles.labelName}>{e.store}</p>
-                                    </div>
-                                    <div className={styles.third}>
-                                        <p className={styles.labelName} style={{ textAlign: 'center' }}> {e.price}</p>
-                                    </div>
+                                    }
 
-                                </div>
-
-                            }
-
-                        />
-                        <input
-                            placeholder='Quantity'
-                            value={itemsToAdd.quantity}
-                            onChange={(e) => setItemsToAdd({ ...itemsToAdd, quantity: e.target.value })}
-                            className={styles.inputbg} />
-                        <DropDownSelect
-                            onChange={(value) => console.log(value)}
-                            onSelect={(option) => setItemsToAdd({ ...itemsToAdd, measurement: option.value })}
-                            options={measurements}
-                            placeholder="Measurement"
-                        />
-                        <button className={styles.btn} onClick={() => addItemToGrocery()}>Add New Item</button>
-                    </div>
+                                />
+                                <input
+                                    placeholder='Quantity'
+                                    value={itemsToAdd.quantity}
+                                    onChange={(e) => setItemsToAdd({ ...itemsToAdd, quantity: e.target.value })}
+                                    className={styles.inputbg} />
+                                <DropDownSelect
+                                    onChange={(value) => console.log(value)}
+                                    onSelect={(option) => setItemsToAdd({ ...itemsToAdd, measurement: option.value })}
+                                    options={measurements}
+                                    placeholder="Measurement"
+                                />
+                                <button className={styles.btn} onClick={() => addItemToGrocery()}>Add New Item</button>
+                            </div>
+                            :
+                            <MobileInputs
+                                getItem={getItem}
+                                addItemToGrocery={addItemToGrocery}
+                                setIsShow={setIsShow}
+                                setValue={setValue}
+                                itemsToAdd={itemsToAdd}
+                                setItemsToAdd={setItemsToAdd}
+                                item={item}
+                                measurements={measurements} />
+                    }
                 </div>
                 {
                     itemList?.groceryItems?.length === 0 ?
                         <>
-                            <h5>Items</h5>
                             <div className={styles.card} style={{ width: '100%' }}>
                                 <Image src={noteGif} height={200} width={250} className={styles.image} />
                                 <div className={styles.flex}>
@@ -370,53 +393,87 @@ const GroceryPage = () => {
                         </>
                         :
                         <div style={{ width: '100%', marginTop: '5rem' }}>
-                            <h5>Items</h5>
-                            <table style={{ width: '100%', borderCollapse: 'collapse', borderSpacing: '20px' }}>
-                                <thead style={{ textAlign: 'left', paddingBottom: '4rem', width: '100%' }}>
-                                    <div className={styles.thead}>
-                                        <th style={{ display: 'flex', alignItems: 'center' }} className={styles.th}>
-                                            <input type='checkbox' style={{ width: '2rem', height: '2rem' }} />
-                                            <p style={{ marginLeft: '2rem', }}>Select All</p>
-                                        </th>
-                                        <th className={styles.th}>Name</th>
-                                        <th className={styles.th}>Quantity</th>
-                                        <th className={styles.th}>Price</th>
-                                        <th className={styles.th}>Store</th>
-                                        <th className={styles.th}>Action</th>
-                                    </div>
-                                </thead>
-                                <tbody style={{ height: '100%' }}>
-                                    {
-                                        itemList?.groceryItems?.map((element, idx) => (
-                                            <tr key={element?._id} className={styles.tr}>
-                                                <td className={styles.td}>
-                                                    <input
-                                                        name={element.item.item_name}
-                                                        value={element.item.item_name}
-                                                        checked={cartHasItem(element.item)}
-                                                        onChange={(e) => {
-                                                            addItemsToCart(element.item, true)
-                                                        }}
-                                                        type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
-                                                    {
-                                                        element.item.itemImage0 ?
-                                                            <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={yellow} height={50} width={55} style={{ borderRadius: '5px' }} />
-                                                    }
-                                                </td>
-                                                <td className={styles.td} onClick={() => {
-                                                    toggle(element)
-                                                }} style={{ cursor: 'pointer' }}>
-                                                    <p>{element.item.item_name}</p>
-                                                </td>
-                                                <td className={styles.td} style={{ textAlign: 'center' }}>{element?.quantity} {element?.measurement?.measurement_name}</td>
-                                                <td className={styles.td}>{element?.item?.item_price ? `$${element?.item?.item_price}` : 'N/A'}</td>
-                                                <td className={styles.td} style={{ textAlign: 'center' }}>{element?.item?.store_name ? element?.item?.store_name : '-'}</td>
-                                                <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
-                                            </tr>
-                                        ))
-                                    }
-                                </tbody>
-                            </table>
+                            <h5 className={styles.text4}>Items</h5>
+
+                            {
+                                matches ?
+                                    <table className={styles.table1}>
+                                        <thead style={{ textAlign: 'left', paddingBottom: '4rem', width: '100%' }}>
+                                            <div className={styles.thead}>
+                                                <th style={{ display: 'flex', alignItems: 'center' }} className={styles.th}>
+                                                    <input type='checkbox' style={{ width: '2rem', height: '2rem' }} />
+                                                    <p style={{ marginLeft: '2rem', }}>Select All</p>
+                                                </th>
+                                                <th className={styles.th}>Name</th>
+                                                <th className={styles.th}>Quantity</th>
+                                                <th className={styles.th}>Price</th>
+                                                <th className={styles.th}>Store</th>
+                                                <th className={styles.th}>Action</th>
+                                            </div>
+                                        </thead>
+                                        <tbody style={{ height: '100%' }}>
+                                            {
+                                                itemList?.groceryItems?.map((element, idx) => (
+                                                    <tr key={element?._id} className={styles.tr}>
+                                                        <td className={styles.td}>
+                                                            <input
+                                                                name={element.item.item_name}
+                                                                value={element.item.item_name}
+                                                                checked={cartHasItem(element.item)}
+                                                                onChange={(e) => {
+                                                                    addItemsToCart(element.item, true)
+                                                                }}
+                                                                type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
+                                                            {
+                                                                element.item.itemImage0 ?
+                                                                    <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={yellow} height={50} width={55} style={{ borderRadius: '5px' }} />
+                                                            }
+                                                        </td>
+                                                        <td className={styles.td} style={{ cursor: 'pointer', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', marginTop: '1.5rem' }}>
+                                                            <p onClick={() => {
+                                                                console.log(element, 'elements')
+                                                                toggle(element)
+                                                            }}>{element.item.item_name}</p>
+                                                            {
+                                                                element.item.item_type === 'Meal' && element?.quantity  ?
+                                                                    <div>
+                                                                        <p className={styles.ingredients} onClick={() => {
+
+                                                                            setOpen({
+                                                                                id: element._id,
+                                                                                isOpen: !open.isOpen
+                                                                            })
+                                                                        }}>
+                                                                            Include Ingredients
+                                                                        </p>
+                                                                        {open.isOpen && element._id === open.id &&
+                                                                            <CardDropdown element={element} />
+                                                                        }
+                                                                    </div>
+                                                                    : <div></div>
+                                                            }
+                                                           
+                                                        </td>
+
+                                                        <td className={styles.td} style={{ textAlign: 'center' }}>{element?.quantity} {element?.measurement?.measurement_name}</td>
+                                                        <td className={styles.td}>{element?.item?.item_price ? `$${element?.item?.item_price}` : 'N/A'}</td>
+                                                        <td className={styles.td} style={{ textAlign: 'center' }}>{element?.item?.store_name ? element?.item?.store_name : '-'}</td>
+                                                        <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                    : <MobileTable
+                                        itemList={itemList}
+                                        addItemsToCart={addItemsToCart}
+                                        cartHasItem={cartHasItem}
+                                        deleteItemFromGrocery={deleteItemFromGrocery}
+                                        toggle={toggle}
+                                        open={open}
+                                        setOpen={setOpen} />
+                            }
                             <div className={styles.cartBtns}>
                                 <button className={styles.cartbtn1}>
                                     Add Selection to Cart
@@ -428,35 +485,11 @@ const GroceryPage = () => {
                             </div>
                             <div className={styles.top}>
                                 {
-                                
-                                similar?.length ? <h5 className={styles.sugTitle}>Suggested Meals Based On Items In Your Grocery List</h5> :
-                                ''
-                                }
-                                <div className={styles.sugImages}>
-                                    {
-                                        similar?.slice(0,5).map((elem) => (
-                                            <div>
-                                                <Image src={elem.itemImage0} width={160} height={130} style={{ boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: '8px' }} objectFit='cover' objectPosition='center' />
-                                                <div className={styles.flex2} style={{ width: '88%' }}>
-                                                    <p className={styles.name2}>{elem.item_name}</p>
-                                                    <p className={styles.name3}>{elem?.item_price ? elem?.item_price : 'N/A'}</p>
-                                                </div>
-                                                <p className={styles.store2}>{elem?.store ? elem?.store : 'No Store'}</p>
-                                                <div className={styles.flex2} style={{ width: '91%' }}>
-                                                    <div className={styles.rating}>
-                                                        <AiFillStar size={15} color='rgba(4, 213, 5, 1)' />
-                                                        <AiFillStar size={15} color='rgba(4, 213, 5, 1)' />
-                                                        <AiFillStar size={15} color='rgba(4, 213, 5, 1)' />
-                                                        <AiFillStar color='grey' size={15} />
-                                                        <AiFillStar color='grey' size={15} />
-                                                    </div>
-                                                    <p className={styles.minutes}>{Number(elem.meal_cook_time || 0) + Number(elem.meal_prep_time || 0)} Mins</p>
-                                                </div>
-                                            </div>
-                                        ))
-                                    }
 
-                                </div>
+                                    similar?.length ? <h5 className={styles.sugTitle}>Suggested Meals Based On Items In Your Grocery List</h5> :
+                                        ''
+                                }
+                                <Cards similar={similar} />
                             </div>
                         </div>
 
@@ -470,8 +503,8 @@ const GroceryPage = () => {
                 isShow && <SuggestModal
                     value={value}
                     refetch={() => getList()}
-                    listName={itemList.listName} 
-                    isShow={isShow} 
+                    listName={itemList.listName}
+                    isShow={isShow}
                     setIsShow={setIsShow} />
             }
             {openModal2 &&

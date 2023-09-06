@@ -1,7 +1,7 @@
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import styles from '../../components/modal/modal.module.css'
 import { useEffect, useRef, useState } from 'react';
-import { AiFillCloseCircle } from 'react-icons/ai'
+import { IoMdCloseCircle } from 'react-icons/io'
 import axios from '../../util/Api';
 import { toast } from 'react-toastify';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
@@ -64,7 +64,7 @@ export const GroceryModal = ({
 
                         setOpenModal(false)
                     }}>
-                        <AiFillCloseCircle color='#949494' size={28} />
+                        <IoMdCloseCircle className={styles.closed} color='#949494' />
                     </div>
                 </div>
 

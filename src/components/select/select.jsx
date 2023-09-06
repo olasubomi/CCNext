@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { getOptionLabel } from 'react-bootstrap-typeahead/types/utils';
 import Select from 'react-select';
-
+import styles from './select.module.css'
 
 const customStyles = {
   option: (defaultStyles, state) => ({
@@ -12,6 +12,10 @@ const customStyles = {
     marginTop: '1.2rem',
     marginBottom: '1.2rem',
     backgroundColor: state.isSelected ? "#FFFFFF" : "#FFFFFF",
+    placeholder: (base) => ({
+      ...base,
+      className: 'placeholder',
+    }),
   }),
 
   control: (defaultStyles, state) => ({
@@ -38,10 +42,11 @@ export const DropDownSelect = ({ placeholder, onSelect, onChange, options, forma
     <div className="App">
       <Select
         placeholder={placeholder}
+        className='custom'
         onInputChange={(e) => onChange(e)}
         options={options}
         styles={customStyles}
-        maxMenuHeight={'22rem'}
+        maxMenuHeight={'23rem'}
         onChange={(e) => onSelect(e)}
         formatOptionLabel={formatOptionLabel}
         noOptionsMessage={noOptionsMessage}

@@ -54,6 +54,10 @@
     gap: 10px;
 }
 
+.dots {
+    font-size: 26px;
+}
+
 .button_text {
     font-size: 14px;
     font-weight: 400;
@@ -61,6 +65,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.imgs {
+    object-fit: cover;
+    object-position: center;
 }
 
 .card {
@@ -79,6 +88,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.ingredients {
+    font-size: 12px;
+    margin-top: 5.52px;
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: #F47900;
+    color: #F47900;
 }
 
 .image {
@@ -101,7 +119,6 @@
     justify-content: space-between;
     margin-bottom: -3rem;
     padding: 1rem 2rem;
-    width: 437px;
     border-radius: 8px;
     background: #FFF;
     box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
@@ -117,7 +134,15 @@
 }
 
 .noImages {
-    height: 0px;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: -3rem;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    background: #FFF;
+    box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
 }
 
 .oneImage {
@@ -131,7 +156,7 @@
 
 .name2 {
     font-size: 11.3px;
-    margin-top: .7rem;
+    margin-top: .2rem;
     text-align: center;
 }
 
@@ -146,7 +171,6 @@
 }
 
 .length {
-    padding-top: 2rem;
     color: #6D6D6D;
     font-size: 13px;
     display: block;
@@ -182,6 +206,7 @@
     font-weight: 400;
     line-height: 2rem;
     width: 95%;
+    padding: 1rem 0 2rem 0;
 }
 
 .text3 {
@@ -254,6 +279,10 @@
     grid-column-gap: .7rem;
 }
 
+.grid2 {
+    display: none;
+}
+
 .inputbg {
     border-radius: 4px;
     border: 1px solid rgba(4, 213, 5, 0.60);
@@ -279,6 +308,10 @@
     outline: none;
 }
 
+.btn2 {
+    display: none;
+}
+
 .th {
     font-weight: 200;
     color: #000;
@@ -295,7 +328,7 @@
     width: 100%;
     padding: 0 2rem;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr .5fr;
     margin-top: 3rem;
 }
 
@@ -308,10 +341,10 @@
 
 .all_cards {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 5rem;
-    width: 90%;
-    row-gap: 4rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 2rem;
+    width: 95%;
+    row-gap: 3.5rem;
     margin: 0 auto 2rem auto;
     height: auto;
     padding-bottom: 10rem;
@@ -370,7 +403,7 @@
 .thead {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr .5fr;
     padding: 0 2.5rem;
 }
 
@@ -420,9 +453,9 @@
 
 .sugImages {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-column-gap: 2.3rem;
-    width: 82%;
+    grid-template-columns: repeat(6, 1fr);
+    grid-column-gap: 2rem;
+    width: 100%;
 }
 
 .top {
@@ -436,13 +469,6 @@
     letter-spacing: 0em;
     text-align: left;
     margin-bottom: 3rem;
-}
-
-.name2 {
-    font-size: 13.5px;
-    text-align: left;
-    color: rgba(0, 0, 0, 1);
-    margin-top: -.2rem;
 }
 
 .name3 {
@@ -581,7 +607,8 @@
     line-height: 16px;
     padding-top: 2rem;
 }
-.add2{
+
+.add2 {
     font-size: 14px;
     font-weight: 400;
     margin-left: .5rem;
@@ -600,10 +627,12 @@
     line-height: 16px;
     margin-top: 1rem;
 }
-.noOptions{
+
+.noOptions {
     padding-bottom: 2rem;
 }
-.popup_content2{
+
+.popup_content2 {
     background-color: #FFF;
     z-index: 1000;
     width: 25%;
@@ -614,5 +643,482 @@
     left: 75%;
     position: absolute;
     top: 46%;
+}
+
+.table2 {
+    display: none;
+}
+
+.table1 {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 20px;
+}
+
+.top2 {
+    margin-top: 5rem;
+}
+
+.top1 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 2rem;
+}
+
+.eye {
+    font-size: 20px;
+}
+
+.close {
+    font-size: 23px;
+}
+
+.check1 {
+    margin-right: 2rem;
+    margin-left: 1rem;
+    color: rgba(244, 121, 0, 1);
+    width: 2rem;
+    height: 2rem;
+}
+
+.dropdown1 {
+    width: 94%;
+    background-color: #FFF;
+    position: absolute;
+    height: auto;
+    left: 3%;
+    right: 0;
+    z-index: 2;
+    margin-top: 2rem;
+
+}
+
+.headtext {
+    background: rgba(241, 241, 241, 1);
+    width: 100%;
+    height: 48px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.subtext2 {
+    color: rgba(0, 0, 0, 1);
+    font-size: 15px;
+    margin-left: 49px;
+
+}
+
+.tr3 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    width: 100%;
+    background-color: #FFF;
+    align-content: center;
+    padding: 1.5rem 1rem 2rem 1rem;
+    height: 100%;
+    height: 90px;
+}
+
+.border1:not(:last-child) {
+    border-bottom: 1px solid rgba(144, 142, 142, 0.2);
+    width: 95%;
+    margin: 0 auto;
+}
+
+.tdata {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.textcenter {
+    text-align: center;
+}
+
+.textcenter2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkbox1 {
+    margin-right: 2rem;
+    margin-left: 2rem;
+}
+
+@media only screen and (max-width: 1100px) {
+    .all_cards {
+        grid-template-columns: 1fr 1fr;
+        width: 90%;
+    }
+    .subtext2 {
+        font-size: 13px;    
+    }
+    .header{
+        margin-top: 12%;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .title {
+        color: #000;
+        font-size: 20px;
+    }
+
+    .header {
+        margin-top: 15%;
+    }
+
+    .all_cards {
+        grid-template-columns: 1fr 1fr;
+        width: 90%;
+    }
+
+    .grid {
+        display: none;
+    }
+
+    .grid2 {
+        display: grid;
+        grid-template-columns: 1fr;
+        row-gap: 2rem;
+    }
+
+    .subgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 1rem;
+
+    }
+
+    .btn {
+        display: none;
+    }
+
+    .btn2 {
+        color: #FFF;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        height: 51px;
+        padding: 10px;
+        border-radius: 4px;
+        background: #00A001;
+        border: none;
+        outline: none;
+        width: 40%;
+        display: block;
+    }
+
+    .table2 {
+        display: block;
+    }
+
+    .table1 {
+        display: none;
+    }
+
+    .td2 {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 11px;
+    }
+
+    .td {
+        font-size: 11px;
+    }
+
+
+    .tr2 {
+        background: #FFF;
+        box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
+        height: 90px;
+        width: 94vw;
+        padding: 0 .5rem;
+        display: grid;
+        grid-template-columns: .3fr 1.5fr 1fr 1fr .3fr;
+        margin-top: 1rem;
+    }
+
+    .supplier {
+        font-size: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .sugImages {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .imgs {
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
+        object-position: center;
+    }
+
+    .ingredients {
+        font-size: 10px;
+    }
     
+
+}
+
+@media only screen and (max-width: 746px) {
+    .sugImages {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .header {
+        margin-top: 12%;
+    }
+
+    .card_text {
+        font-size: 14px;
+    }
+
+    .all_cards {
+        grid-template-columns: 1fr;
+        width: 90%;
+    }
+
+    .tr3 {
+        padding: 1.5rem 0 2rem 0;
+    }
+    .subtext2 {
+        font-size: 12px;  
+        margin-left: 30px;  
+    }
+}
+
+@media only screen and (max-width: 540px) {
+    .title3 {
+        font-size: 13px;
+        margin-left: .5rem;
+    }
+
+    .two3 {
+        width: 135px;
+        padding: 10px 15px;
+    }
+
+    .button_text {
+        font-size: 11px;
+    }
+
+    .title2 {
+        font-size: 20px;
+        letter-spacing: 0px;
+    }
+
+    .sugTitle {
+        font-size: 16px;
+    }
+
+    .sugImages {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-column-gap: 2rem;
+        width: 99%;
+    }
+
+    .text4 {
+        font-size: 14px;
+    }
+
+    .top2 {
+        margin-top: 1rem;
+    }
+
+    .top1 {
+        display: none;
+        margin-top: -1rem;
+    }
+
+    .tr2 {
+        grid-template-columns: .3fr 2fr .7fr .7fr .3fr;
+    }
+
+    .close {
+        font-size: 20px;
+    }
+
+    .cartbtn1 {
+        width: 180px;
+        height: 51px;
+        padding: 12px 15px 12px 15px;
+        font-size: 11px;
+    }
+
+    .cartbtn2 {
+        width: 160px;
+        height: 51px;
+        font-size: 11px;
+    }
+
+    .title {
+        color: #000;
+        font-size: 16px;
+    }
+
+    .two {
+        width: 120px;
+        height: 42px;
+        padding: 11px;
+    }
+
+    .name {
+        font-size: 12px;
+    }
+
+    .imgs {
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .textcenter2 {
+        display: none;
+    }
+
+    .tr3 {
+        grid-template-columns: 1fr 1.2fr 1fr 1fr .5fr
+    }
+
+    .checkbox1 {
+        margin-right: 1rem;
+        margin-left: 1rem;
+    }
+    .subtext2 {
+        font-size: 11px;    
+    }
+}
+
+@media only screen and (max-width: 470px) {
+    .title3 {
+        font-size: 10px;
+    }
+
+    .two3 {
+        width: 115px;
+        padding: 10px 0px;
+    }
+
+    .eye {
+        font-size: 11px;
+    }
+
+    .title2 {
+        font-size: 18px;
+        letter-spacing: 0px;
+    }
+
+    .sugTitle {
+        font-size: 16px;
+    }
+
+    .text4 {
+        font-size: 13px;
+    }
+
+    .inputbg {
+        font-size: 11px;
+    }
+
+    .btn2 {
+        color: #FFF;
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        height: 41px;
+        padding: 5px;
+        width: 39%;
+    }
+
+    .tr2 {
+        padding: 0 .5rem;
+        margin-top: 2rem;
+    }
+
+    .labelName {
+        font-size: 11.5px;
+    }
+
+    .close {
+        font-size: 18px;
+    }
+
+    .check1 {
+        margin-right: 1rem;
+        margin-left: 1rem;
+        color: rgba(244, 121, 0, 1);
+        width: 1.3rem;
+        height: 1.3rem;
+    }
+
+    .header {
+        margin-top: 14%;
+    }
+
+    .two2 {
+
+        width: 102px;
+        padding: 10px 10px;
+        gap: 10px;
+    }
+
+    .name2 {
+        font-size: 9.5px;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .tr2 {
+        padding: 0 0rem;
+        margin-top: 2rem;
+        grid-template-columns: .2fr 2fr .7fr .7fr .3fr;
+    }
+
+    .td2 {
+        font-size: 9px;
+    }
+
+    .td {
+        font-size: 9px;
+    }
+
+    .cartbtn1 {
+        width: 150px;
+        height: 41px;
+        padding: 12px 15px 12px 15px;
+        font-size: 11px;
+    }
+
+    .cartbtn2 {
+        width: 130px;
+        height: 41px;
+        font-size: 11px;
+    }
+
+    .header {
+        margin-top: 18%;
+    }
+
+    .name {
+        font-size: 12px;
+    }
+    .tr3 {
+        grid-template-columns: 1fr 1.2fr .7fr .7fr .5fr
+    }
+    .ingredients {
+        font-size: 9px;
+    }
+
+
 }
