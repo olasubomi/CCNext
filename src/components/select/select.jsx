@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { getOptionLabel } from 'react-bootstrap-typeahead/types/utils';
 import Select from 'react-select';
 import styles from './select.module.css'
 

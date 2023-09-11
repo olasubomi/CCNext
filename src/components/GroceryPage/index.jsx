@@ -388,7 +388,7 @@ class GroceryPage extends React.Component {
 
     return (
       <>
-        <Typeahead
+        {/* <Typeahead
           allowNew
           multiple
           options={productNamesMinusCustomersList}
@@ -397,11 +397,11 @@ class GroceryPage extends React.Component {
           onChange={(selected) => {
             this.handleClickTypeahead(selected);
             ref.current.clear();
-          }}
-          // create reference to clear after onChange
+          }} */}
+          {/* // create reference to clear after onChange
           ref={ref}
         // selected={this.props.productNames}
-        />
+        /> */}
 
         {/* Display alert if there is any issue loading grocery page */}
         <Alert show={showAlert} key={1} variant={variant}>
@@ -520,7 +520,4 @@ class GroceryPage extends React.Component {
 //   return { authUser, role, customer_id }
 // };
 
-export default
-  // connect(
-  // mapStateToProps, () => ({}))
-  (GroceryPage);
+export default GroceryPage

@@ -3441,7 +3441,7 @@ pure-react-carousel@^1.25.1:
     equals "^1.0.5"
     prop-types "^15.6.2"
 
-react-bootstrap-typeahead@^6.0.0-rc.1:
+react-bootstrap-typeahead@^6.2.3:
   version "6.2.3"
   resolved "https://registry.npmjs.org/react-bootstrap-typeahead/-/react-bootstrap-typeahead-6.2.3.tgz"
   integrity sha512-Ge2au2WxR8CWsAH3GbKsaJpIEV2OMKum2Ov7/kuVMBlHNKwsJc2ULJIjk3yZMoTvvfOzOnYDScaWrQwzPc5c/A==

@@ -1,8 +1,9 @@
+import "react-bootstrap-typeahead/css/Typeahead.css";
 import "../src/App.css";
 import { wrapper, } from "../src/store/index";
 import { persistor, store } from '../src/store/index'
 import { Provider } from "react-redux";
-import "react-bootstrap-typeahead/css/Typeahead.css";
+
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

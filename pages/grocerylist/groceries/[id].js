@@ -27,27 +27,6 @@ import { MobileInputs } from '../../../src/components/mobile/inputs.mobile';
 import { Cards } from '../../../src/components/cards/cards';
 import { CardDropdown } from '../../../src/components/dropdown/dropdown';
 
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-];
-const customNoOptionsMessage = ({ isShow, setIsShow }) => {
-    return (
-        <div className={styles.noOptions}>
-            <p className={styles.no_item}>Item Not Found</p>
-            <button className={styles.btn3}>Add Item to List</button>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2rem' }}>
-                <div className={styles.line}></div>
-                <p className={styles.or}>OR</p>
-                <div className={styles.line}></div>
-            </div>
-            <p className={styles.add}>Add Details to Suggested Item</p>
-            <button className={styles.btnOutline} onClick={() => setIsShow(true)}>Suggest Item</button>
-
-        </div>
-    );
-};
 
 const GroceryPage = () => {
     const matches = useMediaQuery('(min-width: 920px)')
