@@ -45,8 +45,8 @@ class GroceryPage extends React.Component {
     typeAheadAdded: false,
 
     product_img: null,
-    product_name:"",
-    product_modal_flg :false,
+    product_name: "",
+    product_modal_flg: false,
   };
 
   //////////////////////////////////////////////////////////////////////
@@ -54,11 +54,11 @@ class GroceryPage extends React.Component {
     this.setState({ [name]: value });
 
   //////////////////////////////////////////////////////////////////////
-  handleProductClick = (_img, _name,productID, flag) =>{
-    if(flag){
-      this.setState({ product_img: `/images/products/${_img}`, product_name: _name, product_modal_flg:true , productID: productID});
-    }else{
-      this.setState({ product_img: _img, product_name: _name , product_modal_flg:true, productID: productID});
+  handleProductClick = (_img, _name, productID, flag) => {
+    if (flag) {
+      this.setState({ product_img: `/images/products/${_img}`, product_name: _name, product_modal_flg: true, productID: productID });
+    } else {
+      this.setState({ product_img: _img, product_name: _name, product_modal_flg: true, productID: productID });
     }
   }
 
@@ -66,7 +66,7 @@ class GroceryPage extends React.Component {
     this.setState({ product_modal_flg: false });
   }
 
-//////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////
   componentDidMount() {
     this._isMounted = true;
 
@@ -75,11 +75,12 @@ class GroceryPage extends React.Component {
       this.setState({ Authentication: authUser });
       this.setState({ customerId: customer_id });
     }
-    if(this.props.customerId){
+    if (this.props.customerId) {
       this.getCustomerList(this.props.customer_id);
-    }else if(typeof window !== 'undefined' && localStorage.getItem("customerList")){
-      this.setState({customerList: JSON.parse(localStorage.getItem("customerList"))})
+    } else if (typeof window !== 'undefined' && localStorage.getItem("customerList")) {
+      this.setState({ customerList: JSON.parse(localStorage.getItem("customerList")) })
     }
+    console.log(this.props.customer_id, )
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -91,8 +92,8 @@ class GroceryPage extends React.Component {
     if (authUser !== null) {
       this.setState({ customerId: customer_id });
       this.getCustomerList(customer_id);
-    }else if(typeof window !== 'undefined' && localStorage.getItem("customerList")){
-      this.setState({customerList: JSON.parse(localStorage.getItem("customerList"))})
+    } else if (typeof window !== 'undefined' && localStorage.getItem("customerList")) {
+      this.setState({ customerList: JSON.parse(localStorage.getItem("customerList")) })
     }
   }
 
@@ -102,75 +103,13 @@ class GroceryPage extends React.Component {
     // var url = `http://localhost:5000/api/getCustomerGroceryList/${customerId}`
     // var url = `https://chopchowdev.herokuapp.com/api/getCustomerGroceryList/${customerId}`;
     axios(url)
-      .then(({data}) => {
+      .then(({ data }) => {
         this.setState({ customerList: data.data });
-      })      
-      .catch(() => {
-        this.setState(
-          {
-            messageAlert:"Authentication Error while fetching your grocery list...",
-            showAlert: true,
-            variant: "danger",
-          },
-          () =>
-            setTimeout(() => {
-              this.setState({ messageAlert: "", showAlert: false });
-            }, 8000)
-        );
-      });    
-  };
-
-  //////////////////////////////////////////////////////////////////////
-  handleShowDeleteItem = (product_name, productID) => {
-    const { customerId, deletedItemId } = this.state;
-    
-    if(this.state.customerId !== undefined && productID !== -1){
-      this.setState({ deletedItemId: productID });
-
-    // var url = `https://chopchowdev.herokuapp.com/api/remove-item/${productID}/${customerId}`
-    var url = `./api/remove-item/${productID}/${customerId}`;
-
-    fetch(url, {
-      method: "DELETE",
-      // headers: {
-      //   Accept: 'application/json',
-      //   'Content-Type': 'application/json',
-      // },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((response) => {
-        this.setState(
-          {
-            messageAlert: "deleted successfully",
-            showAlert: true,
-            variant: "success",
-          },
-          () =>
-            setTimeout(() => {
-              this.setState({ messageAlert: "", showAlert: false });
-            }, 3500)
-        );
-        this.setState((prevState) => {
-          // delete item on client side
-          const newValueData = prevState.customerList.filter(
-            // do we need catch sttmnt for filter
-            (item) => item.id !== deletedItemId
-          );
-          console.log(newValueData)
-          if (typeof window !== 'undefined') {
-            localStorage.setItem("customerList", JSON.stringify(newValueData))
-          }
-          return { customerList: newValueData };
-        });
-        console.log("Deletse item");
-        this.componentDidMount();
       })
       .catch(() => {
         this.setState(
           {
-            messageAlert: "Internal Server Error while deleting item",
+            messageAlert: "Authentication Error while fetching your grocery list...",
             showAlert: true,
             variant: "danger",
           },
@@ -180,8 +119,66 @@ class GroceryPage extends React.Component {
             }, 8000)
         );
       });
+
+
+    if (this.state.customerId !== undefined && productID !== -1) {
+      this.setState({ deletedItemId: productID });
+
+      // var url = `https://chopchowdev.herokuapp.com/api/remove-item/${productID}/${customerId}`
+      var url = `./api/remove-item/${productID}/${customerId}`;
+
+      fetch(url, {
+        method: "DELETE",
+        // headers: {
+        //   Accept: 'application/json',
+        //   'Content-Type': 'application/json',
+        // },
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((response) => {
+          this.setState(
+            {
+              messageAlert: "deleted successfully",
+              showAlert: true,
+              variant: "success",
+            },
+            () =>
+              setTimeout(() => {
+                this.setState({ messageAlert: "", showAlert: false });
+              }, 3500)
+          );
+          this.setState((prevState) => {
+            // delete item on client side
+            const newValueData = prevState.customerList.filter(
+              // do we need catch sttmnt for filter
+              (item) => item.id !== deletedItemId
+            );
+            console.log(newValueData)
+            if (typeof window !== 'undefined') {
+              localStorage.setItem("customerList", JSON.stringify(newValueData))
+            }
+            return { customerList: newValueData };
+          });
+          console.log("Deletse item");
+          this.componentDidMount();
+        })
+        .catch(() => {
+          this.setState(
+            {
+              messageAlert: "Internal Server Error while deleting item",
+              showAlert: true,
+              variant: "danger",
+            },
+            () =>
+              setTimeout(() => {
+                this.setState({ messageAlert: "", showAlert: false });
+              }, 8000)
+          );
+        });
     }
-    else{
+    else {
 
       // Remove from displyed list with images
       this.setState((prevState) => {
@@ -207,7 +204,7 @@ class GroceryPage extends React.Component {
 
           localStorage.setItem("customerList", temp_list)
         }
-        }
+      }
       // remove from selected list state
 
       // selected = selected.filter(e => e !== product_name);
@@ -218,64 +215,64 @@ class GroceryPage extends React.Component {
   handleDeleteList = () => {
     console.log("Comes in deletes list");
     const { customerId } = this.state;
-    if(customerId !== undefined){
+    if (customerId !== undefined) {
 
-    var url = `https://chopchowdev.herokuapp.com/api/remove-list/${customerId}`;
-    // var url = `./api/remove-list/${customerId}`
+      var url = `https://chopchowdev.herokuapp.com/api/remove-list/${customerId}`;
+      // var url = `./api/remove-list/${customerId}`
 
-    fetch(url, {
-      method: "DELETE",
-      // headers: {
-      //   'Content-Type': 'application/json',
-      // }
-    })
-      .then((response) => {
-        console.log("delete response is: ");
-        console.log(response);
-        console.log(response.json);
-        this.setState(
-          {
-            messageAlert: "deleted successfully",
-            showAlert: true,
-            variant: "success",
-          },
-          () =>
-            setTimeout(() => {
-              this.setState({ messageAlert: "", showAlert: false });
-            }, 3500)
-        );
-
-        this.setState({ customerList: [] });
-        if (typeof window !== 'undefined') {
-
-          localStorage.removeItem("customerList")
-        }
-        this.componentDidMount();
-        console.log("deletes list");
-        return response.json();
+      fetch(url, {
+        method: "DELETE",
+        // headers: {
+        //   'Content-Type': 'application/json',
+        // }
       })
-      .catch(() => {
-        console.log("caught an error while deleting list");
-        this.setState(
-          {
-            messageAlert: "Internal Server Error while deleting list",
-            showAlert: true,
-            variant: "danger",
-          },
-          () =>
-            setTimeout(() => {
-              this.setState({ messageAlert: "", showAlert: false });
-            }, 8000)
-        );
-      });
-            
+        .then((response) => {
+          console.log("delete response is: ");
+          console.log(response);
+          console.log(response.json);
+          this.setState(
+            {
+              messageAlert: "deleted successfully",
+              showAlert: true,
+              variant: "success",
+            },
+            () =>
+              setTimeout(() => {
+                this.setState({ messageAlert: "", showAlert: false });
+              }, 3500)
+          );
+
+          this.setState({ customerList: [] });
+          if (typeof window !== 'undefined') {
+
+            localStorage.removeItem("customerList")
+          }
+          this.componentDidMount();
+          console.log("deletes list");
+          return response.json();
+        })
+        .catch(() => {
+          console.log("caught an error while deleting list");
+          this.setState(
+            {
+              messageAlert: "Internal Server Error while deleting list",
+              showAlert: true,
+              variant: "danger",
+            },
+            () =>
+              setTimeout(() => {
+                this.setState({ messageAlert: "", showAlert: false });
+              }, 8000)
+          );
+        });
+
     }
     else {
       if (typeof window !== 'undefined') {
 
         localStorage.removeItem("customerList")
       }
-      this.setState({customerList: []})
+      this.setState({ customerList: [] })
     }
   };
 
@@ -294,7 +291,7 @@ class GroceryPage extends React.Component {
     console.log(selected);
     let selectedProductsListLength = selected.length;
 
-    if(selectedProductsListLength === 0){
+    if (selectedProductsListLength === 0) {
       console.log("sees that selected is empty");
       return;
     }
@@ -306,23 +303,23 @@ class GroceryPage extends React.Component {
         method: "POST",
       }).then((response) => {
         if (response) {
-          
+
           console.log("Comes in handleClickTypeahead's then on client side");
           this.componentDidMount();
         }
       });
     }
-    if(foundIndex !== -1){
+    if (foundIndex !== -1) {
       var mealObject = {
-        id : foundIndex,
-        product_name : selected[selectedProductsListLength-1],
+        id: foundIndex,
+        product_name: selected[selectedProductsListLength - 1],
         product_image: 'chopchow_default_instruction.png',
         size: 'N/A'
       };
 
       console.log(mealObject);
     }
-    else{
+    else {
       console.log("Comes in else, means it soes not have a product id for this product");
       console.log(foundIndex);
       console.log(selected);
@@ -330,27 +327,27 @@ class GroceryPage extends React.Component {
       // add to local list
       // var mealObject = Object;
       mealObject = {
-        id : -1,
-        product_name : selected[0].label,
+        id: -1,
+        product_name: selected[0].label,
         product_image: 'butter.jpg',
         size: 'N/A'
       };
     }
 
-    if(this.state.customerList == null){
+    if (this.state.customerList == null) {
       this.setState({ customerList: [mealObject] })
       if (typeof window !== 'undefined') {
 
         localStorage.setItem("customerList", JSON.stringify([mealObject]))
       }
     }
-    else{
+    else {
       let temp_list = this.state.customerList
       temp_list.push(mealObject);
       if (typeof window !== 'undefined') {
         localStorage.setItem("customerList", JSON.stringify(temp_list))
       }
-      this.setState({customerList: temp_list})
+      this.setState({ customerList: temp_list })
     }
 
     this.setState(
@@ -373,8 +370,8 @@ class GroceryPage extends React.Component {
     const { showAlert, variant, messageAlert, customerList } = this.state;
     //create product names to always exclude what is already in the customers list
     let productNamesMinusCustomersList = this.props.productNames;
-    if(customerList!= null){
-      for(let i = 0 ; i < this.state.customerList.length; i++){
+    if (customerList != null) {
+      for (let i = 0; i < this.state.customerList.length; i++) {
         let curr_product_name = customerList[i].product_name;
         productNamesMinusCustomersList = productNamesMinusCustomersList.filter(e => e !== curr_product_name);
       }
@@ -387,11 +384,11 @@ class GroceryPage extends React.Component {
     console.log("customerList, ", this.state.customerList);
 
     console.log("Props:", this.props)
-  
+
 
     return (
       <>
-        <Typeahead
+        {/* <Typeahead
           allowNew
           multiple
           options={productNamesMinusCustomersList}
@@ -400,11 +397,11 @@ class GroceryPage extends React.Component {
           onChange={(selected) => {
             this.handleClickTypeahead(selected);
             ref.current.clear();
-          }}
-          // create reference to clear after onChange
+          }} */}
+          {/* // create reference to clear after onChange
           ref={ref}
-          // selected={this.props.productNames}
-        />
+        // selected={this.props.productNames}
+        /> */}
 
         {/* Display alert if there is any issue loading grocery page */}
         <Alert show={showAlert} key={1} variant={variant}>
@@ -421,20 +418,20 @@ class GroceryPage extends React.Component {
             grocery list
           </div>
         ) : null}
-          <>
+        <>
           <PageTitle title=" Your Grocery List" />
-            <div>
-              <Button
+          <div>
+            <Button
               className={styles.yourlist__buttonDeleteList}
-                  variant="danger"
-                  onClick={(e) => { e.stopPropagation(); this.handleDeleteList();}}>
-                  Delete List Items
-              </Button>
+              variant="danger"
+              onClick={(e) => { e.stopPropagation(); this.handleDeleteList(); }}>
+              Delete List Items
+            </Button>
 
-              <br></br>
-              <Container className={styles.page__container} fluid>
-                {/* display grocery list, for any authenticated customer */}
-                {
+            <br></br>
+            <Container className={styles.page__container} fluid>
+              {/* display grocery list, for any authenticated customer */}
+              {
                 customerList ? (
                   customerList.map((customer_grocery_product_item) => {
                     // console.log(customerList);
@@ -443,30 +440,30 @@ class GroceryPage extends React.Component {
                     console.log("customer_grocery_product_item:", customer_grocery_product_item.product_image)
                     return (
                       // <>
-                      <Row display="inline-flex" key = {customer_grocery_product_item.product_name} >
-                        <Col key={customer_grocery_product_item.product_name+'images'}>
+                      <Row display="inline-flex" key={customer_grocery_product_item.product_name} >
+                        <Col key={customer_grocery_product_item.product_name + 'images'}>
                           {/* check for private or public images (can be used for suggest meal) */}
                           {customer_grocery_product_item.product_image.startsWith('https://') ? (
-                              <img
-                                src={customer_grocery_product_item.product_image}
-                                alt="product_img "
-                                className={styles.card_img}
-                                onClick = {() => this.handleProductClick(
-                                  customer_grocery_product_item.product_image,
-                                   customer_grocery_product_item.product_name, productID,
-                                    false)}
-                              />
-                            ) : (
-                              <img
-                                src={`/images/products/${customer_grocery_product_item.product_image}`}
-                                alt="product_img "
-                                className={styles.card_img}
-                                onClick = {() => this.handleProductClick(customer_grocery_product_item.product_image, customer_grocery_product_item.product_name, productID, true)}
-                              />
-                            )}
+                            <img
+                              src={customer_grocery_product_item.product_image}
+                              alt="product_img "
+                              className={styles.card_img}
+                              onClick={() => this.handleProductClick(
+                                customer_grocery_product_item.product_image,
+                                customer_grocery_product_item.product_name, productID,
+                                false)}
+                            />
+                          ) : (
+                            <img
+                              src={`/images/products/${customer_grocery_product_item.product_image}`}
+                              alt="product_img "
+                              className={styles.card_img}
+                              onClick={() => this.handleProductClick(customer_grocery_product_item.product_image, customer_grocery_product_item.product_name, productID, true)}
+                            />
+                          )}
                         </Col>
 
-                        <Col key={customer_grocery_product_item.product_name+'details'}>
+                        <Col key={customer_grocery_product_item.product_name + 'details'}>
                           <Card.Title >
                             Product Name :{" "}
                             {customer_grocery_product_item.product_name}
@@ -481,14 +478,15 @@ class GroceryPage extends React.Component {
                         </Col>
 
                         <Col>
-                          <Button onClick={(e) => { e.stopPropagation(); this.handleAddItemToCart(productID);  }} >
+                          <Button onClick={(e) => { e.stopPropagation(); this.handleAddItemToCart(productID); }} >
                             {" "}  Add To Cart
                           </Button>
                         </Col>
                         <Col>
                           <i
                             // className={styles.fa styles.fa-remove}
-                            onClick={(e) => {e.stopPropagation();this.handleShowDeleteItem(
+                            onClick={(e) => {
+                              e.stopPropagation(); this.handleShowDeleteItem(
                                 customer_grocery_product_item.product_name,
                                 customer_grocery_product_item.productID,
                               );
@@ -501,16 +499,16 @@ class GroceryPage extends React.Component {
                 ) : (
                   // consider getting items from their cache
                   //  to display something when users arent logged in
-                    <div> Your grocery cart looks empty.
-                      {/* <Spinner animation="border" variant="info" /> */}
-                    </div>
-                  )}
-              </Container>
-            </div>
-          </>
+                  <div> Your grocery cart looks empty.
+                    {/* <Spinner animation="border" variant="info" /> */}
+                  </div>
+                )}
+            </Container>
+          </div>
+        </>
         {
-          this.state.product_modal_flg && 
-          <ProductDetail state = { this.state } onCloseClicked={this.onCloseClicked} />
+          this.state.product_modal_flg &&
+          <ProductDetail state={this.state} onCloseClicked={this.onCloseClicked} />
         }
       </>
     );
@@ -522,7 +520,4 @@ class GroceryPage extends React.Component {
 //   return { authUser, role, customer_id }
 // };
 
-export default
-  // connect(
-  // mapStateToProps, () => ({}))
-  (GroceryPage);
+export default GroceryPage

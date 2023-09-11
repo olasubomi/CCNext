@@ -27,7 +27,6 @@ function Product(props) {
         }
     }, [props.product.formatted_ingredients])
     console.log(props.product.item_description, 'descrptionn')
-    console.log('props.product.formatted_ingredients', props.product.formatted_ingredients)
     return (
         <>
             <Head>
@@ -85,8 +84,8 @@ function Product(props) {
                                 </div>
                                 <div className={styles.product_section_2_categories}>
                                     <h3 className={styles.product_section_2_category_name}>Product size</h3>
-                                    <p className={styles.product_section_2_category}>{props.product.item_data?.product_size && Array.isArray(props.product.item_data.product_size) && (
-                                        props.product.item_data.product_size.map((elem, id) => (
+                                    <p className={styles.product_section_2_category}>{props.product.product_size && Array.isArray(props.product.product_size) && (
+                                        props.product.product_size.map((elem, id) => (
                                             <div key={id}>
                                                 <p>{elem}</p>
                                             </div>

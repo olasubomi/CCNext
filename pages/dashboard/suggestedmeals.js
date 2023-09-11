@@ -63,18 +63,29 @@ const SuggestedMeals = (props) => {
     const [dateFilter, setDateFilter] = useState(false);
     const [itemStatus, setItemStatus] = useState("all")
 
+    const [descPage, setDescpage] = useState(1)
+    const [descPages, setDescpages] = useState(1)
+
+    const [mesrPage, setMesrpage] = useState(1)
+    const [mesrPages, setMesrpages] = useState(1)
+
     //
     const [data, setData] = useState({
         meals: [],
-        products: []
+        products: [],
+        item: []
     });
     const [allDescriptions, setAllDescriptions] = useState([]);
     const [allMeasurement, setAllMeasurement] = useState([]);
+    const [filter, setFilter] = useState({
+        item_type: false,
+        first_letter: false
+    });
 
 
     useEffect(() => {
         getUserItems()
-    }, [props.auth, itemStatus]);
+    }, [props.auth]);
 
     useEffect(() => {
         getAllDescriptions()
@@ -87,7 +98,7 @@ const SuggestedMeals = (props) => {
     const getUserItems = (newPage) => {
         if (props.auth.authUser) {
 
-            setSearchType("Meal")
+            setSearchType("Item")
             let url
             if (props.auth.authUser.user_type === 'admin') {
                 url = `/items/${newPage ? newPage : page}?type=Product,Meal&status=${itemStatus}`
@@ -106,7 +117,8 @@ const SuggestedMeals = (props) => {
                     console.log('data.data', data.data.data.items)
                     const products = data.data.data.items?.filter(ele => ele.item_type === 'Product');
                     const meals = data.data.data.items?.filter(ele => ele.item_type === 'Meal');
-                    setData({ products, meals })
+                    const item = data.data.data.items?.filter(ele => ele.item_type === 'Product' || ele.item_type === 'Meal');
+                    setData({ products, meals, item })
                     setFilteredSuggestionsState(data.data.data)
                     setSuggestionsState(data.data.data)
                 }
@@ -115,29 +127,29 @@ const SuggestedMeals = (props) => {
     }
 
     const filterItemByDate = () => {
-        let meals = [];
-        let products = []
+        let item = [];
         if (!dateFilter) {
-            meals = data.meals.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-            products = data.products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            item = data.item.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
             setDateFilter(!dateFilter)
         } else {
-            meals = data.meals.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-            products = data.products.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+            item = data.item.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
             setDateFilter(!dateFilter)
         }
 
         setData({
-            meals,
-            products
+            ...data,
+            item
         })
     }
 
-    const getAllDescriptions = async () => {
+    const getAllDescriptions = async (newPage) => {
         try {
-            const resp = await axios.get(`/description/1?status=${status}`);
-            if (Array.isArray(resp?.data?.data) && resp?.data?.data?.length) {
-                setAllDescriptions(resp.data.data)
+            console.log(`/description/${newPage ? newPage : descPage}?status=${status}`)
+            const resp = await axios.get(`/description/${newPage ? newPage : descPage}?status=${status}`);
+            if (Array.isArray(resp?.data?.data.description) && resp?.data?.data?.description?.length) {
+                setAllDescriptions(resp.data.data.description)
+                console.log('description--', resp.data.data)
+                setDescpages(Math.ceil(data.data.data.count / 10))
             }
         } catch (e) {
             console.log('err', e)
@@ -169,11 +181,12 @@ const SuggestedMeals = (props) => {
         }
     }
 
-    const getAllMeasurement = async () => {
+    const getAllMeasurement = async (newPage) => {
         try {
-            const resp = await axios.get(`/measurement/1?status=${mealStatus}`);
-            if (Array.isArray(resp?.data?.data) && resp?.data?.data?.length) {
-                setAllMeasurement(resp.data.data)
+            const resp = await axios.get(`/measurement/${newPage ? newPage : mesrPage}?status=${mealStatus}`);
+            if (Array.isArray(resp?.data?.data?.measurement) && resp?.data?.data?.measurement?.length) {
+                setAllMeasurement(resp.data.data?.measurement)
+                setMesrpages(Math.ceil(resp.data.data.count / 10))
             }
         } catch (e) {
             console.log('err', e)
@@ -912,23 +925,137 @@ const SuggestedMeals = (props) => {
     }
 
     const handlePrev = () => {
-        if (page !== 0) {
+        if (page !== 1) {
             getUserItems(page - 1);
             setPageState(prev => prev - 1)
         }
     }
 
+    const handleDescNext = () => {
+        if (descPage !== descPages) {
+            getAllDescriptions(descPage + 1);
+            setDescpage(prev => prev + 1)
+        }
+    }
+
+    const handleDescPrev = () => {
+        if (descPage !== 1) {
+            getAllDescriptions(descPage - 1);
+            setDescpage(prev => prev - 1)
+        }
+    }
+
+
+    const handleMesrNext = () => {
+        if (mesrPage !== mesrPages) {
+            getAllMeasurement(mesrPage + 1);
+            setMesrpage(prev => prev + 1)
+        }
+    }
+
+    const handleMesrPrev = () => {
+        if (mesrPage !== 1) {
+            getAllMeasurement(mesrPage - 1);
+            setMesrpage(prev => prev - 1)
+        }
+    }
+
+    const handleSort = () => {
+        const resp = data.item.sort((a, b) => {
+            const statusOrder = { Pending: 0, Rejected: 1, Draft: 2, Public: 3 };
+            const statusA = statusOrder[a.status] || Infinity;
+            const statusB = statusOrder[b.status] || Infinity;
+            return statusA - statusB;
+        });
+        setData({ ...data, item: resp })
+    }
+
+    const handleFilterByType = () => {
+        const meals_first = data.item.filter(ele => ele.item_type === 'Meal')
+        const product_first = data.item.filter(ele => ele.item_type === 'Product')
+
+        if (filter.item_type) {
+            setData({ ...data, item: [...meals_first, ...product_first].reverse() })
+            setFilter({ ...filter, item_type: !filter.item_type })
+        } else {
+            setData({ ...data, item: [...product_first, ...meals_first].reverse() })
+            setFilter({ ...filter, item_type: !filter.item_type })
+        }
+    }
+
+    const handleFilterFirstLetter = () => {
+        if (filter.first_letter) {
+            const sorted = data.item.sort((a, b) => {
+                const itemA = a['item_name'].toLowerCase();
+                const itemB = b['item_name'].toLowerCase();
+                return itemA.localeCompare(itemB);
+            })
+            setData({ ...data, item: sorted })
+            setFilter({ ...filter, first_letter: !filter.first_letter })
+        } else {
+            const sorted = data.item.sort((a, b) => {
+                const itemA = a['item_name'].toLowerCase();
+                const itemB = b['item_name'].toLowerCase();
+                return itemB.localeCompare(itemA);
+            })
+            setData({ ...data, item: sorted })
+            setFilter({ ...filter, first_letter: !filter.first_letter })
+        }
+    }
+
     const handleStatus = () => {
-        if(itemStatus === 'all'){
-            setItemStatus('Pending')
-        } else if(itemStatus === 'Pending'){
+        // setItemStatus('Pending')
+
+        if (itemStatus === 'Pending') {
+            const pending = [];
+            const notPending = []
+            for (let ele of data.item) {
+                if (ele.item_status[0].status === 'Pending') {
+                    pending.push(ele)
+                } else {
+                    notPending.push(ele)
+                }
+            }
+            setData({ ...data, item: [...pending, ...notPending].reverse() })
             setItemStatus('Rejected')
-        } else if(itemStatus === 'Rejected'){
+        } else if (itemStatus === 'Rejected') {
+            const rejected = [];
+            const notRejected = []
+            for (let ele of data.item) {
+                if (ele.item_status[0].status === 'Rejected') {
+                    rejected.push(ele)
+                } else {
+                    notRejected.push(ele)
+                }
+            }
+            setData({ ...data, item: [...rejected, ...notRejected].reverse() })
             setItemStatus('Draft')
-        } else if(itemStatus === 'Draft'){
+        } else if (itemStatus === 'Draft') {
+            const draft = [];
+            const notDraft = []
+            for (let ele of data.item) {
+                if (ele.item_status[0].status === 'Draft') {
+                    draft.push(ele)
+                } else {
+                    notDraft.push(ele)
+                }
+            }
+            setData({ ...data, item: [...draft, ...notDraft].reverse() })
             setItemStatus('Public')
-        } else { 
-            setItemStatus('all')
+        } else if (itemStatus === 'Public') {
+            const public_ = [];
+            const notPublic = []
+            for (let ele of data.item) {
+                if (ele.item_status[0].status === 'Public') {
+                    public_.push(ele)
+                } else {
+                    notPublic.push(ele)
+                }
+            }
+            setData({ ...data, item: [...public_, ...notPublic].reverse() })
+            setItemStatus('Pending')
+        } else {
+            setItemStatus('Pending')
         }
     }
     // console.log(suggestion.prepime, 'prep time not showing')
@@ -951,7 +1078,7 @@ const SuggestedMeals = (props) => {
                         {props.auth.authUser &&
                             <div className={styles.suggestedmeal_container}>
                                 <div className={styles.suggestedmeal_search_con}>
-                                    <div className={styles.search_con}>
+                                    {/* <div className={styles.search_con}>
                                         <div className={styles.search_box}>
                                             <p onClick={searchSuggested} className={styles.search_icon}>
                                                 <SearchIcon className={styles.search_icon} />
@@ -966,14 +1093,13 @@ const SuggestedMeals = (props) => {
                                             />
                                         </div>
                                         <div className={styles.search_button} onClick={searchSuggested}>Search</div>
-                                    </div>
+                                    </div> */}
                                     {props.auth.authUser.user_type === 'customer' &&
                                         <Link href='/dashboard/createstore'><a>Create Store</a></Link>}
                                 </div>
                                 <div className={styles.suggestedmeal_row2}>
                                     <div className={styles.mode_con}>
-                                        <div onClick={() => handleSearchType2('Meal')} className={styles.mode + ' ' + styles.left_mode + ' ' + (searchType === 'Meal' ? styles.active_mode : '')}>Meal</div>
-                                        <div onClick={() => handleSearchType2('Product')} className={styles.mode + ' ' + ' ' + (searchType === 'Product' ? styles.active_mode : '')}>Product</div>
+                                        <div onClick={() => handleSearchType2('Item')} className={styles.mode + ' ' + styles.left_mode + ' ' + (searchType === 'Item' ? styles.active_mode : '')}>Item</div>
                                         <div onClick={() => handleSearchType2('Category')} className={styles.mode + ' ' + styles.right_mode + ' ' + (searchType === 'Category' ? styles.active_mode : '')}>Category</div>
                                         {
                                             props.auth.authUser.user_type === 'admin' &&
@@ -1002,25 +1128,25 @@ const SuggestedMeals = (props) => {
                                     }
                                 </div>
                                 <div className={styles.suggestedmeal}>
-                                    <div className={styles.request_table}>
+                                    <table style={{ width: '100%' }}>
                                         {
                                             searchType !== 'Description' && searchType !== 'Measurement'
                                             && <div>
-                                                <div className={styles.request_tr + ' ' + (props.auth.authUser.user_type === 'admin' ? styles.admin_request_tr :
-                                                    props.auth.authUser.user_type === 'customer' ? styles.customer_request_tr :
-                                                        props.auth.authUser.user_type === 'supplier' ? styles.supplier_request_tr : '')}>
-                                                    <input name='id' type="checkbox" />
+                                                <div className={props.auth.authUser.user_type === 'supplier' ? styles.request_tr : styles.request_tr1}>
+                                                    {/* <input name='id' type="checkbox" /> */}
                                                     {/* <p className={styles.request_th}>ID number</p> */}
-                                                    <p className={styles.request_th}>Name</p>
+                                                    <p onClick={handleFilterFirstLetter} className={styles.request_th}>Name <FillterIcon /></p>
+                                                    <p className={styles.request_th + " " + styles.hide}
+                                                        onClick={handleFilterByType}
+                                                    >Item Type <FillterIcon /></p>
                                                     <p className={styles.request_th}
                                                         onClick={handleStatus}
-                                                        style={{ justifySelf: 'center', cursor: 'pointer' }}>Status <FillterIcon /></p>
-                                                    <p className={styles.request_th + " " + styles.hideData}>Categories <FillterIcon /></p>
+                                                        style={{ display: 'flex', cursor: 'pointer' }}>Status <FillterIcon /></p>
+                                                    <p className={styles.request_th + " " + styles.hideData}>Categories</p>
 
                                                     <p onClick={filterItemByDate}
-                                                        style={{ cursor: 'pointer' }}
                                                         className={styles.request_th + " " + styles.hideData}>Date Created <FillterIcon /></p>
-                                                    <p className={styles.request_th} style={{ textAlign: 'center' }}>Action</p>
+                                                    <p className={styles.request_th}>Action</p>
 
 
                                                 </div>
@@ -1028,17 +1154,17 @@ const SuggestedMeals = (props) => {
                                         }
                                         <div>
                                             {
-                                                searchType === 'Meal' && <>
+                                                searchType === 'Item' && <>
                                                     {
-                                                        data.meals && data.meals.reverse().map((suggestion) => {
+                                                        data.item && data.item.reverse().map((suggestion) => {
                                                             return (
                                                                 <SuggestedMealRow
                                                                     searchType={searchType}
                                                                     deleteSuggestion={deleteSuggestion}
                                                                     toggleSent={toggleSent}
                                                                     toggleTransferToInventory={toggleTransferToInventory}
-                                                                    openMealDetailsModal={openMealDetailsModal}
-                                                                    openDetailsModal={openMealDetailsModal}
+                                                                    openMealDetailsModal={(data) => suggestion?.item_type === 'Meal' ? openMealDetailsModal(data) : openDetailsModal(data)}
+                                                                    openDetailsModal={(data) => suggestion?.item_type === 'Meal' ? openMealDetailsModal(data) : openDetailsModal(data)}
                                                                     auth={props.auth} key={suggestion._id}
                                                                     suggestion={suggestion}
                                                                     toggleOpenMeal={toggleOpenMeal}
@@ -1104,44 +1230,61 @@ const SuggestedMeals = (props) => {
 
 
                                         </div>
-                                    </div>
-                                    {suggestionCount > 0 &&
-                                        <div className={styles.user_pagination}>
-                                            <div>
-                                                {
-                                                    page > 1 &&
-                                                    <>
-                                                        <p onClick={() => {
-                                                            // prevPage(1)
+                                    </table>
+                                    <div className={styles.user_pagination}>
+                                        <div>
+                                            {
+                                                <>
+                                                    <p onClick={() => {
+                                                        if (searchType === 'Item') {
                                                             handlePrev()
-                                                        }} className={styles.paginate_btn}>&lt;&lt;</p>
-                                                        {/* <p onClick={() => prevPage()} className={styles.paginate_btn}>&lt;</p> */}
-                                                    </>
-                                                }
-
-                                                {
-                                                    page < pages &&
-                                                    <>
-                                                        {/* <p onClick={() => nextPage()} className={styles.paginate_btn}>&gt;</p> */}
-                                                        <p onClick={() => {
-                                                            // nextPage(pages)
-                                                            handleNext()
+                                                        } else if (searchType === 'Description') {
+                                                            handleDescPrev()
+                                                        } else if (searchType === 'Measurement') {
+                                                            handleMesrPrev()
                                                         }
-                                                        } className={styles.paginate_btn}>&gt;&gt;</p>
-                                                    </>
-                                                }
+                                                    }} className={styles.paginate_btn}>&lt;&lt;</p>
+                                                </>
+                                            }
 
-                                            </div>
-                                            <p>{'' + page + ' of ' + pages}</p>
+                                            {
+                                                <>
+                                                    <p onClick={() => {
+                                                        if (searchType === 'Item') {
+                                                            handleNext()
+                                                        } else if (searchType === 'Description') {
+                                                            handleDescNext()
+                                                        } else if (searchType === 'Measurement') {
+                                                            handleMesrNext()
+                                                        }
+                                                    }
+                                                    } className={styles.paginate_btn}>&gt;&gt;</p>
+                                                </>
+                                            }
+
                                         </div>
-                                    }
+                                        <p>
+                                            {
+                                                searchType === 'Item'
+                                                    ? <>
+                                                        {'' + page + ' of ' + pages}
+                                                    </>
+                                                    : searchType === 'Description'
+                                                        ? <>{'' + descPage + ' of ' + descPages}</>
+                                                        : searchType === 'Measurement'
+                                                            ? <>{'' + mesrPage + ' of ' + mesrPages}</>
+                                                            : null
+                                            }
+                                        </p>
+                                    </div>
+
                                 </div>
                             </div>
                         }
                     </>
                 }
                 {openSuggestion &&
-                    <div>
+                    <div style={{ width: '100%' }}>
                         <div className={styles.meal_section_1}>
                             <div className={styles.meal_section_1_col_1}>
                                 <ul className={styles.goback_header_pages}>
@@ -1186,14 +1329,14 @@ const SuggestedMeals = (props) => {
                                 ))}
                             </div>
                         </div>
-                        {searchType === 'Meal' ?
+                        {searchType === 'Item' ?
                             <Meal meal={suggestion} auth={props.auth} show={false} />
                             :
                             searchType === 'Product' &&
                             <Product product={suggestion} auth={props.auth} />
                         }
 
-                        {searchType === 'Meal' &&
+                        {searchType === 'Item' &&
                             <div className={styles.form_group}>
                                 {/* <h3>Upload Background Picture</h3> */}
                                 <div className={styles.search_con}>
@@ -1290,52 +1433,56 @@ const SuggestedMeals = (props) => {
                     popupType='Meal Suggestion Preview'
                     openModal={openModal}
                     closeModal={closeModal}
-                    name={suggestion.meal_name}
-                    description={suggestion.item_name}
+                    name={suggestion.item_name}
+                    description={suggestion.item_intro}
                     imageData={suggestion.item_images[0]}
                     imagesData={suggestion.item_images}
                     image={suggestion.item_images[0]}
                     // imagesData={suggestion.meal_images.slice(1)} categories={JSON.parse(suggestion.meal_categories).toString().split(',')}
-                    prepTime={suggestion.item_data.prep_time}
-                    cookTime={suggestion.item_data.cook_time}
-                    serves={suggestion.item_data.servings}
-                    chef={suggestion.item_data.chef}
-                    ingredientsList={
-                        suggestion.formatted_ingredients?.length
-                            ? suggestion.formatted_ingredients
-                            : []}
-                    utensilsList={suggestion.kitchen_utensils}
+                    prepTime={suggestion.meal_prep_time}
+                    cookTime={suggestion.meal_cook_time}
+                    serves={suggestion.meal_servings}
+                    chef={suggestion.meal_chef}
+                    isDashboard={true}
+                    // ingredientsList={
+                    //     suggestion.formatted_ingredients?.length
+                    //         ? suggestion.formatted_ingredients
+                    //         : []}
+                    ingredientsInItem={
+                        suggestion.ingredeints_in_item
+                    }
+                    utensilsList={suggestion.meal_kitchen_utensils}
                     //   ingredientsList={suggestion.formatted_ingredients.map(ingredient => JSON.parse(ingredient).properIngredientStringSyntax)} utensilsList={suggestion.kitchen_utensils}
-                    instructionChunk1={suggestion.formatted_instructions[0]?.title}
-                    instructionChunk2={suggestion.formatted_instructions[1]?.title}
-                    instructionChunk3={suggestion.formatted_instructions[2]?.title}
-                    instructionChunk4={suggestion.formatted_instructions[3]?.title}
-                    instructionChunk5={suggestion.formatted_instructions[4]?.title}
-                    instructionChunk6={suggestion.formatted_instructions[5]?.title}
+                    instructionChunk1={suggestion.meal_formatted_instructions[0]?.title}
+                    instructionChunk2={suggestion.meal_formatted_instructions[1]?.title}
+                    instructionChunk3={suggestion.meal_formatted_instructions[2]?.title}
+                    instructionChunk4={suggestion.meal_formatted_instructions[3]?.title}
+                    instructionChunk5={suggestion.meal_formatted_instructions[4]?.title}
+                    instructionChunk6={suggestion.meal_formatted_instructions[5]?.title}
 
-                    instructionChunk1Step={suggestion.formatted_instructions[0]?.instructionSteps}
-                    instructionChunk2Step={suggestion.formatted_instructions[1]?.instructionSteps}
-                    instructionChunk3Step={suggestion.formatted_instructions[2]?.instructionSteps}
-                    instructionChunk4Step={suggestion.formatted_instructions[3]?.instructionSteps}
-                    instructionChunk5Step={suggestion.formatted_instructions[4]?.instructionSteps}
-                    instructionChunk6Step={suggestion.formatted_instructions[5]?.instructionSteps}
+                    instructionChunk1Step={suggestion.meal_formatted_instructions[0]?.instructionSteps}
+                    instructionChunk2Step={suggestion.meal_formatted_instructions[1]?.instructionSteps}
+                    instructionChunk3Step={suggestion.meal_formatted_instructions[2]?.instructionSteps}
+                    instructionChunk4Step={suggestion.meal_formatted_instructions[3]?.instructionSteps}
+                    instructionChunk5Step={suggestion.meal_formatted_instructions[4]?.instructionSteps}
+                    instructionChunk6Step={suggestion.meal_formatted_instructions[5]?.instructionSteps}
 
-                    instructionChunk1DataName={suggestion.formatted_instructions[0]?.dataName}
-                    instructionChunk2DataName={suggestion.formatted_instructions[1]?.dataName}
-                    instructionChunk3DataName={suggestion.formatted_instructions[2]?.dataName}
-                    instructionChunk4DataName={suggestion.formatted_instructions[3]?.dataName}
-                    instructionChunk5DataName={suggestion.formatted_instructions[4]?.dataName}
-                    instructionChunk6DataName={suggestion.formatted_instructions[5]?.dataName}
+                    instructionChunk1DataName={suggestion.meal_formatted_instructions[0]?.dataName}
+                    instructionChunk2DataName={suggestion.meal_formatted_instructions[1]?.dataName}
+                    instructionChunk3DataName={suggestion.meal_formatted_instructions[2]?.dataName}
+                    instructionChunk4DataName={suggestion.meal_formatted_instructions[3]?.dataName}
+                    instructionChunk5DataName={suggestion.meal_formatted_instructions[4]?.dataName}
+                    instructionChunk6DataName={suggestion.meal_formatted_instructions[5]?.dataName}
 
-                    chunk1Content={suggestion?.item_data?.image_or_video_content_1}
-                    chunk2Content={suggestion?.item_data?.image_or_video_content_2}
-                    chunk3Content={suggestion?.item_data?.image_or_video_content_3}
-                    chunk4Content={suggestion?.item_data?.image_or_video_content_4}
-                    chunk5Content={suggestion?.item_data?.image_or_video_content_5}
-                    chunk6Content={suggestion?.item_data?.image_or_video_content_6}
-                    instructionWordlength={suggestion.instructionWordlength}
-                    tips={suggestion?.item_data?.tips}
-                    mealImageData={suggestion.itemImage0}
+                    chunk1Content={suggestion?.meal_image_or_video_content1}
+                    chunk2Content={suggestion?.meal_image_or_video_content2}
+                    chunk3Content={suggestion?.meal_image_or_video_content3}
+                    chunk4Content={suggestion?.meal_image_or_video_content4}
+                    chunk5Content={suggestion?.meal_image_or_video_content5}
+                    chunk6Content={suggestion?.meal_image_or_video_content6}
+                    instructionWordlength={suggestion?.instructionWordlength}
+                    tips={suggestion?.meal_tips}
+                    mealImageData={suggestion?.itemImage0}
                     suggested={true}
                     id={suggestion.id}
                     categories={suggestion?.item_categories?.map(ele => ele?.category_name)}

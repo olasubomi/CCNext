@@ -1,4 +1,317 @@
-.icon{
+.icon {
     fill: #000000;
     width: 17px;
+}
+
+.modal {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+}
+.modal_card2 {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    border-radius: 8px;
+    background: #FFF;
+    padding: 2rem 3rem 3rem 3rem;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+
+}
+.modal_card {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    border-radius: 8px;
+    background: #FFF;
+    padding: 2rem 3rem 3rem 3rem;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+
+}
+
+.flex2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header {
+    color: #000;
+    font-size: 23px;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.close {
+    width: 33px;
+    height: 33px;
+    flex-shrink: 0;
+    background-color: #949494;
+    border-radius: 50%;
+    justify-content: center;
+    display: flex;
+    align-self: center;
+    color: #FFF;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.label {
+    color: #6D6D6D;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.input1 {
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+    width: 100%;
+    height: 45px;
+    margin-top: .6rem;
+    padding: 16px;
+    color: #353535;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.input2 {
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+    width: 100%;
+    text-align: justify;
+    height: 92px;
+    padding: 12px;
+    margin-top: .6rem;
+    color: #353535;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.modal_btn {
+    border-radius: 4px;
+    background: #F47900;
+    display: flex;
+    width: 100%;
+    height: 51px;
+    padding: 12px 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    color: #FFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+
+}
+
+.sub {
+    color: #000;
+    font-size: 13.4px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.radio {
+    display: flex;
+    align-items: center;
+
+}
+
+.radio input[type="radio"]:checked {
+    color: #F47900;
+}
+
+.radiosub {
+    margin-top: 1.5rem;
+    margin-left: .6rem;
+}
+
+.radioLabel {
+    color: #000;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.text2 {
+    color: #6D6D6D;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+}
+
+.button {
+    display: flex;
+    width: 128px;
+    height: 51px;
+    padding: 12px 20px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    background: #F47900;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: 400;
+    border: none;
+    outline: none;
+    margin-top: 2rem;
+}
+
+.label2 {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+    color: rgba(0, 0, 0, 1);
+    margin-top: 1rem;
+
+}
+
+.img3 {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.or {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    color: rgba(0, 0, 0, 0.5);
+    padding: 0 2rem;
+}
+
+.dot {
+    border: 1px dashed rgba(244, 121, 0, 1);
+    width: 100px;
+    height: 93px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 24px;
+    color: rgba(244, 121, 0, 1);
+    font-weight: 500;
+
+}
+
+.upload {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 30px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.7);
+
+}
+
+.radiosub2 {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0em;
+    color: rgba(0, 0, 0, 1);
+    margin-left: 1rem;
+}
+
+.modal_btn2 {
+    width: 220px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 4px;
+    background: rgba(244, 121, 0, 1);
+    margin-top: 2.5rem;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+
+}
+
+.border {
+    border: 1px solid grey;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.closed {
+    font-size: 20px;
+    background-color: transparent;
+}
+@media only screen and (max-width: 920px) {
+    .modal_card2 {
+        width: 65%;
+    }
+    .modal_card{
+        width: 60%;
+    }
+}
+@media only screen and (max-width: 740px) {
+    .modal_card2 {
+        width: 76%;
+    }
+    .modal_card{
+        width: 70%;
+    }
+    .header{
+        font-size: 20px;
+    }
+}
+@media only screen and (max-width: 546px) {
+    .header {
+        font-size: 18px;
+    }
+    .sub {
+        font-size: 11px;
+    }
+
+    .modal_card2 {
+        width: 89%;
+    }
+    .modal_card {
+        width: 80%;
+    }
+    .radioLabel {
+        font-size: 12px;
+    }
+    .text2{
+        font-size: 10px;
+    }
+    .header{
+        font-size: 16px;
+    }
+    
+}
+@media only screen and (max-width: 400px) {
+    .modal_card2 {
+        width: 92%;
+        height: 300px;
+        padding: 1rem 2rem 0 2rem;
+    }  
+    .modal_card{
+        width: 90%;
+        height: 330px;
+    } 
+    .input2 {
+        height: 60px;
+    } 
 }

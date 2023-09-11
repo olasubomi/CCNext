@@ -199,7 +199,7 @@
       padding: 1rem;
       outline: none;
       height: 40px;
-      
+      font-size: 16px;
       background: #FFFFFF;
       border: 1px solid #DCDEDE;
       box-sizing: border-box;
@@ -535,6 +535,7 @@
     color: white;
     height: 3.6rem;
     padding: 0 1rem;
+    font-size: 16px;
   }
 
   .forgot_password{

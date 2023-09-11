@@ -1619,7 +1619,7 @@ class SuggestMealForm extends Component {
       },
     };
 
-    const capitalizedSuggestedCategories = suggestedCategories.map(ele => capitalizeWords(ele))
+    const capitalizedSuggestedCategories = suggestedCategories?.map(ele => this.capitalizeWords(ele))
     suggestMealForm.append("item_categories", JSON.stringify(capitalizedSuggestedCategories));
 
     await axios(config)

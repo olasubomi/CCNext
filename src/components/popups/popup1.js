@@ -192,11 +192,10 @@ class Popup1 extends Component {
                                     <div className={styles.popup_sizes}>
                                         <h3>Size</h3>
                                         <div className={styles.popup_size}>
-                                            {sizesList.map((sizeSyntax, index) =>
-                                                <React.Fragment key={index}>
-                                                    <p>{sizeSyntax}</p>
+                                                <React.Fragment>
+                                                    <p>{sizesList?.toString()}</p>
                                                 </React.Fragment>
-                                            )}
+                                        
 
                                         </div>
                                     </div>

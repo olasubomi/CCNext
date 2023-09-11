@@ -28,7 +28,7 @@ function Meal(props) {
     let num = 0;
 
     console.log('meald data', props.meal)
-
+    console.log(props.meal.item_images, 'serve me')
     return (
         <>
             <Head>
@@ -43,7 +43,7 @@ function Meal(props) {
                         <div className={styles.meal_section_2_col_1}>
                             {props.meal.item_images?.length > 0 &&
                                 <>
-                                    {(props.meal.itemImage0.length > 0 && props.meal.itemImage0 !== "[object HTMLImageElement]") ?
+                                    {(props.meal.itemImage0?.length > 0 && props.meal.itemImage0 !== "[object HTMLImageElement]") ?
                                         <Image
                                             src={props.meal.itemImage0}
                                             alt={props.meal.item_name}
@@ -90,19 +90,19 @@ function Meal(props) {
                                     <div className={styles.meal_details}>
                                         <div className={styles.hide}>
                                             <h3>Serves: </h3>
-                                            <p>{props.meal.item_data?.servings}</p>
+                                            <p>{props.meal.meal_servings}</p>
                                         </div>
                                         <div>
                                             <h3>PrepTime:</h3>
-                                            <p>{props.meal.item_data?.prep_time} Minutes</p>
+                                            <p>{props.meal.meal_prep_time} Minutes</p>
                                         </div>
                                         <div>
                                             <h3>CookTime : </h3>
-                                            <p>{props.meal.item_data?.cook_time} Minutes </p>
+                                            <p>{props.meal.meal_cook_time} Minutes </p>
                                         </div>
                                         <div>
                                             <h3>Chef:</h3>
-                                            <p>{props.meal.item_data?.chef}</p>
+                                            <p>{props.meal.meal_chef}</p>
                                         </div>
                                     </div>
                                     <div className={styles.meal_details}>
@@ -173,24 +173,24 @@ function Meal(props) {
                         <div className={styles.meal_details}>
                             <div className={styles.hide}>
                                 <h3>Serves: </h3>
-                                <div><p onClick={() => addServe(-1)}>-</p>{props.meal.item_data?.servings}<p onClick={() => addServe(1)}>+</p></div>
+                                <div><p onClick={() => addServe(-1)}>-</p>{props.meal.meal_servings}<p onClick={() => addServe(1)}>+</p></div>
                             </div>
                             <div>
                                 <h3>Prep time:</h3>
-                                <p>{props.meal.item_data?.prep_time} Minutes</p>
+                                <p>{props.meal.meal_prep_time} Minutes</p>
                             </div>
                             <div>
                                 <h3>Cook time : </h3>
-                                <p>{props.meal.item_data?.cook_time} Minutes </p>
+                                <p>{props.meal.meal_cook_time} Minutes </p>
                             </div>
                             <div>
                                 <h3>Chef:</h3>
-                                <p>{props.meal.item_data?.chef}</p>
+                                <p>{props.meal.meal_chef}</p>
                             </div>
                         </div>
 
                     </div>
-                    {props.meal.formatted_instructions &&
+                    {props.meal.meal_formatted_instructions &&
                         <div className={styles.meal_section_4}>
                             <div className={styles.ingredient_container}>
                                 <h3>Ingredients</h3>
@@ -276,27 +276,27 @@ function Meal(props) {
                             <h3>Steps</h3>
                             {props.meal.formatted_instructions.length > 0 &&
                                 <>
-                                    {props.meal.formatted_instructions?.map((instruction, index) => {
+                                    {props.meal.meal_formatted_instructions?.map((instruction, index) => {
                                         num = index + 1
                                         console.log(index + 1)
                                         return (
                                             <div key={index} className={styles.meal_section_5_row}>
                                                 <div className={styles.meal_section_5_row_1}>
-                                                    {props.meal.item_data.hasOwnProperty([`image_or_video_content_${Math.abs(index + 1)}`]) &&
+                                                    {props.meal.hasOwnProperty([`meal_image_or_video_content_${Math.abs(index + 1)}`]) &&
                                                         <Image
                                                             width={300}
                                                             height={300}
-                                                            src={props.meal.item_data[`image_or_video_content_${Math.abs(index + 1)}`]}
+                                                            src={props.meal[`meal_image_or_video_content_${Math.abs(index + 1)}`]}
                                                             alt="home"
                                                             className={styles.meal_section_5_row_1}
                                                         />}
                                                 </div>
                                                 <div className={styles.meal_section_5_row_2}>
                                                     <h3 className={styles.meal_section_5_row_2_h3}>
-                                                        {instruction.title}
+                                                        {meal_formatted_instructions.title}
                                                     </h3>
                                                     <p className={styles.meal_section_5_row_2_p}>
-                                                        {instruction.instructionSteps?.map((int) => <> {int + ', '} </>)}
+                                                        {meal_formatted_instructionsinstructionSteps?.map((int) => <> {int + ', '} </>)}
                                                     </p>
                                                 </div>
                                             </div>
@@ -322,9 +322,9 @@ function Meal(props) {
                     <div className={styles.meal_section_7}>
                         <h3>Tips</h3>
                         <div>
-                            {props.meal.item_data?.tips && props.meal.item_data.tips?.length > 0 &&
+                            {props.meal.meal_tips && props.meal.meal_tips?.length > 0 &&
                                 <ul>
-                                    {props.meal.item_data.tips.map((tip, index) => {
+                                    {props.meal.meal_tips.map((tip, index) => {
                                         return (
                                             <li key={index}>{tip}</li>
                                         )

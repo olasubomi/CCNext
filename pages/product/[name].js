@@ -35,7 +35,7 @@ const individualProductPage = () => {
         console.log('name', name)
         // let meal = await axios.get(`/meals/get-meal/${id}`)
         let product = await axios.get(`/items/user/${name}`)
-        console.log(product.data.data.meal, "get props")
+        console.log(product.data.data, "get props")
     
         setProps(product.data.data[0] || {})
     

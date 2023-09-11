@@ -2,7 +2,7 @@
   "name": "chop_chow_sd",
   "version": "0.1.0",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "private": true,
   "dependencies": {
@@ -19,8 +19,8 @@
     "@react-oauth/google": "^0.8.0",
     "@redux-devtools/extension": "3.0.0",
     "axios": "^0.27.2",
+    "body-scroll-lock": "^4.0.0-beta.0",
     "chart.js": "^4.0.1",
-    "connected-react-router": "^6.8.0",
     "dayjs": "^1.11.6",
     "ejs": "^3.1.6",
     "jquery": "^3.5.1",
@@ -34,7 +34,7 @@
     "pure-react-carousel": "^1.25.1",
     "react": "17.0.2",
     "react-bootstrap": "^1.0.0-beta.8",
-    "react-bootstrap-typeahead": "^6.0.0-rc.1",
+    "react-bootstrap-typeahead": "^6.2.3",
     "react-chartjs-2": "^5.0.1",
     "react-dom": "17.0.2",
     "react-facebook-login": "^4.1.1",
@@ -42,7 +42,6 @@
     "react-phone-input-2": "^2.15.1",
     "react-redux": "^7.2.1",
     "react-responsive-carousel": "^3.1.50",
-    "react-router": "^6.9.0",
     "react-router-dom": "^6.9.0",
     "react-select": "^5.7.3",
     "react-shadow-scroll": "^2.0.0",

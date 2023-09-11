@@ -99,7 +99,7 @@ const index = () => {
   //const grocery = userData.groceryList;
 
   //const grocery = productGrocery[0].groceryList;
-  const grocery = userData.groceryList;
+  const grocery = userData?.groceryList;
 
   //console.log("gl", userData);
 

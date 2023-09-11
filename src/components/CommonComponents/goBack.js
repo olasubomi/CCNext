@@ -13,7 +13,7 @@ import styles from './common.module.css'
     return(
             <ul className={styles.goback_header_pages}>
                 <div onClick={goback}><WestIcon className={styles.goback_header_page_arrow} /></div>
-                <li onClick={goback}>
+                <li onClick={goback} className={styles.li}>
                     back
                 </li>
             </ul>
