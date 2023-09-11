@@ -2,7 +2,7 @@
   "name": "chop_chow_sd",
   "version": "0.1.0",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "private": true,
   "dependencies": {
@@ -43,8 +43,6 @@
     "react-phone-input-2": "^2.15.1",
     "react-redux": "^7.2.1",
     "react-responsive-carousel": "^3.1.50",
-    "react-router": "^6.9.0",
-    "react-router-dom": "^6.9.0",
     "react-select": "^5.7.3",
     "react-shadow-scroll": "^2.0.0",
     "react-share": "^4.4.1",
