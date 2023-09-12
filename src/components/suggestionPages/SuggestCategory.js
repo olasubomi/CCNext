@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import styles from "./suggestion.module.css";
 import { toast } from "react-toastify";
-
+import { base_url } from "../../util/Api";
 
 class SuggestCategoryForm extends Component {
   allMealNames = [];
@@ -162,7 +162,7 @@ class SuggestCategoryForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Product to Mongo---------------------------------------------------
     // var url = "/createProduct/";
-    var url = "http://localhost:5000/api/categories/create/";
+    var url = `${base_url}/categories/create/`
 
     console.log(new_categories);
     // console.log({ new_categories });

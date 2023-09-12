@@ -18,6 +18,7 @@ var FormData = require("form-data");
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai"
 import { toast } from 'react-toastify';
+import { base_url } from "../../util/Api";
 
 class SuggestMealForm extends Component {
   ingredientsQuantityMeasurements = [];
@@ -1470,7 +1471,7 @@ class SuggestMealForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
-    var url = "http://localhost:5000/api/items/";
+    var url = `${base_url}/items/`;
 
     for (let i = 1; i < 7; i++) {
       if (this.state[`instructionChunk${i}`].title && this.state[`instructionChunk${i}`].instruction) {
@@ -1518,7 +1519,7 @@ class SuggestMealForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
-    var url = "http://localhost:5000/api/items";
+    var url = `${base_url}/items`;
 
     const formDataObj = {};
     suggestMealForm.forEach((value, key) => (formDataObj[key] = value));
@@ -1589,7 +1590,7 @@ class SuggestMealForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
-    var url = "http://localhost:5000/api/items";
+    var url = `${base_url}/items`;
 
     const config_ = {
       method: "POST",

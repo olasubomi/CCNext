@@ -13,6 +13,7 @@ import Cart from "../../src/components/Cart/Index";
 import CartProvider from "../store/CartProvider";
 import { useMobileMedia } from "../../src/customhooks/useResponsive";
 import Items from "../../src/components/items/Items";
+import { base_url } from "../../src/util/Api";
 
 const GroceryPage = (props) => {
   const [showCart, setShowCart] = useState(false);
@@ -23,6 +24,7 @@ const GroceryPage = (props) => {
   const [productData, setProductData] = useState([]);
   const [productErrData, setProductErrData] = useState({});
   const [itemsData, setItemsData] = useState([]);
+  import { base_url } from "../../src/util/Api";
 
 
   const mobileScreen = useMobileMedia();
@@ -33,7 +35,7 @@ const GroceryPage = (props) => {
 
   async function fetchItems() {
     try {
-      const response = await fetch(`http://localhost:5000/api/items`, {
+      const response = await fetch(`${base_url}/items`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +65,7 @@ const GroceryPage = (props) => {
         localStorage.setItem("user_id", JSON.stringify(user_id));
 
         const response = await fetch(
-          `http://localhost:5000/api/groceries/${user_id}`,
+          `${base_url}/groceries/${user_id}`,
           {
             method: "GET",
             headers: {

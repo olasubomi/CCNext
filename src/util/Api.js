@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { BASE_URL_LIVE, BASE_URL_DEV } from '../../api';
 
 
 console.error("______ process.env.NODE_ENV ____", process.env.NODE_ENV)
@@ -6,9 +7,11 @@ let base_url = `http://localhost:3000/api/`;
 // let base_url = `https://chopchowdev.herokuapp.com/api/`;
 
 if (process.env.NODE_ENV !== "development") {
-    base_url = `https://chopchowdev.herokuapp.com/api/`;
+    // base_url = `https://chopchowdev.herokuapp.com/api/`;
+    base_url = BASE_URL_LIVE
 }else{
-    base_url = `http://localhost:5000/api/`;
+    // base_url = `http://localhost:5000/api/`;
+    base_url = BASE_URL_DEV
 }
 
 
@@ -26,4 +29,5 @@ if (typeof window !== 'undefined') {
     console.error("__ token __", token);
     axios.defaults.headers.common['Authorization'] = "Bearer " + token;
 }
+export {base_url}
 export default axios;

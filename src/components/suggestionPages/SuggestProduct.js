@@ -14,7 +14,7 @@ import Popup1 from "../popups/popup1";
 import Image from 'next/image';
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
-
+import { base_url } from "../../util/Api";
 
 class SuggestProductForm extends Component {
   allProductNames = [];
@@ -104,7 +104,7 @@ class SuggestProductForm extends Component {
     console.log('nutritional-strings=-=-=-', this.state)
     // get all product Names***
     // var url = "https://chopchowdev/api/products/getAllProducts";
-    var url = "http://localhost:5000/api/products/getAllProducts";
+    var url = `${base_url}/products/getAllProducts`;
     axios.get(url).then((body) => {
       var productList = body.data;
       if (productList && productList.data.length !== 0) {
@@ -921,7 +921,7 @@ class SuggestProductForm extends Component {
     //---------------------------------------------Submit Product to Mongo---------------------------------------------------
     // var url = "/createProduct/";
     // var url = "http://localhost:5000/api/products/create/";
-    var url = "http://localhost:5000/api/items/";
+    var url = `${base_url}/items/`;
 
     const config = {
       method: 'POST', data: suggestProductForm, url: url,
