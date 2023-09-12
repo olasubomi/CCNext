@@ -14,7 +14,6 @@ import { CartProvider } from "../src/context/cart.context";
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      //
       <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
