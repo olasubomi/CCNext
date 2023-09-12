@@ -10,9 +10,9 @@ const PrivacyPolicy = () => {
         <h1>Privacy Policy</h1>
         <p>ChopChow provides this Privacy Policy to inform you of our policies
             and procedures regarding the collection, use and disclosure of
-            persinal information we recieve from our platform.<br />
+            personal information we recieve from our platform.<br />
             This privacy policy may be updated from time to time.
-            We will notify you of any material changes through email notificatioin.</p>
+            Any material changes will be shared through email notification.</p>
 
         <b>Data we process when you use ChopChow app</b>
         <br></br>
