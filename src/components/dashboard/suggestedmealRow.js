@@ -33,7 +33,8 @@ function SuggestedMealRow(props){
     return(
         <div key={suggestion._id} className={styles.request_tr_div}>
             <table style={{
-                width: '100%'
+                width: '100%',
+                borderCollapse: 'collapse'
             }}>
                 <tbody>
                     <tr className={props.auth.authUser.user_type === 'supplier' ? styles.meal_tr : styles.meal_tr1}>

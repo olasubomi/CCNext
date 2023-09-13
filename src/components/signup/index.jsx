@@ -10,6 +10,7 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { connect } from 'react-redux';
 import { userSignUp } from '../../actions';
+import { base_url } from '../../util/Api';
 
 // import { setTimeout } from 'timers';
 
@@ -258,7 +259,7 @@ function SignUp(props){
   function submitForm() {
     console.log("state,", this.state);
     var url = 'https://chopchowdev.herokuapp.com/api/user/signup';
-    var url = 'http://localhost:5000/api/user/signup';
+    var url = `${base_url}/user/signup`;
     var payLoad = this.state;
     delete payLoad.messageErr;
     delete payLoad.messageSuccess;

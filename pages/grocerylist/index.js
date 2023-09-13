@@ -11,6 +11,7 @@ import SuggestedMeals from "../../src/components/GroceryPage/GroceryList/Suggest
 import Cart from "../../src/components/Cart/Index";
 import CartProvider from "../store/CartProvider";
 import Items from "../../src/components/items/Items";
+import { base_url } from "../../src/util/Api";
 
 const index = () => {
   const [showCart, setShowCart] = useState(false);
@@ -53,7 +54,7 @@ const index = () => {
         localStorage.setItem("user_id", JSON.stringify(user_id));
   
         const response = await fetch(
-          `http://localhost:5000/api/groceries/${user_id}`,
+          `${base_url}/groceries/${user_id}`,
           {
             method: "GET",
             headers: {

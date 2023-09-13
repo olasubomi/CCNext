@@ -16,7 +16,7 @@ import Popup1 from "../popups/popup1";
 import Image from 'next/image';
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
-
+import { base_url } from "../../util/Api";
 
 class SuggestKitchenUtensilForm extends Component {
 
@@ -78,7 +78,7 @@ class SuggestKitchenUtensilForm extends Component {
     console.log(this.props.categories, "sssssssss")
     // get all Meal Names***
     var url = "/get-all-products";
-    var url = "http://localhost:5000/api/products/get-all-products";
+    var url = `${base_url}/products/get-all-products`
 
     axios.get(url).then((body) => {
       var utensilsList = body.data;
@@ -528,7 +528,7 @@ class SuggestKitchenUtensilForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Product to Mongo---------------------------------------------------
     // var url = "/createProduct/";
-    var url = "http://localhost:5000/api/products/create/";
+    var url = `${base_url}/products/create/`;
 
     const config = {
       method: 'POST', data: suggestProductForm, url: url,

@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { Modal } from '../../../src/components/modal/popup-modal';
 import Footer from '../../../src/components/Footer/Footer';
 import yellow from '../../../public/assets/meal_pics/yellow.jpeg'
+import Frame from '../../../public/assets/logos/Frame.png'
 import { IoMdCloseCircle } from 'react-icons/io'
 import axios from '../../../src/util/Api';
 import { toast } from 'react-toastify';
@@ -141,6 +142,28 @@ const GroceryPage = () => {
             console.log(response.data, 'yello')
             setItemList(response.data.data.data.groceryList)
             setSimilar(response.data.data.data.similar[0])
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const addJsonDataToGroceryList = async () => {
+        try {
+            const data = {
+                listName: itemList.listName,
+                item_name: value
+            }
+            const response = await axios(`/groceries/grocery-item`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data
+            })
+            getList()
+            toast.success('Item added successfully')
+            console.log(response.data, 'yello')
+
         } catch (error) {
             console.log(error)
         }
@@ -289,7 +312,7 @@ const GroceryPage = () => {
                                         () => (
                                             <div className={styles.noOptions}>
                                                 <p className={styles.no_item}>Item Not Found</p>
-                                                <button className={styles.btn3}>Add Item to List</button>
+                                                <button onClick={addJsonDataToGroceryList} className={styles.btn3}>Add Item to List</button>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2rem' }}>
                                                     <div className={styles.line}></div>
                                                     <p className={styles.or}>OR</p>
@@ -393,52 +416,77 @@ const GroceryPage = () => {
                                         <tbody style={{ height: '100%' }}>
                                             {
                                                 itemList?.groceryItems?.map((element, idx) => (
-                                                    <tr key={element?._id} className={styles.tr}>
-                                                        <td className={styles.td}>
-                                                            <input
-                                                                name={element.item.item_name}
-                                                                value={element.item.item_name}
-                                                                checked={cartHasItem(element.item)}
-                                                                onChange={(e) => {
-                                                                    addItemsToCart(element.item, true)
-                                                                }}
-                                                                type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
-                                                            {
-                                                                element.item.itemImage0 ?
-                                                                    <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={yellow} height={50} width={55} style={{ borderRadius: '5px' }} />
-                                                            }
-                                                        </td>
-                                                        <td className={styles.td} style={{ cursor: 'pointer', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', marginTop: '1.5rem' }}>
-                                                            <p onClick={() => {
-                                                                console.log(element, 'elements')
-                                                                toggle(element)
-                                                            }}>{element.item.item_name}</p>
-                                                            {
-                                                                element.item.item_type === 'Meal' && element?.quantity  ?
-                                                                    <div>
-                                                                        <p className={styles.ingredients} onClick={() => {
-
-                                                                            setOpen({
-                                                                                id: element._id,
-                                                                                isOpen: !open.isOpen
-                                                                            })
-                                                                        }}>
-                                                                            Include Ingredients
-                                                                        </p>
-                                                                        {open.isOpen && element._id === open.id &&
-                                                                            <CardDropdown element={element} />
+                                                    <>
+                                                        {
+                                                            !element.hasOwnProperty('itemData') ?
+                                                                <tr key={element?._id} className={styles.tr}>
+                                                                    <td className={styles.td}>
+                                                                        <input
+                                                                            name={element.item.item_name}
+                                                                            value={element.item.item_name}
+                                                                            checked={cartHasItem(element.item)}
+                                                                            onChange={(e) => {
+                                                                                addItemsToCart(element.item, true)
+                                                                            }}
+                                                                            type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
+                                                                        {
+                                                                            element.item.itemImage0 ?
+                                                                                <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={yellow} height={50} width={55} style={{ borderRadius: '5px' }} />
                                                                         }
-                                                                    </div>
-                                                                    : <div></div>
-                                                            }
-                                                           
-                                                        </td>
+                                                                    </td>
+                                                                    <td className={styles.td} style={{ cursor: 'pointer', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', marginTop: '1.5rem' }}>
+                                                                        <p onClick={() => {
+                                                                            console.log(element, 'elements')
+                                                                            toggle(element)
+                                                                        }}>{element.item.item_name}</p>
+                                                                        {
+                                                                            element.item.item_type === 'Meal' && element?.quantity ?
+                                                                                <div>
+                                                                                    <p className={styles.ingredients} onClick={() => {
 
-                                                        <td className={styles.td} style={{ textAlign: 'center' }}>{element?.quantity} {element?.measurement?.measurement_name}</td>
-                                                        <td className={styles.td}>{element?.item?.item_price ? `$${element?.item?.item_price}` : 'N/A'}</td>
-                                                        <td className={styles.td} style={{ textAlign: 'center' }}>{element?.item?.store_name ? element?.item?.store_name : '-'}</td>
-                                                        <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
-                                                    </tr>
+                                                                                        setOpen({
+                                                                                            id: element._id,
+                                                                                            isOpen: !open.isOpen
+                                                                                        })
+                                                                                    }}>
+                                                                                        Include Ingredients
+                                                                                    </p>
+                                                                                    {open.isOpen && element._id === open.id &&
+                                                                                        <CardDropdown element={element} />
+                                                                                    }
+                                                                                </div>
+                                                                                : <div></div>
+                                                                        }
+
+                                                                    </td>
+
+                                                                    <td className={styles.td} style={{ textAlign: 'center' }}>{element?.quantity} {element?.measurement?.measurement_name}</td>
+                                                                    <td className={styles.td}>{element?.item?.item_price ? `$${element?.item?.item_price}` : 'N/A'}</td>
+                                                                    <td className={styles.td} style={{ textAlign: 'center' }}>{element?.item?.store_name ? element?.item?.store_name : '-'}</td>
+                                                                    <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
+                                                                </tr> :
+                                                                <tr key={element?.itemData?._id} className={styles.tr}>
+                                                                    <td className={styles.td}>
+                                                                        <input type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
+                                                                        <Image src={Frame} height={50} width={55} style={{ borderRadius: '5px' }} />
+
+                                                                    </td>
+                                                                    <td className={styles.td}>
+                                                                        {element?.itemData?.item_name}
+                                                                    </td>
+                                                                    <td className={styles.td}>
+                                                                        -
+                                                                    </td>
+                                                                    <td className={styles.td}> 
+                                                                        N/A
+                                                                    </td>
+                                                                    <td className={styles.td}>
+                                                                        -
+                                                                    </td>
+                                                                    <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
+                                                                </tr>
+                                                        }
+                                                    </>
                                                 ))
                                             }
                                         </tbody>

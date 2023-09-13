@@ -589,7 +589,7 @@ export function Header2() {
           </ul>
 
           <div className={styles.navbar_main_grocery}>
-            <Link href="/grocerylist">Grocery Lists</Link>
+            <Link href="/grocery">Grocery Lists</Link>
           </div>
         </div>
       </div>
