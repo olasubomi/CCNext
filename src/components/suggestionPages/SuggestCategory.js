@@ -78,7 +78,7 @@ class SuggestCategoryForm extends Component {
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
     // var url = "/get-all-products";
-    url = "https://chopchowdev.herokuapp.com/get-all-products";
+    url = "https://chopchowserver.vercel.app/get-all-products";
 
     url = "/get-all-categories";
 

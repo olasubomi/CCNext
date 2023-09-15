@@ -100,7 +100,7 @@ class SuggestKitchenUtensilForm extends Component {
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
     // var url = "/get-all-products";
-    url = "https://chopchowdev.herokuapp.com/get-all-products";
+    url = "https://chopchowserver.vercel.app/get-all-products";
 
     // axios.get(url).then((body) => {
     //   this.productsList = body.data;
@@ -566,7 +566,7 @@ class SuggestKitchenUtensilForm extends Component {
   deleteImages(id) {
     const delImages = this.state.utensilImagesData
     delImages.splice(id, 1)
-    this.setState({ ...this.state, utensilImagesData: delImages})
+    this.setState({ ...this.state, utensilImagesData: delImages })
   }
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
@@ -610,8 +610,8 @@ class SuggestKitchenUtensilForm extends Component {
                     <p><Image id="UtensilsMainImages" src={data} width="100%" height="100%" alt="main_Utensil_Image" />
                     </p>
                     <div className={styles.close} onClick={() => this.deleteImages(index)}>
-                    <AiOutlineClose className={styles.closeIcon} />
-                  </div>
+                      <AiOutlineClose className={styles.closeIcon} />
+                    </div>
                   </Col>
                 </Row>
               )

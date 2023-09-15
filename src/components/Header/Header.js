@@ -100,7 +100,7 @@ function Header(props) {
       // }, [])
 
       // var url = "/api/logout";
-      var url = `https://chopchowdev.herokuapp.com/api/logout`;
+      var url = `https://chopchowserver.vercel.app/api/logout`;
 
       fetch(url, {
         method: "GET",

@@ -148,7 +148,7 @@ class SuggestMeal extends Component {
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
     // var url = "/get-all-products";
-    // url = "https://chopchowdev.herokuapp.com/api/meals/get-meals/1";
+    // url = "https://chopchowserver.vercel.app/api/meals/get-meals/1";
 
     // axios.get(url).then((body) => {
     //   this.productsList = body.data;
@@ -342,7 +342,7 @@ class SuggestMeal extends Component {
             {suggestionType === "Category" && (
               <SuggestCategoryForm
                 categories={this.categories}
-                suggestionType={this.state.suggestionType} 
+                suggestionType={this.state.suggestionType}
               ></SuggestCategoryForm>
             )}
           </div>

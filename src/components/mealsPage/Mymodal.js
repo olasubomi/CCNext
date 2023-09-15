@@ -66,20 +66,20 @@ class MyModal extends Component {
     return (
       <>
         <Modal
-          show = {this.state.modalIsOpen}
-          onHide = { this.closeModal }
+          show={this.state.modalIsOpen}
+          onHide={this.closeModal}
           dialogClassName="modal-90w"
           centered
         >
-          <Modal.Header closeButton style={{'borderBottom': '30px', 'padding': '0px'}}/> 
-          <Modal.Body style={{ padding: "0px" }}> 
+          <Modal.Header closeButton style={{ 'borderBottom': '30px', 'padding': '0px' }} />
+          <Modal.Body style={{ padding: "0px" }}>
             <div className="container">
-              <div className="row" style={{ width: "100%"}}>
+              <div className="row" style={{ width: "100%" }}>
                 <div className="detail-firstCol col-md-5 col-sm-12" >
-                  <Carousel showThumbs={false} infiniteLoop={false} style={{width:"96%" }}>
+                  <Carousel showThumbs={false} infiniteLoop={false} style={{ width: "96%" }}>
                     {content.map(index => (
-                      <img style={{ height: "250px" }} alt="pp" key={index} src={'https://chopchowdev.herokuapp.com/getOneMongoFileImage/'+value.mealImageName} />
-                    ))}                    
+                      <img style={{ height: "250px" }} alt="pp" key={index} src={'https://chopchowserver.vercel.app/getOneMongoFileImage/' + value.mealImageName} />
+                    ))}
                   </Carousel>
                   <br />
                   <div className="col-md-12 col-xs-12">
@@ -95,42 +95,43 @@ class MyModal extends Component {
                     <br />
                   </div>
                 </div>
-                
+
                 <div className="col-md-6 col-xs-12">
-                  <div className="row col-md-6 col-xs-12" style={{ width: "100%"}}> Meal Quantity &nbsp;
+                  <div className="row col-md-6 col-xs-12" style={{ width: "100%" }}> Meal Quantity &nbsp;
                     <div className="def-number-input number-input" style={{ backgroundColor: "lightgrey" }}>
                       <button onClick={this.decrease} className="minus"></button>
-                      <input className="quantity" name="quantity" value={this.state.increment}  onChange={() => console.log("change")}  type="number"/>
+                      <input className="quantity" name="quantity" value={this.state.increment} onChange={() => console.log("change")} type="number" />
                       <button onClick={this.increase} className="plus"></button>
-                    </div>                    
+                    </div>
                   </div>
 
                   <br />
-                  <div className="row col-md-6 col-sm-12"><b>Ingredients</b></div>                  
+                  <div className="row col-md-6 col-sm-12"><b>Ingredients</b></div>
                   <div className="row ingredient-section" >
-                      { ingredientsList &&
-                        ingredientsList.map(ingredient => (
-                          <div className="col-md-6 col-sm-12" key={value.label + ingredient.product}>
-                            {/* Should be updated with syntax options tih quantity updated as measurements update synchronously */}
-                            <input type="checkbox" value="" />{" "+ ingredient.properIngredientStringSyntax} <br />
-                          </div>
-                        ))} 
-                  </div>    
+                    {ingredientsList &&
+                      ingredientsList.map(ingredient => (
+                        <div className="col-md-6 col-sm-12" key={value.label + ingredient.product}>
+                          {/* Should be updated with syntax options tih quantity updated as measurements update synchronously */}
+                          <input type="checkbox" value="" />{" " + ingredient.properIngredientStringSyntax} <br />
+                        </div>
+                      ))}
+                  </div>
 
-                  <button className="btn-addToCard" style={{ marginBottom: "20px"}}>Add to Cart</button>
+                  <button className="btn-addToCard" style={{ marginBottom: "20px" }}>Add to Cart</button>
                   <TextSlider instructionData={mealPrep} value={value} />
                 </div>
               </div>
             </div>
           </Modal.Body>
         </Modal>
-        <div id ={value.name}>
+        <div id={value.name}>
           <button
-            className = "detail-step-btn"
-            style={{ backgroundColor: "orange", marginLeft: "50%",
-          }}
-            key={value.id+value.label} onClick={this.openModal}>
-              See Full Recipe
+            className="detail-step-btn"
+            style={{
+              backgroundColor: "orange", marginLeft: "50%",
+            }}
+            key={value.id + value.label} onClick={this.openModal}>
+            See Full Recipe
           </button>
         </div>
       </>
