@@ -77,7 +77,7 @@ import { base_url } from '../../util/Api';
   
 //   submitForm = () => {
 //     console.log("state,", this.state);
-//     var url = 'https://chopchowdev.herokuapp.com/api/user/signup';
+//     var url = 'https://chopchowserver.vercel.app/api/user/signup';
 //     var url = 'http://localhost:5000/api/user/signup';
 //     var payLoad = this.state;
 //     delete payLoad.messageErr;
@@ -258,7 +258,7 @@ function SignUp(props){
   
   function submitForm() {
     console.log("state,", this.state);
-    var url = 'https://chopchowdev.herokuapp.com/api/user/signup';
+    var url = 'https://chopchowserver.vercel.app/api/user/signup';
     var url = `${base_url}/user/signup`;
     var payLoad = this.state;
     delete payLoad.messageErr;
