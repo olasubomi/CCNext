@@ -151,7 +151,9 @@ const GroceryPage = () => {
         try {
             const data = {
                 listName: itemList.listName,
-                item_name: value
+                item_name: value,
+                quantity: itemsToAdd.quantity,
+                measurement: itemsToAdd.measurement
             }
             const response = await axios(`/groceries/grocery-item`, {
                 method: 'POST',
@@ -189,7 +191,6 @@ const GroceryPage = () => {
         return name
     }
 
-    console.log()
 
     const deleteItemFromGrocery = async (id) => {
         try {
@@ -475,9 +476,9 @@ const GroceryPage = () => {
                                                                         {element?.itemData?.item_name}
                                                                     </td>
                                                                     <td className={styles.td}>
-                                                                        -
+                                                                        {element?.itemData?.quantity ? element?.itemData?.quantity : '-'}
                                                                     </td>
-                                                                    <td className={styles.td}> 
+                                                                    <td className={styles.td}>
                                                                         N/A
                                                                     </td>
                                                                     <td className={styles.td}>

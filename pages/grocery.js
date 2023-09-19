@@ -1,19 +1,16 @@
 import Head from "next/head";
-import React from "react";
-import GroceryComponent from "../src/components/GroceryPage/index";
+import React, { useState, useEffect } from "react";
 import Header, { Header2 } from "../src/components/Header/Header";
 import GoBack from "../src/components/CommonComponents/goBack";
 import styles from '../src/components/grocery/grocery.module.css'
 import Image from "next/image";
 import noteGif from '../public/assets/icons/gif.gif'
 import Footer from "../src/components/Footer/Footer";
-import { useState, useEffect } from "react";
 import { Modal } from "../src/components/modal/popup-modal";
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { disableBodyScroll} from 'body-scroll-lock';
 import girl from "../public/assets/icons/girl.jpg"
 import { AiFillEdit } from 'react-icons/ai'
-import { MdDelete } from 'react-icons/md'
-import { MdRemoveRedEye } from 'react-icons/md'
+import { MdDelete, MdRemoveRedEye } from 'react-icons/md'
 import { HiDotsHorizontal } from 'react-icons/hi'
 import axios from "../src/util/Api";
 import { useRouter } from "next/router";
@@ -68,11 +65,7 @@ const Grocery = () => {
         const doc = document.querySelector('#modal_container')
         console.log(doc)
         disableBodyScroll(doc)
-        // if (show) {
-        //     disableBodyScroll(doc)
-        // } else {
-        //     enableBodyScroll(doc)
-        // }
+    
     }, [show])
     console.log(groceryList.groceryItems, 'groceryy')
     return (
@@ -94,7 +87,6 @@ const Grocery = () => {
                         <p className={styles.button_text} onClick={() => setShow(!show)}>Create New List</p>
                     </div>
                 </div>
-
                 {groceryList.length > 0 ?
                     <div className={styles.all_cards}>
 
@@ -167,7 +159,7 @@ const Grocery = () => {
                                                     <div className={styles.oneImage}>
                                                         {
 
-                                                            elem.item.itemImage0 ? <Image src={elem?.item?.itemImage0} width={95} height={100} className={styles.imgs} /> :
+                                                            elem.item?.itemImage0 ? <Image src={elem?.item?.itemImage0} width={95} height={100} className={styles.imgs} /> :
                                                                 <Image src={yellow} width={95} height={95} objectFit='cover' objectPosition='center' />
                                                         }
                                                         <p className={styles.name2}>{elem?.item?.item_name}</p>
