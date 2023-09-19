@@ -431,8 +431,8 @@ const GroceryPage = () => {
                                                                             }}
                                                                             type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
                                                                         {
-                                                                            element.item.itemImage0 ?
-                                                                                <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={yellow} height={50} width={55} style={{ borderRadius: '5px' }} />
+                                                                            element?.item?.itemImage0 &&
+                                                                                <Image src={element?.item?.itemImage0} height={50} width={55} /> 
                                                                         }
                                                                     </td>
                                                                     <td className={styles.td} style={{ cursor: 'pointer', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', marginTop: '1.5rem' }}>
@@ -469,7 +469,6 @@ const GroceryPage = () => {
                                                                 <tr key={element?.itemData?._id} className={styles.tr}>
                                                                     <td className={styles.td}>
                                                                         <input type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
-                                                                        <Image src={Frame} height={50} width={55} style={{ borderRadius: '5px' }} />
 
                                                                     </td>
                                                                     <td className={styles.td}>
