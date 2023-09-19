@@ -17,9 +17,9 @@ import { useRouter } from "next/router";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { toast } from "react-toastify";
-import yellow from '../public/assets/meal_pics/yellow.jpeg'
 import { GroceryModal } from "../src/components/modal/grocery-modal";
 import SideNav from '../src/components/Header/sidenav'
+import Frame from '../public/assets/logos/Frame.png'
 
 const Grocery = () => {
     const [show, setShow] = useState(false)

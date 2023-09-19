@@ -36,11 +36,10 @@ export const MobileInputs = ({getItem, setValue, setItemsToAdd, setIsShow,addIte
                     <div className={styles.data}>
                         <div className={styles.flex3}>
                             {
-                                e.image ?
-                                    <Image src={e.image} width={40} objectPosition='center' objectFit='cover'
+                                e?.image &&
+                                    <Image src={e?.image} width={40} objectPosition='center' objectFit='cover'
                                         height={40} borderRadius='4px' style={{ borderRadius: '4px' }} />
-                                    :
-                                    <Image src={yellow} width={40} height={40} objectPosition='center' objectFit='cover' borderRadius='10px' style={{ borderRadius: '4px' }} />
+                                   
                             }
                             <p className={styles.labelName} style={{ marginLeft: '13px' }}>{e.label}</p>
                         </div>
