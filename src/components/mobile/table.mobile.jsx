@@ -32,8 +32,8 @@ export const MobileTable = ({ itemList, deleteItemFromGrocery, toggle, addItemsT
                                         <td className={styles.td2} style={{ cursor: 'pointer', paddingRight: '2rem' }}>
                                             <div style={{ width: '30%' }}>
                                                 {
-                                                    element?.item.itemImage0 ?
-                                                        <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={yellow} height={50} width={55} style={{ borderRadius: '5px' }} />
+                                                    element?.item?.itemImage0 &&
+                                                        <Image src={element?.item?.itemImage0} height={50} width={55} />
                                                 }
                                             </div>
                                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', marginLeft: '.4rem', marginTop: '-.7rem', width: '70%' }}>
