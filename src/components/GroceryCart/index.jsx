@@ -93,7 +93,7 @@ class GroceryPage extends React.Component {
   getCustomerList = (customerId) => {
     var url = `/getCustomerGroceryList/${customerId}`;
     // var url = `http://localhost:5000/api/getCustomerGroceryList/${customerId}`
-    // var url = `https://chopchowdev.herokuapp.com/api/getCustomerGroceryList/${customerId}`;
+    // var url = `https://chopchowserver.vercel.app/api/getCustomerGroceryList/${customerId}`;
     axios(url)
       .then(({data}) => {
         this.setState({ customerList: data.data });
@@ -117,7 +117,7 @@ class GroceryPage extends React.Component {
   handleShowDeleteItem = (productID) => {
     this.setState({ deletedItemId: productID });
     const { customerId, deletedItemId } = this.state;
-    // var url = `https://chopchowdev.herokuapp.com/api/remove-item/${productID}/${customerId}`
+    // var url = `https://chopchowserver.vercel.app/api/remove-item/${productID}/${customerId}`
     var url = `./api/remove-item/${productID}/${customerId}`;
 
     fetch(url, {
@@ -172,7 +172,7 @@ class GroceryPage extends React.Component {
   handleDeleteList = () => {
     console.log("Comes in deletes list");
     const { customerId } = this.state;
-    var url = `https://chopchowdev.herokuapp.com/api/remove-list/${customerId}`;
+    var url = `https://chopchowserver.vercel.app/api/remove-list/${customerId}`;
     // var url = `./api/remove-list/${customerId}`
 
     fetch(url, {
@@ -229,7 +229,7 @@ class GroceryPage extends React.Component {
     console.log("productID is: " + productID);
     console.log("customer id is: " + this.state.customerId);
     if (!isNaN(productID)) {
-      // var url = `https://chopchowdev.herokuapp.com/api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`
+      // var url = `https://chopchowserver.vercel.app/api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`
       var url = `./api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`;
       fetch(url, {
         method: "POST",

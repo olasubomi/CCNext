@@ -11,10 +11,9 @@ const proxy = require("http-proxy-middleware");
 //     })
 //   );
 // };
-module.exports = function(app) {
-  app.use(proxy("/api/", { 
-    target: base_url,
-    // target: "https://chopchowdev.herokuapp.com/api/",
+module.exports = function (app) {
+  app.use(proxy("/api/", {
+    target: "https://chopchowserver.vercel.app/api/",
     secure: false
   }));
 };
