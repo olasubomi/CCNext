@@ -151,7 +151,9 @@ const GroceryPage = () => {
         try {
             const data = {
                 listName: itemList.listName,
-                item_name: value
+                item_name: value,
+                quantity: itemsToAdd.quantity,
+                measurement: itemsToAdd.measurement
             }
             const response = await axios(`/groceries/grocery-item`, {
                 method: 'POST',
@@ -189,7 +191,6 @@ const GroceryPage = () => {
         return name
     }
 
-    console.log()
 
     const deleteItemFromGrocery = async (id) => {
         try {
@@ -335,11 +336,9 @@ const GroceryPage = () => {
                                         <div className={styles.data}>
                                             <div className={styles.flex3}>
                                                 {
-                                                    e.image ?
-                                                        <Image src={e.image} width={40} objectPosition='center' objectFit='cover'
+                                                    e?.image &&
+                                                        <Image src={e?.image} width={40} objectPosition='center' objectFit='cover'
                                                             height={40} borderRadius='4px' style={{ borderRadius: '4px' }} />
-                                                        :
-                                                        <Image src={yellow} width={40} height={40} objectPosition='center' objectFit='cover' borderRadius='10px' style={{ borderRadius: '4px' }} />
                                                 }
                                                 <p className={styles.labelName} style={{ marginLeft: '13px' }}>{e.label}</p>
                                             </div>
@@ -430,8 +429,8 @@ const GroceryPage = () => {
                                                                             }}
                                                                             type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
                                                                         {
-                                                                            element.item.itemImage0 ?
-                                                                                <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={yellow} height={50} width={55} style={{ borderRadius: '5px' }} />
+                                                                            element?.item?.itemImage0 &&
+                                                                                <Image src={element?.item?.itemImage0} height={50} width={55} /> 
                                                                         }
                                                                     </td>
                                                                     <td className={styles.td} style={{ cursor: 'pointer', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', marginTop: '1.5rem' }}>
@@ -468,16 +467,15 @@ const GroceryPage = () => {
                                                                 <tr key={element?.itemData?._id} className={styles.tr}>
                                                                     <td className={styles.td}>
                                                                         <input type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
-                                                                        <Image src={Frame} height={50} width={55} style={{ borderRadius: '5px' }} />
-
+                                                                        <Image src={Frame} height={50} width={50} className={styles.image} />
                                                                     </td>
                                                                     <td className={styles.td}>
                                                                         {element?.itemData?.item_name}
                                                                     </td>
                                                                     <td className={styles.td}>
-                                                                        -
+                                                                        {element?.itemData?.quantity ? element?.itemData?.quantity : '-'}
                                                                     </td>
-                                                                    <td className={styles.td}> 
+                                                                    <td className={styles.td}>
                                                                         N/A
                                                                     </td>
                                                                     <td className={styles.td}>

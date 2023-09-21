@@ -1,27 +1,25 @@
 import Head from "next/head";
-import React from "react";
-import GroceryComponent from "../src/components/GroceryPage/index";
+import React, { useState, useEffect } from "react";
 import Header, { Header2 } from "../src/components/Header/Header";
 import GoBack from "../src/components/CommonComponents/goBack";
 import styles from '../src/components/grocery/grocery.module.css'
 import Image from "next/image";
 import noteGif from '../public/assets/icons/gif.gif'
 import Footer from "../src/components/Footer/Footer";
-import { useState, useEffect } from "react";
 import { Modal } from "../src/components/modal/popup-modal";
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { disableBodyScroll } from 'body-scroll-lock';
 import girl from "../public/assets/icons/girl.jpg"
 import { AiFillEdit } from 'react-icons/ai'
-import { MdDelete } from 'react-icons/md'
-import { MdRemoveRedEye } from 'react-icons/md'
+import { MdDelete, MdRemoveRedEye } from 'react-icons/md'
 import { HiDotsHorizontal } from 'react-icons/hi'
 import axios from "../src/util/Api";
 import { useRouter } from "next/router";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { toast } from "react-toastify";
-import yellow from '../public/assets/meal_pics/yellow.jpeg'
 import { GroceryModal } from "../src/components/modal/grocery-modal";
+import SideNav from '../src/components/Header/sidenav'
+import Frame from '../public/assets/logos/Frame.png'
 
 const Grocery = () => {
     const [show, setShow] = useState(false)
@@ -68,162 +66,160 @@ const Grocery = () => {
         const doc = document.querySelector('#modal_container')
         console.log(doc)
         disableBodyScroll(doc)
-        // if (show) {
-        //     disableBodyScroll(doc)
-        // } else {
-        //     enableBodyScroll(doc)
-        // }
+
     }, [show])
-    console.log(groceryList.groceryItems, 'groceryy')
+    console.log(groceryList, 'groceryy')
     return (
-        <div className={styles.grocery_container} id="modal_container">
-            <Head>
-                <title>Chop Chow Grocery</title>
-                <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
-            </Head>
+        <>
             <Header />
             <Header2 />
-            {/* <GroceryComponent productNames={['prod1', 'prod2']} /> */}
-            <div className={styles.container}>
-                <div className={styles.header}>
-                    <div className={styles.one}>
-                        <GoBack />
-                        <h3 className={styles.title}>My Grocery List</h3>
-                    </div>
-                    <div className={styles.two}>
-                        <p className={styles.button_text} onClick={() => setShow(!show)}>Create New List</p>
-                    </div>
-                </div>
+            <SideNav />
+            <div className={styles.grocery_container} id="modal_container">
+                <Head>
+                    <title>Chop Chow Grocery</title>
+                    <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                </Head>
 
-                {groceryList.length > 0 ?
-                    <div className={styles.all_cards}>
-
-                        {groceryList.map((ele, id) => (
-                            <div className={ele.groceryItems.length > 0 ? styles.card2 : styles.noImages} key={id}>
-                                <div className={styles.column1}>
-                                    <div className={styles.flex2}>
-                                        <h4 className={styles.title2}>{ele.listName}</h4>
-                                        <Popup trigger={<div> <HiDotsHorizontal className={styles.dots} /> </div>} position="bottom right" className={styles.popup_content}>
-                                            <div>
-                                                <div onClick={() => {
-                                                    setDetails({
-                                                        listName: ele.listName,
-                                                        description: ele.description,
-                                                        id: ele._id
-                                                    })
-                                                    setShow(true)
-                                                }} className={styles.flex} style={{ justifyContent: 'flex-start', cursor: 'pointer', padding: '.7rem' }}>
-                                                    <AiFillEdit size={17} color="#F47900" />
-                                                    <p className={styles.text3} style={{ marginLeft: '.5rem' }}>Edit List</p>
-                                                </div>
-                                                <div onClick={() => deleteGrocery(ele._id)} className={styles.flex} style={{ justifyContent: 'flex-start', cursor: 'pointer', padding: '.8rem', zIndex: '1000' }}>
-                                                    <MdDelete size={19} color='#F47900' />
-                                                    <p className={styles.text3} style={{ marginLeft: '.5rem' }}>Delete List</p>
-                                                </div>
-                                                {
-                                                    ele.groceryItems.length ?
-                                                        <div className={styles.flex}
-                                                            style={{
-                                                                justifyContent: 'flex-start',
-                                                                cursor: 'pointer',
-                                                                padding: '.8rem',
-                                                                opacity: ele?.groceryItems?.length ? '1' : '0.4'
-
-                                                            }}>
-                                                            <MdRemoveRedEye size={17} color='#F47900' />
-                                                            <p className={styles.text3} style={{ marginLeft: '.5rem' }} onClick={() => {
-                                                                setDetails({
-                                                                    listName: ele.listName,
-                                                                    description: ele.description,
-                                                                    status: ele?.status,
-                                                                    id: ele._id
-                                                                })
-                                                                setOpenModal(true)
-                                                            }}>Make Public</p>
-                                                        </div>
-                                                        : <div className={styles.flex}
-                                                            style={{
-                                                                justifyContent: 'flex-start',
-                                                                cursor: 'pointer',
-                                                                padding: '.8rem',
-                                                                opacity: ele?.groceryItems?.length ? '1' : '0.4'
-
-                                                            }}>
-                                                            <MdRemoveRedEye size={17} color='#F47900' />
-                                                            <p className={styles.text3} style={{ marginLeft: '.5rem' }} >Make Public</p>
-                                                        </div>
-                                                }
-                                            </div>
-                                        </Popup>
-                                    </div>
-                                    <p className={styles.text}>
-                                        {ele.description}
-                                    </p>
-                                    <p className={ele.groceryItems.length > 0 ? styles.length : styles.length2}>{ele.groceryItems?.length} Items</p>
-                                    <div className={ele.groceryItems?.length ? styles.images : styles.noimages}>
-                                        {
-                                            ele.groceryItems?.length ? ele.groceryItems?.slice(0, 3)?.map((elem, idx) => (
-                                                <div style={{ display: 'flex', alignItems: 'center' }} key={idx}>
-                                                    <div className={styles.oneImage}>
-                                                        {
-
-                                                            elem.item.itemImage0 ? <Image src={elem?.item?.itemImage0} width={95} height={100} className={styles.imgs} /> :
-                                                                <Image src={yellow} width={95} height={95} objectFit='cover' objectPosition='center' />
-                                                        }
-                                                        <p className={styles.name2}>{elem?.item?.item_name}</p>
-                                                    </div>
-                                                </div>
-                                            )) :
-                                                <div>
-
-                                                </div>
-                                        }
-                                    </div>
-                                </div>
-                                <div className={styles.flex2} style={{ marginBottom: '1rem', marginTop: '1rem'}}>
-                                    <div className={styles.flex}>
-                                        <Image src={girl} width={40} height={40} className={styles.person} />
-                                        <p className={styles.name}>{ele.user.first_name} {ele.user.last_name}</p>
-                                    </div>
-                                    <div onClick={() => router.push(`/grocerylist/groceries/${ele._id}`)} className={styles.two2}>
-                                        <p className={styles.button_text} style={{ cursor: 'pointer' }}>{ele.groceryItems?.length ? 'Show Items' : ' Add Items'}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))} </div> :
-                    < div className={styles.card}>
-                        <Image src={noteGif} height={200} width={250} className={styles.image} />
-                        <div className={styles.flex}>
-                            <p className={styles.card_text}>You have no Grocery List.</p>
-                            <div onClick={() => setShow(!show)}>
-                                <p className={styles.card_text} style={{ color: '#F47900', marginLeft: '.5rem', cursor: 'pointer' }}>Create New List</p>
-                            </div>
+                {/* <GroceryComponent productNames={['prod1', 'prod2']} /> */}
+                <div className={styles.container}>
+                    <div className={styles.header}>
+                        <div className={styles.one}>
+                            <GoBack />
+                            <h3 className={styles.title}>My Grocery List</h3>
+                        </div>
+                        <div className={styles.two}>
+                            <p className={styles.button_text} onClick={() => setShow(!show)}>Create New List</p>
                         </div>
                     </div>
-                }
-            </div>
+                    {groceryList.length > 0 ?
+                        <div className={styles.all_cards}>
 
-            {
-                show &&
-                <Modal
-                    show={show}
-                    setShow={setShow}
-                    fetchList={fetchList}
-                    details={details}
-                    setDetails={setDetails}
-                />
-            }
-            {
-                openModal &&
-                <GroceryModal
-                    details={details}
-                    openModal={openModal}
-                    setOpenModal={setOpenModal}
-                    refetch={() => fetchList()}
-                />
-            }
-            <Footer />
-        </div >
+                            {groceryList.map((ele, id) => (
+                                <div className={ele.groceryItems.length > 0 ? styles.card2 : styles.noImages} key={id}>
+                                    <div className={styles.column1}>
+                                        <div className={styles.flex2}>
+                                            <h4 className={styles.title2}>{ele.listName}</h4>
+                                            <Popup trigger={<div> <HiDotsHorizontal className={styles.dots} /> </div>} position="bottom right" className={styles.popup_content}>
+                                                <div>
+                                                    <div onClick={() => {
+                                                        setDetails({
+                                                            listName: ele.listName,
+                                                            description: ele.description,
+                                                            id: ele._id
+                                                        })
+                                                        setShow(true)
+                                                    }} className={styles.flex} style={{ justifyContent: 'flex-start', cursor: 'pointer', padding: '.7rem' }}>
+                                                        <AiFillEdit size={17} color="#F47900" />
+                                                        <p className={styles.text3} style={{ marginLeft: '.5rem' }}>Edit List</p>
+                                                    </div>
+                                                    <div onClick={() => deleteGrocery(ele._id)} className={styles.flex} style={{ justifyContent: 'flex-start', cursor: 'pointer', padding: '.8rem', zIndex: '1000' }}>
+                                                        <MdDelete size={19} color='#F47900' />
+                                                        <p className={styles.text3} style={{ marginLeft: '.5rem' }}>Delete List</p>
+                                                    </div>
+                                                    {
+                                                        ele.groceryItems.length ?
+                                                            <div className={styles.flex}
+                                                                style={{
+                                                                    justifyContent: 'flex-start',
+                                                                    cursor: 'pointer',
+                                                                    padding: '.8rem',
+                                                                    opacity: ele?.groceryItems?.length ? '1' : '0.4'
+
+                                                                }}>
+                                                                <MdRemoveRedEye size={17} color='#F47900' />
+                                                                <p className={styles.text3} style={{ marginLeft: '.5rem' }} onClick={() => {
+                                                                    setDetails({
+                                                                        listName: ele.listName,
+                                                                        description: ele.description,
+                                                                        status: ele?.status,
+                                                                        id: ele._id
+                                                                    })
+                                                                    setOpenModal(true)
+                                                                }}>Make Public</p>
+                                                            </div>
+                                                            : <div className={styles.flex}
+                                                                style={{
+                                                                    justifyContent: 'flex-start',
+                                                                    cursor: 'pointer',
+                                                                    padding: '.8rem',
+                                                                    opacity: ele?.groceryItems?.length ? '1' : '0.4'
+
+                                                                }}>
+                                                                <MdRemoveRedEye size={17} color='#F47900' />
+                                                                <p className={styles.text3} style={{ marginLeft: '.5rem' }} >Make Public</p>
+                                                            </div>
+                                                    }
+                                                </div>
+                                            </Popup>
+                                        </div>
+                                        <p className={styles.text}>
+                                            {ele.description}
+                                        </p>
+                                        <p className={ele.groceryItems.length > 0 ? styles.length : styles.length2}>{ele.groceryItems?.length} Items</p>
+                                        <div className={ele.groceryItems?.length ? styles.images : styles.noimages}>
+                                            {
+                                                ele.groceryItems?.length ? ele.groceryItems?.slice(0, 3)?.map((elem, idx) => (
+                                                    <div style={{ display: 'flex', alignItems: 'center' }} key={idx}>
+                                                        <div className={styles.oneImage}>
+                                                            {
+
+                                                                elem.item?.itemImage0 && <Image src={elem?.item?.itemImage0} width={95} height={100} className={styles.imgs} /> 
+                                                            }
+                                                            <p className={styles.name2}>{elem?.item?.item_name}</p>
+                                                        </div>
+                                                    </div>
+                                                )) :
+                                                    <div>
+
+                                                    </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className={styles.flex2} style={{ marginBottom: '1rem', marginTop: '1rem' }}>
+                                        <div className={styles.flex}>
+                                            <Image src={girl} width={40} height={40} className={styles.person} />
+                                            <p className={styles.name}>{ele.user.first_name} {ele.user.last_name}</p>
+                                        </div>
+                                        <div onClick={() => router.push(`/grocerylist/groceries/${ele._id}`)} className={styles.two2}>
+                                            <p className={styles.button_text} style={{ cursor: 'pointer' }}>{ele.groceryItems?.length ? 'Show Items' : ' Add Items'}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))} </div> :
+                        < div className={styles.card}>
+                            <Image src={noteGif} height={200} width={250} className={styles.image} />
+                            <div className={styles.flex}>
+                                <p className={styles.card_text}>You have no Grocery List.</p>
+                                <div onClick={() => setShow(!show)}>
+                                    <p className={styles.card_text} style={{ color: '#F47900', marginLeft: '.5rem', cursor: 'pointer' }}>Create New List</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                {
+                    show &&
+                    <Modal
+                        show={show}
+                        setShow={setShow}
+                        fetchList={fetchList}
+                        details={details}
+                        setDetails={setDetails}
+                    />
+                }
+                {
+                    openModal &&
+                    <GroceryModal
+                        details={details}
+                        openModal={openModal}
+                        setOpenModal={setOpenModal}
+                        refetch={() => fetchList()}
+                    />
+                }
+                <Footer />
+            </div >
+        </>
     )
 
 }

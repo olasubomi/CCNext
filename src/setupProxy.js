@@ -1,3 +1,5 @@
+import { base_url } from "./util/Api";
+
 const proxy = require("http-proxy-middleware");
 
 // module.exports = function(app) {

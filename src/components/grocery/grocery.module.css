@@ -20,6 +20,24 @@
     width: 100%;
     height: 100%;
 }
+.left{
+    display: grid;
+    grid-gap: 2rem;
+    background: #F3F6FC;
+    overflow-x: hidden;
+    height: calc(100vh - 88px);
+    position: fixed;
+    width: 259px;
+    z-index: 1;
+    top: 88px;
+    left: 0;
+    overflow: hidden;
+    display: grid;
+    background-color: white;
+    grid-gap: 1rem;
+    align-items: start;
+    grid-template-rows: 1fr;
+  }
 
 .header {
     height: 20%;
