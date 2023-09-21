@@ -22,9 +22,9 @@ const UserDataDeletion = () => {
 
             2) From the top header of the app, go to your app dashboard<br></br><br></br>
 
-            3) From the menu on the left panel of your dashboard , click the 'Settings' option<br></br><br></br>
+            3) From the menu on the left panel of your dashboard , click the 'My Profile' option<br></br><br></br>
 
-            4) In the settings page scroll down to Privacy section and find the button to request to delete your facebook account data from this app.<br></br><br></br>
+            4) In the settings page scroll down to 'Close Account' section and find the button to request to delete your facebook account data from this app.<br></br><br></br>
 
             You can also find the ability to delete all of your data including your account and its affiliated data from the app permanently. This can not be reversed.
         </p>
