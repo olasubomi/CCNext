@@ -261,7 +261,7 @@ function Login(props) {
                 </div>
               </div>
             )}
-            <h3>Add Convenience to your Home Made Meals</h3>
+            <h3>Adding Convenience to your Home Made Meals</h3>
           </div>
         </div>
         )}
