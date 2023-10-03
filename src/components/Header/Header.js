@@ -526,11 +526,10 @@ function Header(props) {
                   </Link>
 
                 </div>
-                {props.openLogin &&
-                  <Auth toggleLogin={toggleLogin} />}
-                {openLogin && <Auth toggleLogin={toggleLogin} />}
+                { openLogin &&
+                  <Auth openLogin={openLogin} toggleLogin={toggleLogin} />}
+                {/* {openLogin && <Auth toggleLogin={toggleLogin} />} */}
               </div>
-              {openLogin && <Auth toggleLogin={toggleLogin} />}
 
             </div>
           </div>

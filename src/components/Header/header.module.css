@@ -41,7 +41,6 @@
   grid-gap: 3rem;
   justify-items: end;
   align-items: center;
-  z-index: 2;
   font-size: 12px;}
 
 .navbar_top_logo_img{
@@ -761,7 +760,8 @@
   }
   
   .navbar_side{
-    width: 8%;
+    width: 1%;
+    background-color: rebeccapurple ;
   }
 
   .openbtn{
@@ -770,6 +770,7 @@
 
   .navbar_down{
     display: grid;
+    grid-template-columns: 1fr;
   }
 
   .navbar_top{

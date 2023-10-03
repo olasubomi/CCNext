@@ -1,6 +1,7 @@
 import { ArrowDown2Icon, ArrowUp2Icon, ChatIcon, ShareIcon, StarIcon } from '../icons';
 import styles from './reviews.module.css'
 import axios from '../../util/Api';
+import { StarRating } from '../star-rating';
 import { useEffect, useState } from 'react';
 
 function Reviews({ itemId }) {
@@ -111,11 +112,14 @@ function Reviews({ itemId }) {
                             <div className={styles.review_details_top1}>
                                 <h3 className={styles.product_review_name}>{username}</h3>
 
+
                                 <div className={styles.review_input_container}>
                                     <textarea value={message} onChange={(e) => setMessage(e.target.value)} style={{ width: '100%', background: 'none', paddingLeft: '2rem', paddingTop: '1rem', border: 'none', outline: 'none' }}
                                         placeholder='Write Review'
                                     />
+
                                 </div>
+                                <StarRating />
                                 <div style={{ alignItems: 'flex-end', display: 'flex', justifyContent: 'flex-end' }}>
                                     <button onClickCapture={postNewComment} className={styles.profile_button}>Add Review</button>
                                 </div>
