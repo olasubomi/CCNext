@@ -228,7 +228,7 @@ class LandingPage extends Component {
                         </div>
                         <div className={styles.home_section_3_row_2}>
                             <h3 className={styles.home_section_3_row_2_h3}>
-                                WELL-ESTABLISHED LOCAL AND INTERNATIONAL FOOD SUPPLIERS
+                                SEARCH LOCAL FOOD SUPPLIERS
                             </h3>
                             <p className={styles.home_section_3_row_2_p}>
                                 One of the most important features of ChopChow is that we make it easy for you to order food products from well established Local and international food suppliers to add convenience to cooking from home.
@@ -249,7 +249,7 @@ class LandingPage extends Component {
                         </div>
                         <div className={styles.home_section_3_row_2}>
                             <h3 className={styles.home_section_3_row_2_h3}>
-                                GET PROFESSIONAL RECOMMENDATIONS OF RECIPIES
+                                GET RECOMMENDATIONS OF RECIPIES
                             </h3>
                             <p className={styles.home_section_3_row_2_p}>
                                 We know that you're an expert in the kitchen, but sometimes
@@ -276,7 +276,7 @@ class LandingPage extends Component {
                         </div>
                         <div className={styles.home_section_3_row_2}>
                             <h3 className={styles.home_section_3_row_2_h3}>
-                                HOME COOKED INTERNATIONAL MEAL
+                                HOME COOK INTERNATIONAL MEALS
                             </h3>
                             <p className={styles.home_section_3_row_2_p}>
                                 Learn to cook meals from around the world!

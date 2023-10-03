@@ -574,16 +574,16 @@ export function Header2() {
         <div className={styles.navbar_main}>
           <ul className={styles.navbar_main_links}>
             <li className={styles.navbar_main_link}>
-              <p>Store</p>
+              <p>Stores</p>
             </li>
             <li className={styles.navbar_main_link}>
               <p>Meals</p>
             </li>
             <li className={styles.navbar_main_link}>
-              <p>Product</p>
+              <p>Products</p>
             </li>
             <li className={styles.navbar_main_link}>
-              <p>Kitchen Utensils</p>
+              <p> Utensils</p>
             </li>
           </ul>
 
