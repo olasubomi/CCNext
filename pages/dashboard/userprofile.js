@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { Alert } from "react-bootstrap";
+
 import Head from "next/head";
 import { container, col2, left, empty, center } from '../../src/components/dashboard/dashboard.module.css'
 import styles from '../../src/components/dashboard/profile.module.css'
@@ -98,12 +100,19 @@ const UserProfile = (props) => {
         city: '',
         country: '', state: '', zip_code: '',
         billing_address: '', billing_address2: '', billing_city: '', billing_country: '',
-        billing_state: '', billing_zip_code: '', driver_car_model: '', vin: '', driver_car_color: '', driver_car_plate_number: '', driver_car_picture: {}
+        billing_state: '', billing_zip_code: '', driver_car_model: '', vin: '', driver_car_color: '', driver_car_plate_number: '', driver_car_picture: {},
+        messageErr: false,
+        messageSuccess: false,
+        messageErrCreate: false,
+        showAlert: false,
+        messageAlert: "",
+        variant: "",
     });
     const { email, phone_number, first_name, last_name, password,
         address, new_password, profileImageData, country, state, city, zip_code,
         billing_address, billing_address2, billing_city, billing_country,
-        billing_state, billing_zip_code, driver_car_model, vin, driver_car_color, driver_car_plate_number, driver_car_picture } = formState;
+        billing_state, billing_zip_code, driver_car_model, vin, driver_car_color, driver_car_plate_number, driver_car_picture,
+        messageErr, messageSuccess, messageErrCreate, showAlert, messageAlert, variant } = formState;
     const [times, setTimes] = useState({
         sunday: { from: '2018-01-01T00:00:00.000Z', to: '2018-01-01T00:00:00.000Z', open: true },
         monday: { from: '2018-01-01T00:00:00.000Z', to: '2018-01-01T00:00:00.000Z', open: true },
@@ -294,11 +303,12 @@ const UserProfile = (props) => {
     };
     //////////////////////////////////////////////////////////////////////
     function handleDeleteAccount() {
-        console.log("comes oin here");
-        this.setState({ deletedItemId: productID });
-        const { customerId, deletedItemId } = this.state;
-        var url = `https://chopchowserver.vercel.app/api/deleteuserprofile/${customerId}`
-        var url = `localhost:5000/api/deleteuserprofile/${customerId}`
+        console.log("comes in here");
+        const { customerId } = props.auth.authUser._id;
+        console.log(customerId);
+
+        var url = `https://chopchowserver.vercel.app/api/user/deleteuserprofile/` + props.auth.authUser._id;
+        var url = `http://localhost:5000/api/user/deleteuserprofile/` + props.auth.authUser._id;
         // var url = `./api/closeaccount/${customerId}`;
 
         fetch(url, {
@@ -309,44 +319,25 @@ const UserProfile = (props) => {
             // },
         })
             .then((res) => {
-                return res.json();
-            })
-            .then((response) => {
-                this.setState(
-                    {
-                        messageAlert: "deleted successfully",
-                        showAlert: true,
-                        variant: "success",
-                    },
-                    () =>
-                        setTimeout(() => {
-                            this.setState({ messageAlert: "", showAlert: false });
-                        }, 3500)
-                );
-                this.setState((prevState) => {
-                    // delete item on client side
-                    const newValueData = prevState.customerList.filter(
-                        // do we need catch sttmnt for filter
-                        (item) => item.id !== deletedItemId
-                    );
-                    return { customerList: newValueData };
-                });
                 console.log("Deletes account");
                 router.push(`/`);
                 this.componentDidMount();
+                return res.json();
             })
-            .catch(() => {
-                this.setState(
-                    {
-                        messageAlert: "Internal Server Error while deleting item",
-                        showAlert: true,
-                        variant: "danger",
-                    },
-                    () =>
-                        setTimeout(() => {
-                            this.setState({ messageAlert: "", showAlert: false });
-                        }, 8000)
-                );
+            .catch((e) => {
+                // this.setState(
+                //     {
+                //         messageAlert: "Internal Server Error while deleting item",
+                //         showAlert: true,
+                //         variant: "danger",
+                //     },
+                //     () =>
+                //         setTimeout(() => {
+                //             this.setState({ messageAlert: "", showAlert: false });
+                //         }, 8000)
+                // );
+                console.log(e);
+                console.log("Failed to delete user");
             });
     };
 
@@ -356,6 +347,9 @@ const UserProfile = (props) => {
                 {status === "error" && <div className="alert-danger">{message}</div>}
                 {status === "success" && <div className="alert-success">{message}</div>}
             </div>
+            <Alert show={showAlert} key={1} variant={variant}>
+                {messageAlert}
+            </Alert>
             <Head>
                 <title>User Profile</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -1151,7 +1145,7 @@ const UserProfile = (props) => {
                                         <button className={styles.profile_button}
                                             style={{ width: '212px', justifySelf: 'start', background: '#F40707' }}
                                             onClick={(e) => {
-                                                this.handleDeleteAccount()
+                                                handleDeleteAccount()
                                             }}
                                         >
                                             Close
