@@ -55,6 +55,12 @@
     align-items: center;
     /* grid-gap: 10px; */
 }
+.review_details_top4{
+    justify-content: space-between;
+    align-items: flex-start;
+    display: flex;
+}
+
 
 .review_details_top1{
     display: grid;

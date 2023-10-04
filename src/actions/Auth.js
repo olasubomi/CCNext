@@ -91,6 +91,7 @@ export const userSignIn = (email, password) => {
           "Bearer " + data.data.token;
 
         localStorage.setItem("x-auth-token", data.data.token);
+        localStorage.setItem("x-auth-refresh-token", data.data.refreshToken);
         localStorage.setItem("in", Date.now());
         localStorage.setItem("user", JSON.stringify(data.data.user));
 

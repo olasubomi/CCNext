@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import { Rating } from 'react-simple-star-rating'
 import {FaStar} from 'react-icons/fa'
 
- export const StarRating = () => {
-    const [rating, setRating] = useState(0)
+ export const StarRating = ({rating, setRating}) => {
 
     // Catch Rating value
     const handleRatingClick = (newRating) => {
@@ -19,8 +18,8 @@ import {FaStar} from 'react-icons/fa'
             {[1, 2, 3, 4, 5].map((star) => (
                 <FaStar
                     key={star}
-                    size={20}
-                    color={star <= rating ? '#FFD700' : '#E4E5E9'}
+                    size={15}
+                    color={star <= rating ? '#04D505' : '#E4E5E9'}
                     onClick={() => handleRatingClick(star)}
                     style={{ cursor: 'pointer' }}
                 />
