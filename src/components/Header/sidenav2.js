@@ -29,7 +29,7 @@ function SideNav2(props) {
                             <a>
                                 <div className={styles.sidenav_link + " " + (props.path === '/dashboard' && styles.active)}>
                                     <DashBoardIcon style={styles.sidenav_link_icon} />
-                                    Dashboard2
+                                    Dashboard
                                 </div>
                             </a>
                         </Link>

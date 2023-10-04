@@ -303,12 +303,11 @@ const UserProfile = (props) => {
     };
     //////////////////////////////////////////////////////////////////////
     function handleDeleteAccount() {
-        console.log("comes in here");
         const { customerId } = props.auth.authUser._id;
         console.log(customerId);
 
-        var url = `https://chopchowserver.vercel.app/api/user/deleteuserprofile/` + props.auth.authUser._id;
-        var url = `http://localhost:5000/api/user/deleteuserprofile/` + props.auth.authUser._id;
+        var url = `https://chopchowserver.vercel.app/user/deleteuserprofile/` + props.auth.authUser._id;
+        // var url = `http://localhost:5000/user/deleteuserprofile/` + props.auth.authUser._id;
         // var url = `./api/closeaccount/${customerId}`;
 
         fetch(url, {
