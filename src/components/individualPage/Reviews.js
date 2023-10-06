@@ -63,7 +63,7 @@ function Reviews({ itemId }) {
             if (message) {
                 const user = JSON.parse(localStorage.getItem('user'))
                 const created_by = user?.first_name.concat(' ', user.last_name)
-                const payload = { message, item: itemId, item_type: 'Item' };
+                const payload = { message, item: itemId, item_type: 'Item' , rating};
                 const resp = await axios.post(`/comment/create`, payload)
                 setRating(0)
                 setMessage('')

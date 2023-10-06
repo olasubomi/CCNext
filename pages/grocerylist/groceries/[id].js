@@ -421,11 +421,11 @@ const GroceryPage = () => {
                                                                 <tr key={element?._id} className={styles.tr}>
                                                                     <td className={styles.td}>
                                                                         <input
-                                                                            name={element.item.item_name}
-                                                                            value={element.item.item_name}
-                                                                            checked={cartHasItem(element.item)}
+                                                                            name={element?.item?.item_name}
+                                                                            value={element?.item?.item_name}
+                                                                            checked={cartHasItem(element?.item)}
                                                                             onChange={(e) => {
-                                                                                addItemsToCart(element.item, true)
+                                                                                addItemsToCart(element?.item, true)
                                                                             }}
                                                                             type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
                                                                         {

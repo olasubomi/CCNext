@@ -28,26 +28,40 @@ if (typeof window !== 'undefined') {
     const token = localStorage.getItem('x-auth-token');
 
     console.error("__ token __", token);
-    axios.defaults.headers.common['Authorization'] = "Bearer " + token;
+    // axios.defaults.headers.common['Authorization'] = "Bearer " + token;
 }
 
+axios.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('x-auth-token');
+        config.headers.Authorization = `Bearer ${token}`;
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 axios.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config
+        console.log('here', error.response.status ,!originalRequest._retry)
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
                 const refreshToken = localStorage.getItem('x-auth-refresh-token');
-                const response = await axios.get(`${base_url}/user/refresh-token`, {
+                const fetchResp = await fetch(`${base_url}/user/refresh-token`, {
+                    method: 'get',
                     headers: {
                         Authorization: `Bearer ${refreshToken}`
                     }
-                });
-                const newAccessToken = response.data.data.token;
-                const newRefreshToken = response.data.data.refreshToken
+                })
+                
+                const response = await fetchResp.json()
+                const newAccessToken = response.data.token;
+                const newRefreshToken = response.data.refreshToken
 
                 localStorage.setItem('x-auth-refresh-token', newRefreshToken);
                 localStorage.setItem('x-auth-token', newAccessToken);
