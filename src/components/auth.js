@@ -24,7 +24,7 @@ export function Auth(props){
   
     return(
       <div className={login_container}>
-        <Login openLogin={props.openLogin} toggleLogin={props.toggleLogin} />
+        <Login />
       </div>
     )
   }

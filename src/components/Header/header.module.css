@@ -271,7 +271,7 @@
 }
 
 .navbar_down{
-  display: none;
+  /* display: none; */
   grid-auto-flow: row;
   position: fixed;
   bottom: 0;

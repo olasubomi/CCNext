@@ -30,6 +30,38 @@ import { CardDropdown } from '../../../src/components/dropdown/dropdown';
 
 
 const GroceryPage = () => {
+    const customStyles = {
+        option: (defaultStyles, state) => ({
+            ...defaultStyles,
+            color: '#6D6D6D;',
+            fontSize: '15px',
+            fontWeight: '200',
+            marginTop: '1.2rem',
+            marginBottom: '1.2rem',
+            backgroundColor: state.isSelected ? "#FFFFFF" : "#FFFFFF",
+            placeholder: (base) => ({
+                ...base,
+                className: 'placeholder',
+            }),
+        }),
+
+        control: (defaultStyles, state) => ({
+            ...defaultStyles,
+            borderRadius: '4px',
+            outline: state.isFocused ? '1px solid rgba(4, 213, 5, 0.90)' : '1px solid rgba(4, 213, 5, 0.10)',
+            border: state.isFocused ? '2px ' : '1px solid rgba(4, 213, 5, 0.60)',
+            borderColor: state.isSelected ? '1px solid rgba(4, 213, 5, 0.90)' : '1px solid rgba(4, 213, 5, 0.60)',
+            height: '51px',
+            color: '#6D6D6D;',
+            textAlign: 'justify',
+            paddingLeft: '.5rem',
+            "&:hover": {
+                borderColor: '1px solid rgba(4, 213, 5, 0.60)',
+            },
+
+        }),
+        // singleValue: (defaultStyles) => ({ ...defaultStyles, color: "#fff" }),
+    };
     const matches = useMediaQuery('(min-width: 920px)')
     const [isShow, setIsShow] = useState(false)
     const [open, setOpen] = useState({
@@ -45,6 +77,8 @@ const GroceryPage = () => {
     const [suggestion, setSuggestionState] = useState({})
     const router = useRouter();
     const [value, setValue] = useState("")
+    const [measurement_value, setMeasurementValue] = useState("")
+    const [measurement_value_1, setMeasurementValue_1] = useState("")
     const { addItemsToCart, cartItems, cartHasItem } = useCart()
     const [measurements, setMeasurement] = useState([{
         value: '',
@@ -73,7 +107,6 @@ const GroceryPage = () => {
 
     const id = router?.query?.id;
 
-    console.log('cartItems-', cartItems)
 
     const getAllMeasurement = async (newPage) => {
         try {
@@ -149,11 +182,15 @@ const GroceryPage = () => {
 
     const addJsonDataToGroceryList = async () => {
         try {
-            const data = {
+            let data = {
                 listName: itemList.listName,
                 item_name: value,
-                quantity: itemsToAdd.quantity,
-                measurement: itemsToAdd.measurement
+            }
+            if (itemsToAdd.quantity) {
+                data.quantity = itemsToAdd.quantity
+            }
+            if (itemsToAdd.measurement) {
+                data.measurement = itemsToAdd.measurement
             }
             const response = await axios(`/groceries/grocery-item`, {
                 method: 'POST',
@@ -162,8 +199,44 @@ const GroceryPage = () => {
                 },
                 data: data
             })
+            setItemsToAdd({
+                itemId: '',
+                quantity: '',
+                measurement: ''
+            })
             getList()
             toast.success('Item added successfully')
+            console.log(response.data, 'yello')
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const addJsonMeasurementToGroceryList = async () => {
+        try {
+            let data = {
+                listName: itemList.listName,
+            }
+
+            if (measurement_value_1) {
+                data.measurement = measurement_value_1
+            }
+            console.log('data', data)
+            const response = await axios(`/groceries/grocery-measurement`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data
+            })
+            setItemsToAdd({
+                itemId: '',
+                quantity: '',
+                measurement: ''
+            })
+            getList()
+            toast.success('Measurement added successfully')
             console.log(response.data, 'yello')
 
         } catch (error) {
@@ -191,6 +264,7 @@ const GroceryPage = () => {
         return name
     }
 
+    console.log()
 
     const deleteItemFromGrocery = async (id) => {
         try {
@@ -236,8 +310,12 @@ const GroceryPage = () => {
         getAllMeasurement()
         getList()
     }, [])
-    console.log(itemList?.groceryItems, 'amen')
 
+    useEffect(() => {
+        if(measurement_value){
+            setMeasurementValue_1(measurement_value)
+        }
+    }, [measurement_value])
     return <div>
         <Head>
             <title>Chop Chow Grocery List</title>
@@ -309,6 +387,7 @@ const GroceryPage = () => {
                                         getItem(value)
                                         setValue(value)
                                     }}
+                                    customStyles={customStyles}
                                     noOptionsMessage={
                                         () => (
                                             <div className={styles.noOptions}>
@@ -328,7 +407,6 @@ const GroceryPage = () => {
                                     options={item}
                                     onSelect={(option) => setItemsToAdd({ ...itemsToAdd, itemId: option.value })}
                                     placeholder="Search meals, products and ingredients"
-
                                     formatOptionLabel={(e, { context }) => context === 'value' ?
                                         <div>
                                             <p className={styles.labelName}>{e.label}</p>
@@ -336,9 +414,11 @@ const GroceryPage = () => {
                                         <div className={styles.data}>
                                             <div className={styles.flex3}>
                                                 {
-                                                    e?.image &&
-                                                        <Image src={e?.image} width={40} objectPosition='center' objectFit='cover'
+                                                    e.image ?
+                                                        <Image src={e.image} width={40} objectPosition='center' objectFit='cover'
                                                             height={40} borderRadius='4px' style={{ borderRadius: '4px' }} />
+                                                        :
+                                                        <Image src={yellow} width={40} height={40} objectPosition='center' objectFit='cover' borderRadius='10px' style={{ borderRadius: '4px' }} />
                                                 }
                                                 <p className={styles.labelName} style={{ marginLeft: '13px' }}>{e.label}</p>
                                             </div>
@@ -360,12 +440,20 @@ const GroceryPage = () => {
                                     onChange={(e) => setItemsToAdd({ ...itemsToAdd, quantity: e.target.value })}
                                     className={styles.inputbg} />
                                 <DropDownSelect
-                                    onChange={(value) => console.log(value)}
+                                    onChange={(value) => setMeasurementValue(value)}
                                     onSelect={(option) => setItemsToAdd({ ...itemsToAdd, measurement: option.value })}
                                     options={measurements}
                                     placeholder="Measurement"
+                                    customStyles={customStyles}
                                 />
-                                <button className={styles.btn} onClick={() => addItemToGrocery()}>Add New Item</button>
+                                <button className={styles.btn} onClick={() => {
+                                    console.log(measurement_value_1, 'item to add')
+                                    if (itemsToAdd.itemId || itemsToAdd.quantity || itemsToAdd.measurement) {
+                                        addItemToGrocery()
+                                    } else if (!Boolean(itemsToAdd.measurement) && measurement_value_1) {
+                                        addJsonMeasurementToGroceryList()
+                                    }
+                                }}>Add New Item</button>
                             </div>
                             :
                             <MobileInputs
@@ -376,7 +464,8 @@ const GroceryPage = () => {
                                 itemsToAdd={itemsToAdd}
                                 setItemsToAdd={setItemsToAdd}
                                 item={item}
-                                measurements={measurements} />
+                                measurements={measurements}
+                                addJsonDataToGroceryList={addJsonDataToGroceryList} />
                     }
                 </div>
                 {
@@ -423,14 +512,14 @@ const GroceryPage = () => {
                                                                         <input
                                                                             name={element?.item?.item_name}
                                                                             value={element?.item?.item_name}
-                                                                            checked={cartHasItem(element?.item)}
+                                                                            checked={cartHasItem(element.item)}
                                                                             onChange={(e) => {
-                                                                                addItemsToCart(element?.item, true)
+                                                                                addItemsToCart(element.item, true)
                                                                             }}
                                                                             type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
                                                                         {
-                                                                            element?.item?.itemImage0 &&
-                                                                                <Image src={element?.item?.itemImage0} height={50} width={55} /> 
+                                                                            element?.item?.itemImage0 ?
+                                                                                <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={Frame} height={50} width={55} style={{ borderRadius: '5px' }} />
                                                                         }
                                                                     </td>
                                                                     <td className={styles.td} style={{ cursor: 'pointer', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', marginTop: '1.5rem' }}>
@@ -439,7 +528,7 @@ const GroceryPage = () => {
                                                                             toggle(element)
                                                                         }}>{element.item.item_name}</p>
                                                                         {
-                                                                            element.item.item_type === 'Meal' && element?.quantity ?
+                                                                            element?.item?.item_type === 'Meal' && element?.quantity ?
                                                                                 <div>
                                                                                     <p className={styles.ingredients} onClick={() => {
 
@@ -467,13 +556,14 @@ const GroceryPage = () => {
                                                                 <tr key={element?.itemData?._id} className={styles.tr}>
                                                                     <td className={styles.td}>
                                                                         <input type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
-                                                                        <Image src={Frame} height={50} width={50} className={styles.image} />
+                                                                        <Image src={Frame} height={50} width={55} style={{ borderRadius: '5px' }} />
+
                                                                     </td>
                                                                     <td className={styles.td}>
                                                                         {element?.itemData?.item_name}
                                                                     </td>
                                                                     <td className={styles.td}>
-                                                                        {element?.itemData?.quantity ? element?.itemData?.quantity : '-'}
+                                                                        {element?.itemData?.quantity} {element?.itemData?.measurement?.measurement_name}
                                                                     </td>
                                                                     <td className={styles.td}>
                                                                         N/A
