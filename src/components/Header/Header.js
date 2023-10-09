@@ -29,6 +29,8 @@ import { userSignOut, verifyToken, setOpenLogin } from "../../actions";
 import { SimpleSnackbar } from "../../common";
 import { triggerAlert } from "../../actions/";
 import CartContext from "../../../pages/store/cart-context";
+import Login from "../Login";
+import { useAuth } from "../../context/auth.context";
 
 
 function Header(props) {
@@ -36,7 +38,7 @@ function Header(props) {
   const [customerId, setCustomerIdState] = useState(null);
   const [username, setUsernameState] = useState(null);
   const [showNotif, setshowNotifState] = useState(true);
-
+  const { isOpen, setIsOpen } = useAuth()
   const [openLogin, setOpenLoginState] = useState(false);
   const router = useRouter();
 
@@ -203,7 +205,7 @@ function Header(props) {
                 // <Link href='/login'>
                 // <a className={styles.navbar_user_loginbtn}>
                 <div
-                  onClick={toggleLogin}
+                  onClick={() => setIsOpen(!isOpen)}
                   className={styles.navbar_user_loginbtn}
                 >
                   Log In/Register
@@ -526,11 +528,13 @@ function Header(props) {
                   </Link>
 
                 </div>
-                {props.openLogin &&
-                  <Auth toggleLogin={toggleLogin} />}
-                {openLogin && <Auth toggleLogin={toggleLogin} />}
+                {
+                  isOpen && <Auth />
+                }
+                
+                {/* <Auth toggleLogin={toggleLogin} /> */}
+                {/* {openLogin && <Auth toggleLogin={toggleLogin} />} */}
               </div>
-              {openLogin && <Auth toggleLogin={toggleLogin} />}
 
             </div>
           </div>

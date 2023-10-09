@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PersistGate } from 'redux-persist/integration/react'
 import { CartProvider } from "../src/context/cart.context";
+import { AuthProvider } from "../src/context/auth.context";
 
 
 function MyApp({ Component, pageProps }) {
@@ -17,9 +18,11 @@ function MyApp({ Component, pageProps }) {
       <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <CartProvider>
-              <Component {...pageProps} />
-            </CartProvider>
+            <AuthProvider>
+              <CartProvider>
+                <Component {...pageProps} />
+              </CartProvider>
+            </AuthProvider>
             <ToastContainer
               position="top-center"
               autoClose={2000}

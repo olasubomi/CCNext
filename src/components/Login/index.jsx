@@ -16,6 +16,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { toast } from 'react-toastify';
 import FacebookLogin from 'react-facebook-login';
+import { useAuth } from "../../context/auth.context";
 
 
 function Login(props) {
@@ -24,6 +25,7 @@ function Login(props) {
   const [status, setStatusState] = useState(null);
   const [message, setMessageState] = useState(null);
   const [showPass, setShowPassState] = useState(null);
+  const {isOpen, setIsOpen } = useAuth();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -46,6 +48,7 @@ function Login(props) {
   }
 
   function openSignUp() {
+
     setSignUpState(true);
   }
 
@@ -81,7 +84,10 @@ function Login(props) {
     // props.toggleLogin() // then redirect to dashboard
 
     setLoginLoading(true);
-    await props.login(email, password);
+    await props.login(email, password, () => {
+      console.log('calling callback')
+      setLoginLoading(false)
+    });
 
     // setTimeout(() => {
     //   setLoginLoading(false)
@@ -115,11 +121,12 @@ function Login(props) {
   return(
 
     <>
-      {!signUp && !forgetPassword &&
-        (<div className={styles.login}>
+      {true &&
+        (
+        <div className={styles.login}>
           <div className={styles.login_col_2}>
             <div className={styles.login_top}>
-              <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}>
+              <div onClick={() => setIsOpen(!isOpen)} className={styles.login_cancel_con + " "}>
                 <Image src={closeIcon} className={styles.login_cancel} />
               </div>
               <Image
@@ -286,7 +293,7 @@ function mapStateToProp(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    login: (email, password) => dispatch(userSignIn(email, password)),
+    login: (email, password, callback) => dispatch(userSignIn(email, password, callback)),
     socialLogin: (code) => dispatch(socialSignIn(code)),
   };
 }
