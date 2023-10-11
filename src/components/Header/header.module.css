@@ -271,12 +271,12 @@
 }
 
 .navbar_down{
-  /* display: none; */
+  display: none;
   grid-auto-flow: row;
   position: fixed;
   bottom: 0;
+  right: 0;
   width: 100%;
-  z-index: 200;
   grid-template-rows: 70px;
   grid-template-columns: max-content max-content max-content max-content;
   justify-content: space-around;
@@ -731,6 +731,7 @@
 
 @media only screen and (max-width: 768px){
   .navbar{
+    display: grid;
     grid-template-rows: 55px;
   }
 

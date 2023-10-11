@@ -69,7 +69,7 @@ function Login(props) {
         // user.super_app_admin
         ? router.push("/admin")
         : router.push("/dashboard");
-      props.toggleLogin();
+      setIsOpen(false)
     } else {
       // setLoginLoading(false);
     }
