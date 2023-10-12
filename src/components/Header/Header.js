@@ -531,10 +531,8 @@ function Header(props) {
                   </Link>
 
                 </div>
-                {
-                  isOpen && <Auth />
-                }
-                
+
+
                 {/* <Auth toggleLogin={toggleLogin} /> */}
                 {/* {openLogin && <Auth toggleLogin={toggleLogin} />} */}
               </div>
@@ -543,6 +541,9 @@ function Header(props) {
           </div>
         </div>
       </div>
+      {
+        isOpen && <Auth />
+      }
     </>
   );
 }
