@@ -361,3 +361,12 @@ input[type="checkbox"]:checked{
 .eye{
   font-size: 30px;
 }
+.dYrfwz{
+  min-height: 52px;
+}
+.searchbar .wrapper{
+  border-radius: 4px 0px 0px 4px;
+  border: 0px solid rgba(148, 148, 148, 0.60);
+  background: #FFF;
+  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
+}

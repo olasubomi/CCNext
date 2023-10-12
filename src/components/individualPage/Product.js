@@ -7,6 +7,7 @@ import Image from "next/image";
 import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIcon, TwitterEIcon, WhatsappEIcon } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
+import { FaStar } from "react-icons/fa";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
 
@@ -64,7 +65,16 @@ function Product(props) {
                     <div className={styles.product_section_2_col_2}>
                         <div className={styles.product_section_2_details}>
 
-                            <h2 className={styles.product_section_2_name}>{props.product.item_name}</h2>
+                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                <h2 className={styles.product_section_2_name}>{props.product.item_name}</h2>
+                                {
+                                    [1, 2, 3, 4, 5].map((elem) => {
+                                        return (
+                                            <FaStar style={{marginLeft: '.4rem'}} size={20} color={props.product.total_ratings <= elem ? "#F47900" : "red"}/>
+                                        )
+                                    })
+                                }
+                            </div>
                             {/* <div className={styles.store}>
                                 <h4>Chop Chow Store</h4>
                                 <div>
@@ -187,7 +197,7 @@ function Product(props) {
                         </div>
                     </div>
                 </div> */}
-              
+
                 <div className={styles.product_section_8}>
                     <h3>Product Ingredients</h3>
                     {formatted_ingredients.length &&
@@ -216,7 +226,7 @@ function Product(props) {
 
                 <div className={styles.product_section_8}>
                     <h3>Add Review</h3>
-                    <Reviews itemId={props.product._id}/>
+                    <Reviews itemId={props.product._id} />
                 </div>
 
                 <div className={styles.productcard_row}>
@@ -259,11 +269,11 @@ function Product(props) {
                                                 })
                                             }
                                         </div> */}
-                                        {/* <p className={styles.productcard_productcard_duration}>
+                                            {/* <p className={styles.productcard_productcard_duration}>
                                             7min
                                         </p> */}
+                                        </div>
                                     </div>
-                                </div>
 
                                 )
                             })

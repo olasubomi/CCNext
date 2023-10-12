@@ -1,6 +1,7 @@
 import { ArrowDown2Icon, ArrowUp2Icon, ChatIcon, ShareIcon, StarIcon } from '../icons';
 import styles from './reviews.module.css'
 import axios from '../../util/Api';
+import { StarRating } from '../star-rating';
 import { useEffect, useState } from 'react';
 
 function Reviews({ itemId }) {
@@ -11,6 +12,8 @@ function Reviews({ itemId }) {
     const [showReply, setShowReply] = useState('');
     const [reply, setReply] = useState("")
     const [username, setUsername] = useState("")
+    const [rating, setRating] = useState(0)
+
 
     useEffect(() => {
         getAllComments()
@@ -60,8 +63,9 @@ function Reviews({ itemId }) {
             if (message) {
                 const user = JSON.parse(localStorage.getItem('user'))
                 const created_by = user?.first_name.concat(' ', user.last_name)
-                const payload = { message, item: itemId, created_by, item_type: 'Item' };
+                const payload = { message, item: itemId, item_type: 'Item' , rating};
                 const resp = await axios.post(`/comment/create`, payload)
+                setRating(0)
                 setMessage('')
                 getAllComments()
             } else {
@@ -81,7 +85,6 @@ function Reviews({ itemId }) {
                 const payload = {
                     message: reply,
                     item: itemId,
-                    created_by,
                     item_type: 'Item',
                     parent_comment_id: showReply
                 };
@@ -98,7 +101,7 @@ function Reviews({ itemId }) {
         }
     }
 
-
+console.log(comments, "comments")
     return (
         <div id="reviews" className={styles.products_reviews_container}>
             <div className={styles.products_reviews_summary}>
@@ -111,7 +114,11 @@ function Reviews({ itemId }) {
                             <div className={styles.review_details_top1}>
                                 <h3 className={styles.product_review_name}>{username}</h3>
 
-                                <div className={styles.review_input_container}>
+                                <div>
+                                    <StarRating rating={rating} setRating={setRating} />
+                                </div>
+                                <div className={styles.review_input_container} style={{ marginTop: '-8rem' }}>
+
                                     <textarea value={message} onChange={(e) => setMessage(e.target.value)} style={{ width: '100%', background: 'none', paddingLeft: '2rem', paddingTop: '1rem', border: 'none', outline: 'none' }}
                                         placeholder='Write Review'
                                     />
@@ -133,7 +140,7 @@ function Reviews({ itemId }) {
                                     <div className={styles.product_review_name_ab}>{comment.created_by.username.charAt(0)}</div>
                                 </div>
                                 <div className={styles.review_details}>
-                                    <div className={styles.review_details_top}>
+                                    <div className={styles.review_details_top4}>
                                         <div className={styles.review_details_top1}>
                                             <h3 className={styles.product_review_name}>{comment.created_by.username}</h3>
                                             <div className={styles.product_review_rating_icons}>
@@ -164,12 +171,12 @@ function Reviews({ itemId }) {
                                                     <p>{comment.down_votes}</p>
                                                 </div>
                                             </div>
-                                            <h4 style={{ cursor: 'pointer' }}>Reply</h4>
-                                            <h4 onClick={() => setShowReply((prev) => Boolean(prev) ? '' : comment._id)}><ChatIcon /> {comment.replies.length}</h4>
+                                            <h4><ChatIcon /> {comment.replies.length}</h4>
                                             <h5><ShareIcon /> Share Comment</h5>
                                         </div>
                                     </div>
                                     <p className={styles.product_review_sub_message}>{comment.message}</p>
+                                    <p onClick={() => setShowReply((prev) => Boolean(prev) ? '' : comment._id)} style={{ cursor: 'pointer', color: '#F47900' }}>Reply</p>
                                 </div>
                             </div>
                         </div>

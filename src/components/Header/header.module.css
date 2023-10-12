@@ -41,7 +41,6 @@
   grid-gap: 3rem;
   justify-items: end;
   align-items: center;
-  z-index: 2;
   font-size: 12px;}
 
 .navbar_top_logo_img{
@@ -276,8 +275,8 @@
   grid-auto-flow: row;
   position: fixed;
   bottom: 0;
+  right: 0;
   width: 100%;
-  z-index: 200;
   grid-template-rows: 70px;
   grid-template-columns: max-content max-content max-content max-content;
   justify-content: space-around;
@@ -732,6 +731,7 @@
 
 @media only screen and (max-width: 768px){
   .navbar{
+    display: grid;
     grid-template-rows: 55px;
   }
 
@@ -761,7 +761,8 @@
   }
   
   .navbar_side{
-    width: 8%;
+    width: 1%;
+    background-color: rebeccapurple ;
   }
 
   .openbtn{
@@ -770,6 +771,7 @@
 
   .navbar_down{
     display: grid;
+    grid-template-columns: 1fr;
   }
 
   .navbar_top{

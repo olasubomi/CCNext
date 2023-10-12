@@ -73,7 +73,7 @@ export const userSignUp = (form) => {
   };
 };
 
-export const userSignIn = (email, password) => {
+export const userSignIn = (email, password, callback) => {
   const customId = "custom-id-yes";
   return (dispatch) => {
     dispatch({ type: FETCH_START });
@@ -91,6 +91,7 @@ export const userSignIn = (email, password) => {
           "Bearer " + data.data.token;
 
         localStorage.setItem("x-auth-token", data.data.token);
+        localStorage.setItem("x-auth-refresh-token", data.data.refreshToken);
         localStorage.setItem("in", Date.now());
         localStorage.setItem("user", JSON.stringify(data.data.user));
 
@@ -111,6 +112,7 @@ export const userSignIn = (email, password) => {
         const customId = "custom-id-yes";
         console.error("xxx userSignIn Request ERROR xxx", err.response.data.message.message);
         toast.error(err.response.data.message.message, {toastId: customId})
+        callback()
         dispatch({ type: IS_AUTHENTICATED, payload: false });
         dispatch({
           type: FETCH_ERROR,

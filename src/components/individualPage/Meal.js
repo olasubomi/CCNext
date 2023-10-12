@@ -7,6 +7,7 @@ import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, Twitter
 import Stores from "./stores";
 import Reviews from "./Reviews";
 import { UserIcon} from "../icons";
+import {GoStarFill} from "react-icons/go"
 
 function Meal(props) {
     const url = 'http://localhost:3000/'
@@ -76,6 +77,12 @@ function Meal(props) {
                         <div className={styles.meal_section_2_col_2}>
                             <div className={styles.meal_section_2_details}>
                                 <h2 className={styles.meal_section_2_name}>{props.meal.item_name}</h2>
+                                <div style={{marginTop: '-1rem', marginBottom: '-1rem'}}>
+                                    {
+                                        Array(5).fill('_').map((_, idx) => <GoStarFill key={idx + _} color={props.meal.average_rating > idx ? '#04D505': 'rgba(0,0,0,0.5)'}/>)
+                                    }
+                                   
+                                </div>
                                 <div className={styles.store}>
                                     <h4>Chop Chow Store</h4>
                                     {/* {props.props.auth.authUser && props.props.auth.authUser.user_type !== 'admin' &&

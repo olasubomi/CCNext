@@ -44,13 +44,18 @@ export const Modal = ({
             return alert('Enter List Name and description')
         }
         try {
+            const user = JSON.parse(localStorage.getItem('user'))
+            let payload = {
+                listName: modalState.listName,
+                user: user._id
+            }
+            if(modalState.description){
+                payload.description = modalState.description
+            }
+
             const response = await axios(`/groceries/create`, {
                 method: 'POST',
-                data: {
-                    listName: modalState.listName,
-                    description: modalState.description
-                },
-
+                data: payload
 
             })
             fetchList()

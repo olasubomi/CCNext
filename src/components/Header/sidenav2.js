@@ -5,13 +5,16 @@ import { connect } from "react-redux";
 import React from 'react';
 import { setOpenLogin, userSignOut } from '../../actions';
 import { useRouter } from 'next/router';
+import { useAuth } from '../../context/auth.context';
 
 function SideNav2(props) {
     console.log(props)
+    const { isOpen, setIsOpen } = useAuth()
     const router = useRouter()
 
     function toggleLogin() {
         props.setOpenLogin(!props.openLogin)
+        setIsOpen(!isOpen)
     }
 
     function logout() {
