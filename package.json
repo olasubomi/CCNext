@@ -67,6 +67,7 @@
     "build-css": "node-sass src/ -o src/",
     "dev": "next dev",
     "build": "next build",
+    "custom-deploy": "npm run build && vercel --prod",
     "start": "next start"
   },
   "browserslist": [
