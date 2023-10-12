@@ -186,7 +186,7 @@ const UserProfile = (props) => {
         const input = document.createElement("input");
         input.accept = "image/*,video/mp4,video/x-m4v,video/*";
         input.id = "profileImage";
-        input.name = "profileImage";
+        input.name = "profile_picture";
         input.type = "file";
         input.onchange = (ev) => onUpdateProfileImage(ev);
         input.hidden = true;

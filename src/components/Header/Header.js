@@ -22,7 +22,7 @@ import {
   UserIcon,
 } from "../icons";
 import { Auth } from "../auth";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getPath } from "../../actions/Common";
 import { useRouter } from "next/router";
 import { userSignOut, verifyToken, setOpenLogin } from "../../actions";
@@ -33,6 +33,7 @@ import Login from "../Login";
 import { useAuth } from "../../context/auth.context";
 
 
+
 function Header(props) {
   const [isAuthenticated, setIsAuthenticatedState] = useState(false);
   const [customerId, setCustomerIdState] = useState(null);
@@ -41,6 +42,7 @@ function Header(props) {
   const { isOpen, setIsOpen } = useAuth()
   const [openLogin, setOpenLoginState] = useState(false);
   const router = useRouter();
+  // const userData = useSelector()
 
   const cartCtx = useContext(CartContext);
 
@@ -217,7 +219,8 @@ function Header(props) {
                   <img
                     id="userImg"
                     onClick={(e) => toggleUserDetails(e)}
-                    src="/assets/icons/user.png"
+                    // src="/assets/icons/user.png"
+                    src={props.auth.authUser.profile_picture}
                     alt="User"
                     className={styles.navbar_user_img}
                   />
