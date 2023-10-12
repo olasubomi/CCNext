@@ -1,4 +1,4 @@
-import { DashBoardIcon, HotMealIcon, InventoryIcon, OrderIcon, PowerIcon, StoreMgtIcon, SupportIcon, UserIcon } from '../icons';
+import { DashBoardIcon, HotMealIcon, InventoryIcon, OrderIcon, GroceryIcon, PowerIcon, StoreMgtIcon, SupportIcon, UserIcon } from '../icons';
 import Link from 'next/link';
 import styles from './header.module.css'
 import { connect } from "react-redux";
@@ -54,7 +54,7 @@ function SideNav2(props) {
                         <Link href="/grocery">
                             <a>
                                 <div className={styles.sidenav_link + " " + (props.path === '/grocery' && styles.active)}>
-                                    <OrderIcon style={styles.sidenav_link_icon} />
+                                    <GroceryIcon style={styles.sidenav_link_icon} />
                                     Grocery List
                                 </div>
                             </a>
