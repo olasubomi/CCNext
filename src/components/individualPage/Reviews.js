@@ -3,6 +3,7 @@ import styles from './reviews.module.css'
 import axios from '../../util/Api';
 import { StarRating } from '../star-rating';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 function Reviews({ itemId }) {
 
@@ -13,6 +14,7 @@ function Reviews({ itemId }) {
     const [reply, setReply] = useState("")
     const [username, setUsername] = useState("")
     const [rating, setRating] = useState(0)
+    const profileImage = JSON.parse(localStorage.getItem('user')).profile_picture
 
 
     useEffect(() => {
@@ -107,7 +109,13 @@ console.log(comments, "comments")
             <div className={styles.products_reviews_summary}>
                 <div className={styles.product_review_col_1}>
                     <div className={styles.product_review_col_1_row}>
-                        <div className={styles.product_review_name_ab}>T</div>
+                        <div className={styles.product_review_name_ab}>
+                        <Image 
+                        width={200} height={200}
+                        alt={username}
+                        src={profileImage}
+                        />
+                        </div>
                     </div>
                     <div className={styles.review_details}>
                         <div className={styles.review_details_top}>

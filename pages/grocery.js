@@ -88,7 +88,7 @@ const Grocery = () => {
                             <h3 className={styles.title}>My Grocery List</h3>
                         </div>
                         <div className={styles.two}>
-                            <p className={styles.button_text} onClick={() => setShow(!show)}>Create New List</p>
+                            <p  onClick={() => setShow(!show)}>Create New List</p>
                         </div>
                     </div>
                     {groceryList.length > 0 ?
