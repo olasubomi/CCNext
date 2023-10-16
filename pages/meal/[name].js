@@ -74,7 +74,7 @@ console.log(props, 'meals id page')
                 </div>
                 <div style={{width: '95%'}}>
                     
-                    <Meal meal={props} />
+                    <Meal meal={props} callback={() => getMeal(router.query?.name)} />
                 </div>
             </div>
         </div>

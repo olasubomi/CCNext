@@ -3,8 +3,9 @@ import styles from './reviews.module.css'
 import axios from '../../util/Api';
 import { StarRating } from '../star-rating';
 import { useEffect, useState } from 'react';
+import { RiDeleteBin5Line } from "react-icons/ri"
 
-function Reviews({ itemId }) {
+function Reviews({ itemId, callback }) {
 
     const [comments, setComments] = useState([]);
     const [page, setPage] = useState(1)
@@ -30,6 +31,15 @@ function Reviews({ itemId }) {
         try {
             const allComment = await axios.get(`/comment/get-all/${page}?item=${itemId}`)
             setComments(allComment.data.data.comments)
+        } catch (e) {
+
+        }
+    }
+      const deleteComment = async (id) => {
+        try {
+            const removeComment = await axios.delete(`/comment/delete/${id}`)
+            callback()
+            getAllComments()
         } catch (e) {
 
         }
@@ -63,11 +73,12 @@ function Reviews({ itemId }) {
             if (message) {
                 const user = JSON.parse(localStorage.getItem('user'))
                 const created_by = user?.first_name.concat(' ', user.last_name)
-                const payload = { message, item: itemId, item_type: 'Item' , rating};
+                const payload = { message, item: itemId, item_type: 'Item', rating };
                 const resp = await axios.post(`/comment/create`, payload)
                 setRating(0)
                 setMessage('')
                 getAllComments()
+                callback()
             } else {
                 alert('Enter a comment to proceed')
             }
@@ -101,7 +112,7 @@ function Reviews({ itemId }) {
         }
     }
 
-console.log(comments, "comments")
+    console.log(comments, "comments")
     return (
         <div id="reviews" className={styles.products_reviews_container}>
             <div className={styles.products_reviews_summary}>
@@ -173,6 +184,9 @@ console.log(comments, "comments")
                                             </div>
                                             <h4><ChatIcon /> {comment.replies.length}</h4>
                                             <h5><ShareIcon /> Share Comment</h5>
+                                            <div onClick={() => deleteComment(comment._id)}>
+                                                <RiDeleteBin5Line color='red' size={20} style={{cursor: "pointer"}} />
+                                            </div>
                                         </div>
                                     </div>
                                     <p className={styles.product_review_sub_message}>{comment.message}</p>

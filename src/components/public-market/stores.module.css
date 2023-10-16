@@ -7,13 +7,76 @@
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
 }
 
-.stores {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 2rem;
+.storeImg1 {
     width: 100%;
-    padding: 1rem 0;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+}
+.storeImg2 {
+    width: 100%;
+    height: 174px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+}
+
+.stores {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 70px;
+}
+
+.stores2 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 70px;
+}
+.stores3 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 56px;
+}
+
+.card1 {
+}
+
+.box {
+    width: 100%;
+    height: 324px;
+}
+
+.storeName {
+    margin-top: .5rem;
+    color: #6D6D6D;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: normal;
+}
+
+.prep {
+    color: #6D6D6D;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.name2 {
+    color: #000;
+    font-size: 13px;
+    font-weight: 200;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: .9rem;
 }
 
 .store {
@@ -47,8 +110,10 @@
 }
 
 .mealContainer {
-    padding: 2rem 5rem;
     width: 100%;
+    padding: 2rem 5rem;
 }
-
-
+.mealContainer1 {
+    width: 100%;
+    padding: 2rem 5rem;
+}

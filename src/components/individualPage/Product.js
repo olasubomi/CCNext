@@ -7,7 +7,7 @@ import Image from "next/image";
 import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIcon, TwitterEIcon, WhatsappEIcon } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
-import { FaStar } from "react-icons/fa";
+import { GoStarFill } from "react-icons/go";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
 
@@ -65,15 +65,14 @@ function Product(props) {
                     <div className={styles.product_section_2_col_2}>
                         <div className={styles.product_section_2_details}>
 
-                            <div style={{display: 'flex', alignItems: 'center'}}>
+                            <div style={{display: 'flex', alignItems: 'flex-start', flexDirection: 'column'}}>
                                 <h2 className={styles.product_section_2_name}>{props.product.item_name}</h2>
-                                {
-                                    [1, 2, 3, 4, 5].map((elem) => {
-                                        return (
-                                            <FaStar style={{marginLeft: '.4rem'}} size={20} color={props.product.total_ratings <= elem ? "#F47900" : "red"}/>
-                                        )
-                                    })
-                                }
+                                <div style={{marginTop: '1rem', marginBottom: '-1rem'}}>
+                                    {
+                                        Array(5).fill('_').map((_, idx) => <GoStarFill key={idx + _} color={props.product.average_rating > idx ? '#04D505': 'rgba(0,0,0,0.5)'}/>)
+                                    }
+                                   
+                                </div>
                             </div>
                             {/* <div className={styles.store}>
                                 <h4>Chop Chow Store</h4>
@@ -226,7 +225,7 @@ function Product(props) {
 
                 <div className={styles.product_section_8}>
                     <h3>Add Review</h3>
-                    <Reviews itemId={props.product._id} />
+                    <Reviews itemId={props.product._id} callback={props.callback} />
                 </div>
 
                 <div className={styles.productcard_row}>
