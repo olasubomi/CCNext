@@ -70,9 +70,10 @@ class LandingPage extends Component {
         // }
 
         let i;
-        let slides = document.getElementsByClassName("home_mySlides__Te_K_");
+        let slides = document.getElementsByClassName(styles.mySlides);
+        console.log("line 74", slides)
 
-        let dots = document.getElementsByClassName("home_dot__tB27k");
+        let dots = document.getElementsByClassName(styles.dot);
         if (n > slides.length) {
             slideIndex = 1;
             this.setState({
