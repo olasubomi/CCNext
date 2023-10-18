@@ -206,17 +206,62 @@ function SignUp(props){
     first_name: "",
     last_name: "",
     password: "",
+    confirm_password: "",
   });
-  const { username, email, phone_number, first_name, last_name, password } = formState;
+  const [error, setError] = useState({
+    username: '',
+    password: '',
+    confirm_password: ''
+  })
+  const { username, email, phone_number, first_name, last_name, password, confirm_password } = formState;
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
+    validateInput(e);
   }
 
   function handlePhoneChange(e) {
     setFormState({ ...formState, ['phone_number']: e });
   }
 
+
+  const validateInput = e => {
+    let { name, value } = e.target;
+    setError(prev => {
+      const stateObj = { ...prev, [name]: "" };
+ 
+      switch (name) {
+        case "username":
+          if (!value) {
+            stateObj[name] = "Please enter Username.";
+          }
+          break;
+ 
+        case "password":
+          if (!value) {
+            stateObj[name] = "Please enter Password";
+          } else if (password && value !== confirm_password) {
+            stateObj["confirm_password"] = "Password and Confirm Password does not match.";
+          } else {
+            stateObj["confirm_password"] = confirm_password ? "" : error.confirm_password;
+          }
+          break;
+ 
+        case "confirm_password":
+          if (!value) {
+            stateObj[name] = "Please enter Confirm Password.";
+          } else if (confirm_password && value !== password) {
+            stateObj[name] = "Password and Confirm Password does not match.";
+          }
+          break;
+ 
+        default:
+          break;
+      }
+ 
+      return stateObj;
+    });
+  }
   // function formSubmit(e){
   //   e.preventDefault();
   //   //validate email
@@ -252,8 +297,15 @@ function SignUp(props){
 
   function formSubmit(e){
     e.preventDefault();
-    props.signup(formState);
-    props.toggleLogin()
+    props.signup({
+      username,
+      email,
+      phone_number,
+      first_name,
+      last_name,
+      password,
+    });
+    // props.toggleLogin()
   }
   
   function submitForm() {
@@ -336,8 +388,10 @@ function SignUp(props){
                   value={username}
                   placeholder="Username"
                   onChange={handleChange}
+                  onBlur={validateInput}
                   className={styles.login_form_input}
                 />
+                {error.username && <span style={{color: "#FF0000", fontSize: 14}}>{error.username}</span>}
               </div>
               <div className={styles.login_form_group}>
                 <label htmlFor="email" className={styles.login_form_label}>
@@ -394,12 +448,33 @@ function SignUp(props){
                   value={password}
                   placeholder="Create a Password"
                   onChange={handleChange}
+                  onBlur={validateInput}
                   className={styles.login_form_input}
                 />
                 <div className={styles.secureEye}>
                   <Image src={closeIcon} />
                   <i className={styles.eye}></i>
               </div>
+              {error.password && <span style={{color: "#FF0000", fontSize: 14}}>{error.password}</span>}
+              </div>
+              <div className={styles.login_form_group}>
+                <label htmlFor="password" className={styles.login_form_label}>
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  name="confirm_password"
+                  value={confirm_password}
+                  placeholder="Confirm Password"
+                  onChange={handleChange}
+                  onBlur={validateInput}
+                  className={styles.login_form_input}
+                />
+                <div className={styles.secureEye}>
+                  <Image src={closeIcon} />
+                  <i className={styles.eye}></i>
+              </div>
+              {error.confirm_password && <span style={{color: "#FF0000", fontSize: 14}} >{error.confirm_password}</span>}
               </div>
 
                 <div className={styles.signup_form_option}>
@@ -415,7 +490,8 @@ function SignUp(props){
                     className={styles.signup_form_radio_button}
                     ></label>
                     <label htmlFor="service" className={styles.signup_form_radio_label}>
-                        I accept the Terms & Conditions and Privacy and Cookie Notice
+                    <Link href="/privacypolicy">I accept the Terms & Conditions and Privacy and Cookie Notice</Link>
+  
                     </label>
                 </div>
 
@@ -455,9 +531,10 @@ function SignUp(props){
                 <Image src={closeIcon} className={styles.login_cancel} />
               </div>
             </div>}
-            <h3>
+            <h3 style={{position: 'absolute', top: 145, alignSelf: 'center', width: 320, zIndex: 99, paddingLeft: 40}}>
               Get your African Delicacies delievered to your Door
             </h3>
+            <Image width={420} height={550} src="/../public/assets/signup/signup_bg.png" alt="Signup" />
           </div>    
         </div>
       </>
