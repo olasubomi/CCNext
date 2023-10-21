@@ -490,7 +490,7 @@ function SignUp(props){
                     className={styles.signup_form_radio_button}
                     ></label>
                     <label htmlFor="service" className={styles.signup_form_radio_label}>
-                    <Link href="/privacypolicy">I accept the Terms & Conditions and Privacy and Cookie Notice</Link>
+                    I accept the Terms & Conditions and <Link href="/privacypolicy"><a style={{textDecoration: "underline"}}>Privacy and Cookie Notice</a></Link>
   
                     </label>
                 </div>
