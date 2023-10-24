@@ -26,6 +26,7 @@
     "ejs": "^3.1.6",
     "jquery": "^3.5.1",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.4",
     "next": "^12.3.1",
     "next-auth": "^4.22.1",
     "next-redux-wrapper": "^8.0.0",
@@ -54,13 +55,15 @@
     "react-to-print": "^2.14.4",
     "react-toast": "^1.0.3",
     "react-toastify": "^9.1.2",
+    "reactjs-localstorage": "^1.0.1",
     "reactjs-popup": "^2.0.5",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "source-map-explorer": "^2.5.2",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "yarn": "^1.22.19"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",

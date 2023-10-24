@@ -70,6 +70,33 @@ export const SuggestModal = ({
         }
     }
 
+    const addOtherToGroceryList = async () => {
+        try {
+            
+            const form = new FormData();
+            form.append('listName', listName)
+            form.append('item_name', itemName)
+            if (itemImage.file) {
+                form.append('item_image', itemImage.file)
+            }
+            
+            const response = await axios(`/groceries/grocery-other`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: form
+            })
+          
+            refetch()
+            toast.success('Other item added successfully')
+            setIsShow(!isShow)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div className={styles.modal} ref={targetElementRef}>
             <div className={styles.modal_card}>
@@ -113,7 +140,7 @@ export const SuggestModal = ({
                             <input
                                 type='radio'
                                 name='private'
-                                id='option1'
+                                id='Meal'
                                 value='Private'
                                 color='#F47900'
                                 checked={selectedOption === "Meal"}
@@ -121,7 +148,7 @@ export const SuggestModal = ({
 
                             />
                             <div className={styles.radiosub2} >
-                                <label htmlFor="option1" className={styles.radioLabel}>Meal</label>
+                                <label htmlFor="Meal" className={styles.radioLabel}>Meal</label>
                             </div>
                         </div>
                         <div className={styles.radio} style={{ marginTop: '1.4rem' }}>
@@ -143,7 +170,7 @@ export const SuggestModal = ({
                             <input
                                 type='radio'
                                 name='private'
-                                id='option1'
+                                id='Utensils'
                                 value='Private'
                                 color='#F47900'
                                 checked={selectedOption === "Utensils"}
@@ -151,12 +178,33 @@ export const SuggestModal = ({
 
                             />
                             <div className={styles.radiosub2} >
-                                <label htmlFor="option1" className={styles.radioLabel}>Utensils</label>
+                                <label htmlFor="Utensils" className={styles.radioLabel}>Utensils</label>
+                            </div>
+                        </div>
+                        <div className={styles.radio} style={{ marginTop: '1.4rem' }}>
+                            <input
+                                type='radio'
+                                name='private'
+                                id='other'
+                                value='other'
+                                color='#F47900'
+                                checked={selectedOption === "other"}
+                                onChange={() => handleRadioChange("other")}
+
+                            />
+                            <div className={styles.radiosub2} >
+                                <label htmlFor="other" className={styles.radioLabel}>Other</label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className={styles.modal_btn2} onClick={handlAdd}>
+                <div className={styles.modal_btn2} onClick={() => {
+                    if(selectedOption === 'other'){
+                        addOtherToGroceryList()
+                    } else {
+                        handlAdd()
+                    }
+                }}>
                     <p>Add Item to Grocery List</p>
                 </div>
             </div>

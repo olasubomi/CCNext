@@ -11,6 +11,7 @@ import 'react-phone-input-2/lib/style.css'
 import { connect } from 'react-redux';
 import { userSignUp } from '../../actions';
 import { base_url } from '../../util/Api';
+import { useAuth } from '../../context/auth.context';
 
 // import { setTimeout } from 'timers';
 
@@ -208,6 +209,7 @@ function SignUp(props){
     password: "",
   });
   const { username, email, phone_number, first_name, last_name, password } = formState;
+  const {isOpen, setIsOpen } = useAuth();
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -291,7 +293,7 @@ function SignUp(props){
         <div className={styles.login}>
           <div className={styles.login_col_2}>
             <div className={styles.login_top}>
-              <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}>
+              <div onClick={() => setIsOpen(false)}>
                 <Image src={closeIcon} className={styles.login_cancel} />
               </div>
               <Image
@@ -444,7 +446,7 @@ function SignUp(props){
   
             <button onClick={formSubmit} className={styles.login_button}>Register</button>
   
-            <h3 className={styles.login_new}>Already have an account? {props.closeSignUp ? <span onClick={props.closeSignUp}>Sign in here</span> : <Link href='/login'><a>Sign in here</a></Link> }</h3>
+            <h3 className={styles.login_new}>Already have an account? <span onClick={() => props.setSignUpState(false)}>Sign in here</span> </h3>
             
           </div>   
           <div style={props.toggleLogin ? {gridTemplateRows: 'max-content 1fr' }: {gridTemplateRows: '1fr'}} className={styles.login_col_1}>

@@ -48,8 +48,8 @@ function Login(props) {
   }
 
   function openSignUp() {
-
-    setSignUpState(true);
+    props.setSignUpState(true)
+    // setSignUpState(true);
   }
 
   function closeSignUp() {
@@ -202,13 +202,9 @@ function Login(props) {
 
             <h3 className={styles.login_new}>
               Don't have an account yet?{" "}
-              {props.toggleLogin ? (
+              
                 <span onClick={openSignUp}>Sign up here</span>
-              ) : (
-                <Link href="/signup">
-                  <a>Sign up here</a>
-                </Link>
-              )}
+             
             </h3>
 
             <div className={styles.login_options}>
@@ -275,12 +271,12 @@ function Login(props) {
       {forgetPassword && (
         <ForgetPassword closeForgetPassword={closeForgetPassword} />
       )}
-      {signUp && (
+      {/* {signUp && (
         <SignUp
           closeSignUp={closeSignUp}
           toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
         />
-      )}
+      )} */}
     </>
   );
 }

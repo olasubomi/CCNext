@@ -215,7 +215,7 @@ function Product(props) {
                             <div key={idx}>{ele?.formatted_string}</div>
                         )) : 'No description available'}
                 </div>
-                <div className={styles.product_section_8}>
+                <div id="review" className={styles.product_section_8}>
                     <h3>Stores location</h3>
 
                     {props.product.stores_available?.length > 0 ?
