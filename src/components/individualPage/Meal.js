@@ -32,7 +32,7 @@ function Meal(props) {
     // console.log(props.props.props.props.meal, "meal props.props")
     let num = 0;
 
-    console.log('meald data', props.meal)
+    console.log('meald callback', props.callback)
     console.log(props.meal.item_images, 'serve me')
    
     return (
@@ -349,7 +349,7 @@ function Meal(props) {
                     </div>
 
 
-                    <div className={styles.meal_section_7}>
+                    <div id="review" className={styles.meal_section_7}>
                         <h3>Tips</h3>
                         <div>
                             {props.meal.meal_tips && props.meal.meal_tips?.length > 0 &&
@@ -410,9 +410,9 @@ function Meal(props) {
                 } 
 
                    {/* {props.props?.auth?.authUser && props.props?.auth?.authUser?.user_type !== 'admin' && */}
-                <div className={styles.meal_section_8}>
-                    <h3>Add Review</h3>
-                    <Reviews itemId={props.meal._id} />
+                <div  className={styles.meal_section_8}>
+                    <h3 >Add Review</h3>
+                    <Reviews itemId={props.meal._id} callback={() => props.callback()}/>
                 </div>
 
                 

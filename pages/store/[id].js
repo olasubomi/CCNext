@@ -29,7 +29,7 @@ const IndividualStorePage = (props) => {
       ]
 
     useEffect(() => {
-        console.log(props.store)
+        console.log(props.store.data, 'props.store')
         // if(props.store && props.store.data && props.store.data.stores.length === 0){
         //     window.location.assign('/')
         // }
@@ -58,8 +58,10 @@ const IndividualStorePage = (props) => {
                     </div>
                 </div> */}
                 <div style={{
-                    backgroundImage: props.store.data.products[0].background_picture,
-                    width: '100%'
+                    background: `url(${props.store.data.supplier.background_picture})`,
+                    width: '100%',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'contain'
                 }}
                     className={styles.banner_container}
                 >
@@ -108,11 +110,11 @@ const IndividualStorePage = (props) => {
                     </div>
 
                 </div>
-                <p className={styles.dateCreated} style={{width:'95%', textAlign:'end'}}>Store Created: {props.store.data.products[0].createdAt && new Date(props.store.data.products[0].createdAt).getDate() + ' ' + months[new Date(props.store.data.products[0].createdAt).getMonth()] + ' ,'+ new Date(props.store.data.products[0].createdAt).getFullYear()} </p>
+                {/* <p className={styles.dateCreated} style={{width:'95%', textAlign:'end'}}>Store Created: {props.store.data.products[0].createdAt && new Date(props.store.data.products[0].createdAt).getDate() + ' ' + months[new Date(props.store.data.products[0].createdAt).getMonth()] + ' ,'+ new Date(props.store.data.products[0].createdAt).getFullYear()} </p> */}
                 <div style={{width: '95%'}}>
-                {props.store && props.store.data && props.store.data.products.length > 0 &&
-                    <Store store={props.store.data.products[0]} />
-                    }
+               
+                    <Store store={props.store.data.supplier} items={props.store.data.items}/>
+                
                 </div>
             </div>
         </div>
@@ -126,7 +128,7 @@ export async function getServerSideProps(context){
     // const posts = await res.json()
     // console.log(context)
     let {id} = context.params
-    let store = await axios.get('/stores/getallstores/1?_id='+id)
+    let store = await axios.get(`/stores/getstore/${id}`)
 
     // console.log(meal.data)
 

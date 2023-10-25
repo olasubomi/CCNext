@@ -7,63 +7,92 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { GrStar } from "react-icons/gr"
 import { BsCurrencyDollar } from 'react-icons/bs'
 import Link from "next/link"
+import { toast } from 'react-toastify';
 
-export const PopularMeals = () => {
-    const [meals, setMeals] = useState([])
-    const [visibleMeals, setVisibleMeals] = useState(8)
-    const [selectedItem, setSelectedItem] = useState({})
+
+export const TopSellingProducts = () => {
+    const [products, setProducts] = useState([])
+    const [visibleProducts, setVisibleProducts] = useState(5)
     const [openModal, setOpenModal] = useState(false)
-
-    const loadMore = () => {
-        setVisibleMeals(visibleMeals + 4)
-    }
+    const [selectedItem, setSelectedItem] = useState({})
     const router = useRouter()
 
-    const fetchMeals = async () => {
+    const loadMore = () => {
+        setVisibleProducts(visibleProducts + 5)
+    }
+
+    // const addItemToGrocery = async () => {
+
+    //     const user = JSON.parse(localStorage.getItem('user'))
+    //     const payload = {
+    //         userId: user._id,
+    //         groceryList: {
+    //             listName: itemList.listName,
+    //             groceryItems: {
+    //                 itemId: itemsToAdd.itemId,
+    //             }
+    //         }
+    //     }
+
+    //     console.log(payload, 'payload')
+    //     try {
+    //         const response = await axios(`/groceries`, {
+    //             method: 'post',
+    //             data: payload
+    //         })
+
+    //         toast.success('Item added successfully')
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+    const fetchProducts = async () => {
         try {
-            const response = await axios(`/items/1?type=Meal&status=all&limit=50`, {
+            const response = await axios(`/items/1?type=Product&status=all&limit=50`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-            console.log(response.data.data.items, 'ress')
-            setMeals(response.data.data.items)
+            console.log(response.data.data.items, 'ressee')
+            setProducts(response.data.data.items)
         } catch (error) {
             console.log(error);
         }
 
     }
     useEffect(() => {
-        fetchMeals()
+        fetchProducts()
     }, [])
 
-    const filteredMeals = meals.filter(meal => meal.item_type === 'Meal' && meal.average_rating);
-
+    const filteredProducts = products.filter(product => product.item_type === "Product" && product.average_rating);
     return (
-        <div className={styles.mealContainer}>
-            <h4>Popular Meals</h4>
-            <div className={styles.stores2}>
+        <div className={styles.mealContainer1}>
+            <h4>Top Selling Products</h4>
+            <div className={styles.stores3}>
                 {
-                    filteredMeals.slice(0, visibleMeals).filter(meal => Boolean(meal.total_rating)).map((meal, idx) => {
+                    filteredProducts.slice(0, visibleProducts).map((product, idx) => {
+                        console.log(product.item_name, product?.itemImage0, 'pp')
+
                         return (
                             <div className={styles.card1} key={idx} onClick={() => {
-                                setSelectedItem(meal)
+                                setSelectedItem(product)
                                 setOpenModal(true)
                             }}>
-                                {
+                                {product?.itemImage0 &&
 
                                     <div className={styles.box}>
-                                        <img src={meal?.itemImage0} className={styles.storeImg1} />
+                                        <img src={product?.itemImage0} className={styles.storeImg2} />
                                         <div className={styles.flex}>
-                                            <p className={styles.name2}>{meal.item_name}</p>
+                                            <p className={styles.name2}>{product.item_name}</p>
                                             <p>$8.43</p>
                                         </div>
                                         <p className={styles.storeName}>Chop Chow Official Store</p>
                                         <div className={styles.flex}>
                                             <div>
                                                 {
-                                                    Array(5).fill('_').map((_, idx) => <GoStarFill key={idx + _} color={meal.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} style={{ marginLeft: '.2rem' }} />)
+                                                    Array(5).fill('_').map((_, idx) => <GoStarFill key={idx + _} color={product.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} style={{ marginLeft: '.2rem' }} />)
                                                 }
                                             </div>
                                             <p className={styles.prep}> 23 mins </p>
@@ -77,9 +106,9 @@ export const PopularMeals = () => {
                 {
                     openModal &&
                     <div className={styles.modalContainer}>
-                        <div className={styles.modalCard2}>
-                            <div className={styles.flexed2}>
-                                <div className={styles.images2}>
+                        <div className={styles.modalCard}>
+                            <div className={styles.flexed}>
+                                <div className={styles.images}>
                                     <img src={selectedItem?.itemImage0} alt='' className={styles.modalImg} />
                                     <div className={styles.images1}>
                                         {
@@ -93,10 +122,10 @@ export const PopularMeals = () => {
                                         }
                                     </div>
                                 </div>
-                                <div className={styles.right2}>
+                                <div className={styles.right}>
                                     <div className={styles.flex3}>
                                         <h6 className={styles.itemName}>{selectedItem.item_name}</h6>
-                                        {/* <div className={styles.round} onClick={() => setOpenModal(false)}> <AiOutlineClose /></div> */}
+                                        <div className={styles.round} onClick={() => setOpenModal(false)}> <AiOutlineClose /></div>
                                     </div>
                                     <p className={styles.storeName}> From {selectedItem.store_name}</p>
                                     <div className={styles.rates}>
@@ -105,35 +134,31 @@ export const PopularMeals = () => {
                                         }
                                     </div>
                                     <p className={styles.intro}>{selectedItem.item_intro}</p>
-                                    <div className={styles.flex1}>
-                                        <h4 className={styles.modalTitle}>Meal Category:</h4>
-                                        <div className={styles.cat} style={{ marginTop: '-.5rem' }}>
-                                            <p className={styles.intro}>
-                                                {selectedItem?.item_categories.map((cat) => cat.category_name)?.toString()}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className={styles.flexer}>
-                                        <div>
-                                            <span className={styles.prepspan}><p className={styles.prep}>PrepTime: </p><p style={{ marginLeft: '.8rem' }}>{selectedItem.meal_cook_time} Minutes</p></span>
-                                            <div className={styles.flex1}>
-                                                <h4 className={styles.prep}>Serves:</h4>
-                                                <div className={styles.flex2} style={{ marginLeft: '1rem' }}>
-                                                    <p className={styles.box2}>-</p>
-                                                    <p style={{ marginRight: '1rem' }}>2</p>
-                                                    <p className={styles.box2}>+</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span className={styles.prepspan}><p className={styles.prep}>CookTime: </p><p style={{ marginLeft: '.8rem' }}>{selectedItem.meal_prep_time} Minutes</p></span>
-                                            <span className={styles.prepspan}><p className={styles.prep}>Chef:</p><p className={styles.underline}>{selectedItem.meal_chef}</p></span>
-                                        </div>
-
+                                    <div>
+                                        <h4 className={styles.modalTitle}>Product Category</h4>
+                                        <div className={styles.intro} style={{ marginTop: '-.5rem' }}>{
+                                            selectedItem?.item_categories.map((cat) => {
+                                                <p className={styles.intro}>{cat}</p>
+                                            })
+                                        }</div>
                                     </div>
                                     <div>
-                                        <p className={styles.prep}>Add Meal Ingredients</p>
+                                        <h4 className={styles.modalTitle2}>Quantity</h4>
+                                        <div className={styles.flex2}>
+                                            <p className={styles.box2}>-</p>
+                                            <p style={{ marginRight: '1rem' }}>2</p>
+                                            <p className={styles.box2}>+</p>
+                                        </div>
+                                        <div>
+                                            <h4 className={styles.modalTitle2}>Available Quantity</h4>
+                                            <p className={styles.intro} style={{ marginTop: '-.5rem' }}>43 left</p>
+                                        </div>
+                                        <div className={styles.end}>
+                                            <h4 className={styles.modalTitle} style={{ marginRight: '6.3rem' }}>Price</h4>
+                                            <span className={styles.span}> <h2 style={{ display: 'flex', alignItems: 'center' }} className={styles.price}><BsCurrencyDollar /> {selectedItem.item_price}</h2><p className={styles.piece}> /piece</p></span>
+                                        </div>
                                     </div>
+
                                 </div>
 
                             </div>
@@ -151,10 +176,9 @@ export const PopularMeals = () => {
 
                     </div>
                 }
-
             </div>
             <p className={styles.view} onClick={() => loadMore()}>View More</p>
-            <div className={styles.border} />
+
         </div>
     )
 }

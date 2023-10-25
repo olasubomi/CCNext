@@ -48,8 +48,8 @@ function Login(props) {
   }
 
   function openSignUp() {
-
-    setSignUpState(true);
+    props.setSignUpState(true)
+    // setSignUpState(true);
   }
 
   function closeSignUp() {
@@ -198,16 +198,12 @@ function Login(props) {
             )}
           </button>
 
-          <h3 className={styles.login_new}>
-            Don't have an account yet?{" "}
-            {props.toggleLogin ? (
-              <span onClick={openSignUp}>Sign up here</span>
-            ) : (
-              <Link href="/signup">
-                Sign up here
-              </Link>
-            )}
-          </h3>
+            <h3 className={styles.login_new}>
+              Don't have an account yet?{" "}
+              
+                <span onClick={openSignUp}>Sign up here</span>
+             
+            </h3>
 
           <div className={styles.login_options}>
             <h3>Login with social media</h3>
@@ -268,18 +264,19 @@ function Login(props) {
           )}
           <h3>Adding Convenience to your Home Made Meals</h3>
         </div>
-      </div>
+
+        )}
+      {forgetPassword && (
+        <ForgetPassword closeForgetPassword={closeForgetPassword} />
       )}
-    {forgetPassword && (
-      <ForgetPassword closeForgetPassword={closeForgetPassword} />
-    )}
-    {signUp && (
-      <SignUp
-        closeSignUp={closeSignUp}
-        toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
-      />
-    )}
-  </>;
+      {/* {signUp && (
+        <SignUp
+          closeSignUp={closeSignUp}
+          toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
+        />
+      )} */}
+    </>
+  );
 }
 
 function mapStateToProp(state) {

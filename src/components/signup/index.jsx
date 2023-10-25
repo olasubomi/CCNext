@@ -11,6 +11,7 @@ import 'react-phone-input-2/lib/style.css'
 import { connect } from 'react-redux';
 import { userSignUp } from '../../actions';
 import { base_url } from '../../util/Api';
+import { useAuth } from '../../context/auth.context';
 
 // import { setTimeout } from 'timers';
 
@@ -208,6 +209,7 @@ function SignUp(props){
     password: "",
   });
   const { username, email, phone_number, first_name, last_name, password } = formState;
+  const {isOpen, setIsOpen } = useAuth();
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -286,12 +288,19 @@ function SignUp(props){
       })
   };
 
-    return <>
-      <div className={styles.login}>
-        <div className={styles.login_col_2}>
-          <div className={styles.login_top}>
-            <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}>
-              <Image src={closeIcon} className={styles.login_cancel} />
+    return(
+      <>
+        <div className={styles.login}>
+          <div className={styles.login_col_2}>
+            <div className={styles.login_top}>
+              <div onClick={() => setIsOpen(false)}>
+                <Image src={closeIcon} className={styles.login_cancel} />
+              </div>
+              <Image
+                  src={img_logo}
+                  alt="logo"
+                  className={styles.login_main_logo_img}
+                />
             </div>
             <Image
                 src={img_logo}
@@ -401,38 +410,22 @@ function SignUp(props){
             </div>
             </div>
 
-              <div className={styles.signup_form_option}>
-              <input
-                  className={styles.signup_form_radioInput}
-                  type="radio"
-                  id="service"
-                  name="agreement"
-                  value="agreed"
-                  />
-                  <label
-                  htmlFor="service"
-                  className={styles.signup_form_radio_button}
-                  ></label>
-                  <label htmlFor="service" className={styles.signup_form_radio_label}>
-                      I accept the Terms & Conditions and Privacy and Cookie Notice
-                  </label>
-              </div>
+            {status === 'success' ? 
+            <p className="msg-success">{message}</p>:
+            <p className="msg-err">{message}</p>}
+  
+            <button onClick={formSubmit} className={styles.login_button}>Register</button>
+  
+            <h3 className={styles.login_new}>Already have an account? <span onClick={() => props.setSignUpState(false)}>Sign in here</span> </h3>
+            
+          </div>   
+          <div style={props.toggleLogin ? {gridTemplateRows: 'max-content 1fr' }: {gridTemplateRows: '1fr'}} className={styles.login_col_1}>
+            {props.toggleLogin && 
+            <div className={styles.login_top}>
+              <h2></h2>
+              <div onClick={props.toggleLogin} className={styles.login_cancel_con}>
+                <Image src={closeIcon} className={styles.login_cancel} />
 
-              <div className={styles.signup_form_option}>
-              <input
-                  className={styles.signup_form_radioInput}
-                  type="radio"
-                  id="service"
-                  name="agreement"
-                  value="agreed"
-                  />
-                  <label
-                  htmlFor="service"
-                  className={styles.signup_form_radio_button}
-                  ></label>
-                  <label htmlFor="service" className={styles.signup_form_radio_label}>
-                      I want to receive Chop Chow Newletters and best deal promotional offers
-                  </label>
               </div>
             
           </div>

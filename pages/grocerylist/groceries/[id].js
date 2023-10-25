@@ -244,6 +244,8 @@ const GroceryPage = () => {
         }
     }
 
+
+
     const getItem = async (name) => {
         try {
             const response = await axios.get(`/items/filter/${name}`)
@@ -312,10 +314,12 @@ const GroceryPage = () => {
     }, [])
 
     useEffect(() => {
-        if(measurement_value){
+        if (measurement_value) {
             setMeasurementValue_1(measurement_value)
         }
     }, [measurement_value])
+
+    console.log(itemList?.groceryItems, 'itemList?.groceryItems')
     return <div>
         <Head>
             <title>Chop Chow Grocery List</title>
@@ -506,53 +510,8 @@ const GroceryPage = () => {
                                                 itemList?.groceryItems?.map((element, idx) => (
                                                     <>
                                                         {
-                                                            !element.hasOwnProperty('itemData') ?
-                                                                <tr key={element?._id} className={styles.tr}>
-                                                                    <td className={styles.td}>
-                                                                        <input
-                                                                            name={element?.item?.item_name}
-                                                                            value={element?.item?.item_name}
-                                                                            checked={cartHasItem(element.item)}
-                                                                            onChange={(e) => {
-                                                                                addItemsToCart(element.item, true)
-                                                                            }}
-                                                                            type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
-                                                                        {
-                                                                            element?.item?.itemImage0 ?
-                                                                                <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={Frame} height={50} width={55} style={{ borderRadius: '5px' }} />
-                                                                        }
-                                                                    </td>
-                                                                    <td className={styles.td} style={{ cursor: 'pointer', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', marginTop: '1.5rem' }}>
-                                                                        <p onClick={() => {
-                                                                            console.log(element, 'elements')
-                                                                            toggle(element)
-                                                                        }}>{element.item.item_name}</p>
-                                                                        {
-                                                                            element?.item?.item_type === 'Meal' && element?.quantity ?
-                                                                                <div>
-                                                                                    <p className={styles.ingredients} onClick={() => {
 
-                                                                                        setOpen({
-                                                                                            id: element._id,
-                                                                                            isOpen: !open.isOpen
-                                                                                        })
-                                                                                    }}>
-                                                                                        Include Ingredients
-                                                                                    </p>
-                                                                                    {open.isOpen && element._id === open.id &&
-                                                                                        <CardDropdown element={element} />
-                                                                                    }
-                                                                                </div>
-                                                                                : <div></div>
-                                                                        }
-
-                                                                    </td>
-
-                                                                    <td className={styles.td} style={{ textAlign: 'center' }}>{element?.quantity} {element?.measurement?.measurement_name}</td>
-                                                                    <td className={styles.td}>{element?.item?.item_price ? `$${element?.item?.item_price}` : 'N/A'}</td>
-                                                                    <td className={styles.td} style={{ textAlign: 'center' }}>{element?.item?.store_name ? element?.item?.store_name : '-'}</td>
-                                                                    <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
-                                                                </tr> :
+                                                            element.hasOwnProperty('itemData') ?
                                                                 <tr key={element?.itemData?._id} className={styles.tr}>
                                                                     <td className={styles.td}>
                                                                         <input type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
@@ -573,6 +532,74 @@ const GroceryPage = () => {
                                                                     </td>
                                                                     <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
                                                                 </tr>
+                                                                : element.hasOwnProperty('other')
+                                                                    ?
+                                                                    <tr key={element?.itemData?._id} className={styles.tr}>
+                                                                        <td className={styles.td}>
+                                                                            <input type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
+                                                                            <Image src={element?.other?.item_image} height={50} width={55} style={{ borderRadius: '5px' }} />
+
+                                                                        </td>
+                                                                        <td className={styles.td}>
+                                                                            {element?.other?.item_name}
+                                                                        </td>
+                                                                        <td className={styles.td}>
+                                                                            N/A
+                                                                        </td>
+                                                                        <td className={styles.td}>
+                                                                            N/A
+                                                                        </td>
+                                                                        <td className={styles.td}>
+                                                                            -
+                                                                        </td>
+                                                                        <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
+                                                                    </tr>
+                                                                    : <tr key={element?._id} className={styles.tr}>
+                                                                        <td className={styles.td}>
+                                                                            <input
+                                                                                name={element?.item?.item_name}
+                                                                                value={element?.item?.item_name}
+                                                                                checked={cartHasItem(element.item)}
+                                                                                onChange={(e) => {
+                                                                                    addItemsToCart(element.item, true)
+                                                                                }}
+                                                                                type='checkbox' style={{ marginRight: '2rem', marginLeft: '1rem', color: 'rgba(244, 121, 0, 1)', width: '2rem', height: '2rem' }} />
+                                                                            {
+                                                                                element?.item?.itemImage0 ?
+                                                                                    <Image src={element?.item?.itemImage0} height={50} width={55} /> : <Image src={Frame} height={50} width={55} style={{ borderRadius: '5px' }} />
+                                                                            }
+                                                                        </td>
+                                                                        <td className={styles.td} style={{ cursor: 'pointer', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', marginTop: '1.5rem' }}>
+                                                                            <p onClick={() => {
+                                                                                console.log(element, 'elements')
+                                                                                toggle(element)
+                                                                            }}>{element?.item?.item_name}</p>
+                                                                            {
+                                                                                element?.item?.item_type === 'Meal' && element?.quantity ?
+                                                                                    <div>
+                                                                                        <p className={styles.ingredients} onClick={() => {
+
+                                                                                            setOpen({
+                                                                                                id: element._id,
+                                                                                                isOpen: !open.isOpen
+                                                                                            })
+                                                                                        }}>
+                                                                                            Include Ingredients
+                                                                                        </p>
+                                                                                        {open.isOpen && element._id === open.id &&
+                                                                                            <CardDropdown element={element} />
+                                                                                        }
+                                                                                    </div>
+                                                                                    : <div></div>
+                                                                            }
+
+                                                                        </td>
+
+                                                                        <td className={styles.td} style={{ textAlign: 'center' }}>{element?.quantity} {element?.measurement?.measurement_name}</td>
+                                                                        <td className={styles.td}>{element?.item?.item_price ? `$${element?.item?.item_price}` : 'N/A'}</td>
+                                                                        <td className={styles.td} style={{ textAlign: 'center' }}>{element?.item?.store_name ? element?.item?.store_name : '-'}</td>
+                                                                        <td onClick={() => deleteItemFromGrocery(element._id)} className={styles.td} style={{ textAlign: 'center' }}><IoMdCloseCircle size={23} color='#949494' /></td>
+                                                                    </tr>
                                                         }
                                                     </>
                                                 ))
