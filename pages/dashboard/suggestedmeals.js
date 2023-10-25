@@ -1095,7 +1095,7 @@ const SuggestedMeals = (props) => {
                                         <div className={styles.search_button} onClick={searchSuggested}>Search</div>
                                     </div> */}
                                     {props.auth.authUser.user_type === 'customer' &&
-                                        <Link href='/dashboard/createstore'><a>Create Store</a></Link>}
+                                        <Link href='/dashboard/createstore'>Create Store</Link>}
                                 </div>
                                 <div className={styles.suggestedmeal_row2}>
                                     <div className={styles.mode_con}>
@@ -1118,9 +1118,9 @@ const SuggestedMeals = (props) => {
                                                 {/* <div onClick={togglePublicMeal} className={styles.tableactionbutton}>+ Add public meal</div> */}
                                                 <div className={styles.tableactionbutton}>
                                                     <Link href='/suggestmeal' >
-                                                        <a>
+                                                        
                                                             + New Suggestion
-                                                        </a>
+                                                        
                                                     </Link>
                                                 </div>
                                             </div>
@@ -1610,7 +1610,7 @@ const SuggestedMeals = (props) => {
             }
 
         </div>
-    )
+    );
 }
 
 // export default SuggestedMeals

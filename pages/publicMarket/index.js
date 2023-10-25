@@ -5,6 +5,9 @@ import GoBack from "../../src/components/CommonComponents/goBack";
 import styles from '../../src/components/public-market/public-market.module.css'
 import { HiLocationMarker } from 'react-icons/hi'
 import { DropDownSelect } from "../../src/components/select/select";
+import { Search } from "../../src/components/select/search";
+import { PopularMeals, Stores, TopSellingProducts } from "../../src/components/public-market";
+import Footer from "../../src/components/Footer/Footer";
 
 const PublicMarket = () => {
     return (
@@ -24,11 +27,23 @@ const PublicMarket = () => {
                 <GoBack />
                 <div className={styles.two}>
                     <DropDownSelect
-                        onSelect={(e) =>  null}
+                        onSelect={(e) => null}
                         options={null}
-                         placeholder='All categories' onChange={(e) => null} />
+                        placeholder='All categories' onChange={(e) => null} />
+                    <div className={styles.searchflex}>
+                        <div className={styles.search}>
+                            <Search />
+                        </div>
+                        <button className={styles.searchbtn}>Search</button>
+                    </div>
                 </div>
             </div>
+            <div className={styles.storeContainer}>
+                <Stores />
+            </div>
+            <PopularMeals />
+            <TopSellingProducts />
+            <Footer/>
         </div>
     )
 }
