@@ -65,13 +65,21 @@
 .two {
     width: 160px;
     height: 52px;
-    background-color: #F47900;
+    background-color: #eeeae6;
     border-radius: 4px;
     padding: 14px;
     flex-shrink: 0;
     gap: 10px;
+    border: 1px solid #000;
+    
+
 }
 
+.two:hover {
+    background-color: #F47900;
+    color:#FFFFFF;
+    border: none;
+}
 .dots {
     font-size: 26px;
 }
@@ -928,6 +936,7 @@
 
     .button_text {
         font-size: 11px;
+
     }
 
     .title2 {

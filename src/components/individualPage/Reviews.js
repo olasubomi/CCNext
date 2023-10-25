@@ -8,6 +8,7 @@ import Link from 'next/link';
 import moment from 'moment'
 import { elements } from 'chart.js';
 
+
 function Reviews({ itemId, callback }) {
 
     const [comments, setComments] = useState([]);
@@ -20,6 +21,7 @@ function Reviews({ itemId, callback }) {
     const [rating, setRating] = useState(0)
     const [isEditing, setIsEditing] = useState(false)
     const [commentId, setCommentId] = useState("")
+
 
 
     useEffect(() => {
@@ -150,7 +152,13 @@ function Reviews({ itemId, callback }) {
             <div className={styles.products_reviews_summary}>
                 <div className={styles.product_review_col_1}>
                     <div className={styles.product_review_col_1_row}>
-                        <div className={styles.product_review_name_ab}>T</div>
+                        <div className={styles.product_review_name_ab}>
+                        <Image 
+                        width={200} height={200}
+                        alt={username}
+                        src={profileImage}
+                        />
+                        </div>
                     </div>
                     <div className={styles.review_details}>
                         <div className={styles.review_details_top}>
