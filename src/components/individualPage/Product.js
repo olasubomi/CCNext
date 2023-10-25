@@ -9,11 +9,13 @@ import Stores from "./stores";
 import Reviews from "./Reviews";
 import { FaStar } from "react-icons/fa";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import InstagramShareButton from "../SocialShare/InstagramShare";
 
 
 function Product(props) {
     const [formatted_ingredients, set_formatted_ingredients] = useState([''])
-    const url = 'http://localhost:3000/'
+     //const url = 'http://localhost:3000/'
+     const url = 'https://www.chopchow.app/'
     // console.log(props.product.item_data.product_size, 'item_data')
     // console.log(props.product.item_data.product_size?.map((elem, id) => (
     //     <div key={id}>
@@ -33,6 +35,23 @@ function Product(props) {
             <Head>
                 <title>Product</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta name="twitter:card" content="summary_large_image"/>
+                <meta name="twitter:title" content={props.meal_name}/>
+                <meta name="twitter:description" content={props.meal.item_intro}/>
+                <meta name="twitter:description" content={props.meal.item_name}/>
+                <meta name="twitter:image" content={props.meal.itemImage0}/>
+                <meta name="twitter:image:alt" content={props.meal.item_name }/>
+                <meta name="twitter:image" content="URL_to_your_image2"/>
+                <meta name="twitter:image:alt" content="Alt text for the image2"/>
+
+                <meta property="og:title" content={props.meal_name}/>
+                <meta property="og:description" content={props.meal.item_intro}/>
+                <meta property="og:image" content={props.meal.itemImage0}/>
+                <meta property="og:image:alt" content={props.meal.item_name }/>
+                <meta property="og:image" content="URL_to_your_image2"/>
+                <meta property="og:image:alt" content="Alt text for the image2"/>
+
+
             </Head>
             <div className={styles.product_sections}>
 
@@ -126,9 +145,9 @@ function Product(props) {
                         <TwitterShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>
                             <TwitterEIcon />
                         </TwitterShareButton>
-                        <InstapaperShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>
+                        <InstagramShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>
                             <InstaEIcon />
-                        </InstapaperShareButton>
+                        </InstagramShareButton>
                         <WhatsappShareButton title={props.product.product_name} url={url + 'product/' + props.product._id} >
                             <WhatsappEIcon />
                         </WhatsappShareButton>
