@@ -72,15 +72,19 @@ export const SuggestModal = ({
 
     const addOtherToGroceryList = async () => {
         try {
+            const user = JSON.parse(localStorage.getItem('user'))
             
+
             const form = new FormData();
             form.append('listName', listName)
             form.append('item_name', itemName)
+            form.append('item_type', 'Other')
+            form.append('user', user?._id.toString())
             if (itemImage.file) {
-                form.append('item_image', itemImage.file)
+                form.append('item_images', itemImage.file)
             }
             
-            const response = await axios(`/groceries/grocery-other`, {
+            const response = await axios(`/items`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
