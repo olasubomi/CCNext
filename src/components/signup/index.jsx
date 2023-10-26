@@ -534,7 +534,7 @@ function SignUp(props){
             <h3 style={{position: 'absolute', top: 145, alignSelf: 'center', width: 320, zIndex: 99, paddingLeft: 40}}>
               Get your African Delicacies delievered to your Door
             </h3>
-            <Image width={420} height={550} src="/../public/assets/signup/signup_bg.png" alt="Signup" />
+            <Image width={420} height={550} src="/assets/signup/signup_bg.png" alt="Signup" />
           </div>    
         </div>
       </>
