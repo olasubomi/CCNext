@@ -74,7 +74,7 @@ const individualProductPage = () => {
                 </div>
                 <div style={{width: '95%'}}>
                     {/* {props.product && props.product.data && props.product.data.products.length > 0 && */}
-                    <Product product={props} />
+                    <Product product={props} callback={() => getProduct(router.query?.name)}/>
                 </div>
             </div>
             

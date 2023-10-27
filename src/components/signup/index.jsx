@@ -11,6 +11,7 @@ import 'react-phone-input-2/lib/style.css'
 import { connect } from 'react-redux';
 import { userSignUp } from '../../actions';
 import { base_url } from '../../util/Api';
+import { useAuth } from '../../context/auth.context';
 
 // import { setTimeout } from 'timers';
 
@@ -214,6 +215,9 @@ function SignUp(props){
     confirm_password: ''
   })
   const { username, email, phone_number, first_name, last_name, password, confirm_password } = formState;
+   // const {isOpen, setIsOpen } = useAuth();
+
+
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
