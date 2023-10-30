@@ -118,61 +118,61 @@ function Login(props) {
     setShowPassState(!showPass);
   }
   //{console.log("signedin", props.auth)}
-  return(
+  return <>
+    {true &&
+      (
+      <div className={styles.login}>
+        <div className={styles.login_col_2}>
+          <div className={styles.login_top}>
+            <div onClick={() => setIsOpen(!isOpen)} className={styles.login_cancel_con + " "}>
+              <Image src={closeIcon} className={styles.login_cancel} />
+            </div>
+            <Image
 
-    <>
-      {true &&
-        (
-        <div className={styles.login}>
-          <div className={styles.login_col_2}>
-            <div className={styles.login_top}>
-              <div onClick={() => setIsOpen(!isOpen)} className={styles.login_cancel_con + " "}>
-                <Image src={closeIcon} className={styles.login_cancel} />
-              </div>
-              <Image
-
-                src={img_logo}
-                alt="logo"
-                className={styles.login_main_logo_img}
+              src={img_logo}
+              alt="logo"
+              className={styles.login_main_logo_img}
+            />
+          </div>
+          <h2>Welcome Back</h2>
+          <h3>Login</h3>
+          <div className={styles.login_form}>
+            
+            
+            <div className={styles.login_form_group}>
+              <label htmlFor="email" className={styles.login_form_label}>
+                Email
+              </label>
+              <input
+                type="text"
+                name="email"
+                value={email}
+                placeholder="Your Email or Username"
+                onChange={onChange}
+                className={styles.login_form_input}
               />
             </div>
-            <h2>Welcome Back</h2>
-            <h3>Login</h3>
-            <div className={styles.login_form}>
-              <div className={styles.login_form_group}>
-                <label htmlFor="email" className={styles.login_form_label}>
-                  Email
-                </label>
-                <input
-                  type="text"
-                  name="email"
-                  value={email}
-                  placeholder="Your Email or Username"
-                  onChange={onChange}
-                  className={styles.login_form_input}
-                />
-              </div>
-              <div className={styles.login_form_group}>
-                <label htmlFor="password" className={styles.login_form_label}>
-                  Password
-                </label>
-                <input
-                  type={showPass ? "text" : "password"}
-                  name="password"
-                  value={password}
-                  placeholder="Your password"
-                  onChange={onChange}
-                  className={styles.login_form_input}
-                />
-                <div onClick={togglePass} className={styles.secureEye}>
-                  {showPass ? (
-                    <VisibilityIcon className={styles.eye} />
-                  ) : (
-                    <EyeSIcon style={styles.eye} />
-                  )}
-                </div>
+            <div className={styles.login_form_group}>
+              <label htmlFor="password" className={styles.login_form_label}>
+                Password
+              </label>
+              <input
+                type={showPass ? "text" : "password"}
+                name="password"
+                value={password}
+                placeholder="Your password"
+                onChange={onChange}
+                className={styles.login_form_input}
+              />
+              <div onClick={togglePass} className={styles.secureEye}>
+                {showPass ? (
+                  <VisibilityIcon className={styles.eye} />
+                ) : (
+                  <EyeSIcon style={styles.eye} />
+                )}
               </div>
             </div>
+           
 
             <div className={styles.login_password_help}>
               <div className={styles.login_remember_pass}>
@@ -245,31 +245,31 @@ function Login(props) {
               </div>
             </div>
           </div>
-          <div
-            style={
-              props.toggleLogin
-                ? { gridTemplateRows: "max-content 1fr" }
-                : { gridTemplateRows: "1fr" }
-            }
-            className={styles.login_col_1}
-          >
-            {props.toggleLogin && (
-              <div className={styles.login_top}>
-                <h2></h2>
-                <div
-                  onClick={props.toggleLogin}
-                  className={styles.login_cancel_con}
-                >
-                  <Image src={closeIcon} className={styles.login_cancel} />
-                </div>
-              </div>
-            )}
-            <h3>Adding Convenience to your Home Made Meals</h3>
-          </div>
+
+          
         </div>
-        )}
-      {forgetPassword && (
-        <ForgetPassword closeForgetPassword={closeForgetPassword} />
+        <div
+          style={
+            props.toggleLogin
+              ? { gridTemplateRows: "max-content 1fr" }
+              : { gridTemplateRows: "1fr" }
+          }
+          className={styles.login_col_1}
+        >
+          {props.toggleLogin && (
+            <div className={styles.login_top}>
+              <h2></h2>
+              <div
+                onClick={props.toggleLogin}
+                className={styles.login_cancel_con}
+              >
+                <Image src={closeIcon} className={styles.login_cancel} />
+              </div>
+            </div>
+          )}
+          <h3>Adding Convenience to your Home Made Meals</h3>
+        </div>
+      </div>
       )}
       {/* {signUp && (
         <SignUp
@@ -277,8 +277,16 @@ function Login(props) {
           toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
         />
       )} */}
-    </>
-  );
+    {forgetPassword && (
+      <ForgetPassword closeForgetPassword={closeForgetPassword} />
+    )}
+    {signUp && (
+      <SignUp
+        closeSignUp={closeSignUp}
+        toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
+      />
+    )}
+  </>;
 }
 
 function mapStateToProp(state) {

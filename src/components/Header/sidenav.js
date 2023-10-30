@@ -28,7 +28,7 @@ function SideNav(props){
         window.event.returnValue = false
     }
 
-  return(
+  return (
     <div className={styles.navbar_side}>
         <div
         id="openbutton"
@@ -41,10 +41,10 @@ function SideNav(props){
             <div id='side_top' className={styles.sidenav_top}>
                 <div className={styles.sidenav_top_row_1}>
                 <Image src={closeIcon} alt="close nav" />
-                <Link href="/">
-                <a className={styles.social_link}>
-                    <Image src={img_logo} alt="logo" className={styles.sidenav_logo} />
-                </a>
+                <Link href="/" className={styles.social_link}>
+
+                  <Image src={img_logo} alt="logo" className={styles.sidenav_logo} />
+
                 </Link>
                 </div>
                 {props.auth.authUser && 
@@ -63,7 +63,7 @@ function SideNav(props){
             <Sidenav2 showBottom={true} />
         </div>
     </div>
-  )
+  );
 }
 
 // export default SideNav;

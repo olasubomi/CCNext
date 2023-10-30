@@ -8,9 +8,13 @@ import Stores from "./stores";
 import Reviews from "./Reviews";
 import { UserIcon} from "../icons";
 import {GoStarFill} from "react-icons/go"
+import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import InstagramShareButton from "../SocialShare/InstagramShare";
+
 
 function Meal(props) {
-    const url = 'http://localhost:3000/'
+    //const url = 'http://localhost:3000/'
+    const url = 'https://www.chopchow.app/'
 
     const [serves, setServes] = useState(parseInt(props.meal?.servings))
 
@@ -30,12 +34,31 @@ function Meal(props) {
 
     console.log('meald callback', props.callback)
     console.log(props.meal.item_images, 'serve me')
+   
     return (
         <>
             <Head>
                 <title>Meal</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta name="twitter:card" content="summary_large_image"/>
+                <meta name="twitter:title" content={props.meal_name}/>
+                <meta name="twitter:description" content={props.meal.item_intro}/>
+                <meta name="twitter:description" content={props.meal.item_name}/>
+                <meta name="twitter:image" content={props.meal.itemImage0}/>
+                <meta name="twitter:image:alt" content={props.meal.item_name }/>
+                <meta name="twitter:image" content="URL_to_your_image2"/>
+                <meta name="twitter:image:alt" content="Alt text for the image2"/>
+
+                <meta property="og:title" content={props.meal_name}/>
+                <meta property="og:description" content={props.meal.item_intro}/>
+                <meta property="og:image" content={props.meal.itemImage0}/>
+                <meta property="og:image:alt" content={props.meal.item_name }/>
+                <meta property="og:image" content="URL_to_your_image2"/>
+                <meta property="og:image:alt" content="Alt text for the image2"/>
+
+
             </Head>
+            
             {props.meal &&
 
                 <div className={styles.meal_sections}>
@@ -141,24 +164,24 @@ function Meal(props) {
                                     <p>$7.65<span>/piece</span></p>
                                 </div>
                             }
+
                         </div>
                     </div>
 
-                    {/* {props.props.auth.authUser && props.props.auth.authUser.user_type !== 'admin' &&
+                    {/* {props.props.auth.authUser && props.props.auth.authUser.user_type !== 'admin' && */}
                 <div className={styles.section_2_footer}>
                     <div className={styles.hide}>
                         <p><ShareIcon />Share this product:</p>
-                        <FacebookShareButton>
-
-                            <FacebookEIcon quote={props.props.meal.intro} url={url+'meal/'+props.props.meal._id} />
+                        <FacebookShareButton quote={props.meal.intro} url={url+'meal/'+props.meal._id}>
+                            <FacebookEIcon  />
                         </FacebookShareButton>
-                        <TwitterShareButton title={props.props.meal.meal_name} url={url+'meal/'+props.props.meal._id}>
+                        <TwitterShareButton title={props.meal_name} url={url+'meal/'+props.meal._id}>
                             <TwitterEIcon />
                         </TwitterShareButton>
-                        <InstapaperShareButton title={props.props.meal.meal_name} url={url+'meal/'+props.props.meal._id}>
+                        <InstagramShareButton title={props.meal_name} url="https://www.instagram.com">
                             <InstaEIcon />
-                        </InstapaperShareButton>
-                        <WhatsappShareButton title={props.props.meal.meal_name} url={url+'meal/'+props.props.meal._id} >
+                        </InstagramShareButton>
+                        <WhatsappShareButton title={props.meal_name} url={url+'meal/'+props.meal._id} >
                             <WhatsappEIcon />
                         </WhatsappShareButton>
                     </div>
@@ -175,7 +198,7 @@ function Meal(props) {
                     </div>}
                 </div>
 
-                } */}
+                {/* } */}
                     <div className={styles.meal_section_3}>
                         <div className={styles.meal_details}>
                             <div className={styles.hide}>
