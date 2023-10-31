@@ -376,3 +376,15 @@ input[type="checkbox"]:checked{
   background: #FFF;
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
 }
+.css-1aquho2-MuiTabs-indicator {
+  background-color: #F47900;
+}
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected{
+  color: #000;
+  font-size: 14px;
+}
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root{
+  font-size: 14px;
+  color: #6D6D6D;
+  text-transform: capitalize;
+}

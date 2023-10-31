@@ -16,6 +16,7 @@
     border-radius: 8px;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
 }
+
 .storeImg2 {
     width: 100%;
     height: 174px;
@@ -36,14 +37,14 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 70px;
 }
+
 .stores3 {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 56px;
 }
 
-.card1 {
-}
+.card1 {}
 
 .box {
     width: 100%;
@@ -77,6 +78,7 @@
     align-items: center;
     margin-top: .9rem;
 }
+
 .flexer {
     display: flex;
     justify-content: space-between;
@@ -94,7 +96,8 @@
 .storeContainer {
     padding: 1rem 5rem;
 }
-.underline{
+
+.underline {
     text-decoration: underline;
     text-decoration-color: #F47900;
     color: #F47900;
@@ -120,15 +123,21 @@
     width: 100%;
     border-top: 1px solid rgba(0, 0, 0, 0.20);
 }
+.border2 {
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.20);
+}
 
 .mealContainer {
     width: 100%;
     padding: 2rem 5rem;
 }
+
 .mealContainer1 {
     width: 100%;
     padding: 2rem 5rem;
 }
+
 .modalContainer {
     width: 100%;
     position: fixed;
@@ -152,33 +161,37 @@
     margin: 0 auto;
     border-radius: 8px;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
-    
+
 }
+
 .modalCard2 {
     background: #FFF;
-    width: 80%;
+    width: 83%;
     margin: 0 auto;
     border-radius: 8px;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
-    
+
 }
-.flexed{
+
+.flexed {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     padding: 3rem 3rem .2rem 3rem;
 }
-.flexed2{
+
+.flexed2 {
     display: grid;
-    grid-template-columns: 1.1fr 1.1fr .7fr;
-    padding: 3rem 3rem .2rem 3rem;
+    grid-template-columns: .8fr .8fr .6fr;
 }
-.prep{
+
+.prep {
     font-size: 13px;
     font-weight: 100;
     display: flex;
 }
-.prepspan{
+
+.prepspan {
     display: flex;
     align-items: center;
     margin-top: 1.5rem;
@@ -190,17 +203,20 @@
     width: 45%;
     height: 100%;
 }
+
 .images2 {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
+    padding-left: 2rem;
+    padding-top: 3rem;
 }
 
 .modalImg {
     border-radius: 8px;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
-    height: 315px;
+    height: 255px;
     object-position: center;
     object-fit: contain;
 }
@@ -214,10 +230,13 @@
 .right {
     width: 51%;
 }
+
 .right2 {
     width: 100%;
     padding-left: 2rem;
     margin-top: -2rem;
+    padding-top: 3rem;
+    padding-right: 2rem;
 }
 
 .right .storeName {
@@ -226,11 +245,38 @@
     font-weight: 300;
     margin-top: -1rem;
 }
+
 .right2 .storeName {
     color: #F47900;
     font-size: 13px;
     font-weight: 300;
     margin-top: -1rem;
+}
+
+.recipes {
+    width: 100%;
+    margin: auto;
+    height: 100%;
+    padding-right: 2rem;
+    text-align: justify;
+
+}
+
+.arr {
+    background-color: #f0efef;
+}
+
+.instructionStep {
+    color: #353535;
+    font-size: 12.5px;
+    font-weight: 300;
+    line-height: 22.4px;
+    /* 22.4px */
+}
+
+.recipeImg {
+    width: 100%;
+    height: 200px;
 }
 
 .rates {
@@ -254,6 +300,7 @@
     font-weight: 500;
     margin-top: 1rem;
 }
+
 .right2 .modalTitle {
     color: #000;
     font-size: 15px;
@@ -267,12 +314,30 @@
     font-weight: 500;
     margin-top: 3rem;
 }
-.flex1{
+
+.third {
+    border-left: 1px solid rgba(0, 0, 0, 0.20);
+    padding-left: 1.5rem;
+    padding-top: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.third .close {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.preptext {
+    font-size: 14px;
+}
+
+.flex1 {
     display: flex;
     align-items: center;
     margin-top: .4rem;
 }
-.cat{
+
+.cat {
     display: flex;
     margin-left: 1rem;
 }
@@ -326,7 +391,7 @@
     margin-left: 1.2rem;
 }
 
- .buttons {
+.buttons {
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
@@ -336,6 +401,23 @@
 }
 
 .buttons .outlinebtn {
+    display: flex;
+    height: 40px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background-color: transparent;
+    border: .5px solid rgba(0, 0, 0, 0.50);
+    outline: 1px solid rgba(0, 0, 0, 0.50);
+    color: #353535;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.outlinebtn {
     display: flex;
     height: 40px;
     padding: 20px;
@@ -412,7 +494,74 @@
     border-radius: 8px;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
 }
-.border{
+
+.border {
     border-bottom: .5px solid rgba(0, 0, 0, 0.10);
     margin-top: 1.5rem;
+}
+
+.modalCard3 {
+    background: #FFF;
+    width: 55%;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+    padding: 0rem 2.5rem 2rem 2.5rem;
+}
+
+.addTitle {
+    color: #000;
+    font-size: 22px;
+    font-weight: 400;
+}
+
+.list {
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.list input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+}
+
+.list p {
+    margin-left: .7rem;
+    font-weight: 200;
+    color: #000;
+}
+
+.th {
+    font-weight: 100;
+    font-size: 12px;
+    text-align: left;
+}
+
+.thead {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 1rem;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
+.td {
+    font-weight: 100;
+    font-size: 12px;
+}
+
+.tr {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr .8fr;
+    text-align: justify;
+    gap: 1rem;
+    padding: 1rem 1rem;
+
+}
+
+.tr:nth-child(odd) {
+    background: #F1F1F1;
+    width: 100%;
+    height: 100%;
 }
