@@ -7,8 +7,6 @@ import { RiDeleteBin5Line } from "react-icons/ri"
 import Link from 'next/link';
 import moment from 'moment'
 import { elements } from 'chart.js';
-
-
 function Reviews({ itemId, callback }) {
 
     const [comments, setComments] = useState([]);
@@ -21,7 +19,6 @@ function Reviews({ itemId, callback }) {
     const [rating, setRating] = useState(0)
     const [isEditing, setIsEditing] = useState(false)
     const [commentId, setCommentId] = useState("")
-
 
 
     useEffect(() => {

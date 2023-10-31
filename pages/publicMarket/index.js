@@ -44,6 +44,7 @@ const PublicMarket = () => {
             <PopularMeals />
             <TopSellingProducts />
             <Footer/>
+
         </div>
     )
 }

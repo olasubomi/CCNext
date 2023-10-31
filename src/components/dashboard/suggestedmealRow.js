@@ -3,7 +3,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import styles from './suggestedmeals.module.css'
 import {status, approve, pending, rejected, actionIcon } from './dashboard.module.css'
 import { useState } from 'react';
-import { ArrowDropUp } from '@mui/icons-material';
+import ArrowDropUp from '@mui/icons-material/ArrowDropUp';
 function SuggestedMealRow(props){
 
     const [show, setShowState] = useState(false)

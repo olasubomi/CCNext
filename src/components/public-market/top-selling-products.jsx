@@ -10,43 +10,60 @@ import Link from "next/link"
 import { toast } from 'react-toastify';
 
 
+
 export const TopSellingProducts = () => {
     const [products, setProducts] = useState([])
     const [visibleProducts, setVisibleProducts] = useState(5)
     const [openModal, setOpenModal] = useState(false)
     const [selectedItem, setSelectedItem] = useState({})
+
+    const [selectGrocery, setSelectGrocery] = useState({})
+    const [openList, setOpenList] = useState(false)
+    const [show, setShow] = useState(false)
     const router = useRouter()
+
+    //items to add
+    const [itemToAdd, setItemAdd] = useState({
+        listName: "",
+    })
 
     const loadMore = () => {
         setVisibleProducts(visibleProducts + 5)
     }
 
-    // const addItemToGrocery = async () => {
 
-    //     const user = JSON.parse(localStorage.getItem('user'))
-    //     const payload = {
-    //         userId: user._id,
-    //         groceryList: {
-    //             listName: itemList.listName,
-    //             groceryItems: {
-    //                 itemId: itemsToAdd.itemId,
-    //             }
-    //         }
-    //     }
+    const addItemToGrocery = async (listName) => {
 
-    //     console.log(payload, 'payload')
-    //     try {
-    //         const response = await axios(`/groceries`, {
-    //             method: 'post',
-    //             data: payload
-    //         })
+        const user = JSON.parse(localStorage.getItem('user'))
+        const payload = {
+            userId: user._id,
+            groceryList: {
+                listName: itemToAdd.listName || listName,
+                groceryItems: {
+                    itemId: selectedItem._id,
+                }
+            }
+        }
 
-    //         toast.success('Item added successfully')
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
+        console.log(payload, 'payload')
+        try {
+            const response = await axios(`/groceries`, {
+                method: 'post',
+                data: payload
+            })
+            toast.success('Item added successfully')
+            setOpenList(false)
+            setShow(false)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const [details, setDetails] = useState({
+        listName: '',
+        description: '',
+        id: '',
+        status: ""
+    })
     const fetchProducts = async () => {
         try {
             const response = await axios(`/items/1?type=Product&status=all&limit=50`, {
@@ -66,6 +83,24 @@ export const TopSellingProducts = () => {
         fetchProducts()
     }, [])
 
+
+    const fetchGroceryList = async () => {
+        try {
+            const response = await axios(`/groceries/list`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log(response.data.data.data, 'groceries')
+            setSelectGrocery(response.data.data.data)
+        } catch (error) {
+
+        }
+    }
+    useEffect(() => {
+        fetchGroceryList()
+    }, [])
     const filteredProducts = products.filter(product => product.item_type === "Product" && product.average_rating);
     return (
         <div className={styles.mealContainer1}>
@@ -103,79 +138,21 @@ export const TopSellingProducts = () => {
                         )
                     })
                 }
-                {
-                    openModal &&
-                    <div className={styles.modalContainer}>
-                        <div className={styles.modalCard}>
-                            <div className={styles.flexed}>
-                                <div className={styles.images}>
-                                    <img src={selectedItem?.itemImage0} alt='' className={styles.modalImg} />
-                                    <div className={styles.images1}>
-                                        {
-                                            selectedItem.item_images.map((image, idx) => {
-                                                return (
-                                                    <div className={styles.img1}>
-                                                        <img src={image} />
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                                <div className={styles.right}>
-                                    <div className={styles.flex3}>
-                                        <h6 className={styles.itemName}>{selectedItem.item_name}</h6>
-                                        <div className={styles.round} onClick={() => setOpenModal(false)}> <AiOutlineClose /></div>
-                                    </div>
-                                    <p className={styles.storeName}> From {selectedItem.store_name}</p>
-                                    <div className={styles.rates}>
-                                        {
-                                            Array(5).fill('_').map((_, idx) => <GrStar size={20} key={idx + _} color={selectedItem.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} />)
-                                        }
-                                    </div>
-                                    <p className={styles.intro}>{selectedItem.item_intro}</p>
-                                    <div>
-                                        <h4 className={styles.modalTitle}>Product Category</h4>
-                                        <div className={styles.intro} style={{ marginTop: '-.5rem' }}>{
-                                            selectedItem?.item_categories.map((cat) => {
-                                                <p className={styles.intro}>{cat}</p>
-                                            })
-                                        }</div>
-                                    </div>
-                                    <div>
-                                        <h4 className={styles.modalTitle2}>Quantity</h4>
-                                        <div className={styles.flex2}>
-                                            <p className={styles.box2}>-</p>
-                                            <p style={{ marginRight: '1rem' }}>2</p>
-                                            <p className={styles.box2}>+</p>
-                                        </div>
-                                        <div>
-                                            <h4 className={styles.modalTitle2}>Available Quantity</h4>
-                                            <p className={styles.intro} style={{ marginTop: '-.5rem' }}>43 left</p>
-                                        </div>
-                                        <div className={styles.end}>
-                                            <h4 className={styles.modalTitle} style={{ marginRight: '6.3rem' }}>Price</h4>
-                                            <span className={styles.span}> <h2 style={{ display: 'flex', alignItems: 'center' }} className={styles.price}><BsCurrencyDollar /> {selectedItem.item_price}</h2><p className={styles.piece}> /piece</p></span>
-                                        </div>
-                                    </div>
 
-                                </div>
-
-                            </div>
-                            <div className={styles.border} />
-                            <div className={styles.buttons}>
-                                <button className={styles.outlinebtn}>
-                                    <Link href={`/meal/${selectedItem.item_name}`}>
-                                        View More
-                                    </Link>
-                                </button>
-                                <button className={styles.outlinebtn}>Add to Grocery List</button>
-                                <button className={styles.btn}>Add to Cart</button>
-                            </div>
-                        </div>
-
-                    </div>
-                }
+                <ProductModal
+                    openList={openList}
+                    openModal={openModal}
+                    selectGrocery={selectGrocery}
+                    selectedItem={selectedItem}
+                    setOpenList={setOpenList}
+                    setOpenModal={setOpenModal}
+                    show={show}
+                    details={details}
+                    setDetails={setDetails}
+                    addItemToGrocery={addItemToGrocery}
+                    setItemAdd={setItemAdd}
+                    setShow={setShow}
+                />
             </div>
             <p className={styles.view} onClick={() => loadMore()}>View More</p>
 

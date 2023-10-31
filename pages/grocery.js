@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import yellow from '../public/assets/meal_pics/yellow.jpeg'
 import Frame from "../public/assets/logos/Frame.png"
 import { GroceryModal } from "../src/components/modal/grocery-modal";
+import SideNav from "../src/components/Header/sidenav"
 
 const Grocery = () => {
     const [show, setShow] = useState(false)
@@ -33,6 +34,7 @@ const Grocery = () => {
         id: '',
         status: ""
     })
+    
     const fetchList = async () => {
         try {
             const response = await axios(`/groceries/list`, {
@@ -87,6 +89,7 @@ const Grocery = () => {
                     <div className={styles.two}>
                         <p className={styles.button_text} onClick={() => setShow(!show)}>Create New List</p>
                     </div>
+
                 </div>
                 {groceryList.length > 0 ?
                     <div className={styles.all_cards}>
@@ -231,6 +234,7 @@ const Grocery = () => {
             }
             <Footer />
         </div >
+
     )
 
 }
