@@ -28,108 +28,92 @@ const Footer = () => {
             <div className={styles.footer_row_2_navigations}>
               <h3 className={styles.footer_row_2_navigation_h3}>Pages</h3>
               <ul className={styles.footer_row_2_navigation_lists}>
-                <Link href="/">
-                <a className={styles.footer_row_2_navigation_link}>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>
                     Recipes
                   </li>
-                </a></Link>
-                <Link
-                  href="/"
-                >
-                  <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>
                     Grocery List
                   </li>
-                </a></Link>
-                <Link
-                  href="/"
-                >
-                  <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>
                     Food Products
                   </li>
-                </a></Link>
-                <Link
-                  href="/"
-                >
-                  <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>
                     Kitchen Products
                   </li>
-                </a></Link>
-                <Link
-                  href="/"
-                >
-                  <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>
                     Household Products
                   </li>
-                </a></Link>
+                </Link>
               </ul>
             </div>
             <div className={styles.footer_row_2_navigations}>
               <h3 className={styles.footer_row_2_navigation_h3}>Resources</h3>
               <ul className={styles.footer_row_2_navigation_lists}>
-                <Link href="/login">
-                <a className={styles.footer_row_2_navigation_link}>
+                <Link href="/login" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>
                     Login/My account
                   </li>
-                </a></Link>
-                <Link href="/login">
-                <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/login" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>Sign Up</li>
-                </a></Link>
-                <Link href="/">
-                <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>Shipping Return</li>
-                </a></Link>
-                <Link href="/">
-                <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>FAQ + Support</li>
-                </a></Link>
+                </Link>
               </ul>
             </div>
             <div className={styles.footer_row_2_navigations + " " + styles.lastnavbox}>
               <h3 className={styles.footer_row_2_navigation_h3}>Company</h3>
               <ul className={styles.footer_row_2_navigation_lists}>
-                <Link href="/">
-                <a className={styles.footer_row_2_navigation_link}>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>About Us</li>
-                </a></Link>
-                <Link
-                  href="/"
-                >
-                  <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>
                     Careers
                   </li>
-                </a></Link>
-                <Link
-                  href="/"
-                >
-                  <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>
                     Partners
                   </li>
-                </a></Link>
-                <Link
-                  href="/"
-                >
-                  <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>
                     Terms of Service
                   </li>
-                </a></Link>
-                <Link
-                  href="/"
-                >
-                  <a className={styles.footer_row_2_navigation_link}>
+                </Link>
+                <Link href="/" className={styles.footer_row_2_navigation_link}>
+
                   <li className={styles.footer_row_2_navigation_list}>
                     Privacy and Policy
                   </li>
-                </a></Link>
+                </Link>
               </ul>
             </div>
           </div>
@@ -145,14 +129,20 @@ const Footer = () => {
               Adding convenience to home made mealsTM
             </div>
             <div className={styles.footer_top_social_links}>
-              <Link href="https://www.instagram.com/preciselighting.ng/">
-              <a aria-label="Check out our instagram page" target="_blank">
+              <Link
+                href="https://www.instagram.com/preciselighting.ng/"
+                aria-label="Check out our instagram page"
+                target="_blank">
+
                 <Image className={styles.footer_top_social_link_logo} src={instagramImg} alt='instagram' />
-              </a></Link>
-              <Link href="https://www.facebook.com/Preciselighting">
-              <a aria-label="Check out our facebook page" target="_blank">
+              </Link>
+              <Link
+                href="https://www.facebook.com/Preciselighting"
+                aria-label="Check out our facebook page"
+                target="_blank">
+
                 <Image className={styles.footer_top_social_link_logo} src={facebookImg} alt='instagram' />
-              </a></Link>
+              </Link>
             </div>
             <h3 className={styles.footer_row_2_h3}>
             {new Date().getFullYear()} Copyright: <span>ChopChowSD</span>

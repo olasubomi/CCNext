@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import yellow from '../public/assets/meal_pics/yellow.jpeg'
 import Frame from "../public/assets/logos/Frame.png"
 import { GroceryModal } from "../src/components/modal/grocery-modal";
+import SideNav from "../src/components/Header/sidenav"
 
 const Grocery = () => {
     const [show, setShow] = useState(false)
@@ -71,22 +72,26 @@ const Grocery = () => {
     }, [show])
     console.log(groceryList.groceryItems, 'groceryy')
     return (
-        <div className={styles.grocery_container} id="modal_container">
-            <Head>
-                <title>Chop Chow Grocery</title>
-                <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
-            </Head>
+        <>
             <Header />
             <Header2 />
-            {/* <GroceryComponent productNames={['prod1', 'prod2']} /> */}
-            <div className={styles.container}>
-                <div className={styles.header}>
-                    <div className={styles.one}>
-                        <GoBack />
-                        <h3 className={styles.title}>My Grocery List</h3>
-                    </div>
-                    <div className={styles.two}>
-                        <p className={styles.button_text} onClick={() => setShow(!show)}>Create New List</p>
+            <SideNav />
+            <div className={styles.grocery_container} id="modal_container">
+                <Head>
+                    <title>Chop Chow Grocery</title>
+                    <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                </Head>
+
+                {/* <GroceryComponent productNames={['prod1', 'prod2']} /> */}
+                <div className={styles.container}>
+                    <div className={styles.header}>
+                        <div className={styles.one}>
+                            <GoBack />
+                            <h3 className={styles.title}>My Grocery List</h3>
+                        </div>
+                        <div className={styles.two}>
+                            <p  onClick={() => setShow(!show)}>Create New List</p>
+                        </div>
                     </div>
                 </div>
                 {groceryList.length > 0 ?
@@ -231,7 +236,7 @@ const Grocery = () => {
                 />
             }
             <Footer />
-        </div >
+        </ >
     )
 
 }

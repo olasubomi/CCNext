@@ -186,7 +186,7 @@ const UserProfile = (props) => {
         const input = document.createElement("input");
         input.accept = "image/*,video/mp4,video/x-m4v,video/*";
         input.id = "profileImage";
-        input.name = "profileImage";
+        input.name = "profile_picture";
         input.type = "file";
         input.onchange = (ev) => onUpdateProfileImage(ev);
         input.hidden = true;
@@ -369,66 +369,66 @@ const UserProfile = (props) => {
                             <div className={styles.profile_summary}>
                                 <div className={styles.profile_summary_link}>
                                     <Link href='#basic-information' >
-                                        <a>Basic Information</a>
+                                        Basic Information
                                     </Link>
                                 </div>
                                 <div className={styles.profile_summary_link}>
                                     <Link href='#change-password' >
-                                        <a>Change Password</a>
+                                        Change Password
                                     </Link>
                                 </div>
                                 <div className={styles.profile_summary_link}>
                                     <Link href='#billing-address' >
-                                        <a>Billing Address</a>
+                                        Billing Address
                                     </Link>
                                 </div>
                                 {props.auth.authUser.user_type === 'driver' &&
                                     <div className={styles.profile_summary_link}>
                                         <Link href='#car-details' >
-                                            <a>Car Details</a>
+                                            Car Details
                                         </Link>
                                     </div>
                                 }
                                 <div className={styles.profile_summary_link}>
                                     <Link href='#payment-method' >
-                                        <a>Payment Method</a>
+                                        Payment Method
                                     </Link>
                                 </div>
                                 <div className={styles.profile_summary_link}>
                                     <Link href='#notification' >
-                                        <a>Notification</a>
+                                        Notification
                                     </Link>
                                 </div>
                                 {(props.auth.authUser.user_type === 'supplier' || props.auth.authUser.user_type === 'customer') &&
                                     <div className={styles.profile_summary_link}>
                                         <Link href='#food-preference' >
-                                            <a>Food Preference</a>
+                                            Food Preference
                                         </Link>
                                     </div>
                                 }
                                 {(props.auth.authUser.user_type === 'driver' || props.auth.authUser.user_type === 'customer') &&
                                     <div className={styles.profile_summary_link}>
                                         <Link href='#upgrade-chopChow-plan'>
-                                            <a>Upgrade ChopChow Plan</a>
+                                            Upgrade ChopChow Plan
                                         </Link>
                                     </div>
                                 }
                                 {props.auth.authUser.user_type === 'driver' &&
                                     <div className={styles.profile_summary_link}>
                                         <Link href='#working-hours'>
-                                            <a>Working Hours</a>
+                                            Working Hours
                                         </Link>
                                     </div>
                                 }
                                 <div className={styles.profile_summary_link}>
                                     <Link href='#account-type'>
-                                        <a>Account Type</a>
+                                        Account Type
                                     </Link>
                                 </div>
                                 {props.auth.authUser.user_type !== 'admin' &&
                                     <div className={styles.profile_summary_link}>
                                         <Link href='#close-account' >
-                                            <a>Close Account</a>
+                                            Close Account
                                         </Link>
                                     </div>}
                             </div>
@@ -445,7 +445,7 @@ const UserProfile = (props) => {
 
                                                 {(profileImageData === '' && props.auth.authUser.profile_picture === undefined) && <UserIcon />}
                                                 {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) &&
-                                                    <Image width={500} height={500} src={props.auth.authUser.profile_picture} />
+                                                    <Image width={500} height={500} src={props.auth.authUser.profile_picture} alt="profile_picture" />
                                                 }
                                                 <img id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
                                             </div>
@@ -653,7 +653,7 @@ const UserProfile = (props) => {
                                                     <div className={styles.suggestion_form_image_col_2}>
                                                         {driver_car_picture.carContentURL &&
                                                             <div className={styles.profile_image}>
-                                                                <Image width={300} height={300} src={driver_car_picture.carContentURL} />
+                                                                <Image width={300} height={300} src={driver_car_picture.carContentURL} alt="driver_car_picture_carContentURL"/>
                                                             </div>
                                                         }
                                                     </div>
@@ -716,13 +716,13 @@ const UserProfile = (props) => {
                                     <div className={styles.profile_basic_info}>
                                         <div className={styles.profile_payment_methods}>
                                             <div className={styles.profile_payment_method}>
-                                                <Image src={cardImage} />
+                                                <Image src={cardImage} alt="cardImage" />
                                             </div>
                                             <div className={styles.profile_payment_method}>
-                                                <Image src={paypal} />
+                                                <Image src={paypal} alt="paypal"/>
                                             </div>
                                             <div className={styles.profile_payment_method}>
-                                                <Image src={sezzle} />
+                                                <Image src={sezzle} alt="sezzle"/>
                                             </div>
 
                                         </div>
@@ -763,7 +763,7 @@ const UserProfile = (props) => {
                                                             className={styles.profile_card_type_radio_button}
                                                         ></label>
                                                         <label htmlFor="visa" className={styles.profile_card_type_radioLabel}>
-                                                            <Image src={visa} />
+                                                            <Image src={visa} alt="Visa" />
                                                         </label>
                                                     </div>
                                                     <div className={styles.profile_card_type_option}>
@@ -779,7 +779,7 @@ const UserProfile = (props) => {
                                                             className={styles.profile_card_type_radio_button}
                                                         ></label>
                                                         <label htmlFor="american" className={styles.profile_card_type_radioLabel}>
-                                                            <Image src={american} />
+                                                            <Image src={american} alt="american"/>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -1159,7 +1159,7 @@ const UserProfile = (props) => {
             </div>
 
         </div>
-    )
+    );
 
 }
 

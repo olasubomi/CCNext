@@ -25,12 +25,12 @@ class Banner2 extends Component {
                         <p className={styles.banner2_text}>
                             ENJOY HASSLE FREE COOKING WITH CHOP CHOW
                         </p>
-                        <Link href="/v2"><a className={styles.banner2_button}>Learn More</a></Link>
+                        <Link href="/v2" className={styles.banner2_button}>Learn More</Link>
                     </div>
 
                 </div>
             </div>
-        )
+        );
     };
 
 }
