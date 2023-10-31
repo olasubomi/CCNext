@@ -235,7 +235,7 @@ const DashboardHomePage = (props) => {
                                             <p onClick={() => toggleMode('admin')}>Admin</p>
                                         }
                                         <p onClick={() => toggleMode('customer')}>Customer</p>
-                                        {props.auth.authUser.sub_store_admin &&
+                                        {props.auth.authUser.super_store_admin &&
                                             <p onClick={() => toggleMode('supplier')}>Supplier</p>
                                         }
                                         <p onClick={() => toggleMode('driver')}>Driver</p>
