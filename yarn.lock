@@ -3273,6 +3273,11 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.6"
 
+moment@^2.29.4:
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -3930,6 +3935,11 @@ react@18.2.0, react@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
 
+reactjs-localstorage@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/reactjs-localstorage/-/reactjs-localstorage-1.0.1.tgz#0c4311527d9e9abb31dc1c40d64cb886204e0f23"
+  integrity sha512-eNSwfiVyVDhfjw9h83PBvgqQcFxmyK6KGPrPlutuaaTlALRZVQLZ0MAN72iU9UT+bKtscwtdogHQ2ikZ7rjT+w==
+
 reactjs-popup@^2.0.5:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/reactjs-popup/-/reactjs-popup-2.0.6.tgz#ff0e340e31d03785ae62f6b6cf62de1ef48c9605"
@@ -4551,3 +4561,8 @@ yargs@^16.2.0:
     string-width "^4.2.0"
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
+
+yarn@^1.22.19:
+  version "1.22.19"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.19.tgz#4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+  integrity sha512-/0V5q0WbslqnwP91tirOvldvYISzaqhClxzyUKXYxs07yUILIs5jx/k6CFe8bvKSkds5w+eiOqta39Wk3WxdcQ==

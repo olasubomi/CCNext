@@ -478,3 +478,24 @@ function SignUp(props){
     mapStateToProp,
     mapDispatchToProps,
   )(SignUp);
+
+
+
+  {/* <div className={styles.signup_form_option}>
+              <input
+                  className={styles.signup_form_radioInput}
+                  type="radio"
+                  id="service"
+                  name="agreement"
+                  value="agreed"
+                  />
+                  <label
+                  htmlFor="service"
+                  className={styles.signup_form_radio_button}
+                  ></label>
+                  <label htmlFor="service" className={styles.signup_form_radio_label}>
+                      I accept the Terms & Conditions and Privacy and Cookie Notice
+                  </label> */}
+
+
+                  {/* <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}> */}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "./store.module.css";
 
 import Head from "next/head";
@@ -6,10 +6,13 @@ import img_logo from "../../../public/assets/logos/sezzle.png"
 import Image from "next/image";
 import Reviews from "./Reviews";
 import { CallIcon, EmailIcon, LocationIcon, StarIcon, TimeIcon } from "../icons";
+import { GrStar } from "react-icons/gr";
+import sale from '../../../public/assets/store_pics/sale.jpg'
 
-function Store(props){
+function Store(props) {
+    const [selectItem, setSelectItem] = useState({})
 
-    function handleSearch(e){
+    function handleSearch(e) {
         // setSearchSuggestedMealState(e.target.value);
         // if(e.target.value.length>=1){
         //   let url = window.location.href;
@@ -29,9 +32,16 @@ function Store(props){
         //     }
         //   })
         // }
-        
-      };
 
+    };
+    console.log(props.items, 'props11')
+    const filteredItem = () => {
+         return props.items.filter(data => data.item_type === 'Meal')
+    }
+    const filteredProducts = () => {
+        return props.items.filter(data => data.item_type === 'Product')
+   }
+    console.log(filteredProducts(), 'filtered')
     return (
         <>
             <Head>
@@ -43,7 +53,7 @@ function Store(props){
                 <div className={styles.product_section_2}>
                     <div className={styles.product_section_2_col_1}>
                         <Image
-                            src={props.store.profile_picture}
+                            src={props.store.profile_picture ? props.store.profile_picture : sale}
                             alt="pop up"
                             className={styles.product_section_2_main_img}
                             height={500} width={500}
@@ -51,13 +61,20 @@ function Store(props){
                     </div>
                     <div className={styles.product_section_2_col_2}>
                         <div className={styles.product_section_2_details}>
-                            <h2 className={styles.product_section_2_name}>{props.store.store_name}</h2>
+                            <div className={styles.flex}>
+                                <h2 className={styles.product_section_2_name}>{props.store.store_name}</h2>
+                                <div className={styles.rates}>
+                                    {
+                                        Array(5).fill('_').map((_, idx) => <GrStar size={23} key={idx + _} color={props.store.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} />)
+                                    }
+                                </div>
+                            </div>
                             <div className={styles.store}>
-                                {props.store.supplier_address && 
-                                <div>
-                                    <LocationIcon style={styles.store_icon} />
-                                    <p>{JSON.parse(props.store.supplier_address).address + " " + JSON.parse(props.store.supplier_address).city + " ," + JSON.parse(props.store.supplier_address).state + " " + JSON.parse(props.store.supplier_address).country + " " + JSON.parse(props.store.supplier_address).zip_code}6391 Elgin St. Celina, Delaware 10299</p>
-                                </div>}
+                                {props.store.supplier_address &&
+                                    <div>
+                                        <LocationIcon style={styles.store_icon} />
+                                        <p>{JSON.parse(props.store.supplier_address).address + " " + JSON.parse(props.store.supplier_address).city + " ," + JSON.parse(props.store.supplier_address).state + " " + JSON.parse(props.store.supplier_address).country + " " + JSON.parse(props.store.supplier_address).zip_code}6391 Elgin St. Celina, Delaware 10299</p>
+                                    </div>}
                                 <div>
                                     <EmailIcon style={styles.store_icon} />
                                     <p>{props.store.email}</p>
@@ -85,51 +102,46 @@ function Store(props){
                 </div>
 
                 <div className={styles.products_con}>
+                    <div style={{ width: '100%', borderBottom: '.5px solid rgba(0, 0, 0, 0.10);' }}></div>
                     <div className={styles.productcard_row}>
+                        <div style={{ width: '100%', borderBottom: '1px solid rgba(0, 0, 0, 0.20)' }}></div>
+
                         <div className={styles.productcard_col_1}>
                             <h3>Meal</h3>
                         </div>
                         <div className={styles.productcard_col_2}>
                             <div className={styles.productcard_productcards}>
-                                {new Array(1,2,3,4,5,6).map((data, index) => {
-                                    return(
-                                    <div key={index} className={styles.productcard_productcard}>
-                                        <div className={styles.productcard_productcard_img_container}>
+                                {filteredItem().slice(0, 6).map((data, index) => {
+                                    return (
+                                        <div key={index} className={styles.productcard_productcard}>
+                                            <div className={styles.productcard_productcard_img_container}>
 
-                                        <Image
-                                            priority
-                                            src={img_logo}
-                                            alt="Store"
-                                            className={styles.productcard_productcard_img}
-                                        />
-                                        </div>
-                                        <div className={styles.productcard_productcard_col}>
-                                            <h6 className={styles.productcard_productcard_name}>TagIcon</h6>
-                                            <p className={styles.productcard_productcard_duration}>
-                                                7 min
-                                            </p>
-                                        </div>
-                                        <div className={styles.productcard_productcard_col}>
-                                            <div className={styles.store_review_rating_icons}>
-                                                {
-                                                    Array.from({ length: 5 }).map((i,j) => {
-                                                        var rate = 4;
-                                                        if((j+1) <= rate){
-                                                            return(
-                                                                <StarIcon style={styles.store_review_rating_icon} />
-                                                            )
-                                                        }else{
-                                                            return(
-                                                                <StarIcon style={styles.store_review_rating_icon2} />
-                                                            )}
-                                                    })
-                                                }
+                                                <img
+                                                    priority
+                                                    src={data.itemImage0}
+                                                    alt="Store"
+                                                    className={styles.productcard_productcard_img}
+
+                                                />
                                             </div>
-                                            <p className={styles.productcard_productcard_price}>
-                                                $666
-                                            </p>
+                                            <div className={styles.productcard_productcard_col}>
+                                                <h6 className={styles.productcard_productcard_name}>{data.item_name}</h6>
+                                                <p className={styles.productcard_productcard_price}>
+                                                   {data.item_price ? data.item_price : 'N/A'}
+                                                </p>
+                                            </div>
+                                            <div className={styles.productcard_productcard_col}>
+                                                <div className={styles.rate}>
+                                                    {
+                                                        Array(5).fill('_').map((_, idx) => <GrStar size={20} key={idx + _} color={data.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} />)
+                                                    }
+                                                </div>
+                                                
+                                                <p className={styles.productcard_productcard_duration}>
+                                                    {data.meal_cook_time ? data.meal_cook_time : 0} min
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
                                     )
                                 })
                                 }
@@ -143,46 +155,35 @@ function Store(props){
                         </div>
                         <div className={styles.productcard_col_2}>
                             <div className={styles.productcard_productcards}>
-                                {new Array(1,2,3,4,5,6).map((data, index) => {
-                                    return(
-                                    <div key={index} className={styles.productcard_productcard}>
-                                        <div className={styles.productcard_productcard_img_container}>
+                                {filteredProducts().slice(0,6).map((data, index) => {
+                                    return (
+                                        <div key={index} className={styles.productcard_productcard}>
+                                            <div className={styles.productcard_productcard_img_container}>
 
-                                        <Image
-                                            priority
-                                            src={img_logo}
-                                            alt="Store"
-                                            className={styles.productcard_productcard_img}
-                                        />
-                                        </div>
-                                        <div className={styles.productcard_productcard_col}>
-                                            <h6 className={styles.productcard_productcard_name}>TagIcon</h6>
-                                            <p className={styles.productcard_productcard_duration}>
-                                                7 min
-                                            </p>
-                                        </div>
-                                        <p>SandraDeli</p>
-                                        <div className={styles.productcard_productcard_col}>
-                                            <div className={styles.store_review_rating_icons}>
-                                                {
-                                                    Array.from({ length: 5 }).map((i,j) => {
-                                                        var rate = 4;
-                                                        if((j+1) <= rate){
-                                                            return(
-                                                                <StarIcon style={styles.store_review_rating_icon} />
-                                                            )
-                                                        }else{
-                                                            return(
-                                                                <StarIcon style={styles.store_review_rating_icon2} />
-                                                            )}
-                                                    })
-                                                }
+                                                <img
+                                                    priority
+                                                    src={data.itemImage0}
+                                                    alt="Store"
+                                                    className={styles.productcard_productcard_img}
+                                                />
                                             </div>
-                                            <p className={styles.productcard_productcard_price}>
-                                                $666
-                                            </p>
+                                            <div className={styles.productcard_productcard_col}>
+                                                <h6 className={styles.productcard_productcard_name}>{data.item_name}</h6>
+                                                
+                                            </div>
+                                            <div className={styles.productcard_productcard_col}>
+                                                <div className={styles.store_review_rating_icons}>
+                                                <div className={styles.rate}>
+                                                    {
+                                                        Array(5).fill('_').map((_, idx) => <GrStar size={20} key={idx + _} color={data.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} />)
+                                                    }
+                                                </div>
+                                                </div>
+                                                <p className={styles.productcard_productcard_price}>
+                                                   {data.item_price ? data.item_price : 'N/A'}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
                                     )
                                 })
                                 }

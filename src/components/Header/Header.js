@@ -31,6 +31,7 @@ import { triggerAlert } from "../../actions/";
 import CartContext from "../../../pages/store/cart-context";
 import Login from "../Login";
 import { useAuth } from "../../context/auth.context";
+import signup from "../signup";
 
 
 
@@ -42,6 +43,7 @@ function Header(props) {
   const { isOpen, setIsOpen } = useAuth()
   const [openLogin, setOpenLoginState] = useState(false);
   const router = useRouter();
+  const [showSignup, setShowSignUp] = useState(false);
   // const userData = useSelector()
 
   const cartCtx = useContext(CartContext);
@@ -543,6 +545,9 @@ function Header(props) {
     {
       isOpen && <Auth />
     }
+    {/* {
+        isOpen && <Auth setShowSignUp={setShowSignUp} />
+      } */}
   </>;
 }
 

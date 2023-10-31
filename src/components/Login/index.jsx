@@ -48,8 +48,8 @@ function Login(props) {
   }
 
   function openSignUp() {
-
-    setSignUpState(true);
+    props.setSignUpState(true)
+    // setSignUpState(true);
   }
 
   function closeSignUp() {
@@ -137,6 +137,8 @@ function Login(props) {
           <h2>Welcome Back</h2>
           <h3>Login</h3>
           <div className={styles.login_form}>
+            
+            
             <div className={styles.login_form_group}>
               <label htmlFor="email" className={styles.login_form_label}>
                 Email
@@ -170,82 +172,81 @@ function Login(props) {
                 )}
               </div>
             </div>
-          </div>
+           
 
-          <div className={styles.login_password_help}>
-            <div className={styles.login_remember_pass}>
-              <input
-                onChange={onChange}
-                name="rememberPassword"
-                value={rememberPassword}
-                type="checkbox"
-              />
-              <label>Remember Password</label>
-            </div>
-            <div
-              onClick={openForgetPassword}
-              className={styles.login_forgot_pass}
-            >
-              Forgot your Password?
-            </div>
-          </div>
-
-          <button onClick={Login} className={styles.login_button}>
-            {loginLoading ? (
-              <Loader thickness={5} size={30} color="secondary" />
-            ) : (
-              "Login"
-            )}
-          </button>
-
-          <h3 className={styles.login_new}>
-            Don't have an account yet?{" "}
-            {props.toggleLogin ? (
-              <span onClick={openSignUp}>Sign up here</span>
-            ) : (
-              <Link href="/signup">
-                Sign up here
-              </Link>
-            )}
-          </h3>
-
-          <div className={styles.login_options}>
-            <h3>Login with social media</h3>
-
-            <div className={styles.login_socials}>
-              {/* <div className={styles.login_social + " " + styles.blue}>
-                <Image src={facebook} />
-                <h4>Facebook</h4>
-              </div> */}
-              {
-                showFacebook &&
-                <FacebookLogin
-                  appId="791475055678094"
-                  autoLoad={true}
-                  fields="name,email,picture"
-                  cssClass= {styles.blue}
-                  callback={responseFacebook}
-                  render={renderProps => (
-                    <button className={styles.blue} onClick={() => {
-                      renderProps.onClick();
-                      setShowFacebook(false)
-                    }}>This is my custom FB button</button>
-                  )} />
-              }
-              {!showFacebook && <button className={styles.blue} onClick={() => setShowFacebook(true)}>Login with Facebook</button>
-              }
-              <div className={styles.login_social}>
-                <GoogleLogin
-                  onSuccess={async (credentialResponse) =>
-                    handleSocialLogin(credentialResponse)
-                  }
-                  onError={() => {
-                    console.log("Login Failed");
-                  }}
+            <div className={styles.login_password_help}>
+              <div className={styles.login_remember_pass}>
+                <input
+                  onChange={onChange}
+                  name="rememberPassword"
+                  value={rememberPassword}
+                  type="checkbox"
                 />
+                <label>Remember Password</label>
+              </div>
+              <div
+                onClick={openForgetPassword}
+                className={styles.login_forgot_pass}
+              >
+                Forgot your Password?
+              </div>
+            </div>
+
+            <button onClick={Login} className={styles.login_button}>
+              {loginLoading ? (
+                <Loader thickness={5} size={30} color="secondary" />
+              ) : (
+                "Login"
+              )}
+            </button>
+
+            <h3 className={styles.login_new}>
+              Don't have an account yet?{" "}
+              
+                <span onClick={openSignUp}>Sign up here</span>
+             
+            </h3>
+
+            <div className={styles.login_options}>
+              <h3>Login with social media</h3>
+
+              <div className={styles.login_socials}>
+                {/* <div className={styles.login_social + " " + styles.blue}>
+                  <Image src={facebook} />
+                  <h4>Facebook</h4>
+                </div> */}
+                {
+                  showFacebook &&
+                  <FacebookLogin
+                    appId="791475055678094"
+                    autoLoad={true}
+                    fields="name,email,picture"
+                    cssClass= {styles.blue}
+                    callback={responseFacebook}
+                    render={renderProps => (
+                      <button className={styles.blue} onClick={() => {
+                        renderProps.onClick();
+                        setShowFacebook(false)
+                      }}>This is my custom FB button</button>
+                    )} />
+                }
+                {!showFacebook && <button className={styles.blue} onClick={() => setShowFacebook(true)}>Login with Facebook</button>
+                }
+                <div className={styles.login_social}>
+                  <GoogleLogin
+                    onSuccess={async (credentialResponse) =>
+                      handleSocialLogin(credentialResponse)
+                    }
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
+
+          
         </div>
         <div
           style={
@@ -270,6 +271,12 @@ function Login(props) {
         </div>
       </div>
       )}
+      {/* {signUp && (
+        <SignUp
+          closeSignUp={closeSignUp}
+          toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
+        />
+      )} */}
     {forgetPassword && (
       <ForgetPassword closeForgetPassword={closeForgetPassword} />
     )}

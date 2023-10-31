@@ -1,3 +1,5 @@
+  /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=Poppins:wght@100;200;300;400;500;600&display=swap'); */
+
 *,
 *::after,
 *::before{
@@ -10,7 +12,11 @@ html{
     box-sizing: border-box;
     font-size: 62.5%;
     font-family: 'Inter';
+    scroll-behavior: smooth;
 }
+/* body{
+  font-family: 'Inter', sans-serif;
+} */
 
 ::-webkit-scrollbar {
   width: 0;  /* Remove scrollbar space */
