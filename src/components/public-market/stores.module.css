@@ -7,13 +7,83 @@
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
 }
 
-.stores {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 2rem;
+.storeImg1 {
     width: 100%;
-    padding: 1rem 0;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+}
+
+.storeImg2 {
+    width: 100%;
+    height: 174px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+}
+
+.stores {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.stores2 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 70px;
+}
+
+.stores3 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 56px;
+}
+
+.card1 {}
+
+.box {
+    width: 100%;
+    height: 324px;
+}
+
+.storeName {
+    margin-top: .5rem;
+    color: #6D6D6D;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: normal;
+}
+
+.prep {
+    color: #6D6D6D;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.name2 {
+    color: #000;
+    font-size: 13px;
+    font-weight: 200;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: .9rem;
+}
+
+.flexer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: -1rem;
 }
 
 .store {
@@ -25,6 +95,14 @@
 
 .storeContainer {
     padding: 1rem 5rem;
+}
+
+.underline {
+    text-decoration: underline;
+    text-decoration-color: #F47900;
+    color: #F47900;
+    margin-left: .8rem;
+
 }
 
 .name {
@@ -45,10 +123,445 @@
     width: 100%;
     border-top: 1px solid rgba(0, 0, 0, 0.20);
 }
+.border2 {
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.20);
+}
 
 .mealContainer {
-    padding: 2rem 5rem;
     width: 100%;
+    padding: 2rem 5rem;
+}
+
+.mealContainer1 {
+    width: 100%;
+    padding: 2rem 5rem;
+}
+
+.modalContainer {
+    width: 100%;
+    position: fixed;
+    /* Use 'fixed' instead of 'absolute' for the modal container */
+    top: 0;
+    left: 0;
+    right: 0;
+    /* Use 'right' instead of 'bottom' to cover the bottom */
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
+.modalCard {
+    background: #FFF;
+    width: 70%;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+
+}
+
+.modalCard2 {
+    background: #FFF;
+    width: 83%;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+
+}
+
+.flexed {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 3rem 3rem .2rem 3rem;
+}
+
+.flexed2 {
+    display: grid;
+    grid-template-columns: .8fr .8fr .6fr;
+}
+
+.prep {
+    font-size: 13px;
+    font-weight: 100;
+    display: flex;
+}
+
+.prepspan {
+    display: flex;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+.images {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    height: 100%;
+}
+
+.images2 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding-left: 2rem;
+    padding-top: 3rem;
+}
+
+.modalImg {
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+    height: 255px;
+    object-position: center;
+    object-fit: contain;
+}
+
+.itemName {
+    color: #000;
+    font-size: 32px;
+    font-weight: 500;
+}
+
+.right {
+    width: 51%;
+}
+
+.right2 {
+    width: 100%;
+    padding-left: 2rem;
+    margin-top: -2rem;
+    padding-top: 3rem;
+    padding-right: 2rem;
+}
+
+.right .storeName {
+    color: #F47900;
+    font-size: 13px;
+    font-weight: 300;
+    margin-top: -1rem;
+}
+
+.right2 .storeName {
+    color: #F47900;
+    font-size: 13px;
+    font-weight: 300;
+    margin-top: -1rem;
+}
+
+.recipes {
+    width: 100%;
+    margin: auto;
+    height: 100%;
+    padding-right: 2rem;
+    text-align: justify;
+
+}
+
+.arr {
+    background-color: #f0efef;
+}
+
+.instructionStep {
+    color: #353535;
+    font-size: 12.5px;
+    font-weight: 300;
+    line-height: 22.4px;
+    /* 22.4px */
+}
+
+.recipeImg {
+    width: 100%;
+    height: 200px;
+}
+
+.rates {
+    display: flex;
+    justify-content: space-between;
+    width: 23%;
+    margin-top: .7rem;
+}
+
+.intro {
+    color: #353535;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 20.933px;
+    margin-top: .8rem;
+}
+
+.right .modalTitle {
+    color: #000;
+    font-size: 17px;
+    font-weight: 500;
+    margin-top: 1rem;
+}
+
+.right2 .modalTitle {
+    color: #000;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 1rem;
+}
+
+.right .modalTitle2 {
+    color: #000;
+    font-size: 17px;
+    font-weight: 500;
+    margin-top: 3rem;
+}
+
+.third {
+    border-left: 1px solid rgba(0, 0, 0, 0.20);
+    padding-left: 1.5rem;
+    padding-top: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.third .close {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.preptext {
+    font-size: 14px;
+}
+
+.flex1 {
+    display: flex;
+    align-items: center;
+    margin-top: .4rem;
+}
+
+.cat {
+    display: flex;
+    margin-left: 1rem;
+}
+
+.flex2 {
+    display: flex;
+    width: 22%;
+    align-items: center;
+}
+
+.flex2 .box2 {
+    padding: .2rem .6rem;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #F47900;
+    text-align: center;
+    margin-right: 1rem;
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.span .price {
+    color: #000;
+    font-size: 34px;
+    font-weight: 500;
+}
+
+.span {
+    display: flex;
+    align-items: center;
+    margin-top: -2.5rem;
+    justify-content: flex-start;
+}
+
+.end {
+    display: flex;
+    flex-direction: column;
+    margin-left: 80%;
+    margin-top: -3rem;
+    align-items: flex-end;
+}
+
+.span .piece {
+    color: #949494;
+    font-size: 14px;
+    font-weight: 300;
+    margin-left: 1.2rem;
+}
+
+.buttons {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 1.5rem 2.5rem 2rem 2.5rem;
+
+}
+
+.buttons .outlinebtn {
+    display: flex;
+    height: 40px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background-color: transparent;
+    border: .5px solid rgba(0, 0, 0, 0.50);
+    outline: 1px solid rgba(0, 0, 0, 0.50);
+    color: #353535;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.outlinebtn {
+    display: flex;
+    height: 40px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background-color: transparent;
+    border: .5px solid rgba(0, 0, 0, 0.50);
+    outline: 1px solid rgba(0, 0, 0, 0.50);
+    color: #353535;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.btn {
+    display: flex;
+    height: 40px;
+    padding: 21.4px 25px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 4px;
+    background: #F47900;
+    flex-shrink: 0;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: 400;
+    border: #F47900;
+    outline: #F47900;
+}
+
+.flex3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.round {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #949494;
+    color: #FFF;
+    font-size: 22px;
+    font-weight: 500;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.images1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 2rem;
+    margin-top: 2rem;
+}
+
+.img1 {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+}
+
+.img1 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+}
+
+.border {
+    border-bottom: .5px solid rgba(0, 0, 0, 0.10);
+    margin-top: 1.5rem;
+}
+
+.modalCard3 {
+    background: #FFF;
+    width: 55%;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+    padding: 0rem 2.5rem 2rem 2.5rem;
+}
+
+.addTitle {
+    color: #000;
+    font-size: 22px;
+    font-weight: 400;
+}
+
+.list {
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.list input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+}
+
+.list p {
+    margin-left: .7rem;
+    font-weight: 200;
+    color: #000;
+}
+
+.th {
+    font-weight: 100;
+    font-size: 12px;
+    text-align: left;
+}
+
+.thead {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 1rem;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
+.td {
+    font-weight: 100;
+    font-size: 12px;
+}
+
+.tr {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr .8fr;
+    text-align: justify;
+    gap: 1rem;
+    padding: 1rem 1rem;
+
+}
+
+.tr:nth-child(odd) {
+    background: #F1F1F1;
+    width: 100%;
+    height: 100%;
+}

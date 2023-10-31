@@ -6,8 +6,8 @@ import styles from '../../src/components/public-market/public-market.module.css'
 import { HiLocationMarker } from 'react-icons/hi'
 import { DropDownSelect } from "../../src/components/select/select";
 import { Search } from "../../src/components/select/search";
-import { Stores } from "../../src/components/public-market/stores";
-import { PopularMeals } from "../../src/components/public-market/popular-meals";
+import { PopularMeals, Stores, TopSellingProducts } from "../../src/components/public-market";
+import Footer from "../../src/components/Footer/Footer";
 
 const PublicMarket = () => {
     return (
@@ -42,6 +42,8 @@ const PublicMarket = () => {
                 <Stores />
             </div>
             <PopularMeals />
+            <TopSellingProducts />
+            <Footer />
         </div>
     )
 }

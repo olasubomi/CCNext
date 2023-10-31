@@ -5,30 +5,31 @@ import { GoStarFill } from "react-icons/go"
 import { useRouter } from "next/router"
 import { AiOutlineClose } from 'react-icons/ai'
 import { GrStar } from "react-icons/gr"
-import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from 'react-icons/bs'
+import { BsCurrencyDollar } from 'react-icons/bs'
 import Link from "next/link"
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Modal } from "../modal/popup-modal"
 import { toast } from 'react-toastify';
-import { IndividualModal } from "../modal/individual-meal-product"
+import { ProductModal } from "../modal/individual-meal-product"
 
 
-export const PopularMeals = () => {
-    const [meals, setMeals] = useState([])
-    const [visibleMeals, setVisibleMeals] = useState(8)
-    const [selectedItem, setSelectedItem] = useState({})
-    const [selectGrocery, setSelectGrocery] = useState([])
+export const TopSellingProducts = () => {
+    const [products, setProducts] = useState([])
+    const [visibleProducts, setVisibleProducts] = useState(5)
     const [openModal, setOpenModal] = useState(false)
-    const [show, setShow] = useState(false)
+    const [selectedItem, setSelectedItem] = useState({})
+    const [selectGrocery, setSelectGrocery] = useState({})
     const [openList, setOpenList] = useState(false)
-
-    const loadMore = () => {
-        setVisibleMeals(visibleMeals + 4)
-    }
+    const [show, setShow] = useState(false)
     const router = useRouter()
+
+    //items to add
     const [itemToAdd, setItemAdd] = useState({
         listName: "",
     })
+
+    const loadMore = () => {
+        setVisibleProducts(visibleProducts + 5)
+    }
 
     const addItemToGrocery = async (listName) => {
 
@@ -62,25 +63,25 @@ export const PopularMeals = () => {
         id: '',
         status: ""
     })
-
-    const fetchMeals = async () => {
+    const fetchProducts = async () => {
         try {
-            const response = await axios(`/items/1?type=Meal&status=all&limit=50`, {
+            const response = await axios(`/items/1?type=Product&status=all&limit=50`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-            console.log(response.data.data.items, 'ressw')
-            setMeals(response.data.data.items)
+            console.log(response.data.data.items, 'ressee')
+            setProducts(response.data.data.items)
         } catch (error) {
             console.log(error);
         }
 
     }
     useEffect(() => {
-        fetchMeals()
+        fetchProducts()
     }, [])
+
     const fetchGroceryList = async () => {
         try {
             const response = await axios(`/groceries/list`, {
@@ -98,33 +99,33 @@ export const PopularMeals = () => {
     useEffect(() => {
         fetchGroceryList()
     }, [])
-
-    const filteredMeals = meals.filter(meal => meal.item_type === 'Meal' && meal.average_rating);
-
+    const filteredProducts = products.filter(product => product.item_type === "Product" && product.average_rating);
     return (
-        <div className={styles.mealContainer}>
-            <h4>Popular Meals</h4>
-            <div className={styles.stores2}>
+        <div className={styles.mealContainer1}>
+            <h4>Top Selling Products</h4>
+            <div className={styles.stores3}>
                 {
-                    filteredMeals.slice(0, visibleMeals).filter(meal => Boolean(meal.total_rating)).map((meal, idx) => {
+                    filteredProducts.slice(0, visibleProducts).map((product, idx) => {
+                        console.log(product.item_name, product?.itemImage0, 'pp')
+
                         return (
                             <div className={styles.card1} key={idx} onClick={() => {
-                                setSelectedItem(meal)
+                                setSelectedItem(product)
                                 setOpenModal(true)
                             }}>
-                                {
+                                {product?.itemImage0 &&
 
                                     <div className={styles.box}>
-                                        <img src={meal?.itemImage0} className={styles.storeImg1} />
+                                        <img src={product?.itemImage0} className={styles.storeImg2} />
                                         <div className={styles.flex}>
-                                            <p className={styles.name2}>{meal.item_name}</p>
+                                            <p className={styles.name2}>{product.item_name}</p>
                                             <p>$8.43</p>
                                         </div>
                                         <p className={styles.storeName}>Chop Chow Official Store</p>
                                         <div className={styles.flex}>
                                             <div>
                                                 {
-                                                    Array(5).fill('_').map((_, idx) => <GoStarFill key={idx + _} color={meal.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} style={{ marginLeft: '.2rem' }} />)
+                                                    Array(5).fill('_').map((_, idx) => <GoStarFill key={idx + _} color={product.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} style={{ marginLeft: '.2rem' }} />)
                                                 }
                                             </div>
                                             <p className={styles.prep}> 23 mins </p>
@@ -135,7 +136,7 @@ export const PopularMeals = () => {
                         )
                     })
                 }
-                <IndividualModal
+                <ProductModal
                     openList={openList}
                     openModal={openModal}
                     selectGrocery={selectGrocery}
@@ -147,10 +148,11 @@ export const PopularMeals = () => {
                     setDetails={setDetails}
                     addItemToGrocery={addItemToGrocery}
                     setItemAdd={setItemAdd}
-                    setShow={setShow} />
+                    setShow={setShow}
+                />
             </div>
             <p className={styles.view} onClick={() => loadMore()}>View More</p>
-            <div className={styles.border} />
+
         </div>
     )
 }
