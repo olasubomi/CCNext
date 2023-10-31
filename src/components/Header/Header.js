@@ -596,6 +596,7 @@ export function Header2() {
             </li>
             <li className={styles.navbar_main_link}>
               <p> Utensils</p>
+              
             </li>
           </ul>
 
