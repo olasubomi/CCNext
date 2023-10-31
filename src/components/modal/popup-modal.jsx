@@ -1,7 +1,7 @@
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import styles from '../../components/modal/modal.module.css'
 import { useEffect, useRef, useState } from 'react';
-import {AiFillCloseCircle} from 'react-icons/ai'
+import { AiFillCloseCircle } from 'react-icons/ai'
 import axios from '../../util/Api';
 import { toast } from 'react-toastify';
 
@@ -14,7 +14,8 @@ export const Modal = ({
         description: '',
         id: ''
     },
-    setDetails
+    setDetails,
+    addItemToGrocery
 }) => {
 
     const targetElementRef = useRef(null);
@@ -49,7 +50,7 @@ export const Modal = ({
                 listName: modalState.listName,
                 user: user._id
             }
-            if(modalState.description){
+            if (modalState.description) {
                 payload.description = modalState.description
             }
 
@@ -58,8 +59,13 @@ export const Modal = ({
                 data: payload
 
             })
+            if (addItemToGrocery) {
+                addItemToGrocery(modalState.listName)
+            }
             fetchList()
-            toast.success('Grocery list created successfully')
+            if (!addItemToGrocery) {
+                toast.success('Grocery list created successfully')
+            }
             setShow(!show)
         }
         catch (error) {

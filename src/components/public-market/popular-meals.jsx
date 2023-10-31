@@ -5,19 +5,66 @@ import { GoStarFill } from "react-icons/go"
 import { useRouter } from "next/router"
 import { AiOutlineClose } from 'react-icons/ai'
 import { GrStar } from "react-icons/gr"
-import { BsCurrencyDollar } from 'react-icons/bs'
+import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from 'react-icons/bs'
 import Link from "next/link"
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import jollof from '../../../public/assets/meal_pics/jollof.jpg'
+import Image from "next/image"
+import { Modal } from "../modal/popup-modal"
+import { toast } from 'react-toastify';
+import { IndividualModal } from "../modal/individual-meal-product"
+
 
 export const PopularMeals = () => {
     const [meals, setMeals] = useState([])
     const [visibleMeals, setVisibleMeals] = useState(8)
     const [selectedItem, setSelectedItem] = useState({})
+    const [selectGrocery, setSelectGrocery] = useState([])
     const [openModal, setOpenModal] = useState(false)
+    const [show, setShow] = useState(false)
+    const [openList, setOpenList] = useState(false)
 
     const loadMore = () => {
         setVisibleMeals(visibleMeals + 4)
     }
     const router = useRouter()
+    const [itemToAdd, setItemAdd] = useState({
+        listName: "",
+    })
+
+    const addItemToGrocery = async (listName) => {
+
+        const user = JSON.parse(localStorage.getItem('user'))
+        const payload = {
+            userId: user._id,
+            groceryList: {
+                listName: itemToAdd.listName || listName,
+                groceryItems: {
+                    itemId: selectedItem._id,
+                }
+            }
+        }
+
+        console.log(payload, 'payload')
+        try {
+            const response = await axios(`/groceries`, {
+                method: 'post',
+                data: payload
+            })
+            toast.success('Item added successfully')
+            setOpenList(false)
+            setShow(false)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const [details, setDetails] = useState({
+        listName: '',
+        description: '',
+        id: '',
+        status: ""
+    })
 
     const fetchMeals = async () => {
         try {
@@ -27,7 +74,7 @@ export const PopularMeals = () => {
                     "Content-Type": "application/json",
                 },
             });
-            console.log(response.data.data.items, 'ress')
+            console.log(response.data.data.items, 'ressw')
             setMeals(response.data.data.items)
         } catch (error) {
             console.log(error);
@@ -36,6 +83,23 @@ export const PopularMeals = () => {
     }
     useEffect(() => {
         fetchMeals()
+    }, [])
+    const fetchGroceryList = async () => {
+        try {
+            const response = await axios(`/groceries/list`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log(response.data.data.data, 'groceries')
+            setSelectGrocery(response.data.data.data)
+        } catch (error) {
+
+        }
+    }
+    useEffect(() => {
+        fetchGroceryList()
     }, [])
 
     const filteredMeals = meals.filter(meal => meal.item_type === 'Meal' && meal.average_rating);
@@ -74,84 +138,19 @@ export const PopularMeals = () => {
                         )
                     })
                 }
-                {
-                    openModal &&
-                    <div className={styles.modalContainer}>
-                        <div className={styles.modalCard2}>
-                            <div className={styles.flexed2}>
-                                <div className={styles.images2}>
-                                    <img src={selectedItem?.itemImage0} alt='' className={styles.modalImg} />
-                                    <div className={styles.images1}>
-                                        {
-                                            selectedItem.item_images.map((image, idx) => {
-                                                return (
-                                                    <div className={styles.img1}>
-                                                        <img src={image} />
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                                <div className={styles.right2}>
-                                    <div className={styles.flex3}>
-                                        <h6 className={styles.itemName}>{selectedItem.item_name}</h6>
-                                        {/* <div className={styles.round} onClick={() => setOpenModal(false)}> <AiOutlineClose /></div> */}
-                                    </div>
-                                    <p className={styles.storeName}> From {selectedItem.store_name}</p>
-                                    <div className={styles.rates}>
-                                        {
-                                            Array(5).fill('_').map((_, idx) => <GrStar size={20} key={idx + _} color={selectedItem.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} />)
-                                        }
-                                    </div>
-                                    <p className={styles.intro}>{selectedItem.item_intro}</p>
-                                    <div className={styles.flex1}>
-                                        <h4 className={styles.modalTitle}>Meal Category:</h4>
-                                        <div className={styles.cat} style={{ marginTop: '-.5rem' }}>
-                                            <p className={styles.intro}>
-                                                {selectedItem?.item_categories.map((cat) => cat.category_name)?.toString()}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className={styles.flexer}>
-                                        <div>
-                                            <span className={styles.prepspan}><p className={styles.prep}>PrepTime: </p><p style={{ marginLeft: '.8rem' }}>{selectedItem.meal_cook_time} Minutes</p></span>
-                                            <div className={styles.flex1}>
-                                                <h4 className={styles.prep}>Serves:</h4>
-                                                <div className={styles.flex2} style={{ marginLeft: '1rem' }}>
-                                                    <p className={styles.box2}>-</p>
-                                                    <p style={{ marginRight: '1rem' }}>2</p>
-                                                    <p className={styles.box2}>+</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span className={styles.prepspan}><p className={styles.prep}>CookTime: </p><p style={{ marginLeft: '.8rem' }}>{selectedItem.meal_prep_time} Minutes</p></span>
-                                            <span className={styles.prepspan}><p className={styles.prep}>Chef:</p><p className={styles.underline}>{selectedItem.meal_chef}</p></span>
-                                        </div>
-
-                                    </div>
-                                    <div>
-                                        <p className={styles.prep}>Add Meal Ingredients</p>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className={styles.border} />
-                            <div className={styles.buttons}>
-                                <button className={styles.outlinebtn}>
-                                    <Link href={`/meal/${selectedItem.item_name}`}>
-                                        View More
-                                    </Link>
-                                </button>
-                                <button className={styles.outlinebtn}>Add to Grocery List</button>
-                                <button className={styles.btn}>Add to Cart</button>
-                            </div>
-                        </div>
-
-                    </div>
-                }
-
+                <IndividualModal
+                    openList={openList}
+                    openModal={openModal}
+                    selectGrocery={selectGrocery}
+                    selectedItem={selectedItem}
+                    setOpenList={setOpenList}
+                    setOpenModal={setOpenModal}
+                    show={show}
+                    details={details}
+                    setDetails={setDetails}
+                    addItemToGrocery={addItemToGrocery}
+                    setItemAdd={setItemAdd}
+                    setShow={setShow} />
             </div>
             <p className={styles.view} onClick={() => loadMore()}>View More</p>
             <div className={styles.border} />

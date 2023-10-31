@@ -43,7 +43,7 @@ const PublicMarket = () => {
             </div>
             <PopularMeals />
             <TopSellingProducts />
-            <Footer/>
+            <Footer />
         </div>
     )
 }
