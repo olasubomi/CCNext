@@ -34,6 +34,7 @@ const Grocery = () => {
         id: '',
         status: ""
     })
+    
     const fetchList = async () => {
         try {
             const response = await axios(`/groceries/list`, {

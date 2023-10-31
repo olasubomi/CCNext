@@ -2,8 +2,6 @@ import { useState, useEffect } from "react"
 import axios from "../../util/Api"
 import styles from "./stores.module.css"
 import { MealDropDown } from "./dropdown"
-import { useRouter } from "next/router"
-import sale from '../../../public/assets/store_pics/sale.jpg'
 import stored from '../../../public/assets/store_pics/store.jpg'
 import Image from "next/image"
 
