@@ -4,7 +4,6 @@ import { AiOutlineClose } from 'react-icons/ai'
 import Link from "next/link"
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-// import jollof from '../../../public/assets/meal_pics/jollof.jpg'
 import Image from "next/image"
 import { Modal } from "../modal/popup-modal"
 import { useRouter } from 'next/router';
@@ -166,7 +165,6 @@ export const IndividualModal = ({
                                     {
                                         selectedItem.meal_formatted_instructions?.map((elem, index) => (
                                             <div className={styles.recipes} key={index}>
-                                                {/* <Image src={jollof} className={styles.recipeImg} /> */}
                                                 <span style={{ paddingTop: '6rem' }}>
                                                     <h6>{elem.title}</h6>
                                                     {elem.instructionSteps.map((ele) => (

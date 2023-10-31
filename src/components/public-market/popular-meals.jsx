@@ -9,9 +9,6 @@ import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from 'react-icons/bs'
 import Link from "next/link"
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import jollof from '../../../public/assets/meal_pics/jollof.jpg'
-import Image from "next/image"
-import { Modal } from "../modal/popup-modal"
 import { toast } from 'react-toastify';
 import { IndividualModal } from "../modal/individual-meal-product"
 
