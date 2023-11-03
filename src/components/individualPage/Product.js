@@ -36,20 +36,16 @@ function Product(props) {
                 <title>Product</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta name="twitter:card" content="summary_large_image"/>
-                <meta name="twitter:title" content={props.product_name}/>
                 <meta name="twitter:description" content={props.product.item_intro}/>
-                <meta name="twitter:description" content={props.product.item_name}/>
                 <meta name="twitter:image" content={props.product.itemImage0}/>
                 <meta name="twitter:image:alt" content={props.product.item_name }/>
-                <meta name="twitter:image" content="URL_to_your_image2"/>
-                <meta name="twitter:image:alt" content="Alt text for the image2"/>
+               
 
-                <meta property="og:title" content={props.product_name}/>
+                <meta property="og:title" content={props.product.item_name}/>
                 <meta property="og:description" content={props.product.item_intro}/>
                 <meta property="og:image" content={props.product.itemImage0}/>
                 <meta property="og:image:alt" content={props.product.item_name }/>
-                <meta property="og:image" content="URL_to_your_image2"/>
-                <meta property="og:image:alt" content="Alt text for the image2"/>
+            
 
 
             </Head>
@@ -141,7 +137,7 @@ function Product(props) {
 
                             <FacebookEIcon quote={props.product.product_name} url={url + 'product/' + props.product._id} />
                         </FacebookShareButton>
-                        <TwitterShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>
+                        <TwitterShareButton title={props.product.product_name} via="ChopChowMarket"  url={url + "product" + props.product._id}>
                             <TwitterEIcon />
                         </TwitterShareButton>
                         <InstagramShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>

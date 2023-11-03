@@ -21,7 +21,7 @@ function Meal(props) {
     // useEffect(() => {
     //     setServes(parseInt(props.props.meal.servings))
     // })
-
+    console.log( props, 'line 24')
     function addServe(val) {
         let s = serves + val;
         if (s >= props.meal.servings) {
@@ -31,9 +31,14 @@ function Meal(props) {
 
     // console.log(props.props.props.props.meal, "meal props.props")
     let num = 0;
-
+  
     console.log('meald callback', props.callback)
-    console.log(props.meal.item_images, 'serve me')
+    console.log( props.meal.item_images, 'serve me')
+    console.log( props.meal.itemImage0, 'serve me')
+    
+//   let url = shareURL + "&via=" + "ChopChowMarket" +"&text=" + encodeURIComponent(`${props.meal.item_intro}`);
+    
+// const shareURL = `https://www.chopchow.app/meal/${props.meal._id}?`
    
     return (
         <>
@@ -41,20 +46,17 @@ function Meal(props) {
                 <title>Meal</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta name="twitter:card" content="summary_large_image"/>
-                <meta name="twitter:title" content={props.meal_name}/>
-                <meta name="twitter:description" content={props.meal.item_intro}/>
-                <meta name="twitter:description" content={props.meal.item_name}/>
-                <meta name="twitter:image" content={props.meal.itemImage0}/>
+                <meta name="twitter:image" content={url + props.meal.itemImage0}/>
                 <meta name="twitter:image:alt" content={props.meal.item_name }/>
-                <meta name="twitter:image" content="URL_to_your_image2"/>
-                <meta name="twitter:image:alt" content="Alt text for the image2"/>
+                <meta name="twitter:description" content={props.meal.item_intro}/>
+                
+                
+                
 
                 <meta property="og:title" content={props.meal_name}/>
                 <meta property="og:description" content={props.meal.item_intro}/>
-                <meta property="og:image" content={props.meal.itemImage0}/>
+                <meta property="og:image" content={url + props.meal.itemImage0}/>
                 <meta property="og:image:alt" content={props.meal.item_name }/>
-                <meta property="og:image" content="URL_to_your_image2"/>
-                <meta property="og:image:alt" content="Alt text for the image2"/>
 
 
             </Head>
@@ -172,16 +174,16 @@ function Meal(props) {
                 <div className={styles.section_2_footer}>
                     <div className={styles.hide}>
                         <p><ShareIcon />Share this product:</p>
-                        <FacebookShareButton quote={props.meal.intro} url={url+'meal/'+props.meal._id}>
+                        <FacebookShareButton quote={props.meal.item_name} hashtag={props.meal.item_intro} url={url+'meal/'+props.meal._id}>
                             <FacebookEIcon  />
                         </FacebookShareButton>
-                        <TwitterShareButton title={props.meal_name} url={url+'meal/'+props.meal._id}>
+                        <TwitterShareButton title={props.meal.item_name} via="ChopChowMarket"  url={url + "meal" + props.meal._id}>
                             <TwitterEIcon />
                         </TwitterShareButton>
-                        <InstagramShareButton title={props.meal_name} url="https://www.instagram.com">
+                        <InstagramShareButton title={props.meal.item_name} url="https://www.instagram.com">
                             <InstaEIcon />
                         </InstagramShareButton>
-                        <WhatsappShareButton title={props.meal_name} url={url+'meal/'+props.meal._id} >
+                        <WhatsappShareButton title={props.meal.item_name} url={url+'meal/'+props.meal._id} >
                             <WhatsappEIcon />
                         </WhatsappShareButton>
                     </div>
