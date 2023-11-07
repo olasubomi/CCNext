@@ -218,7 +218,7 @@ function Login(props) {
                 {
                   showFacebook &&
                   <FacebookLogin
-                    appId="791475055678094"
+                    appId="300185864007066"
                     autoLoad={true}
                     fields="name,email,picture"
                     cssClass= {styles.blue}
