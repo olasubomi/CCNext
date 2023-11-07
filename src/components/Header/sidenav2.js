@@ -28,7 +28,7 @@ function SideNav2(props) {
             <div className={styles.sidenav_links}>
                 {props.auth.authUser &&
                     <React.Fragment>
-                        <Link href="/dashboard">
+                        <Link href="/dashboard" >
 
                             <div className={styles.sidenav_link + " " + (props.path === '/dashboard' && styles.active)}>
                                 <DashBoardIcon style={styles.sidenav_link_icon} />
@@ -37,7 +37,7 @@ function SideNav2(props) {
 
                         </Link>
                         {props.auth.authUser.user_type === "supplier" &&
-                            <Link href="/dashboard/inventory">
+                            <Link href="/dashboard/inventory" >
 
                                 <div className={styles.sidenav_link + " " + (props.path === '/dashboard/inventory' && styles.active)}>
                                     <InventoryIcon style={styles.sidenav_link_icon} />
@@ -46,7 +46,7 @@ function SideNav2(props) {
 
                             </Link>
                         }
-                        <Link href="/dashboard/orders/orders">
+                        <Link href="/dashboard/orders/orders" >
 
                             <div className={styles.sidenav_link + " " + (props.path === '/dashboard/orders/orders' && styles.active)}>
                                 <OrderIcon style={styles.sidenav_link_icon} />
@@ -54,7 +54,7 @@ function SideNav2(props) {
                             </div>
 
                         </Link>
-                        <Link href="/grocery">
+                        <Link href="/grocery" >
 
                             <div className={styles.sidenav_link + " " + (props.path === '/grocery' && styles.active)}>
                                 <GroceryIcon style={styles.sidenav_link_icon} />
@@ -63,7 +63,7 @@ function SideNav2(props) {
 
                         </Link>
                         {(props.auth.authUser.user_type !== "driver") &&
-                            <Link href="/dashboard/suggestedmeals">
+                            <Link href="/dashboard/suggestedmeals" >
 
                                 <div className={styles.sidenav_link + " " + (props.path === '/dashboard/suggestedmeals' && styles.active)}>
                                     <HotMealIcon style={styles.sidenav_link_icon} />
@@ -72,7 +72,7 @@ function SideNav2(props) {
 
                             </Link>
                         }
-                        <Link href="/dashboard/userprofile">
+                        <Link href="/dashboard/userprofile" >
 
                             <div className={styles.sidenav_link + " " + (props.path === '/dashboard/userprofile' && styles.active)}>
                                 <UserIcon style={styles.sidenav_link_icon} />
@@ -81,7 +81,7 @@ function SideNav2(props) {
 
                         </Link>
                         {props.auth.authUser.user_type === "supplier" &&
-                            <Link href="/dashboard/management">
+                            <Link href="/dashboard/management" >
 
                                 <div className={styles.sidenav_link + " " + (props.path === '/dashboard/management' && styles.active)}>
                                     <StoreMgtIcon style={styles.sidenav_link_icon} />
@@ -91,7 +91,7 @@ function SideNav2(props) {
                             </Link>
                         }
                         {props.auth.authUser.user_type === "admin" &&
-                            <Link href="/dashboard/management">
+                            <Link href="/dashboard/management" >
 
                                 <div className={styles.sidenav_link + " " + (props.path === '/dashboard/management' && styles.active)}>
                                     <StoreMgtIcon style={styles.sidenav_link_icon} />
@@ -101,7 +101,7 @@ function SideNav2(props) {
                             </Link>
                         }
                         {props.auth.authUser.user_type === "admin" &&
-                            <Link href="/dashboard/management">
+                            <Link href="/dashboard/management" >
 
                                 <div className={styles.sidenav_link + " " + (props.path === '/dashboard/management' && styles.active)}>
                                     <StoreMgtIcon style={styles.sidenav_link_icon} />
@@ -111,7 +111,7 @@ function SideNav2(props) {
                             </Link>
                         }
                         {props.auth.authUser.user_type !== "admin" &&
-                            <Link href="/support">
+                            <Link href="/support" >
 
                                 <div className={styles.sidenav_link + " " + (props.path === '/dashboard/support' && styles.active)}>
                                     <SupportIcon style={styles.sidenav_link_icon} />

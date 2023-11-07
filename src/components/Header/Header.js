@@ -238,7 +238,7 @@ function Header(props) {
                   style={styles.navbar_user_icon}
                 />
                 <div id="userdetails" className={styles.navbar_user_signedin}>
-                  <Link href="/dashboard">
+                  <Link href="/dashboard" >
 
                     <div
                       className={
@@ -252,7 +252,7 @@ function Header(props) {
                     </div>
 
                   </Link>
-                  <Link href="/dashboard/userprofile">
+                  <Link href="/dashboard/userprofile" >
 
                     <div
                       className={
@@ -482,7 +482,7 @@ function Header(props) {
                   (props.path === "/" && styles.activeLinkDown)
                 }
               >
-                <Link href="/">
+                <Link href="/" >
 
                   <HomeIcon style={styles.navbar_down_col_icon} />
                   <p>Home</p>
@@ -496,7 +496,7 @@ function Header(props) {
                   (props.path === "/dashboard/orders/orders" && styles.activeLinkDown)
                 }
               >
-                <Link href="/dashboard/orders/orders">
+                <Link href="/dashboard/orders/orders" >
 
                   <Order2Icon style={styles.navbar_down_col_icon} />
                   <p>Order</p>
@@ -510,7 +510,7 @@ function Header(props) {
                   (props.path === "/grocery-list" && styles.activeLinkDown)
                 }
               >
-                <Link href="/grocerylist">
+                <Link href="/grocerylist" >
 
                   <BasketIcon style={styles.navbar_down_col_icon} />
                   <p>Grocery List</p>
@@ -524,7 +524,7 @@ function Header(props) {
                   (props.path === "/cart" && styles.activeLinkDown)
                 }
               >
-                <Link href="/cart">
+                <Link href="/cart" >
 
                   <CartIcon style={styles.navbar_down_col_icon} />
                   <p>Cart</p>

@@ -137,7 +137,7 @@ function Product(props) {
 
                             <FacebookEIcon quote={props.product.product_name} url={url + 'product/' + props.product._id} />
                         </FacebookShareButton>
-                        <TwitterShareButton title={props.product.product_name} via="ChopChowMarket"  url={url + "product" + props.product._id}>
+                        <TwitterShareButton title={props.product.product_name} via="ChopChowMarket"  url={url + "product/" + props.product._id}>
                             <TwitterEIcon />
                         </TwitterShareButton>
                         <InstagramShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>

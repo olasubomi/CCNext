@@ -53,7 +53,7 @@ function Meal(props) {
                 
                 
 
-                <meta property="og:title" content={props.meal_name}/>
+                <meta property="og:title" content={props.meal.item_name}/>
                 <meta property="og:description" content={props.meal.item_intro}/>
                 <meta property="og:image" content={url + props.meal.itemImage0}/>
                 <meta property="og:image:alt" content={props.meal.item_name }/>
@@ -174,10 +174,10 @@ function Meal(props) {
                 <div className={styles.section_2_footer}>
                     <div className={styles.hide}>
                         <p><ShareIcon />Share this product:</p>
-                        <FacebookShareButton quote={props.meal.item_name} hashtag={props.meal.item_intro} url={url+'meal/'+props.meal._id}>
+                        <FacebookShareButton  url={url+'meal/'+props.meal._id} quote={props.meal.item_name} hashtag={props.meal.item_intro}>
                             <FacebookEIcon  />
                         </FacebookShareButton>
-                        <TwitterShareButton title={props.meal.item_name} via="ChopChowMarket"  url={url + "meal" + props.meal._id}>
+                        <TwitterShareButton title={props.meal.item_name} via="ChopChowMarket"  url={url + "meal/" + props.meal._id}>
                             <TwitterEIcon />
                         </TwitterShareButton>
                         <InstagramShareButton title={props.meal.item_name} url="https://www.instagram.com">
