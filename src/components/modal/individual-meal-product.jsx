@@ -9,6 +9,7 @@ import { Modal } from "../modal/popup-modal"
 import { useRouter } from 'next/router';
 import { BsCurrencyDollar } from 'react-icons/bs'
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill, } from 'react-icons/bs'
+import { useState } from 'react';
 export const IndividualModal = ({
     openList,
     openModal,
@@ -22,6 +23,8 @@ export const IndividualModal = ({
     setDetails,
     setItemAdd,
     itemToAdd,
+    setQuantity,
+    quantity,
     selectedItem }) => {
     const router = useRouter()
     return (
@@ -71,9 +74,11 @@ export const IndividualModal = ({
                                         <div className={styles.flex1}>
                                             <h4 className={styles.prep}>Serves:</h4>
                                             <div className={styles.flex2} style={{ marginLeft: '1rem' }}>
-                                                <p className={styles.box2}>-</p>
-                                                <p style={{ marginRight: '1rem' }}>2</p>
-                                                <p className={styles.box2}>+</p>
+                                                <p onClick={() => {
+                                                    if(quantity !== 0) setQuantity(prev => prev - 1)
+                                                }} className={styles.box2}>-</p>
+                                                <p style={{ marginRight: '1rem' }}>{quantity}</p>
+                                                <p onClick={() => setQuantity(prev => prev + 1)} className={styles.box2}>+</p>
                                             </div>
                                         </div>
                                     </div>
@@ -98,7 +103,7 @@ export const IndividualModal = ({
                                                     <td className={styles.td}>{elem.item_name}</td>
                                                     <td className={styles.td}>{elem.item_quantity}</td>
                                                     <td className={styles.td}>{elem.item_measurement}</td>
-                                                    <td className={styles.td}>{elem?.item_price ? elem?.item_price : 'N/A'}</td> {/* Use the correct property for the price */}
+                                                    <td className={styles.td}>{elem?.item_price ? `$${elem?.item_price}` : 'N/A'}</td> {/* Use the correct property for the price */}
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -116,6 +121,7 @@ export const IndividualModal = ({
                                     showStatus={false}
                                     showIndicators={false}
                                     axis="horizontal"
+                                    showThumbs={false}
                                     renderArrowPrev={(clickHandler, hasPrev) => {
                                         return (
                                             <div
@@ -163,16 +169,27 @@ export const IndividualModal = ({
                                     }}
                                 >
                                     {
-                                        selectedItem.meal_formatted_instructions?.map((elem, index) => (
-                                            <div className={styles.recipes} key={index}>
-                                                <span style={{ paddingTop: '6rem' }}>
-                                                    <h6>{elem.title}</h6>
-                                                    {elem.instructionSteps.map((ele) => (
-                                                        <p className={styles.instructionStep}>{ele}</p>
-                                                    ))}
-                                                </span>
-                                            </div>
-                                        ))}
+                                        selectedItem.meal_formatted_instructions?.map((elem, index) => {
+                                            return (
+                                                <div className={styles.recipes} key={index}>
+                                                    {
+                                                        (/\.(jpg|png|jpeg)$/i).test(elem.dataName)
+                                                            ? <img src={selectedItem[`meal_image_or_video_content${index + 1}`]} style={{width: '100%', height: '200px'}} />
+                                                            : <>
+                                                                {elem.dataName.includes('mp4') && <video className={styles.instruction_img} src={selectedItem[`meal_image_or_video_content${index + 1}`]}>
+                                                                    Your browser does not support the video tag.
+                                                                </video>}
+                                                            </>
+                                                    }
+                                                    <span style={{ paddingTop: '6rem' }}>
+                                                        <h6>{elem.title}</h6>
+                                                        {elem.instructionSteps.map((ele) => (
+                                                            <p className={styles.instructionStep}>{ele}</p>
+                                                        ))}
+                                                    </span>
+                                                </div>
+                                            )
+                                        })}
 
                                 </Carousel>
                             </div>
@@ -248,6 +265,8 @@ export const ProductModal = ({
     details,
     setDetails,
     setItemAdd,
+    setQuantity,
+    quantity
 }) => {
     return (
         <div>
@@ -289,16 +308,185 @@ export const ProductModal = ({
                                             {
                                                 selectedItem?.item_categories.map((cat) => cat.category_name).toString()
                                             }
-                                            </p>
+                                        </p>
                                     </div>
                                 </div>
                                 <div>
                                     <h4 className={styles.modalTitle2}>Quantity</h4>
                                     <div className={styles.flex2}>
-                                        <p className={styles.box2}>-</p>
-                                        <p style={{ marginRight: '1rem' }}>2</p>
-                                        <p className={styles.box2}>+</p>
+                                        <p onClick={() => {
+                                            if(quantity !== 0) setQuantity(prev => prev - 1)
+                                        }} className={styles.box2}>-</p>
+                                        <p style={{ marginRight: '1rem' }}>{quantity}</p>
+                                        <p onClick={() => setQuantity(prev => prev + 1)} className={styles.box2}>+</p>
                                     </div>
+                                    <div>
+                                        <h4 className={styles.modalTitle2}>Available Quantity</h4>
+                                        <p className={styles.intro} style={{ marginTop: '-.5rem' }}>43 left</p>
+                                    </div>
+                                    <div className={styles.end}>
+                                        <h4 className={styles.modalTitle} style={{ marginRight: '6.3rem' }}>Price</h4>
+                                        <span className={styles.span}> <h2 style={{ display: 'flex', alignItems: 'center' }} className={styles.price}><BsCurrencyDollar /> {selectedItem.item_price}</h2><p className={styles.piece}> /piece</p></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div className={styles.border} />
+                        <div className={styles.buttons}>
+                            <button className={styles.outlinebtn}>
+                                <Link href={`/meal/${selectedItem.item_name}`}>
+                                    View More
+                                </Link>
+                            </button>
+                            <button className={styles.outlinebtn} onClick={() => {
+                                setOpenModal(false)
+                                setOpenList(true)
+                            }}>Add to Grocery List</button>
+                            <button className={styles.btn}>Add to Cart</button>
+                        </div>
+                    </div>
+
+                </div>
+            }
+            {openList &&
+                <div className={styles.modalContainer}>
+                    <div className={styles.modalCard3}>
+                        <div className={styles.flex}>
+                            <h4 className={styles.addTitle}>Add Item to Grocery List</h4>
+                            <div onClick={() => setOpenList(false)} className={styles.round}>
+                                <AiOutlineClose />
+                            </div>
+                        </div>
+                        <div className={styles.lists}>
+                            {
+                                selectGrocery.map((elem) => {
+                                    return (
+                                        <div onClick={() => setItemAdd({ listName: elem.listName })} className={styles.list}>
+                                            <input type="checkbox" />
+                                            <p>{elem.listName}</p>
+                                        </div>
+                                    )
+                                })
+                            }
+
+                        </div>
+                        <div className={styles.flex} style={{ marginTop: '2rem' }}>
+                            <button onClick={addItemToGrocery} className={styles.btn}>Done</button>
+                            <button className={styles.outlinebtn} onClick={() => {
+                                setOpenList(false)
+                                setShow(true)
+                            }}>Add to New List</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            {
+                show && <Modal addItemToGrocery={addItemToGrocery} details={details} setDetails={setDetails} setShow={setShow} show={show} />
+            }
+        </div>
+    )
+}
+export const UtensilModal = ({
+    openList,
+    openModal,
+    setOpenModal,
+    setOpenList,
+    show,
+    setShow,
+    selectedItem,
+    selectGrocery,
+    addItemToGrocery,
+    details,
+    setDetails,
+    setItemAdd,
+    setQuantity,
+    quantity
+}) => {
+    return (
+        <div>
+            {
+                openModal &&
+                <div className={styles.modalContainer}>
+                    <div className={styles.modalCard}>
+                        <div className={styles.flexed}>
+                            <div className={styles.images}>
+                                <img src={selectedItem?.itemImage0} alt='' className={styles.modalImg} />
+                                <div className={styles.images1}>
+                                    {
+                                        selectedItem.item_images.map((image, idx) => {
+                                            return (
+                                                <div className={styles.img1}>
+                                                    <img src={image} />
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                            <div className={styles.right}>
+                                <div className={styles.flex3}>
+                                    <h6 className={styles.itemName}>{selectedItem.item_name}</h6>
+                                    <div className={styles.round} onClick={() => setOpenModal(false)}> <AiOutlineClose /></div>
+                                </div>
+                                <p className={styles.storeName}> From {selectedItem.store_name}</p>
+                                <div className={styles.rates}>
+                                    {
+                                        Array(5).fill('_').map((_, idx) => <GrStar size={20} key={idx + _} color={selectedItem.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} />)
+                                    }
+                                </div>
+                                <p className={styles.intro}>{selectedItem.item_intro}</p>
+                                <div>
+                                    <h4 className={styles.modalTitle}>Description</h4>
+                                    <div className={styles.des}>
+                                        {
+                                            selectedItem.item_description.map((elem) => {
+                                                return (
+                                                    <div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                            <p className={styles.intro}>Material</p>
+                                                            <div style={{ borderBottom: '1px dashed #949494', width: '100%' }} />
+                                                            <p className={styles.intro}>{elem.description_key}</p>
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                            <div>
+                                                                <p className={styles.intro}>Weight</p>
+                                                            </div>
+                                                            <div style={{ borderBottom: '1px dashed #949494', width: '90%', height: '1px' }} />
+                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                                <p className={styles.intro}>{elem.object_quantity}</p>
+                                                                <p className={styles.intro} style={{ marginLeft: '.5rem' }}>{elem.object_measurement}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                    <div className={styles.end}>
+                                        <h4 className={styles.modalTitle2}>Quantity</h4>
+                                        <div className={styles.flex2}>
+                                            <p onClick={() => {
+                                                if(quantity !== 0) setQuantity(prev => prev - 1)
+                                            }} className={styles.box2}>-</p>
+                                            <p style={{ marginRight: '1rem' }}>{quantity}</p>
+                                            <p onClick={() => setQuantity(prev => prev + 1)} className={styles.box2}>+</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 className={styles.modalTitle}>Product Category</h4>
+                                    <div className={styles.intro} style={{ marginTop: '-.5rem', display: 'flex' }}>
+                                        <p className={styles.intro}>
+                                            {
+                                                selectedItem?.item_categories.map((cat) => cat.category_name).toString()
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+
                                     <div>
                                         <h4 className={styles.modalTitle2}>Available Quantity</h4>
                                         <p className={styles.intro} style={{ marginTop: '-.5rem' }}>43 left</p>

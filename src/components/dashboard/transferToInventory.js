@@ -13,51 +13,51 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
     borderRadius: 15,
     display: 'flex',
     '&:active': {
-      '& .MuiSwitch-thumb': {
-        width: 15,
-      },
-      '& .MuiSwitch-switchBase.Mui-checked': {
-        transform: 'translateX(9px)',
-      },
+        '& .MuiSwitch-thumb': {
+            width: 15,
+        },
+        '& .MuiSwitch-switchBase.Mui-checked': {
+            transform: 'translateX(9px)',
+        },
     },
     '& .MuiSwitch-switchBase': {
-      padding: 2,
-      '&.Mui-checked': {
-        transform: 'translateX(28px)',
-        color: '#fff',
-        '& + .MuiSwitch-track': {
-          opacity: 1,
-          backgroundColor: '#ffffff',
+        padding: 2,
+        '&.Mui-checked': {
+            transform: 'translateX(28px)',
+            color: '#fff',
+            '& + .MuiSwitch-track': {
+                opacity: 1,
+                backgroundColor: '#ffffff',
+            },
+            '& > .MuiSwitch-thumb': {
+                backgroundColor:
+                    theme.palette.mode === 'dark' ? '#949494' : '#04D505',
+            },
         },
-        '& > .MuiSwitch-thumb': {
-            backgroundColor:
-        theme.palette.mode === 'dark' ? '#949494' : '#04D505',
-          },
-      },
     },
     '& .MuiSwitch-thumb': {
-      boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
-      width: 26.22,
-      height: 23,
-      borderRadius: 11,
-      backgroundColor:
-        theme.palette.mode === 'dark' ? '#04D505' : '#949494',
-      transition: theme.transitions.create(['width'], {
-        duration: 200,
-      }),
+        boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
+        width: 26.22,
+        height: 23,
+        borderRadius: 11,
+        backgroundColor:
+            theme.palette.mode === 'dark' ? '#04D505' : '#949494',
+        transition: theme.transitions.create(['width'], {
+            duration: 200,
+        }),
     },
     '& .MuiSwitch-track': {
         width: 58,
         height: 27,
-      borderRadius: 16 / 2,
-      opacity: 1,
-      backgroundColor:
-        '#ffffff',
-      boxSizing: 'border-box',
+        borderRadius: 16 / 2,
+        opacity: 1,
+        backgroundColor:
+            '#ffffff',
+        boxSizing: 'border-box',
     },
-  }));
+}));
 
-export default function TransferToInventory(props){
+export default function TransferToInventory(props) {
     const [restockOption, setRestockOption] = useState()
     const [restockTime, setRestockTime] = useState('1 day')
     const [message, setMessage] = useState('')
@@ -67,15 +67,15 @@ export default function TransferToInventory(props){
         estimated_preparation_time: 0,
         item_type: 'Meal',
         in_stock: true
-      });
+    });
 
-      const { ingredientsAvailable, item_type, in_stock } = formState;
+    const { ingredientsAvailable, item_type, in_stock } = formState;
 
     useEffect(() => {
-        if(props.type === "Meal" && props.meal.meal_categories.length > 0){
+        if (props.type === "Meal" && props.meal.meal_categories.length > 0) {
             let ingredientsAvailablee = []
             let ingredients = eval('(' + props.meal.formatted_ingredients[0] + ')')
-            for(let i=0; i<ingredients?.length; i++){
+            for (let i = 0; i < ingredients?.length; i++) {
                 ingredientsAvailablee.push({
                     name: ingredients[i].productName,
                     quantity: ingredients[i].quantity,
@@ -87,181 +87,202 @@ export default function TransferToInventory(props){
         }
         setFormState({ ...formState, ['item_type']: props.type });
     }, [props.meal])
-    
+
     function handleChange(e) {
         const { name, value } = e.target;
-        if(name === 'meal_type'){
-            if(value === 'packaged'){
-                setFormState({ ...formState, [name]: value,  ['prepackagedMeal']: true});
-            }else{
+        if (name === 'meal_type') {
+            if (value === 'packaged') {
+                setFormState({ ...formState, [name]: value, ['prepackagedMeal']: true });
+            } else {
                 setFormState({ ...formState, [name]: value, ['prepackagedMeal']: false });
             }
-        }else{
+        } else {
             setFormState({ ...formState, [name]: value });
         }
-        
+
         console.log(formState)
-      };
+    };
 
     function handleInStockChange(value) {
         setFormState({ ...formState, ['in_stock']: value });
     };
 
-    function handleIngredientChange(e,id,key) {
+    function handleIngredientChange(e, id, key) {
         const { value } = e.target;
+        console.log(e, id, key)
         let ingredientsAvailable = formState.ingredientsAvailable;
-        ingredientsAvailable[id][key] =  value
+        ingredientsAvailable[id][key] = value
+        console.log(ingredientsAvailable)
         setFormState({ ...formState, ['ingredientsAvailable']: ingredientsAvailable });
     };
 
-    function handleIngredientAvailabilityChange(value,id,key) {
+    function handleIngredientAvailabilityChange(value, id, key) {
         console.log(value)
         let ingredientsAvailable = formState.ingredientsAvailable;
-        ingredientsAvailable[id][key] =  value
+        ingredientsAvailable[id][key] = value
         setFormState({ ...formState, ['ingredientsAvailable']: ingredientsAvailable });
     };
 
-    function sendToInventory(){
+    function sendToInventory() {
         let fields = formState;
+
         delete fields.meal_type
         fields['item'] = props.meal._id
         fields['storeId'] = '63783f54088dda05688af4df'
+        fields.ingredients = formState.ingredientsAvailable;
+        delete formState.ingredientsAvailable;
         axios.post('/inventory/create-inventory', fields).then(response => {
-        if (response.status >= 200 && response.status < 300) {
-            // this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
-            console.log(response);
-            console.log("Display Item submitted successfully");
-            setMessage('Item submitted successfully')
-            // window.location.href = "/SuggestMeal"
-        } else {
-            setMessage('Something wrong happened')
-        }
+            if (response.status >= 200 && response.status < 300) {
+                // this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
+                console.log(response);
+                console.log("Display Item submitted successfully");
+                setMessage('Item submitted successfully')
+                // window.location.href = "/SuggestMeal"
+            } else {
+                setMessage('Something wrong happened')
+            }
         }).catch(error => {
             setMessage('Item already in store')
             console.log(error);
         });
     }
 
-    function handleRestockTimeChange (type){
+    function handleRestockTimeChange(type) {
         setRestockTime(type)
         toggleRestockTimeOption()
     }
 
-    function toggleRestockTimeOption(){
+    function toggleRestockTimeOption() {
         setRestockOption(!restockOption)
     }
+    console.log(props, 'ty')
 
-    return(
+    useEffect(() => {
+        if (Array.isArray(props?.meal?.ingredeints_in_item) && props?.meal?.ingredeints_in_item?.length) {
+            const resp = props?.meal?.ingredeints_in_item?.map((element => {
+                return {
+                    item_name: element.item_name,
+                    item_quantity: element.item_quantity,
+                    set_price: '',
+                    product_available: true
+                }
+            }))
+            setFormState({ ...formState, ingredientsAvailable: resp })
+        }
+    }, [])
+
+
+    return (
         <div className={styles.transToIn_container}>
             <div className={styles.transToIn}>
                 <div className={styles.transToIn_top}>
                     <h2>Transfer {' ' + item_type + ' '} to Inventory</h2>
                     <p>{message}</p>
                     <div onClick={props.toggleTransferToInventory}>
-                    <CancelIcon className={styles.transToIn_cancel_con} />
+                        <CancelIcon className={styles.transToIn_cancel_con} />
                     </div>
                 </div>
 
                 <div className={styles.transToIn_details_con}>
                     <div className={styles.transToIn_meal_types}>
                         <p>Choose Meal Type</p>
-                        {item_type === "Meal" ? 
-                        <div className={styles.transToIn_meal_type}>
-                            <div className={styles.transToIn_meal_type_option}>
-                                <input
-                                onChange={handleChange}
-                                className={styles.transToIn_meal_type_radioInput}
-                                type="radio"
-                                id="non packaged"
-                                name="meal_type"
-                                value="non packaged"
-                                />
-                                <label
-                                htmlFor="non packaged"
-                                className={styles.transToIn_meal_type_radio_button}
-                                ></label>
-                                <label
-                                htmlFor="non packaged"
-                                className={styles.transToIn_meal_type_radioLabel}
-                                >
-                                Non-prepackaged meal
-                                </label>
-                                <label
-                                htmlFor="non packaged"
-                                className={styles.transToIn_meal_type_radioLabel2}
-                                >
-                                Includes all the ingredients needed in preparation of this meal
-                                </label>
-                            </div>
-                            <div className={styles.transToIn_meal_type_option}>
-                                <input
-                                className={styles.transToIn_meal_type_radioInput}
-                                type="radio"
-                                onChange={handleChange}
-                                id="packaged"
-                                name="meal_type"
-                                value="packaged"
-                                />
-                                <label
-                                htmlFor="packaged"
-                                className={styles.transToIn_meal_type_radio_button}
-                                ></label>
-                                <label htmlFor="packaged" className={styles.transToIn_meal_type_radioLabel}>
-                                Prepackaged Meal
-                                </label>
-                                <label htmlFor="packaged" className={styles.transToIn_meal_type_radioLabel2}>
-                                Meal without the ingredients
-                                </label>
-                            </div>
-                        </div>:
-                        <div className={styles.transToIn_meal_type}>
-                            <div className={styles.transToIn_meal_type_option}>
-                                <input
-                                onChange={handleChange}
-                                className={styles.transToIn_meal_type_radioInput}
-                                type="radio"
-                                id="Product"
-                                name="item_type"
-                                value="Product"
-                                />
-                                <label
-                                htmlFor="Product"
-                                className={styles.transToIn_meal_type_radio_button}
-                                ></label>
-                                <label
-                                htmlFor="Product"
-                                className={styles.transToIn_meal_type_radioLabel}
-                                >
-                                Product
-                                </label>
-                                {/* <label
+                        {props?.meal?.item_type === "Meal" ?
+                            <div className={styles.transToIn_meal_type}>
+                                <div className={styles.transToIn_meal_type_option}>
+                                    <input
+                                        onChange={handleChange}
+                                        className={styles.transToIn_meal_type_radioInput}
+                                        type="radio"
+                                        id="non packaged"
+                                        name="meal_type"
+                                        value="non packaged"
+                                    />
+                                    <label
+                                        htmlFor="non packaged"
+                                        className={styles.transToIn_meal_type_radio_button}
+                                    ></label>
+                                    <label
+                                        htmlFor="non packaged"
+                                        className={styles.transToIn_meal_type_radioLabel}
+                                    >
+                                        Non-prepackaged meal
+                                    </label>
+                                    <label
+                                        htmlFor="non packaged"
+                                        className={styles.transToIn_meal_type_radioLabel2}
+                                    >
+                                        Includes all the ingredients needed in preparation of this meal
+                                    </label>
+                                </div>
+                                <div className={styles.transToIn_meal_type_option}>
+                                    <input
+                                        className={styles.transToIn_meal_type_radioInput}
+                                        type="radio"
+                                        onChange={handleChange}
+                                        id="packaged"
+                                        name="meal_type"
+                                        value="packaged"
+                                    />
+                                    <label
+                                        htmlFor="packaged"
+                                        className={styles.transToIn_meal_type_radio_button}
+                                    ></label>
+                                    <label htmlFor="packaged" className={styles.transToIn_meal_type_radioLabel}>
+                                        Prepackaged Meal
+                                    </label>
+                                    <label htmlFor="packaged" className={styles.transToIn_meal_type_radioLabel2}>
+                                        Meal without the ingredients
+                                    </label>
+                                </div>
+                            </div> :
+                            <div className={styles.transToIn_meal_type}>
+                                <div className={styles.transToIn_meal_type_option}>
+                                    <input
+                                        onChange={handleChange}
+                                        className={styles.transToIn_meal_type_radioInput}
+                                        type="radio"
+                                        id="Product"
+                                        name="item_type"
+                                        value="Product"
+                                    />
+                                    <label
+                                        htmlFor="Product"
+                                        className={styles.transToIn_meal_type_radio_button}
+                                    ></label>
+                                    <label
+                                        htmlFor="Product"
+                                        className={styles.transToIn_meal_type_radioLabel}
+                                    >
+                                        Product
+                                    </label>
+                                    {/* <label
                                 htmlFor="Product"
                                 className={styles.transToIn_meal_type_radioLabel2}
                                 >
                                 Includes all the ingredients needed in preparation of this meal
                                 </label> */}
-                            </div>
-                            <div className={styles.transToIn_meal_type_option}>
-                                <input
-                                className={styles.transToIn_meal_type_radioInput}
-                                type="radio"
-                                onChange={handleChange}
-                                id="Kitchen Utensils"
-                                name="item_type"
-                                value="Kitchen Utensils"
-                                />
-                                <label
-                                htmlFor="Kitchen Utensils"
-                                className={styles.transToIn_meal_type_radio_button}
-                                ></label>
-                                <label htmlFor="Kitchen Utensils" className={styles.transToIn_meal_type_radioLabel}>
-                                Kitchen Utensils
-                                </label>
-                                {/* <label htmlFor="Kitchen Utensils" className={styles.transToIn_meal_type_radioLabel2}>
+                                </div>
+                                <div className={styles.transToIn_meal_type_option}>
+                                    <input
+                                        className={styles.transToIn_meal_type_radioInput}
+                                        type="radio"
+                                        onChange={handleChange}
+                                        id="Kitchen Utensils"
+                                        name="item_type"
+                                        value="Kitchen Utensils"
+                                    />
+                                    <label
+                                        htmlFor="Kitchen Utensils"
+                                        className={styles.transToIn_meal_type_radio_button}
+                                    ></label>
+                                    <label htmlFor="Kitchen Utensils" className={styles.transToIn_meal_type_radioLabel}>
+                                        Kitchen Utensils
+                                    </label>
+                                    {/* <label htmlFor="Kitchen Utensils" className={styles.transToIn_meal_type_radioLabel2}>
                                 Meal without the ingredients
                                 </label> */}
+                                </div>
                             </div>
-                        </div>
                         }
                     </div>
                     <div className={styles.transToIn_details_col2}>
@@ -309,27 +330,29 @@ export default function TransferToInventory(props){
                         </div>
                     </div>
                     {
-                        item_type === 'Meal' &&
+                        props?.meal?.item_type === 'Meal' &&
                         <div className={styles.transToIn_details_col4}>
                             <p>Set ingredient prices and availability</p>
                             <table className={styles.request_table}>
                                 <thead>
-                                <div className={styles.request_tr} style={{backgroundColor: 'transparent'}}>
-                                    <th className={styles.request_th}>Items</th>
-                                    <th className={styles.request_th + " " + styles.hideData}>Quantity</th>
-                                    <th className={styles.request_th}>Set Price</th>
-                                    <th className={styles.request_th}>Product Available</th>
-                                </div>
+                                    <div className={styles.request_tr} style={{ backgroundColor: 'transparent' }}>
+                                        <th className={styles.request_th}>Items</th>
+                                        <th className={styles.request_th + " " + styles.hideData}>Quantity</th>
+                                        <th className={styles.request_th}>Set Price</th>
+                                        <th className={styles.request_th}>Product Available</th>
+                                    </div>
                                 </thead>
                                 <tbody>
-                                    {ingredientsAvailable.map((ingredient, index) => {
-                                        return(
+                                    {formState.ingredientsAvailable?.map((ingredient, index) => {
+                                        return (
                                             <div className={styles.refId + " " + styles.request_tr}>
-                                                <div className={styles.request_td}>{ingredient.name}</div>
-                                                <div className={styles.request_td + " " + styles.hideData}><input value={ingredient.quantity} onChange={(e) => handleIngredientChange(e,index,'quantity')} name='meal_price' /></div>
-                                                <div className={styles.request_td}>$<input value={ingredient.set_price} onChange={(e) => handleIngredientChange(e,index,'set_price')} name='meal_price' /></div>
+                                                <div className={styles.request_td}>{ingredient.item_name}</div>
+                                                <div className={styles.request_td + " " + styles.hideData}>
+                                                    <input value={formState.ingredientsAvailable[index]?.item_quantity} onChange={(e) => handleIngredientChange(e, index, 'item_quantity')} name='meal_price' />
+                                                </div>
+                                                <div className={styles.request_td}>$<input value={formState.ingredientsAvailable[index]?.set_price} onChange={(e) => handleIngredientChange(e, index, 'set_price')} name='meal_price' /></div>
                                                 <div className={styles.request_td}>
-                                                    <AntSwitch checked={ingredient.product_available} onChange={(e) => handleIngredientAvailabilityChange(!ingredient.product_available,index,'product_available')} inputProps={{ 'aria-label': 'ant design' }} />
+                                                    <AntSwitch checked={formState.ingredientsAvailable[index]?.product_available} onChange={(e) => handleIngredientAvailabilityChange(!ingredient.product_available, index, 'product_available')} inputProps={{ 'aria-label': 'ant design' }} />
                                                 </div>
                                             </div>
                                         )
@@ -343,10 +366,10 @@ export default function TransferToInventory(props){
                 </div>
 
                 <div className={styles.transToIn_footer}>
-                    <button className={styles.transToIn_footer_button} onClick={props.toggleTransferToInventory}>Cancle</button>
+                    <button className={styles.transToIn_footer_button} onClick={props.toggleTransferToInventory}>Cancel</button>
                     <button onClick={sendToInventory} className={styles.transToIn_footer_button2}>Confirm</button>
                 </div>
-            
+
             </div>
         </div>
     )

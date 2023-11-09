@@ -200,7 +200,7 @@ function Header(props) {
         <div className={styles.navbar_top}>
           <Link href="/" >
 
-            <Image className={styles.navbar_top_logo_img} src={img_logo} alt="logo"  />
+            <Image className={styles.navbar_top_logo_img} src={img_logo} alt="logo" />
 
           </Link>
           <div className={styles.navbar_top_details}>
@@ -586,16 +586,23 @@ export function Header2() {
         <div className={styles.navbar_main}>
           <ul className={styles.navbar_main_links}>
             <li className={styles.navbar_main_link}>
-              <p>Stores</p>
+              <p>
+                <a href="/publicMarket#store">Stores</a>
+              </p>
             </li>
             <li className={styles.navbar_main_link}>
-              <p>Meals</p>
+              <p>
+                <a href="/publicMarket#meals">Meals</a></p>
             </li>
             <li className={styles.navbar_main_link}>
-              <p>Products</p>
+              <p>
+                <a href="/publicMarket#products">Products</a>
+              </p>
             </li>
             <li className={styles.navbar_main_link}>
-              <p> Utensils</p>
+              <p>
+                <a href="/publicMarket#utensils"> Utensils</a>
+              </p>
             </li>
           </ul>
 

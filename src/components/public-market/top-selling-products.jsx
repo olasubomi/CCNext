@@ -21,6 +21,7 @@ export const TopSellingProducts = () => {
     const [openList, setOpenList] = useState(false)
     const [show, setShow] = useState(false)
     const router = useRouter()
+    const [quantity, setQuantity] = useState(0)
 
     //items to add
     const [itemToAdd, setItemAdd] = useState({
@@ -40,6 +41,7 @@ export const TopSellingProducts = () => {
                 listName: itemToAdd.listName || listName,
                 groceryItems: {
                     itemId: selectedItem._id,
+                    quantity: quantity.toString()
                 }
             }
         }
@@ -115,7 +117,7 @@ export const TopSellingProducts = () => {
                             }}>
                                 {product?.itemImage0 &&
 
-                                    <div className={styles.box}>
+                                    <div className={styles.box} id="utensils">
                                         <img src={product?.itemImage0} className={styles.storeImg2} />
                                         <div className={styles.flex}>
                                             <p className={styles.name2}>{product.item_name}</p>
@@ -149,9 +151,12 @@ export const TopSellingProducts = () => {
                     addItemToGrocery={addItemToGrocery}
                     setItemAdd={setItemAdd}
                     setShow={setShow}
+                    quantity={quantity}
+                    setQuantity={setQuantity}
                 />
             </div>
             <p className={styles.view} onClick={() => loadMore()}>View More</p>
+            <div className={styles.border} />
 
         </div>
     )

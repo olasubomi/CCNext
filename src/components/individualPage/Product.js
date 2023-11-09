@@ -29,7 +29,7 @@ function Product(props) {
             set_formatted_ingredients(props.product.formatted_ingredients)
         }
     }, [props.product.formatted_ingredients])
-    console.log(props.product.item_description, 'descrptionn')
+    console.log(props.product.item_images, 'image')
     return (
         <>
             <Head>
@@ -37,17 +37,17 @@ function Product(props) {
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta name="twitter:card" content="summary_large_image"/>
                 <meta name="twitter:title" content={props.meal_name}/>
-                <meta name="twitter:description" content={props.meal.item_intro}/>
-                <meta name="twitter:description" content={props.meal.item_name}/>
-                <meta name="twitter:image" content={props.meal.itemImage0}/>
-                <meta name="twitter:image:alt" content={props.meal.item_name }/>
+                <meta name="twitter:description" content={props.meal?.item_intro}/>
+                <meta name="twitter:description" content={props.meal?.item_name}/>
+                <meta name="twitter:image" content={props.meal?.itemImage0}/>
+                <meta name="twitter:image:alt" content={props.meal?.item_name }/>
                 <meta name="twitter:image" content="URL_to_your_image2"/>
                 <meta name="twitter:image:alt" content="Alt text for the image2"/>
 
-                <meta property="og:title" content={props.meal_name}/>
-                <meta property="og:description" content={props.meal.item_intro}/>
-                <meta property="og:image" content={props.meal.itemImage0}/>
-                <meta property="og:image:alt" content={props.meal.item_name }/>
+                <meta property="og:title" content={props?.meal_name}/>
+                <meta property="og:description" content={props.meal?.item_intro}/>
+                <meta property="og:image" content={props.meal?.itemImage0}/>
+                <meta property="og:image:alt" content={props.meal?.item_name }/>
                 <meta property="og:image" content="URL_to_your_image2"/>
                 <meta property="og:image:alt" content="Alt text for the image2"/>
 
@@ -126,11 +126,11 @@ function Product(props) {
                             </div>
                         </div>
                         {
-                            props.product.publicly_available === 'Public' &&
+                            props.product.item_available &&
 
                             <div className={styles.product_section_2_price}>
                                 <h3>Price</h3>
-                                <p>$7.65<span>/piece</span></p>
+                                <p>${props.product.item_price}<span>/piece</span></p>
                             </div>}
                     </div>
                 </div>

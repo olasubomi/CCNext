@@ -188,7 +188,7 @@ class Popup2 extends Component {
                                                 src={imagesData[0]}
                                                 alt="pop up"
                                                 className={styles.popup2_main_img}
-                                                height={"160%"} width={"100%"}
+                                                height={160} width={100}
                                                 objectFit="cover"
                                                 objectPosition="center"
                                             />}
@@ -198,7 +198,7 @@ class Popup2 extends Component {
                                                     imagesData.slice(1).map((data, index) =>
                                                         <Image key={index} alt="pop up" src={data}
                                                             className={styles.popup2_image}
-                                                            height={"70%"} width={"100%"}
+                                                            height={70} width={100}
                                                             objectFit="cover"
                                                             objectPosition="center" />
                                                     )
@@ -272,7 +272,7 @@ class Popup2 extends Component {
                                                         src={this.props['chunk' + curIn + 'Content']}
                                                         alt={this.props['instructionChunk' + curIn]?.title}
                                                         className={styles.popup2_step_img}
-                                                        height={"150%"} width={"70%"}
+                                                        height={150} width={70}
                                                         objectFit="cover"
                                                         objectPosition="center"
                                                     />
@@ -280,7 +280,7 @@ class Popup2 extends Component {
 
                                                 {allowedVideoExtensions.exec(this.props[`instructionChunk${curIn}DataName`]) &&
                                                     <video controls className={styles.popup2_step_img}
-                                                        height={"150%"} width={"70%"}>
+                                                        height={150} width={70}>
                                                         <source
                                                             src={this.props['chunk' + curIn + 'Content']} type="video/mp4" />
                                                         Your browser does not support the video tag.
@@ -320,7 +320,7 @@ class Popup2 extends Component {
                                     >
                                         <span className={styles.iconSpan}>
                                             <Image src="/assets/icons/Vector.svg" alt='facebook'
-                                                height={"17%"} width={"17%"} className={styles.icons}
+                                                height={17} width={17} className={styles.icons}
                                                 objectFit="cover"
                                                 objectPosition="center" />
                                         </span>
@@ -330,7 +330,7 @@ class Popup2 extends Component {
                                 <div onClick={() => this.handleShareClick()} style={{ cursor: "pointer" }}>
                                     <span className={styles.iconSpan1}>
                                         <Image src="/assets/icons/Vector (2).svg" alt='instagram'
-                                            height={"17%"} width={"17%"} className={styles.icons}
+                                            height={17} width={17} className={styles.icons}
                                             objectFit="cover"
                                             objectPosition="center" />
                                     </span>
@@ -344,7 +344,7 @@ class Popup2 extends Component {
                                     >
                                         <span className={styles.iconSpan2}>
                                             <Image src="/assets/icons/Vector (1).svg" alt='twitter'
-                                                height={"17%"} width={"17%"} className={styles.icons}
+                                                height={17} width={17} className={styles.icons}
                                                 objectFit="cover"
                                                 objectPosition="center" />
                                         </span>
@@ -354,7 +354,7 @@ class Popup2 extends Component {
 
                                 <span className={styles.iconSpan3}>
                                     <Image src="/assets/icons/logos_whatsapp-icon.svg" alt='whatsapp'
-                                        height={"17%"} width={"17%"} className={styles.icons}
+                                        height={17} width={17} className={styles.icons}
                                         objectFit="cover"
                                         objectPosition="center" />
                                 </span>
@@ -366,7 +366,7 @@ class Popup2 extends Component {
                                         return <div style={{ display: "flex", alignItems: "center", marginLeft: "4rem" }}>
                                             <p className={styles.para}>Print Preview</p>
                                             <Image alt='print' src="/assets/icons/Vector (3).svg"
-                                                height={"20%"} width={"20%"} className={styles.printIcon} /></div>;
+                                                height={20} width={20} className={styles.printIcon} /></div>;
                                     }}
                                     content={() => this.componentRef}
                                 />

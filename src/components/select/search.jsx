@@ -1,4 +1,5 @@
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import styles from './select.module.css'
 
 export const Search = () => {
     const items = [
@@ -42,9 +43,17 @@ export const Search = () => {
 
     const formatResult = (item) => {
         return (
-            <>
-                <span style={{ display: 'block', textAlign: 'left' }}>{item.name}</span>
-            </>
+         <div>
+            <h4>Stores</h4>
+            <div className='bord' />
+            <div>
+                {
+                    items.map((elem) => {
+                        <p>{elem.name}</p>
+                    })
+                }
+            </div>
+         </div>
         )
     }
 
