@@ -10,28 +10,6 @@ import Footer from "../../src/components/Footer/Footer";
 import { useRouter } from "next/router";
 import axios from "../../src/util/Api";
 
-const options = [
-    {
-        label: 'All categories',
-        value: 1
-    },
-    {
-        label: 'Stores',
-        value: 2
-    },
-    {
-        label: 'Meals',
-        value: 3
-    },
-    {
-        label: 'Products',
-        value: 4
-    },
-    {
-        label: 'Kitchen Utensils',
-        value: 5
-    },
-]
 const PublicMarket = () => {
     const router = useRouter();
     const [show, setShow] = useState(false)
@@ -52,19 +30,19 @@ const PublicMarket = () => {
             },
             {
                 label: 'Stores',
-                value: false
+                value: true
             },
             {
                 label: 'Meals',
-                value: false
+                value: true
             },
             {
                 label: 'Products',
-                value: false
+                value: true
             },
             {
                 label: 'Kitchen Utensils',
-                value: false
+                value: true
             },
         ])
 
@@ -148,7 +126,7 @@ const PublicMarket = () => {
                 <div className={styles.two}>
                     <div>
                         <div className={styles.searchbox} onClick={() => setShowCategory(!showCategory)}>
-                            All categories
+                           {categories[0].value && categories.some((ele) => !ele.value) ? 'All categories' : categories.find((ele) => ele.value).label}
                             <GoTriangleUp className={!showCategory ? styles.rotate : styles.nonrotate} size={15} />
                         </div>
                         {
