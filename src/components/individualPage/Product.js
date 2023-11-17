@@ -48,6 +48,7 @@ function Product(props) {
                 <meta property="og:description" content={props.meal?.item_intro}/>
                 <meta property="og:image" content={props.meal?.itemImage0}/>
                 <meta property="og:image:alt" content={props.meal?.item_name }/>
+
                 <meta property="og:image" content="URL_to_your_image2"/>
                 <meta property="og:image:alt" content="Alt text for the image2"/>
 
