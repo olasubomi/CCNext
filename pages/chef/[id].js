@@ -73,7 +73,7 @@ const ChefPage = () => {
                         >
                             <span className={styles.iconSpan}>
                                 <Image src="/assets/icons/Vector.svg" alt='facebook'
-                                    height={"17%"} width={"17%"} className={styles.icons}
+                                    height={17} width={17} className={styles.icons}
                                     objectFit="cover"
                                     objectPosition="center" />
                             </span>
@@ -82,8 +82,8 @@ const ChefPage = () => {
                     </div>
                     <div onClick={() => this.handleShareClick()} style={{ cursor: "pointer" }} className={styles.icon}>
                         <span className={styles.iconSpan1}>
-                            <Image src="/assets/icons/Vector (2).svg" alt='instagram'
-                                height={"17%"} width={"17%"} className={styles.icons}
+                            <img src="/assets/icons/Vector (2).svg" alt='instagram'
+                                height={17} width={17} className={styles.icons}
                                 objectFit="cover"
                                 objectPosition="center" />
                         </span>
@@ -98,7 +98,7 @@ const ChefPage = () => {
                         >
                             <span className={styles.iconSpan2}>
                                 <Image src="/assets/icons/Vector (1).svg" alt='twitter'
-                                    height={"17%"} width={"17%"} className={styles.icons}
+                                    height={17} width={17} className={styles.icons}
                                     objectFit="cover"
                                     objectPosition="center" />
                             </span>

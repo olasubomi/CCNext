@@ -125,7 +125,7 @@ class SuggestProductForm extends Component {
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
     // var url = "/get-all-products";
-    url = "https://chopchowserver.vercel.app/get-all-products";
+    url = "https://chopchowdev.herokuapp.com/get-all-products";
 
     // axios.get(url).then((body) => {
     //   this.productsList = body.data;
@@ -1013,7 +1013,8 @@ class SuggestProductForm extends Component {
               this.state.productImagesData.map((data, index) =>
                 <Row key={index}>
                   <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><Image src={data} width="100%" height="100%" alt="main_product_Images" />
+                    <p>
+                      <Image src={data} width={100} height={100} alt="main_product_Images" />
                     </p>
                     <div className={styles.close} onClick={() => this.deleteImages(index)}>
                       <AiOutlineClose className={styles.closeIcon} />

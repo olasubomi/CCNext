@@ -25,7 +25,7 @@ export const CardDropdown = ({element}) => {
                                     <p>{ingredient?.item_quantity} {ingredient?.item_measurement}</p>
                                 </span>
                                 <span className={styles.tdata}>
-                                    <p>{ingredient?.item_price ? ingredient.item_price : 'N/A'}</p>
+                                    <p>{ingredient?.item_price ? `$${ingredient.item_price}` : 'N/A'}</p>
                                 </span>
                                 <span className={styles.textcenter2}>
                                     <p className={styles.textcenter }>30 minutes</p>

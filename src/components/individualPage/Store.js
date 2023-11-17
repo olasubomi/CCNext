@@ -53,7 +53,7 @@ function Store(props) {
                 <div className={styles.product_section_2}>
                     <div className={styles.product_section_2_col_1}>
                         <Image
-                            src={props.store.profile_picture ? props.store.profile_picture : sale}
+                            src={props.store.profile_picture}
                             alt="pop up"
                             className={styles.product_section_2_main_img}
                             height={500} width={500}
