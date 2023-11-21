@@ -71,10 +71,10 @@ const ChefPage = () => {
                 <div className={styles.share}>
                     <div className={styles.icon}>
                         <FacebookShareButton
-                            url={url + 'chef/'+ user.id}
+                            url={url + 'chef/'+ user._id}
                             quote={'Chop chow awesome'}
-                            hashtag={`#${ user.first_name}`}
-                            title={"fnkdlkd"}
+                            hashtag={`#${ user.first_name} ${ user.last_name}'s recipes`}
+                            title={"Share to Facebook"}
                         >
                               <FacebookEIcon  />
                             {/* <span className={styles.iconSpan}>
@@ -95,7 +95,7 @@ const ChefPage = () => {
                         </span>
                     </div> */}
                      <div  style={{ cursor: "pointer" }} className={styles.icon}>
-                     <WhatsappShareButton title={user.first_name} url={url + 'chef/'+ user.id} >
+                     <WhatsappShareButton title={user.first_name} url={url + 'chef/'+ user._id} >
                             <WhatsappEIcon />
                         </WhatsappShareButton>
                     </div> 
@@ -103,7 +103,7 @@ const ChefPage = () => {
                     <div>
                         <TwitterShareButton
                             className={styles.icon}
-                            url={url + 'chef/'+ user.id}
+                            url={url + 'chef/'+ user._id}
                             title={user.first_name} 
                             via="ChopChowMarket"
                         >
