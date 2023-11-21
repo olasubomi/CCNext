@@ -180,9 +180,9 @@ function Meal(props) {
                         <TwitterShareButton title={props.meal.item_name} via="ChopChowMarket"  url={url + "meal/" + props.meal._id}>
                             <TwitterEIcon />
                         </TwitterShareButton>
-                        <InstagramShareButton title={props.meal.item_name} url="https://www.instagram.com">
+                        {/* <InstagramShareButton title={props.meal.item_name} url="https://www.instagram.com">
                             <InstaEIcon />
-                        </InstagramShareButton>
+                        </InstagramShareButton> */}
                         <WhatsappShareButton title={props.meal.item_name} url={url+'meal/'+props.meal._id} >
                             <WhatsappEIcon />
                         </WhatsappShareButton>

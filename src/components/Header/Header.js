@@ -36,14 +36,14 @@ import signup from "../signup";
 
 
 function Header(props) {
-  const [isAuthenticated, setIsAuthenticatedState] = useState(false);
-  const [customerId, setCustomerIdState] = useState(null);
-  const [username, setUsernameState] = useState(null);
-  const [showNotif, setshowNotifState] = useState(true);
+  // const [isAuthenticated, setIsAuthenticatedState] = useState(false);
+  // const [customerId, setCustomerIdState] = useState(null);
+  // const [username, setUsernameState] = useState(null);
+  // const [showNotif, setshowNotifState] = useState(true);
   const { isOpen, setIsOpen } = useAuth()
   const [openLogin, setOpenLoginState] = useState(false);
   const router = useRouter();
-  const [showSignup, setShowSignUp] = useState(false);
+  // const [showSignup, setShowSignUp] = useState(false);
   // const userData = useSelector()
 
   const cartCtx = useContext(CartContext);
@@ -76,17 +76,17 @@ function Header(props) {
   //   }
   // }, []);
 
-  function updateLogInStatus(customerId, username) {
-    console.log("updates log in status before");
-    setIsAuthenticatedState(true);
-    setCustomerIdState(customerId);
-    setUsernameState(username);
+  // function updateLogInStatus(customerId, username) {
+  //   console.log("updates log in status before");
+  //   setIsAuthenticatedState(true);
+  //   setCustomerIdState(customerId);
+  //   setUsernameState(username);
 
 
-    setIsAuthenticatedState(true);
-    setCustomerIdState(customerId);
-    setUsernameState(username);
-  }
+  //   setIsAuthenticatedState(true);
+  //   setCustomerIdState(customerId);
+  //   setUsernameState(username);
+  // }
 
   //////////////////////////////////////////////////////////////////////
   // CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
@@ -96,52 +96,52 @@ function Header(props) {
   //   </a>
   // ));
   //////////////////////////////////////////////////////////////////////
-  function handleLogout(e) {
-    if (e === "6") {
-      //clear cookie cache
-      // useEffect(() => {
-      // You now have access to `window`
-      // window.localStorage.setItem("userToken", null);
-      // window.localStorage.setItem("userRole", null);
-      // }, [])
+  // function handleLogout(e) {
+  //   if (e === "6") {
+  //     //clear cookie cache
+  //     // useEffect(() => {
+  //     // You now have access to `window`
+  //     // window.localStorage.setItem("userToken", null);
+  //     // window.localStorage.setItem("userRole", null);
+  //     // }, [])
 
-      // var url = "/api/logout";
-      var url = `https://chopchowserver.vercel.app/api/logout`;
+  //     // var url = "/api/logout";
+  //     var url = `https://chopchowserver.vercel.app/api/logout`;
 
-      fetch(url, {
-        method: "GET",
-        credentials: "same-origin",
-        headers: {
-          "Content-type": "application/json",
-        },
-      })
-        .then((response) => {
-          response.json().then((res) => {
-            console.log("logout response is:");
-            console.log(res);
-            console.log("should print body");
-            console.log(res.data);
-            if (res.data === "success") {
-              console.log("comes to turn off authentication state");
-              setIsAuthenticatedState(false);
-            }
-          });
-        })
-        .catch((err) => {
-          console.log("fails to authenticate app page");
-          console.log(err);
-        });
+  //     fetch(url, {
+  //       method: "GET",
+  //       credentials: "same-origin",
+  //       headers: {
+  //         "Content-type": "application/json",
+  //       },
+  //     })
+  //       .then((response) => {
+  //         response.json().then((res) => {
+  //           console.log("logout response is:");
+  //           console.log(res);
+  //           console.log("should print body");
+  //           console.log(res.data);
+  //           if (res.data === "success") {
+  //             console.log("comes to turn off authentication state");
+  //             setIsAuthenticatedState(false);
+  //           }
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         console.log("fails to authenticate app page");
+  //         console.log(err);
+  //       });
 
-      setIsAuthenticatedState(false);
-      window.location.reload(false);
-    } else if (e === "4") {
-      // this.props.history.push('/SuggestMeal');
-    }
-  }
+  //     setIsAuthenticatedState(false);
+  //     window.location.reload(false);
+  //   } else if (e === "4") {
+  //     // this.props.history.push('/SuggestMeal');
+  //   }
+  // }
 
-  function handleDashborad() {
-    // this.props.history.push('/admin');
-  }
+  // function handleDashborad() {
+  //   // this.props.history.push('/admin');
+  // }
 
   function toggleNotification(e) {
     document.getElementById("notification").style.display = "grid";

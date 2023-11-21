@@ -140,9 +140,9 @@ function Product(props) {
                         <TwitterShareButton title={props.product.product_name} via="ChopChowMarket"  url={url + "product/" + props.product._id}>
                             <TwitterEIcon />
                         </TwitterShareButton>
-                        <InstagramShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>
+                        {/* <InstagramShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>
                             <InstaEIcon />
-                        </InstagramShareButton>
+                        </InstagramShareButton> */}
                         <WhatsappShareButton title={props.product.product_name} url={url + 'product/' + props.product._id} >
                             <WhatsappEIcon />
                         </WhatsappShareButton>

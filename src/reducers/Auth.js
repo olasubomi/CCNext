@@ -1,4 +1,4 @@
-import { INIT_URL, SIGNOUT_USER_SUCCESS, USER_DATA, USER_TOKEN_SET, USER_ROLE, CUSTOMER_ID, IS_AUTHENTICATED, OPEN_LOGIN } from "../constants/ActionTypes";
+import { INIT_URL, SIGNOUT_USER_SUCCESS, USER_DATA, USER_TOKEN_SET, USER_ROLE, CUSTOMER_ID, IS_AUTHENTICATED, OPEN_LOGIN, IS_VERIFIED } from "../constants/ActionTypes";
 
 
 
@@ -6,6 +6,7 @@ import { INIT_URL, SIGNOUT_USER_SUCCESS, USER_DATA, USER_TOKEN_SET, USER_ROLE, C
         token: '',
         initURL: '',
         authUser: null,
+        isVerified: false,
         isAuthenticated: false,
         openLogin: false
     };
@@ -24,7 +25,8 @@ export default (state = INIT_STATE, action) => {
                 token: '',
                 authUser: null,
                 initURL: '',
-                isAuthenticated: false
+                isAuthenticated: false,
+                isVerified: true
             }
         }
         case OPEN_LOGIN: {
@@ -50,6 +52,12 @@ export default (state = INIT_STATE, action) => {
                 ...state,
                 token: action.payload,
             };
+        }
+        case IS_VERIFIED: {
+            return {
+                ...state,
+                isVerified: action.payload
+            }
         }
         case USER_ROLE: {
             return {

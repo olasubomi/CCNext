@@ -8,7 +8,7 @@ import closeIcon from "../../../public/assets/icons/eva_menu-close.png"
 import Image from "next/image";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { userSignUp } from '../../actions';
 import { base_url } from '../../util/Api';
 
@@ -197,6 +197,8 @@ import { base_url } from '../../util/Api';
 // }
 
 function SignUp(props){
+  // const isverified =  useSelector(state => state.Auth.isVerified);
+  // console.log("isverified use selector", isverified)
   const [message, setMessageState] = useState(null);
   const [status, setStatusState] = useState(null);
   const [formState, setFormState] = useState({
@@ -308,35 +310,35 @@ function SignUp(props){
     // props.toggleLogin()
   }
   
-  function submitForm() {
-    console.log("state,", this.state);
-    var url = 'https://chopchowserver.vercel.app/api/user/signup';
-    var url = `${base_url}/user/signup`;
-    var payLoad = this.state;
-    delete payLoad.messageErr;
-    delete payLoad.messageSuccess;
-    delete payLoad.showModal;
+  // function submitForm() {
+  //   console.log("state,", this.state);
+  //   var url = 'https://chopchowserver.vercel.app/api/user/signup';
+  //   var url = `${base_url}/user/signup`;
+  //   var payLoad = this.state;
+  //   delete payLoad.messageErr;
+  //   delete payLoad.messageSuccess;
+  //   delete payLoad.showModal;
 
-    fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(payLoad),
-    }).then(response => {
-        if (response.status === 400 || response.status === 404) {
-          this.setState({ messageErr: 'Bad Request , Check username or password ...' });
-        } else if (response.status === 401) {
-          this.setState({ messageErr: 'You are unauthorized' });
-        } else if (response.status >= 500) {
-          this.setState({ messageErr: 'Sorry , Internal Server ERROR' })
-        } else {
-          this.setState({ messageErr: '', isAuthenticated: true, messageSuccess: 'You are signed up! ' });
-          this.handleClose(5000);
-        }
-      })
-  };
+  //   fetch(url, {
+  //     method: 'POST',
+  //     credentials: 'include',
+  //     headers: {
+  //       'Content-type': 'application/json',
+  //     },
+  //     body: JSON.stringify(payLoad),
+  //   }).then(response => {
+  //       if (response.status === 400 || response.status === 404) {
+  //         this.setState({ messageErr: 'Bad Request , Check username or password ...' });
+  //       } else if (response.status === 401) {
+  //         this.setState({ messageErr: 'You are unauthorized' });
+  //       } else if (response.status >= 500) {
+  //         this.setState({ messageErr: 'Sorry , Internal Server ERROR' })
+  //       } else {
+  //         this.setState({ messageErr: '', isAuthenticated: true, messageSuccess: 'You are signed up! ' });
+  //         this.handleClose(5000);
+  //       }
+  //     })
+  // };
 
     return <>
       <div className={styles.login}>
@@ -538,8 +540,7 @@ function SignUp(props){
       </div>
     </>;
   }
-
-  function mapStateToProp(state) {
+ function mapStateToProp(state) {
     return {
       auth: state.Auth
     };

@@ -11,7 +11,8 @@ import {
   SIGNOUT_USER_SUCCESS,
   IS_AUTHENTICATED,
   TRIGGER_SNACK,
-  OPEN_LOGIN
+  OPEN_LOGIN,
+  IS_VERIFIED
 } from "../constants/ActionTypes";
 import axios from "../util/Api";
 import Alert from "@mui/material/Alert";
@@ -38,22 +39,29 @@ export const userSignUp = (form) => {
       })
       .then(({ data }) => {
         console.log("__ SignUp api res __ : ", data);
-        axios.defaults.headers.common["Authorization"] =
-          "Bearer " + data.data.token;
+        // axios.defaults.headers.common["Authorization"] =
+        //   "Bearer " + data.data.token;
 
-        localStorage.setItem("x-auth-token", data.data.token);
-        localStorage.setItem("in", Date.now());
-        localStorage.setItem("user", JSON.stringify(data.data.user));
+        // localStorage.setItem("x-auth-token", data.data.token);
+        // localStorage.setItem("in", Date.now());
+        // localStorage.setItem("user", JSON.stringify(data.data.user));
 
         dispatch({ type: FETCH_SUCCESS });
-        dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
-        dispatch({ type: USER_ROLE, payload: data.data.role });
-        dispatch({ type: USER_DATA, payload: data.data.user });
-        dispatch({ type: IS_AUTHENTICATED, payload: true });
+        // dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+        // dispatch({ type: USER_ROLE, payload: data.data.user.user_type });
+        // dispatch({ type: USER_DATA, payload: data.data.user });
+        // dispatch({ type: IS_AUTHENTICATED, payload: true });
+        dispatch({ type: IS_VERIFIED, payload: false });
         // dispatch({ type: USER_DATA, payload: data.user });
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
-        
-        toast.success("Registration successful")
+        //console.log("verified email action creator", data)
+        // console.log("verified email action creator", data.data.user.is_verified)
+        // if(data.data.user.is_verified === "true") {
+        //   toast.success("Registration successful")
+        // }else{
+        //   toast.success("A verifiation link was sent to your mail")  
+        // }
+        toast.success("A verifiation link was sent to your mail")  
         
       })
       .catch((err) => {
@@ -102,6 +110,7 @@ export const userSignIn = (email, password, callback) => {
         dispatch({ type: IS_AUTHENTICATED, payload: true });
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
         const customId = "custom-id-no";
+        
         toast.success("Login Successful", {toastId: customId} )
 
       
@@ -167,6 +176,67 @@ export const verifyToken = (user,token) => {
                 dispatch({ type: USER_DATA, payload: user });
                 dispatch({ type: USER_TOKEN_SET, payload: token });
                 dispatch({ type: IS_AUTHENTICATED, payload: true });
+            }else{
+                console.log('logout')
+                localStorage.removeItem('x-auth-token');
+                localStorage.removeItem('in');
+                localStorage.removeItem('user');
+                dispatch({ type: USER_DATA, payload: [] });
+                dispatch({ type: USER_TOKEN_SET, payload: '' });
+                dispatch({ type: IS_AUTHENTICATED, payload: false });
+                window.location.assign('/')
+            }
+            
+        }).catch(err => {
+            console.error("xxx verifyUser Request ERROR xxx", err);
+            // dispatch({ type: FETCH_ERROR, payload: "Error during get me request with this token" });
+            localStorage.removeItem('x-auth-token');
+                localStorage.removeItem('in');
+                localStorage.removeItem('user');
+            dispatch({ type: SIGNOUT_USER_SUCCESS });
+            dispatch({ type: IS_AUTHENTICATED, payload: false });
+            // window.location.assign('/')
+            setTimeout(() => {
+                dispatch({ type: FETCH_ERROR, payload: '' });
+            }, 5000)
+
+        });
+        dispatch({ type: SIGNOUT_USER_SUCCESS });
+        dispatch({ type: IS_AUTHENTICATED, payload: false });
+        window.location.assign("/");
+      }
+  };
+
+
+
+  export const verifyEmail = (userid,token) => {
+    return (dispatch) => {
+        dispatch({ type: FETCH_START });
+        axios.post('/user/verifyEmail',{
+          userid,
+          token
+        }).then(({ data }) => {
+            console.log(" ___ verifyUser RESPONSE ___ ", data);
+            console.log(" ___ verifyUser RESPONSE ___ id", data.data);
+            if(data.data.id && data.data.is_verified){
+              axios.defaults.headers.common["Authorization"] =
+              "Bearer " + data.data.token;
+    
+            localStorage.setItem("x-auth-token", data.data.token);
+            localStorage.setItem("x-auth-refresh-token", data.data.refreshToken);
+            localStorage.setItem("in", Date.now());
+            localStorage.setItem("user", JSON.stringify(data.data.user));
+    
+            dispatch({ type: FETCH_SUCCESS });
+            dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+            dispatch({ type: USER_ROLE, payload: data.data.role });
+            dispatch({ type: USER_DATA, payload: data.data.user });
+            dispatch({ type: IS_AUTHENTICATED, payload: true });
+            dispatch({ type: IS_VERIFIED, payload: true });
+
+            // dispatch({ type: CUSTOMER_ID, payload: data.custom
+                
+                
             }else{
                 console.log('logout')
                 localStorage.removeItem('x-auth-token');
