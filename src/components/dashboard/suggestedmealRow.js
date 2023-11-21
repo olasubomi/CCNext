@@ -29,7 +29,7 @@ function SuggestedMealRow(props){
     function showDropDown(){
         setShowState(!show)
     }
-
+console.log(suggestion, 'hells')
     return(
         <div key={suggestion._id} className={styles.request_tr_div}>
             <table style={{

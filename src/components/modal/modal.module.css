@@ -115,6 +115,15 @@
     cursor: pointer;
 
 }
+.radioBtn{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 1.5px solid #F47900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .sub {
     color: #000;

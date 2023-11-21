@@ -10,10 +10,10 @@ import Link from "next/link"
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { toast } from 'react-toastify';
-import { IndividualModal } from "../modal/individual-meal-product"
+import { UtensilModal } from "../modal/individual-meal-product"
 
 
-export const PopularMeals = () => {
+export const SuggestedUtensils = () => {
     const [meals, setMeals] = useState([])
     const [visibleMeals, setVisibleMeals] = useState(8)
     const [selectedItem, setSelectedItem] = useState({})
@@ -67,13 +67,13 @@ export const PopularMeals = () => {
 
     const fetchMeals = async () => {
         try {
-            const response = await axios(`/items/1?type=Meal&status=all&limit=50`, {
+            const response = await axios(`/items/1?type=Utensil&status=all&limit=50`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-            console.log(response.data.data.items, 'ressw')
+            console.log(response.data.data.items, 'ee')
             setMeals(response.data.data.items)
         } catch (error) {
             console.log(error);
@@ -100,36 +100,35 @@ export const PopularMeals = () => {
     useEffect(() => {
         fetchGroceryList()
     }, [])
-
-    const filteredMeals = meals.filter(meal => meal.item_type === 'Meal' && meal.average_rating);
+console.log(meals, 'meals')
+    const filteredMeals = meals.filter(meal => meal.item_type === 'Utensil' && meal.item_status[0]?.status === 'Public');
 
     return (
         <div className={styles.mealContainer}>
-            <h4>Popular Meals</h4>
+            <h4>Suggested Utensils for you</h4>
             <div className={styles.stores2}>
                 {
-                    filteredMeals.slice(0, visibleMeals).filter(meal => Boolean(meal.total_rating)).map((meal, idx) => {
+                    filteredMeals.slice(0, visibleMeals).filter(utensil => (utensil)).map((utensil, idx) => {
                         return (
                             <div className={styles.card1} key={idx} onClick={() => {
-                                setSelectedItem(meal)
+                                setSelectedItem(utensil)
                                 setOpenModal(true)
                             }}>
                                 {
 
                                     <div className={styles.box}>
-                                        <img src={meal?.itemImage0} className={styles.storeImg1} />
+                                        <img src={utensil?.itemImage0} className={styles.storeImg1} />
                                         <div className={styles.flex}>
-                                            <p className={styles.name2}>{meal.item_name}</p>
-                                            <p>${meal.item_price ? meal.item_price : '0'}</p>
+                                            <p className={styles.name2}>{utensil.item_name}</p>
+                                            <p>$8.43</p>
                                         </div>
                                         <p className={styles.storeName}>Chop Chow Official Store</p>
-                                        <div className={styles.flex} id="products">
+                                        <div style={{display: 'flex', justifyContent: 'flex-start', marginTop: '.7rem', alignItems: 'flex-start'}}>
                                             <div>
                                                 {
-                                                    Array(5).fill('_').map((_, idx) => <GoStarFill key={idx + _} color={meal.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} style={{ marginLeft: '.2rem' }} />)
+                                                    Array(5).fill('_').map((_, idx) => <GoStarFill key={idx + _} color={utensil.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} style={{ marginLeft: '.2rem' }} />)
                                                 }
                                             </div>
-                                            <p className={styles.prep}> 23 mins </p>
                                         </div>
                                     </div>
                                 }
@@ -137,7 +136,7 @@ export const PopularMeals = () => {
                         )
                     })
                 }
-                <IndividualModal
+                <UtensilModal
                     openList={openList}
                     openModal={openModal}
                     selectGrocery={selectGrocery}
@@ -154,7 +153,6 @@ export const PopularMeals = () => {
                     setShow={setShow} />
             </div>
             <p className={styles.view} onClick={() => loadMore()}>View More</p>
-            <div className={styles.border} />
         </div>
     )
 }

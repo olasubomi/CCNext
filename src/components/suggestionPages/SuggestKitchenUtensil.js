@@ -427,6 +427,9 @@ class SuggestKitchenUtensilForm extends Component {
     // this.openModal = false;
     // this.func_removeutensilFlag();
   }
+  capitalizeWords(text) {
+    return text.replace(/\b\w/g, (match) => match.toUpperCase());
+  }
 
   openMealDetailsModal = (index) => {
 
@@ -494,41 +497,70 @@ class SuggestKitchenUtensilForm extends Component {
     utensilWords.map((utensilWord) => {
       return utensilWord[0].toUpperCase() + utensilWord.substring(1);
     }).join(" ");
-    suggestProductForm.append('product_name', utensilWords);
-    suggestProductForm.append('product_images', utensilImage1);
-    suggestProductForm.append('product_images', utensilImage2);
-    suggestProductForm.append('product_images', utensilImage3);
-    suggestProductForm.append('product_images', utensilImage4);
-    suggestProductForm.append('product_details', intro);
+    suggestProductForm.append('item_name', utensilName);
+   
+    suggestProductForm.append('item_intro', intro);
 
-    descriptionGroupList.map((individualDescriptions) => {
-      console.log(individualDescriptions);
-      suggestProductForm.append('product_descriptions', JSON.stringify(individualDescriptions));
+    if (utensilImage1) {
+      suggestProductForm.append('item_images', utensilImage1);
+    }
+    if (utensilImage2) {
+      suggestProductForm.append('item_images', utensilImage2);
+    } if (utensilImage3) {
+      suggestProductForm.append('item_images', utensilImage3);
+    } if (utensilImage4) {
+      suggestProductForm.append('item_images', utensilImage4);
+    }
+    // descriptionGroupList.map((individualDescriptions) => {
+    //   console.log(individualDescriptions);
+    //   suggestProductForm.append('product_descriptions', JSON.stringify(individualDescriptions));
+    // })
+
+    suggestProductForm.append("user", JSON.parse(localStorage.getItem('user'))._id);
+
+    console.log(descriptionGroupList, 'descriptionGroupList')
+    const arr = descriptionGroupList.map(ele => {
+      return {
+        object_name: ele.description_name,
+        object_quantity: ele.quantity,
+        object_measurement: ele.measurement,
+        formatted_string: `${this.capitalizeWords(ele.description_name)} : ${ele.quantity}${ele.measurement}`
+
+      }
     })
+
+   
+    suggestProductForm.append('description', JSON.stringify(arr));
+
+    suggestProductForm.append("item_type", "Utensil")
+
 
     // suggestProductForm.append('ingredientStrings', ingredientStrings);
     // list of products quantity measurements (created on submit Product)
     // suggestProductForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
-    suggestProductForm.append('new_measurements', JSON.stringify(new_measurements));
+    // suggestProductForm.append('new_measurements', JSON.stringify(new_measurements));
 
     // suggestProductForm.append('product_slider', JSON.stringify(product_slider));
     // suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
 
     // new suggested products
     // suggestProductForm.append('product_categories', JSON.stringify(suggestedCategories));
-    suggestProductForm.append('product_type', JSON.stringify("Utensil"));
-    suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
+    // suggestProductForm.append('product_type', JSON.stringify("Utensil"));
+    // suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
 
-    suggestedCategories.map((individualCategories) => {
-      suggestProductForm.append('product_categories', individualCategories);
-    })
+    // suggestedCategories.map((individualCategories) => {
+    //   suggestProductForm.append('product_categories', individualCategories);
+    // })
+
+    const capitalizedSuggestedCategories = suggestedCategories?.map(ele => this.capitalizeWords(ele))
+    suggestProductForm.append("item_categories", JSON.stringify(capitalizedSuggestedCategories));
     // suggestProductForm.append('product_details', descriptionGroupList);
     console.log(this.state.chunk1Content);
 
     // chunk content should be passed as file
     //---------------------------------------------Submit Product to Mongo---------------------------------------------------
     // var url = "/createProduct/";
-    var url = `${base_url}/products/create/`;
+    var url = `${base_url}/items/`;
 
     const config = {
       method: 'POST', data: suggestProductForm, url: url,
@@ -607,7 +639,7 @@ class SuggestKitchenUtensilForm extends Component {
               this.state.utensilImagesData.map((data, index) =>
                 <Row key={index}>
                   <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><Image id="UtensilsMainImages" src={data} width="100%" height="100%" alt="main_Utensil_Image" />
+                    <p><Image id="UtensilsMainImages" src={data} width={100} height={100} alt="main_Utensil_Image" />
                     </p>
                     <div className={styles.close} onClick={() => this.deleteImages(index)}>
                       <AiOutlineClose className={styles.closeIcon} />
@@ -699,19 +731,31 @@ class SuggestKitchenUtensilForm extends Component {
                   // filterSelectedOptions
                   options={this.props.categories?.map((option) => option)}
                   // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
-                  onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
+                  onChange={(e, newValue) =>
+                    this.handleCategoryDropdownChange(newValue)
+                  }
                   // getOptionLabel={option => option}
                   // renderTags={() => {}}
                   value={this.state.suggestedCategories}
-                  renderInput={params => (
+                  renderInput={(params) => (
                     <TextField
                       {...params}
                       variant="outlined"
-                      placeholder="Suggest categories for this utensil.."
+                      placeholder="Suggest categories for this meal.."
                       fullWidth
-                    />)}
+                    />
+                  )}
                 />
-                <Button variant="contained" disableRipple onClick={this.addCategory} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Category</Button>
+                <Button
+                  variant="contained"
+                  disableRipple
+                  onClick={this.addCategory}
+                  className={styles.ingredient_button}
+                  style={{ width: "max-content" }}
+                >
+                  {" "}
+                  Add Category
+                </Button>
               </div>
 
             </div>

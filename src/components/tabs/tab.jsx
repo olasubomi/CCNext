@@ -131,22 +131,24 @@ const MyTabs = ({ id }) => {
 
   const fetchGroceryList = async () => {
     try {
-        const response = await axios(`/groceries/list`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        console.log(response.data.data.data, 'groceries')
-        setSelectGrocery(response.data.data.data)
+      const response = await axios(`/groceries/list`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data.data.data, 'groceries')
+      setSelectGrocery(response.data.data.data)
     } catch (error) {
 
     }
-}
-useEffect(() => {
+  }
+  useEffect(() => {
     fetchGroceryList()
-}, [])
-
+  }, [])
+  const filteredMeals = () => {
+    return suggestedItems.filter((meal) => meal.item_type === 'Meal')
+  }
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -236,18 +238,18 @@ useEffect(() => {
         <p className={styles.length}>{suggestedItems.length} Items</p>
         <div className={styles.meals}>
           {
-            suggestedItems.slice(0, itemsLength).map((item) => {
+            filteredMeals().slice(0, itemsLength).map((item) => {
               return (
                 <div className={styles.mealCard} onClick={() => {
-                  if(item.item_type === 'Meal'){
+                  if (item.item_type === 'Meal') {
                     setSelectedItem(item)
-                  setOpenModal(true)
+                    setOpenModal(true)
                   }
-              }}>
+                }}>
                   <img src={item.itemImage0} />
                   <div className={styles.flexed}>
                     <p>{item.item_name}</p>
-                    <p>{item.item_price ? item.item_price : 'N/A'}</p>
+                    <p>{item.item_price ? `$${item.item_price}` : 'N/A'}</p>
                   </div>
                   <div className={styles.flexed}>
                     <div>
@@ -255,7 +257,7 @@ useEffect(() => {
                         Array(5).fill('_').map((_, idx) => <GoStarFill key={idx + _} color={item.average_rating > idx ? '#04D505' : 'rgba(0,0,0,0.5)'} />)
                       }
                     </div>
-                    <p>{item.item_type === 'Meal' ? item.meal_cook_time : ''}</p>
+                    <p>{item.meal_cook_time}mins</p>
                   </div>
                 </div>
               )
@@ -275,7 +277,7 @@ useEffect(() => {
             setItemAdd={setItemAdd}
             setShow={setShow} />
         </div>
-        <p onClick={() => setItemsLength(PREV => PREV + 4)} className={styles.more}>View More</p>
+        <p onClick={() => setItemsLength(PREV => PREV + 4)} className={styles.more} style={{cursor: 'pointer'}}>View More</p>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <p style={{
@@ -323,7 +325,7 @@ useEffect(() => {
             )
           })
         }
-        <p onClick={() => setItemsLength(PREV => PREV + 4)} className={styles.more}>View More</p>
+        <p onClick={() => setItemsLength(PREV => PREV + 4)} className={styles.more} style={{cursor: 'pointer'}}>View More</p>
       </CustomTabPanel ></>
   );
 };

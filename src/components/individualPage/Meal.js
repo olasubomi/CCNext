@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./meal.module.css";
 
 import Head from "next/head";
@@ -17,7 +17,13 @@ function Meal(props) {
     const url = 'https://www.chopchow.app/'
 
     const [serves, setServes] = useState(parseInt(props.meal?.servings))
+    const [user, setUser] = useState({})
 
+
+    useEffect(() => {
+        const User = JSON.parse(localStorage.getItem('user')) || {}
+        setUser(user)
+    }, [])
     // useEffect(() => {
     //     setServes(parseInt(props.props.meal.servings))
     // })
@@ -31,6 +37,7 @@ function Meal(props) {
 
     // console.log(props.props.props.props.meal, "meal props.props")
     let num = 0;
+
   
     console.log('meald callback', props.callback)
     console.log( props.meal.item_images, 'serve me')
@@ -39,6 +46,7 @@ function Meal(props) {
 //   let url = shareURL + "&via=" + "ChopChowMarket" +"&text=" + encodeURIComponent(`${props.meal.item_intro}`);
     
 // const shareURL = `https://www.chopchow.app/meal/${props.meal._id}?`
+
    
     return (
         <>
@@ -159,11 +167,11 @@ function Meal(props) {
                                 </div>
                             </div>
                             {
-                                props.meal.publicly_available === 'Public' && props.auth.authUser && props.auth.authUser.user_type !== 'admin' &&
+                                props.meal.item_available && user && user?.user_type !== 'admin' &&
 
                                 <div className={styles.meal_section_2_price}>
                                     <h3>Price</h3>
-                                    <p>$7.65<span>/piece</span></p>
+                                    <p>${props.meal.item_price}<span>/piece</span></p>
                                 </div>
                             }
 
@@ -238,16 +246,17 @@ function Meal(props) {
                                     <div className={styles.ingredients_body}>
                                         <div className={styles.ingredients_table}>
                                             <div>
-                                                {props.meal.formatted_ingredients.length > 0 &&
+                                                {props.meal.ingredeints_in_item.length > 0 &&
                                                     <>
-                                                        {props.meal.formatted_ingredients.map((ingredient, index) => {
+                                                        {props.meal?.ingredeints_in_item.map((ingredient, index) => {
                                                             return (
                                                                 <div key={index} className={styles.ingredients_tr}>
                                                                     <input name='id' type="checkbox" />
-                                                                    <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split('of')[1] : ingredient.split(' ')[1]}</td>
-                                                                    <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[0] : ingredient.split(' ')[0]}</td>
-                                                                    <td className={styles.td}>{ingredient.split('of').length > 1 ? ingredient.split(' ')[1] : ''}</td>
-                                                                    <div className={styles.ingredients_td}>Unavailable</div>
+                                                                    <td className={styles.td}>{ingredient.item_name}</td>
+                                                                    <td className={styles.td}>{ingredient.item_quantity}</td>
+                                                                    <td className={styles.td}>{ingredient.item_measurement}</td>
+                                                                    <div className={styles.ingredients_td}>{ingredient.product_available ? 'Available' : 'Unavailable'}</div>
+                                                                    <div className={styles.ingredients_td}>${ingredient.item_price}</div>
                                                                 </div>
                                                             )
                                                         })}
@@ -403,7 +412,7 @@ function Meal(props) {
                         </div>
                     </div> */}
 
-                    {props.props?.auth?.authUser && props.props?.auth?.authUser?.user_type !== 'admin' &&
+                    {user && user?.user_type !== 'admin' &&
                 <div className={styles.meal_section_8}>
                     <h3>Stores location</h3>
                     <Stores />

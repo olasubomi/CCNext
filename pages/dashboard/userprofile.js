@@ -28,6 +28,8 @@ import axios from '../../src/util/Api';
 import PhoneInput from 'react-phone-input-2';
 import { getUser } from '../../src/actions';
 import AddIcon from '@mui/icons-material/Add';
+import { suggestion_form_image, suggestion_form_image_col_1, suggestion_form_image_col_2, suggestion_form_image_icon, suggestion_form_image_icon_con, suggestion_form_group, suggestion_form_label } from "../../src/components/suggestionPages/suggestion.module.css";
+
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -107,6 +109,13 @@ const UserProfile = (props) => {
         showAlert: false,
         messageAlert: "",
         variant: "",
+        profile_picture: "",
+        profile_picture_name: "",
+        profile_picture_data: "",
+        background_picture: "",
+        background_picture_name: "",
+        background_picture_data: "",
+        store_id: ""
     });
     const { email, phone_number, first_name, last_name, password,
         address, new_password, profileImageData, country, state, city, zip_code,
@@ -131,6 +140,61 @@ const UserProfile = (props) => {
         "friday",
         "saturday"
     ];
+    function uploadImage(picture) {
+
+        if (picture === 'profile') {
+            const input = document.createElement("input");
+            input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+            input.id = "profileImage";
+            input.name = "profileImage";
+            input.type = "file";
+            input.onchange = (ev) => onUpdateImage(ev, picture);
+            input.hidden = true;
+            input.click()
+        } else {
+            const input = document.createElement("input");
+            input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+            input.id = "backgroundImage";
+            input.name = "backgroundImage";
+            input.type = "file";
+            input.onchange = (ev) => onUpdateImage(ev, picture);
+            input.hidden = true;
+            input.click()
+        }
+    }
+
+    function onUpdateImage(event, picture) {
+        if (event.target.files[0] === undefined) return;
+        var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
+
+        if (allowedImageExtensions.exec(event.target.files[0].name)) {
+            if (picture === 'profile') {
+                setFormState({
+                    ...formState,
+                    ['profile_picture']: event.target.files[0],
+                    ['profile_picture_name']: event.target.files[0].name,
+                    ['profile_picture_data']: URL.createObjectURL(event.target.files[0])
+                })
+                var image = document.getElementById("profile_picture");
+                image.style.display = "block";
+                image.src = URL.createObjectURL(event.target.files[0]);
+            } else {
+                setFormState({
+                    ...formState,
+                    ['background_picture']: event.target.files[0],
+                    ['background_picture_name']: event.target.files[0].name,
+                    ['background_picture_data']: URL.createObjectURL(event.target.files[0])
+                })
+                var image = document.getElementById("background_picture");
+                image.style.display = "block";
+                image.src = URL.createObjectURL(event.target.files[0]);
+            }
+        }
+        else {
+            alert("Invalid image type");
+        }
+
+    };
 
     useEffect(() => {
         if (props.auth.authUser) {
@@ -339,6 +403,47 @@ const UserProfile = (props) => {
                 console.log("Failed to delete user");
             });
     };
+
+    const getStoreInformation = async () => {
+        const userId = JSON.parse(localStorage.getItem("user"))._id
+        try {
+            const response = await axios.get(`http://localhost:5000/api/stores/getstore/user?userId=${userId}`)
+            const data = response.data?.data?.supplier || {}
+            if (data.hasOwnProperty('profile_picture') && data.hasOwnProperty('background_picture')) {
+                setFormState({ ...formState, profile_picture: data.profile_picture, background_picture: data.background_picture, store_id: data._id })
+            }
+            console.log('store', response.data?.data)
+        } catch (e) {
+            console.log(e, 'eeee')
+        }
+    }
+
+    const handleUpdateStore = async () => {
+        const form = new FormData();
+        form.append('profile_picture', formState.profile_picture)
+        form.append('background_picture', formState.background_picture)
+
+        const userId = JSON.parse(localStorage.getItem('user'))._id
+
+        try {
+            const response = await axios(`http://localhost:5000/api/stores/updatestore/${formState.store_id}`, {
+                method: 'put',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                data: form
+            })
+            getStoreInformation()
+        } catch (e) {
+            console.log('e', e)
+        }
+
+
+    }
+
+    useEffect(() => {
+        getStoreInformation()
+    }, [])
 
     return (
         <div className={container + " " + col2}>
@@ -653,7 +758,7 @@ const UserProfile = (props) => {
                                                     <div className={styles.suggestion_form_image_col_2}>
                                                         {driver_car_picture.carContentURL &&
                                                             <div className={styles.profile_image}>
-                                                                <Image width={300} height={300} src={driver_car_picture.carContentURL} alt="driver_car_picture_carContentURL"/>
+                                                                <Image width={300} height={300} src={driver_car_picture.carContentURL} alt="driver_car_picture_carContentURL" />
                                                             </div>
                                                         }
                                                     </div>
@@ -719,10 +824,10 @@ const UserProfile = (props) => {
                                                 <Image src={cardImage} alt="cardImage" />
                                             </div>
                                             <div className={styles.profile_payment_method}>
-                                                <Image src={paypal} alt="paypal"/>
+                                                <Image src={paypal} alt="paypal" />
                                             </div>
                                             <div className={styles.profile_payment_method}>
-                                                <Image src={sezzle} alt="sezzle"/>
+                                                <Image src={sezzle} alt="sezzle" />
                                             </div>
 
                                         </div>
@@ -779,7 +884,7 @@ const UserProfile = (props) => {
                                                             className={styles.profile_card_type_radio_button}
                                                         ></label>
                                                         <label htmlFor="american" className={styles.profile_card_type_radioLabel}>
-                                                            <Image src={american} alt="american"/>
+                                                            <Image src={american} alt="american" />
                                                         </label>
                                                     </div>
                                                 </div>
@@ -1132,6 +1237,42 @@ const UserProfile = (props) => {
                                         </div>
                                     </div>
                                 }
+
+                                <div id='account-type' className={styles.profile_basic_info_con}>
+                                    <h3>Store Management</h3>
+                                    <div className={styles.profile_basic_info}>
+                                        <div className={styles.form_group}>
+                                            <h3>Upload Profile Picture</h3>
+
+                                            <div className={suggestion_form_image}>
+                                                <div className={suggestion_form_image_col_1}>
+                                                    <img id="profile_picture" width='100%' alt="profile" style={{ display: "none" }} />
+                                                    <div onClick={() => uploadImage('profile')} className={suggestion_form_image_icon_con}>
+                                                        <AddIcon className={suggestion_form_image_icon} />
+                                                    </div>
+                                                </div>
+                                                <div className={suggestion_form_image_col_2}>
+                                                    <p>Upload picture with : Jpeg or Png format and not more than 500kb</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.form_group}>
+                                            <h3>Upload Background Picture</h3>
+
+                                            <div className={suggestion_form_image}>
+                                                <div className={suggestion_form_image_col_1}>
+                                                    <img id="background_picture" width='100%' alt="background" style={{ display: "none" }} />
+                                                    <div onClick={() => uploadImage('background')} className={suggestion_form_image_icon_con}>
+                                                        <AddIcon className={suggestion_form_image_icon} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button className={styles.profile_button} onClick={handleUpdateStore}>Save Changes</button>
+
+                                    </div>
+                                </div>
 
                                 {props.auth.authUser.user_type !== 'admin' &&
                                     <div className={styles.line}></div>

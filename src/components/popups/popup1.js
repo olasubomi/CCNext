@@ -84,7 +84,6 @@ class Popup1 extends Component {
                             <div className={styles.popup_col_1}>
                                 <div>
                                     <Image
-                                        fill
                                         src={Array.isArray(imageData) ? imageData[0] : imageData}
                                         className={styles.popup_main_img}
                                         alt="pop up"
@@ -105,8 +104,8 @@ class Popup1 extends Component {
                                                     alt="pop up"
                                                     src={data}
 
-                                                    height={"100%"}
-                                                    width={"100%"}
+                                                    height={100}
+                                                    width={100}
                                                     className={styles.popup_image}
                                                     objectFit="cover"
                                                     objectPosition="center"

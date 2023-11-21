@@ -16,6 +16,9 @@
     border-radius: 8px;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
 }
+.card{
+    width: 100%;
+}
 
 .storeImg2 {
     width: 100%;
@@ -30,6 +33,8 @@
 .stores {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
+    width: 100%;
+    gap: 2.5rem;
 }
 
 .stores2 {
@@ -95,6 +100,7 @@
 
 .storeContainer {
     padding: 1rem 5rem;
+    position: relative;
 }
 
 .underline {
@@ -564,4 +570,15 @@
     background: #F1F1F1;
     width: 100%;
     height: 100%;
+}
+.end{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    margin-right: 3rem;
+    margin-top: -5rem;
+}
+.des{
+    width: 50%;
 }

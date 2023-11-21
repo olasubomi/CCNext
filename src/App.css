@@ -327,10 +327,9 @@ color: #353535;
 
 }
 
-
 input[type=radio] {
   appearance:inherit;
-  padding: 7.5px;
+  padding: 6px;
   background-color: transparent;
   border-radius:50%;
 }
@@ -341,7 +340,7 @@ input[type="checkbox"]:checked{
   accent-color: #F47900 !important;
   color: #fff;
   background-color: #fff;
-  padding: 7.5px;
+  padding: 6px;
   background-color: transparent;
 }
 
@@ -387,4 +386,24 @@ input[type="checkbox"]:checked{
   font-size: 14px;
   color: #6D6D6D;
   text-transform: capitalize;
+}
+.css-13cymwt-control{
+  border-color: #F47900;
+  border-width: 1px;
+  min-height: 51px;
+  min-width: 200px;
+  outline-width: 1px;
+  outline-color: #F47900;
+  outline-style: solid;
+}
+.css-t3ipsp-control{
+  border-color: #F47900;
+  border-width: 2px;
+  min-height: 51px;
+  min-width: 200px;
+  outline-width: 1px;
+  outline-color: #F47900;
+  outline-style: solid;}
+.option{
+  background-color: red;
 }

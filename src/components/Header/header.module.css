@@ -771,7 +771,7 @@
 
   .navbar_down{
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 
   .navbar_top{
