@@ -205,7 +205,7 @@ const Grocery = () => {
                             </div>
                         ))} </div> :
                     <div className={styles.card}>
-                        <Image src={noteGif} height={200} width={250} className={styles.image} />
+                        <Image src={noteGif} height={200} width={250} objectFit="contain" objectPosition="center" />
                         <div className={styles.flex}>
                             <p className={styles.card_text}>You have no Grocery List.</p>
                             <div onClick={() => setShow(!show)}>

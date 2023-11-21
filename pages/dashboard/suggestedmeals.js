@@ -101,10 +101,10 @@ const SuggestedMeals = (props) => {
             setSearchType("Item")
             let url
             if (props.auth.authUser.user_type === 'admin') {
-                url = `/items/${newPage ? newPage : page}?type=Product,Meal&status=${itemStatus}`
+                url = `/items/${newPage ? newPage : page}?type=Product,Meal,Utensil&status=${itemStatus}`
             } else {
                 // url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
-                url = `/items/user-items/${newPage ? newPage : page}?type=Product,Meal` + '&userId=' + props.auth.authUser._id
+                url = `/items/user-items/${newPage ? newPage : page}?type=Product,Meal,Utensil` + '&userId=' + props.auth.authUser._id
             }
 
 
@@ -116,9 +116,10 @@ const SuggestedMeals = (props) => {
                     console.log('data.data.data.count', data.data.data.count)
                     console.log('data.data', data.data.data.items)
                     const products = data.data.data.items?.filter(ele => ele.item_type === 'Product');
+                    const utensils = data.data.data.items?.filter(ele => ele.item_type === 'Utensil');
                     const meals = data.data.data.items?.filter(ele => ele.item_type === 'Meal');
-                    const item = data.data.data.items?.filter(ele => ele.item_type === 'Product' || ele.item_type === 'Meal');
-                    setData({ products, meals, item })
+                    const item = data.data.data.items?.filter(ele => ele.item_type === 'Product' || ele.item_type === 'Meal' || ele.item_type === 'Utensil');
+                    setData({ products, meals, item, utensils })
                     setFilteredSuggestionsState(data.data.data)
                     setSuggestionsState(data.data.data)
                 }

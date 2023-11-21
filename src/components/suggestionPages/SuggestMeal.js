@@ -203,7 +203,7 @@ class SuggestMealForm extends Component {
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
     // var url = "/get-all-products";
-    // url = "https://chopchowserver.vercel.app/get-all-products";
+    // url = "https://chopchowdev.herokuapp.com/get-all-products";
 
     //----get category meals-------------------------
     // url = "/get-all-categories";
@@ -1898,8 +1898,8 @@ class SuggestMealForm extends Component {
                     <Image
                       src={data}
                       id={"itemmealImage" + { index }}
-                      width="100%"
-                      height="100%"
+                      width={100}
+                      height={100}
                       alt="other_meal_images"
                       objectFit="cover"
                       objectPosition="center"
@@ -2234,9 +2234,9 @@ class SuggestMealForm extends Component {
                     id="chunk1Image"
                     className={styles.suggestion_image}
                     alt="recipe_step1_image_or_video"
-                    height={"100%"}
-                    width={"100%"}
-                    style={{ display: "none", objectFit: "cover", objectPosition: "center" }}
+                    style={{
+                      display: "none", objectFit: 'cover', height:"100px", width:"100px", objectPosition: "center"
+                    }}
 
                   />
                   <video
@@ -2330,8 +2330,8 @@ class SuggestMealForm extends Component {
                     <p>
                       <img
                         id={"chunk" + id + "Image"}
-                        height={"100%"}
-                        width={"100%"}
+                        height="100%"
+                        width="100%"
                         className={styles.suggestion_image}
                         alt={"recipe_step" + id + "_image_or_video"}
                         style={{ display: "none", objectFit: "cover", objectPosition: "center" }}

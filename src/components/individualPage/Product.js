@@ -29,13 +29,14 @@ function Product(props) {
             set_formatted_ingredients(props.product.formatted_ingredients)
         }
     }, [props.product.formatted_ingredients])
-    console.log(props.product.item_description, 'descrptionn')
+    console.log(props.product.item_images, 'image')
     return (
         <>
             <Head>
                 <title>Product</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta name="twitter:card" content="summary_large_image"/>
+
                 <meta name="twitter:description" content={props.product.item_intro}/>
                 <meta name="twitter:image" content={props.product.itemImage0}/>
                 <meta name="twitter:image:alt" content={props.product.item_name }/>
@@ -46,6 +47,7 @@ function Product(props) {
                 <meta property="og:image" content={props.product.itemImage0}/>
                 <meta property="og:image:alt" content={props.product.item_name }/>
             
+
 
 
             </Head>
@@ -122,11 +124,11 @@ function Product(props) {
                             </div>
                         </div>
                         {
-                            props.product.publicly_available === 'Public' &&
+                            props.product.item_available &&
 
                             <div className={styles.product_section_2_price}>
                                 <h3>Price</h3>
-                                <p>$7.65<span>/piece</span></p>
+                                <p>${props.product.item_price}<span>/piece</span></p>
                             </div>}
                     </div>
                 </div>
