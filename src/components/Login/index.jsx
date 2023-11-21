@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.css";
-import { connect } from "react-redux";
-import { userSignIn, socialSignIn } from "../../actions";
+import { connect, useSelector } from "react-redux";
+import { userSignIn, socialSignIn, verifyEmail } from "../../actions";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
 import facebook from "../../../public/assets/logos/facebook.png";
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png";
@@ -20,6 +20,8 @@ import { useAuth } from "../../context/auth.context";
 
 
 function Login(props) {
+  const isverified = useSelector(state => state.Auth.isVerified);
+  const isauthenticated = useSelector(state => state.Auth.isAuthenticated);
   const [forgetPassword, setForgetPasswordState] = useState(false);
   const [signUp, setSignUpState] = useState(false);
   const [status, setStatusState] = useState(null);
@@ -36,6 +38,14 @@ function Login(props) {
 
   const [showFacebook, setShowFacebook] = useState(false)
   const router = useRouter();
+  
+
+  // useEffect(() => {
+  //  // const currentURL = window.location.href;
+  //   const {userid, token} = router.query;
+  //   console.log("useeffect query", router.query)
+  //   props.verifyEmail(userid, token);
+  // }, [router.query])
 
   console.log(process.env.GOOGLE_CLIENT_ID);
 
@@ -48,12 +58,19 @@ function Login(props) {
   }
 
   function openSignUp() {
-    props.setSignUpState(true)
+    setSignUpState(true)
+
     // setSignUpState(true);
   }
 
   function closeSignUp() {
-    setSignUpState(false);
+    if(isverified == "true" && isauthenticated == "true" ){
+      setSignUpState(true);
+
+      
+    }else{
+      setSignUpState(false);
+    }
   }
 
   function onChange(e) {
@@ -62,6 +79,9 @@ function Login(props) {
   const responseFacebook = (response) => {
     console.log(response);
   }
+
+
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"))
     if (props.auth.isAuthenticated && user) {
@@ -103,7 +123,7 @@ function Login(props) {
 
     // }
   }
-
+  console.log("useeffect isverified", isverified)
   async function handleSocialLogin(credentialResponse) {
     setLoginLoading(true);
     await props.socialLogin(credentialResponse.credential);
@@ -119,7 +139,7 @@ function Login(props) {
   }
   //{console.log("signedin", props.auth)}
   return <>
-    {true &&
+    {true && !signUp &&
       (
       <div className={styles.login}>
         <div className={styles.login_col_2}>
@@ -218,7 +238,7 @@ function Login(props) {
                 {
                   showFacebook &&
                   <FacebookLogin
-                    appId="791475055678094"
+                    appId="300185864007066"
                     autoLoad={true}
                     fields="name,email,picture"
                     cssClass= {styles.blue}
@@ -299,6 +319,7 @@ function mapDispatchToProps(dispatch) {
   return {
     login: (email, password, callback) => dispatch(userSignIn(email, password, callback)),
     socialLogin: (code) => dispatch(socialSignIn(code)),
+    verifyEmail: (userid, token) => dispatch(verifyEmail(userid, token))
   };
 }
 

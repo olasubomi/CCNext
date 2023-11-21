@@ -1,4 +1,3 @@
-
 import Head from "next/head";
 import Meal from '../../src/components/individualPage/Meal';
 import GoBack from '../../src/components/CommonComponents/goBack';
@@ -19,7 +18,7 @@ const individualMealPage = () => {
             // window.location.assign('/')
         }
     }, [])
-
+console.log("props", props)
     const months = [
         "Jan",
         "Feb",
@@ -39,6 +38,7 @@ console.log(router.query.id, "this meal")
 const getMeal = async (name) => {
     // let meal = await axios.get(`/meals/get-meal/${id}`)
     let meal = await axios.get(`/items/user/${name}`)
+    console.log(meal, "meals")
     console.log(meal.data.data.meal, "get props")
 
     setProps(meal.data.data[0] || {})
