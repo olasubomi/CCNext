@@ -206,17 +206,62 @@ function SignUp(props){
     first_name: "",
     last_name: "",
     password: "",
+    confirm_password: "",
   });
-  const { username, email, phone_number, first_name, last_name, password } = formState;
+  const [error, setError] = useState({
+    username: '',
+    password: '',
+    confirm_password: ''
+  })
+  const { username, email, phone_number, first_name, last_name, password, confirm_password } = formState;
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
+    validateInput(e);
   }
 
   function handlePhoneChange(e) {
     setFormState({ ...formState, ['phone_number']: e });
   }
 
+
+  const validateInput = e => {
+    let { name, value } = e.target;
+    setError(prev => {
+      const stateObj = { ...prev, [name]: "" };
+ 
+      switch (name) {
+        case "username":
+          if (!value) {
+            stateObj[name] = "Please enter Username.";
+          }
+          break;
+ 
+        case "password":
+          if (!value) {
+            stateObj[name] = "Please enter Password";
+          } else if (password && value !== confirm_password) {
+            stateObj["confirm_password"] = "Password and Confirm Password does not match.";
+          } else {
+            stateObj["confirm_password"] = confirm_password ? "" : error.confirm_password;
+          }
+          break;
+ 
+        case "confirm_password":
+          if (!value) {
+            stateObj[name] = "Please enter Confirm Password.";
+          } else if (confirm_password && value !== password) {
+            stateObj[name] = "Password and Confirm Password does not match.";
+          }
+          break;
+ 
+        default:
+          break;
+      }
+ 
+      return stateObj;
+    });
+  }
   // function formSubmit(e){
   //   e.preventDefault();
   //   //validate email
@@ -252,8 +297,15 @@ function SignUp(props){
 
   function formSubmit(e){
     e.preventDefault();
-    props.signup(formState);
-    props.toggleLogin()
+    props.signup({
+      username,
+      email,
+      phone_number,
+      first_name,
+      last_name,
+      password,
+    });
+    // props.toggleLogin()
   }
   
   function submitForm() {
@@ -286,180 +338,207 @@ function SignUp(props){
       })
   };
 
-    return <>
-      <div className={styles.login}>
-        <div className={styles.login_col_2}>
-          <div className={styles.login_top}>
-            <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}>
-              <Image src={closeIcon} className={styles.login_cancel} />
+    return(
+      <>
+        <div className={styles.login}>
+          <div className={styles.login_col_2}>
+            <div className={styles.login_top}>
+              <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}>
+                <Image src={closeIcon} className={styles.login_cancel} />
+              </div>
+              <Image
+                  src={img_logo}
+                  alt="logo"
+                  className={styles.login_main_logo_img}
+                />
             </div>
-            <Image
-                src={img_logo}
-                alt="logo"
-                className={styles.login_main_logo_img}
-              />
-          </div>
-          <h3>Sign Up</h3>
-          <div className={styles.login_form}>
+            <h3>Sign Up</h3>
+            <div className={styles.login_form}>
+                <div className={styles.login_form_col_2}>
+                    <div className={styles.login_form_group}>
+                        <label htmlFor="first_name" className={styles.login_form_label}>First Name</label>
+                        <input 
+                        type="text"
+                        name="first_name"
+                        value={first_name}
+                        placeholder="First Name"
+                        onChange={handleChange}
+                         className={styles.login_form_input} />
+                        {/* {this.props.errors.accountname && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
+                    </div>
+                    <div className={styles.login_form_group}>
+                        <label htmlFor="last_name" className={styles.login_form_label}>Last Name</label>
+                        <input
+                        type="text"
+                        name="last_name"
+                        value={last_name}
+                        placeholder="Last Name"
+                        onChange={handleChange}
+                         className={styles.login_form_input} />
+                        {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
+                    </div>
+                </div>
+              <div className={styles.login_form_group}>
+                <label htmlFor="username" className={styles.login_form_label}>
+                  Username
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  value={username}
+                  placeholder="Username"
+                  onChange={handleChange}
+                  onBlur={validateInput}
+                  className={styles.login_form_input}
+                />
+                {error.username && <span style={{color: "#FF0000", fontSize: 14}}>{error.username}</span>}
+              </div>
+              <div className={styles.login_form_group}>
+                <label htmlFor="email" className={styles.login_form_label}>
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  placeholder="Email"
+                  onChange={handleChange}
+                  className={styles.login_form_input}
+                />
+              </div>
               <div className={styles.login_form_col_2}>
                   <div className={styles.login_form_group}>
-                      <label htmlFor="first_name" className={styles.login_form_label}>First Name</label>
-                      <input 
-                      type="text"
-                      name="first_name"
-                      value={first_name}
-                      placeholder="First Name"
-                      onChange={handleChange}
-                       className={styles.login_form_input} />
-                      {/* {this.props.errors.accountname && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
+                      <label htmlFor="city" className={styles.login_form_label}>City</label>
+                      <input  name="city" type="text" className={styles.login_form_input} />
+                      {/* {this.props.errors.city && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
                   </div>
                   <div className={styles.login_form_group}>
-                      <label htmlFor="last_name" className={styles.login_form_label}>Last Name</label>
-                      <input
-                      type="text"
-                      name="last_name"
-                      value={last_name}
-                      placeholder="Last Name"
-                      onChange={handleChange}
-                       className={styles.login_form_input} />
+                      <label htmlFor="country" className={styles.login_form_label}>Country</label>
+                      <input name="country" type="text" className={styles.login_form_input} />
                       {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
                   </div>
               </div>
-            <div className={styles.login_form_group}>
-              <label htmlFor="username" className={styles.login_form_label}>
-                Username
-              </label>
-              <input
-                type="text"
-                name="username"
-                value={username}
-                placeholder="Username"
-                onChange={handleChange}
-                className={styles.login_form_input}
-              />
-            </div>
-            <div className={styles.login_form_group}>
-              <label htmlFor="email" className={styles.login_form_label}>
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={email}
-                placeholder="Email"
-                onChange={handleChange}
-                className={styles.login_form_input}
-              />
-            </div>
-            <div className={styles.login_form_col_2}>
-                <div className={styles.login_form_group}>
-                    <label htmlFor="city" className={styles.login_form_label}>City</label>
-                    <input  name="city" type="text" className={styles.login_form_input} />
-                    {/* {this.props.errors.city && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
-                </div>
-                <div className={styles.login_form_group}>
-                    <label htmlFor="country" className={styles.login_form_label}>Country</label>
-                    <input name="country" type="text" className={styles.login_form_input} />
-                    {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
-                </div>
-            </div>
-            <div className={styles.login_form_group}>
-              <label htmlFor="phone_number" className={styles.login_form_label}>
-                Phone Number
-              </label>
-              {/* <input
-                type="tel"
-                name="phone_number"
-               value={phone_number}
-                placeholder="Your Phone Number"
-                onChange={handleChange}
-                className={styles.login_form_input}
-              /> */}
-              <PhoneInput
-                inputClass={styles.login_form_input}
-                country={'us'}
-                name="phone_number"
-                value={phone_number}
-                onChange={phone => handlePhoneChange(phone)}
-              />
-            </div>
-            <div className={styles.login_form_group}>
-              <label htmlFor="password" className={styles.login_form_label}>
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={password}
-                placeholder="Create a Password"
-                onChange={handleChange}
-                className={styles.login_form_input}
-              />
-              <div className={styles.secureEye}>
-                <Image src={closeIcon} />
-                <i className={styles.eye}></i>
-            </div>
-            </div>
-
-              <div className={styles.signup_form_option}>
-              <input
-                  className={styles.signup_form_radioInput}
-                  type="radio"
-                  id="service"
-                  name="agreement"
-                  value="agreed"
-                  />
-                  <label
-                  htmlFor="service"
-                  className={styles.signup_form_radio_button}
-                  ></label>
-                  <label htmlFor="service" className={styles.signup_form_radio_label}>
-                      I accept the Terms & Conditions and Privacy and Cookie Notice
-                  </label>
+              <div className={styles.login_form_group}>
+                <label htmlFor="phone_number" className={styles.login_form_label}>
+                  Phone Number
+                </label>
+                {/* <input
+                  type="tel"
+                  name="phone_number"
+                 value={phone_number}
+                  placeholder="Your Phone Number"
+                  onChange={handleChange}
+                  className={styles.login_form_input}
+                /> */}
+                <PhoneInput
+                  inputClass={styles.login_form_input}
+                  country={'us'}
+                  name="phone_number"
+                  value={phone_number}
+                  onChange={phone => handlePhoneChange(phone)}
+                />
+              </div>
+              <div className={styles.login_form_group}>
+                <label htmlFor="password" className={styles.login_form_label}>
+                  Password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={password}
+                  placeholder="Create a Password"
+                  onChange={handleChange}
+                  onBlur={validateInput}
+                  className={styles.login_form_input}
+                />
+                <div className={styles.secureEye}>
+                  <Image src={closeIcon} />
+                  <i className={styles.eye}></i>
+              </div>
+              {error.password && <span style={{color: "#FF0000", fontSize: 14}}>{error.password}</span>}
+              </div>
+              <div className={styles.login_form_group}>
+                <label htmlFor="password" className={styles.login_form_label}>
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  name="confirm_password"
+                  value={confirm_password}
+                  placeholder="Confirm Password"
+                  onChange={handleChange}
+                  onBlur={validateInput}
+                  className={styles.login_form_input}
+                />
+                <div className={styles.secureEye}>
+                  <Image src={closeIcon} />
+                  <i className={styles.eye}></i>
+              </div>
+              {error.confirm_password && <span style={{color: "#FF0000", fontSize: 14}} >{error.confirm_password}</span>}
               </div>
 
-              <div className={styles.signup_form_option}>
-              <input
-                  className={styles.signup_form_radioInput}
-                  type="radio"
-                  id="service"
-                  name="agreement"
-                  value="agreed"
-                  />
-                  <label
-                  htmlFor="service"
-                  className={styles.signup_form_radio_button}
-                  ></label>
-                  <label htmlFor="service" className={styles.signup_form_radio_label}>
-                      I want to receive Chop Chow Newletters and best deal promotional offers
-                  </label>
-              </div>
+                <div className={styles.signup_form_option}>
+                <input
+                    className={styles.signup_form_radioInput}
+                    type="radio"
+                    id="service"
+                    name="agreement"
+                    value="agreed"
+                    />
+                    <label
+                    htmlFor="service"
+                    className={styles.signup_form_radio_button}
+                    ></label>
+                    <label htmlFor="service" className={styles.signup_form_radio_label}>
+                    I accept the Terms & Conditions and <Link href="/privacypolicy"><a style={{textDecoration: "underline"}}>Privacy and Cookie Notice</a></Link>
+  
+                    </label>
+                </div>
+
+                <div className={styles.signup_form_option}>
+                <input
+                    className={styles.signup_form_radioInput}
+                    type="radio"
+                    id="service"
+                    name="agreement"
+                    value="agreed"
+                    />
+                    <label
+                    htmlFor="service"
+                    className={styles.signup_form_radio_button}
+                    ></label>
+                    <label htmlFor="service" className={styles.signup_form_radio_label}>
+                        I want to receive Chop Chow Newletters and best deal promotional offers
+                    </label>
+                </div>
+              
+            </div>
+
+            {status === 'success' ? 
+            <p className="msg-success">{message}</p>:
+            <p className="msg-err">{message}</p>}
+  
+            <button onClick={formSubmit} className={styles.login_button}>Register</button>
+  
+            <h3 className={styles.login_new}>Already have an account? {props.closeSignUp ? <span onClick={props.closeSignUp}>Sign in here</span> : <Link href='/login'><a>Sign in here</a></Link> }</h3>
             
-          </div>
-
-          {status === 'success' ? 
-          <p className="msg-success">{message}</p>:
-          <p className="msg-err">{message}</p>}
-
-          <button onClick={formSubmit} className={styles.login_button}>Register</button>
-
-          <h3 className={styles.login_new}>Already have an account? {props.closeSignUp ? <span onClick={props.closeSignUp}>Sign in here</span> : <Link href='/login'>Sign in here</Link> }</h3>
-          
-        </div>   
-        <div style={props.toggleLogin ? {gridTemplateRows: 'max-content 1fr' }: {gridTemplateRows: '1fr'}} className={styles.login_col_1}>
-          {props.toggleLogin && 
-          <div className={styles.login_top}>
-            <h2></h2>
-            <div onClick={props.toggleLogin} className={styles.login_cancel_con}>
-              <Image src={closeIcon} className={styles.login_cancel} />
-            </div>
-          </div>}
-          <h3>
-            Get your African Delicacies delievered to your Door
-          </h3>
-        </div>    
-      </div>
-    </>;
+          </div>   
+          <div style={props.toggleLogin ? {gridTemplateRows: 'max-content 1fr' }: {gridTemplateRows: '1fr'}} className={styles.login_col_1}>
+            {props.toggleLogin && 
+            <div className={styles.login_top}>
+              <h2></h2>
+              <div onClick={props.toggleLogin} className={styles.login_cancel_con}>
+                <Image src={closeIcon} className={styles.login_cancel} />
+              </div>
+            </div>}
+            <h3 style={{position: 'absolute', top: 145, alignSelf: 'center', width: 320, zIndex: 99, paddingLeft: 40}}>
+              Get your African Delicacies delievered to your Door
+            </h3>
+            <Image width={420} height={550} src="/assets/signup/signup_bg.png" alt="Signup" />
+          </div>    
+        </div>
+      </>
+    )
   }
 
   function mapStateToProp(state) {
