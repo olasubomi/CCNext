@@ -73,13 +73,13 @@ export const Stores = () => {
                                     {
 
                                         <div>
-                                            <Image src={store?.background_picture ? store?.background_picture : stored} className={styles.storeImg} width={200} height={200} objectFit="cover" objectPosition='center' />
+                                            <Image src={store?.background_picture ? store?.background_picture : stored} className={styles.storeImg} width={200} height={200}/>
                                             <p className={styles.name}>{store?.store_name}</p>
                                         </div>
                                     }
-                                    {
+                                    {/* {
                                         show && selected === id && <MealDropDown selectedStore={selectedStore} id={selectedStore.supplier._id} />
-                                    }
+                                    } */}
 
                                 </div>
 

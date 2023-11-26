@@ -6,21 +6,23 @@
     flex-direction: column;
     justify-content: space-between;
     padding-top: 10%;
+    position: relative;
 }
 
 .header {
     width: 100%;
-    height: 69px;
-    margin-top: 2%;
+    height: 70px;
     background-color: #353535;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    position: fixed;
+    z-index: 2;
+    top: 19.5%;
 }
 
 .searchbar {
-    width: 45%;
+    width: 100%;
     border-radius: 4px;
     background: #FFF;
     color: #949494;
@@ -28,14 +30,26 @@
     height: 39px;
     border: none;
     outline: none;
-    padding-left: 3.5rem;
+    padding-left: 4rem;
     font-size: 14px;
+    position: relative;
+}
+.search2{
+    position: relative;
+    width: 49%;
+    display: flex;
+    align-items: center;
+}
+.location{
+    display: flex;
+    align-items: center;
+    padding-left: 2.4rem;
 }
 
 .locationIcon {
     position: absolute;
-    top: 37%;
-    left: 36%;
+    top: 30%;
+    left: 2%;
 }
 
 .title {
@@ -47,12 +61,16 @@
 
 .header2 {
     display: flex;
-    width: 70%;
-    margin: 2rem 25% 2rem 5%;
+    width: 100%;
     background: #F8F8F8;
     justify-content: space-between;
     align-items: flex-start;
     padding-bottom: 2rem;
+    padding-top: 1rem;
+    position: fixed;
+    z-index: 10;
+    padding-left: 5rem;
+    top: 28%;
 
 }
 .searchbox {
@@ -91,12 +109,13 @@
 
 .two {
     display: flex;
-    gap: 15px;
+    gap: 10px;
+    width: 100%;
+    margin-left: 12%;
 }
 
 .search {
-    width: 400px;
-    max-width: 400px;
+    width: 40%;
     height: 100%;
     position: relative;
 }
@@ -182,6 +201,7 @@
 
 .searchflex {
     display: flex;
+    width: 90%;
 }
 
 .searchbtn {
@@ -199,12 +219,12 @@
     font-weight: 500;
 }
 
-
 .storeContainer {
     background: #FCFCFC;
     width: 100%;
     height: 100%;
     position: relative;
+    padding-top: 20rem;
 }
 
 .dropdown {
@@ -295,11 +315,9 @@
 .modalContainer {
     width: 100%;
     position: fixed;
-    /* Use 'fixed' instead of 'absolute' for the modal container */
     top: 0;
     left: 0;
     right: 0;
-    /* Use 'right' instead of 'bottom' to cover the bottom */
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.45);
     z-index: 1000;
@@ -522,4 +540,109 @@
 
 .border {
     border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+}
+
+@media only screen and (max-width: 1100px){
+    .header {
+        top: 18%;
+    }
+    .header2{
+        width: 100%;
+        top: 26%;
+    }
+    .search{
+        width: 60%;
+    }
+    .storeContainer{
+        padding-top: 25rem;
+    }
+}
+@media only screen and (max-width: 920px){
+    .header {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        height: 140px;
+        padding: .2rem 2rem 1.2rem 2rem ;
+    }
+    .header2{
+        width: 100%;
+        top: 34%;
+    }
+    .two{
+        margin-left: 9%;
+    }
+    .search2{
+        width: 100%;
+    }
+    .title{
+        font-size: 13px;
+        padding-bottom: 1rem;
+        padding-top: 1.5rem;
+    }
+    .location{
+        padding-left: 0rem;
+    }
+    .search{
+        width: 67%;
+    }
+    .storeContainer{
+        padding-top: 30rem;
+    }
+}
+@media only screen and (max-width: 800px){
+    .two{
+        margin-left: 0%;
+        margin-top: 2rem;
+        top: 24%;
+    }
+    .search{
+        width: 70%;
+    }
+    .header2{
+        width: 100%;
+        padding-left: 3rem;
+        flex-direction: column;
+        top: 27%;
+    }
+    .header{
+        top: 11%;
+    }
+
+}
+@media only screen and (max-width: 600px) {
+    .header2{
+        flex-direction: column;
+    }
+    .two{
+        margin-left: 0;
+    }
+    .searchbtn {
+        height: 53px;
+        padding: 10px 20px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0px 4px 4px 0px;
+        background: #F47900;
+        color: #FFF;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    .storeContainer{
+        padding-top: 35rem;
+    }
+}
+@media only screen and (max-width: 520px){
+    .header2{
+        flex-direction: column;
+    }
+   .two{
+    flex-direction: column;
+   }
+    .search{
+        width: 100%;
+    }
+    .storeContainer{
+        padding-top: 38rem;
+    }
 }
