@@ -88,6 +88,7 @@ export const Stores = () => {
               </div>
               {show && selected === id && (
                 <MealDropDown
+                  setShow={setShow}
                   selectedStore={selectedStore}
                   id={selectedStore.supplier._id}
                 />
