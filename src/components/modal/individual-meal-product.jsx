@@ -638,6 +638,7 @@ export const UtensilModal = ({
                               style={{
                                 borderBottom: "1px dashed #949494",
                                 width: "100%",
+                                marginTop: '.8rem'
                               }}
                             />
                             <p className={styles.intro}>
@@ -659,6 +660,8 @@ export const UtensilModal = ({
                                 borderBottom: "1px dashed #949494",
                                 width: "90%",
                                 height: "1px",
+                                marginTop: '.8rem'
+
                               }}
                             />
                             <div
@@ -683,7 +686,7 @@ export const UtensilModal = ({
                       );
                     })}
                   </div>
-                  <div className={styles.end}>
+                  <div className={styles.end2}>
                     <h4 className={styles.modalTitle2}>Quantity</h4>
                     <div className={styles.flex2}>
                       <p
@@ -724,7 +727,7 @@ export const UtensilModal = ({
                       43 left
                     </p>
                   </div>
-                  <div className={styles.end}>
+                  <div className={styles.end2}>
                     <h4
                       className={styles.modalTitle}
                       style={{ marginRight: "6.3rem" }}
