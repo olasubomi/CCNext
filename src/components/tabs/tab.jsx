@@ -169,7 +169,7 @@ const MyTabs = ({ id }) => {
 
   return (
     <>
-      <Tabs value={value} onChange={handleChange} style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.20)', paddingLeft: '9rem' }}>
+      <Tabs value={value} onChange={handleChange} className={styles.tabsContainer}>
         <Tab label="Grocery List" {...a11yProps(0)} />
         <Tab label="Suggested Meals" {...a11yProps(1)} />
         <Tab label="Comments" {...a11yProps(2)} />

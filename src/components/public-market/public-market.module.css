@@ -558,7 +558,7 @@
 }
 
 .profile_picture {
-    width: 406px;
+    width: 27%;
     height: 206px;
 }
 
@@ -592,8 +592,8 @@
 .store_flex {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 30px;
+    gap: 13px;
+    width: 100%;
 }
 .arrow{
     position: absolute;
@@ -655,6 +655,9 @@
     gap: 80px;
     margin-top: 3rem;
 }
+.rightside{
+    width: 72%;
+}
 
 @media only screen and (max-width: 1100px) {
     .header {
@@ -714,6 +717,13 @@
     .storeContainer {
         padding-top: 30rem;
     }
+    .profile_picture{
+        width: 35%;
+        height: 200px;
+    }
+    .rightside{
+        width: 65%;
+    }
 }
 
 @media only screen and (max-width: 800px) {
@@ -737,7 +747,13 @@
     .header {
         top: 11%;
     }
-
+    .profile_picture{
+        width: 50%;
+        height: 200px;
+    }
+    .rightside{
+        width: 50%;
+    }
 }
 
 @media only screen and (max-width: 600px) {
@@ -781,5 +797,9 @@
 
     .storeContainer {
         padding-top: 38rem;
+    }
+    .modalCard2 {
+        width: 95%;
+  
     }
 }

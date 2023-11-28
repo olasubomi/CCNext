@@ -108,7 +108,6 @@ const ChefPage = () => {
                 </div>
             </div>
             <MyTabs id={router.query.id} />
-
             <Footer />
         </div>
     )

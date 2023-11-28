@@ -6,6 +6,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import axios from "../../util/Api";
+import { toast } from "react-toastify";
+
 
 export const Mealmodal = ({
   openList,
@@ -24,6 +28,7 @@ export const Mealmodal = ({
   quantity,
   selectedItem,
 }) => {
+  const router = useRouter()
   return (
     <div>
       {openModal && (
@@ -42,7 +47,7 @@ export const Mealmodal = ({
                   className={styles.modalImg}
                 />
                 <div className={styles.images1}>
-                  {selectedItem.item_images?.map((image, idx) => {
+                  {selectedItem.item_images?.slice(1, 4).map((image, idx) => {
                     return (
                       <div className={styles.img1} key={idx}>
                         <img src={image} />
@@ -118,12 +123,13 @@ export const Mealmodal = ({
                         {selectedItem.meal_chef}
                       </p>
                     </span>
-                    <p className={styles.prep}>Intro:</p>
-                    <p className={styles.intro}>{selectedItem.item_intro}</p>
+                  
                   </div>
                 </div>
               </div>
             </div>
+            <p className={styles.prep}>Intro:</p>
+                    <p className={styles.intro}>{selectedItem.item_intro}</p>
             <div>
               <h3 className={styles.modalTitle}>Ingredients</h3>
               <div style={{ marginTop: "1rem", paddingBottom: "3rem" }}>
@@ -255,9 +261,11 @@ export const Mealmodal = ({
                           >
                             {elem.title}
                           </h6>
-                          {elem.instructionSteps.map((ele) => (
-                            <p className={styles.instructionStep}>{ele}</p>
+                         <ul className={styles.ul}>
+                         {elem.instructionSteps.map((ele) => (
+                            <li className={styles.instructionStep}>{ele}</li>
                           ))}
+                         </ul>
                         </span>
                       </div>
                     );
@@ -303,7 +311,7 @@ export const Mealmodal = ({
               <button
                 className={styles.outlinebtn}
                 onClick={() => {
-                  setOpenModal(false);
+                  // setOpenModal(false);
                   setOpenList(true);
                 }}
               >

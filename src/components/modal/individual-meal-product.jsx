@@ -19,7 +19,7 @@ export const IndividualModal = ({
   addItemToGrocery,
   details,
   setDetails,
-  setItemAdd,
+  setItemAdd, 
   setQuantity,
   quantity,
   selectedItem,
@@ -38,7 +38,7 @@ export const IndividualModal = ({
                   className={styles.modalImg}
                 />
                 <div className={styles.images1}>
-                  {selectedItem.item_images.slice(1,3).map((image, idx) => {
+                  {selectedItem.item_images.slice(1, 3).map((image, idx) => {
                     return (
                       <div className={styles.img1}>
                         <img src={image} />
@@ -181,101 +181,103 @@ export const IndividualModal = ({
                   </div>
                 </div>
                 <p style={{ marginBottom: "1rem" }}>Recipe Steps</p>
-                <Carousel
-                  showStatus={false}
-                  showIndicators={false}
-                  axis="horizontal"
-                  showThumbs={false}
-                  className={styles.recipe}
-                  renderArrowPrev={(clickHandler, hasPrev) => {
-                    return (
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "60%",
-                          bottom: 0,
-                          left: 0,
-                          display: hasPrev ? "flex" : "none",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: "3px",
-                          opacity: 0.3,
-                          zIndex: 1000,
-                        }}
-                        onClick={clickHandler}
-                      >
-                        <BsArrowLeftCircleFill
-                          size={30}
-                          className={styles.arr}
-                        />
-                      </div>
-                    );
-                  }}
-                  renderArrowNext={(clickHandler, hasNext) => {
-                    const arrowStyle = {
-                      position: "absolute",
-                      top: "60%",
-                      bottom: 0,
-                      right: 0,
-                      display: hasNext ? "flex" : "none",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: "3px",
-                      opacity: 0.3,
-                      cursor: "pointer",
-                      zIndex: 20,
-                    };
-
-                    return (
-                      <div style={arrowStyle} onClick={clickHandler}>
-                        <BsArrowRightCircleFill
-                          size={30}
-                          className={styles.arr}
-                        />
-                      </div>
-                    );
-                  }}
-                >
-                  {selectedItem.meal_formatted_instructions?.map(
-                    (elem, index) => {
+                <div className={styles.adjust}>
+                  <Carousel
+                    width="100%"
+                    showStatus={false}
+                    showIndicators={false}
+                    axis="horizontal"
+                    showThumbs={false}
+                    renderArrowPrev={(clickHandler, hasPrev) => {
                       return (
-                        <div className={styles.recipes} key={index}>
-                          {/\.(jpg|png|jpeg)$/i.test(elem.dataName) ? (
-                            <img
-                              src={
-                                selectedItem[
-                                  `meal_image_or_video_content${index + 1}`
-                                ]
-                              }
-                              style={{ width: "100%", height: "200px" }}
-                            />
-                          ) : (
-                            <>
-                              {elem.dataName.includes("mp4") && (
-                                <video
-                                  className={styles.instruction_img}
-                                  src={
-                                    selectedItem[
-                                      `meal_image_or_video_content${index + 1}`
-                                    ]
-                                  }
-                                >
-                                  Your browser does not support the video tag.
-                                </video>
-                              )}
-                            </>
-                          )}
-                          <span style={{ paddingTop: "6rem" }}>
-                            <h6>{elem.title}</h6>
-                            {elem.instructionSteps.map((ele) => (
-                              <p className={styles.instructionStep}>{ele}</p>
-                            ))}
-                          </span>
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "60%",
+                            bottom: 0,
+                            left: 0,
+                            display: hasPrev ? "flex" : "none",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: "3px",
+                            opacity: 0.3,
+                            zIndex: 1000,
+                          }}
+                          onClick={clickHandler}
+                        >
+                          <BsArrowLeftCircleFill
+                            size={30}
+                            className={styles.arr}
+                          />
                         </div>
                       );
-                    }
-                  )}
-                </Carousel>
+                    }}
+                    renderArrowNext={(clickHandler, hasNext) => {
+                      const arrowStyle = {
+                        position: "absolute",
+                        top: "60%",
+                        bottom: 0,
+                        right: 0,
+                        display: hasNext ? "flex" : "none",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "3px",
+                        opacity: 0.3,
+                        cursor: "pointer",
+                        zIndex: 20,
+                      };
+
+                      return (
+                        <div style={arrowStyle} onClick={clickHandler}>
+                          <BsArrowRightCircleFill
+                            size={30}
+                            className={styles.arr}
+                          />
+                        </div>
+                      );
+                    }}
+                  >
+                    {selectedItem.meal_formatted_instructions?.map(
+                      (elem, index) => {
+                        return (
+                          <div key={index}>
+                            {/\.(jpg|png|jpeg)$/i.test(elem.dataName) ? (
+                              <img
+                                src={
+                                  selectedItem[
+                                  `meal_image_or_video_content${index + 1}`
+                                  ]
+                                }
+                                className={styles.instruction_img}
+                              />
+                            ) : (
+                              <>
+                                {elem.dataName.includes("mp4") && (
+                                  <video
+                                    className={styles.instruction_img}
+                                    src={
+                                      selectedItem[
+                                      `meal_image_or_video_content${index + 1}`
+                                      ]
+                                    }
+                                  >
+                                    Your browser does not support the video tag.
+                                  </video>
+                                )}
+                              </>
+                            )}
+                            <span style={{ paddingTop: "2rem"}} className={styles.carouselText}>
+                              <h6>{elem.title}</h6>
+                              {elem.instructionSteps.map((ele) => (
+                                <p className={styles.instructionStep}>{ele}</p>
+                              ))}
+                            </span>
+                          </div>
+                        );
+                      }
+                    )}
+                  </Carousel>
+                </div>
               </div>
             </div>
             <div className={styles.border2} />
@@ -288,8 +290,9 @@ export const IndividualModal = ({
               <button
                 className={styles.outlinebtn}
                 onClick={() => {
-                  setOpenModal(false);
                   setOpenList(true);
+
+                  // setOpenModal(false);
                 }}
               >
                 Add to Grocery List
@@ -380,7 +383,7 @@ export const ProductModal = ({
                   className={styles.modalImg}
                 />
                 <div className={styles.images1}>
-                  {selectedItem.item_images.slice(1,3).map((image, idx) => {
+                  {selectedItem.item_images.slice(1, 3).map((image, idx) => {
                     return (
                       <div className={styles.img1}>
                         <img src={image} />
@@ -393,14 +396,14 @@ export const ProductModal = ({
                 <div className={styles.flex3}>
                   <h6 className={styles.itemName}>{selectedItem.item_name}</h6>
                   <div className={styles.left2}>
-                  <div
-                    className={styles.round}
-                    onClick={() => setOpenModal(false)}
-                  >
-                    {" "}
-                    <AiOutlineClose />
+                    <div
+                      className={styles.round}
+                      onClick={() => setOpenModal(false)}
+                    >
+                      {" "}
+                      <AiOutlineClose />
+                    </div>
                   </div>
-                </div>
                 </div>
                 <p className={styles.storeName}>
                   {" "}
@@ -758,6 +761,7 @@ export const UtensilModal = ({
                 onClick={() => {
                   setOpenModal(false);
                   setOpenList(true);
+                  console.log(openList, 'setOpenList')
                 }}
               >
                 Add to Grocery List

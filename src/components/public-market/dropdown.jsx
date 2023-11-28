@@ -1,5 +1,5 @@
 import styles from "../../components/public-market/public-market.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GrStar } from "react-icons/gr";
 import { AiOutlineClose } from "react-icons/ai";
 import { useRouter } from "next/router";
@@ -10,6 +10,8 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { IndividualModal } from "../modal/individual-meal-product";
 import { Mealmodal } from "../mobile/meal-modal";
+import axios from "../../util/Api";
+import { toast } from "react-toastify";
 
 const responsive = {
   superLargeDesktop: {
@@ -23,17 +25,18 @@ const responsive = {
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
-    items: 2,
+    items: 3,
   },
+  
   mobile: {
     breakpoint: { max: 464, min: 0 },
     items: 1,
   },
 };
 
-export const MealDropDown = ({ selectedStore, id }) => {
+export const MealDropDown = ({ selectedStore,setIsShow, id }) => {
   const matches = useMediaQuery("(min-width: 920px)");
-  const [selectGrocery, setSelectGrocery] = useState([]);
+  const [selectGrocery, setSelectGrocery] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [openList, setOpenList] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
@@ -44,7 +47,6 @@ export const MealDropDown = ({ selectedStore, id }) => {
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
   });
-
   const addItemToGrocery = async (listName) => {
     const user = JSON.parse(localStorage.getItem("user"));
     const payload = {
@@ -78,6 +80,22 @@ export const MealDropDown = ({ selectedStore, id }) => {
     status: "",
   });
 
+  const fetchGroceryList = async () => {
+    try {
+      const response = await axios(`/groceries/list`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data.data.data, "groceries");
+      setSelectGrocery(response.data.data.data);
+    } catch (error) {}
+  };
+  useEffect(() => {
+    fetchGroceryList();
+  }, []);
+
   const CustomRightArrow = ({ onClick, ...rest }) => {
     const {
       onMove,
@@ -106,12 +124,12 @@ export const MealDropDown = ({ selectedStore, id }) => {
     );
   };
 
-  console.log(selectedItem, "selectedItem");
+  console.log(selectedStore, "selectedItem");
   return (
     <div className={styles.modalContainer}>
       <div className={styles.modalCard2}>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <div className={styles.round}>
+          <div className={styles.round} onClick={() => setIsShow(false)}>
             <AiOutlineClose />
           </div>
         </div>
@@ -119,7 +137,7 @@ export const MealDropDown = ({ selectedStore, id }) => {
           <div className={styles.profile_picture}>
             <img src={selectedStore.supplier.profile_picture} />
           </div>
-          <div>
+          <div className={styles.rightside}>
             <div>
               <h4 className={styles.storeName2}>
                 {selectedStore.supplier.store_name}
