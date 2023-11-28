@@ -9,6 +9,7 @@
 .env
 .next
 .vscode
+.build
 
 # testing
 /coverage
