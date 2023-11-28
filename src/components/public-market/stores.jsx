@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, Fragment, createRef } from "react"
 import axios from "../../util/Api"
 import styles from "./stores.module.css"
 import { MealDropDown } from "./dropdown"
@@ -11,7 +11,8 @@ export const Stores = () => {
     const [show, setShow] = useState(false)
     const [selected, SetSelected] = useState(null)
     const [loadMore, setLoadMore] = useState(5)
-    const ref = useRef();
+    const [refArr, setRefArr] = useState([])
+    const ref = useRef([]);
 
     const [selectedStore, setSelectedStore] = useState({
         items: [],
@@ -23,14 +24,14 @@ export const Stores = () => {
 
     const fetchOneStore = async (id) => {
         try {
-            const response = await axios(`/stores/getstore/${id}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            console.log(response.data.data, 'one store')
-            setSelectedStore(response.data.data)
+            // const response = await axios(`/stores/getstore/${id}`, {
+            //     method: "GET",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            // });
+            // console.log(response.data.data, 'one store')
+            // setSelectedStore(response.data.data)
             setShow(true)
         } catch (error) {
             console.log(error);
@@ -57,42 +58,23 @@ export const Stores = () => {
     }, [])
     console.log(selectedStore, 'selectedStore')
 
+    useEffect(() => {
+
+    }, [selected])
+
+    console.log('ddd', ref)
+    
 
     return (
         <div className={styles.storeContainer}>
+            
             <h4>Stores</h4>
-            <div className={styles.stores}>
-                {
-                    stores.slice(0, loadMore).map((store, id) => {
-                        return (
-                            <>
-                                <div className={styles.card} onClick={() => {
-                                    fetchOneStore(store._id)
-                                    SetSelected(id)
-                                }} id="meals">
-                                    {
+      
 
-                                        <div>
-                                            <Image src={store?.background_picture ? store?.background_picture : stored} className={styles.storeImg} width={200} height={200} objectFit="cover" objectPosition='center' />
-                                            <p className={styles.name}>{store?.store_name}</p>
-                                        </div>
-                                    }
-                                    {
-                                        show && selected === id && <MealDropDown selectedStore={selectedStore} id={selectedStore.supplier._id} />
-                                    }
-
-                                </div>
-
-
-                            </>
-                        )
-                    })
-                }
-
-            </div>
 
             <p className={styles.view} onClick={() => handleLoadMore()}>View More</p>
             <div className={styles.border} />
         </div>
+        
     )
 }

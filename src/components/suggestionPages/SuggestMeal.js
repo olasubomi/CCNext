@@ -1526,18 +1526,11 @@ class SuggestMealForm extends Component {
 
     console.log('form', formDataObj)
 
-
-
-
-
     for (let i = 1; i < 7; i++) {
       if (this.state[`instructionChunk${i}`].title && this.state[`instructionChunk${i}`].instruction) {
         instructionTitles.push(this.state[`instructionChunk${i}`].title);
         instructions.push(this.state[`instructionChunk${i}`].instruction);
       }
-
-
-
     }
     // suggestMealForm.append('meal_images', mealImages);
 

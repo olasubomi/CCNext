@@ -372,41 +372,7 @@ function Meal(props) {
                             }
                         </div>
                     </div>
-                    {/* <div className={styles.reject_card}>
-                        <h3>Posted By</h3>
-                        <div className={styles.flex_card}>
-                            <div className={styles.cards}>
-                                <div className={styles.flex}>
-                                    <UserIcon style={styles.users} />
-                                    <p className={styles.info}>{props.meal.item_data?.chef}</p>
-                                </div>
-                                <div className={styles.flex}>
-                                    <p>Posted on: </p>
-                                    <p className={styles.info}>10 June, 2023</p>
-                                </div>
-                            </div>
-                            <div className={styles.flex}>
-                                <EmailIcon style={styles.users} />
-                                <p className={styles.info}>Olatundun@gmail.com</p>
-                            </div>
-                            <div className={styles.flex}>
-                                <CallIcon style={styles.users} />
-                                <p className={styles.info}>+2348064667542</p>
-                            </div>
-                            <div className={styles.flex}>
-                                <LocationIcon style={styles.users}/>
-                                <p className={styles.info}>Lagos, Nigeria</p>
-                            </div>
-                        </div>
-                        <div className={styles.admin_buttons}>
-                            <div className={styles.submit_button}>
-                                <p>Reject</p>
-                            </div>
-                            <div className={styles.submit_button2}>
-                                <p>Accept Request</p>
-                            </div>
-                        </div>
-                    </div> */}
+                 
 
                     {user && user?.user_type !== 'admin' &&
                 <div className={styles.meal_section_8}>

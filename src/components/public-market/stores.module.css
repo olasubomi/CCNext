@@ -19,7 +19,13 @@
 .card{
     width: 100%;
 }
-
+.dropdownContainer1{
+    background: #000;
+    height: 400px;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+}
 .storeImg2 {
     width: 100%;
     height: 174px;
@@ -142,6 +148,20 @@
 .mealContainer1 {
     width: 100%;
     padding: 2rem 5rem;
+}
+
+.initial_anime_box {
+    height: 0px;
+    width: 100vw;
+    background-color: #000;
+    transition: ease all 500ms;
+}
+
+.anime_box {
+    transition: ease all 500ms;
+    height: 300px;
+    width: 100vw;
+    background-color: #000;
 }
 
 .modalContainer {
