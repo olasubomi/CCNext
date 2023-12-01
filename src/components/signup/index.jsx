@@ -490,7 +490,7 @@ function SignUp(props){
                     className={styles.signup_form_radio_button}
                     ></label>
                     <label htmlFor="service" className={styles.signup_form_radio_label}>
-                    I accept the Terms & Conditions and <Link href="/privacypolicy"><a style={{textDecoration: "underline"}}>Privacy and Cookie Notice</a></Link>
+                    I accept the Terms & Conditions and <Link href="/privacypolicy" style={{textDecoration: "underline"}}>Privacy and Cookie Notice</Link>
   
                     </label>
                 </div>
@@ -520,7 +520,7 @@ function SignUp(props){
   
             <button onClick={formSubmit} className={styles.login_button}>Register</button>
   
-            <h3 className={styles.login_new}>Already have an account? {props.closeSignUp ? <span onClick={props.closeSignUp}>Sign in here</span> : <Link href='/login'><a>Sign in here</a></Link> }</h3>
+            <h3 className={styles.login_new}>Already have an account? {props.closeSignUp ? <span onClick={props.closeSignUp}>Sign in here</span> : <Link href='/login'>Sign in here</Link> }</h3>
             
           </div>   
           <div style={props.toggleLogin ? {gridTemplateRows: 'max-content 1fr' }: {gridTemplateRows: '1fr'}} className={styles.login_col_1}>

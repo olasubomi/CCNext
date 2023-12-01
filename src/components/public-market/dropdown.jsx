@@ -165,7 +165,7 @@ export const MealDropDown = ({ selectedStore,setIsShow, id }) => {
                 marginTop: "1rem",
               }}
             >
-              <FaLocationDot fill="#F47900" />
+              <FaLocationDot fill="#F47900" size={20}/>
               <p className={styles.text} style={{ marginLeft: ".4rem" }}>
                 6391 Elgin St. Celina, Delaware 10299
               </p>

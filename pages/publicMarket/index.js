@@ -144,11 +144,11 @@ const PublicMarket = () => {
           />
         </div>
         <div className={styles.location}>
-        <HiLocationMarker
+          <HiLocationMarker
             size={17}
             fill="#FFFFFF"
           />
-          <p className={styles.title} style={{marginLeft: '.4rem'}}>Use my current location</p>
+          <p className={styles.title} style={{ marginLeft: '.4rem' }}>Use my current location</p>
         </div>
       </div>
       <div className={styles.header2}>
@@ -225,146 +225,170 @@ const PublicMarket = () => {
                 <div className={styles.searchDropdown}>
                   <>
                     <>
-                      <h4 className={styles.storeTitle}>
-                        Stores ({store.length})
-                      </h4>
-                      <div className={styles.bord} />
-                      <div className={styles.list}>
-                        {store.length === 0 ? (
-                          Boolean(value) ? (
-                            <div className={styles.result}>
-                              <p>No Result Found</p>
-                            </div>
-                          ) : null
-                        ) : (
-                          store.slice(0, 4).map((stores) => (
-                            <p
-                              key={stores.value}
-                              onClick={() => {
-                                setOneStore({
-                                  visible: true,
-                                  id: stores.value,
-                                });
-                                setValue(stores.label);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {stores.label}
-                            </p>
-                          ))
-                        )}
-                      </div>
+                      {
+                        categories.find((ele) => ele.label === "Stores")?.value &&
+                        <>
+                          <h4 className={styles.storeTitle}>
+                            Stores ({store.length})
+                          </h4>
+                          <div className={styles.bord} />
+                          <div className={styles.list}>
+                            {store.length === 0 ? (
+                              Boolean(value) ? (
+                                <div className={styles.result}>
+                                  <p>No Result Found</p>
+                                </div>
+                              ) : null
+                            ) : (
+                              store.slice(0, 4).map((stores) => (
+                                <p
+                                  key={stores.value}
+                                  onClick={() => {
+                                    setOneStore({
+                                      visible: true,
+                                      id: stores.value,
+                                    });
+                                    setValue(stores.label);
+                                  }}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  {stores.label}
+                                </p>
+                              ))
+                            )}
+                          </div>
+                        </>
+                      }
+
                     </>
                   </>
                   <>
-                    <h4 className={styles.storeTitle}>
-                      Meals ({filteredItem().length})
-                    </h4>
-                    <div className={styles.bord} />
-                    <div className={styles.list}>
-                      {filteredItem().length === 0 ? (
-                        Boolean(value) ? (
-                          <div className={styles.result}>
-                            <p>No Result Found</p>
-                            <button onClick={() => router.push("/suggestmeal")}>
-                              Suggest Meal
-                            </button>
-                          </div>
-                        ) : null
-                      ) : (
-                        filteredItem()
-                          ?.slice(0, 4)
-                          .map((elem) => (
-                            <p
-                              key={elem.value}
-                              onClick={() => {
-                                setOneStore({
-                                  visible: false,
-                                  id: "",
-                                });
-                                setValue(elem.label);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {elem.label}
-                            </p>
-                          ))
-                      )}
-                    </div>
+                    {
+                      categories.find((ele) => ele.label === "Meals")?.value &&
+                      <>
+                        <h4 className={styles.storeTitle}>
+                          Meals ({filteredItem().length})
+                        </h4>
+                        <div className={styles.bord} />
+                        <div className={styles.list}>
+                          {filteredItem().length === 0 ? (
+                            Boolean(value) ? (
+                              <div className={styles.result}>
+                                <p>No Result Found</p>
+                                <button onClick={() => router.push("/suggestmeal")}>
+                                  Suggest Meal
+                                </button>
+                              </div>
+                            ) : null
+                          ) : (
+                            filteredItem()
+                              ?.slice(0, 4)
+                              .map((elem) => (
+                                <p
+                                  key={elem.value}
+                                  onClick={() => {
+                                    setOneStore({
+                                      visible: false,
+                                      id: "",
+                                    });
+                                    setValue(elem.label);
+                                  }}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  {elem.label}
+                                </p>
+                              ))
+                          )}
+                        </div>
+                      </>
+                    }
+
                   </>
 
                   <>
-                    <h4 className={styles.storeTitle}>
-                      Products ({filteredProduct().length})
-                    </h4>
-                    <div className={styles.bord} />
-                    <div className={styles.list}>
-                      {filteredProduct().length === 0 ? (
-                        Boolean(value) ? (
-                          <div className={styles.result}>
-                            <p>No Result Found</p>
-                            <button onClick={() => router.push("/suggestmeal")}>
-                              Suggest Product
-                            </button>
-                          </div>
-                        ) : null
-                      ) : (
-                        filteredProduct()
-                          ?.slice(0, 4)
-                          .map((elem) => (
-                            <p
-                              key={elem.value}
-                              onClick={() => {
-                                setOneStore({
-                                  visible: false,
-                                  id: "",
-                                });
-                                setValue(elem.label);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {elem.label}
-                            </p>
-                          ))
-                      )}
-                    </div>
+                    {
+                      categories.find((ele) => ele.label === "Products")?.value &&
+                      <>
+                        <h4 className={styles.storeTitle}>
+                          Products ({filteredProduct().length})
+                        </h4>
+                        <div className={styles.bord} />
+                        <div className={styles.list}>
+                          {filteredProduct().length === 0 ? (
+                            Boolean(value) ? (
+                              <div className={styles.result}>
+                                <p>No Result Found</p>
+                                <button onClick={() => router.push("/suggestmeal")}>
+                                  Suggest Product
+                                </button>
+                              </div>
+                            ) : null
+                          ) : (
+                            filteredProduct()
+                              ?.slice(0, 4)
+                              .map((elem) => (
+                                <p
+                                  key={elem.value}
+                                  onClick={() => {
+                                    setOneStore({
+                                      visible: false,
+                                      id: "",
+                                    });
+                                    setValue(elem.label);
+                                  }}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  {elem.label}
+                                </p>
+                              ))
+                          )}
+                        </div>
+                      </>
+                    }
+
                   </>
 
                   <>
-                    <h4 className={styles.storeTitle}>
-                      Kitchen Utensils ({filteredUtensils().length})
-                    </h4>
-                    <div className={styles.bord} />
-                    <div className={styles.list}>
-                      {filteredUtensils().length === 0 ? (
-                        Boolean(value) ? (
-                          <div className={styles.result}>
-                            <p>No Result Found</p>
-                            <button onClick={() => router.push("/suggestmeal")}>
-                              Suggest Utensil
-                            </button>
-                          </div>
-                        ) : null
-                      ) : (
-                        filteredUtensils()
-                          ?.slice(0, 4)
-                          .map((elem) => (
-                            <p
-                              key={elem.value}
-                              onClick={() => {
-                                setOneStore({
-                                  visible: false,
-                                  id: "",
-                                });
-                                setValue(elem.label);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {elem.label}
-                            </p>
-                          ))
-                      )}
-                    </div>
+                    {
+                      categories.find((ele) => ele.label === "Kitchen Utensils")?.value &&
+                      <>
+                        <h4 className={styles.storeTitle}>
+                          Kitchen Utensils ({filteredUtensils().length})
+                        </h4>
+                        <div className={styles.bord} />
+                        <div className={styles.list}>
+                          {filteredUtensils().length === 0 ? (
+                            Boolean(value) ? (
+                              <div className={styles.result}>
+                                <p>No Result Found</p>
+                                <button onClick={() => router.push("/suggestmeal")}>
+                                  Suggest Utensil
+                                </button>
+                              </div>
+                            ) : null
+                          ) : (
+                            filteredUtensils()
+                              ?.slice(0, 4)
+                              .map((elem) => (
+                                <p
+                                  key={elem.value}
+                                  onClick={() => {
+                                    setOneStore({
+                                      visible: false,
+                                      id: "",
+                                    });
+                                    setValue(elem.label);
+                                  }}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  {elem.label}
+                                </p>
+                              ))
+                          )}
+                        </div>
+                      </>
+                    }
+
                   </>
                 </div>
               )}
@@ -378,8 +402,8 @@ const PublicMarket = () => {
                   items.item_type === "Meal"
                     ? router.push(`/meal/${value}`)
                     : items.item_type === "Product"
-                    ? router.push(`/product/${value}`)
-                    : router.push(`/product/${value}`);
+                      ? router.push(`/product/${value}`)
+                      : router.push(`/product/${value}`);
                 }
               }}
             >

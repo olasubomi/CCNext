@@ -53,6 +53,13 @@
 .or {
   margin-top: 30px !important; }
 
+.flex{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
 .right-panel {
   padding-right: 50px !important; }
 
@@ -546,6 +553,9 @@
     height: 3.6rem;
     padding: 0 1rem;
     font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 3px;
   }
 
   .forgot_password{
@@ -616,6 +626,7 @@
   .login_col_2{
     margin: 0;
     padding: 2rem;
+    width: auto;
   }
 }
 
@@ -623,8 +634,13 @@
   .forgot_password{
     width: 95%;
   }
-  
-  .login_social{
-    width: 122px;
+ 
+  .blue{
+    background: #3B5998;
+    color: white;
+    height: 3.4rem;
+    padding: 0 0rem;
+    font-size: 11px;
+    width: 100%;
   }
 }

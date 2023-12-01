@@ -18,7 +18,7 @@
     align-items: center;
     position: fixed;
     z-index: 2;
-    top: 19.5%;
+    top: 150px;
 }
 
 .searchbar {
@@ -72,7 +72,7 @@
     position: fixed;
     z-index: 10;
     padding-left: 5rem;
-    top: 28%;
+    top: 220px;
 
 }
 
@@ -660,14 +660,6 @@
 }
 
 @media only screen and (max-width: 1100px) {
-    .header {
-        top: 18%;
-    }
-
-    .header2 {
-        width: 100%;
-        top: 26%;
-    }
 
     .search {
         width: 60%;
@@ -684,12 +676,12 @@
         justify-content: flex-start;
         align-items: flex-start;
         height: 140px;
-        padding: .2rem 2rem 1.2rem 2rem;
+        padding: 1rem 2rem 1.2rem 2rem;
     }
 
     .header2 {
         width: 100%;
-        top: 34%;
+        top: 290px;
     }
 
     .two {
@@ -741,18 +733,33 @@
         width: 100%;
         padding-left: 3rem;
         flex-direction: column;
-        top: 27%;
+        top: 260px;
     }
 
     .header {
-        top: 11%;
+        top: 118px;
+        padding: .5rem 2rem .5rem 2rem;
     }
     .profile_picture{
         width: 50%;
-        height: 200px;
+        height: 210px;
     }
     .rightside{
         width: 50%;
+    }
+    .storeName2 {
+        font-size: 23px;
+    }
+    .rate {
+        font-size: 15px;
+    }
+    .text {
+        font-size: 12px;
+    }
+}
+@media only screen and (max-width: 768px){
+    .header2 {
+        top: 258px;
     }
 }
 
@@ -776,30 +783,36 @@
         font-size: 12px;
         font-weight: 500;
     }
-
-    .storeContainer {
-        padding-top: 35rem;
+    .profile_picture{
+        width: 50%;
+        height: 150px;
     }
 }
 
 @media only screen and (max-width: 520px) {
     .header2 {
         flex-direction: column;
+        position: relative;
     }
 
     .two {
         flex-direction: column;
     }
-
+    .header{
+        z-index: 1000;
+    }
     .search {
         width: 100%;
     }
-
-    .storeContainer {
-        padding-top: 38rem;
-    }
     .modalCard2 {
         width: 95%;
-  
+        padding: 2rem 1.5rem;
+    }
+    .store_flex {
+        align-items: flex-start;
+        gap: 11px;
+    }
+    .profile_picture{
+        margin-top: 1.2rem;
     }
 }
