@@ -47,6 +47,20 @@ const ChefPage = () => {
     };
     const url = 'https://www.chopchow.app/'
     console.log("line 47", user)
+
+    function CheckStringsEnd(str) {
+        let result = "";
+        if (typeof str !== 'string' || str.length === 0) {
+          return str; // Return unchanged if not a string or empty string
+        }
+      
+        // Check if the string ends with 's'
+        if (str.endsWith('s')) {
+          return str + "'"; // Append apostrophe to the string
+        }
+        result = str + "'s"
+        return result; // Return unchanged if the string doesn't end with 's'
+      }
     return (
         <div className={styles.ChefContainer}>
             <Head>
@@ -73,7 +87,9 @@ const ChefPage = () => {
                         <FacebookShareButton
                             url={url + 'chef/'+ user._id}
                             quote={'Chop chow awesome'}
-                            hashtag={`#${ user.first_name} ${ user.last_name}'s recipes`}
+                            hashtag={`#${ user.first_name} ${ user.last_name}  #recipes   #ChopChow`}
+    
+                            
                             title={"Share to Facebook"}
                         >
                               <FacebookEIcon  />
@@ -108,9 +124,10 @@ const ChefPage = () => {
                         <TwitterShareButton
                             className={styles.icon}
                             url={url + 'chef/'+ user._id}
-                            title={user.first_name} 
+                            title={"View" + " " + user.first_name + " " + CheckStringsEnd(user.last_name) + " " + "Recipes"} 
                             via="ChopChowMarket"
                         >
+                           
 
                            <TwitterEIcon />
 
