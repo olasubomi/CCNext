@@ -1,6 +1,8 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import './style.css';
+//import './style.css';
 import {  Button, Container, Modal, Row, Col, ButtonToolbar } from 'react-bootstrap';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { verifyEmail } from '../../actions';
 import Login from '../Login';
 // import { setTimeout } from 'timers';
@@ -40,6 +42,7 @@ const isauthenticated = useSelector(state => state.Auth.isAuthenticated);
 
 
 const router = useRouter();
+const dispatch = useDispatch()
 
   const handleClose = () => {
     // setTimeout(() => {
@@ -52,7 +55,8 @@ const router = useRouter();
     const {userid, token} = router.query;
     console.log("useeffect query", router.query)
     setLoginLoading(true);
-    props.verifyEmail(userid, token);
+    dispatch(verifyEmail(userid, token))
+    //props.verifyEmail(userid, token);
 
   // let token = this.props.location.search.replace('?', '').split('=')[1];
 //     let formData = Object.assign({}, this.state, {token})
@@ -129,16 +133,16 @@ if(userid && token ) {
 
 
 }
-function mapStateToProp(state) {
-  return {
-    auth: state.Auth,
-  };
-}
+// function mapStateToProp(state) {
+//   return {
+//     auth: state.Auth,
+//   };
+// }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    verifyEmail: (userid, token) => dispatch(verifyEmail(userid, token))
-  };
-}
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     verifyEmail: (userid, token) => 
+//   };
+// }
 
-export default connect(mapStateToProp, mapDispatchToProps)(VerifyEmail);
+export default VerifyEmail;
