@@ -222,15 +222,12 @@ function Login(props) {
 
             <h3 className={styles.login_new}>
               Don't have an account yet?{" "}
-              
                 <span onClick={openSignUp}>Sign up here</span>
-             
             </h3>
-
             <div className={styles.login_options}>
               <h3>Login with social media</h3>
 
-              <div className={styles.login_socials}>
+              <div className={styles.flex}>
                 {/* <div className={styles.login_social + " " + styles.blue}>
                   <Image src={facebook} />
                   <h4>Facebook</h4>
@@ -252,7 +249,7 @@ function Login(props) {
                 }
                 {!showFacebook && <button className={styles.blue} onClick={() => setShowFacebook(true)}>Login with Facebook</button>
                 }
-                <div className={styles.login_social}>
+                <div>
                   <GoogleLogin
                     onSuccess={async (credentialResponse) =>
                       handleSocialLogin(credentialResponse)

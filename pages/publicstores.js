@@ -23,7 +23,7 @@ const PublicStore = () => {
                 </div>
                 <div className={styles.publicstore_col_2}>
                     <div className={styles.publicstore_storecards}>
-                        {new Array(1,2,3,4,5).map((data, index) => {
+                        {new Array(1,2,3,4,5,6,7,8,9,10).map((data, index) => {
                             return(
                             <div onClick={showSummary} key={index} className={styles.publicstore_storecard}>
                                 <div className={styles.publicstore_storecard_img_container}>

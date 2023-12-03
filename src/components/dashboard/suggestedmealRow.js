@@ -55,12 +55,6 @@ console.log(suggestion, 'hells')
                                             ? suggestion.item_name
                                             : suggestion?.category_name)
                                 }
-
-
-
-
-
-
                             </p>
                         </td>
                         <td className={styles.td_name}>

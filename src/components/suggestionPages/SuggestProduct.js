@@ -880,7 +880,7 @@ class SuggestProductForm extends Component {
 
     for (let ele of Object.keys(description)) {
       arr2.push({
-        object_name: ele,
+        object_name: capitalizeFirstLetter(ele),
         object_quantity: description[ele].match(/\d+/)[0],
         object_measurement: description[ele].match(/[a-zA-Z]+/)[0],
         formatted_string: `${ele.split('_').map(capitalizeFirstLetter).join(' ')}: ${description[ele]}`

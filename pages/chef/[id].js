@@ -138,7 +138,7 @@ const ChefPage = () => {
             </div>
             <InstagramBasicApi/>
             <MyTabs id={router.query.id} />
-                
+
             <Footer />
         </div>
     )

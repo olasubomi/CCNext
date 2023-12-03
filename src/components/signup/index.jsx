@@ -379,6 +379,7 @@ function SignUp(props){
                       {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
                   </div>
               </div>
+
             <div className={styles.login_form_group}>
               <label htmlFor="username" className={styles.login_form_label}>
                 Username

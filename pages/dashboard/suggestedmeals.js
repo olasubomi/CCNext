@@ -918,46 +918,71 @@ const SuggestedMeals = (props) => {
         }
     };
 
-    const handleNext = () => {
+    const handleNext = (lastPage = false) => {
         if (page <= pages) {
-            getUserItems(page + 1);
-            setPageState(prev => prev + 1)
+            getUserItems(lastPage ? pages : page + 1);
+            if (lastPage) {
+                setPageState(pages)
+            } else {
+                setPageState(prev => prev + 1)
+            }
         }
     }
 
-    const handlePrev = () => {
+    const handlePrev = (lastPage = false) => {
         if (page !== 1) {
-            getUserItems(page - 1);
-            setPageState(prev => prev - 1)
+            getUserItems(lastPage ? 1 : page - 1);
+            if(lastPage){
+                setPageState(1)
+            } else {
+                setPageState(prev => prev - 1)
+            }
+            
         }
     }
 
-    const handleDescNext = () => {
+    const handleDescNext = (lastPage = false) => {
         if (descPage !== descPages) {
-            getAllDescriptions(descPage + 1);
-            setDescpage(prev => prev + 1)
+            getAllDescriptions(lastPage ? descPages : descPage + 1);
+            if(lastPage){
+                setDescpage(descPages)
+            } else {
+                setDescpage(prev => prev + 1)
+            }
         }
     }
 
-    const handleDescPrev = () => {
+    const handleDescPrev = (lastPage = false) => {
         if (descPage !== 1) {
-            getAllDescriptions(descPage - 1);
-            setDescpage(prev => prev - 1)
+            getAllDescriptions(lastPage ? 1 : descPage - 1);
+            if(lastPage){
+                setDescpage(1)
+            } else {
+                setDescpage(prev => prev - 1)
+            }
         }
     }
 
 
-    const handleMesrNext = () => {
+    const handleMesrNext = (lastPage = false) => {
         if (mesrPage !== mesrPages) {
-            getAllMeasurement(mesrPage + 1);
-            setMesrpage(prev => prev + 1)
+            getAllMeasurement(lastPage ? mesrPages : mesrPage + 1);
+            if(lastPage){
+                setMesrpage(mesrPages)
+            } else {
+                setMesrpage(prev => prev + 1)
+            }
         }
     }
 
-    const handleMesrPrev = () => {
+    const handleMesrPrev = (lastPage = false) => {
         if (mesrPage !== 1) {
-            getAllMeasurement(mesrPage - 1);
-            setMesrpage(prev => prev - 1)
+            getAllMeasurement(lastPage ? 1 : mesrPage - 1);
+            if(lastPage){
+                setMesrpage(1)
+            } else {
+                setMesrpage(prev => prev - 1)
+            }
         }
     }
 
@@ -1119,9 +1144,9 @@ const SuggestedMeals = (props) => {
                                                 {/* <div onClick={togglePublicMeal} className={styles.tableactionbutton}>+ Add public meal</div> */}
                                                 <div className={styles.tableactionbutton}>
                                                     <Link href='/suggestmeal' >
-                                                        
-                                                            + New Suggestion
-                                                        
+
+                                                        + New Suggestion
+
                                                     </Link>
                                                 </div>
                                             </div>
@@ -1238,6 +1263,16 @@ const SuggestedMeals = (props) => {
                                                 <>
                                                     <p onClick={() => {
                                                         if (searchType === 'Item') {
+                                                            handlePrev(true)
+                                                        } else if (searchType === 'Description') {
+                                                            handleDescPrev(true)
+                                                        } else if (searchType === 'Measurement') {
+                                                            handleMesrPrev(true)
+                                                        }
+                                                    }} className={styles.paginate_btn}>&lt;&lt;</p>
+
+                                                    <p onClick={() => {
+                                                        if (searchType === 'Item') {
                                                             handlePrev()
                                                         } else if (searchType === 'Description') {
                                                             handleDescPrev()
@@ -1257,6 +1292,17 @@ const SuggestedMeals = (props) => {
                                                             handleDescNext()
                                                         } else if (searchType === 'Measurement') {
                                                             handleMesrNext()
+                                                        }
+                                                    }
+                                                    } className={styles.paginate_btn}>&gt;&gt;</p>
+
+                                                    <p onClick={() => {
+                                                        if (searchType === 'Item') {
+                                                            handleNext(true)
+                                                        } else if (searchType === 'Description') {
+                                                            handleDescNext(true)
+                                                        } else if (searchType === 'Measurement') {
+                                                            handleMesrNext(true)
                                                         }
                                                     }
                                                     } className={styles.paginate_btn}>&gt;&gt;</p>

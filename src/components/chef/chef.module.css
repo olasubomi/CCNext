@@ -51,3 +51,44 @@
 .icon{
     margin-left: 1rem;
 }
+@media only screen and (max-width: 768px) {
+    .chefBg {
+        margin-top: 13rem;
+        padding: 3rem;
+    }
+    .chefBg h5 {
+        font-size: 52px;
+        font-weight: 500;
+        line-height: 64.184px;
+        margin-left: 3rem;
+    }
+}
+@media only screen and (max-width: 520px) {
+    .chefBg {
+        margin-top: 13rem;
+        padding: 2rem;
+    }
+    .chefBg h5 {
+        font-size: 42px;
+        font-weight: 500;
+        line-height: 64.184px;
+        margin-left: 3rem;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .chefBg {
+        margin-top: 12rem;
+        padding: 2rem;
+    }
+    .chefBg h5 {
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 34.184px;
+        margin-left: 3rem;
+    }
+    .chefImg {
+        width: 70px;
+        height: 70px;
+    }
+}
+
