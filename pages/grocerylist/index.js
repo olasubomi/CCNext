@@ -118,14 +118,16 @@ const index = () => {
             <div className={indexStyles.groceryMainBody}>
               <div className={indexStyles.arrowBack}>
                 <div className={indexStyles.mainArrowRow}>
-                  <Link href="/" legacyBehavior>
+                  {/* <Link href="/" legacyBehavior> */}
+                  <Link href="/" >
                     <img
                       id="backArr"
                       src="/assets/grocery_list/backArr.svg"
                       alt="arrowDown"
                     />
                   </Link>
-                  <Link href="/" legacyBehavior>
+                  {/* <Link href="/" legacyBehavior> */}
+                  <Link href="/" >
                     <label>Back</label>
                   </Link>
                 </div>

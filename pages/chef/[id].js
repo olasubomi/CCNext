@@ -6,12 +6,14 @@ import styles from '../../src/components/chef/chef.module.css'
 import chef from '../../public/assets/homepage/chef.jpg'
 import Image from "next/image";
 import { BsFillShareFill } from 'react-icons/bs'
-import { FacebookShareButton, TwitterShareButton } from "react-share";
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 import { useEffect, useState } from "react";
 import MyTabs from "../../src/components/tabs/tab";
 import { useRouter } from "next/router";
 import axios from '../../src/util/Api'
 import { IndividualModal } from "../../src/components/modal/individual-meal-product";
+import { WhatsappEIcon, FacebookEIcon, TwitterEIcon } from "../../src/components/icons";
+import InstagramBasicApi from "../../src/components/SocialShare/InstagramBasicApi";
 
 
 const ChefPage = () => {
@@ -35,7 +37,7 @@ const ChefPage = () => {
     console.log('rrr')
 
     useEffect(() => {
-       if(router.query.id){
+       if(router.query.id){ 
         fetchUserDetails(router.query.id)
        }
     }, [router.query.id])
@@ -43,6 +45,22 @@ const ChefPage = () => {
     const handleTabChange = (key) => {
         setActiveKey(key);
     };
+    const url = 'https://www.chopchow.app/'
+    console.log("line 47", user)
+
+    function CheckStringsEnd(str) {
+        let result = "";
+        if (typeof str !== 'string' || str.length === 0) {
+          return str; // Return unchanged if not a string or empty string
+        }
+      
+        // Check if the string ends with 's'
+        if (str.endsWith('s')) {
+          return str + "'"; // Append apostrophe to the string
+        }
+        result = str + "'s"
+        return result; // Return unchanged if the string doesn't end with 's'
+      }
     return (
         <div className={styles.ChefContainer}>
             <Head>
@@ -67,47 +85,60 @@ const ChefPage = () => {
                 <div className={styles.share}>
                     <div className={styles.icon}>
                         <FacebookShareButton
-                            url={'https://localhost:3000/suggestmeal'}
-                            quote={'Dummy text!'}
-                            hashtag="#muo"
+                            url={url + 'chef/'+ user._id}
+                            quote={'Chop chow awesome'}
+                            hashtag={`#${ user.first_name} ${ user.last_name}  #recipes   #ChopChow`}
+    
+                            
+                            title={"Share to Facebook"}
                         >
-                            <span className={styles.iconSpan}>
+                              <FacebookEIcon  />
+                            {/* <span className={styles.iconSpan}>
                                 <Image src="/assets/icons/Vector.svg" alt='facebook'
-                                    height={17} width={17} className={styles.icons}
+
+                                    height={"17"} width={"17"} className={styles.icons}
+
                                     objectFit="cover"
                                     objectPosition="center" />
-                            </span>
+                            </span> */}
                         </FacebookShareButton>
 
                     </div>
-                    <div onClick={() => this.handleShareClick()} style={{ cursor: "pointer" }} className={styles.icon}>
+                    {/* <div onClick={() => this.handleShareClick()} style={{ cursor: "pointer" }} className={styles.icon}>
                         <span className={styles.iconSpan1}>
-                            <img src="/assets/icons/Vector (2).svg" alt='instagram'
-                                height={17} width={17} className={styles.icons}
+
+                            <Image src="/assets/icons/Vector (2).svg" alt='instagram'
+                                height={"17"} width={"17"} className={styles.icons}
+
                                 objectFit="cover"
                                 objectPosition="center" />
                         </span>
-                    </div>
-
+                    </div> */}
+                     <div  style={{ cursor: "pointer" }} className={styles.icon}>
+                     <WhatsappShareButton title={user.first_name} url={url + 'chef/'+ user._id} >
+                            <WhatsappEIcon />
+                        </WhatsappShareButton>
+                    </div> 
+                    
                     <div>
                         <TwitterShareButton
                             className={styles.icon}
-                            url={'https://twitter.com/VillageParrot/status/1661378988491538434?s=20'}
-                            quote={'Dummy text!'}
-                            hashtag="#muo"
+                            url={url + 'chef/'+ user._id}
+                            title={"View" + " " + user.first_name + " " + CheckStringsEnd(user.last_name) + " " + "Recipes"} 
+                            via="ChopChowMarket"
                         >
-                            <span className={styles.iconSpan2}>
-                                <Image src="/assets/icons/Vector (1).svg" alt='twitter'
-                                    height={17} width={17} className={styles.icons}
-                                    objectFit="cover"
-                                    objectPosition="center" />
-                            </span>
+                           
+
+                           <TwitterEIcon />
+
                         </TwitterShareButton>
 
                     </div>
                 </div>
             </div>
+            <InstagramBasicApi/>
             <MyTabs id={router.query.id} />
+
             <Footer />
         </div>
     )
