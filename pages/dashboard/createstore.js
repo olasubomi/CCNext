@@ -19,6 +19,7 @@ import { connect } from 'react-redux';
 import PhoneInput from 'react-phone-input-2';
 import { getUser } from '../../src/actions';
 import { useRouter } from 'next/router';
+import GooglePlacesAutocomplete from '../../src/components/dashboard/googleplacesautocomplete';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -91,6 +92,10 @@ const CreateStore = (props) => {
         background_picture_name: '',
         background_picture_data: '',
         description: '',
+        lng: "",
+        lat: "",
+        place_id: "",
+        address: ""
     });
     const { email, phone_number, store_name, city, state, country, zip_code, address, description } = formState;
     const [times, setTimes] = useState({
@@ -121,7 +126,6 @@ const CreateStore = (props) => {
     }
 
     function handleTime(time, day, when) {
-        console.log(time)
         // times[day][when] = time;
         setTimes({ ...times, [day]: { ...times[day], [when]: time } })
     }
@@ -192,15 +196,33 @@ const CreateStore = (props) => {
             street: address,
             city: city,
             zip_code: zip_code,
-            country: country
+            country: country,
+            lng: formState.lng,
+            lat: formState.lat,
+            place_id: formState.place_id,
+            address: formState.address
         }
         let createStoreObject = new FormData();
+
+        const handleFormat = (val) => {
+            return new Date(val).toLocaleTimeString()
+        }
+        const formattedTime =  {};
+        for(let ele in times){
+            formattedTime[ele] = {
+                ...times[ele],
+                from: handleFormat(times[ele]?.from),
+                to: handleFormat(times[ele]?.to)
+            }
+        }
+
         createStoreObject.append('store_name', store_name);
         createStoreObject.append('phone_number', phone_number);
         createStoreObject.append('profile_picture', formState.profile_picture);
         createStoreObject.append('background_picture', formState.background_picture);
         createStoreObject.append('email', email);
-        createStoreObject.append('hours', JSON.stringify(times));
+        createStoreObject.append('description', formState.description);
+        createStoreObject.append('hours', JSON.stringify(formattedTime));
         createStoreObject.append('store_owner', props.auth.authUser?._id);
         createStoreObject.append('supplier_address', JSON.stringify(supplier_address));
 
@@ -293,6 +315,29 @@ const CreateStore = (props) => {
                                         onChange={phone => handlePhoneChange(phone)}
                                     />
                                 </div>
+                                <div className={profileStyles.profile_form_group}>
+                                    <label htmlFor="address" className={profileStyles.profile_form_label}>
+                                        Address
+                                    </label>
+                                    {/* <input
+                                        type="tel"
+                                        name="address"
+                                        value={address}
+                                        placeholder="Your Address"
+                                        onChange={handleChange}
+                                        className={profileStyles.profile_form_input}
+                                    /> */}
+                                    <div>
+                                        <GooglePlacesAutocomplete
+                                            handleValueChange={(address, place_id, lat, lng, zip_code,
+                                                country,
+                                                state,
+                                                city) => {
+                                                setFormState({ ...formState, address, place_id, lat, lng, zip_code, country, state, city })
+                                            }}
+                                        />
+                                    </div>
+                                </div>
                                 <div className={profileStyles.profile_form_col_2}>
                                     <div className={profileStyles.profile_form_group}>
                                         <label htmlFor="city" className={profileStyles.profile_form_label}>City</label>
@@ -317,19 +362,7 @@ const CreateStore = (props) => {
                                         {/* {this.props.errors.lastname && <div className={profileStyles.errorMsg}>{this.props.errors.lastname}</div>} */}
                                     </div>
                                 </div>
-                                <div className={profileStyles.profile_form_group}>
-                                    <label htmlFor="address" className={profileStyles.profile_form_label}>
-                                        Address
-                                    </label>
-                                    <input
-                                        type="tel"
-                                        name="address"
-                                        value={address}
-                                        placeholder="Your Address"
-                                        onChange={handleChange}
-                                        className={profileStyles.profile_form_input}
-                                    />
-                                </div>
+
 
                                 <div className={styles.form_group}>
                                     <h3>Upload Profile Picture</h3>

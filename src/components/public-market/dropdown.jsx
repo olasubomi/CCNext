@@ -167,14 +167,12 @@ export const MealDropDown = ({ selectedStore,setIsShow, id }) => {
             >
               <FaLocationDot fill="#F47900" size={20}/>
               <p className={styles.text} style={{ marginLeft: ".4rem" }}>
-                6391 Elgin St. Celina, Delaware 10299
+                {selectedStore?.supplier?.supplier_address?.address}
               </p>
             </div>
             <h6 className={styles.title2}>About Store</h6>
             <p className={styles.text}>
-              For athletes, high altitude produces two contradictory effects on
-              performance. For explosive events (sprints up to 400 metres, long
-              jump, triple jump) the reduction in atmospheric pressure
+             {selectedStore?.supplier?.description}
             </p>
           </div>
         </div>

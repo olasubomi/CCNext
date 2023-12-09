@@ -1,18 +1,26 @@
 export const storeList = [
     {
-        name: 'Lizzy foods',
+        name: 'Oriental Store',
+        address: '6391 Elgin St. Celina, Delaware 10299',
+        status: 'Open',
+        time: '8:00am - 10:00am',
+        distance: 4,
         id: 1,
     },
     {
-        name: 'Lazy foodshop',
+        name: 'Landon Delicacy',
+        address: '6391 Elgin St. Celina, Delaware 10299',
+        status: 'Open',
+        time: '8:00am - 10:00am',
+        distance: 4,
         id: 2,
     },
     {
-        name: 'Lolade Amala Joint',
+        name: 'Lizzy Lake Cake',
+        address: '6391 Elgin St. Celina, Delaware 10299',
+        status: 'Open',
+        time: '8:00am - 10:00am',
+        distance: 4,
         id: 3,
     },
-    {
-        name: 'Lynn headquarters',
-        id: 4,
-    }
 ]

@@ -1,0 +1,91 @@
+.container {
+    width: 100%;
+}
+
+.top {
+    display: flex;
+    margin-top: 18rem;
+    padding: 0 3rem;
+}
+
+.pageTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 4rem;
+}
+
+.store {
+    height: 30px;
+    width: 30px;
+    background: #F47900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 29px;
+    color: #FFF;
+}
+
+.pageTitle p {
+    font-size: 23px;
+    font-weight: 200;
+    margin-left: .8rem;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.flex p {
+    color: #F47900;
+    font-size: 17px;
+}
+
+.questionContainer {
+    width: 60%;
+    margin: auto;
+    padding-top: 3rem;
+}
+
+.question {
+    color: #000;
+    font-size: 28px;
+    font-weight: 100;
+    line-height: normal;
+    padding-top: 1rem;
+}
+
+.radio {
+    margin-right: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.radioDiv {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    padding: .4rem;
+    border: 1px solid #000;
+    display: flex;
+    justify-content: center;
+}
+
+.label {
+    color: #000;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: normal;
+    margin-left: 1rem;
+}
+.outlineBtn{
+
+}
+.btns{
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 5rem;
+}
