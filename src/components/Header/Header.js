@@ -32,6 +32,7 @@ import CartContext from "../../../pages/store/cart-context";
 import Login from "../Login";
 import { useAuth } from "../../context/auth.context";
 import signup from "../signup";
+import profilePhoto from "../../../public/assets/icons/user.png"
 
 
 
@@ -205,23 +206,19 @@ function Header(props) {
           </Link>
           <div className={styles.navbar_top_details}>
             {!props.auth.isAuthenticated && props.auth.authUser === null ? (
-              // <Link href='/login'>
-              // <a className={styles.navbar_user_loginbtn}>
-              <div
-                onClick={() => setIsOpen(!isOpen)}
-                className={styles.navbar_user_loginbtn}
-              >
+              <Link legacyBehavior href='/login'>
+              <a className={styles.navbar_user_loginbtn}>
+              
                 Log In/Register
-              </div>
+              </a>
+               </Link>
             ) : (
-              // </a>[//\\][//\\][Aa1]
-              // </Link>
               <div className={styles.navbar_user_info}>
                 <img
                   id="userImg"
                   onClick={(e) => toggleUserDetails(e)}
                   // src="/assets/icons/user.png"
-                  src={props.auth.authUser.profile_picture}
+                  src={props.auth.authUser.profile_picture ? props.auth.authUser.profile_picture :  profilePhoto}
                   alt="User"
                   className={styles.navbar_user_img}
                 />

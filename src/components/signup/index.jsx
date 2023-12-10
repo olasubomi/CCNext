@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../Login/style.module.css';
 // import { Form, Button, Container, Modal, Row, Col, ButtonToolbar } from 'react-bootstrap';
-
+import { EyeSIcon } from "../icons";
 import Link from 'next/link';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png"
@@ -11,6 +11,7 @@ import 'react-phone-input-2/lib/style.css'
 import { connect } from 'react-redux';
 import { userSignUp } from '../../actions';
 import { base_url } from '../../util/Api';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 // import { setTimeout } from 'timers';
 
@@ -199,6 +200,9 @@ import { base_url } from '../../util/Api';
 function SignUp(props){
   const [message, setMessageState] = useState(null);
   const [status, setStatusState] = useState(null);
+  const [isAgreed, setIsAgreed] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [showPass, setShowPassState] = useState(null);
   const [formState, setFormState] = useState({
     username: "",
     email: "",
@@ -211,9 +215,10 @@ function SignUp(props){
   const [error, setError] = useState({
     username: '',
     password: '',
-    confirm_password: ''
+    confirm_password: '',
+    isAgreed: '',
   })
-  const { username, email, phone_number, first_name, last_name, password, confirm_password } = formState;
+  const { username, email, phone_number, first_name, last_name, password, confirm_password, } = formState;
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -224,6 +229,9 @@ function SignUp(props){
     setFormState({ ...formState, ['phone_number']: e });
   }
 
+  function togglePass() {
+    setShowPassState(!showPass);
+  }
 
   const validateInput = e => {
     let { name, value } = e.target;
@@ -297,14 +305,24 @@ function SignUp(props){
 
   function formSubmit(e){
     e.preventDefault();
-    props.signup({
-      username,
-      email,
-      phone_number,
-      first_name,
-      last_name,
-      password,
-    });
+    if(!isAgreed){
+      alert('Please agree to terms and conditions.');
+      // setError('Please agree to terms and conditions');
+      setError(prev => ({ ...prev, [error.isAgreed]: "Please agree to terms and conditions" }
+      ))  
+      console.error('Please agree to the terms and conditions.');
+      return 
+    }else {
+
+      props.signup({
+        username,
+        email,
+        phone_number,
+        first_name,
+        last_name,
+        password,
+      });
+    }
     // props.toggleLogin()
   }
   
@@ -343,17 +361,31 @@ function SignUp(props){
         <div className={styles.login}>
           <div className={styles.login_col_2}>
             <div className={styles.login_top}>
-              <div onClick={props.toggleLogin} className={styles.login_cancel_con + " " + styles.show}>
-                <Image src={closeIcon} className={styles.login_cancel} />
-              </div>
+            <div className={styles.login_cancel_con}>
+            <Link href="/" legacyBehavior>
+                    <img
+                      src="/assets/grocery_list/backArr.svg"
+                      alt="goBack"
+                      width="20px"
+                      height="20px"
+                    />
+                  </Link>
+                  <Link href="/" legacyBehavior>
+                    <h3 className={styles.login_cancel}>Back</h3>
+                  </Link>
+            </div>
               <Image
                   src={img_logo}
                   alt="logo"
                   className={styles.login_main_logo_img}
                 />
             </div>
-            <h3>Sign Up</h3>
+            <div>
+
+            
             <div className={styles.login_form}>
+            <h4>Sign Up</h4>
+            
                 <div className={styles.login_form_col_2}>
                     <div className={styles.login_form_group}>
                         <label htmlFor="first_name" className={styles.login_form_label}>First Name</label>
@@ -439,30 +471,39 @@ function SignUp(props){
                 />
               </div>
               <div className={styles.login_form_group}>
-                <label htmlFor="password" className={styles.login_form_label}>
+                <label htmlFor="password" id='password' className={styles.login_form_label}>
                   Password
                 </label>
                 <input
-                  type="password"
+                  type={showPass? "text" : "password"}
                   name="password"
+                  id="password"
                   value={password}
                   placeholder="Create a Password"
                   onChange={handleChange}
                   onBlur={validateInput}
                   className={styles.login_form_input}
                 />
-                <div className={styles.secureEye}>
+                {/* <div className={styles.secureEye}>
                   <Image src={closeIcon} />
                   <i className={styles.eye}></i>
+              </div> */}
+              <div onClick={togglePass} className={styles.secureEye}>
+                {showPass ? 
+                  <VisibilityOff />
+                 : 
+                  <Visibility  />
+                }
               </div>
               {error.password && <span style={{color: "#FF0000", fontSize: 14}}>{error.password}</span>}
               </div>
               <div className={styles.login_form_group}>
-                <label htmlFor="password" className={styles.login_form_label}>
+                <label htmlFor="password" id="confirm_password" className={styles.login_form_label}>
                   Confirm Password
                 </label>
                 <input
-                  type="password"
+                  type={showPass? "text" : "password"}
+                  id="confirm_password"
                   name="confirm_password"
                   value={confirm_password}
                   placeholder="Confirm Password"
@@ -470,9 +511,16 @@ function SignUp(props){
                   onBlur={validateInput}
                   className={styles.login_form_input}
                 />
-                <div className={styles.secureEye}>
+                {/* <div className={styles.secureEye}>
                   <Image src={closeIcon} />
                   <i className={styles.eye}></i>
+              </div> */}
+               <div onClick={togglePass} className={styles.secureEye}>
+               {showPass ? 
+                  <VisibilityOff />
+                 : 
+                  <Visibility  />
+                }
               </div>
               {error.confirm_password && <span style={{color: "#FF0000", fontSize: 14}} >{error.confirm_password}</span>}
               </div>
@@ -480,35 +528,39 @@ function SignUp(props){
                 <div className={styles.signup_form_option}>
                 <input
                     className={styles.signup_form_radioInput}
-                    type="radio"
-                    id="service"
-                    name="agreement"
-                    value="agreed"
+                    type="checkbox"
+                    id="agreement"
+                    name="isAgreed"
+                    required
+                    value={isAgreed}
+                    onChange={(e) => setIsAgreed(e.target.value)}
                     />
                     <label
-                    htmlFor="service"
+                    htmlFor="agreement"
                     className={styles.signup_form_radio_button}
                     ></label>
-                    <label htmlFor="service" className={styles.signup_form_radio_label}>
-                    I accept the Terms & Conditions and <Link href="/privacypolicy"><a style={{textDecoration: "underline"}}>Privacy and Cookie Notice</a></Link>
+                    <label htmlFor="agreement" className={styles.signup_form_radio_label}>
+                    I accept the Terms & Conditions and <Link legacyBehavior href="/privacypolicy"><a style={{textDecoration: "underline"}}>Privacy and Cookie Notice</a></Link>
   
                     </label>
+                    {!isAgreed && <span style={{color: "#FF0000", fontSize: 14}} >{error.isAgreed}</span>}
                 </div>
 
                 <div className={styles.signup_form_option}>
                 <input
                     className={styles.signup_form_radioInput}
-                    type="radio"
-                    id="service"
-                    name="agreement"
-                    value="agreed"
+                    type="checkbox"
+                    id="newsletter"
+                    name="newsletter"
+                    value="isSubscribed"
+                    onChange={(e) => setIsSubscribed(e.target.value)}
                     />
                     <label
-                    htmlFor="service"
+                    htmlFor="newsletter"
                     className={styles.signup_form_radio_button}
-                    ></label>
-                    <label htmlFor="service" className={styles.signup_form_radio_label}>
-                        I want to receive Chop Chow Newletters and best deal promotional offers
+                    > </label>
+                    <label htmlFor="newsletter" className={styles.signup_form_radio_label}>
+                    I want to receive Chop Chow Newletters and best deal promotional offers
                     </label>
                 </div>
               
@@ -520,21 +572,14 @@ function SignUp(props){
   
             <button onClick={formSubmit} className={styles.login_button}>Register</button>
   
-            <h3 className={styles.login_new}>Already have an account? {props.closeSignUp ? <span onClick={props.closeSignUp}>Sign in here</span> : <Link href='/login'><a>Sign in here</a></Link> }</h3>
-            
+            <h3 className={styles.login_new}>Already have an account? {props.closeSignUp ? <span onClick={props.closeSignUp}>Sign in here</span> : <Link legacyBehavior href='/login'><a>Sign in here</a></Link> }</h3>
+            </div>
           </div>   
-          <div style={props.toggleLogin ? {gridTemplateRows: 'max-content 1fr' }: {gridTemplateRows: '1fr'}} className={styles.login_col_1}>
-            {props.toggleLogin && 
-            <div className={styles.login_top}>
-              <h2></h2>
-              <div onClick={props.toggleLogin} className={styles.login_cancel_con}>
-                <Image src={closeIcon} className={styles.login_cancel} />
-              </div>
-            </div>}
-            <h3 style={{position: 'absolute', top: 145, alignSelf: 'center', width: 320, zIndex: 99, paddingLeft: 40}}>
+          <div className={styles.login_col_1}>
+            <h3 style={{position: 'absolute', top: 168, alignSelf: 'center', width: 360, zIndex: 99, paddingLeft: 40}}>
               Get your African Delicacies delievered to your Door
             </h3>
-            <Image width={420} height={550} src="/assets/signup/signup_bg.png" alt="Signup" />
+            <img width="100%" height="100%" src="/assets/signup/signup_bg.png" alt="Signup" />
           </div>    
         </div>
       </>

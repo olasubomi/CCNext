@@ -445,7 +445,7 @@ const UserProfile = (props) => {
 
                                                 {(profileImageData === '' && props.auth.authUser.profile_picture === undefined) && <UserIcon />}
                                                 {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) &&
-                                                    <Image width={500} height={500} src={props.auth.authUser.profile_picture} alt="profile_picture" />
+                                                    <Image width={100} height={100} src={props.auth.authUser.profile_picture} alt="profile_picture" />
                                                 }
                                                 <img id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
                                             </div>

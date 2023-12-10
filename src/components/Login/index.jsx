@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { toast } from 'react-toastify';
 import FacebookLogin from 'react-facebook-login';
 import { useAuth } from "../../context/auth.context";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 
 function Login(props) {
@@ -48,8 +49,9 @@ function Login(props) {
   }
 
   function openSignUp() {
-    props.setSignUpState(true)
-    // setSignUpState(true);
+    // props.setSignUpState(true)
+    setIsOpen(false)
+    setSignUpState(true);
   }
 
   function closeSignUp() {
@@ -118,14 +120,23 @@ function Login(props) {
     setShowPassState(!showPass);
   }
   //{console.log("signedin", props.auth)}
-  return <>
-    {true &&
-      (
+  return (<>
+    
       <div className={styles.login}>
         <div className={styles.login_col_2}>
           <div className={styles.login_top}>
-            <div onClick={() => setIsOpen(!isOpen)} className={styles.login_cancel_con + " "}>
-              <Image src={closeIcon} className={styles.login_cancel} />
+            <div className={styles.login_cancel_con}>
+            <Link href="/" legacyBehavior>
+                    <img
+                      src="/assets/grocery_list/backArr.svg"
+                      alt="goBack"
+                      width="20px"
+                      height="20px"
+                    />
+                  </Link>
+                  <Link href="/" legacyBehavior>
+                    <h3 className={styles.login_cancel}>Back</h3>
+                  </Link>
             </div>
             <Image
 
@@ -134,11 +145,9 @@ function Login(props) {
               className={styles.login_main_logo_img}
             />
           </div>
-          <h2>Welcome Back</h2>
-          <h3>Login</h3>
           <div className={styles.login_form}>
-            
-            
+          <h2>Welcome Back</h2>
+          <h4>Login</h4>
             <div className={styles.login_form_group}>
               <label htmlFor="email" className={styles.login_form_label}>
                 Email
@@ -158,6 +167,7 @@ function Login(props) {
               </label>
               <input
                 type={showPass ? "text" : "password"}
+                id="password"
                 name="password"
                 value={password}
                 placeholder="Your password"
@@ -165,11 +175,11 @@ function Login(props) {
                 className={styles.login_form_input}
               />
               <div onClick={togglePass} className={styles.secureEye}>
-                {showPass ? (
-                  <VisibilityIcon className={styles.eye} />
-                ) : (
-                  <EyeSIcon style={styles.eye} />
-                )}
+              {showPass ? 
+                  <VisibilityOff />
+                 : 
+                  <Visibility  />
+                }
               </div>
             </div>
            
@@ -200,12 +210,14 @@ function Login(props) {
               )}
             </button>
 
-            <h3 className={styles.login_new}>
+            {/* <h3 className={styles.login_new}>
               Don't have an account yet?{" "}
               
                 <span onClick={openSignUp}>Sign up here</span>
              
-            </h3>
+            </h3> */}
+
+            <h3 className={styles.login_new}>Don't have an account yet?{" "} <Link legacyBehavior href='/signup'><a>Sign up here</a></Link> </h3>
 
             <div className={styles.login_options}>
               <h3>Login with social media</h3>
@@ -248,36 +260,25 @@ function Login(props) {
 
           
         </div>
-        <div
-          style={
-            props.toggleLogin
-              ? { gridTemplateRows: "max-content 1fr" }
-              : { gridTemplateRows: "1fr" }
-          }
-          className={styles.login_col_1}
-        >
-          {props.toggleLogin && (
-            <div className={styles.login_top}>
-              <h2></h2>
-              <div
-                onClick={props.toggleLogin}
-                className={styles.login_cancel_con}
-              >
-                <Image src={closeIcon} className={styles.login_cancel} />
-              </div>
-            </div>
-          )}
-          <h3>Adding Convenience to your Home Made Meals</h3>
+        <div className={styles.login_col_1}>
+          <h3 style={{position: 'absolute', top: 150, alignSelf: 'center',  zIndex: 99, paddingRight: 30, paddingLeft: 30, width: 380}}>Adding Convenience to your Home Made Meals</h3>
+                {/* <div className={styles.login_col_1_img}> */}
+
+                <img  width="100%" height="100%" src="/assets/signup/signin_bg.jpg" alt="Sign-in" />
+                {/* </div> */}
+             
+            
+      
         </div>
       </div>
-      )}
+      
       {/* {signUp && (
         <SignUp
           closeSignUp={closeSignUp}
           toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
         />
       )} */}
-    {forgetPassword && (
+    {/* {forgetPassword && (
       <ForgetPassword closeForgetPassword={closeForgetPassword} />
     )}
     {signUp && (
@@ -285,8 +286,9 @@ function Login(props) {
         closeSignUp={closeSignUp}
         toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
       />
-    )}
-  </>;
+    )} */}
+  
+  </>);
 }
 
 function mapStateToProp(state) {
