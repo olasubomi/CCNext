@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, Fragment } from "react";
 import Header, { Header2 } from "../../src/components/Header/Header";
 import GoBack from "../../src/components/CommonComponents/goBack";
 import styles from '../../src/components/suggest-store/suggest-store.module.css'
@@ -29,6 +29,7 @@ const SuggestStore = () => {
     const handlePrevious = useCallback(() => {
         if (index !== 1) {
             setIndex(prev => prev - 1)
+            console.log('back')
         }
     }, [details])
     return (
@@ -91,7 +92,7 @@ const SuggestStore = () => {
                             <>
                                 {
                                     details.isStoreOwner ?
-                                        <><p className={styles.question}>Would you prefer </p>
+                                        <><p className={styles.question}>Would you prefer a quick or detailed setup</p>
                                             <div className={styles.flex} style={{ paddingTop: '3rem' }}>
                                                 <div className={styles.radio}>
                                                     <div className={styles.radioDiv}>
@@ -99,17 +100,62 @@ const SuggestStore = () => {
                                                             ...details, isStoreOwner: true
                                                         })} type="radio" />
                                                     </div>
-                                                    <label className={styles.label}>Yes</label>
+                                                    <label className={styles.label}>Quick setup</label>
                                                 </div>
                                                 <div className={styles.radio}>
                                                     <div className={styles.radioDiv}>
                                                         <input onChange={() => setDetails({
-                                                            ...details, isStoreOwner: false
+                                                            ...details, isStoreOwner: true
                                                         })} type="radio" />
                                                     </div>
-                                                    <label className={styles.label}>No</label>
+                                                    <label className={styles.label}>Detailed setup</label>
                                                 </div>
                                             </div></>
+                                        : <></>
+                                }
+
+                            </>
+                        )
+
+                    }
+                    {
+                        index === 2 && (
+                            <>
+                                {
+                                    details.isStoreOwner ?
+                                        <div className={styles.fragment}>
+                                            <p className={styles.question}>Store Name</p>
+                                            <input
+                                                onChange={() => setDetails({
+                                                    ...details, isStoreOwner: true
+                                                })}
+                                                type="text"
+                                                name="text"
+                                                placeholder="Enter store name" />
+                                                
+                                        </div>
+                                        : <></>
+                                }
+
+                            </>
+                        )
+
+                    }
+                    {
+                        index === 3 && (
+                            <>
+                                {
+                                    details.isStoreOwner ?
+                                        <div className={styles.fragment}>
+                                            <p className={styles.question}>Store address</p>
+                                            <input
+                                                onChange={() => setDetails({
+                                                    ...details, isStoreOwner: true
+                                                })}
+                                                type="text"
+                                                name="text"
+                                                placeholder="Enter store Address" />
+                                        </div>
                                         : <></>
                                 }
 

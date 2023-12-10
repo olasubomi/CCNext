@@ -89,3 +89,15 @@
     justify-content: flex-end;
     padding-top: 5rem;
 }
+.fragment input{
+    width: 100%;
+    border-left: none;
+    border-top: none;
+    border-right: none;
+    outline: none;
+    margin-top: 3rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+    color: #6D6D6D;
+    font-size: 18px;
+    font-weight: 100;
+}

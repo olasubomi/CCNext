@@ -67,7 +67,7 @@ export const AddressInput = forwardRef((props, ref) => {
                 })
                 const res = await BaseAxios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${location?.coords?.latitude},${location?.coords?.longitude}&key=AIzaSyDJ2OXLQoX_83t-DYmg-zIs3keZmNAZHzk`)
                 const data = res.data;
-                const curr_location = data?.results?.find((ele) => ele?.types?.includes('street_address'))?.formatted_address || "";
+                const curr_location = data?.results?.find((ele) => ele?.types?.includes('street_address') || ele?.types?.includes('route'))?.formatted_address || "";
                 setCurrentAddress(curr_location)
                 setIsLoading(false)
             } catch (e) {
