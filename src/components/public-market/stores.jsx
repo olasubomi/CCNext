@@ -76,6 +76,7 @@ export const Stores = () => {
                                                 <div>
                                                     <Image src={store?.background_picture ? store?.background_picture : stored} className={styles.storeImg} width={200} height={200} objectFit="cover" objectPosition='center' />
                                                     <p className={styles.name}>{store?.store_name}</p>
+                                                    <p className={styles.storeName} style={{ marginTop: '.4rem' }}>{store?.supplier_address ? store?.supplier_address?.city + ' - ' + store?.supplier_address?.country : ''}</p>
                                                 </div>
                                             }
                                         </div>
@@ -85,8 +86,8 @@ export const Stores = () => {
                                         <MealDropDown
                                             setIsShow={setIsShow}
                                             selectedStore={selectedStore}
-                                            id={selectedStore.supplier._id} />
-
+                                            id={selectedStore.supplier._id}
+                                        />
                                     }
                                 </div>
                             </>

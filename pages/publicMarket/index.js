@@ -14,6 +14,7 @@ import {
 import Footer from "../../src/components/Footer/Footer";
 import { useRouter } from "next/router";
 import axios from "../../src/util/Api";
+import { AddressInput } from "../../src/components/public-market/input";
 
 const PublicMarket = () => {
   const router = useRouter();
@@ -21,7 +22,12 @@ const PublicMarket = () => {
   const [value, setValue] = useState("");
   const [items, setItems] = useState([]);
   const [store, setStore] = useState([]);
+  const [showLocation, setShowLocation] = useState(false)
+  const [showAddress, setShowAddress] = useState(false)
   const [showCategory, setShowCategory] = useState(false);
+  const [showCurrentLocation, setShowCurrentLocation] = useState(false)
+  const addressRef = useRef();
+
   const ref = useRef();
   const [oneStore, setOneStore] = useState({
     visible: false,
@@ -130,20 +136,21 @@ const PublicMarket = () => {
       <Header2 />
       <div className={styles.header}>
         <p className={styles.title}>Access stores near you</p>
-        <div className={styles.search2}>
-          <input
-            type="search"
-            name="name"
-            placeholder="Enter Delivery Address"
-            className={styles.searchbar}
-          />
-          <HiLocationMarker
-            size={17}
-            className={styles.locationIcon}
-            fill="#949494"
-          />
-        </div>
-        <div className={styles.location}>
+        <AddressInput
+          showLocation={showLocation}
+          setShowLocation={setShowLocation}
+          showAddress={showAddress}
+          ref={addressRef}
+          setShowAddress={setShowAddress}
+          showCurrentLocation={showCurrentLocation}
+          setShowCurrentLocation={setShowCurrentLocation}
+        />
+        <div className={styles.location} style={{ cursor: 'pointer' }} onClick={() => {
+          addressRef.current?.handleGetStoreByLocation()
+          setShowLocation(!showLocation)
+          setShowCurrentLocation(true)
+          console.log(showLocation, 'showLocation')
+        }}>
           <HiLocationMarker
             size={17}
             fill="#FFFFFF"
@@ -237,6 +244,9 @@ const PublicMarket = () => {
                               Boolean(value) ? (
                                 <div className={styles.result}>
                                   <p>No Result Found</p>
+                                  <button onClick={() => router.push(`/suggest-store/${value}`)}>
+                                    Suggest Store
+                                  </button>
                                 </div>
                               ) : null
                             ) : (

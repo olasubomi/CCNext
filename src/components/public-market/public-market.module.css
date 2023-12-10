@@ -39,6 +39,8 @@
     position: relative;
     width: 49%;
     display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -50,8 +52,21 @@
 
 .locationIcon {
     position: absolute;
-    top: 30%;
+    top: 22%;
     left: 2%;
+}
+
+.locationDropdown {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 100%;
+    z-index: 2;
+    margin-top: .5rem;
+    padding: 1.5rem 2.5rem;
+    background: #FFF;
+    border-radius: 0px 0px 4px 4px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
 }
 
 .title {
@@ -70,7 +85,7 @@
     padding-bottom: 2rem;
     padding-top: 1rem;
     position: fixed;
-    z-index: 10;
+    z-index: 1;
     padding-left: 5rem;
     top: 220px;
 
@@ -579,7 +594,8 @@
     background: #FFF;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
 }
-.round{
+
+.round {
     background: #6D6D6D;
     width: 2.7rem;
     height: 2.7rem;
@@ -595,7 +611,8 @@
     gap: 13px;
     width: 100%;
 }
-.arrow{
+
+.arrow {
     position: absolute;
     z-index: 1000;
     right: 0%;
@@ -608,7 +625,8 @@
     justify-content: center;
     align-items: center;
 }
-.arrow2{
+
+.arrow2 {
     position: absolute;
     z-index: 1000;
     left: 0%;
@@ -621,6 +639,7 @@
     justify-content: center;
     align-items: center;
 }
+
 .storeName2 {
     color: #000;
     font-size: 30px;
@@ -655,8 +674,75 @@
     gap: 80px;
     margin-top: 3rem;
 }
-.rightside{
+
+.rightside {
     width: 72%;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.rowName {
+    color: #000;
+    font-size: 15px;
+    font-weight: 500;
+    padding-left: 1rem;
+}
+
+.address {
+    color: #6D6D6D;
+    font-size: 14px;
+    font-weight: 400;
+    padding-left: 2.5rem;
+    line-height: 35.4px;
+}
+
+.allstores {
+    padding: 0 1.2rem 0 1.2rem;
+
+}
+.oneStore{
+    padding: 1rem 0;
+}
+.loader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15rem;
+}
+.storename {
+    color: #000;
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: .4px;
+}
+
+.storeaddress {
+    color: #6D6D6D;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding-bottom: 1.2rem;
+}
+
+.storestatus {
+    color: #00A701;
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: -.4rem;
+    margin-right: 1rem;
+
+}
+
+.storetime {
+    color: #6D6D6D;
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: .5rem;
 }
 
 @media only screen and (max-width: 1100px) {
@@ -709,11 +795,13 @@
     .storeContainer {
         padding-top: 30rem;
     }
-    .profile_picture{
+
+    .profile_picture {
         width: 35%;
         height: 200px;
     }
-    .rightside{
+
+    .rightside {
         width: 65%;
     }
 }
@@ -740,24 +828,30 @@
         top: 118px;
         padding: .5rem 2rem .5rem 2rem;
     }
-    .profile_picture{
+
+    .profile_picture {
         width: 50%;
         height: 210px;
     }
-    .rightside{
+
+    .rightside {
         width: 50%;
     }
+
     .storeName2 {
         font-size: 23px;
     }
+
     .rate {
         font-size: 15px;
     }
+
     .text {
         font-size: 12px;
     }
 }
-@media only screen and (max-width: 768px){
+
+@media only screen and (max-width: 768px) {
     .header2 {
         top: 258px;
     }
@@ -783,7 +877,8 @@
         font-size: 12px;
         font-weight: 500;
     }
-    .profile_picture{
+
+    .profile_picture {
         width: 50%;
         height: 150px;
     }
@@ -798,21 +893,26 @@
     .two {
         flex-direction: column;
     }
-    .header{
+
+    .header {
         z-index: 1000;
     }
+
     .search {
         width: 100%;
     }
+
     .modalCard2 {
         width: 95%;
         padding: 2rem 1.5rem;
     }
+
     .store_flex {
         align-items: flex-start;
         gap: 11px;
     }
-    .profile_picture{
+
+    .profile_picture {
         margin-top: 1.2rem;
     }
 }
