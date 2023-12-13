@@ -34,7 +34,7 @@ function Store(props) {
         // }
 
     };
-    console.log(props.items, 'props11')
+    console.log(props, 'props11')
     const filteredItem = () => {
          return props.items.filter(data => data.item_type === 'Meal')
     }
@@ -73,7 +73,8 @@ function Store(props) {
                                 {props.store.supplier_address &&
                                     <div>
                                         <LocationIcon style={styles.store_icon} />
-                                        <p>{JSON.parse(props.store.supplier_address).address + " " + JSON.parse(props.store.supplier_address).city + " ," + JSON.parse(props.store.supplier_address).state + " " + JSON.parse(props.store.supplier_address).country + " " + JSON.parse(props.store.supplier_address).zip_code}6391 Elgin St. Celina, Delaware 10299</p>
+                                        {/* <p>{JSON.parse(props?.store?.supplier_address)?.address + " " + JSON.parse(props?.store?.supplier_address)?.city + " ," + JSON.parse(props?.store?.supplier_address)?.state + " " + JSON.parse(props?.store?.supplier_address)?.country + " " + JSON.parse(props?.store?.supplier_address)?.zip_code}6391 Elgin St. Celina, Delaware 10299</p> */}
+                                        <p>{props?.store?.supplier_address?.address}</p>
                                     </div>}
                                 <div>
                                     <EmailIcon style={styles.store_icon} />

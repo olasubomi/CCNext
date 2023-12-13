@@ -70,7 +70,7 @@ const PublicMarket = () => {
         };
       });
       setItems(resp);
-      console.log(resp, "resp");
+      console.log(response.data.data, "resp");
     } catch (error) {
       console.log(error);
     }

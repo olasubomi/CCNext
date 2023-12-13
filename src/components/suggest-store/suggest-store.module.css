@@ -81,11 +81,101 @@
     line-height: normal;
     margin-left: 1rem;
 }
-.outlineBtn{
+
+.outlineBtn {
+    width: 180px;
+    height: 48px;
+    background: #FFF;
+    outline: none;
+    border-radius: 4px;
+    border: 1px solid #6D6D6D;
+    font-size: 12px;
+    color: #000;
+    cursor: pointer;
 
 }
-.btns{
+
+.btn {
+    width: 180px;
+    height: 48px;
+    background: #F47900;
+    outline: none;
+    border-radius: 4px;
+    border: none;
+    font-size: 12px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.gif {
+    height: 12rem;
+}
+
+.gif img {
+    object-fit: contain;
+    object-position: center;
+    width: 100%;
+    height: 100%;
+}
+
+.btns {
     display: flex;
     justify-content: flex-end;
     padding-top: 5rem;
+    gap: 10px;
+}
+
+.fragment input {
+    width: 100%;
+    border-left: none;
+    border-top: none;
+    border-right: none;
+    outline: none;
+    margin-top: 3rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+    color: #6D6D6D;
+    font-size: 18px;
+    font-weight: 100;
+}
+
+.modalContainer {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.40);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    width: 40%;
+    margin: auto;
+    background: #FFF;
+    padding: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.successMessage {
+    color: #000;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.successText {
+    color: #6D6D6D;
+    text-align: center;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    padding-top: 1rem;
 }
