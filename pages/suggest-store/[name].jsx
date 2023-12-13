@@ -20,6 +20,7 @@ const SuggestStore = () => {
   const [index, setIndex] = useState(1);
   const [show, setShow] = useState(false);
   const router = useRouter();
+  const ref = useRef(false);
   const [details, setDetails] = useState({
     title: "",
     isStoreOwner: null,
@@ -51,30 +52,48 @@ const SuggestStore = () => {
       router.push(`/dashboard/createstore?storename=${details.title}`);
     } else {
       if (index === 4) {
-        handleCreate()
+        handleCreate();
       } else {
-        setIndex((prev) => prev + 1);
+        if (ref.current) {
+          setIndex((prev) => prev + 2);
+          ref.current = false;
+        } else {
+          setIndex((prev) => prev + 1);
+        }
       }
     }
   }, [details, index]);
   const handlePrevious = useCallback(() => {
     if (index !== 1) {
-      setIndex((prev) => prev - 1);
-      console.log("back");
+      if (index === 3 && !details.isStoreOwner) {
+        setIndex((prev) => prev - 2);
+      } else {
+        setIndex((prev) => prev - 1);
+      }
     } else {
       router.push("/publicMarket");
     }
   }, [details, index]);
 
-
   const handleCreate = async () => {
-    const payload = {...formState, store_name: details.title}
-    axios.post('/stores/createstore', payload).then(response => {
+    let supplier_address = {
+      ...formState,
+    };
+    const user = JSON.parse(localStorage.getItem("user"));
+    const form = new FormData();
+    form.append("supplier_address", JSON.stringify(supplier_address));
+    form.append("store_name", details.title);
+    form.append("email", user?.email);
+    if(details.isStoreOwner){
+      form.append("store_owner", user?._id);
+    }
+
+    axios.post("/stores/createstore", form).then((response) => {
       if (response.status >= 200 && response.status < 300) {
         setShow(true);
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -113,12 +132,13 @@ const SuggestStore = () => {
                 <div className={styles.radio}>
                   <div className={styles.radioDiv}>
                     <input
-                      onChange={() =>
+                      onChange={() => {
                         setDetails({
                           ...details,
                           isStoreOwner: true,
-                        })
-                      }
+                        });
+                        ref.current = false;
+                      }}
                       type="radio"
                       value="yes"
                       name="radio"
@@ -129,12 +149,13 @@ const SuggestStore = () => {
                 <div className={styles.radio}>
                   <div className={styles.radioDiv}>
                     <input
-                      onChange={() =>
+                      onChange={() => {
                         setDetails({
                           ...details,
                           isStoreOwner: false,
-                        })
-                      }
+                        });
+                        ref.current = true;
+                      }}
                       type="radio"
                       name="radio"
                       value="no"
@@ -147,7 +168,7 @@ const SuggestStore = () => {
           )}
           {index === 2 && (
             <>
-              {details.isStoreOwner || !details.isStoreOwner ? (
+              {details.isStoreOwner ? (
                 <>
                   <p className={styles.question}>
                     Would you prefer a quick or detailed setup
@@ -194,7 +215,7 @@ const SuggestStore = () => {
           )}
           {index === 3 && (
             <>
-              {details.isStoreOwner ? (
+              {details.isStoreOwner || !details.isStoreOwner ? (
                 <div className={styles.fragment}>
                   <p className={styles.question}>Store Name</p>
                   <input
@@ -217,7 +238,7 @@ const SuggestStore = () => {
           )}
           {index === 4 && (
             <>
-              {details.isStoreOwner ? (
+              {details.isStoreOwner || !details.isStoreOwner ? (
                 <div className={styles.fragment}>
                   <p className={styles.question}>Store address</p>
                   {/* <input
