@@ -361,8 +361,8 @@ class SuggestProductForm extends Component {
     const categoryWords = categorySentence.split(" ");
 
     categoryWords.map((categoryWord) => {
-      return categoryWord[0].toUpperCase() + categoryWord.substring(1);
-    }).join(" ");
+      return categoryWord[0]?.toUpperCase() + categoryWord?.substring(1);
+    })?.join(" ");
 
     let suggestedCategories = this.state.suggestedCategories;
     suggestedCategories.push(categoryWords);
