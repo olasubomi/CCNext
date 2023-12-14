@@ -155,7 +155,7 @@ export const TopSellingProducts = () => {
                     setQuantity={setQuantity}
                 />
             </div>
-            <p className={styles.view} onClick={() => loadMore()}>View More</p>
+            <p className={styles.view2} onClick={() => loadMore()}>View More</p>
             <div className={styles.border} />
 
         </div>
