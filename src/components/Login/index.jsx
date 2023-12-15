@@ -132,18 +132,22 @@ function Login(props) {
                       alt="goBack"
                       width="20px"
                       height="20px"
+                      className={styles.login_cancel}
                     />
                   </Link>
                   <Link href="/" legacyBehavior>
                     <h3 className={styles.login_cancel}>Back</h3>
                   </Link>
             </div>
+            <Link href="/" legacyBehavior>
+                    
             <Image
 
               src={img_logo}
               alt="logo"
               className={styles.login_main_logo_img}
             />
+                  </Link>
           </div>
           <div className={styles.login_form}>
           <h2>Welcome Back</h2>
@@ -261,11 +265,10 @@ function Login(props) {
           
         </div>
         <div className={styles.login_col_1}>
-          <h3 style={{position: 'absolute', top: 150, alignSelf: 'center',  zIndex: 99, paddingRight: 30, paddingLeft: 30, width: 380}}>Adding Convenience to your Home Made Meals</h3>
-                {/* <div className={styles.login_col_1_img}> */}
+          {/* <h3 style={{position: 'absolute', top: 150, alignSelf: 'center',  zIndex: 99, paddingRight: 30, paddingLeft: 30, width: 380}}>Adding Convenience to your Home Made Meals</h3> */}
 
-                <img  width="100%" height="100%" src="/assets/signup/signin_bg.jpg" alt="Sign-in" />
-                {/* </div> */}
+                <img  width="100%" height="100%" src="/assets/signup/login.png" alt="Sign-in" />
+                
              
             
       

@@ -128,6 +128,8 @@
 .profile_image{
     
     object-fit: contain;
+    width: 250px;
+    max-height: 300px;
 }
 
 .profile_image > span{

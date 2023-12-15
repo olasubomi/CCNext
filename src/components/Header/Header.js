@@ -32,7 +32,8 @@ import CartContext from "../../../pages/store/cart-context";
 import Login from "../Login";
 import { useAuth } from "../../context/auth.context";
 import signup from "../signup";
-import profilePhoto from "../../../public/assets/icons/user.png"
+// import profile_pic from "../assets/icons/user-icon.jpg"
+import profile_pic from "../../../public/assets/icons/user.png"
 
 
 
@@ -45,7 +46,7 @@ function Header(props) {
   const [openLogin, setOpenLoginState] = useState(false);
   const router = useRouter();
   const [showSignup, setShowSignUp] = useState(false);
-  // const userData = useSelector()
+  const {authUser} = useSelector(state => state.Auth)
 
   const cartCtx = useContext(CartContext);
 
@@ -214,11 +215,12 @@ function Header(props) {
                </Link>
             ) : (
               <div className={styles.navbar_user_info}>
-                <img
+                <Image
                   id="userImg"
                   onClick={(e) => toggleUserDetails(e)}
-                  // src="/assets/icons/user.png"
-                  src={props.auth.authUser.profile_picture ? props.auth.authUser.profile_picture :  profilePhoto}
+                  width={50}
+                  height={50}
+                  src={authUser.profile_picture !== "" && authUser.profile_picture !== undefined ? authUser.profile_picture : profile_pic}
                   alt="User"
                   className={styles.navbar_user_img}
                 />
