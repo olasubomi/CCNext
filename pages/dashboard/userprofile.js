@@ -405,7 +405,7 @@ const UserProfile = (props) => {
     };
 
     const getStoreInformation = async () => {
-        const userId = JSON.parse(localStorage.getItem("user"))._id
+        const userId = JSON.parse(localStorage.getItem("user"))?._id
         try {
             const response = await axios.get(`http://localhost:5000/api/stores/getstore/user?userId=${userId}`)
             const data = response.data?.data?.supplier || {}

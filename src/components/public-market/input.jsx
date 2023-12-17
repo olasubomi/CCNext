@@ -1,5 +1,5 @@
 import { HiLocationMarker } from 'react-icons/hi'
-import { useState, useEffect, useCallback, useImperativeHandle, forwardRef } from 'react'
+import { useState, useEffect, useCallback, useImperativeHandle, forwardRef, useRef } from 'react'
 import styles from './public-market.module.css'
 import { FadeLoader } from 'react-spinners'
 import { storeList } from './lists'
@@ -27,6 +27,7 @@ export const AddressInput = forwardRef((props, ref) => {
         longitude: ''
     })
     const router = useRouter()
+    const pageRef = useRef()
 
         useImperativeHandle(ref, () => {
             return {
@@ -55,6 +56,18 @@ export const AddressInput = forwardRef((props, ref) => {
             console.log(error)
         }
     }
+    useEffect(() => {
+        document.addEventListener(
+          "click",
+          (e) => {
+            if (pageRef.current && !pageRef.current.contains(e.target)) {
+                setShowLocation(false);
+                setShowAddress(false);
+            }
+          },
+          true
+        );
+      }, []);
 
 
     const onSuccess = useCallback(async (location) => {
@@ -87,12 +100,13 @@ export const AddressInput = forwardRef((props, ref) => {
     }, [])
 
     return (
-        <div className={styles.search2}>
+        <div className={styles.search2} ref={pageRef}>
             <input
                 onFocus={() => {
                     setShowCurrentLocation(false)
                     setShowLocation(!showLocation);
                     setShowAddress(!showAddress);
+            
                 }}
                 autoComplete="off"
                 type="text"
@@ -164,7 +178,7 @@ export const AddressInput = forwardRef((props, ref) => {
                             //     :
                                 allStores.map((elem, idx) => (
                                     <>
-                                        <div className={styles.oneStore} key={idx}>
+                                        <div className={styles.oneStore} key={idx} onClick={() => router.push(`/store/${elem._id}`)}>
                                             <h6 className={styles.storename}>{elem.store_name}</h6>
                                             <p className={styles.storeaddress}>{elem.address}</p>
                                             <div className={styles.row}>

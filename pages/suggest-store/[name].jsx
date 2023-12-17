@@ -21,6 +21,7 @@ const SuggestStore = () => {
   const [show, setShow] = useState(false);
   const router = useRouter();
   const ref = useRef(false);
+  const [storeId, setStoreId] = useState("");
   const [details, setDetails] = useState({
     title: "",
     isStoreOwner: null,
@@ -47,6 +48,25 @@ const SuggestStore = () => {
     }
   }, [router]);
 
+  const handleCreate = async () => {
+    let supplier_address = {
+      ...formState
+    };
+    const user = JSON.parse(localStorage.getItem("user"));
+    const form = new FormData();
+    form.append("supplier_address", JSON.stringify(supplier_address));
+    form.append("store_name", details.title);
+    if (details.isStoreOwner) {
+      form.append("email", user?.email);
+      form.append("store_owner", user?._id);
+    }
+    axios.post("/stores/createstore", form).then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        setStoreId(response.data?.data?._id)
+        setShow(true);
+      }
+    });
+  };
   const handleNext = useCallback(() => {
     if (details?.storeType === "detailed") {
       router.push(`/dashboard/createstore?storename=${details.title}`);
@@ -62,7 +82,7 @@ const SuggestStore = () => {
         }
       }
     }
-  }, [details, index]);
+  }, [details, index, handleCreate]);
   const handlePrevious = useCallback(() => {
     if (index !== 1) {
       if (index === 3 && !details.isStoreOwner) {
@@ -75,25 +95,7 @@ const SuggestStore = () => {
     }
   }, [details, index]);
 
-  const handleCreate = async () => {
-    let supplier_address = {
-      ...formState,
-    };
-    const user = JSON.parse(localStorage.getItem("user"));
-    const form = new FormData();
-    form.append("supplier_address", JSON.stringify(supplier_address));
-    form.append("store_name", details.title);
-    form.append("email", user?.email);
-    if(details.isStoreOwner){
-      form.append("store_owner", user?._id);
-    }
 
-    axios.post("/stores/createstore", form).then((response) => {
-      if (response.status >= 200 && response.status < 300) {
-        setShow(true);
-      }
-    });
-  };
 
   return (
     <div className={styles.container}>
@@ -294,7 +296,7 @@ const SuggestStore = () => {
           </div>
         </div>
       </div>
-      {show && <SuccessModal />}
+      {show && <SuccessModal storeId={storeId} />}
     </div>
   );
 };
