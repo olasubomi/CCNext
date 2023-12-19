@@ -423,7 +423,7 @@ const UserProfile = (props) => {
         form.append('profile_picture', formState.profile_picture)
         form.append('background_picture', formState.background_picture)
 
-        const userId = JSON.parse(localStorage.getItem('user'))._id
+        // const userId = JSON.parse(localStorage.getItem('user'))._id
 
         try {
             const response = await axios(`http://localhost:5000/api/stores/updatestore/${formState.store_id}`, {
@@ -548,9 +548,11 @@ const UserProfile = (props) => {
                                         <div className={styles.profile_image_con}>
                                             <div className={styles.profile_image}>
 
-                                                {(profileImageData === '' && props.auth.authUser.profile_picture === undefined) && <UserIcon />}
+                                                {(profileImageData === '' && props.auth.authUser?.profile_picture === undefined) && <UserIcon />}
                                                 {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) &&
-                                                    <Image width={500} height={500} src={props.auth.authUser.profile_picture} alt="profile_picture" />
+                                                    <Image width={200} height={200} src={props.auth.authUser.profile_picture} 
+                                                    className={styles.profile_image}
+                                                    alt="profile_picture" />
                                                 }
                                                 <img id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
                                             </div>
