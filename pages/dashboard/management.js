@@ -25,6 +25,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
+import GooglePlacesAutocomplete from "../../src/components/dashboard/googleplacesautocomplete";
+import { toast } from "react-toastify";
+import moment from "moment";
 
 const List = [
   {
@@ -180,16 +183,18 @@ const Management = () => {
     store_name: "",
     email: "",
     phone: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: "",
-    address: "",
     intro: "",
     profile_picture: {},
     background_picture: {},
     phone_number: "",
     store_owner: "",
+    supplier_address: {
+      city: "",
+      state: "",
+      zip_code: "",
+      country: "",
+      address: "",
+    },
   });
 
   useEffect(() => {
@@ -246,6 +251,7 @@ const Management = () => {
       console.log(error);
     }
   };
+  console.log(formState, "storee");
   useEffect(() => {
     const path = router.asPath.split("#");
     if (Array.isArray(path) && path.length === 2) {
@@ -333,14 +339,40 @@ const Management = () => {
         setFormState({
           store_name: store?.store_name,
           email: store?.email,
-          city: store?.supplier_address?.city,
-          state: store?.supplier_address?.state,
-          zip: store?.supplier_address?.zip_code,
-          country: store?.supplier_address?.country,
-          address: store?.supplier_address?.address,
           phone_number: store?.phone_number,
           store_owner: store?.store_owner,
+          supplier_address: {
+            city: store?.supplier_address?.city,
+            state: store?.supplier_address?.state,
+            zip_code: store?.supplier_address?.zip_code,
+            country: store?.supplier_address?.country,
+            address: store?.supplier_address?.address,
+          },
+          profile_picture: store?.profile_picture,
+          background_picture: store?.background_picture,
         });
+
+        const hours = store?.hours;
+
+        if (Object.keys(hours).length) {
+          let time = {};
+          days.forEach((element) => {
+            const from = hours[element]?.from;
+            const to = hours[element]?.to;
+            const inputDate = "2018-01-01";
+            const fromTimeString = `${inputDate}T${from}.000Z`;
+            const fromDateTime = moment(fromTimeString).format();
+
+            const toTimeString = `${inputDate}T${to}.000Z`;
+            const toDateTime = moment(toTimeString).format();
+            time[element] = {
+              from: fromDateTime,
+              to: toDateTime,
+              open: hours[element]?.open,
+            };
+          });
+          setTimes(time);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -383,7 +415,45 @@ const Management = () => {
       value: true,
     },
   ]);
-  console.log(formState, "fff");
+
+  const handleUpdateProfile = useCallback(async () => {
+    try {
+      const form = new FormData();
+      for (let element in formState) {
+        if (formState[element]) {
+          if (element === "supplier_address") {
+            form.append(element, JSON.stringify(formState[element]));
+          } else {
+            form.append(element, formState[element]);
+          }
+        }
+      }
+      const response = await axios.put(`/stores/updatestore/${storeId}`, form);
+      console.log(response.data.data, "response");
+      toast.success("Store updated");
+    } catch (e) {}
+  }, [formState, storeId]);
+
+  const handleChangeTime = useCallback(async () => {
+    const handleFormat = (val) => {
+      return new Date(val).toLocaleTimeString();
+    };
+    const form = new FormData();
+    const formattedTime = {};
+    for (let ele in times) {
+      formattedTime[ele] = {
+        ...times[ele],
+        from: handleFormat(times[ele]?.from),
+        to: handleFormat(times[ele]?.to),
+      };
+    }
+    form.append("hours", JSON.stringify(formattedTime));
+    try {
+      const response = await axios.put(`/stores/updatestore/${storeId}`, form);
+      toast.success("Store updated");
+    } catch (e) {}
+  }, [times]);
+
   return (
     <div className={container + " " + col2}>
       <Head>
@@ -447,6 +517,7 @@ const Management = () => {
                         id="profile_picture"
                         width="100%"
                         alt="profile"
+                        src={formState.profile_picture}
                         style={{ display: "block" }}
                       />
                       {/* <p>choose image</p> */}
@@ -461,6 +532,7 @@ const Management = () => {
                       <img
                         id="background_picture"
                         width="100%"
+                        src={formState.background_picture}
                         alt="profile"
                         style={{ display: "none" }}
                       />
@@ -500,19 +572,33 @@ const Management = () => {
                       <div className={styles.column}>
                         <label>City</label>
                         <input
-                          onChange={handleChange}
-                          value={formState.city}
+                          onChange={(e) => {
+                            setFormState({
+                              ...formState,
+                              supplier_address: {
+                                city: e.target.value,
+                              },
+                            });
+                          }}
+                          value={formState.supplier_address.city}
                           type="text"
-                          name="city"
+                          name="supplier_address.city"
                         />
                       </div>
                       <div className={styles.column}>
                         <label>State</label>
                         <input
-                          onChange={handleChange}
-                          value={formState.state}
+                          onChange={(e) => {
+                            setFormState({
+                              ...formState,
+                              supplier_address: {
+                                state: e.target.value,
+                              },
+                            });
+                          }}
+                          value={formState.supplier_address.state}
                           type="text"
-                          name="state"
+                          name="supplier_address.state"
                         />
                       </div>
                     </div>
@@ -520,29 +606,77 @@ const Management = () => {
                       <div className={styles.column}>
                         <label>Zip Code</label>
                         <input
-                          onChange={handleChange}
-                          value={formState.zip}
+                          onChange={(e) => {
+                            setFormState({
+                              ...formState,
+                              supplier_address: {
+                                zip_code: e.target.value,
+                              },
+                            });
+                          }}
+                          value={formState.supplier_address.zip_code}
                           type="text"
-                          name="zip"
+                          name="supplier_address.zip_code"
                         />
                       </div>
                       <div className={styles.column}>
                         <label>Country</label>
                         <input
-                          onChange={handleChange}
-                          value={formState.zip}
+                          onChange={(e) => {
+                            setFormState({
+                              ...formState,
+                              supplier_address: {
+                                country: e.target.value,
+                              },
+                            });
+                          }}
+                          value={formState.supplier_address.country}
                           type="text"
-                          name="zip"
+                          name="supplier_address.country"
                         />
                       </div>
                     </div>
                     <div className={styles.column}>
                       <label>Address</label>
-                      <input
-                        onChange={handleChange}
-                        value={formState.address}
+                      {/* <input
+                        onChange={(e) => {
+                          setFormState({
+                            ...formState,
+                            supplier_address: {
+                              address: e.target.value,
+                            },
+                          });
+                        }}
+                        value={formState.supplier_address.address}
                         type="text"
-                        name="address"
+                        name="supplier_address.address"
+                      /> */}
+                      <GooglePlacesAutocomplete
+                        defaultInputValue={formState.supplier_address.address}
+                        handleValueChange={(
+                          address,
+                          place_id,
+                          lat,
+                          lng,
+                          zip_code,
+                          country,
+                          state,
+                          city
+                        ) => {
+                          setFormState({
+                            ...formState,
+                            supplier_address: {
+                              address,
+                              place_id,
+                              lat,
+                              lng,
+                              zip_code,
+                              country,
+                              state,
+                              city,
+                            },
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -571,6 +705,7 @@ const Management = () => {
                     </div>
                   </div>
                 </div>
+                <button onClick={handleUpdateProfile}>Update Profile</button>
               </>
             )}
             {active === 2 && (
@@ -1057,6 +1192,7 @@ const Management = () => {
                     </div>
                   </div>
                 </div>
+                <button onClick={handleChangeTime}>Update</button>
               </div>
             )}
             {active === 5 && (
@@ -1148,7 +1284,10 @@ const Management = () => {
                     <div style={{ marginLeft: "1.3rem" }}>
                       <h5 className={styles.admin_name}>Rachel Anterta</h5>
                       <p className={styles.car}>Hyundai Elantra - Black</p>
-                      <div className={styles.flexstart} style={{marginTop: '1rem'}}>
+                      <div
+                        className={styles.flexstart}
+                        style={{ marginTop: "1rem" }}
+                      >
                         <FaPhoneAlt color="#F47900" />
                         <p className={styles.number}>(406) 555-0120</p>
                       </div>
