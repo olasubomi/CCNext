@@ -104,9 +104,9 @@ console.log(meals, 'meals')
     const filteredMeals = meals.filter(meal => meal.item_type === 'Utensil' && meal.item_status[0]?.status === 'Public');
 
     return (
-        <div className={styles.mealContainer}>
-            <h4>Suggested Utensils for you</h4>
-            <div className={styles.stores2}>
+        <div className={styles.mealContainer} id="utensils">
+            <h4 >Suggested Utensils for you</h4>
+            <div className={styles.stores2}  >
                 {
                     filteredMeals.slice(0, visibleMeals).filter(utensil => (utensil)).map((utensil, idx) => {
                         return (
@@ -116,7 +116,7 @@ console.log(meals, 'meals')
                             }}>
                                 {
 
-                                    <div className={styles.box}>
+                                    <div className={styles.box}  >
                                         <img src={utensil?.itemImage0} className={styles.storeImg1} />
                                         <div className={styles.flex}>
                                             <p className={styles.name2}>{utensil.item_name}</p>
