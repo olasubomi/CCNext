@@ -417,21 +417,18 @@ const Management = () => {
   ]);
   const deleteItem = async (id) => {
     try {
-        const res = await axios.delete(`/items/delete/${id}`)
-        console.log('resss', res)
-        if (res.status === 202) {
-          getItem()
-            toast.success("Deleted successful")
-        }
-        else {
-            toast.error("This Item does not exist!")
-
-        }
-
+      const res = await axios.delete(`/items/delete/${id}`);
+      console.log("resss", res);
+      if (res.status === 202) {
+        getItem();
+        toast.success("Deleted successful");
+      } else {
+        toast.error("This Item does not exist!");
+      }
     } catch (e) {
-        console.log(e, 'errr')
+      console.log(e, "errr");
     }
-}
+  };
   const handleUpdateProfile = useCallback(async () => {
     try {
       const form = new FormData();
@@ -528,8 +525,20 @@ const Management = () => {
                     <div
                       onClick={() => uploadImage("profile")}
                       className={styles.bgimg}
+                      style={{position: 'relative'}}
+
                     >
-                      <p>+</p>
+                      <img
+                        id="profile_picture"
+                        width="100%"
+                        alt="profile"
+                        style={{ display: "none", position: 'relative', zIndex: 10 }}
+                      />
+                      <p style={{
+                        position: 'absolute',
+                        zIndex: 5,
+                        
+                      }}>+</p>
                     </div>
                   </div>
                   <div>
@@ -537,8 +546,20 @@ const Management = () => {
                     <div
                       onClick={() => uploadImage("background")}
                       className={styles.bgimg}
+                      style={{position: 'relative'}}
                     >
-                      <p>+</p>
+                      {" "}
+                      <img
+                        id="background_picture"
+                        width="100%"
+                        alt="profile"
+                        style={{ display: "none", position: 'relative', zIndex: 10 }}
+                      />
+                      <p style={{
+                        position: 'absolute',
+                        zIndex: 5,
+                        
+                      }}>+</p>
                     </div>
                   </div>
                   <div className={styles.contact}>
@@ -1036,7 +1057,10 @@ const Management = () => {
                         <td>
                           <p>{ele?.price}</p>
                         </td>
-                        <td style={{ textAlign: "center" }} onClick={() => deleteItem(ele.value)}>
+                        <td
+                          style={{ textAlign: "center" }}
+                          onClick={() => deleteItem(ele.value)}
+                        >
                           <IoIosCloseCircle color="#949494" size={20} />
                         </td>
                       </tr>
@@ -1072,7 +1096,10 @@ const Management = () => {
                           <td>
                             <p>{ele?.price}</p>
                           </td>
-                          <td style={{ textAlign: "center" }} onClick={() => deleteItem(ele.value)}>
+                          <td
+                            style={{ textAlign: "center" }}
+                            onClick={() => deleteItem(ele.value)}
+                          >
                             <IoIosCloseCircle color="#949494" size={20} />
                           </td>
                         </tr>

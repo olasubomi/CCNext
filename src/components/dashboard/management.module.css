@@ -1,10 +1,15 @@
 .summary {
-    width: 32%;
+    width: 25%;
+    z-index: 10;
+    position: fixed;
+
 }
 
 .flex {
     display: flex;
     justify-content: space-between;
+    position: relative;
+    gap: 10%;
 }
 
 .summaryCard {
@@ -54,10 +59,12 @@
 
 .store {
     width: 65%;
+    position: relative;
+    margin-left: 35%;
 }
 
 .storeInfo {
-    width: 100%;
+    width: auto;
     height: auto;
     flex-shrink: 0;
     background: #FFF;

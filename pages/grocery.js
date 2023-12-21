@@ -22,6 +22,7 @@ import Frame from "../public/assets/logos/Frame.png";
 import { GroceryModal } from "../src/components/modal/grocery-modal";
 import SideNav from "../src/components/Header/sidenav";
 import { getLocalGroceryList } from "../src/util";
+import { ModalPopup } from "../src/components/modal/modal";
 
 const Grocery = () => {
   const [show, setShow] = useState(false);
@@ -337,6 +338,7 @@ const Grocery = () => {
                         if (isUserOnline) {
                           router.push(`/grocerylist/groceries/${ele._id}`);
                         } else {
+                        alert('Login to add Items to Grocery List')
                         }
                       }}
                       className={styles.two2}
