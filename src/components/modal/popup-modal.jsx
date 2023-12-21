@@ -102,7 +102,7 @@ export const Modal = ({
     }
 
     return (
-        <div className={styles.modal} ref={targetElementRef}>
+        <div className={styles.modal} ref={targetElementRef} onClick={() => setShow(false)}>
             <div className={styles.modal_card}>
                 <div className={styles.flex2}>
                     <h5 className={styles.header}>Create New Grocery List</h5>
