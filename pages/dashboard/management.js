@@ -415,7 +415,23 @@ const Management = () => {
       value: true,
     },
   ]);
+  const deleteItem = async (id) => {
+    try {
+        const res = await axios.delete(`/items/delete/${id}`)
+        console.log('resss', res)
+        if (res.status === 202) {
+          getItem()
+            toast.success("Deleted successful")
+        }
+        else {
+            toast.error("This Item does not exist!")
 
+        }
+
+    } catch (e) {
+        console.log(e, 'errr')
+    }
+}
   const handleUpdateProfile = useCallback(async () => {
     try {
       const form = new FormData();
@@ -513,14 +529,7 @@ const Management = () => {
                       onClick={() => uploadImage("profile")}
                       className={styles.bgimg}
                     >
-                      <img
-                        id="profile_picture"
-                        width="100%"
-                        alt="profile"
-                        src={formState.profile_picture}
-                        style={{ display: "block" }}
-                      />
-                      {/* <p>choose image</p> */}
+                      <p>+</p>
                     </div>
                   </div>
                   <div>
@@ -529,14 +538,7 @@ const Management = () => {
                       onClick={() => uploadImage("background")}
                       className={styles.bgimg}
                     >
-                      <img
-                        id="background_picture"
-                        width="100%"
-                        src={formState.background_picture}
-                        alt="profile"
-                        style={{ display: "none" }}
-                      />
-                      {/* <p>choose image</p> */}
+                      <p>+</p>
                     </div>
                   </div>
                   <div className={styles.contact}>
@@ -705,7 +707,20 @@ const Management = () => {
                     </div>
                   </div>
                 </div>
-                <button onClick={handleUpdateProfile}>Update Profile</button>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "1.5rem",
+                  }}
+                >
+                  <button
+                    onClick={handleUpdateProfile}
+                    className={styles.updateBtn}
+                  >
+                    Update Profile
+                  </button>
+                </div>
               </>
             )}
             {active === 2 && (
@@ -1021,7 +1036,7 @@ const Management = () => {
                         <td>
                           <p>{ele?.price}</p>
                         </td>
-                        <td style={{ textAlign: "center" }}>
+                        <td style={{ textAlign: "center" }} onClick={() => deleteItem(ele.value)}>
                           <IoIosCloseCircle color="#949494" size={20} />
                         </td>
                       </tr>
@@ -1057,7 +1072,7 @@ const Management = () => {
                           <td>
                             <p>{ele?.price}</p>
                           </td>
-                          <td style={{ textAlign: "center" }}>
+                          <td style={{ textAlign: "center" }} onClick={() => deleteItem(ele.value)}>
                             <IoIosCloseCircle color="#949494" size={20} />
                           </td>
                         </tr>
@@ -1192,7 +1207,20 @@ const Management = () => {
                     </div>
                   </div>
                 </div>
-                <button onClick={handleChangeTime}>Update</button>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "1.5rem",
+                  }}
+                >
+                  <button
+                    onClick={handleChangeTime}
+                    className={styles.updateBtn}
+                  >
+                    Update Hours
+                  </button>
+                </div>
               </div>
             )}
             {active === 5 && (
