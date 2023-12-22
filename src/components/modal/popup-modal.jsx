@@ -149,57 +149,50 @@ export const Modal = ({
       console.log(error);
     }
   };
-
-  return (
-    <div className={styles.modal} ref={targetElementRef}>
-      <div className={styles.modal_card}>
-        <div className={styles.flex2}>
-          <h5 className={styles.header}>Create New Grocery List</h5>
-          <div
-            onClick={() => {
-              setDetails({
-                listName: "",
-                description: "",
-                id: "",
-              });
-              setShow(false);
-            }}
-          >
-            <AiFillCloseCircle color="#949494" size={28} />
-          </div>
-        </div>
-        <div style={{ width: "100%" }}>
-          <p className={styles.label}>Title</p>
-          <input
-            name="listName"
-            value={listName}
-            onChange={onChange}
-            className={styles.input1}
-          />
-        </div>
-        <div style={{ marginTop: "2.5rem" }}>
-          <p className={styles.label}>Description</p>
-          <textarea
-            name="description"
-            value={description}
-            onChange={onChange}
-            className={styles.input2}
-          />
-        </div>
-        <div
-          className={styles.modal_btn}
-          onClick={() => {
-            if (details.listName && details.description && details.id) {
-              isUserOnline ? handleEdit() : editLocalList()
-            } else {
-              isUserOnline ? handleCreate() : handleCreateLocalGroceryList()
-            }
-          }}
-        >
-          <p>
-            {" "}
-            {details.listName && details.description ? "Update" : "Create"} Now
-          </p>
+    return (
+        <div className={styles.modal} ref={targetElementRef} onClick={() => setShow(false)}>
+            <div className={styles.modal_card}>
+                <div className={styles.flex2}>
+                    <h5 className={styles.header}>Create New Grocery List</h5>
+                    <div onClick={() => {
+                        setDetails({
+                            listName: '',
+                            description: '',
+                            id: ''
+                        })
+                        setShow(false)
+                    }}>
+                        <AiFillCloseCircle color='#949494' size={28} />
+                    </div>
+                </div>
+                <div style={{ width: '100%' }}>
+                    <p className={styles.label}>Title</p>
+                    <input
+                        name="listName"
+                        value={listName}
+                        onChange={onChange}
+                        className={styles.input1}
+                    />
+                </div>
+                <div style={{ marginTop: '2.5rem' }}>
+                    <p className={styles.label}>Description</p>
+                    <textarea
+                        name="description"
+                        value={description}
+                        onChange={onChange}
+                        className={styles.input2}
+                    />
+                </div>
+                <div className={styles.modal_btn} onClick={() => {
+                    if (details.listName && details.description && details.id) {
+                        handleEdit()
+                    } else {
+                        handleCreate()
+                    }
+                }}>
+                    <p> {details.listName && details.description ? 'Update' : 'Create'} Now</p>
+                </div>
+            </div>
         </div>
       </div>
     </div>
