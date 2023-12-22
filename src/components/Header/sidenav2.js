@@ -16,6 +16,8 @@ import React, { useEffect, useState } from "react";
 import { setOpenLogin, userSignOut } from "../../actions";
 import { useRouter } from "next/router";
 import { useAuth } from "../../context/auth.context";
+import icon from '../../../public/assets/fa_shopping-basket.png'
+import Image from "next/image";
 
 function SideNav2(props) {
   console.log(props, 'pops');
@@ -89,8 +91,12 @@ function SideNav2(props) {
                   (props.path === "/grocery" && styles.active)
                 }
               >
-                <GroceryIcon style={styles.sidenav_link_icon} />
+                {/* <GroceryIcon style={styles.sidenav_link_icon} /> */}
+                <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+                <Image src={icon} />
                 Grocery List
+                </div>
+                
               </div>
             </Link>
             {props.auth.authUser.user_type !== "driver" && (

@@ -422,11 +422,14 @@ const PublicMarket = () => {
           </div>
         </div>
       </div>
-      <div className={styles.storeContainer}>
+      <div className={styles.storeContainer} id="store">
         {categories.find((ele) => ele.label === "Stores")?.value && <Stores />}
       </div>
       {categories.find((ele) => ele.label === "Meals")?.value && (
-        <PopularMeals />
+        <div id="meals">
+          <PopularMeals />
+
+        </div>
       )}
       {categories.find((ele) => ele.label === "Products")?.value && (
         <TopSellingProducts />

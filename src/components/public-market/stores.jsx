@@ -71,7 +71,7 @@ export const Stores = () => {
                                         <div className={styles.card} onClick={() => {
                                             fetchOneStore(store._id)
                                             SetSelected(id)
-                                        }} id="meals">
+                                        }}>
                                             {
                                                 <div>
                                                     <Image src={store?.background_picture ? store?.background_picture : stored} className={styles.storeImg} width={200} height={200} objectFit="cover" objectPosition='center' />
