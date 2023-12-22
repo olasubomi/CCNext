@@ -350,6 +350,7 @@ const Management = () => {
           },
           profile_picture: store?.profile_picture,
           background_picture: store?.background_picture,
+          store_owner: store?.store_owner || "",
         });
 
         const hours = store?.hours;
@@ -491,7 +492,28 @@ const Management = () => {
               {List.map((elem) => (
                 <div
                   key={elem.id}
-                  onClick={() => handleActive(elem.id)}
+                  onClick={() => {
+                    // {
+                    //   name: "Store Information",
+                    //   id: 1,
+                    // },
+                    // {
+                    //   name: "Meals/Products",
+                    //   id: 2,
+                    // },
+                    if (
+                      elem.name === "Store Information" ||
+                      elem.name === "Meals/Products"
+                    ) {
+                      handleActive(elem.id);
+                    } else {
+                      if (formState.store_owner) {
+                        handleActive(elem.id);
+                      } else {
+                        alert("This store has not been claimed");
+                      }
+                    }
+                  }}
                   className={styles.active}
                 >
                   <div
@@ -525,20 +547,26 @@ const Management = () => {
                     <div
                       onClick={() => uploadImage("profile")}
                       className={styles.bgimg}
-                      style={{position: 'relative'}}
-
+                      style={{ position: "relative" }}
                     >
                       <img
                         id="profile_picture"
                         width="100%"
                         alt="profile"
-                        style={{ display: "none", position: 'relative', zIndex: 10 }}
+                        style={{
+                          display: "none",
+                          position: "relative",
+                          zIndex: 10,
+                        }}
                       />
-                      <p style={{
-                        position: 'absolute',
-                        zIndex: 5,
-                        
-                      }}>+</p>
+                      <p
+                        style={{
+                          position: "absolute",
+                          zIndex: 5,
+                        }}
+                      >
+                        +
+                      </p>
                     </div>
                   </div>
                   <div>
@@ -546,20 +574,27 @@ const Management = () => {
                     <div
                       onClick={() => uploadImage("background")}
                       className={styles.bgimg}
-                      style={{position: 'relative'}}
+                      style={{ position: "relative" }}
                     >
                       {" "}
                       <img
                         id="background_picture"
                         width="100%"
                         alt="profile"
-                        style={{ display: "none", position: 'relative', zIndex: 10 }}
+                        style={{
+                          display: "none",
+                          position: "relative",
+                          zIndex: 10,
+                        }}
                       />
-                      <p style={{
-                        position: 'absolute',
-                        zIndex: 5,
-                        
-                      }}>+</p>
+                      <p
+                        style={{
+                          position: "absolute",
+                          zIndex: 5,
+                        }}
+                      >
+                        +
+                      </p>
                     </div>
                   </div>
                   <div className={styles.contact}>
