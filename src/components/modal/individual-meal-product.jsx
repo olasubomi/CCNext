@@ -1,4 +1,5 @@
 import styles from "../../components/public-market/stores.module.css";
+import modalStyles from "./modal.module.css";
 import { GrStar } from "react-icons/gr";
 import { AiOutlineClose } from "react-icons/ai";
 import Link from "next/link";
@@ -573,7 +574,9 @@ export const UtensilModal = ({
   return (
     <div>
       {openModal && (
-        <div className={styles.modalContainer}>
+        <>
+        <div className={modalStyles.backdrop} onClick={() => setOpenModal(false)}></div>
+        <div className={styles.modalContainer} onClick={() => setOpenModal(false)}>
           <div className={styles.modalCard}>
             <div className={styles.flexed}>
               <div className={styles.images}>
@@ -770,6 +773,7 @@ export const UtensilModal = ({
             </div>
           </div>
         </div>
+        </>
       )}
       {openList && (
         <div className={styles.modalContainer}>

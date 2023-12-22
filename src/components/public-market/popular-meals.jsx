@@ -99,9 +99,9 @@ export const PopularMeals = () => {
   );
 
   return (
-    <div className={styles.mealContainer}>
+    <div className={styles.mealContainer} >
       <h4>Popular Meals</h4>
-      <div className={styles.stores2}>
+      <div className={styles.stores2} >
         {filteredMeals
           .slice(0, visibleMeals)
           .filter((meal) => Boolean(meal.total_rating))
@@ -123,7 +123,7 @@ export const PopularMeals = () => {
                       <p>${meal.item_price ? meal.item_price : "0"}</p>
                     </div>
                     <p className={styles.storeName}>Chop Chow Official Store</p>
-                    <div className={styles.flex} id="products">
+                    <div className={styles.flex} >
                       <div>
                         {Array(5)
                           .fill("_")
