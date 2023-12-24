@@ -6,9 +6,11 @@ import styles from '../../src/components/suggest-store/suggest-store.module.css'
 import { useRouter } from "next/router";
 import { MdStoreMallDirectory } from "react-icons/md";
 import { IoIosPlay } from "react-icons/io";
+import { SuccessModal } from "../../src/components/suggest-store/success-modal";
 
 const SuggestStore = () => {
     const [index, setIndex] = useState(0)
+    const [show, setShow] = useState(false)
     const router = useRouter()
     const [details, setDetails] = useState({
         title: "",
@@ -24,16 +26,24 @@ const SuggestStore = () => {
     }, [router])
 
     const handleNext = useCallback(() => {
-        setIndex(prev => prev + 1)
-    }, [details])
+        if(details?.storeType === 'detailed'){
+            router.push(``)
+        }
+        if (index === 3) {
+            setShow(true)
+        } else {
+            setIndex(prev => prev + 1)
+        }
+    }, [details, index])
     const handlePrevious = useCallback(() => {
-        if (index !== 1) {
+        if (index !== 0) {
             setIndex(prev => prev - 1)
             console.log('back')
         }
-    }, [details])
+    }, [details, index])
     return (
         <div className={styles.container}>
+
             <Head>
                 <title>Chop Chow Grocery</title>
                 <meta
@@ -56,7 +66,7 @@ const SuggestStore = () => {
             <div className={styles.questionContainer}>
                 <div className={styles.flex}>
                     <IoIosPlay color="#F47900" size={20} />
-                    <p>Step 1/4</p>
+                    <p>Step {index}/4</p>
                     {/* First Question */}
 
                 </div>
@@ -70,7 +80,11 @@ const SuggestStore = () => {
                                         <div className={styles.radioDiv}>
                                             <input onChange={() => setDetails({
                                                 ...details, isStoreOwner: true
-                                            })} type="radio" />
+                                            })}
+                                                type="radio"
+                                                value='yes'
+                                                name="yes"
+                                            />
                                         </div>
                                         <label className={styles.label}>Yes</label>
                                     </div>
@@ -78,7 +92,11 @@ const SuggestStore = () => {
                                         <div className={styles.radioDiv}>
                                             <input onChange={() => setDetails({
                                                 ...details, isStoreOwner: false
-                                            })} type="radio" />
+                                            })}
+                                                type="radio"
+                                                value='no'
+                                                name="yes"
+                                            />
                                         </div>
                                         <label className={styles.label}>No</label>
                                     </div>
@@ -91,22 +109,31 @@ const SuggestStore = () => {
                         index === 1 && (
                             <>
                                 {
-                                    details.isStoreOwner ?
-                                        <><p className={styles.question}>Would you prefer a quick or detailed setup</p>
+                                    details.isStoreOwner || !details.isStoreOwner ?
+                                        <>
+                                            <p className={styles.question}>Would you prefer a quick or detailed setup</p>
                                             <div className={styles.flex} style={{ paddingTop: '3rem' }}>
                                                 <div className={styles.radio}>
                                                     <div className={styles.radioDiv}>
                                                         <input onChange={() => setDetails({
-                                                            ...details, isStoreOwner: true
-                                                        })} type="radio" />
+                                                            ...details, storeType: 'quick'
+                                                        })} type="radio"
+                                                            value='quick'
+                                                            name="radio" />
                                                     </div>
                                                     <label className={styles.label}>Quick setup</label>
                                                 </div>
                                                 <div className={styles.radio}>
                                                     <div className={styles.radioDiv}>
-                                                        <input onChange={() => setDetails({
-                                                            ...details, isStoreOwner: true
-                                                        })} type="radio" />
+                                                        <input
+                                                        
+                                                         onChange={() => setDetails({
+                                                            ...details, storeType: 'detailed'
+                                                        })}
+                                                            type="radio"
+                                                            name="radio"
+                                                            value='detailed'
+                                                        />
                                                     </div>
                                                     <label className={styles.label}>Detailed setup</label>
                                                 </div>
@@ -132,7 +159,7 @@ const SuggestStore = () => {
                                                 type="text"
                                                 name="text"
                                                 placeholder="Enter store name" />
-                                                
+
                                         </div>
                                         : <></>
                                 }
@@ -165,12 +192,18 @@ const SuggestStore = () => {
                     }
                     <div className={styles.btns}>
                         <button className={styles.outlineBtn} onClick={handlePrevious}>{index === 0 ? 'Close' : 'Back'}</button>
-                        <button className={styles.btn} onClick={handleNext}>Next</button>
+                        <button className={styles.btn}
+                            onClick=
+                            {handleNext}
+                        >Next</button>
                     </div>
 
                 </div>
 
             </div>
+            {
+                show && <SuccessModal />
+            }
         </div>
     )
 }
