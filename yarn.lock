@@ -581,17 +581,10 @@
     "@smithy/util-utf8" "^2.0.2"
     tslib "^2.5.0"
 
-<<<<<<< HEAD
-"@aws-sdk/types@3.433.0", "@aws-sdk/types@^3.222.0":
-  version "3.433.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/types/-/types-3.433.0.tgz#0f94eae2a4a3525ca872c9ab04e143c01806d755"
-  integrity sha512-0jEE2mSrNDd8VGFjTc1otYrwYPIkzZJEIK90ZxisKvQ/EURGBhNzWn7ejWB9XCMFT6XumYLBR0V9qq5UPisWtA==
-=======
 "@aws-sdk/types@3.451.0", "@aws-sdk/types@^3.222.0":
   version "3.451.0"
   resolved "https://registry.npmjs.org/@aws-sdk/types/-/types-3.451.0.tgz"
   integrity sha512-rhK+qeYwCIs+laJfWCcrYEjay2FR/9VABZJ2NRM89jV/fKqGVQR52E5DQqrI+oEIL5JHMhhnr4N4fyECMS35lw==
->>>>>>> 54ae7a7da200526688fcdbc478bf9bfb06cb37b3
   dependencies:
     "@smithy/types" "^2.5.0"
     tslib "^2.5.0"
@@ -1362,15 +1355,9 @@
     prop-types "^15.8.1"
 
 "@mui/material@^5.8.4":
-<<<<<<< HEAD
   version "5.14.16"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.14.16.tgz#45cd62d312d10399d3813ee6dc43bd1f11179bf4"
   integrity sha512-W4zZ4vnxgGk6/HqBwgsDHKU7x2l2NhX+r8gAwfg58Rhu3ikfY7NkIS6y8Gl3NkATc4GG1FNaGjjpQKfJx3U6Jw==
-=======
-  version "5.14.18"
-  resolved "https://registry.npmjs.org/@mui/material/-/material-5.14.18.tgz"
-  integrity sha512-y3UiR/JqrkF5xZR0sIKj6y7xwuEiweh9peiN3Zfjy1gXWXhz5wjlaLdoxFfKIEBUFfeQALxr/Y8avlHH+B9lpQ==
->>>>>>> 54ae7a7da200526688fcdbc478bf9bfb06cb37b3
   dependencies:
     "@babel/runtime" "^7.23.2"
     "@mui/base" "5.0.0-beta.24"
