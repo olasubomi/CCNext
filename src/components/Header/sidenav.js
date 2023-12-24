@@ -42,9 +42,7 @@ function SideNav(props){
                 <div className={styles.sidenav_top_row_1}>
                 <Image src={closeIcon} alt="close nav" />
                 <Link href="/" className={styles.social_link} >
-
                   <Image src={img_logo} alt="logo" className={styles.sidenav_logo} />
-
                 </Link>
                 </div>
                 {props.auth.authUser && 

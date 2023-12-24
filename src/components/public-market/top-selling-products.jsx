@@ -103,7 +103,7 @@ export const TopSellingProducts = () => {
     }, [])
     const filteredProducts = products.filter(product => product.item_type === "Product" && product.average_rating);
     return (
-        <div className={styles.mealContainer1}>
+        <div className={styles.mealContainer1} id="products">
             <h4>Top Selling Products</h4>
             <div className={styles.stores3}>
                 {
@@ -117,7 +117,7 @@ export const TopSellingProducts = () => {
                             }}>
                                 {product?.itemImage0 &&
 
-                                    <div className={styles.box} id="utensils">
+                                    <div className={styles.box} >
                                         <img src={product?.itemImage0} className={styles.storeImg2} />
                                         <div className={styles.flex}>
                                             <p className={styles.name2}>{product.item_name}</p>
@@ -155,7 +155,7 @@ export const TopSellingProducts = () => {
                     setQuantity={setQuantity}
                 />
             </div>
-            <p className={styles.view} onClick={() => loadMore()}>View More</p>
+            <p className={styles.view2} onClick={() => loadMore()}>View More</p>
             <div className={styles.border} />
 
         </div>

@@ -56,7 +56,7 @@ export const GroceryModal = ({
     }, [openModal])
 
     return (
-        <div className={styles.modal} ref={targetElementRef}>
+        <div className={styles.modal} ref={targetElementRef} >
             <div className={styles.modal_card2}>
                 <div className={styles.flex2}>
                     <h5 className={styles.header}>Grocery List Visibilty</h5>

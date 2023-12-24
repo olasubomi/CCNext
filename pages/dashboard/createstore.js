@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { container, center } from '../../src/components/dashboard/dashboard.module.css'
 import Header from '../../src/components/Header/Header'
 import SideNav from '../../src/components/Header/sidenav'
@@ -19,6 +19,7 @@ import { connect } from 'react-redux';
 import PhoneInput from 'react-phone-input-2';
 import { getUser } from '../../src/actions';
 import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
 import GooglePlacesAutocomplete from '../../src/components/dashboard/googleplacesautocomplete';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
@@ -76,6 +77,8 @@ const CreateStore = (props) => {
     const [status, setStatusState] = useState('');
     const [message, setMessageState] = useState('');
     const router = useRouter();
+    const params = useParams()
+    console.log(params, router)
     const [formState, setFormState] = useState({
         email: "",
         phone_number: "",
@@ -259,6 +262,15 @@ const CreateStore = (props) => {
         });
     }
 
+    useEffect(() => {
+        if(router.query?.storename){
+            setFormState({
+                ...formState,
+                store_name: router.query.storename
+            })
+        }
+    }, [router])
+
     return (
         <div className={container}>
             <div className="alert">
@@ -281,6 +293,7 @@ const CreateStore = (props) => {
                                 <div className={profileStyles.profile_form_group}>
                                     <label htmlFor="store_name" className={profileStyles.profile_form_label}>Store Name</label>
                                     <input
+                                    
                                         type="text"
                                         name="store_name"
                                         value={store_name}
