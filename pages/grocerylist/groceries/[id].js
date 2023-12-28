@@ -27,6 +27,10 @@ import { MobileTable } from '../../../src/components/mobile/table.mobile';
 import { MobileInputs } from '../../../src/components/mobile/inputs.mobile';
 import { Cards } from '../../../src/components/cards/cards';
 import { CardDropdown } from '../../../src/components/dropdown/dropdown';
+import profile_pic from "../../../public/assets/icons/user.png"
+import { useSelector } from "react-redux";
+
+import { UserIcon } from '../../../src/components/icons';
 
 
 const GroceryPage = () => {
@@ -75,6 +79,7 @@ const GroceryPage = () => {
     const [openModal1, setOpenModalState] = useState(false)
     const [openModal2, setOpenModal2State] = useState(false)
     const [suggestion, setSuggestionState] = useState({})
+    const {authUser} = useSelector(state => state.Auth)
     const router = useRouter();
     const [value, setValue] = useState("")
     const [measurement_value, setMeasurementValue] = useState("")
@@ -377,7 +382,11 @@ const GroceryPage = () => {
                     {itemList.description}
                 </p>
                 <div className={styles.top1}>
-                    <Image src={girl} width={40} height={40} className={styles.person} />
+                {authUser?.profile_picture !== "" && authUser?.profile_picture !== undefined ?  <Image 
+                    src={authUser?.profile_picture }
+                    width={40} height={40} className={styles.person} />
+                    : <UserIcon style={styles.navbar_user_img }/> }
+                    
                     <p className={styles.text} style={{ marginLeft: '1rem', textTransform: 'capitalize' }}>{itemList.user?.first_name} {itemList.user?.last_name}</p>
                 </div>
                 <div className={styles.top2}>

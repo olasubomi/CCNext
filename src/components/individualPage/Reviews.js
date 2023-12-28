@@ -1,4 +1,4 @@
-import { ArrowDown2Icon, ArrowUp2Icon, ChatIcon, ShareIcon, StarIcon } from '../icons';
+import { ArrowDown2Icon, ArrowUp2Icon, ChatIcon, ShareIcon, StarIcon, UserIcon } from '../icons';
 import styles from './reviews.module.css'
 import axios from '../../util/Api';
 import { StarRating } from '../star-rating';
@@ -8,6 +8,8 @@ import Link from 'next/link';
 import moment from 'moment'
 import { elements } from 'chart.js';
 import Image from 'next/image';
+import profile_pic from "../../../public/assets/icons/user_icon.jpeg"
+import { useSelector } from 'react-redux';
 
 function Reviews({ itemId, callback }) {
 
@@ -21,7 +23,8 @@ function Reviews({ itemId, callback }) {
     const [rating, setRating] = useState(0)
     const [isEditing, setIsEditing] = useState(false)
     const [commentId, setCommentId] = useState("")
-    const profileImage = JSON.parse(localStorage.getItem('user')).profile_picture
+    const {authUser} = useSelector(state => state.Auth)
+    // const profileImage = JSON.parse(localStorage.getItem('user')).profile_picture
 
 
     useEffect(() => {
@@ -153,11 +156,15 @@ function Reviews({ itemId, callback }) {
                 <div className={styles.product_review_col_1}>
                     <div className={styles.product_review_col_1_row}>
                         <div className={styles.product_review_name_ab}>
+
+                        {authUser?.profile_picture !== "" && authUser?.profile_picture !== undefined ? 
                         <Image 
-                        width={200} height={200}
+                        width={50} height={50}
+                        style={{borderRadius: 30}}
                         alt={username}
-                        src={profileImage}
-                        />
+                        src={authUser?.profile_picture}
+                        className={styles.user_img}
+                        /> : <UserIcon style={styles.user_img}/> }
                         </div>
                     </div>
                     <div className={styles.review_details}>
@@ -198,7 +205,22 @@ function Reviews({ itemId, callback }) {
                         <div className={styles.product_review}>
                             <div className={styles.product_review_col_1}>
                                 <div className={styles.product_review_col_1_row}>
-                                    <div className={styles.product_review_name_ab}>{comment?.created_by?.username.charAt(0)}</div>
+                                    
+                                    <div className={styles.product_review_name_ab}>
+                            {
+                                comment.created_by.username !== "" && comment.created_by.username !== undefined ?  (<Image
+                                    id="userImg"
+                                    width={60}
+                                    height={60}
+                                    src={ comment?.created_by?.profile_picture}
+                                    alt="User"
+                                    className={styles.user_img}
+                                    />): <UserIcon style={styles.user_img}/>
+                            }
+                            
+                                        
+                                        
+                                        </div>
                                 </div>
                                 <div className={styles.review_details}>
                                     <div className={styles.review_details_top4}>
