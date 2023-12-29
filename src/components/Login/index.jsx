@@ -17,6 +17,8 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import FacebookLogin from "react-facebook-login";
 import { useAuth } from "../../context/auth.context";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 
 function Login(props) {
   const isverified = useSelector((state) => state.Auth.isVerified);
@@ -56,9 +58,9 @@ function Login(props) {
   }
 
   function openSignUp() {
+    // props.setSignUpState(true)
+    setIsOpen(false)
     setSignUpState(true);
-
-    // setSignUpState(true);
   }
 
   function closeSignUp() {
@@ -131,78 +133,104 @@ function Login(props) {
     setShowPassState(!showPass);
   }
   //{console.log("signedin", props.auth)}
-  return (
-    <>
-      {true && !signUp && (
-        <div className={styles.login}>
-          <div className={styles.login_col_2}>
-            <div className={styles.login_top}>
-              <div
-                onClick={() => setIsOpen(!isOpen)}
-                className={styles.login_cancel_con + " "}
-              >
-                <Image src={closeIcon} className={styles.login_cancel} />
-              </div>
-              <Image
-                src={img_logo}
-                alt="logo"
-                className={styles.login_main_logo_img}
+  return (<>
+    
+      <div className={styles.login}>
+        <div className={styles.login_col_2}>
+          <div className={styles.login_top}>
+            <div className={styles.login_cancel_con}>
+            <Link href="/" legacyBehavior>
+                    <img
+                      src="/assets/grocery_list/backArr.svg"
+                      alt="goBack"
+                      width="20px"
+                      height="20px"
+                      className={styles.login_cancel}
+                    />
+                    
+                  </Link>
+                  
+                  <Link href="/" legacyBehavior>
+                  <img
+                      src="/assets/grocery_list/backArr_white.svg"
+                      alt="goBack"
+                      width="20px"
+                      height="20px"
+                      className={styles.login_backArr}
+                    />
+                  </Link>
+                  <Link href="/" legacyBehavior>
+                    <h3 className={styles.login_cancel}>Back</h3>
+                  </Link>
+            </div>
+            <Link href="/" legacyBehavior>
+                    
+            <Image
+
+              src={img_logo}
+              alt="logo"
+              className={styles.login_main_logo_img}
+            />
+                  </Link>
+                  <h4 className={styles.login_promo_text}>Adding Convenience to your Home Made Meals</h4>
+          </div>
+          <div style={{margin: 0}}>
+          <h3 className={styles.login_col_2_welcome}>Welcome Back</h3>
+          <h3 className={styles.login_col_h3}>Login</h3>
+          <div className={styles.login_form}>
+            <div className={styles.login_form_group}>
+              <label htmlFor="email" className={styles.login_form_label}>
+                Email
+              </label>
+              <input
+                type="text"
+                name="email"
+                value={email}
+                placeholder="Your Email or Username"
+                onChange={onChange}
+                className={styles.login_form_input}
               />
             </div>
-            <h2>Welcome Back</h2>
-            <h3>Login</h3>
-            <div className={styles.login_form}>
-              <div className={styles.login_form_group}>
-                <label htmlFor="email" className={styles.login_form_label}>
-                  Email
-                </label>
-                <input
-                  type="text"
-                  name="email"
-                  value={email}
-                  placeholder="Your Email or Username"
-                  onChange={onChange}
-                  className={styles.login_form_input}
-                />
+            <div className={styles.login_form_group}>
+              <label htmlFor="password" className={styles.login_form_label}>
+                Password
+              </label>
+              <input
+                type={showPass ? "text" : "password"}
+                id="password"
+                name="password"
+                value={password}
+                placeholder="Your password"
+                onChange={onChange}
+                className={styles.login_form_input}
+              />
+              <div onClick={togglePass} className={styles.secureEye}>
+              {showPass ? 
+                  <VisibilityOff />
+                 : 
+                  <Visibility  />
+                }
               </div>
-              <div className={styles.login_form_group}>
-                <label htmlFor="password" className={styles.login_form_label}>
-                  Password
-                </label>
-                <input
-                  type={showPass ? "text" : "password"}
-                  name="password"
-                  value={password}
-                  placeholder="Your password"
-                  onChange={onChange}
-                  className={styles.login_form_input}
-                />
-                <div onClick={togglePass} className={styles.secureEye}>
-                  {showPass ? (
-                    <VisibilityIcon className={styles.eye} />
-                  ) : (
-                    <EyeSIcon style={styles.eye} />
-                  )}
-                </div>
-              </div>
+            </div>
+           
 
-              <div className={styles.login_password_help}>
-                <div className={styles.login_remember_pass}>
-                  <input
-                    onChange={onChange}
-                    name="rememberPassword"
-                    value={rememberPassword}
-                    type="checkbox"
-                  />
-                  <label>Remember Password</label>
-                </div>
-                <div
-                  onClick={openForgetPassword}
-                  className={styles.login_forgot_pass}
-                >
-                  Forgot your Password?
-                </div>
+            <div className={styles.login_password_help} style={{justifyContent: "space-between"}}>
+              <div className={styles.login_remember_pass}>
+                <input
+                  onChange={onChange}
+                  name="rememberPassword"
+                  value={rememberPassword}
+                  type="checkbox"
+                />
+                <label>Remember Password</label>
               </div>
+              <div
+                onClick={openForgetPassword}
+                className={styles.login_forgot_pass}
+              >
+                Forgot your Password?
+              </div>
+            </div>
 
               <button onClick={Login} className={styles.login_button}>
                 {loginLoading ? (
@@ -212,100 +240,86 @@ function Login(props) {
                 )}
               </button>
 
-              <h3 className={styles.login_new}>
-                Don't have an account yet?{" "}
+            {/* <h3 className={styles.login_new}>
+              Don't have an account yet?{" "}
                 <span onClick={openSignUp}>Sign up here</span>
-              </h3>
-              <div className={styles.login_options}>
-                <h3>Login with social media</h3>
+             
+            </h3> */}
 
-                <div className={styles.flex}>
-                  {/* <div className={styles.login_social + " " + styles.blue}>
-                  <Image src={facebook} />
-                  <h4>Facebook</h4>
-                </div> */}
-                  {showFacebook && (
-                    <FacebookLogin
-                      appId="300185864007066"
-                      autoLoad={true}
-                      fields="name,email,picture"
-                      cssClass={styles.blue}
-                      callback={responseFacebook}
-                      render={(renderProps) => (
-                        <button
-                          className={styles.blue}
-                          onClick={() => {
-                            renderProps.onClick();
-                            setShowFacebook(false);
-                          }}
-                        >
-                          This is my custom FB button
-                        </button>
-                      )}
-                    />
-                  )}
-                  {!showFacebook && (
-                    <button
-                      className={styles.blue}
-                      onClick={() => setShowFacebook(true)}
-                    >
-                      Login with Facebook
-                    </button>
-                  )}
-                  <div>
-                    <GoogleLogin
-                      onSuccess={async (credentialResponse) =>
-                        handleSocialLogin(credentialResponse)
-                      }
-                      onError={() => {
-                        console.log("Login Failed");
-                      }}
-                    />
-                  </div>
+          </div>
+            <h3 className={styles.login_new}>Don't have an account yet?{" "} <Link legacyBehavior href='/signup'><a>Sign up here</a></Link> </h3>
+
+            <div className={styles.login_options}>
+              <h3>Login with social media</h3>
+
+              <div className={styles.flex}>
+                <div>
+
+                
+                {
+                  showFacebook &&
+                  <FacebookLogin
+                    appId="300185864007066"
+                    autoLoad={true}
+                    fields="name,email,picture"
+                    cssClass= {styles.blue}
+                    callback={responseFacebook}
+                    render={renderProps => (
+                      <button className={styles.blue} onClick={() => {
+                        renderProps.onClick();
+                        setShowFacebook(false)
+                      }}>This is my custom FB button</button>
+                    )} />
+                }
+                {!showFacebook && <button className={styles.blue} onClick={() => setShowFacebook(true)}>Login with Facebook</button>
+                }
+                </div>
+                <div>
+                  <GoogleLogin
+                    onSuccess={async (credentialResponse) =>
+                      handleSocialLogin(credentialResponse)
+                    }
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                  />
                 </div>
               </div>
             </div>
           </div>
-          <div
-            style={
-              props.toggleLogin
-                ? { gridTemplateRows: "max-content 1fr" }
-                : { gridTemplateRows: "1fr" }
-            }
-            className={styles.login_col_1}
-          >
-            {props.toggleLogin && (
-              <div className={styles.login_top}>
-                <h2></h2>
-                <div
-                  onClick={props.toggleLogin}
-                  className={styles.login_cancel_con}
-                >
-                  <Image src={closeIcon} className={styles.login_cancel} />
-                </div>
-              </div>
-            )}
-            <h3>Adding Convenience to your Home Made Meals</h3>
-          </div>
+          
         </div>
-      )}
+        <div className={styles.login_col_1}>
+          
+
+                <div className={styles.login_col_1_img_2}>
+
+                <img width="100%" height="100%" src="/assets/signup/signin_mobile.jpeg" alt="Signup" />
+                </div>
+                <img  width="100%" height="100%" className={styles.login_col_1_img} src="/assets/signup/login.png" alt="Sign-in" />
+             
+            
+      
+        </div>
+      </div>
+      
       {/* {signUp && (
         <SignUp
           closeSignUp={closeSignUp}
           toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
         />
       )} */}
-      {forgetPassword && (
-        <ForgetPassword closeForgetPassword={closeForgetPassword} />
-      )}
-      {signUp && (
-        <SignUp
-          closeSignUp={closeSignUp}
-          toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
-        />
-      )}
-    </>
-  );
+    {/* {forgetPassword && (
+      <ForgetPassword closeForgetPassword={closeForgetPassword} />
+    )}
+    {signUp && (
+      <SignUp
+        closeSignUp={closeSignUp}
+        toggleLogin={props.toggleLogin ? props.toggleLogin : undefined}
+      />
+    )} */}
+  
+  </>);
 }
 
 function mapStateToProp(state) {

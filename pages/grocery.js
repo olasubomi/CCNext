@@ -23,6 +23,8 @@ import { GroceryModal } from "../src/components/modal/grocery-modal";
 import SideNav from "../src/components/Header/sidenav";
 import { getLocalGroceryList } from "../src/util";
 import { ModalPopup } from "../src/components/modal/modal";
+import { useSelector } from "react-redux";
+import { UserIcon } from "../src/components/icons";
 
 const Grocery = () => {
   const [show, setShow] = useState(false);
@@ -30,6 +32,9 @@ const Grocery = () => {
   const [groceryList, setGroceryList] = useState([]);
   const [isUserOnline, setIsUserOnline] = useState(true);
   const router = useRouter();
+    const {authUser} = useSelector(state => state.Auth)
+
+
   const [localGroceryList, setLocalGroceryList] = useState([]);
 
   const [details, setDetails] = useState({
