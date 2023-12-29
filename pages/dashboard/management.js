@@ -28,6 +28,9 @@ import Switch from "@mui/material/Switch";
 import GooglePlacesAutocomplete from "../../src/components/dashboard/googleplacesautocomplete";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { ModalPopup } from "../../src/components/modal/modal";
+import { FormModal } from "../../src/components/modal/form-modal";
+import { SuccessModal } from "../../src/components/suggest-store/success-modal";
 
 const List = [
   {
@@ -113,6 +116,9 @@ const Management = () => {
   const [show, setShow] = useState(false);
   const [items, setItems] = useState([]);
   const [store, setStore] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [openSuccessModal, setOpenSuccessModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const days = [
     "sunday",
     "monday",
@@ -352,7 +358,10 @@ const Management = () => {
           background_picture: store?.background_picture,
           store_owner: store?.store_owner || "",
         });
-
+       if(store?.background_picture){
+        const image = document.querySelector('#background_picture')
+        image.src = store?.background_picture
+       }
         const hours = store?.hours;
 
         if (Object.keys(hours).length) {
@@ -443,7 +452,7 @@ const Management = () => {
         }
       }
       const response = await axios.put(`/stores/updatestore/${storeId}`, form);
-      console.log(response.data.data, "response");
+      console.log(response.data.data, "responses");
       toast.success("Store updated");
     } catch (e) {}
   }, [formState, storeId]);
@@ -486,6 +495,25 @@ const Management = () => {
       <div className={empty}></div>
       <div className={center}>
         <div className={styles.flex}>
+          {open && <ModalPopup setOpen={setOpen} />}
+          {openModal && (
+            <FormModal
+              setOpenSuccessModal={setOpenSuccessModal}
+              setOpenModal={setOpenModal}
+            />
+          )}
+          {openSuccessModal && (
+            <SuccessModal
+              storeId={storeId}
+              title={`Submitted Successfully`}
+              text={`Thank you for your submission, Our dedicated team will 
+              now carefully review your claim. Rest assured, we'll keep you
+               updated on the progress every step of the way.`}
+              button2={true}
+              btnTitle3={`Back to Store`}
+              onClick={() => router.push(`/store/${storeId}`)}
+            />
+          )}
           <div className={styles.summary}>
             <h5 style={{ paddingBottom: "1rem" }}>Summary</h5>
             <div className={styles.summaryCard}>
@@ -510,7 +538,8 @@ const Management = () => {
                       if (formState.store_owner) {
                         handleActive(elem.id);
                       } else {
-                        alert("This store has not been claimed");
+                        // alert("This store has not been claimed");
+                        setOpen(true);
                       }
                     }
                   }}
@@ -523,7 +552,12 @@ const Management = () => {
                   ></div>
                   <h6
                     className={
-                      active === elem.id ? styles.activeText : styles.name
+                      active === elem.id && formState.store_owner !== undefined
+                        ? styles.activeText
+                        : formState.store_owner === "" &&
+                          [3, 4, 5, 6].includes(elem.id)
+                        ? styles.undefinedOwnerText
+                        : styles.name
                     }
                   >
                     {elem.name}
@@ -538,7 +572,9 @@ const Management = () => {
                 <div className={styles.flextitle}>
                   <h5>Store Information</h5>
                   {!Boolean(formState.store_owner) && (
-                    <button onClick={handleClaimStore}>Claim this Store</button>
+                    <button onClick={() => setOpenModal(true)}>
+                      Claim this Store
+                    </button>
                   )}
                 </div>
                 <div className={styles.storeInfo}>
@@ -552,9 +588,11 @@ const Management = () => {
                       <img
                         id="profile_picture"
                         width="100%"
-                        alt="profile"
+                        height="100%"
+                        backgroundPosition="center"
+                        alt=""
+                        backgroundSize="cover"
                         style={{
-                          display: "none",
                           position: "relative",
                           zIndex: 10,
                         }}
@@ -578,12 +616,17 @@ const Management = () => {
                     >
                       {" "}
                       <img
+                        // src={formState.background_picture}
                         id="background_picture"
                         width="100%"
-                        alt="profile"
+                        height="100%"
+                        backgroundPosition="center"
+                        alt=""
+                        backgroundSize="cover"
                         style={{
-                          display: "none",
                           position: "relative",
+                          backgroundPosition: "center",
+                          backgroundSize: "cover",
                           zIndex: 10,
                         }}
                       />
@@ -744,6 +787,7 @@ const Management = () => {
                     <div className={styles.column}>
                       <label>Address</label>
                       <input
+                        onchange={handleChange}
                         value={formState.address}
                         type="text"
                         name="address"
@@ -756,9 +800,9 @@ const Management = () => {
                       <label>Intro</label>
                       <textarea
                         onChange={handleChange}
-                        value={formState.address}
+                        value={formState.intro}
                         type="text"
-                        name="address"
+                        name="intro"
                       />
                     </div>
                   </div>

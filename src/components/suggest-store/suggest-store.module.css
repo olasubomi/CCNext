@@ -36,7 +36,11 @@
     display: flex;
     align-items: center;
 }
-
+.flex2 {
+    display: flex;
+    align-items: center;
+    margin-top: -2.7rem;
+}
 .flex p {
     color: #F47900;
     font-size: 17px;
@@ -126,7 +130,7 @@
     .btns {
         display: flex;
         justify-content: flex-end;
-        padding-top: 5rem;
+        padding-top: 2.5rem;
         gap: 10px;
     }
 
@@ -160,7 +164,7 @@
         width: 40%;
         margin: auto;
         background: #FFF;
-        padding: 4rem;
+        padding: 2rem 4rem;
         display: flex;
         justify-content: center;
         flex-direction: column;
@@ -183,4 +187,15 @@
         font-weight: 400;
         line-height: 18px;
         padding-top: 1rem;
+    }
+    .successText2 {
+        color: #6D6D6D;
+        text-align: center;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 18px;
+        padding-top: .4rem;
+        width: 80%;
+        margin: auto;
     }

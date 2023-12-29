@@ -50,7 +50,7 @@ const SuggestStore = () => {
 
   const handleCreate = async () => {
     let supplier_address = {
-      ...formState
+      ...formState,
     };
     const user = JSON.parse(localStorage.getItem("user"));
     const form = new FormData();
@@ -62,7 +62,7 @@ const SuggestStore = () => {
     }
     axios.post("/stores/createstore", form).then((response) => {
       if (response.status >= 200 && response.status < 300) {
-        setStoreId(response.data?.data?._id)
+        setStoreId(response.data?.data?._id);
         setShow(true);
       }
     });
@@ -94,8 +94,6 @@ const SuggestStore = () => {
       router.push("/publicMarket");
     }
   }, [details, index]);
-
-
 
   return (
     <div className={styles.container}>
@@ -296,7 +294,18 @@ const SuggestStore = () => {
           </div>
         </div>
       </div>
-      {show && <SuccessModal storeId={storeId} />}
+      {show && (
+        <SuccessModal
+          storeId={storeId}
+          title={`Store Created Successfully`}
+          text={` Congratulations you have successfully created a store,
+       \n
+          To manage your store, click “Manage store”`}
+          button={true}
+          btnTitle={`Public Market`}
+          btnTitle2={`Manage Store`}
+        />
+      )}
     </div>
   );
 };

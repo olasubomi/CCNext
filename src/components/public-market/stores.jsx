@@ -86,7 +86,7 @@ export const Stores = () => {
                                         <MealDropDown
                                             setIsShow={setIsShow}
                                             selectedStore={selectedStore}
-                                            id={selectedStore.supplier._id}
+                                            id={selectedStore?.supplier?._id}
                                         />
                                     }
                                 </div>

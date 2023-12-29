@@ -14,9 +14,15 @@ import {
 } from "../icons";
 import { GrStar } from "react-icons/gr";
 import sale from "../../../public/assets/store_pics/sale.jpg";
+import { FormModal } from "../modal/form-modal";
+import { SuccessModal } from "../suggest-store/success-modal";
+import { useRouter } from "next/navigation";
 
 function Store(props) {
+  const [openModal, setOpenModal] = useState(false);
+  const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [selectItem, setSelectItem] = useState({});
+  const router = useRouter();
 
   function handleSearch(e) {
     // setSearchSuggestedMealState(e.target.value);
@@ -58,14 +64,34 @@ function Store(props) {
         />
       </Head>
       <div className={styles.store_sections}>
+        {openModal && (
+          <FormModal
+            setOpenModal={setOpenModal}
+            setOpenSuccessModal={setOpenSuccessModal}
+          />
+        )}
+        {openSuccessModal && (
+          <SuccessModal
+            storeId={props.store._id}
+            title={`Submitted Successfully`}
+            text={`Thank you for your submission, Our dedicated team will 
+          now carefully review your claim. Rest assured, we'll keep you
+           updated on the progress every step of the way.`}
+            button2={true}
+            btnTitle3={`Back to Store`}
+            onClick={() => setOpenSuccessModal(false)}
+          />
+        )}
         <div className={styles.product_section_2}>
           <div className={styles.product_section_2_col_1}>
             <Image
               src={props.store.profile_picture}
               alt="pop up"
               className={styles.product_section_2_main_img}
-              height={500}
-              width={500}
+              height={350}
+              width={350}
+              objectFit="cover"
+              objectPosition="center"
             />
           </div>
           <div className={styles.product_section_2_col_2}>
@@ -89,6 +115,29 @@ function Store(props) {
                       />
                     ))}
                 </div>
+                {props?.store?.hasOwnProperty("store_owner") ? null : (
+                  <div className={styles.btns}>
+                    <button
+                      className={styles.btn}
+                      onClick={() => {
+                        setOpenModal(true);
+                      }}
+                    >
+                      Claim this Store
+                    </button>
+                    <button
+                      className={styles.outlineBtn}
+                      onClick={() => {
+                        router.push(
+                          `/dashboard/management?storeId=${props.store._id}`
+                        );
+                        console.log(props.store._id, "propsstore");
+                      }}
+                    >
+                      Manage Store
+                    </button>
+                  </div>
+                )}
               </div>
               <div className={styles.store}>
                 {props.store.supplier_address && (

@@ -10,6 +10,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import WestIcon from '@mui/icons-material/West';
 import axios from '../../src/util/Api';
 import { useEffect } from 'react';
+import moment from 'moment';
 
 const IndividualStorePage = (props) => {
     const router = useRouter()
@@ -61,7 +62,8 @@ const IndividualStorePage = (props) => {
                     background: `url(${props.store.data.supplier.background_picture})`,
                     width: '100%',
                     backgroundPosition: 'center',
-                    backgroundSize: 'contain'
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat'
                 }}
                     className={styles.banner_container}
                 >
@@ -110,9 +112,12 @@ const IndividualStorePage = (props) => {
                     </div>
 
                 </div>
+               
                 {/* <p className={styles.dateCreated} style={{width:'95%', textAlign:'end'}}>Store Created: {props.store.data.products[0].createdAt && new Date(props.store.data.products[0].createdAt).getDate() + ' ' + months[new Date(props.store.data.products[0].createdAt).getMonth()] + ' ,'+ new Date(props.store.data.products[0].createdAt).getFullYear()} </p> */}
                 <div style={{width: '95%'}}>
-               
+                <div className={styles.date}>
+                    <p>Store Created: <p style={{marginLeft: '.2rem'}}> {moment(props.store.data.supplier.createdAt).format('MMMM Do, YYYY')}</p></p>
+                </div>
                     <Store store={props.store.data.supplier} items={props.store.data.items}/>
                 
                 </div>
