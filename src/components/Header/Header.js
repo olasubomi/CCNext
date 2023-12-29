@@ -373,10 +373,10 @@ function Header(props) {
                                 <h3
                                   className={styles.summary_notification_desc}
                                 >
-                                  {elem.message}
+                                  {/* {elem.message} */}
                                 </h3>
                                 <p className={styles.summary_notification_time}>
-                                  {moment(elem.createdAt).fromNow()}
+                                  {/* {moment(elem.createdAt).fromNow()} */}
                                 </p>
                               </div>
                             </div>
