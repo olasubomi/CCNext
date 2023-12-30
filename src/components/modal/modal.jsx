@@ -12,7 +12,7 @@ export const ModalPopup = ({setOpen}) => (
         details needed for ownership verification.
       </p>
       <div className={styles.flex2}>
-          <div className={styles.btns}>
+          <div className={styles.btns2}>
             <button
               className={styles.outlineBtn}
               onClick={() => setOpen(false)}

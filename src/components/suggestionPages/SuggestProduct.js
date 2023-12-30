@@ -890,8 +890,24 @@ class SuggestProductForm extends Component {
     suggestProductForm.append("item_data", JSON.stringify(productObject))
 
     suggestProductForm.append('description', JSON.stringify(arr2));
-
-    suggestProductForm.append("formatted_ingredients", JSON.stringify(ingredientStrings));
+    let ingredientList = []
+    for (let element of ingredientGroupList){
+      let obj = {} 
+      if(element.productName){
+        obj.item_name = element.productName
+      }
+      if(element.quantity){
+        obj.item_quantity = element.quantity
+      }
+      if(element.measurement){
+        obj.item_measurement = element.measurement
+      }
+      if(element.properIngredientStringSyntax){
+        obj.formatted_string_of_item = element.properIngredientStringSyntax
+      }
+      ingredientList.push(obj)
+    }
+    suggestProductForm.append("formatted_ingredients", JSON.stringify(ingredientList));
     // suggestProductForm.append("store_available", '63d426b416b83177aaeaed96');
     suggestProductForm.append("item_type", this.props.suggestionType)
     suggestProductForm.append("user", JSON.parse(localStorage.getItem('user'))._id);
