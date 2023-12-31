@@ -675,7 +675,7 @@
   }
 }
 
-@media screen and (max-width: 1090px) {
+@media screen and (max-width: 960px) {
 
   .signup_container{
     all: initial;
@@ -688,6 +688,7 @@
   .login_col_1_img_2{
     display: flex;
     object-fit: contain;
+    align-self: center;
     z-index: 999;
     
 
@@ -700,6 +701,33 @@
     width: 360; 
     z-index: 1000;
      padding-left: 2rem
+  }
+
+  .login_col_1_img_2::before{
+    content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80%;
+  background-color: rgba(0, 0, 0, 0.5);
+  
+  }
+
+  .login_promo_text{
+   
+    display: flex;
+    position: 'relative';
+    flex-wrap: wrap;
+    width: 380px;
+    margin-top: 19.5rem;
+    margin-left: 17rem;
+    z-index: 1000;
+    font-size: 29px;
+     color: "#ffffff";
+font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+
   }
 
   .login_container{
@@ -851,12 +879,6 @@
     width: 100%;
 
   }
-
-  
-  
-
-  
-
   
   .login_col_1_img_2{
     /* all: initial; */
@@ -876,16 +898,17 @@
   background-color: rgba(0, 0, 0, 0.5);
   
   }
+
+
   .login_promo_text{
-   
     display: flex;
     position: 'relative';
     flex-wrap: wrap;
     width: 240px;
-    margin-top: 13rem;
-    margin-left: 8rem;
+    margin-top: 9.5rem;
+    margin-left: 6rem;
     z-index: 1000;
-    font-size: 20px;
+    font-size: 19px;
      color: "#ffffff";
 font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
 
