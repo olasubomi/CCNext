@@ -1510,9 +1510,27 @@ class SuggestMealForm extends Component {
     console.log(suggestedCategories, "suggests");
     console.log(suggestedUtensils, "utensils");
     // RecipeSteps
+    
+    let ingredientList = []
+    for (let element of ingredientGroupList){
+      let obj = {} 
+      if(element.productName){
+        obj.item_name = element.productName
+      }
+      if(element.quantity){
+        obj.item_quantity = element.quantity
+      }
+      if(element.measurement){
+        obj.item_measurement = element.measurement
+      }
+      if(element.properIngredientStringSyntax){
+        obj.formatted_string_of_item = element.properIngredientStringSyntax
+      }
+      ingredientList.push(obj)
+    }
     suggestMealForm.append(
       "formatted_ingredients",
-      JSON.stringify(ingredientStrings)
+      JSON.stringify(ingredientList)
     );
     // suggestMealForm.append("store_available", '63d426b416b83177aaeaed96');
     suggestMealForm.append(

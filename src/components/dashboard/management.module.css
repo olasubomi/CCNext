@@ -32,6 +32,13 @@
     margin-left: 2rem;
 
 }
+.undefinedOwnerText{
+    color: #a19e9e;
+    font-size: 16px;
+    font-weight: 100;
+    letter-spacing: .2px;
+    margin-left: 2rem;
+}
 
 .activeText {
     color: #F47900;
