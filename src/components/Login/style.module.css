@@ -675,7 +675,8 @@
   }
 }
 
-@media screen and (max-width: 960px) {
+
+@media only screen and (max-width: 960px) {
 
   .signup_container{
     all: initial;
@@ -798,8 +799,56 @@ font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
   
 }
 
+@media only screen and (min-width: 442px) and (max-width:959px) {
 
-@media screen and (max-width: 767px) {
+  .signup_container{
+    all: initial;
+  }
+
+  .login_container{
+    all: initial;
+  }
+
+  .login_backArr{
+    all:initial;
+      font-size: 15px;
+      cursor: pointer;
+      color: rgb(255, 255, 255);
+  }
+
+  .login_col_1_img_2::before{
+    content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 60%;
+  background-color: rgba(0, 0, 0, 0.5);
+  
+  }
+
+  .login_promo_text{
+    display: flex;
+    position: 'relative';
+    flex-wrap: wrap;
+    width: 340px;
+    margin-top: 12rem;
+    margin-left: 6rem;
+    
+    z-index: 1000;
+    font-size: 28px;
+     color: "#ffffff";
+font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+font-weight: 600;
+line-height: 35px;
+text-transform: capitalize;
+  }
+
+}
+
+
+@media only screen and (max-width: 440px) {
 
   .signup_container{
     all: initial;
@@ -906,7 +955,7 @@ font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
     flex-wrap: wrap;
     width: 240px;
     margin-top: 9.5rem;
-    margin-left: 6rem;
+    margin-left: 5rem;
     z-index: 1000;
     font-size: 19px;
      color: "#ffffff";
