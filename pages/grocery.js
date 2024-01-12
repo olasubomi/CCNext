@@ -335,11 +335,12 @@ const Grocery = () => {
                   {
                     <div
                       onClick={() => {
-                        if (isUserOnline) {
-                          router.push(`/grocerylist/groceries/${ele._id}`);
-                        } else {
-                        alert('Login to add Items to Grocery List')
-                        }
+                        router.push(`/grocerylist/groceries/${ele._id}`);
+                        // if (isUserOnline) {
+                        //   router.push(`/grocerylist/groceries/${ele._id}`);
+                        // } else {
+                        // alert('Login to add Items to Grocery List')
+                        // }
                       }}
                       className={styles.two2}
                     >

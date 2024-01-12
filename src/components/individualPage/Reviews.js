@@ -21,7 +21,7 @@ function Reviews({ itemId, callback }) {
     const [rating, setRating] = useState(0)
     const [isEditing, setIsEditing] = useState(false)
     const [commentId, setCommentId] = useState("")
-    const profileImage = JSON.parse(localStorage.getItem('user')).profile_picture
+    const profileImage = JSON.parse(localStorage.getItem('user'))?.profile_picture
 
 
     useEffect(() => {
@@ -236,7 +236,7 @@ function Reviews({ itemId, callback }) {
                                             <h5><ShareIcon /> Share Comment</h5>
 
                                             {
-                                                comment.created_by._id === JSON.parse(localStorage.getItem('user'))._id &&
+                                                comment.created_by._id === JSON.parse(localStorage.getItem('user'))?._id &&
                                                 <p
                                                     onClick={() => {
                                                         const doc = document.querySelector('#review')

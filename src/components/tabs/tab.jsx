@@ -13,6 +13,7 @@ import { ImArrowUp, ImArrowDown } from 'react-icons/im'
 import { BiSolidMessageRounded, BiSolidShareAlt } from 'react-icons/bi'
 import { IndividualModal } from '../modal/individual-meal-product';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -27,7 +28,7 @@ function CustomTabPanel(props) {
     >
       {value === index && (
         <div>
-          <p>{children}</p>
+          <div>{children}</div>
         </div>
       )}
     </div>
@@ -238,14 +239,14 @@ const MyTabs = ({ id }) => {
         <p className={styles.length}>{suggestedItems.length} Items</p>
         <div className={styles.meals}>
           {
-            filteredMeals().slice(0, itemsLength).map((item) => {
+            filteredMeals().slice(0, itemsLength).map((item, id) => {
               return (
                 <div className={styles.mealCard} onClick={() => {
                   if (item.item_type === 'Meal') {
                     setSelectedItem(item)
                     setOpenModal(true)
                   }
-                }}>
+                }} key={id}>
                   <img src={item.itemImage0} />
                   <div className={styles.flexed}>
                     <p>{item.item_name}</p>
@@ -284,9 +285,9 @@ const MyTabs = ({ id }) => {
           paddingLeft: '6rem', paddingTop: '2rem', color: '#6D6D6D', fontSize: '15px', fontWeight: '300'
         }}>{comments.length} Comments</p>
         {
-          comments?.slice(0, itemsLength).map((elem) => {
+          comments?.slice(0, itemsLength).map((elem, id) => {
             return (
-              <div className={styles.commentRow}>
+              <div className={styles.commentRow} key={id}>
                 <div className={styles.comment}>
                   <div className={styles.flex}>
                     <span className={styles.nameRound}>{elem.created_by?.last_name?.charAt(0)}</span>

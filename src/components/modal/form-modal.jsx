@@ -4,46 +4,55 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import GooglePlacesAutocomplete from "../dashboard/googleplacesautocomplete";
 import { useState } from "react";
 import { SuccessModal } from "../suggest-store/success-modal";
+import axios from "../../util/Api";
 
-export const FormModal = ({ setOpenModal, setOpenSuccessModal }) => {
-  function uploadImage(picture) {
-    if (picture === "profile") {
-      const input = document.createElement("input");
-      input.accept = "image/*,video/mp4,video/x-m4v,video/*";
-      input.id = "profileImage";
-      input.name = "profileImage";
-      input.type = "file";
-      input.onchange = (ev) => onUpdateImage(ev, picture);
-      input.hidden = true;
-      input.click();
-    } else {
-      const input = document.createElement("input");
-      input.accept = "image/*,video/mp4,video/x-m4v,video/*";
-      input.id = "backgroundImage";
-      input.name = "backgroundImage";
-      input.type = "file";
-      input.onchange = (ev) => onUpdateImage(ev, picture);
-      input.hidden = true;
-      input.click();
-    }
+export const FormModal = ({ setOpenModal, setOpenSuccessModal, _id }) => {
+  function uploadImage() {
+    const input = document.createElement("input");
+    input.accept = ".pdf,.docx,.doc";
+    input.type = "file";
+    input.onchange = (ev) => {
+      setFormState({
+        ...formState,
+        business_ownership_proof: ev.target.files[0],
+        file_name: ev.target.files[0]?.name,
+      });
+    };
+    input.hidden = true;
+    input.click();
   }
   const [formState, setFormState] = useState({
-    store_name: "",
-    email: "",
-    phone: "",
-    intro: "",
-    profile_picture: {},
-    background_picture: {},
-    phone_number: "",
-    store_owner: "",
-    supplier_address: {
-      city: "",
-      state: "",
-      zip_code: "",
-      country: "",
-      address: "",
-    },
+    business_name: "",
+    business_address: "",
+    business_reg_number: "",
+    business_ownership_proof: "",
+    file_name: "",
   });
+
+  const handleCliamStore = async () => {
+    try {
+      const form = new FormData();
+      delete formState.file_name;
+      for (let ele in formState) {
+        form.append(ele, formState[ele]);
+      }
+      const response = await axios.patch(`/stores/claimstore/${_id}`, form);
+      console.log(response.data);
+      setOpenModal(false);
+      setOpenSuccessModal(true);
+    } catch (e) {
+      console.log(e);
+      setOpenModal(false);
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
   return (
     <div className={styles.modalContainer}>
       <div className={styles.modal}>
@@ -58,49 +67,31 @@ export const FormModal = ({ setOpenModal, setOpenSuccessModal }) => {
           <div className={styles.column}>
             <label>Business Name</label>
             <input
-              //   onChange={handleChange}
+              onChange={handleChange}
               value={formState.store_name}
               placeholder="Enter your business name"
               type="text"
-              name="store_name"
+              name="business_name"
             />
           </div>
           <div className={styles.column}>
             <label>Business Registration Number</label>
             <input
-              //   onChange={handleChange}
+              onChange={handleChange}
               placeholder="Enter your business registration number"
               value={formState.store_name}
               type="text"
-              name="store_name"
+              name="business_reg_number"
             />
           </div>
           <div className={styles.column}>
             <label>Store Address </label>
             <GooglePlacesAutocomplete
-              defaultInputValue={formState.supplier_address.address}
-              handleValueChange={(
-                address,
-                place_id,
-                lat,
-                lng,
-                zip_code,
-                country,
-                state,
-                city
-              ) => {
+              defaultInputValue={formState.business_address}
+              handleValueChange={(address) => {
                 setFormState({
                   ...formState,
-                  supplier_address: {
-                    address,
-                    place_id,
-                    lat,
-                    lng,
-                    zip_code,
-                    country,
-                    state,
-                    city,
-                  },
+                  business_address: address,
                 });
               }}
             />
@@ -112,10 +103,10 @@ export const FormModal = ({ setOpenModal, setOpenSuccessModal }) => {
               or Certificate)
             </label>
             <div
-              onClick={() => uploadImage("background")}
+              onClick={() => uploadImage()}
               className={styles.bgimg}
               style={{ position: "relative" }}
-            >
+          >
               {" "}
               <img
                 id="background_picture"
@@ -136,10 +127,15 @@ export const FormModal = ({ setOpenModal, setOpenSuccessModal }) => {
                 +
               </p>
             </div>
-            <button className={styles.submit} onClick={() => {
-              setOpenModal(false)
-              setOpenSuccessModal(true)
-            }}>Submit Form</button>
+            {formState.file_name}
+            <button
+              className={styles.submit}
+              onClick={() => {
+                handleCliamStore();
+              }}
+            >
+              Submit Form
+            </button>
           </div>
         </div>
       </div>

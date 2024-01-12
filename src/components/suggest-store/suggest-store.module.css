@@ -119,6 +119,9 @@
 .gif {
   height: 12rem;
 }
+.gif2 {
+  height: 5rem;
+}
 
 .gif img {
   object-fit: contain;
@@ -203,4 +206,20 @@
   padding-top: 0.4rem;
   width: 80%;
   margin: auto;
+}
+.flexCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 2rem;
+}
+.flexCol p {
+  color: #f47900;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
 }
