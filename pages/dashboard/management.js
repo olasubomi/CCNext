@@ -16,6 +16,7 @@ import {
 import { useState, useEffect, useCallback, useRef } from "react";
 import axios from "../../src/util/Api";
 import { GoTriangleUp } from "react-icons/go";
+import { TbDotsVertical } from "react-icons/tb";
 import { IoIosCloseCircle } from "react-icons/io";
 import { BsFillCreditCard2BackFill } from "react-icons/bs";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -34,7 +35,7 @@ import { SuccessModal } from "../../src/components/suggest-store/success-modal";
 
 const List = [
   {
-    name: "Store Information",
+    name: "Store Info",
     id: 1,
   },
   {
@@ -317,7 +318,11 @@ const Management = () => {
         });
         var image = document.getElementById("profile_picture");
         image.style.display = "block";
-        image.src = URL.createObjectURL(event.target.files[0]);
+        // image.src = URL.createObjectURL(event.target.files[0]);
+        setFormState({
+          ...formState,
+          profile_picture: URL.createObjectURL(event.target.files[0]),
+        });
       } else {
         setFormState({
           ...formState,
@@ -329,7 +334,11 @@ const Management = () => {
         });
         var image = document.getElementById("background_picture");
         image.style.display = "block";
-        image.src = URL.createObjectURL(event.target.files[0]);
+        // image.src = URL.createObjectURL(event.target.files[0]);
+        setFormState({
+          ...formState,
+          background_picture: URL.createObjectURL(event.target.files[0]),
+        });
       }
     } else {
       alert("Invalid image type");
@@ -354,14 +363,18 @@ const Management = () => {
             country: store?.supplier_address?.country,
             address: store?.supplier_address?.address,
           },
-          profile_picture: store?.profile_picture,
-          background_picture: store?.background_picture,
+          profile_picture: store?.profile_picture || "",
+          background_picture: store?.background_picture || "",
           store_owner: store?.store_owner || "",
         });
-       if(store?.background_picture){
-        const image = document.querySelector('#background_picture')
-        image.src = store?.background_picture
-       }
+        if (store?.background_picture) {
+          const image = document.querySelector("#background_picture");
+          image.src = store?.background_picture;
+        }
+        if (store?.profile_picture) {
+          const image = document.querySelector("#profile_picture");
+          image.src = store?.profile_picture;
+        }
         const hours = store?.hours;
 
         if (Object.keys(hours).length) {
@@ -494,12 +507,13 @@ const Management = () => {
       </div>
       <div className={empty}></div>
       <div className={center}>
-        <div className={styles.flex}>
+        <div>
           {open && <ModalPopup setOpen={setOpen} />}
           {openModal && (
             <FormModal
               setOpenSuccessModal={setOpenSuccessModal}
               setOpenModal={setOpenModal}
+              _id={storeId}
             />
           )}
           {openSuccessModal && (
@@ -514,8 +528,7 @@ const Management = () => {
               onClick={() => router.push(`/store/${storeId}`)}
             />
           )}
-          <div className={styles.summary}>
-            <h5 style={{ paddingBottom: "1rem" }}>Summary</h5>
+          <div className={styles.flex}>
             <div className={styles.summaryCard}>
               {List.map((elem) => (
                 <div
@@ -565,181 +578,185 @@ const Management = () => {
                 </div>
               ))}
             </div>
-          </div>
-          <div className={styles.store}>
-            {active === 1 && (
-              <>
-                <div className={styles.flextitle}>
-                  <h5>Store Information</h5>
-                  {!Boolean(formState.store_owner) && (
-                    <button onClick={() => setOpenModal(true)}>
-                      Claim this Store
-                    </button>
-                  )}
-                </div>
-                <div className={styles.storeInfo}>
-                  <div>
-                    <h5>Upload Store Profile Picture</h5>
-                    <div
-                      onClick={() => uploadImage("profile")}
-                      className={styles.bgimg}
-                      style={{ position: "relative" }}
-                    >
-                      <img
-                        id="profile_picture"
-                        width="100%"
-                        height="100%"
-                        backgroundPosition="center"
-                        alt=""
-                        backgroundSize="cover"
-                        style={{
-                          position: "relative",
-                          zIndex: 10,
-                        }}
-                      />
-                      <p
-                        style={{
-                          position: "absolute",
-                          zIndex: 5,
-                        }}
-                      >
-                        +
-                      </p>
-                    </div>
+            <div className={styles.border_bottom} />
+            <div className={styles.store}>
+              {active === 1 && (
+                <>
+                  <div className={styles.flextitle}>
+                    {!Boolean(formState.store_owner) && (
+                      <button onClick={() => setOpenModal(true)}>
+                        Claim this Store
+                      </button>
+                    )}
                   </div>
-                  <div>
-                    <h5>Upload Background Image</h5>
-                    <div
-                      onClick={() => uploadImage("background")}
-                      className={styles.bgimg}
-                      style={{ position: "relative" }}
-                    >
-                      {" "}
-                      <img
-                        // src={formState.background_picture}
-                        id="background_picture"
-                        width="100%"
-                        height="100%"
-                        backgroundPosition="center"
-                        alt=""
-                        backgroundSize="cover"
-                        style={{
-                          position: "relative",
-                          backgroundPosition: "center",
-                          backgroundSize: "cover",
-                          zIndex: 10,
-                        }}
-                      />
-                      <p
-                        style={{
-                          position: "absolute",
-                          zIndex: 5,
-                        }}
+                  <div className={styles.storeInfo}>
+                    <div>
+                      <h5 className={styles.h5}>Upload Store Profile Picture</h5>
+                      <div
+                        onClick={() => uploadImage("profile")}
+                        className={styles.bgimg}
+                        style={{ position: "relative" }}
                       >
-                        +
-                      </p>
-                    </div>
-                  </div>
-                  <div className={styles.contact}>
-                    <p>Contact Information</p>
-                    <div className={styles.column}>
-                      <label>Store Name</label>
-                      <input
-                        onChange={handleChange}
-                        value={formState.store_name}
-                        type="text"
-                        name="store_name"
-                      />
-                    </div>
-                    <div className={styles.column}>
-                      <label>Email Address</label>
-                      <input
-                        onChange={handleChange}
-                        value={formState.email}
-                        type="text"
-                        name="email"
-                      />
-                    </div>
-                    <div className={styles.column}>
-                      <label>Phone Number</label>
-                      <input
-                        onChange={handleChange}
-                        value={formState.phone_number}
-                        type="text"
-                        name="phone_number"
-                      />
-                    </div>
-                    <div className={styles.columnflex}>
-                      <div className={styles.column}>
-                        <label>City</label>
-                        <input
-                          onChange={(e) => {
-                            setFormState({
-                              ...formState,
-                              supplier_address: {
-                                city: e.target.value,
-                              },
-                            });
+                        <img
+                          id="profile_picture"
+                          {...(formState.profile_picture && {
+                            src: formState.profile_picture,
+                          })}
+                          width="100%"
+                          height="100%"
+                          backgroundPosition="center"
+                          alt=""
+                          backgroundSize="cover"
+                          style={{
+                            position: "relative",
+                            zIndex: 10,
                           }}
-                          value={formState.supplier_address.city}
+                        />
+                        <p
+                          style={{
+                            position: "absolute",
+                            zIndex: 5,
+                          }}
+                        >
+                          +
+                        </p>
+                      </div>
+                    </div>
+                    <div className={styles.top}>
+                      <h5 className={styles.h5}>Upload Background Image</h5>
+                      <div
+                        onClick={() => uploadImage("background")}
+                        className={styles.bgimg}
+                        style={{ position: "relative" }}
+                      >
+                        {" "}
+                        <img
+                          {...(formState.background_picture && {
+                            src: formState.background_picture,
+                          })}
+                          id="background_picture"
+                          width="100%"
+                          height="100%"
+                          backgroundPosition="center"
+                          alt=""
+                          backgroundSize="cover"
+                          style={{
+                            position: "relative",
+                            backgroundPosition: "center",
+                            backgroundSize: "cover",
+                            zIndex: 10,
+                          }}
+                        />
+                        <p
+                          style={{
+                            position: "absolute",
+                            zIndex: 5,
+                          }}
+                        >
+                          +
+                        </p>
+                      </div>
+                    </div>
+                    <div className={styles.contact}>
+                      <p>Contact Information</p>
+                      <div className={styles.column}>
+                        <label>Store Name</label>
+                        <input
+                          onChange={handleChange}
+                          value={formState.store_name}
                           type="text"
-                          name="supplier_address.city"
+                          name="store_name"
                         />
                       </div>
                       <div className={styles.column}>
-                        <label>State</label>
+                        <label>Email Address</label>
                         <input
-                          onChange={(e) => {
-                            setFormState({
-                              ...formState,
-                              supplier_address: {
-                                state: e.target.value,
-                              },
-                            });
-                          }}
-                          value={formState.supplier_address.state}
+                          onChange={handleChange}
+                          value={formState.email}
                           type="text"
-                          name="supplier_address.state"
-                        />
-                      </div>
-                    </div>
-                    <div className={styles.columnflex}>
-                      <div className={styles.column}>
-                        <label>Zip Code</label>
-                        <input
-                          onChange={(e) => {
-                            setFormState({
-                              ...formState,
-                              supplier_address: {
-                                zip_code: e.target.value,
-                              },
-                            });
-                          }}
-                          value={formState.supplier_address.zip_code}
-                          type="text"
-                          name="supplier_address.zip_code"
+                          name="email"
                         />
                       </div>
                       <div className={styles.column}>
-                        <label>Country</label>
+                        <label>Phone Number</label>
                         <input
-                          onChange={(e) => {
-                            setFormState({
-                              ...formState,
-                              supplier_address: {
-                                country: e.target.value,
-                              },
-                            });
-                          }}
-                          value={formState.supplier_address.country}
+                          onChange={handleChange}
+                          value={formState.phone_number}
                           type="text"
-                          name="supplier_address.country"
+                          name="phone_number"
                         />
                       </div>
-                    </div>
-                    <div className={styles.column}>
-                      <label>Address</label>
-                      {/* <input
+                      <div className={styles.columnflex}>
+                        <div className={styles.column}>
+                          <label>City</label>
+                          <input
+                            onChange={(e) => {
+                              setFormState({
+                                ...formState,
+                                supplier_address: {
+                                  city: e.target.value,
+                                },
+                              });
+                            }}
+                            value={formState.supplier_address.city}
+                            type="text"
+                            name="supplier_address.city"
+                          />
+                        </div>
+                        <div className={styles.column}>
+                          <label>State</label>
+                          <input
+                            onChange={(e) => {
+                              setFormState({
+                                ...formState,
+                                supplier_address: {
+                                  state: e.target.value,
+                                },
+                              });
+                            }}
+                            value={formState.supplier_address.state}
+                            type="text"
+                            name="supplier_address.state"
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.columnflex}>
+                        <div className={styles.column}>
+                          <label>Zip Code</label>
+                          <input
+                            onChange={(e) => {
+                              setFormState({
+                                ...formState,
+                                supplier_address: {
+                                  zip_code: e.target.value,
+                                },
+                              });
+                            }}
+                            value={formState.supplier_address.zip_code}
+                            type="text"
+                            name="supplier_address.zip_code"
+                          />
+                        </div>
+                        <div className={styles.column}>
+                          <label>Country</label>
+                          <input
+                            onChange={(e) => {
+                              setFormState({
+                                ...formState,
+                                supplier_address: {
+                                  country: e.target.value,
+                                },
+                              });
+                            }}
+                            value={formState.supplier_address.country}
+                            type="text"
+                            name="supplier_address.country"
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.column}>
+                        <label>Address</label>
+                        {/* <input
                         onChange={(e) => {
                           setFormState({
                             ...formState,
@@ -752,405 +769,364 @@ const Management = () => {
                         type="text"
                         name="supplier_address.address"
                       /> */}
-                      <GooglePlacesAutocomplete
-                        defaultInputValue={formState.supplier_address.address}
-                        handleValueChange={(
-                          address,
-                          place_id,
-                          lat,
-                          lng,
-                          zip_code,
-                          country,
-                          state,
-                          city
-                        ) => {
-                          setFormState({
-                            ...formState,
-                            supplier_address: {
-                              address,
-                              place_id,
-                              lat,
-                              lng,
-                              zip_code,
-                              country,
-                              state,
-                              city,
-                            },
-                          });
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.borderBottom} />
-                  <div className={styles.contact}>
-                    <p>Pickup Address</p>
-                    <div className={styles.column}>
-                      <label>Address</label>
-                      <input
-                        onchange={handleChange}
-                        value={formState.address}
-                        type="text"
-                        name="address"
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.contact}>
-                    <p>Introduce your store to customers</p>
-                    <div className={styles.column}>
-                      <label>Intro</label>
-                      <textarea
-                        onChange={handleChange}
-                        value={formState.intro}
-                        type="text"
-                        name="intro"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "1.5rem",
-                  }}
-                >
-                  <button
-                    onClick={handleUpdateProfile}
-                    className={styles.updateBtn}
-                  >
-                    Update Profile
-                  </button>
-                </div>
-              </>
-            )}
-            {active === 2 && (
-              <div>
-                <div className={styles.flexend}>
-                  <p>Filter</p>
-                  <div>
-                    <div
-                      className={styles.searchbox}
-                      onClick={() => setShowCategory(!showCategory)}
-                    >
-                      {categories[0].value &&
-                      categories.some((ele) => !ele.value)
-                        ? "All categories"
-                        : categories.find((ele) => ele.value).label}
-                      <GoTriangleUp
-                        className={
-                          !showCategory ? styles.rotate : styles.nonrotate
-                        }
-                        size={15}
-                      />
-                    </div>
-                    {showCategory && (
-                      <div className={styles.categories}>
-                        {categories.map((option) => (
-                          <p
-                            onClick={() => {
-                              let arr = [];
-                              if (option.label === "All categories") {
-                                arr = categories.map((ele) => {
-                                  return {
-                                    ...ele,
-                                    value: true,
-                                  };
-                                });
-                              } else {
-                                arr = categories.map((ele) => {
-                                  if (ele.label === option.label) {
-                                    return {
-                                      ...ele,
-                                      value: true,
-                                    };
-                                  } else {
-                                    return {
-                                      ...ele,
-                                      value: false,
-                                    };
-                                  }
-                                });
-                              }
-
-                              setCategories(arr);
-                            }}
-                            key={option?.label}
-                          >
-                            {option?.label}
-                          </p>
-                        ))}
+                        <GooglePlacesAutocomplete
+                          defaultInputValue={formState.supplier_address.address}
+                          handleValueChange={(
+                            address,
+                            place_id,
+                            lat,
+                            lng,
+                            zip_code,
+                            country,
+                            state,
+                            city
+                          ) => {
+                            setFormState({
+                              ...formState,
+                              supplier_address: {
+                                address,
+                                place_id,
+                                lat,
+                                lng,
+                                zip_code,
+                                country,
+                                state,
+                                city,
+                              },
+                            });
+                          }}
+                        />
                       </div>
-                    )}
+                    </div>
+                    <div className={styles.borderBottom} />
+                    <div className={styles.contact}>
+                      <p>Pickup Address</p>
+                      <div className={styles.column}>
+                        <label>Address</label>
+                        <input
+                          onchange={handleChange}
+                          value={formState.address}
+                          type="text"
+                          name="address"
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.contact}>
+                      <p>Introduce your store to customers</p>
+                      <div className={styles.column}>
+                        <label>Intro</label>
+                        <textarea
+                          onChange={handleChange}
+                          value={formState.intro}
+                          type="text"
+                          name="intro"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className={styles.suggestbtn}>
-                    <p>+ New Suggestion</p>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "1.5rem",
+                    }}
+                  >
+                    <button
+                      onClick={handleUpdateProfile}
+                      className={styles.updateBtn}
+                    >
+                      Update Profile
+                    </button>
                   </div>
-                </div>
-                <div ref={ref} className={styles.searchflex}>
-                  <div className={styles.search}>
-                    <input
-                      placeholder="Search"
-                      autoComplete="off"
-                      onFocus={() => setShow(true)}
-                      value={value}
-                      onChange={(e) => {
-                        setValue(e.target.value);
-                        getItem(e.target.value);
-                        getStore(e.target.value);
-                      }}
-                      type="text"
-                      name="search"
-                    />
-                    {show && (
-                      <div className={styles.searchDropdown}>
-                        <>
+                </>
+              )}
+              {active === 2 && (
+                <div className={styles.storeInfo}>
+               <div className={styles.flexend2}>
+               <div ref={ref} className={styles.searchflex}>
+                    <div className={styles.search}>
+                      <input
+                        placeholder="Search"
+                        autoComplete="off"
+                        onFocus={() => setShow(true)}
+                        value={value}
+                        onChange={(e) => {
+                          setValue(e.target.value);
+                          getItem(e.target.value);
+                          getStore(e.target.value);
+                        }}
+                        type="text"
+                        name="search"
+                      />
+                      {show && (
+                        <div className={styles.searchDropdown}>
                           <>
-                            {categories.find((ele) => ele.label === "Stores")
+                            <>
+                              {categories.find((ele) => ele.label === "Stores")
+                                ?.value && (
+                                <>
+                                  <h4 className={styles.storeTitle}>
+                                    Stores ({store.length})
+                                  </h4>
+                                  <div className={styles.bord} />
+                                  <div className={styles.list}>
+                                    {store.length === 0 ? (
+                                      Boolean(value) ? (
+                                        <div className={styles.result}>
+                                          <p>No Result Found</p>
+                                          <button
+                                            onClick={() =>
+                                              router.push(
+                                                `/suggest-store/${value}`
+                                              )
+                                            }
+                                          >
+                                            Suggest Store
+                                          </button>
+                                        </div>
+                                      ) : null
+                                    ) : (
+                                      store.slice(0, 4).map((stores) => (
+                                        <p
+                                          key={stores.value}
+                                          onClick={() => {
+                                            setOneStore({
+                                              visible: true,
+                                              id: stores.value,
+                                            });
+                                            setValue(stores.label);
+                                          }}
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          {stores.label}
+                                        </p>
+                                      ))
+                                    )}
+                                  </div>
+                                </>
+                              )}
+                            </>
+                          </>
+                          <>
+                            {categories.find((ele) => ele.label === "Meals")
                               ?.value && (
                               <>
                                 <h4 className={styles.storeTitle}>
-                                  Stores ({store.length})
+                                  Meals ({filteredItem().length})
                                 </h4>
                                 <div className={styles.bord} />
                                 <div className={styles.list}>
-                                  {store.length === 0 ? (
+                                  {filteredItem().length === 0 ? (
                                     Boolean(value) ? (
                                       <div className={styles.result}>
                                         <p>No Result Found</p>
                                         <button
                                           onClick={() =>
-                                            router.push(
-                                              `/suggest-store/${value}`
-                                            )
+                                            router.push("/suggestmeal")
                                           }
                                         >
-                                          Suggest Store
+                                          Suggest Meal
                                         </button>
                                       </div>
                                     ) : null
                                   ) : (
-                                    store.slice(0, 4).map((stores) => (
-                                      <p
-                                        key={stores.value}
-                                        onClick={() => {
-                                          setOneStore({
-                                            visible: true,
-                                            id: stores.value,
-                                          });
-                                          setValue(stores.label);
-                                        }}
-                                        style={{ cursor: "pointer" }}
-                                      >
-                                        {stores.label}
-                                      </p>
-                                    ))
+                                    filteredItem()
+                                      ?.slice(0, 4)
+                                      .map((elem) => (
+                                        <p
+                                          key={elem.value}
+                                          onClick={() => {
+                                            setOneStore({
+                                              visible: false,
+                                              id: "",
+                                            });
+                                            setValue(elem.label);
+                                          }}
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          {elem.label}
+                                        </p>
+                                      ))
                                   )}
                                 </div>
                               </>
                             )}
                           </>
-                        </>
-                        <>
-                          {categories.find((ele) => ele.label === "Meals")
-                            ?.value && (
-                            <>
-                              <h4 className={styles.storeTitle}>
-                                Meals ({filteredItem().length})
-                              </h4>
-                              <div className={styles.bord} />
-                              <div className={styles.list}>
-                                {filteredItem().length === 0 ? (
-                                  Boolean(value) ? (
-                                    <div className={styles.result}>
-                                      <p>No Result Found</p>
-                                      <button
-                                        onClick={() =>
-                                          router.push("/suggestmeal")
-                                        }
-                                      >
-                                        Suggest Meal
-                                      </button>
-                                    </div>
-                                  ) : null
-                                ) : (
-                                  filteredItem()
-                                    ?.slice(0, 4)
-                                    .map((elem) => (
-                                      <p
-                                        key={elem.value}
-                                        onClick={() => {
-                                          setOneStore({
-                                            visible: false,
-                                            id: "",
-                                          });
-                                          setValue(elem.label);
-                                        }}
-                                        style={{ cursor: "pointer" }}
-                                      >
-                                        {elem.label}
-                                      </p>
-                                    ))
-                                )}
-                              </div>
-                            </>
-                          )}
-                        </>
 
-                        <>
-                          {categories.find((ele) => ele.label === "Products")
-                            ?.value && (
-                            <>
-                              <h4 className={styles.storeTitle}>
-                                Products ({filteredProduct().length})
-                              </h4>
-                              <div className={styles.bord} />
-                              <div className={styles.list}>
-                                {filteredProduct().length === 0 ? (
-                                  Boolean(value) ? (
-                                    <div className={styles.result}>
-                                      <p>No Result Found</p>
-                                      <button
-                                        onClick={() =>
-                                          router.push("/suggestmeal")
-                                        }
-                                      >
-                                        Suggest Product
-                                      </button>
-                                    </div>
-                                  ) : null
-                                ) : (
-                                  filteredProduct()
-                                    ?.slice(0, 4)
-                                    .map((elem) => (
-                                      <p
-                                        key={elem.value}
-                                        onClick={() => {
-                                          setOneStore({
-                                            visible: false,
-                                            id: "",
-                                          });
-                                          setValue(elem.label);
-                                        }}
-                                        style={{ cursor: "pointer" }}
-                                      >
-                                        {elem.label}
-                                      </p>
-                                    ))
-                                )}
-                              </div>
-                            </>
-                          )}
-                        </>
+                          <>
+                            {categories.find((ele) => ele.label === "Products")
+                              ?.value && (
+                              <>
+                                <h4 className={styles.storeTitle}>
+                                  Products ({filteredProduct().length})
+                                </h4>
+                                <div className={styles.bord} />
+                                <div className={styles.list}>
+                                  {filteredProduct().length === 0 ? (
+                                    Boolean(value) ? (
+                                      <div className={styles.result}>
+                                        <p>No Result Found</p>
+                                        <button
+                                          onClick={() =>
+                                            router.push("/suggestmeal")
+                                          }
+                                        >
+                                          Suggest Product
+                                        </button>
+                                      </div>
+                                    ) : null
+                                  ) : (
+                                    filteredProduct()
+                                      ?.slice(0, 4)
+                                      .map((elem) => (
+                                        <p
+                                          key={elem.value}
+                                          onClick={() => {
+                                            setOneStore({
+                                              visible: false,
+                                              id: "",
+                                            });
+                                            setValue(elem.label);
+                                          }}
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          {elem.label}
+                                        </p>
+                                      ))
+                                  )}
+                                </div>
+                              </>
+                            )}
+                          </>
 
-                        <>
-                          {categories.find(
-                            (ele) => ele.label === "Kitchen Utensils"
-                          )?.value && (
-                            <>
-                              <h4 className={styles.storeTitle}>
-                                Kitchen Utensils ({filteredUtensils().length})
-                              </h4>
-                              <div className={styles.bord} />
-                              <div className={styles.list}>
-                                {filteredUtensils().length === 0 ? (
-                                  Boolean(value) ? (
-                                    <div className={styles.result}>
-                                      <p>No Result Found</p>
-                                      <button
-                                        onClick={() =>
-                                          router.push("/suggestmeal")
-                                        }
-                                      >
-                                        Suggest Utensil
-                                      </button>
-                                    </div>
-                                  ) : null
-                                ) : (
-                                  filteredUtensils()
-                                    ?.slice(0, 4)
-                                    .map((elem) => (
-                                      <p
-                                        key={elem.value}
-                                        onClick={() => {
-                                          setOneStore({
-                                            visible: false,
-                                            id: "",
-                                          });
-                                          setValue(elem.label);
-                                        }}
-                                        style={{ cursor: "pointer" }}
-                                      >
-                                        {elem.label}
-                                      </p>
-                                    ))
-                                )}
-                              </div>
-                            </>
-                          )}
-                        </>
-                      </div>
-                    )}
+                          <>
+                            {categories.find(
+                              (ele) => ele.label === "Kitchen Utensils"
+                            )?.value && (
+                              <>
+                                <h4 className={styles.storeTitle}>
+                                  Kitchen Utensils ({filteredUtensils().length})
+                                </h4>
+                                <div className={styles.bord} />
+                                <div className={styles.list}>
+                                  {filteredUtensils().length === 0 ? (
+                                    Boolean(value) ? (
+                                      <div className={styles.result}>
+                                        <p>No Result Found</p>
+                                        <button
+                                          onClick={() =>
+                                            router.push("/suggestmeal")
+                                          }
+                                        >
+                                          Suggest Utensil
+                                        </button>
+                                      </div>
+                                    ) : null
+                                  ) : (
+                                    filteredUtensils()
+                                      ?.slice(0, 4)
+                                      .map((elem) => (
+                                        <p
+                                          key={elem.value}
+                                          onClick={() => {
+                                            setOneStore({
+                                              visible: false,
+                                              id: "",
+                                            });
+                                            setValue(elem.label);
+                                          }}
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          {elem.label}
+                                        </p>
+                                      ))
+                                  )}
+                                </div>
+                              </>
+                            )}
+                          </>
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      className={styles.searchbtn}
+                      onClick={() => {
+                        if (oneStore.visible) {
+                          router.push(`/store/${oneStore.id}`);
+                        } else {
+                          items.item_type === "Meal"
+                            ? router.push(`/meal/${value}`)
+                            : items.item_type === "Product"
+                            ? router.push(`/product/${value}`)
+                            : router.push(`/product/${value}`);
+                        }
+                      }}
+                    >
+                      Search
+                    </button>
                   </div>
-                  <button
-                    className={styles.searchbtn}
-                    onClick={() => {
-                      if (oneStore.visible) {
-                        router.push(`/store/${oneStore.id}`);
-                      } else {
-                        items.item_type === "Meal"
-                          ? router.push(`/meal/${value}`)
-                          : items.item_type === "Product"
-                          ? router.push(`/product/${value}`)
-                          : router.push(`/product/${value}`);
-                      }
-                    }}
-                  >
-                    Search
-                  </button>
-                </div>
-                <div className={styles.flex}>
+                  <div className={styles.flexend}>
+                    <p>Filter</p>
+                      <div
+                        className={styles.searchbox}
+                        onClick={() => setShowCategory(!showCategory)}
+                      >
+                        {categories[0].value &&
+                        categories.some((ele) => !ele.value)
+                          ? "All categories"
+                          : categories.find((ele) => ele.value).label}
+                        <GoTriangleUp
+                          className={
+                            !showCategory ? styles.rotate : styles.nonrotate
+                          }
+                          size={15}
+                        />
+                      </div>
+                      {showCategory && (
+                        <div className={styles.categories}>
+                          {categories.map((option) => (
+                            <p
+                              onClick={() => {
+                                let arr = [];
+                                if (option.label === "All categories") {
+                                  arr = categories.map((ele) => {
+                                    return {
+                                      ...ele,
+                                      value: true,
+                                    };
+                                  });
+                                } else {
+                                  arr = categories.map((ele) => {
+                                    if (ele.label === option.label) {
+                                      return {
+                                        ...ele,
+                                        value: true,
+                                      };
+                                    } else {
+                                      return {
+                                        ...ele,
+                                        value: false,
+                                      };
+                                    }
+                                  });
+                                }
+
+                                setCategories(arr);
+                              }}
+                              key={option?.label}
+                            >
+                              {option?.label}
+                            </p>
+                          ))}
+                        </div>
+                      )}
+                    <div className={styles.suggestbtn}>
+                      <p>+ New Suggestion</p>
+                    </div>
+                  </div>
+               </div>
                   <p>Meal</p>
                   <p className={styles.red}>Remove selection(s)</p>
-                </div>
-                <table className={styles.table}>
-                  <thead className={styles.thead}>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th style={{ textAlign: "center" }}>Action</th>
-                  </thead>
-                  <tbody style={{ width: "100%" }}>
-                    {filteredItem()?.map((ele) => (
-                      <tr className={styles.tr}>
-                        <td style={{ display: "flex", alignItems: "center" }}>
-                          <input type="checkbox" />
-                          <Image
-                            src={ele.image}
-                            width={40}
-                            height={40}
-                            objectFit="contain"
-                            objectPosition="center"
-                            style={{ marginLeft: "1rem" }}
-                          />
-                          <p className={styles.label}>{ele?.label}</p>
-                        </td>
-                        <td>
-                          <p>{ele?.price}</p>
-                        </td>
-                        <td
-                          style={{ textAlign: "center" }}
-                          onClick={() => deleteItem(ele.value)}
-                        >
-                          <IoIosCloseCircle color="#949494" size={20} />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <div className={styles.top}>
-                  <div className={styles.flex}>
-                    <p>Product</p>
-                    <p className={styles.red}>Remove selection(s)</p>
-                  </div>
                   <table className={styles.table}>
                     <thead className={styles.thead}>
                       <th>Name</th>
@@ -1158,7 +1134,7 @@ const Management = () => {
                       <th style={{ textAlign: "center" }}>Action</th>
                     </thead>
                     <tbody style={{ width: "100%" }}>
-                      {filteredProduct()?.map((ele) => (
+                      {filteredItem()?.map((ele) => (
                         <tr className={styles.tr}>
                           <td style={{ display: "flex", alignItems: "center" }}>
                             <input type="checkbox" />
@@ -1185,8 +1161,47 @@ const Management = () => {
                       ))}
                     </tbody>
                   </table>
-                </div>
-                {/* <div className={styles.top}>
+                  <div className={styles.top}>
+                      <p>Product</p>
+                      <p className={styles.red}>Remove selection(s)</p>
+                    <table className={styles.table}>
+                      <thead className={styles.thead}>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th style={{ textAlign: "center" }}>Action</th>
+                      </thead>
+                      <tbody style={{ width: "100%" }}>
+                        {filteredProduct()?.map((ele) => (
+                          <tr className={styles.tr}>
+                            <td
+                              style={{ display: "flex", alignItems: "center" }}
+                            >
+                              <input type="checkbox" />
+                              <Image
+                                src={ele.image}
+                                width={40}
+                                height={40}
+                                objectFit="contain"
+                                objectPosition="center"
+                                style={{ marginLeft: "1rem" }}
+                              />
+                              <p className={styles.label}>{ele?.label}</p>
+                            </td>
+                            <td>
+                              <p>{ele?.price}</p>
+                            </td>
+                            <td
+                              style={{ textAlign: "center" }}
+                              onClick={() => deleteItem(ele.value)}
+                            >
+                              <IoIosCloseCircle color="#949494" size={20} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {/* <div className={styles.top}>
                   <div className={styles.flex}>
                     <p>Utensil</p>
                     <p className={styles.red}>Remove selection(s)</p>
@@ -1215,315 +1230,335 @@ const Management = () => {
                     </tbody>
                   </table>
                 </div> */}
-              </div>
-            )}
-            {active === 3 && (
-              <div>
-                <h5>Payment</h5>
-                <div className={styles.payment}>
-                  <div className={styles.cards}>
-                    <div className={styles.card}>
-                      <BsFillCreditCard2BackFill />
-                      <p>Cards</p>
-                    </div>
-                    <div className={styles.paypal}>
-                      <img src="/assets/logos/paypal.png" />
-                    </div>
-                    <div className={styles.paypal}>
-                      <img
-                        src="/assets/logos/sezzle.png"
-                        className={styles.sezzle}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <p>Choose card type</p>
-                  </div>
                 </div>
-              </div>
-            )}
-            {active === 4 && (
-              <div>
-                <h5>Work hours</h5>
+              )}
+              {active === 3 && (
                 <div>
-                  <h5>Set Working Hours</h5>
-                  <p>
-                    Configure the standard hours of operation for this store
-                  </p>
+                  <h5>Payment</h5>
                   <div className={styles.payment}>
-                    <div className={profileStyles.profile_workinghour_days}>
-                      {days.map((day) => {
-                        return (
-                          <div
-                            className={profileStyles.profile_workinghour_day}
-                          >
-                            <h3>{day}</h3>
+                    <div className={styles.cards}>
+                      <div className={styles.card}>
+                        <BsFillCreditCard2BackFill />
+                        <p>Cards</p>
+                      </div>
+                      <div className={styles.paypal}>
+                        <img src="/assets/logos/paypal.png" />
+                      </div>
+                      <div className={styles.paypal}>
+                        <img
+                          src="/assets/logos/sezzle.png"
+                          className={styles.sezzle}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <p>Choose card type</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {active === 4 && (
+                <div>
+                  <div>
+                    <h5>Set Working Hours</h5>
+                    <p>
+                      Configure the standard hours of operation for this store
+                    </p>
+                    <div className={styles.payment}>
+                      <div className={profileStyles.profile_workinghour_days}>
+                        {days.map((day) => {
+                          return (
                             <div
-                              className={
-                                profileStyles.profile_workinghour_switch
-                              }
+                              className={profileStyles.profile_workinghour_day}
                             >
-                              <AntSwitch
-                                checked={times[day]["open"]}
-                                onChange={() =>
-                                  handleDayAvailabiltyChange(
-                                    !times[day]["open"],
-                                    day,
-                                    "open"
-                                  )
+                              <h3>{day}</h3>
+                              <div
+                                className={
+                                  profileStyles.profile_workinghour_switch
                                 }
-                                inputProps={{ "aria-label": "ant design" }}
-                              />
-                              {times[day]["open"] ? "Open" : "Closed"}
-                            </div>
-                            <div
-                              className={profileStyles.profile_workinghour_date}
-                            >
-                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <TimePicker
-                                  value={times[day]["from"]}
-                                  onChange={(time) =>
-                                    handleTime(time, day, "from")
+                              >
+                                <AntSwitch
+                                  checked={times[day]["open"]}
+                                  onChange={() =>
+                                    handleDayAvailabiltyChange(
+                                      !times[day]["open"],
+                                      day,
+                                      "open"
+                                    )
                                   }
-                                  renderInput={(params) => (
-                                    <TextField {...params} />
-                                  )}
+                                  inputProps={{ "aria-label": "ant design" }}
                                 />
-                              </LocalizationProvider>
+                                {times[day]["open"] ? "Open" : "Closed"}
+                              </div>
+                              <div
+                                className={
+                                  profileStyles.profile_workinghour_date
+                                }
+                              >
+                                <LocalizationProvider
+                                  dateAdapter={AdapterDayjs}
+                                >
+                                  <TimePicker
+                                    value={times[day]["from"]}
+                                    onChange={(time) =>
+                                      handleTime(time, day, "from")
+                                    }
+                                    renderInput={(params) => (
+                                      <TextField {...params} />
+                                    )}
+                                  />
+                                </LocalizationProvider>
+                              </div>
+                              <h4>To</h4>
+                              <div
+                                className={
+                                  profileStyles.profile_workinghour_date
+                                }
+                              >
+                                <LocalizationProvider
+                                  dateAdapter={AdapterDayjs}
+                                >
+                                  <TimePicker
+                                    value={times[day]["to"]}
+                                    onChange={(time) =>
+                                      handleTime(time, day, "to")
+                                    }
+                                    renderInput={(params) => (
+                                      <TextField {...params} />
+                                    )}
+                                  />
+                                </LocalizationProvider>
+                              </div>
                             </div>
-                            <h4>To</h4>
-                            <div
-                              className={profileStyles.profile_workinghour_date}
-                            >
-                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <TimePicker
-                                  value={times[day]["to"]}
-                                  onChange={(time) =>
-                                    handleTime(time, day, "to")
-                                  }
-                                  renderInput={(params) => (
-                                    <TextField {...params} />
-                                  )}
-                                />
-                              </LocalizationProvider>
-                            </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "1.5rem",
-                  }}
-                >
-                  <button
-                    onClick={handleChangeTime}
-                    className={styles.updateBtn}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "1.5rem",
+                    }}
                   >
-                    Update Hours
-                  </button>
-                </div>
-              </div>
-            )}
-            {active === 5 && (
-              <div>
-                <div className={styles.flex}>
-                  <h5>Sub Admins</h5>
-                  <div className={styles.suggestbtn}>
-                    <p>+ Add Sub Admin</p>
+                    <button
+                      onClick={handleChangeTime}
+                      className={styles.updateBtn}
+                    >
+                      Update Hours
+                    </button>
                   </div>
                 </div>
-                <div className={styles.subadmin}>
-                  <div className={styles.flexstart}>
-                    <div className={styles.user}>
-                      <img src="/assets/icons/girl.jpg" />
+              )}
+              {active === 5 && (
+                <div>
+                  <div className={styles.flex}>
+                    <h5>Admins</h5>
+                  </div>
+                  <div className={styles.subadmin}>
+                    <div className={styles.flexstart}>
+                      <div className={styles.user}>
+                        <img src="/assets/icons/girl.jpg" />
+                      </div>
+                      <div style={{ marginLeft: "1.5rem" }}>
+                        <h5 className={styles.admin_name}>Rachel Anterta</h5>
+                        <p className={styles.role}>Sub Admin</p>
+                      </div>
                     </div>
-                    <div style={{ marginLeft: "1.5rem" }}>
-                      <h5 className={styles.admin_name}>Rachel Anterta</h5>
-                      <p className={styles.role}>Sub Admin</p>
+                    <div className={styles.center}>
+                      <TbDotsVertical color="#949494" size={20} />
                     </div>
                   </div>
-                  <div className={styles.center}>
-                    <IoIosCloseCircle color="#949494" size={20} />
-                    <p className={styles.remove}>Remove User</p>
+                  <div className={styles.flex}  style={{marginTop:'2rem'}}>
+                    <h5>Sub Admins</h5>
                   </div>
-                </div>
-                <p className={styles.add}>Add New Sub Admin</p>
-                <div className={styles.payment}>
-                  <div className={styles.contact}>
-                    <p>Contact Information</p>
+                  <div className={styles.subadmin}>
+                    <div className={styles.flexstart}>
+                      <div className={styles.user}>
+                        <img src="/assets/icons/girl.jpg" />
+                      </div>
+                      <div style={{ marginLeft: "1.5rem" }}>
+                        <h5 className={styles.admin_name}>Rachel Anterta</h5>
+                        <p className={styles.role}>Sub Admin</p>
+                      </div>
+                    </div>
+                    <div className={styles.center}>
+                      <TbDotsVertical color="#949494" size={20} />
+                    
+                    </div>
+                  </div>
+                  <p className={styles.add}>Add New Sub Admin</p>
+                  <div className={styles.payment}>
+                    <div className={styles.contact}>
+                      <p>Contact Information</p>
 
-                    <div className={styles.columnflex}>
+                      <div className={styles.columnflex}>
+                        <div className={styles.column}>
+                          <label>First Name</label>
+                          <input
+                            onChange={handleChange}
+                            value={formState.city}
+                            type="text"
+                            name="first_name"
+                          />
+                        </div>
+                        <div className={styles.column}>
+                          <label>Last Name</label>
+                          <input
+                            onChange={handleChange}
+                            value={formState.state}
+                            type="text"
+                            name="Last Name"
+                          />
+                        </div>
+                      </div>
                       <div className={styles.column}>
-                        <label>First Name</label>
+                        <label>Email Address</label>
                         <input
                           onChange={handleChange}
-                          value={formState.city}
+                          value={formState.address}
                           type="text"
-                          name="first_name"
+                          name="email"
                         />
                       </div>
                       <div className={styles.column}>
-                        <label>Last Name</label>
+                        <label>Phone Number</label>
                         <input
                           onChange={handleChange}
-                          value={formState.state}
+                          value={formState.address}
                           type="text"
-                          name="Last Name"
+                          name="number"
                         />
                       </div>
                     </div>
-                    <div className={styles.column}>
-                      <label>Email Address</label>
-                      <input
-                        onChange={handleChange}
-                        value={formState.address}
-                        type="text"
-                        name="email"
-                      />
-                    </div>
-                    <div className={styles.column}>
-                      <label>Phone Number</label>
-                      <input
-                        onChange={handleChange}
-                        value={formState.address}
-                        type="text"
-                        name="number"
-                      />
-                    </div>
+                  </div>
+                  <div className={styles.flexend}>
+                    <button className={styles.button}> Send Link</button>
                   </div>
                 </div>
-                <div className={styles.flexend}>
-                  <button className={styles.button}> Send Link</button>
-                </div>
-              </div>
-            )}
-            {active === 6 && (
-              <div>
-                <div className={styles.flex}>
-                  <h5>Drivers</h5>
-                  <div className={styles.suggestbtn}>
-                    <p>+ Add Driver</p>
-                  </div>
-                </div>
-                <div className={styles.subadmin}>
-                  <div className={styles.flexstart}>
-                    <div className={styles.user}>
-                      <img src="/assets/icons/girl.jpg" />
-                    </div>
-                    <div style={{ marginLeft: "1.3rem" }}>
-                      <h5 className={styles.admin_name}>Rachel Anterta</h5>
-                      <p className={styles.car}>Hyundai Elantra - Black</p>
-                      <div
-                        className={styles.flexstart}
-                        style={{ marginTop: "1rem" }}
-                      >
-                        <FaPhoneAlt color="#F47900" />
-                        <p className={styles.number}>(406) 555-0120</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className={styles.center}>
-                    <IoIosCloseCircle color="#949494" size={20} />
-                    <p className={styles.remove}>Remove User</p>
-                  </div>
-                </div>
-                <p className={styles.add}>Add New Driver</p>
-                <div className={styles.payment}>
-                  <div className={styles.contact}>
-                    <p>Contact Information</p>
+              )}
+              {active === 6 && (
+                <div>
+                  <div className={styles.flex}>
+                    <h5>Drivers</h5>
 
-                    <div className={styles.columnflex}>
-                      <div className={styles.column}>
-                        <label>First Name</label>
-                        <input
-                          onChange={handleChange}
-                          value={formState.city}
-                          type="text"
-                          name="first_name"
-                        />
+                  </div>
+                  <div className={styles.subadmin}>
+                    <div className={styles.flexstart}>
+                      <div className={styles.user}>
+                        <img src="/assets/icons/girl.jpg" />
                       </div>
-                      <div className={styles.column}>
-                        <label>Last Name</label>
-                        <input
-                          onChange={handleChange}
-                          value={formState.state}
-                          type="text"
-                          name="Last Name"
-                        />
+                      <div style={{ marginLeft: "1.3rem" }}>
+                        <h5 className={styles.admin_name}>Rachel Anterta</h5>
+                        <p className={styles.car}>Hyundai Elantra - Black</p>
+                        <div
+                          className={styles.flexstart}
+                          style={{ marginTop: "1rem" }}
+                        >
+                          <FaPhoneAlt color="#F47900" />
+                          <p className={styles.number}>(406) 555-0120</p>
+                        </div>
                       </div>
                     </div>
-                    <div className={styles.column}>
-                      <label>Email Address</label>
-                      <input
-                        onChange={handleChange}
-                        value={formState.address}
-                        type="text"
-                        name="email"
-                      />
-                    </div>
-                    <div className={styles.column}>
-                      <label>Phone Number</label>
-                      <input
-                        onChange={handleChange}
-                        value={formState.address}
-                        type="text"
-                        name="number"
-                      />
+                    <div className={styles.center}>
+                      <IoIosCloseCircle color="#949494" size={20} />
+                      <p className={styles.remove}>Remove User</p>
                     </div>
                   </div>
-                  <div className={styles.contact}>
-                    <p className={styles.title}>Car Details</p>
-                    <div className={styles.column}>
-                      <label>Car Name</label>
-                      <input
-                        onChange={handleChange}
-                        value={formState.address}
-                        type="text"
-                        name="email"
-                      />
-                    </div>
+                  <p className={styles.add}>Add New Driver</p>
+                  <div className={styles.payment}>
+                    <div className={styles.contact}>
+                      <p>Contact Information</p>
 
-                    <div className={styles.columnflex2}>
+                      <div className={styles.columnflex}>
+                        <div className={styles.column}>
+                          <label>First Name</label>
+                          <input
+                            onChange={handleChange}
+                            value={formState.city}
+                            type="text"
+                            name="first_name"
+                          />
+                        </div>
+                        <div className={styles.column}>
+                          <label>Last Name</label>
+                          <input
+                            onChange={handleChange}
+                            value={formState.state}
+                            type="text"
+                            name="Last Name"
+                          />
+                        </div>
+                      </div>
                       <div className={styles.column}>
-                        <label>VIN</label>
+                        <label>Email Address</label>
                         <input
                           onChange={handleChange}
-                          value={formState.city}
+                          value={formState.address}
                           type="text"
-                          name="first_name"
+                          name="email"
                         />
                       </div>
                       <div className={styles.column}>
-                        <label>Color</label>
+                        <label>Phone Number</label>
                         <input
                           onChange={handleChange}
-                          value={formState.state}
+                          value={formState.address}
                           type="text"
-                          name="Last Name"
+                          name="number"
                         />
                       </div>
                     </div>
-                    <div className={styles.column}>
-                      <label>Plate Number</label>
-                      <input
-                        onChange={handleChange}
-                        value={formState.address}
-                        type="text"
-                        name="number"
-                      />
-                    </div>
-                    <div className={styles.flexend}>
-                      <button className={styles.button2}> Add Driver</button>
+                    <div className={styles.contact}>
+                      <p className={styles.title}>Car Details</p>
+                      <div className={styles.column}>
+                        <label>Car Name</label>
+                        <input
+                          onChange={handleChange}
+                          value={formState.address}
+                          type="text"
+                          name="email"
+                        />
+                      </div>
+
+                      <div className={styles.columnflex2}>
+                        <div className={styles.column}>
+                          <label>VIN</label>
+                          <input
+                            onChange={handleChange}
+                            value={formState.city}
+                            type="text"
+                            name="first_name"
+                          />
+                        </div>
+                        <div className={styles.column}>
+                          <label>Color</label>
+                          <input
+                            onChange={handleChange}
+                            value={formState.state}
+                            type="text"
+                            name="Last Name"
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.column}>
+                        <label>Plate Number</label>
+                        <input
+                          onChange={handleChange}
+                          value={formState.address}
+                          type="text"
+                          name="number"
+                        />
+                      </div>
+                      <div className={styles.flexend}>
+                        <button className={styles.button2}> Add Driver</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

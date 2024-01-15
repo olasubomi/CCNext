@@ -68,6 +68,7 @@ function Store(props) {
           <FormModal
             setOpenModal={setOpenModal}
             setOpenSuccessModal={setOpenSuccessModal}
+            _id={props.store._id}
           />
         )}
         {openSuccessModal && (

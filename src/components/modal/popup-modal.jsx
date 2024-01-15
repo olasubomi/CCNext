@@ -68,8 +68,8 @@ export const Modal = ({
       "grocery-list",
       JSON.stringify([...localGrocery, payload])
     );
-    setShow(false)
-    fetchList()
+    setShow(false);
+    fetchList();
     toast.success("Grocery list created locally successfully");
   }, [description, listName, getLocalGroceryList, setShow, localStorage]);
 
@@ -87,112 +87,133 @@ export const Modal = ({
       }
     });
     localStorage.setItem("grocery-list", JSON.stringify([...localGrocery]));
-    setShow(false)
-    fetchList()
+    setShow(false);
+    fetchList();
     toast.success("Grocery list edited locally successfully");
+  }, [
+    listName,
+    description,
+    details,
+    getLocalGroceryList,
+    localStorage,
+    setShow,
+  ]);
 
-  }, [listName, description, details, getLocalGroceryList, localStorage, setShow]);
-
-  
   const handleCreate = async () => {
-    if (!modalState.listName && !modalState.description) {
-      return alert("Enter List Name and description");
-    }
-    try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      let payload = {
-        listName: modalState.listName,
-        user: user._id,
-      };
-      if (modalState.description) {
-        payload.description = modalState.description;
+    if (!isUserOnline) {
+      handleCreateLocalGroceryList();
+    } else {
+      if (!modalState.listName && !modalState.description) {
+        return alert("Enter List Name and description");
       }
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        let payload = {
+          listName: modalState.listName,
+          user: user._id,
+        };
+        if (modalState.description) {
+          payload.description = modalState.description;
+        }
 
-      const response = await axios(`/groceries/create`, {
-        method: "POST",
-        data: payload,
-      });
-      if (addItemToGrocery) {
-        addItemToGrocery(modalState.listName);
+        const response = await axios(`/groceries/create`, {
+          method: "POST",
+          data: payload,
+        });
+        if (addItemToGrocery) {
+          addItemToGrocery(modalState.listName);
+        }
+        fetchList();
+        if (!addItemToGrocery) {
+          toast.success("Grocery list created successfully");
+        }
+        setShow(!show);
+      } catch (error) {
+        console.log(error);
       }
-      fetchList();
-      if (!addItemToGrocery) {
-        toast.success("Grocery list created successfully");
-      }
-      setShow(!show);
-    } catch (error) {
-      console.log(error);
     }
   };
 
   const handleEdit = async () => {
-    if (!modalState.listName && !modalState.description) {
-      return alert("Enter List Name and description");
-    }
-    try {
-      const response = await axios(`/groceries/create/${details.id}`, {
-        method: "PATCH",
-        data: {
-          listName: modalState.listName,
-          description: modalState.description,
-        },
-      });
-      fetchList();
-      setDetails({
-        listName: "",
-        description: "",
-        id: "",
-      });
-      toast.success("Grocery list edited successfully");
-      setShow(!show);
-    } catch (error) {
-      console.log(error);
+    if(!isUserOnline){
+      editLocalList()
+    }else{
+      if (!modalState.listName && !modalState.description) {
+        return alert("Enter List Name and description");
+      }
+      try {
+        const response = await axios(`/groceries/create/${details.id}`, {
+          method: "PATCH",
+          data: {
+            listName: modalState.listName,
+            description: modalState.description,
+          },
+        });
+        fetchList();
+        setDetails({
+          listName: "",
+          description: "",
+          id: "",
+        });
+        toast.success("Grocery list edited successfully");
+        setShow(!show);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
-    return (
-        <div className={styles.modal} ref={targetElementRef} onClick={() => setShow(false)}>
-            <div className={styles.modal_card}>
-                <div className={styles.flex2}>
-                    <h5 className={styles.header}>Create New Grocery List</h5>
-                    <div onClick={() => {
-                        setDetails({
-                            listName: '',
-                            description: '',
-                            id: ''
-                        })
-                        setShow(false)
-                    }}>
-                        <AiFillCloseCircle color='#949494' size={28} />
-                    </div>
-                </div>
-                <div style={{ width: '100%' }}>
-                    <p className={styles.label}>Title</p>
-                    <input
-                        name="listName"
-                        value={listName}
-                        onChange={onChange}
-                        className={styles.input1}
-                    />
-                </div>
-                <div style={{ marginTop: '2.5rem' }}>
-                    <p className={styles.label}>Description</p>
-                    <textarea
-                        name="description"
-                        value={description}
-                        onChange={onChange}
-                        className={styles.input2}
-                    />
-                </div>
-                <div className={styles.modal_btn} onClick={() => {
-                    if (details.listName && details.description && details.id) {
-                        handleEdit()
-                    } else {
-                        handleCreate()
-                    }
-                }}>
-                    <p> {details.listName && details.description ? 'Update' : 'Create'} Now</p>
-                </div>
-            </div>
+  return (
+    <div className={styles.modal} ref={targetElementRef}>
+      <div className={styles.modal_card}>
+        <div className={styles.flex2}>
+          <h5 className={styles.header}>Create New Grocery List</h5>
+          <div
+            onClick={() => {
+              setDetails({
+                listName: "",
+                description: "",
+                id: "",
+              });
+              setShow(false);
+            }}
+          >
+            <AiFillCloseCircle color="#949494" size={28} />
+          </div>
         </div>
+        <div style={{ width: "100%" }}>
+          <p className={styles.label}>Title</p>
+          <input
+            name="listName"
+            value={listName}
+            onChange={onChange}
+            className={styles.input1}
+          />
+        </div>
+        <div style={{ marginTop: "2.5rem" }}>
+          <p className={styles.label}>Description</p>
+          <textarea
+            name="description"
+            value={description}
+            onChange={onChange}
+            className={styles.input2}
+          />
+        </div>
+        <div
+          className={styles.modal_btn}
+          onClick={() => {
+            if (details.listName && details.description && details.id) {
+              handleEdit();
+            } else {
+              handleCreate();
+            }
+          }}
+        >
+          <p>
+            {" "}
+            {details.listName && details.description ? "Update" : "Create"} Now
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
