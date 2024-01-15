@@ -47,10 +47,10 @@ function Store(props) {
   }
   console.log(props, "props11");
   const filteredItem = () => {
-    return props.items.filter((data) => data.item_type === "Meal");
+    return props?.items?.filter((data) => data?.item_type === "Meal");
   };
   const filteredProducts = () => {
-    return props.items.filter((data) => data.item_type === "Product");
+    return props?.items?.filter((data) => data?.item_type === "Product");
   };
   console.log(filteredProducts(), "filtered");
   return (
@@ -86,7 +86,7 @@ function Store(props) {
         <div className={styles.product_section_2}>
           <div className={styles.product_section_2_col_1}>
             <Image
-              src={props.store.profile_picture}
+              src={props.store?.profile_picture}
               alt="pop up"
               className={styles.product_section_2_main_img}
               height={350}
@@ -99,7 +99,7 @@ function Store(props) {
             <div className={styles.product_section_2_details}>
               <div className={styles.flex}>
                 <h2 className={styles.product_section_2_name}>
-                  {props.store.store_name}
+                  {props.store?.store_name}
                 </h2>
                 <div className={styles.rates}>
                   {Array(5)
@@ -109,14 +109,16 @@ function Store(props) {
                         size={23}
                         key={idx + _}
                         color={
-                          props.store.average_rating > idx
+                          props.store?.average_rating > idx
                             ? "#04D505"
                             : "rgba(0,0,0,0.5)"
                         }
                       />
                     ))}
                 </div>
-                {props?.store?.hasOwnProperty("store_owner") ? null : (
+                {props?.store?.hasOwnProperty("store_owner") ? (
+                  null && props.auth.authUser.user_type !== "admin"
+                ) : (
                   <div className={styles.btns}>
                     <button
                       className={styles.btn}
@@ -130,9 +132,9 @@ function Store(props) {
                       className={styles.outlineBtn}
                       onClick={() => {
                         router.push(
-                          `/dashboard/management?storeId=${props.store._id}`
+                          `/dashboard/management?storeId=${props?.store?._id}`
                         );
-                        console.log(props.store._id, "propsstore");
+                        console.log(props.store?._id, "propsstore");
                       }}
                     >
                       Manage Store
@@ -141,7 +143,7 @@ function Store(props) {
                 )}
               </div>
               <div className={styles.store}>
-                {props.store.supplier_address && (
+                {props?.store?.supplier_address && (
                   <div>
                     <LocationIcon style={styles.store_icon} />
                     {/* <p>{JSON.parse(props?.store?.supplier_address)?.address + " " + JSON.parse(props?.store?.supplier_address)?.city + " ," + JSON.parse(props?.store?.supplier_address)?.state + " " + JSON.parse(props?.store?.supplier_address)?.country + " " + JSON.parse(props?.store?.supplier_address)?.zip_code}6391 Elgin St. Celina, Delaware 10299</p> */}
@@ -150,11 +152,11 @@ function Store(props) {
                 )}
                 <div>
                   <EmailIcon style={styles.store_icon} />
-                  <p>{props.store.email}</p>
+                  <p>{props.store?.email}</p>
                 </div>
                 <div>
                   <CallIcon style={styles.store_icon} />
-                  <p>{props.store.phone_number}</p>
+                  <p>{props.store?.phone_number}</p>
                 </div>
               </div>
               <div className={styles.store}>
@@ -169,7 +171,7 @@ function Store(props) {
                   About Store
                 </h3>
                 <p className={styles.product_section_2_category}>
-                  {props.store.description}
+                  {props.store?.description}
                 </p>
               </div>
             </div>
@@ -197,8 +199,8 @@ function Store(props) {
             <div className={styles.productcard_col_2}>
               <div className={styles.productcard_productcards}>
                 {filteredItem()
-                  .slice(0, 6)
-                  .map((data, index) => {
+                  ?.slice(0, 6)
+                  ?.map((data, index) => {
                     return (
                       <div
                         key={index}
@@ -211,7 +213,7 @@ function Store(props) {
                         >
                           <img
                             priority
-                            src={data.itemImage0}
+                            src={data?.itemImage0}
                             alt="Store"
                             className={styles.productcard_productcard_img}
                           />
@@ -261,8 +263,8 @@ function Store(props) {
             <div className={styles.productcard_col_2}>
               <div className={styles.productcard_productcards}>
                 {filteredProducts()
-                  .slice(0, 6)
-                  .map((data, index) => {
+                  ?.slice(0, 6)
+                  ?.map((data, index) => {
                     return (
                       <div
                         key={index}

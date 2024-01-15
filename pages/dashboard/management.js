@@ -16,6 +16,7 @@ import {
 import { useState, useEffect, useCallback, useRef } from "react";
 import axios from "../../src/util/Api";
 import { GoTriangleUp } from "react-icons/go";
+import { useMediaQuery } from "../../src/hooks/usemediaquery";
 import { TbDotsVertical } from "react-icons/tb";
 import { IoIosCloseCircle } from "react-icons/io";
 import { BsFillCreditCard2BackFill } from "react-icons/bs";
@@ -32,7 +33,6 @@ import moment from "moment";
 import { ModalPopup } from "../../src/components/modal/modal";
 import { FormModal } from "../../src/components/modal/form-modal";
 import { SuccessModal } from "../../src/components/suggest-store/success-modal";
-
 const List = [
   {
     name: "Store Info",
@@ -120,6 +120,7 @@ const Management = () => {
   const [open, setOpen] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const matches = useMediaQuery("(min-width: 700px)");
   const days = [
     "sunday",
     "monday",
@@ -529,56 +530,114 @@ const Management = () => {
             />
           )}
           <div className={styles.flex}>
-            <div className={styles.summaryCard}>
-              {List.map((elem) => (
-                <div
-                  key={elem.id}
-                  onClick={() => {
-                    // {
-                    //   name: "Store Information",
-                    //   id: 1,
-                    // },
-                    // {
-                    //   name: "Meals/Products",
-                    //   id: 2,
-                    // },
-                    if (
-                      elem.name === "Store Information" ||
-                      elem.name === "Meals/Products"
-                    ) {
-                      handleActive(elem.id);
-                    } else {
-                      if (formState.store_owner) {
+            {matches ? (
+              <>
+                <div className={styles.summaryCard}>
+                  {List.map((elem) => (
+                    <div
+                      key={elem.id}
+                      onClick={() => {
+                        // {
+                        //   name: "Store Information",
+                        //   id: 1,
+                        // },
+                        // {
+                        //   name: "Meals/Products",
+                        //   id: 2,
+                        // },
+                        if (
+                          elem.name === "Store Info" ||
+                          elem.name === "Meals/Products"
+                        ) {
+                          handleActive(elem.id);
+                        } else {
+                          if (formState.store_owner) {
+                            handleActive(elem.id);
+                          } else {
+                            // alert("This store has not been claimed");
+                            setOpen(true);
+                          }
+                        }
+                      }}
+                      className={styles.active}
+                    >
+                      <div
+                        className={
+                          active === elem.id ? styles.border : styles.noborder
+                        }
+                      ></div>
+                      <h6
+                        className={
+                          active === elem.id &&
+                          formState.store_owner !== undefined
+                            ? styles.activeText
+                            : formState.store_owner === "" &&
+                              [3, 4, 5, 6].includes(elem.id)
+                            ? styles.undefinedOwnerText
+                            : styles.name
+                        }
+                      >
+                        {elem.name}
+                      </h6>
+                    </div>
+                  ))}
+                </div>
+                <div className={styles.border_bottom} />
+              </>
+            ) : (
+              <div className={styles.summaryCard2}>
+                {List.map((elem) => (
+                  <div
+                    key={elem.id}
+                    onClick={() => {
+                      // {
+                      //   name: "Store Information",
+                      //   id: 1,
+                      // },
+                      // {
+                      //   name: "Meals/Products",
+                      //   id: 2,
+                      // },
+                      if (
+                        elem.name === "Store Info" ||
+                        elem.name === "Meals/Products"
+                      ) {
                         handleActive(elem.id);
                       } else {
-                        // alert("This store has not been claimed");
-                        setOpen(true);
+                        if (formState.store_owner) {
+                          handleActive(elem.id);
+                        } else {
+                          // alert("This store has not been claimed");
+                          setOpen(true);
+                        }
                       }
-                    }
-                  }}
-                  className={styles.active}
-                >
-                  <div
-                    className={
-                      active === elem.id ? styles.border : styles.noborder
-                    }
-                  ></div>
-                  <h6
+                    }}
                     className={
                       active === elem.id && formState.store_owner !== undefined
-                        ? styles.activeText
+                        ? styles.active2
                         : formState.store_owner === "" &&
                           [3, 4, 5, 6].includes(elem.id)
                         ? styles.undefinedOwnerText
-                        : styles.name
+                        : styles.inactive
                     }
                   >
-                    {elem.name}
-                  </h6>
-                </div>
-              ))}
-            </div>
-            <div className={styles.border_bottom} />
+                    <h6
+                      className={
+                        active === elem.id &&
+                        formState.store_owner !== undefined
+                          ? styles.activeText2
+                          : formState.store_owner === "" &&
+                            [3, 4, 5, 6].includes(elem.id)
+                          ? styles.undefinedOwnerText
+                          : styles.name
+                      }
+                    >
+                      {elem.name}
+                    </h6>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className={styles.store}>
               {active === 1 && (
                 <>
@@ -591,7 +650,9 @@ const Management = () => {
                   </div>
                   <div className={styles.storeInfo}>
                     <div>
-                      <h5 className={styles.h5}>Upload Store Profile Picture</h5>
+                      <h5 className={styles.h5}>
+                        Upload Store Profile Picture
+                      </h5>
                       <div
                         onClick={() => uploadImage("profile")}
                         className={styles.bgimg}
@@ -842,231 +903,234 @@ const Management = () => {
               )}
               {active === 2 && (
                 <div className={styles.storeInfo}>
-               <div className={styles.flexend2}>
-               <div ref={ref} className={styles.searchflex}>
-                    <div className={styles.search}>
-                      <input
-                        placeholder="Search"
-                        autoComplete="off"
-                        onFocus={() => setShow(true)}
-                        value={value}
-                        onChange={(e) => {
-                          setValue(e.target.value);
-                          getItem(e.target.value);
-                          getStore(e.target.value);
-                        }}
-                        type="text"
-                        name="search"
-                      />
-                      {show && (
-                        <div className={styles.searchDropdown}>
-                          <>
+                  <div className={styles.flexend2}>
+                    <div ref={ref} className={styles.searchflex}>
+                      <div className={styles.search}>
+                        <input
+                          placeholder="Search"
+                          autoComplete="off"
+                          onFocus={() => setShow(true)}
+                          value={value}
+                          onChange={(e) => {
+                            setValue(e.target.value);
+                            getItem(e.target.value);
+                            getStore(e.target.value);
+                          }}
+                          type="text"
+                          name="search"
+                        />
+                        {show && (
+                          <div className={styles.searchDropdown}>
                             <>
-                              {categories.find((ele) => ele.label === "Stores")
+                              <>
+                                {categories.find(
+                                  (ele) => ele.label === "Stores"
+                                )?.value && (
+                                  <>
+                                    <h4 className={styles.storeTitle}>
+                                      Stores ({store.length})
+                                    </h4>
+                                    <div className={styles.bord} />
+                                    <div className={styles.list}>
+                                      {store.length === 0 ? (
+                                        Boolean(value) ? (
+                                          <div className={styles.result}>
+                                            <p>No Result Found</p>
+                                            <button
+                                              onClick={() =>
+                                                router.push(
+                                                  `/suggest-store/${value}`
+                                                )
+                                              }
+                                            >
+                                              Suggest Store
+                                            </button>
+                                          </div>
+                                        ) : null
+                                      ) : (
+                                        store.slice(0, 4).map((stores) => (
+                                          <p
+                                            key={stores.value}
+                                            onClick={() => {
+                                              setOneStore({
+                                                visible: true,
+                                                id: stores.value,
+                                              });
+                                              setValue(stores.label);
+                                            }}
+                                            style={{ cursor: "pointer" }}
+                                          >
+                                            {stores.label}
+                                          </p>
+                                        ))
+                                      )}
+                                    </div>
+                                  </>
+                                )}
+                              </>
+                            </>
+                            <>
+                              {categories.find((ele) => ele.label === "Meals")
                                 ?.value && (
                                 <>
                                   <h4 className={styles.storeTitle}>
-                                    Stores ({store.length})
+                                    Meals ({filteredItem().length})
                                   </h4>
                                   <div className={styles.bord} />
                                   <div className={styles.list}>
-                                    {store.length === 0 ? (
+                                    {filteredItem().length === 0 ? (
                                       Boolean(value) ? (
                                         <div className={styles.result}>
                                           <p>No Result Found</p>
                                           <button
                                             onClick={() =>
-                                              router.push(
-                                                `/suggest-store/${value}`
-                                              )
+                                              router.push("/suggestmeal")
                                             }
                                           >
-                                            Suggest Store
+                                            Suggest Meal
                                           </button>
                                         </div>
                                       ) : null
                                     ) : (
-                                      store.slice(0, 4).map((stores) => (
-                                        <p
-                                          key={stores.value}
-                                          onClick={() => {
-                                            setOneStore({
-                                              visible: true,
-                                              id: stores.value,
-                                            });
-                                            setValue(stores.label);
-                                          }}
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          {stores.label}
-                                        </p>
-                                      ))
+                                      filteredItem()
+                                        ?.slice(0, 4)
+                                        .map((elem) => (
+                                          <p
+                                            key={elem.value}
+                                            onClick={() => {
+                                              setOneStore({
+                                                visible: false,
+                                                id: "",
+                                              });
+                                              setValue(elem.label);
+                                            }}
+                                            style={{ cursor: "pointer" }}
+                                          >
+                                            {elem.label}
+                                          </p>
+                                        ))
                                     )}
                                   </div>
                                 </>
                               )}
                             </>
-                          </>
-                          <>
-                            {categories.find((ele) => ele.label === "Meals")
-                              ?.value && (
-                              <>
-                                <h4 className={styles.storeTitle}>
-                                  Meals ({filteredItem().length})
-                                </h4>
-                                <div className={styles.bord} />
-                                <div className={styles.list}>
-                                  {filteredItem().length === 0 ? (
-                                    Boolean(value) ? (
-                                      <div className={styles.result}>
-                                        <p>No Result Found</p>
-                                        <button
-                                          onClick={() =>
-                                            router.push("/suggestmeal")
-                                          }
-                                        >
-                                          Suggest Meal
-                                        </button>
-                                      </div>
-                                    ) : null
-                                  ) : (
-                                    filteredItem()
-                                      ?.slice(0, 4)
-                                      .map((elem) => (
-                                        <p
-                                          key={elem.value}
-                                          onClick={() => {
-                                            setOneStore({
-                                              visible: false,
-                                              id: "",
-                                            });
-                                            setValue(elem.label);
-                                          }}
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          {elem.label}
-                                        </p>
-                                      ))
-                                  )}
-                                </div>
-                              </>
-                            )}
-                          </>
 
-                          <>
-                            {categories.find((ele) => ele.label === "Products")
-                              ?.value && (
-                              <>
-                                <h4 className={styles.storeTitle}>
-                                  Products ({filteredProduct().length})
-                                </h4>
-                                <div className={styles.bord} />
-                                <div className={styles.list}>
-                                  {filteredProduct().length === 0 ? (
-                                    Boolean(value) ? (
-                                      <div className={styles.result}>
-                                        <p>No Result Found</p>
-                                        <button
-                                          onClick={() =>
-                                            router.push("/suggestmeal")
-                                          }
-                                        >
-                                          Suggest Product
-                                        </button>
-                                      </div>
-                                    ) : null
-                                  ) : (
-                                    filteredProduct()
-                                      ?.slice(0, 4)
-                                      .map((elem) => (
-                                        <p
-                                          key={elem.value}
-                                          onClick={() => {
-                                            setOneStore({
-                                              visible: false,
-                                              id: "",
-                                            });
-                                            setValue(elem.label);
-                                          }}
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          {elem.label}
-                                        </p>
-                                      ))
-                                  )}
-                                </div>
-                              </>
-                            )}
-                          </>
+                            <>
+                              {categories.find(
+                                (ele) => ele.label === "Products"
+                              )?.value && (
+                                <>
+                                  <h4 className={styles.storeTitle}>
+                                    Products ({filteredProduct().length})
+                                  </h4>
+                                  <div className={styles.bord} />
+                                  <div className={styles.list}>
+                                    {filteredProduct().length === 0 ? (
+                                      Boolean(value) ? (
+                                        <div className={styles.result}>
+                                          <p>No Result Found</p>
+                                          <button
+                                            onClick={() =>
+                                              router.push("/suggestmeal")
+                                            }
+                                          >
+                                            Suggest Product
+                                          </button>
+                                        </div>
+                                      ) : null
+                                    ) : (
+                                      filteredProduct()
+                                        ?.slice(0, 4)
+                                        .map((elem) => (
+                                          <p
+                                            key={elem.value}
+                                            onClick={() => {
+                                              setOneStore({
+                                                visible: false,
+                                                id: "",
+                                              });
+                                              setValue(elem.label);
+                                            }}
+                                            style={{ cursor: "pointer" }}
+                                          >
+                                            {elem.label}
+                                          </p>
+                                        ))
+                                    )}
+                                  </div>
+                                </>
+                              )}
+                            </>
 
-                          <>
-                            {categories.find(
-                              (ele) => ele.label === "Kitchen Utensils"
-                            )?.value && (
-                              <>
-                                <h4 className={styles.storeTitle}>
-                                  Kitchen Utensils ({filteredUtensils().length})
-                                </h4>
-                                <div className={styles.bord} />
-                                <div className={styles.list}>
-                                  {filteredUtensils().length === 0 ? (
-                                    Boolean(value) ? (
-                                      <div className={styles.result}>
-                                        <p>No Result Found</p>
-                                        <button
-                                          onClick={() =>
-                                            router.push("/suggestmeal")
-                                          }
-                                        >
-                                          Suggest Utensil
-                                        </button>
-                                      </div>
-                                    ) : null
-                                  ) : (
-                                    filteredUtensils()
-                                      ?.slice(0, 4)
-                                      .map((elem) => (
-                                        <p
-                                          key={elem.value}
-                                          onClick={() => {
-                                            setOneStore({
-                                              visible: false,
-                                              id: "",
-                                            });
-                                            setValue(elem.label);
-                                          }}
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          {elem.label}
-                                        </p>
-                                      ))
-                                  )}
-                                </div>
-                              </>
-                            )}
-                          </>
-                        </div>
-                      )}
+                            <>
+                              {categories.find(
+                                (ele) => ele.label === "Kitchen Utensils"
+                              )?.value && (
+                                <>
+                                  <h4 className={styles.storeTitle}>
+                                    Kitchen Utensils (
+                                    {filteredUtensils().length})
+                                  </h4>
+                                  <div className={styles.bord} />
+                                  <div className={styles.list}>
+                                    {filteredUtensils().length === 0 ? (
+                                      Boolean(value) ? (
+                                        <div className={styles.result}>
+                                          <p>No Result Found</p>
+                                          <button
+                                            onClick={() =>
+                                              router.push("/suggestmeal")
+                                            }
+                                          >
+                                            Suggest Utensil
+                                          </button>
+                                        </div>
+                                      ) : null
+                                    ) : (
+                                      filteredUtensils()
+                                        ?.slice(0, 4)
+                                        .map((elem) => (
+                                          <p
+                                            key={elem.value}
+                                            onClick={() => {
+                                              setOneStore({
+                                                visible: false,
+                                                id: "",
+                                              });
+                                              setValue(elem.label);
+                                            }}
+                                            style={{ cursor: "pointer" }}
+                                          >
+                                            {elem.label}
+                                          </p>
+                                        ))
+                                    )}
+                                  </div>
+                                </>
+                              )}
+                            </>
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        className={styles.searchbtn}
+                        onClick={() => {
+                          if (oneStore.visible) {
+                            router.push(`/store/${oneStore.id}`);
+                          } else {
+                            items.item_type === "Meal"
+                              ? router.push(`/meal/${value}`)
+                              : items.item_type === "Product"
+                              ? router.push(`/product/${value}`)
+                              : router.push(`/product/${value}`);
+                          }
+                        }}
+                      >
+                        Search
+                      </button>
                     </div>
-                    <button
-                      className={styles.searchbtn}
-                      onClick={() => {
-                        if (oneStore.visible) {
-                          router.push(`/store/${oneStore.id}`);
-                        } else {
-                          items.item_type === "Meal"
-                            ? router.push(`/meal/${value}`)
-                            : items.item_type === "Product"
-                            ? router.push(`/product/${value}`)
-                            : router.push(`/product/${value}`);
-                        }
-                      }}
-                    >
-                      Search
-                    </button>
-                  </div>
-                  <div className={styles.flexend}>
-                    <p>Filter</p>
+                    <div className={styles.flexend}>
+                      <p className={styles.filter}>Filter</p>
                       <div
                         className={styles.searchbox}
                         onClick={() => setShowCategory(!showCategory)}
@@ -1120,13 +1184,15 @@ const Management = () => {
                           ))}
                         </div>
                       )}
-                    <div className={styles.suggestbtn}>
-                      <p>+ New Suggestion</p>
+                      <div className={styles.suggestbtn}>
+                        <p>+ New Suggestion</p>
+                      </div>
                     </div>
                   </div>
-               </div>
-                  <p>Meal</p>
-                  <p className={styles.red}>Remove selection(s)</p>
+                  <div className={styles.span}>
+                    <p>Meal</p>
+                    <p className={styles.red}>Remove selection(s)</p>
+                  </div>
                   <table className={styles.table}>
                     <thead className={styles.thead}>
                       <th>Name</th>
@@ -1148,12 +1214,13 @@ const Management = () => {
                             />
                             <p className={styles.label}>{ele?.label}</p>
                           </td>
-                          <td>
-                            <p>{ele?.price}</p>
+                          <td style={{ display: "flex", alignItems: "center" }}>
+                            <p className={styles.label2}>{ele?.price}</p>
                           </td>
                           <td
                             style={{ textAlign: "center" }}
                             onClick={() => deleteItem(ele.value)}
+                            className={styles.close2}
                           >
                             <IoIosCloseCircle color="#949494" size={20} />
                           </td>
@@ -1162,8 +1229,10 @@ const Management = () => {
                     </tbody>
                   </table>
                   <div className={styles.top}>
+                    <div className={styles.span}>
                       <p>Product</p>
                       <p className={styles.red}>Remove selection(s)</p>
+                    </div>
                     <table className={styles.table}>
                       <thead className={styles.thead}>
                         <th>Name</th>
@@ -1187,12 +1256,15 @@ const Management = () => {
                               />
                               <p className={styles.label}>{ele?.label}</p>
                             </td>
-                            <td>
-                              <p>{ele?.price}</p>
+                            <td
+                              style={{ display: "flex", alignItems: "center" }}
+                            >
+                              <p className={styles.label2}>{ele?.price}</p>
                             </td>
                             <td
                               style={{ textAlign: "center" }}
                               onClick={() => deleteItem(ele.value)}
+                              className={styles.close2}
                             >
                               <IoIosCloseCircle color="#949494" size={20} />
                             </td>
@@ -1233,7 +1305,7 @@ const Management = () => {
                 </div>
               )}
               {active === 3 && (
-                <div>
+                <div className={styles.store23}>
                   <h5>Payment</h5>
                   <div className={styles.payment}>
                     <div className={styles.cards}>
@@ -1370,7 +1442,7 @@ const Management = () => {
                       <TbDotsVertical color="#949494" size={20} />
                     </div>
                   </div>
-                  <div className={styles.flex}  style={{marginTop:'2rem'}}>
+                  <div className={styles.flex} style={{ marginTop: "2rem" }}>
                     <h5>Sub Admins</h5>
                   </div>
                   <div className={styles.subadmin}>
@@ -1385,7 +1457,6 @@ const Management = () => {
                     </div>
                     <div className={styles.center}>
                       <TbDotsVertical color="#949494" size={20} />
-                    
                     </div>
                   </div>
                   <p className={styles.add}>Add New Sub Admin</p>
@@ -1442,7 +1513,6 @@ const Management = () => {
                 <div>
                   <div className={styles.flex}>
                     <h5>Drivers</h5>
-
                   </div>
                   <div className={styles.subadmin}>
                     <div className={styles.flexstart}>

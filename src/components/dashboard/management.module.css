@@ -64,20 +64,18 @@
 
 .store {
   width: 100%;
+  margin: 2rem auto 0 auto;
   position: relative;
-  padding-top: 1.4rem;
+  padding: 2rem;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
 .storeInfo {
-  width: 100%;
   height: auto;
   flex-shrink: 0;
-  padding: 2rem 4rem 5rem 4rem;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
 .box {
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
-
 }
 .flextitle {
   display: flex;
@@ -263,13 +261,15 @@
 }
 
 .flexend {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
 .suggestbtn {
-  display: inline-flex;
+  display: flex;
+  width: auto;
   height: 39px;
   padding: 10px;
   justify-content: center;
@@ -283,11 +283,11 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  margin-right: 2.5rem;
 }
 
 .search {
   width: 60%;
-  height: 0%;
   position: relative;
 }
 .right {
@@ -315,9 +315,10 @@
   display: flex;
   width: 100%;
   justify-content: flex-end;
-  margin: 3rem auto;
+  margin: 3rem 0;
 }
 .flexend2 {
+  width: 100%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -404,20 +405,29 @@
   line-height: normal;
   margin-left: 1rem;
 }
+.label2 {
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
 
 .table {
   width: 100%;
+  margin: 1rem 0;
   border-collapse: collapse;
   background: #fff;
-  margin-top: 1rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
-  
 }
+
 
 .top {
   margin-top: 4rem;
+  padding-bottom: 2rem;
 }
-
+.span{
+}
 .card {
   display: flex;
   align-items: center;
@@ -633,11 +643,10 @@
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
 }
 .one_store {
-  width: 22%;
+  width: auto;
   height: 180px;
   border-radius: 8px;
   background: #fff;
-
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.04);
 }
 .one_store img {
@@ -650,6 +659,8 @@
 .allStores {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 3rem;
   padding-top: 2rem;
 }
@@ -670,4 +681,155 @@
   line-height: normal;
   padding-left: 1rem;
   padding-top: 0.5rem;
+}
+@media only screen and (max-width: 1100px) {
+  .summaryCard {
+    width: 100%;
+    margin: auto;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 2rem 0 2rem;
+  }
+  .name {
+    color: #000;
+    font-size: 13px;
+    font-weight: 100;
+    letter-spacing: 0.2px;
+  }
+
+  .activeText {
+    color: #f47900;
+    font-size: 13px;
+    font-weight: 100;
+    letter-spacing: 0.2px;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .summaryCard {
+    padding: 2rem 1rem 0 1rem;
+  }
+  .name {
+    color: #000;
+    font-size: 12px;
+    font-weight: 100;
+    letter-spacing: 0.2px;
+  }
+
+  .activeText {
+    color: #f47900;
+    font-size: 12px;
+    font-weight: 100;
+    letter-spacing: 0.2px;
+  }
+  .storeInfo {
+    padding: 2rem 2rem 3rem 2rem;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .summaryCard2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 2rem 2rem;
+    gap: 5%;
+    row-gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    background: #fff;
+    box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
+  }
+  .active2 {
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: none;
+    height: 3rem;
+    background: #f47900;
+  }
+  .inactive {
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: 1px solid #6d6d6d;
+    height: 3rem;
+    background: transparent;
+  }
+  .name {
+    color: #000;
+    font-size: 12px;
+    padding: 2rem;
+    font-weight: 100;
+    letter-spacing: 0.2px;
+  }
+  .activeText2 {
+    font-size: 12px;
+    color: #fff;
+  }
+  .flexend2 {
+    flex-direction: column;
+  }
+
+  .search input {
+    height: 40px;
+  }
+  .search {
+    width: 80%;
+  }
+  .searchbtn {
+    height: 40px;
+    padding: 14px 20px;
+    border-radius: 0px 4px 4px 0px;
+  }
+  .searchflex {
+    margin: 0;
+  }
+  .searchbox {
+    margin-left: 0;
+    margin-right: 4px;
+    width: 50%;
+  }
+
+  .flexend {
+    width: 100%;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+    gap: 10%;
+  }
+  .filter {
+    display: none;
+  }
+  .thead th {
+    font-size: 14px;
+  }
+  .label {
+    font-size: 12px;
+  }
+  .label2 {
+    font-size: 12px;
+  }
+  .close2 {
+    margin-top: 1rem;
+  }
+  .suggestbtn {
+    display: flex;
+    width: 40%;
+    padding: 5px;
+    font-size: 9px;
+    font-weight: 300;
+    margin-right: 3px;
+  }
+  .remove {
+    display: none;
+  }
+  .allStores {
+    row-gap: 2rem;
+    justify-content: center;
+  }
+  .one_store{
+    width: 100%;
+  }
 }
