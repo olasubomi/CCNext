@@ -31,6 +31,8 @@ import Popup2 from "../../src/components/popups/popup2";
 import Popup1 from "../../src/components/popups/popup1";
 import Product from "../../src/components/individualPage/Product";
 import AddIcon from "@mui/icons-material/Add";
+import moment from "moment";
+
 import {
   suggestion_form_image,
   suggestion_form_image_col_1,
@@ -45,6 +47,8 @@ import { toast } from "react-toastify";
 import { SuggestedDescription } from "../../src/components/dashboard/suggesteddescriptionRow";
 import { SuggestedMeasurement } from "../../src/components/dashboard/suggestedmeasurementRow";
 import { SuggestedCategories } from "../../src/components/dashboard/suggestedCategories";
+import SuggestedStores from "../../src/components/dashboard/suggestedStores";
+import Store from "../../src/components/individualPage/Store";
 
 const SuggestedMeals = (props) => {
   const router = useRouter();
@@ -60,12 +64,15 @@ const SuggestedMeals = (props) => {
   const [searchSuggestedSuggestion, setSearchSuggestedSuggestionState] =
     useState("");
   const [openSuggestion, setOpenSuggestionState] = useState(false);
+  const [openStoreSuggestion, setOpenStoreSuggestion] = useState(false);
   const [changeStatus, setChangeStatusState] = useState(false);
+  const [changeStoreStatus, setChangeStoreStatus] = useState(false);
   const [transferToInventory, setTransferToInventoryState] = useState(false);
   const [sent, setSentState] = useState(false);
   const [openModal, setOpenModalState] = useState(false);
   const [openModal2, setOpenModal2State] = useState(false);
   const [statusType, setStatusTypeState] = useState("");
+  const [storeStatus, setStoreStatus] = useState("");
   const [page, setPageState] = useState(1);
   const [pages, setPagesState] = useState(1);
   const [ingredientsStringSyntax, setIngredientsString] = useState([]);
@@ -89,6 +96,9 @@ const SuggestedMeals = (props) => {
 
   const [catPage, setCatPage] = useState(1);
   const [catPages, setCatPages] = useState(1);
+
+  const [storePage, setStorePage] = useState(1);
+  const [storePages, setStorePages] = useState(1);
   //
   const [data, setData] = useState({
     meals: [],
@@ -98,6 +108,7 @@ const SuggestedMeals = (props) => {
   const [allDescriptions, setAllDescriptions] = useState([]);
   const [allMeasurement, setAllMeasurement] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
+  const [allStores, setAllStores] = useState([]);
   const [filter, setFilter] = useState({
     item_type: false,
     first_letter: false,
@@ -117,6 +128,10 @@ const SuggestedMeals = (props) => {
 
   useEffect(() => {
     getAllCategories();
+  }, [props.Auth]);
+
+  useEffect(() => {
+    getAllStores();
   }, [props.Auth]);
 
   const getUserItems = (newPage) => {
@@ -312,13 +327,12 @@ const SuggestedMeals = (props) => {
       }
     }
   };
-  const updateCategory = async (id,payload) => {
+  const updateCategory = async (id, payload) => {
     try {
       const resp = await axios.post(`/categories/update/${id}`, payload);
-     
-        toast.success("Category updated");
-        getAllCategories();
-      
+
+      toast.success("Category updated");
+      getAllCategories();
     } catch (e) {
       console.log(e);
     }
@@ -326,13 +340,79 @@ const SuggestedMeals = (props) => {
   const deleteCategory = async (id) => {
     try {
       const resp = await axios.delete(`/categories/delete-category/${id}`);
-        toast.success("Category deleted successfully");
-        getAllCategories();
-      
+      toast.success("Category deleted successfully");
+      getAllCategories();
     } catch (e) {
       console.log(e);
     }
   };
+  const getAllStores = async (newPage) => {
+    try {
+      const resp = await axios.get(
+        `/stores/getallstores/${newPage ? newPage : storePage}`
+      );
+      if (
+        Array.isArray(resp?.data?.data.products) &&
+        resp?.data?.data?.products?.length
+      ) {
+        setAllStores(resp?.data?.data.products);
+        console.log("storess--", resp?.data?.data.products);
+
+        setStorePages(Math.ceil(data.data.data.count / 10));
+      }
+    } catch (e) {
+      console.log("err", e);
+    }
+  };
+
+  const handleStoreNext = (lastPage = false) => {
+    if (storePage !== storePages) {
+      getAllStores(lastPage ? storePages : storePage + 1);
+      if (lastPage) {
+        setStorePage(storePage);
+      } else {
+        setStorePage((prev) => prev + 1);
+      }
+    }
+  };
+
+  const handleStorePrev = (lastPage = false) => {
+    if (storePage !== 1) {
+      getAllStores(lastPage ? 1 : storePage - 1);
+      if (lastPage) {
+        setStorePage(1);
+      } else {
+        setStorePage((prev) => prev - 1);
+      }
+    }
+  };
+  const updateStoreStatus = async (type, storeId) => {
+    try {
+      setStoreStatus(type);
+      const res = await axios.put(`/stores/updatestore/${storeId}`, {
+        status: type,
+      });
+      toggleChangeStoreStatus();
+      console.log("resss", res);
+        getAllStores();
+        toast.success("Status successfully updated");
+      
+    } catch (e) {
+      console.log(e, "errr");
+    }
+  };
+
+  const deleteStore = async (id) => {
+    try {
+      const resp = await axios.delete(`/stores/deletestore/${id}`);
+        toast.success("Store deleted successfully");
+        getAllStores();
+      console.log(resp, 'respo')
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   function togglePublicMeal() {
     setAddPublicMeal(!addPublicMeal);
   }
@@ -602,9 +682,14 @@ const SuggestedMeals = (props) => {
   function closeSuggestion() {
     setOpenSuggestionState(false);
   }
-
+  function closeStoreSuggestion() {
+    setOpenStoreSuggestion(false);
+  }
   function toggleChangeStatus() {
     setChangeStatusState(!changeStatus);
+  }
+  function toggleChangeStoreStatus() {
+    setChangeStoreStatus(!changeStoreStatus);
   }
 
   // function handleStatusType(type) {
@@ -1354,9 +1439,7 @@ const SuggestedMeals = (props) => {
                             " " +
                             styles.right_mode +
                             " " +
-                            (searchType === "Store"
-                              ? styles.active_mode
-                              : "")
+                            (searchType === "Store" ? styles.active_mode : "")
                           }
                         >
                           Store
@@ -1521,6 +1604,19 @@ const SuggestedMeals = (props) => {
                               deleteCategory={deleteCategory}
                             />
                           )}
+                          {searchType === "Store" && (
+                            <SuggestedStores
+                              setStoreStatus={setStoreStatus}
+                              storeStatus={storeStatus}
+                              changeStoreStatus={changeStoreStatus}
+                              toggleChangeStoreStatus={toggleChangeStoreStatus}
+                              allstores={allStores}
+                              deleteStore={deleteStore}
+                              updateStoreStatus={updateStoreStatus}
+                              openStoreSuggestion={openStoreSuggestion}
+                              setOpenStoreSuggestion={setOpenStoreSuggestion}
+                            />
+                          )}
                         </>
                       )}
                     </div>
@@ -1539,6 +1635,8 @@ const SuggestedMeals = (props) => {
                                 handleMesrPrev(true);
                               } else if (searchType === "Category") {
                                 handleCatPrev(true);
+                              } else if (searchType === "Store") {
+                                handleStorePrev(true);
                               }
                             }}
                             className={styles.paginate_btn}
@@ -1556,6 +1654,8 @@ const SuggestedMeals = (props) => {
                                 handleMesrPrev();
                               } else if (searchType === "Category") {
                                 handleCatPrev();
+                              } else if (searchType === "Store") {
+                                handleStorePrev();
                               }
                             }}
                             className={styles.paginate_btn}
@@ -1577,6 +1677,8 @@ const SuggestedMeals = (props) => {
                                 handleMesrNext();
                               } else if (searchType === "Category") {
                                 handleCatNext();
+                              } else if (searchType === "Store") {
+                                handleStoreNext();
                               }
                             }}
                             className={styles.paginate_btn}
@@ -1594,6 +1696,8 @@ const SuggestedMeals = (props) => {
                                 handleMesrNext(true);
                               } else if (searchType === "Category") {
                                 handleCatNext(true);
+                              } else if (searchType === "Store") {
+                                handleStoreNext(true);
                               }
                             }}
                             className={styles.paginate_btn}
@@ -1612,6 +1716,8 @@ const SuggestedMeals = (props) => {
                         <>{"" + mesrPage + " of " + mesrPages}</>
                       ) : searchType === "Category" ? (
                         <>{"" + catPage + " of " + catPages}</>
+                      ) : searchType === "Store" ? (
+                        <>{"" + storePage + " of " + storePages}</>
                       ) : null}
                     </p>
                   </div>
