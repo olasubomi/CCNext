@@ -540,256 +540,194 @@ const UserProfile = (props) => {
     getStoreInformation();
   }, []);
 
-  return (
-    <div className={container + " " + col2}>
-      <div className="alert">
-        {status === "error" && <div className="alert-danger">{message}</div>}
-        {status === "success" && <div className="alert-success">{message}</div>}
-      </div>
-      <Alert show={showAlert} key={1} variant={variant}>
-        {messageAlert}
-      </Alert>
-      <Head>
-        <title>User Profile</title>
-        <meta
-          key="title"
-          name="viewport"
-          content="initial-scale=1.0, width=device-width"
-        />
-      </Head>
-      <Header />
-      <SideNav />
-      <div className={left}>
-        <Sidenav2 showBottom={false} />
-      </div>
-      <div className={empty}></div>
-      <div className={center}>
-        <h3 className={styles.center_h3}>My Profile</h3>
-        <div className={styles.profile_con}>
-          <div className={styles.empty}></div>
-          <div className={styles.profile_summary_con}>
-            <h3>Summary</h3>
-            {props.auth.authUser && (
-              <div className={styles.profile_summary}>
-                <div className={styles.profile_summary_link}>
-                  <Link href="#basic-information">Basic Information</Link>
-                </div>
-                <div className={styles.profile_summary_link}>
-                  <Link href="#change-password">Change Password</Link>
-                </div>
-                <div className={styles.profile_summary_link}>
-                  <Link href="#billing-address">Billing Address</Link>
-                </div>
-                {props.auth.authUser.user_type === "driver" && (
-                  <div className={styles.profile_summary_link}>
-                    <Link href="#car-details">Car Details</Link>
-                  </div>
-                )}
-                <div className={styles.profile_summary_link}>
-                  <Link href="#payment-method">Payment Method</Link>
-                </div>
-                <div className={styles.profile_summary_link}>
-                  <Link href="#notification">Notification</Link>
-                </div>
-                {(props.auth.authUser.user_type === "supplier" ||
-                  props.auth.authUser.user_type === "customer") && (
-                  <div className={styles.profile_summary_link}>
-                    <Link href="#food-preference">Food Preference</Link>
-                  </div>
-                )}
-                {(props.auth.authUser.user_type === "driver" ||
-                  props.auth.authUser.user_type === "customer") && (
-                  <div className={styles.profile_summary_link}>
-                    <Link href="#upgrade-chopChow-plan">
-                      Upgrade ChopChow Plan
-                    </Link>
-                  </div>
-                )}
-                {props.auth.authUser.user_type === "driver" && (
-                  <div className={styles.profile_summary_link}>
-                    <Link href="#working-hours">Working Hours</Link>
-                  </div>
-                )}
-                <div className={styles.profile_summary_link}>
-                  <Link href="#account-type">Account Type</Link>
-                </div>
-                {props.auth.authUser.user_type !== "admin" && (
-                  <div className={styles.profile_summary_link}>
-                    <Link href="#close-account">Close Account</Link>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          <div className={styles.profile_details}>
-            {props.auth.authUser && (
-              <>
-                <div
-                  id="basic-information"
-                  className={styles.profile_basic_info_con}
-                >
-                  <h3>Basic Information</h3>
-                  <div className={styles.profile_basic_info}>
-                    <div className={styles.profile_image_con}>
-                      <div className={styles.profile_image}>
-                        {profileImageData === "" &&
-                          props.auth.authUser.profile_picture === undefined && (
-                            <UserIcon />
-                          )}
-                        {profileImageData === "" &&
-                          props.auth.authUser.profile_picture !== undefined && (
-                            <Image
-                              width={500}
-                              height={500}
-                              src={props.auth.authUser.profile_picture}
-                              alt="profile_picture"
-                            />
-                          )}
-                        <img
-                          id="profile_image"
-                          width="100%"
-                          alt="profile"
-                          style={{ display: "none" }}
-                        />
-                      </div>
-                      <p onClick={uploadProfileImage}>Change Picture</p>
+    return (
+        <div className={container + " " + col2}>
+            <div className="alert">
+                {status === "error" && <div className="alert-danger">{message}</div>}
+                {status === "success" && <div className="alert-success">{message}</div>}
+            </div>
+            <Alert show={showAlert} key={1} variant={variant}>
+                {messageAlert}
+            </Alert>
+            <Head>
+                <title>User Profile</title>
+                <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+            </Head>
+            <Header />
+            <SideNav />
+            <div className={left}>
+                <Sidenav2 showBottom={false} />
+            </div>
+            <div className={empty}></div>
+            <div className={center}>
+                <h3 className={styles.center_h3}>My Profile</h3>
+                <div className={styles.profile_con}>
+                    <div className={styles.empty}></div>
+                    <div className={styles.profile_summary_con}>
+                        <h3>Summary</h3>
+                        {props.auth.authUser &&
+                            <div className={styles.profile_summary}>
+                                <div className={styles.profile_summary_link}>
+                                    <Link href='#basic-information' >
+                                        Basic Information
+                                    </Link>
+                                </div>
+                                <div className={styles.profile_summary_link}>
+                                    <Link href='#change-password' >
+                                        Change Password
+                                    </Link>
+                                </div>
+                                <div className={styles.profile_summary_link}>
+                                    <Link href='#billing-address' >
+                                        Billing Address
+                                    </Link>
+                                </div>
+                                {props.auth.authUser.user_type === 'driver' &&
+                                    <div className={styles.profile_summary_link}>
+                                        <Link href='#car-details' >
+                                            Car Details
+                                        </Link>
+                                    </div>
+                                }
+                                <div className={styles.profile_summary_link}>
+                                    <Link href='#payment-method' >
+                                        Payment Method
+                                    </Link>
+                                </div>
+                                <div className={styles.profile_summary_link}>
+                                    <Link href='#notification' >
+                                        Notification
+                                    </Link>
+                                </div>
+                                {(props.auth.authUser.user_type === 'supplier' || props.auth.authUser.user_type === 'customer') &&
+                                    <div className={styles.profile_summary_link}>
+                                        <Link href='#food-preference' >
+                                            Food Preference
+                                        </Link>
+                                    </div>
+                                }
+                                {(props.auth.authUser.user_type === 'driver' || props.auth.authUser.user_type === 'customer') &&
+                                    <div className={styles.profile_summary_link}>
+                                        <Link href='#upgrade-chopChow-plan'>
+                                            Upgrade ChopChow Plan
+                                        </Link>
+                                    </div>
+                                }
+                                {props.auth.authUser.user_type === 'driver' &&
+                                    <div className={styles.profile_summary_link}>
+                                        <Link href='#working-hours'>
+                                            Working Hours
+                                        </Link>
+                                    </div>
+                                }
+                                <div className={styles.profile_summary_link}>
+                                    <Link href='#account-type'>
+                                        Account Type
+                                    </Link>
+                                </div>
+                                {props.auth.authUser.user_type !== 'admin' &&
+                                    <div className={styles.profile_summary_link}>
+                                        <Link href='#close-account' >
+                                            Close Account
+                                        </Link>
+                                    </div>}
+                            </div>
+                        }
                     </div>
-                    <div className={styles.profile_form}>
-                      <h3>Contact Information</h3>
-                      <div className={styles.profile_form_col_2}>
-                        <div className={styles.profile_form_group}>
-                          <label
-                            htmlFor="first_name"
-                            className={styles.profile_form_label}
-                          >
-                            First Name
-                          </label>
-                          <input
-                            type="text"
-                            name="first_name"
-                            value={first_name}
-                            placeholder="First Name"
-                            onChange={handleChange}
-                            className={styles.profile_form_input}
-                          />
-                          {/* {this.props.errors.accountname && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
-                        </div>
-                        <div className={styles.profile_form_group}>
-                          <label
-                            htmlFor="last_name"
-                            className={styles.profile_form_label}
-                          >
-                            Last Name
-                          </label>
-                          <input
-                            type="text"
-                            name="last_name"
-                            value={last_name}
-                            placeholder="Last Name"
-                            onChange={handleChange}
-                            className={styles.profile_form_input}
-                          />
-                          {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
-                        </div>
-                      </div>
-                      <div className={styles.profile_form_group}>
-                        <label
-                          htmlFor="email"
-                          className={styles.profile_form_label}
-                        >
-                          Email
-                        </label>
-                        <input
-                          type="text"
-                          name="email"
-                          value={email}
-                          placeholder="Email"
-                          onChange={handleChange}
-                          className={styles.profile_form_input}
-                        />
-                      </div>
-                      <div className={styles.profile_form_group}>
-                        <label
-                          htmlFor="phone_number"
-                          className={styles.profile_form_label}
-                        >
-                          Phone Number
-                        </label>
-                        <PhoneInput
-                          inputClass={styles.login_form_input}
-                          name="phone_number"
-                          value={phone_number}
-                          onChange={(phone) => handlePhoneChange(phone)}
-                        />
-                      </div>
-                      <div className={styles.profile_form_col_2}>
-                        <div className={styles.profile_form_group}>
-                          <label
-                            htmlFor="city"
-                            className={styles.profile_form_label}
-                          >
-                            City
-                          </label>
-                          <input
-                            name="city"
-                            value={city}
-                            onChange={handleChange}
-                            type="text"
-                            className={styles.profile_form_input}
-                          />
-                          {/* {this.props.errors.city && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
-                        </div>
-                        <div className={styles.profile_form_group}>
-                          <label
-                            htmlFor="state"
-                            className={styles.profile_form_label}
-                          >
-                            State
-                          </label>
-                          <input
-                            name="state"
-                            value={state}
-                            onChange={handleChange}
-                            type="text"
-                            className={styles.profile_form_input}
-                          />
-                          {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
-                        </div>
-                      </div>
-                      <div className={styles.profile_form_col_2}>
-                        <div className={styles.profile_form_group}>
-                          <label
-                            htmlFor="zip_code"
-                            className={styles.profile_form_label}
-                          >
-                            Zip Code
-                          </label>
-                          <input
-                            name="zip_code"
-                            value={zip_code}
-                            onChange={handleChange}
-                            type="text"
-                            className={styles.profile_form_input}
-                          />
-                          {/* {this.props.errors.zip_code && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
-                        </div>
-                        <div className={styles.profile_form_group}>
-                          <label
-                            htmlFor="country"
-                            className={styles.profile_form_label}
-                          >
-                            Country
-                          </label>
-                          <input
-                            name="country"
-                            value={country}
-                            onChange={handleChange}
-                            type="text"
-                            className={styles.profile_form_input}
-                          />
-                          {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
-                        </div>
-                      </div>
+                    <div className={styles.profile_details}>
+                        {props.auth.authUser && (
+                            <>
+                                <div id='basic-information' className={styles.profile_basic_info_con}>
+                                    <h3>Basic Information</h3>
+                                    <div className={styles.profile_basic_info}>
+                                        <div className={styles.profile_image_con}>
+                                            <div className={styles.profile_image}>
+
+                                                {(profileImageData === '' && props.auth.authUser?.profile_picture === undefined) && <UserIcon />}
+                                                {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) &&
+                                                    <Image width={200} height={200} src={props.auth.authUser.profile_picture} 
+                                                    className={styles.profile_image}
+                                                    alt="profile_picture" />
+                                                }
+                                                <img id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
+                                            </div>
+                                            <p onClick={uploadProfileImage}>Change Picture</p>
+                                        </div>
+                                        <div className={styles.profile_form}>
+                                            <h3>Contact Information</h3>
+                                            <div className={styles.profile_form_col_2}>
+                                                <div className={styles.profile_form_group}>
+                                                    <label htmlFor="first_name" className={styles.profile_form_label}>First Name</label>
+                                                    <input
+                                                        type="text"
+                                                        name="first_name"
+                                                        value={first_name}
+                                                        placeholder="First Name"
+                                                        onChange={handleChange}
+                                                        className={styles.profile_form_input} />
+                                                    {/* {this.props.errors.accountname && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
+                                                </div>
+                                                <div className={styles.profile_form_group}>
+                                                    <label htmlFor="last_name" className={styles.profile_form_label}>Last Name</label>
+                                                    <input
+                                                        type="text"
+                                                        name="last_name"
+                                                        value={last_name}
+                                                        placeholder="Last Name"
+                                                        onChange={handleChange}
+                                                        className={styles.profile_form_input} />
+                                                    {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
+                                                </div>
+                                            </div>
+                                            <div className={styles.profile_form_group}>
+                                                <label htmlFor="email" className={styles.profile_form_label}>
+                                                    Email
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="email"
+                                                    value={email}
+                                                    placeholder="Email"
+                                                    onChange={handleChange}
+                                                    className={styles.profile_form_input}
+                                                />
+                                            </div>
+                                            <div className={styles.profile_form_group}>
+                                                <label htmlFor="phone_number" className={styles.profile_form_label}>
+                                                    Phone Number
+                                                </label>
+                                                <PhoneInput
+                                                    inputClass={styles.login_form_input}
+
+                                                    name="phone_number"
+                                                    value={phone_number}
+                                                    onChange={phone => handlePhoneChange(phone)}
+                                                />
+                                            </div>
+                                            <div className={styles.profile_form_col_2}>
+                                                <div className={styles.profile_form_group}>
+                                                    <label htmlFor="city" className={styles.profile_form_label}>City</label>
+                                                    <input name="city" value={city} onChange={handleChange} type="text" className={styles.profile_form_input} />
+                                                    {/* {this.props.errors.city && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
+                                                </div>
+                                                <div className={styles.profile_form_group}>
+                                                    <label htmlFor="state" className={styles.profile_form_label}>State</label>
+                                                    <input name="state" value={state} onChange={handleChange} type="text" className={styles.profile_form_input} />
+                                                    {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
+                                                </div>
+                                            </div>
+                                            <div className={styles.profile_form_col_2}>
+                                                <div className={styles.profile_form_group}>
+                                                    <label htmlFor="zip_code" className={styles.profile_form_label}>Zip Code</label>
+                                                    <input name="zip_code" value={zip_code} onChange={handleChange} type="text" className={styles.profile_form_input} />
+                                                    {/* {this.props.errors.zip_code && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
+                                                </div>
+                                                <div className={styles.profile_form_group}>
+                                                    <label htmlFor="country" className={styles.profile_form_label}>Country</label>
+                                                    <input name="country" value={country} onChange={handleChange} type="text" className={styles.profile_form_input} />
+                                                    {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
+                                                </div>
+                                            </div>
 
                       <div className={styles.profile_form_group}>
                         <label
