@@ -33,6 +33,8 @@ import CartContext from "../../../pages/store/cart-context";
 import Login from "../Login";
 import { useAuth } from "../../context/auth.context";
 import signup from "../signup";
+// import profile_pic from "../assets/icons/user-icon.jpg"
+import profile_pic from "../../../public/assets/icons/user.png"
 import moment from "moment";
 
 function Header(props) {
@@ -44,8 +46,8 @@ function Header(props) {
   const [openLogin, setOpenLoginState] = useState(false);
   const [user, setUser] = useState({});
   const router = useRouter();
-  // const [showSignup, setShowSignUp] = useState(false);
-  // const userData = useSelector()
+  const [showSignup, setShowSignUp] = useState(false);
+  const {authUser} = useSelector(state => state.Auth)
 
   const cartCtx = useContext(CartContext);
 
@@ -187,6 +189,7 @@ function Header(props) {
     setUser(user);
     console.log(user, "user");
   }, []);
+
   return (
     <>
       <div className={styles.navbar}>
@@ -199,125 +202,167 @@ function Header(props) {
           <div className="alert-danger">
             {props.error}
           </div>} */}
-        </div>
-        <div className={styles.navbar_top_container}>
-          <div className={styles.navbar_top}>
-            <Link href="/">
-              <Image
-                className={styles.navbar_top_logo_img}
-                src={img_logo}
-                alt="logo"
-              />
-            </Link>
-            <div className={styles.navbar_top_details}>
-              {!props.auth.isAuthenticated && props.auth.authUser === null ? (
-                // <Link href='/login'>
-                // <a className={styles.navbar_user_loginbtn}>
-                <div
-                  onClick={() => setIsOpen(!isOpen)}
-                  className={styles.navbar_user_loginbtn}
+      </div>
+      <div className={styles.navbar_top_container}>
+        <div className={styles.navbar_top}>
+          <Link href="/" >
+
+            <Image className={styles.navbar_top_logo_img} src={img_logo} alt="logo" />
+
+          </Link>
+          <div className={styles.navbar_top_details}>
+            {!props.auth.isAuthenticated && props.auth.authUser === null ? (
+              <Link legacyBehavior href='/login'>
+              <a className={styles.navbar_user_loginbtn}>
+              
+                Log In/Register
+              </a>
+               </Link>
+            ) : (
+              <div className={styles.navbar_user_info}>
+
+{authUser?.profile_picture !== "" && authUser?.profile_picture !== undefined ?  <Image
+                  id="userImg"
+                  onClick={(e) => toggleUserDetails(e)}
+                  width={50}
+                  height={50}
+                  src={authUser?.profile_picture }
+                  alt="User"
+                  className={styles.navbar_user_img}
+                />: <UserIcon style={styles.navbar_user_img}/> }
+
+               
+                <h2
+                  id="userName"
+                  onClick={(e) => toggleUserDetails(e)}
+                  className={styles.navbar_user_name}
                 >
-                  Log In/Register
-                </div>
-              ) : (
-                // </a>[//\\][//\\][Aa1]
-                // </Link>
-                <div className={styles.navbar_user_info}>
-                  <img
-                    id="userImg"
-                    onClick={(e) => toggleUserDetails(e)}
-                    // src="/assets/icons/user.png"
-                    src={props.auth.authUser.profile_picture}
-                    alt="User"
-                    className={styles.navbar_user_img}
-                  />
-                  <h2
-                    id="userName"
-                    onClick={(e) => toggleUserDetails(e)}
-                    className={styles.navbar_user_name}
-                  >
-                    {props.auth.authUser.username}
-                  </h2>
-                  <ArrowDownIcon
-                    id="usericon"
-                    onClick={(e) => toggleUserDetails(e)}
-                    style={styles.navbar_user_icon}
-                  />
-                  <div id="userdetails" className={styles.navbar_user_signedin}>
-                    <Link href="/dashboard">
+                  {props.auth.authUser.username}
+                </h2>
+                <ArrowDownIcon
+                  id="usericon"
+                  onClick={(e) => toggleUserDetails(e)}
+                  style={styles.navbar_user_icon}
+                />
+                <div id="userdetails" className={styles.navbar_user_signedin}>
+                  <Link href="/dashboard" >
+
+                    <div
+                      className={
+                        styles.navbar_user_signedin_link +
+                        " " +
+                        styles.black
+                      }
+                    >
+                      <DashBoardIcon style={styles.navbar_main_link_icon} />
+                      <h3>Dashboard</h3>
+                    </div>
+
+                  </Link>
+                  <Link href="/dashboard/userprofile" >
+
+                    <div
+                      className={
+                        styles.navbar_user_signedin_link +
+                        " " +
+                        styles.black
+                      }
+                    >
+                      {/* <Image src={openIcon} alt="profile" /> */}
+                      <UserIcon style={styles.navbar_main_link_icon} />
+                      <h3>Profile</h3>
+                    </div>
+
+                  </Link>
+                  <div className={styles.navbar_user_signedin_logout}>
+                    <div>
                       <div
+                        onClick={logout}
                         className={
-                          styles.navbar_user_signedin_link + " " + styles.black
+                          styles.navbar_user_signedin_link +
+                          " " +
+                          styles.white
                         }
                       >
-                        <DashBoardIcon style={styles.navbar_main_link_icon} />
-                        <h3>Dashboard</h3>
-                      </div>
-                    </Link>
-                    <Link href="/dashboard/userprofile">
-                      <div
-                        className={
-                          styles.navbar_user_signedin_link + " " + styles.black
-                        }
-                      >
-                        {/* <Image src={openIcon} alt="profile" /> */}
-                        <UserIcon style={styles.navbar_main_link_icon} />
-                        <h3>Profile</h3>
-                      </div>
-                    </Link>
-                    <div className={styles.navbar_user_signedin_logout}>
-                      <div>
-                        <div
-                          onClick={logout}
-                          className={
-                            styles.navbar_user_signedin_link +
-                            " " +
-                            styles.white
-                          }
-                        >
-                          <ArrowLeftFillIcon
-                            style={styles.navbar_main_link_icon2}
-                          />
-                          <h3>Logout</h3>
-                        </div>
+                        <ArrowLeftFillIcon
+                          style={styles.navbar_main_link_icon2}
+                        />
+                        <h3>Logout</h3>
                       </div>
                     </div>
                   </div>
                 </div>
-              )}
-              <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
-              <div className={styles.navbar_top_details_col}>
-                <div id="noticon" onClick={(e) => toggleNotification(e)}>
-                  <NotificationIcon
-                    id="notImg"
-                    style={styles.navbar_top_details_col_icon}
-                  />
-                  <span
-                    id="notNo"
-                    style={{ background: "#04D505" }}
-                    className={styles.numberofitems}
-                  >
-                    {user?.notifications?.length}
-                  </span>
-                </div>
-                <h5 id="notText" onClick={(e) => toggleNotification(e)}>
-                  Notification
-                </h5>
-                {/* <div id="notification" className={styles.summaries_min}>
-                  <div className={styles.summary_min}>
-                    {/* <div className={styles.summary_min_head}>
-                      <h3 className={styles.summary_min_h3}>Notification</h3>
-                    </div> */}
-                <div className={styles.summary_min_notifications}>
-                  <div className={styles.navbar_top_details_col}>
-                    <div id="notification" className={styles.summaries_min}>
-                      <div className={styles.summary_min}>
-                        <div className={styles.summary_min_head}>
-                          <h5 style={{ color: "black" }}>Notification</h5>
-                        </div>
+              </div>
+            )}
+            <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
+            <div className={styles.navbar_top_details_col}>
+              <div id="noticon" onClick={(e) => toggleNotification(e)}>
+                <NotificationIcon
+                  id="notImg"
+                  style={styles.navbar_top_details_col_icon}
+                />
+                <span
+                  id="notNo"
+                  style={{ background: "#04D505" }}
+                  className={styles.numberofitems}
+                >
+                  3
+                </span>
+              </div>
+              <h5 id="notText" onClick={(e) => toggleNotification(e)}>
+                Notification
+              </h5>
+              <div id="notification" className={styles.summaries_min}>
+                <div className={styles.summary_min}>
+                  <div className={styles.summary_min_head}>
+                    <h3 className={styles.summary_min_h3}>Notification</h3>
+                  </div>
+                  <div className={styles.summary_min_notifications}>
+                    <div className={styles.summary_notification}>
+                      <Image
+                        src={orderIcon}
+                        alt="order"
+                        className={styles.summary_notification_Img}
+                      />
+                      <div className={styles.summary_notification_Details}>
+                        <h3 className={styles.summary_notification_desc}>
+                          hhh
+                        </h3>
+                        <p className={styles.summary_notification_link}>
+                          View Order
+                        </p>
+                        <p className={styles.summary_notification_time}>
+                          2 sec
+                        </p>
 
-                        <div className={styles.summary_min_notifications}>
-                          {user?.notifications?.map((elem) => (
+                      </div>
+                    </div>
+                    {/* </> */}
+
+                    <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
+                    <div className={styles.navbar_top_details_col}>
+                      <div id="noticon" onClick={(e) => toggleNotification(e)}>
+                        <NotificationIcon
+                          id="notImg"
+                          style={styles.navbar_top_details_col_icon}
+                        />
+                        <span
+                          id="notNo"
+                          style={{ background: "#04D505" }}
+                          className={styles.numberofitems}
+                        >
+                          3
+                        </span>
+                      </div>
+                      <h5 id="notText" onClick={(e) => toggleNotification(e)}>
+                        Notification
+                      </h5>
+                      <div id="notification" className={styles.summaries_min}>
+                        <div className={styles.summary_min}>
+                          <div className={styles.summary_min_head}>
+                            <h3 className={styles.summary_min_h3}>Notification</h3>
+                          </div>
+                          <div className={styles.summary_min_notifications}>
                             <div className={styles.summary_notification}>
                               <div className={styles.tick}>
                                 <FaCheck />
@@ -328,14 +373,14 @@ function Header(props) {
                                 <h3
                                   className={styles.summary_notification_desc}
                                 >
-                                  {elem.message}
+                                  {/* {elem.message} */}
                                 </h3>
                                 <p className={styles.summary_notification_time}>
-                                  {moment(elem.createdAt).fromNow()}
+                                  {/* {moment(elem.createdAt).fromNow()} */}
                                 </p>
                               </div>
                             </div>
-                          ))}
+                          
                           {/* <div className={styles.summary_notification}>
                               <Image
                                 src={orderIcon}
@@ -512,10 +557,9 @@ function Header(props) {
           </div>
         </div>
       </div>
-      {isOpen && <Auth />}
-      {/* {
-        isOpen && <Auth setShowSignUp={setShowSignUp} />
-      } */}
+      {/* {isOpen && <Auth />} */}
+      </div>
+      </div>
     </>
   );
 }

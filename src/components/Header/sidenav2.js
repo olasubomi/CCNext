@@ -208,10 +208,12 @@ function SideNav2(props) {
           </div>
         )}
         {props.showBottom && !props.auth.authUser && (
+           <Link href="/login">
           <div onClick={toggleLogin} className={styles.sidenav_link}>
             <PowerIcon style={styles.sidenav_link_icon} />
             <p>Log In</p>
           </div>
+          </Link>
         )}
       </div>
     </div>

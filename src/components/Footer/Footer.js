@@ -28,34 +28,22 @@ const Footer = () => {
             <div className={styles.footer_row_2_navigations}>
               <h3 className={styles.footer_row_2_navigation_h3}>Pages</h3>
               <ul className={styles.footer_row_2_navigation_lists}>
-                <Link href="/" className={styles.footer_row_2_navigation_link} >
+                <Link href="/dashboard" className={styles.footer_row_2_navigation_link} >
 
                   <li className={styles.footer_row_2_navigation_list}>
-                    Recipes
+                    Dashboard
                   </li>
                 </Link>
-                <Link href="/" className={styles.footer_row_2_navigation_link} >
+                <Link href="/grocerylist" className={styles.footer_row_2_navigation_link} >
 
                   <li className={styles.footer_row_2_navigation_list}>
                     Grocery List
                   </li>
                 </Link>
-                <Link href="/" className={styles.footer_row_2_navigation_link} >
+                <Link href="/suggestmeal" className={styles.footer_row_2_navigation_link} >
 
                   <li className={styles.footer_row_2_navigation_list}>
-                    Food Products
-                  </li>
-                </Link>
-                <Link href="/" className={styles.footer_row_2_navigation_link} >
-
-                  <li className={styles.footer_row_2_navigation_list}>
-                    Kitchen Products
-                  </li>
-                </Link>
-                <Link href="/" className={styles.footer_row_2_navigation_link} >
-
-                  <li className={styles.footer_row_2_navigation_list}>
-                    Household Products
+                    Suggest A Meal
                   </li>
                 </Link>
               </ul>

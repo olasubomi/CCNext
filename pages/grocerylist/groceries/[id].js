@@ -35,6 +35,7 @@ import {
 } from "../../../src/util";
 import { LoginPrompt } from "../../../src/components/modal/login-prompt";
 
+
 const GroceryPage = () => {
   const customStyles = {
     option: (defaultStyles, state) => ({

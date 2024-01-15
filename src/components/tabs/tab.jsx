@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
+  const {authUser} = useSelector(state => state.Auth)
 
   return (
     <div
@@ -223,7 +224,7 @@ const MyTabs = ({ id }) => {
               </div>
               <div className={styles.flex2} style={{ marginBottom: '1rem', marginTop: '1rem' }}>
                 <div className={styles.flex}>
-                  <Image src={girl} width={40} height={40} className={styles.person} />
+                  <Image src={authUser !== null && authUser !==undefined ? authUser.profile_picture: girl} width={40} height={40} className={styles.person} />
                   <p className={styles.name}>{ele.user.first_name} {ele.user.last_name}</p>
                 </div>
                 <div onClick={() => router.push(`/grocerylist/groceries/${ele._id}`)} className={styles.two2}>

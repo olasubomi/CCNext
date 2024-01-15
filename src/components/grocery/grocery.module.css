@@ -598,6 +598,12 @@
     padding-top: 2rem;
 }
 
+.navbar_user_img {
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+  }
+
 .btn3 {
     width: 212px;
     height: 39px;
