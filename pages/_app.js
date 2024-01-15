@@ -11,10 +11,17 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { CartProvider } from "../src/context/cart.context";
 import { AuthProvider } from "../src/context/auth.context";
 
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 
 function MyApp({ Component, pageProps }) {
+
+  const queryClient = new QueryClient();
+
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
@@ -38,7 +45,7 @@ function MyApp({ Component, pageProps }) {
           </PersistGate>
         </Provider>
       </GoogleOAuthProvider>
-    </>
+    </QueryClientProvider>
   );
 }
 

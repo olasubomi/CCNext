@@ -24,7 +24,7 @@ const index = () => {
 
   async function fetchItems() {
     try {
-      const response = await fetch(`http://localhost:5000/api/items`, {
+      const response = await fetch(`http://localhost:5000/api/items/1`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -32,6 +32,8 @@ const index = () => {
       });
   
       const data = await response.json();
+
+      console.log("data items", data)
   
       if (data.data === undefined) {
         setProductErrData(data);

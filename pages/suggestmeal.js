@@ -311,6 +311,7 @@ class SuggestMeal extends Component {
                 </div>
               </div>
             </div>
+            
             {suggestionType === "Meal" && (
               <SuggestMealForm
                 allMealNames={this.allMealNames}
@@ -372,3 +373,5 @@ class SuggestMeal extends Component {
 }
 
 export default SuggestMeal;
+
+
