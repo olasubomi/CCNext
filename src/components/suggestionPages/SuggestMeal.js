@@ -622,42 +622,48 @@ class SuggestMealForm extends Component {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////
+  // handleProductNameInput = (event, val) => {
+  //   console.log("In handleProductNameInput . \n val is: " + val + event);
+  //   if (val !== undefined && val !== null) {
+  //     // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
+  //     // set currProductIndexInDBsProductsList variable
+  //     const searchResult = this.props.productNames.map(function callback(
+  //       element
+  //     ) {
+  //       console.log("element", element);
+  //       if (element.toLowerCase() === val.toLowerCase()) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     });
+  //     const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
+  //     console.log(
+  //       "Curr Product Index If Exists In Products List is: \n" +
+  //         tmpcurrProductIndexInDBsProductsList
+  //     );
+
+  //     // check if product name is an existing product
+  //     // set product existense to index, so one will not need to edit
+  //     this.setState({
+  //       currProductIndexInDBsProductsList: tmpcurrProductIndexInDBsProductsList,
+  //     });
+
+  //     // set current ingredient to input Product regardless
+  //     // console.log("Event is: \n"+ event.target);
+  //     if (event != null && event.target.value !== null) {
+  //       this.setState({ currentIngredient: event.target.innerHTML });
+  //     } else {
+  //       this.setState({ currentIngredient: val });
+  //     }
+  //   } else {
+  //     console.log("val is null or undefined");
+  //   }
+  // };
+
   handleProductNameInput = (event, val) => {
     console.log("In handleProductNameInput . \n val is: " + val);
-    if (val !== undefined && val !== null) {
-      // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
-      // set currProductIndexInDBsProductsList variable
-      const searchResult = this.props.productNames.map(function callback(
-        element
-      ) {
-        if (element.toLowerCase() === val.toLowerCase()) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
-      console.log(
-        "Curr Product Index If Exists In Products List is: \n" +
-          tmpcurrProductIndexInDBsProductsList
-      );
-
-      // check if product name is an existing product
-      // set product existense to index, so one will not need to edit
-      this.setState({
-        currProductIndexInDBsProductsList: tmpcurrProductIndexInDBsProductsList,
-      });
-
-      // set current ingredient to input Product regardless
-      // console.log("Event is: \n"+ event.target);
-      if (event != null && event.target.value !== null) {
-        this.setState({ currentIngredient: event.target.innerHTML });
-      } else {
-        this.setState({ currentIngredient: val });
-      }
-    } else {
-      console.log("val is null or undefined");
-    }
+    console.log("In handleProductNameInput . \n event is: " + event);
   };
 
   // getProductIndex(){
@@ -1753,6 +1759,8 @@ class SuggestMealForm extends Component {
     // console.log(this.props.categories);
     const { ingredientStrings, stepInputs } = this.state;
 
+    console.log("productNames producct", this.props);
+
     return (
       <div className={styles.suggestion_section_2}>
         <form
@@ -1960,10 +1968,12 @@ class SuggestMealForm extends Component {
               </label>
               <Autocomplete
                 id="currentIngredient"
-                options={this.props.productNames.map((option) => option)}
                 // onChange={(ev)=>this.onTextFieldChange(ev)}
-                value={this.state.currentIngredient}
+                // value={this.state.currentIngredient}
                 onChange={(ev, val) => this.handleProductNameInput(ev, val)}
+                // options={[]}
+                options={this.props.productNames.map((option) => option)}
+                // onChange={(ev, val) => console.log("ev", ev, val)}
                 freeSolo
                 renderInput={(params) => (
                   <TextField

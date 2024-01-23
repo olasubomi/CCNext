@@ -215,7 +215,7 @@ class SuggestCategoryForm extends Component {
                   id="tags-outlined"
                   freeSolo
                   // filterSelectedOptions
-                  options={this.categories.map((option) => option)}
+                  options={this.props.categories.map((option) => option)}
                   // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
                   onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
                   // getOptionLabel={option => option}
