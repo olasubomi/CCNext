@@ -125,7 +125,7 @@ const PublicMarket = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Chop Chow Grocery</title>
+        <title>Chop Chow Marketplace</title>
         <meta
           key="title"
           name="viewport"

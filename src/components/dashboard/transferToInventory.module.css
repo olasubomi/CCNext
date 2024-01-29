@@ -1,5 +1,6 @@
 .transToIn_container {
   position: fixed;
+  overflow: auto;
   width: 100vw;
   height: 100vh;
   display: grid;
@@ -13,12 +14,13 @@
 
 .transToIn {
   width: 973px;
-  height: 709px;
+  height: 90%;
   background: #ffffff;
+  position: relative;
   border-radius: 11px;
-  overflow: hidden;
+  overflow-y: scroll;
   display: grid;
-  grid-template-rows: 10% 80% 10%;
+  padding-bottom: 2rem;
 }
 .success {
   width: 40%;
@@ -60,7 +62,7 @@
   align-items: center;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 10px 1rem;
+  padding: 15px 1rem;
 }
 
 .transToIn_top > h2 {
@@ -84,7 +86,7 @@
 .transToIn_details_con {
   display: grid;
   grid-gap: 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.2); */
   padding: 2rem 3rem;
   align-content: start;
 }
@@ -332,14 +334,21 @@
   border-collapse: collapse;
   border-spacing: 0;
   width: 100%;
-  overflow: scroll;
-}
-
-.request_table > thead {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  overflow: auto !important;
 }
 
 .request_tr {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-gap: 2rem;
+  margin: 0;
+  align-items: center;
+  padding: 0.6rem;
+  height: 70px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.request_tr1 {
   display: grid;
   grid-auto-flow: column;
   grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -347,7 +356,9 @@
   grid-gap: 2rem;
   margin: 0;
   align-items: center;
-  padding: .6rem;
+  padding: 0.6rem;
+  height: 50px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .request_th {
@@ -390,12 +401,10 @@
 }
 
 .transToIn_footer {
-  display: grid;
-  grid-auto-flow: column;
-  grid-gap: 1rem;
-  justify-content: end;
-  align-items: center;
-  padding: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: flex-end;
+  padding: 0 2rem;
 }
 
 .transToIn_footer_button {
@@ -440,7 +449,6 @@
 .select_box {
   width: 156px;
   height: 34px;
-
   background: #ffffff;
   border: 1px solid #e6e6e6;
   border-radius: 4px;

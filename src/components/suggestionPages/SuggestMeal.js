@@ -301,7 +301,7 @@ class SuggestMealForm extends Component {
           prepTime,
 
           instructionChunk6: {
-            title: instructionChunk6.title,
+            title: instructionChunk6?.title,
             instructionSteps: instructionChunk6.instructionSteps,
             dataName: "",
           },
@@ -1094,8 +1094,8 @@ class SuggestMealForm extends Component {
     }
     ingredientValue = this.capitalizeWords(ingredientValue);
     if (quantityValue === "") {
-      window.alert("Enter quantity to add to meal");
-      return;
+      // window.alert("Enter quantity to add to meal");
+      // return;
     }
     // update ingredient string syntax for no quantity or no measurement.
     if (quantityValue === "") {

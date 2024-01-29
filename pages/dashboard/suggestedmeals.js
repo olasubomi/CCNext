@@ -2134,13 +2134,13 @@ const SuggestedMeals = (props) => {
         </div>
       )}
 
-        <TransferToInventory
-          type={searchType}
-          setTransferToInventoryState={setTransferToInventoryState}
-          meal={suggestion}
-          transferToInventory={transferToInventory}
-          toggleTransferToInventory={toggleTransferToInventory}
-        />
+      <TransferToInventory
+        type={searchType}
+        setTransferToInventoryState={setTransferToInventoryState}
+        meal={suggestion}
+        transferToInventory={transferToInventory}
+        toggleTransferToInventory={toggleTransferToInventory}
+      />
 
       {sent && <Sent toggleSent={toggleSent} />}
     </div>

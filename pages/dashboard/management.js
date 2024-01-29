@@ -257,10 +257,11 @@ const Management = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}")?._id;
       const response = await axios.get(`/inventory/user-inventory/${user}`);
+      console.log(response, 'repsonse')
       const resp = response.data.data.inventoryItems.map((element) => {
         return {
           label: element.item.item_name,
-          value: element.item._id,
+          value: element._id,
           image: element?.item.itemImage0,
           price: element?.item.item_price
             ? `${element?.item.item_price}`
@@ -270,6 +271,7 @@ const Management = () => {
           currency: element.storeId?.currency?.symbol,
         };
       });
+      console.log(resp, 'respsp')
       setUserInventory(resp);
       setFilteredMeals(resp.filter((item) => item.item_type === "Meal"));
       setFilteredProducts(resp.filter((item) => item.item_type === "Product"));
@@ -520,6 +522,21 @@ const Management = () => {
     } catch (e) {}
   }, [times]);
 
+  const deleteInventory = async (id) => {
+    console.log(id, 'idd')
+    try {
+      const res = await axios.delete(`/inventory/delete-inventory/${id}`);
+      console.log("resss", res);
+      if (res.status === 202) {
+        fetchOneUserInventory();
+        toast.success("Deleted successful");
+      } else {
+        toast.error("This Item does not exist!");
+      }
+    } catch (e) {
+      console.log(e, "errr");
+    }
+  };
   useEffect(() => {
     fetchOneUserInventory();
   }, []);
@@ -1123,7 +1140,7 @@ const Management = () => {
                           ))}
                         </div>
                       )}
-                      <div className={styles.suggestbtn}>
+                      <div className={styles.suggestbtn} onClick={() => router.push('/suggestmeal')}>
                         <p>+ New Suggestion</p>
                       </div>
                     </div>
@@ -1174,7 +1191,7 @@ const Management = () => {
                               </td>
                               <td
                                 style={{ textAlign: "center" }}
-                                onClick={() => deleteItem(ele.value)}
+                                onClick={() => deleteInventory(ele.value)}
                                 className={styles.close2}
                               >
                                 <IoIosCloseCircle color="#949494" size={20} />
@@ -1232,7 +1249,7 @@ const Management = () => {
                                 </td>
                                 <td
                                   style={{ textAlign: "center" }}
-                                  onClick={() => deleteItem(ele.value)}
+                                  onClick={() => deleteInventory(ele.value)}
                                   className={styles.close2}
                                 >
                                   <IoIosCloseCircle color="#949494" size={20} />

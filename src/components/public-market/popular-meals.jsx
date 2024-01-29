@@ -97,7 +97,7 @@ export const PopularMeals = () => {
   const filteredMeals = meals.filter(
     (meal) => meal.item_type === "Meal" && meal.average_rating
   );
-
+console.log(filteredMeals, 'fill')
   return (
     <div className={styles.mealContainer} >
       <h4>Popular Meals</h4>
@@ -139,7 +139,7 @@ export const PopularMeals = () => {
                             />
                           ))}
                       </div>
-                      <p className={styles.prep}> 23 mins </p>
+                      <p className={styles.prep}> 0 mins </p>
                     </div>
                   </div>
                 }

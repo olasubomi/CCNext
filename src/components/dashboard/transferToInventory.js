@@ -319,14 +319,20 @@ export default function TransferToInventory(props) {
                   flexDirection: "column",
                   display: "flex",
                   paddingBottom: "1rem",
-                  borderBottom: "1px solid grey",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                 }}
               >
                 <label htmlFor="mySelect" style={{ paddingBottom: "1rem" }}>
                   Which store are you sending from?
                 </label>
                 <select
-                  style={{ width: "25%" }}
+                  style={{
+                    width: "25%",
+                    height: "34px",
+                    border: "1px solid #E6E6E6",
+                    outline: "none",
+                    borderRadius: "4px",
+                  }}
                   onChange={(e) => {
                     setFormState({
                       ...formState,
@@ -423,12 +429,7 @@ export default function TransferToInventory(props) {
                       >
                         Product
                       </label>
-                      {/* <label
-          htmlFor="Product"
-          className={styles.transToIn_meal_type_radioLabel2}
-        >
-          Includes all the ingredients needed in preparation of this meal
-        </label> */}
+      
                     </div>
                     <div className={styles.transToIn_meal_type_option}>
                       <input
@@ -449,9 +450,7 @@ export default function TransferToInventory(props) {
                       >
                         Kitchen Utensils
                       </label>
-                      {/* <label htmlFor="Kitchen Utensils" className={styles.transToIn_meal_type_radioLabel2}>
-          Meal without the ingredients
-        </label> */}
+                      
                     </div>
                   </div>
                 )}
@@ -541,10 +540,10 @@ export default function TransferToInventory(props) {
                   {formState.meal_type === "non packaged" && (
                     <div className={styles.transToIn_details_col4}>
                       <p>Set ingredient prices and availability</p>
-                      <table className={styles.request_table}>
+                      <table className={styles.request_table} style={{height: '2px'}}>
                         <thead>
                           <div
-                            className={styles.request_tr}
+                            className={styles.request_tr1}
                             style={{ backgroundColor: "transparent" }}
                           >
                             <th className={styles.request_th}>Items</th>
@@ -561,7 +560,7 @@ export default function TransferToInventory(props) {
                             </th>
                           </div>
                         </thead>
-                        <tbody>
+                        <tbody className={styles.tbody}>
                           {formState.ingredientsAvailable?.map(
                             (ingredient, index) => {
                               return (
