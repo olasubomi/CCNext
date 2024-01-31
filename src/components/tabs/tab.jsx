@@ -17,7 +17,7 @@ import { useSelector } from 'react-redux';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
-  const {authUser} = useSelector(state => state.Auth)
+  // const {authUser} = useSelector(state => state.Auth)
 
   return (
     <div
@@ -56,6 +56,7 @@ const MyTabs = ({ id }) => {
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
   })
+  const {authUser} = useSelector(state => state.Auth)
 
   const addItemToGrocery = async (listName) => {
 
@@ -224,7 +225,15 @@ const MyTabs = ({ id }) => {
               </div>
               <div className={styles.flex2} style={{ marginBottom: '1rem', marginTop: '1rem' }}>
                 <div className={styles.flex}>
-                  <Image src={authUser !== null && authUser !==undefined ? authUser.profile_picture: girl} width={40} height={40} className={styles.person} />
+                  {/* <Image src={authUser !== null && authUser !==undefined ? authUser.profile_picture: girl} width={40} height={40} className={styles.person} /> */}
+                  {authUser?.profile_picture !== "" && authUser?.profile_picture !== undefined ? 
+                        <Image 
+                        width={50} height={50}
+                        style={{borderRadius: 30}}
+                        alt={ele.user.first_name}
+                        src={authUser?.profile_picture}
+                        className={styles.user_img}
+                        /> : <UserIcon style={styles.user_img}/> }
                   <p className={styles.name}>{ele.user.first_name} {ele.user.last_name}</p>
                 </div>
                 <div onClick={() => router.push(`/grocerylist/groceries/${ele._id}`)} className={styles.two2}>
