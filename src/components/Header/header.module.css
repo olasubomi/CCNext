@@ -3,8 +3,10 @@
   grid-auto-flow: row;
   position: fixed;
   top: 0;
+
   width: 100%;
   z-index: 200;
+  align-content: center;
   grid-template-rows: 88px;
   grid-template-columns: 100%;
   /* border-bottom: 1px solid #e7e7e7; */
@@ -25,11 +27,12 @@
 .navbar_top_container {
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
-  display: grid;
+  padding: 0 10px 0 10px;
+  display: flex;
   justify-items: center;
   align-items: center;
   animation: slidefromup .3s ease-in-out;
-  height: 90px;
+  height: 100px;
 }
 
 .navbar_top {
@@ -775,7 +778,8 @@
     height: 58px;
   }
 
-  .navbar_user_info {
+  
+  .navbar_user_info>h4 {
     display: none;
   }
 
@@ -804,6 +808,7 @@
   .navbar_top {
     grid-gap: 1rem;
     width: 90%;
+    padding: auto;
   }
 
   .navbar_main {
