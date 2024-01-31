@@ -192,7 +192,7 @@ function Header(props) {
 
   return (
     <>
-      <div className={styles.navbar}>
+      <div className={styles.navbar} >
         <div className="alert">
           {/* {props.message.length > 0 &&
           <div className="alert-success">
@@ -232,13 +232,13 @@ function Header(props) {
                 />: <UserIcon style={styles.navbar_user_img}/> }
 
                
-                <h2
+                <h4
                   id="userName"
                   onClick={(e) => toggleUserDetails(e)}
                   className={styles.navbar_user_name}
                 >
                   {props.auth.authUser.username}
-                </h2>
+                </h4>
                 <ArrowDownIcon
                   id="usericon"
                   onClick={(e) => toggleUserDetails(e)}
