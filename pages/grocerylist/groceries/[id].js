@@ -34,6 +34,8 @@ import {
   removeItemFromLocalGroceryList,
 } from "../../../src/util";
 import { LoginPrompt } from "../../../src/components/modal/login-prompt";
+import { UserIcon } from "../../../src/components/icons";
+import { useSelector } from "react-redux";
 
 
 const GroceryPage = () => {
@@ -92,6 +94,7 @@ const GroceryPage = () => {
   const { addItemsToCart, cartItems, cartHasItem } = useCart();
   const [isUserOnline, setIsUserOnline] = useState(true);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false)
+  const {authUser} = useSelector(state => state.Auth)
 
   console.log(itemList, "itemListitemList");
 
@@ -441,12 +444,21 @@ const GroceryPage = () => {
             {itemList.description}
           </p>
           <div className={styles.top1}>
-            <Image
+            {/* <Image
               src={girl}
               width={40}
               height={40}
               className={styles.person}
-            />
+            /> */}
+            {authUser?.profile_picture !== "" && authUser?.profile_picture !== undefined ? 
+                        <Image 
+                        width={50} height={50}
+                        style={{borderRadius: 30}}
+                        alt={itemList.user?.first_name}
+                        src={authUser?.profile_picture}
+                        className={styles.user_img}
+                        /> : <UserIcon style={styles.user_img}/> }
+            
             <p
               className={styles.text}
               style={{ marginLeft: "1rem", textTransform: "capitalize" }}

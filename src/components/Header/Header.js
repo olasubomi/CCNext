@@ -201,7 +201,7 @@ function Header(props) {
 
   return (
     <>
-      <div className={styles.navbar}>
+      <div className={styles.navbar} >
         <div className="alert">
           {/* {props.message.length > 0 &&
           <div className="alert-success">
@@ -211,52 +211,80 @@ function Header(props) {
           <div className="alert-danger">
             {props.error}
           </div>} */}
-        </div>
-        <div className={styles.navbar_top_container}>
-          <div className={styles.navbar_top}>
-            <Link href="/">
-              <Image
-                className={styles.navbar_top_logo_img}
-                src={img_logo}
-                alt="logo"
-              />
-            </Link>
-            <div className={styles.navbar_top_details}>
-              {!props.auth.isAuthenticated && props.auth.authUser === null ? (
-                <Link legacyBehavior href="/login">
-                  <a className={styles.navbar_user_loginbtn}>Log In/Register</a>
-                </Link>
-              ) : (
-                <div className={styles.navbar_user_info}>
-                  {authUser?.profile_picture !== "" &&
-                  authUser?.profile_picture !== undefined ? (
-                    <Image
-                      id="userImg"
-                      onClick={(e) => toggleUserDetails(e)}
-                      width={50}
-                      height={50}
-                      src={authUser?.profile_picture}
-                      alt="User"
-                      className={styles.navbar_user_img}
-                    />
-                  ) : (
-                    <UserIcon style={styles.navbar_user_img} />
-                  )}
+      </div>
+      <div className={styles.navbar_top_container}>
+        <div className={styles.navbar_top}>
+          <Link href="/" >
 
-                  <h2
-                    id="userName"
-                    onClick={(e) => toggleUserDetails(e)}
-                    className={styles.navbar_user_name}
-                  >
-                    {props.auth.authUser.username}
-                  </h2>
-                  <ArrowDownIcon
-                    id="usericon"
-                    onClick={(e) => toggleUserDetails(e)}
-                    style={styles.navbar_user_icon}
-                  />
-                  <div id="userdetails" className={styles.navbar_user_signedin}>
-                    <Link href="/dashboard">
+            <Image className={styles.navbar_top_logo_img} src={img_logo} alt="logo" />
+
+          </Link>
+          <div className={styles.navbar_top_details}>
+            {!props.auth.isAuthenticated && authUser === null ? (
+              <Link legacyBehavior href='/login'>
+              <a className={styles.navbar_user_loginbtn}>
+              
+                Log In/Register
+              </a>
+               </Link>
+            ) : (
+              <div className={styles.navbar_user_info}>
+
+{authUser?.profile_picture !== "" && authUser?.profile_picture !== undefined ?  <Image
+                  id="userImg"
+                  onClick={(e) => toggleUserDetails(e)}
+                  width={50}
+                  height={50}
+                  src={authUser?.profile_picture }
+                  alt={props?.auth?.authUser?.username}
+                  className={styles.navbar_user_img}
+                />: <UserIcon style={styles.navbar_user_img}/> }
+
+               
+                <h4
+                  id="userName"
+                  onClick={(e) => toggleUserDetails(e)}
+                  className={styles.navbar_user_name}
+                >
+                  {props?.auth?.authUser?.username}
+                </h4>
+                <ArrowDownIcon
+                  id="usericon"
+                  onClick={(e) => toggleUserDetails(e)}
+                  style={styles.navbar_user_icon}
+                />
+                <div id="userdetails" className={styles.navbar_user_signedin}>
+                  <Link href="/dashboard" >
+
+                    <div
+                      className={
+                        styles.navbar_user_signedin_link +
+                        " " +
+                        styles.black
+                      }
+                    >
+                      <DashBoardIcon style={styles.navbar_main_link_icon} />
+                      <h3>Dashboard</h3>
+                    </div>
+
+                  </Link>
+                  <Link href="/dashboard/userprofile" >
+
+                    <div
+                      className={
+                        styles.navbar_user_signedin_link +
+                        " " +
+                        styles.black
+                      }
+                    >
+                      {/* <Image src={openIcon} alt="profile" /> */}
+                      <UserIcon style={styles.navbar_main_link_icon} />
+                      <h3>Profile</h3>
+                    </div>
+
+                  </Link>
+                  <div className={styles.navbar_user_signedin_logout}>
+                    <div>
                       <div
                         className={
                           styles.navbar_user_signedin_link + " " + styles.black

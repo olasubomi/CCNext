@@ -20,6 +20,7 @@ function Reviews({ itemId, callback }) {
     const [isEditing, setIsEditing] = useState(false)
     const [commentId, setCommentId] = useState("")
     const profileImage = JSON.parse(localStorage.getItem('user'))?.profile_picture
+    const {authUser} = useSelector(state => state.Auth)
 
 
     useEffect(() => {
