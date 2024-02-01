@@ -211,7 +211,7 @@ function Header(props) {
 
           </Link>
           <div className={styles.navbar_top_details}>
-            {!props.auth.isAuthenticated && props.auth.authUser === null ? (
+            {!props.auth.isAuthenticated && authUser === null ? (
               <Link legacyBehavior href='/login'>
               <a className={styles.navbar_user_loginbtn}>
               
@@ -227,7 +227,7 @@ function Header(props) {
                   width={50}
                   height={50}
                   src={authUser?.profile_picture }
-                  alt="User"
+                  alt={props?.auth?.authUser?.username}
                   className={styles.navbar_user_img}
                 />: <UserIcon style={styles.navbar_user_img}/> }
 
@@ -237,7 +237,7 @@ function Header(props) {
                   onClick={(e) => toggleUserDetails(e)}
                   className={styles.navbar_user_name}
                 >
-                  {props.auth.authUser.username}
+                  {props?.auth?.authUser?.username}
                 </h4>
                 <ArrowDownIcon
                   id="usericon"
