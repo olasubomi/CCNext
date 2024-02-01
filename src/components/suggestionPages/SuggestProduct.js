@@ -411,7 +411,7 @@ class SuggestProductForm extends Component {
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.props.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.props.measurements?.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
 
@@ -445,7 +445,7 @@ class SuggestProductForm extends Component {
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
       // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.props.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const searchResult = this.props.measurements?.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
       const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
       console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
 
@@ -798,7 +798,7 @@ class SuggestProductForm extends Component {
 
       // get new_Measurements from inputted ingredient packets
       if (ingredientGroupList[i].measurement !== "") {
-        let index = this.props.measurements.indexOf(ingredientGroupList[i].measurement);
+        let index = this.props.measurements?.indexOf(ingredientGroupList[i].measurement);
         if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
       }
     }
@@ -1071,7 +1071,7 @@ class SuggestProductForm extends Component {
                   </label>
                   <Autocomplete
                     id="sizeMeasurement"
-                    options={this.props.measurements.map((option) => option)}
+                    options={this.props.measurements?.map((option) => option)}
                     value={this.state.sizeMeasurement} x
                     onChange={this.handleSizeMeasurement}
                     freeSolo
@@ -1140,7 +1140,7 @@ class SuggestProductForm extends Component {
                   </label>
                   <Autocomplete
                     id="currentIngredientMeasurement"
-                    options={this.props.measurements.map((option) => option)}
+                    options={this.props.measurements?.map((option) => option)}
                     value={this.state.currentIngredientMeasurement}
                     onChange={this.handleIngredientMeasurement}
                     freeSolo
@@ -1176,7 +1176,7 @@ class SuggestProductForm extends Component {
               </label>
               <Autocomplete
                 id="currentNutritionName"
-                options={this.props.nutritionFacts.map((option) => option)}
+                options={this.props.nutritionFacts?.map((option) => option)}
                 // onChange={(ev)=>this.onTextFieldChange(ev)}
                 value={this.state.currentNutritionName}
                 onChange={(ev, val) => this.handleProductNameInput(ev, val, 'currentNutritionName')}
@@ -1207,7 +1207,7 @@ class SuggestProductForm extends Component {
                   </label>
                   <Autocomplete
                     id="currentIngredientMeasurement1"
-                    options={this.props.measurements.map((option) => option)}
+                    options={this.props.measurements?.map((option) => option)}
                     value={this.state.currentIngredientMeasurement}
                     onChange={this.handleIngredientMeasurement}
                     freeSolo

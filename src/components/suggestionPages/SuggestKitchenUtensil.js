@@ -684,7 +684,7 @@ class SuggestKitchenUtensilForm extends Component {
                   </label>
                   <Autocomplete
                     id="measurement"
-                    options={this.props.measurements.map((option) => option)}
+                    options={this.props.measurements?.map((option) => option)}
                     value={this.state.measurement}
                     onChange={this.handleMeasurement}
                     freeSolo
