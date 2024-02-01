@@ -118,7 +118,7 @@ export const SuggestedUtensils = () => {
   return (
     <div className={styles.mealContainer}>
       <Element
-        name="utensils"
+        name="utensils" id="utensils"
         style={{ fontSize: "2rem", marginBottom: "1rem" }}
       >
         Suggested Utensils for you

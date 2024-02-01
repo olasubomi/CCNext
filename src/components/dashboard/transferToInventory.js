@@ -176,7 +176,7 @@ export default function TransferToInventory(props) {
           setShow(true);
           setTimeout(() => {
             setShow(false);
-          }, 3000);
+          }, 4000);
           setMessage({
             response:
               "Your request has been sent to the administrator; you will be notified when it is approved or rejected. It might take up to 2-3 hours, so please be patient.",
@@ -192,7 +192,7 @@ export default function TransferToInventory(props) {
         setShow(true);
         setTimeout(() => {
           setShow(false);
-        }, 3000);
+        }, 4000);
         setMessage({
           response:
             "Your request cannot be completed as Item is already in Inventory",
@@ -429,7 +429,6 @@ export default function TransferToInventory(props) {
                       >
                         Product
                       </label>
-      
                     </div>
                     <div className={styles.transToIn_meal_type_option}>
                       <input
@@ -450,7 +449,6 @@ export default function TransferToInventory(props) {
                       >
                         Kitchen Utensils
                       </label>
-                      
                     </div>
                   </div>
                 )}
@@ -540,7 +538,10 @@ export default function TransferToInventory(props) {
                   {formState.meal_type === "non packaged" && (
                     <div className={styles.transToIn_details_col4}>
                       <p>Set ingredient prices and availability</p>
-                      <table className={styles.request_table} style={{height: '2px'}}>
+                      <table
+                        className={styles.request_table}
+                        style={{ height: "2px" }}
+                      >
                         <thead>
                           <div
                             className={styles.request_tr1}

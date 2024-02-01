@@ -693,7 +693,7 @@ export function Header2() {
                 activeClass="active"
                 href="/publicMarket/#utensils"
                 onClick={() =>
-                  scroll.scrollTo(1800, { smooth: true, duration: 100 })
+                  scroll.scrollTo(1700, { smooth: true, duration: 100 })
                 }
               >
                 Utensils
