@@ -169,6 +169,8 @@ class Popup2 extends Component {
         const { curIn, length } = this.state;
 
         console.log('propss', this.props)
+        console.log(ingredientsInItem, 'items')
+        console.log(ingredientsList, 'list')
         var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
         var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
         return (

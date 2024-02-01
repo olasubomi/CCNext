@@ -4,12 +4,8 @@ import axios from '../../util/Api';
 import { StarRating } from '../star-rating';
 import { useEffect, useState } from 'react';
 import { RiDeleteBin5Line } from "react-icons/ri"
-import Link from 'next/link';
 import moment from 'moment'
-import { elements } from 'chart.js';
 import Image from 'next/image';
-import profile_pic from "../../../public/assets/icons/user_icon.jpeg"
-import { useSelector } from 'react-redux';
 
 function Reviews({ itemId, callback }) {
 
@@ -25,6 +21,7 @@ function Reviews({ itemId, callback }) {
     const [commentId, setCommentId] = useState("")
     const profileImage = JSON.parse(localStorage.getItem('user'))?.profile_picture
     const {authUser} = useSelector(state => state.Auth)
+
 
     useEffect(() => {
         getAllComments()
@@ -156,12 +153,12 @@ function Reviews({ itemId, callback }) {
                     <div className={styles.product_review_col_1_row}>
                         <div className={styles.product_review_name_ab}>
 
-                        {authUser?.profile_picture !== "" && authUser?.profile_picture !== undefined ? 
+                        {profileImage !== "" && profileImage !== undefined ? 
                         <Image 
                         width={50} height={50}
                         style={{borderRadius: 30}}
                         alt={username}
-                        src={authUser?.profile_picture}
+                        src={profileImage}
                         className={styles.user_img}
                         /> : <UserIcon style={styles.user_img}/> }
                         </div>

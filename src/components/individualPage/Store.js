@@ -45,7 +45,7 @@ function Store(props) {
     //   })
     // }
   }
-  console.log(props, "props11");
+  console.log(props.store, "props11");
   const filteredItem = () => {
     return props?.items?.filter((data) => data?.item_type === "Meal");
   };
@@ -223,7 +223,7 @@ function Store(props) {
                             {data.item_name}
                           </h6>
                           <p className={styles.productcard_productcard_price}>
-                            {data.item_price ? data.item_price : "N/A"}
+                           {data.item_price ?  props?.store?.currency?.symbol + data.item_price : "N/A"}
                           </p>
                         </div>
                         <div className={styles.productcard_productcard_col}>
@@ -306,7 +306,7 @@ function Store(props) {
                             </div>
                           </div>
                           <p className={styles.productcard_productcard_price}>
-                            {data.item_price ? data.item_price : "N/A"}
+                          {data.item_price ?  props?.store?.currency?.symbol + data.item_price : "N/A"}
                           </p>
                         </div>
                       </div>

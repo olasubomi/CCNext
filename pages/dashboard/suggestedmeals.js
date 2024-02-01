@@ -394,9 +394,8 @@ const SuggestedMeals = (props) => {
       });
       toggleChangeStoreStatus();
       console.log("resss", res);
-        getAllStores();
-        toast.success("Status successfully updated");
-      
+      getAllStores();
+      toast.success("Status successfully updated");
     } catch (e) {
       console.log(e, "errr");
     }
@@ -405,9 +404,9 @@ const SuggestedMeals = (props) => {
   const deleteStore = async (id) => {
     try {
       const resp = await axios.delete(`/stores/deletestore/${id}`);
-        toast.success("Store deleted successfully");
-        getAllStores();
-      console.log(resp, 'respo')
+      toast.success("Store deleted successfully");
+      getAllStores();
+      console.log(resp, "respo");
     } catch (e) {
       console.log(e);
     }
@@ -2135,13 +2134,13 @@ const SuggestedMeals = (props) => {
         </div>
       )}
 
-      {transferToInventory && (
-        <TransferToInventory
-          type={searchType}
-          meal={suggestion}
-          toggleTransferToInventory={toggleTransferToInventory}
-        />
-      )}
+      <TransferToInventory
+        type={searchType}
+        setTransferToInventoryState={setTransferToInventoryState}
+        meal={suggestion}
+        transferToInventory={transferToInventory}
+        toggleTransferToInventory={toggleTransferToInventory}
+      />
 
       {sent && <Sent toggleSent={toggleSent} />}
     </div>
