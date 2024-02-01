@@ -211,17 +211,19 @@ function Header(props) {
 
           </Link>
           <div className={styles.navbar_top_details}>
+            <div style={{display: "flex", alignItems: "center", gap:15}}>
             {!props.auth.isAuthenticated && authUser === null ? (
               <Link legacyBehavior href='/login'>
-              <a className={styles.navbar_user_loginbtn}>
+              <button className={styles.navbar_user_loginbtn}>
               
                 Log In/Register
-              </a>
+              </button>
                </Link>
             ) : (
               <div className={styles.navbar_user_info}>
-
-{authUser?.profile_picture !== "" && authUser?.profile_picture !== undefined ?  <Image
+             <div onClick={(e) => toggleUserDetails(e)} style={{display: "flex", flexDirection: "row", alignItems: "center", paddingRight: 15}}> 
+            {authUser?.profile_picture !== "" && authUser?.profile_picture !== undefined ?  
+                <Image
                   id="userImg"
                   onClick={(e) => toggleUserDetails(e)}
                   width={50}
@@ -244,6 +246,7 @@ function Header(props) {
                   onClick={(e) => toggleUserDetails(e)}
                   style={styles.navbar_user_icon}
                 />
+                </div>
                 <div id="userdetails" className={styles.navbar_user_signedin}>
                   <Link href="/dashboard" >
 
@@ -295,6 +298,7 @@ function Header(props) {
               </div>
             )}
             <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
+
             <div className={styles.navbar_top_details_col}>
               <div id="noticon" onClick={(e) => toggleNotification(e)}>
                 <NotificationIcon
@@ -555,6 +559,8 @@ function Header(props) {
               </div>
             </div>
           </div>
+            </div>
+            
         </div>
       </div>
       {/* {isOpen && <Auth />} */}
