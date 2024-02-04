@@ -15,6 +15,7 @@ import Image from 'next/image';
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { base_url } from "../../util/Api";
+import { withRouter } from "next/router";
 
 class SuggestProductForm extends Component {
   allProductNames = [];
@@ -938,7 +939,9 @@ class SuggestProductForm extends Component {
     // var url = "/createProduct/";
     // var url = "http://localhost:5000/api/products/create/";
     var url = `${base_url}/items/`;
-
+    if(this.props.router?.query?.id){
+      url = url + `?action=update&_id=${this.props.router.query.id}`
+    }
     const config = {
       method: 'POST', data: suggestProductForm, url: url,
       headers: {
@@ -1088,7 +1091,7 @@ class SuggestProductForm extends Component {
 
             <Stack direction="row" spacing={1} className={styles.stack}>
               {
-                sizeStrings.map((data, index) => (
+                sizeStrings?.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
@@ -1156,7 +1159,7 @@ class SuggestProductForm extends Component {
 
             <Stack direction="row" spacing={1} className={styles.stack}>
               {
-                ingredientStrings.map((data, index) => (
+                ingredientStrings?.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
@@ -1223,7 +1226,7 @@ class SuggestProductForm extends Component {
 
             <Stack direction="row" spacing={1} className={styles.stack}>
               {
-                nutritionalStrings.map((data, index) => (
+                nutritionalStrings?.map((data, index) => (
                   <Chip
                     key={index}
                     label={data}
@@ -1319,4 +1322,4 @@ class SuggestProductForm extends Component {
   }
 }
 
-export default SuggestProductForm;
+export default withRouter(SuggestProductForm);

@@ -124,6 +124,11 @@ class SuggestMeal extends Component {
   componentDidMount() {
     this.openSuggestionModal();
     console.log("suggestionType---", this.state.suggestionType);
+    console.log(this.props.router, 'this.props.router.query00')
+
+    setTimeout(() => {
+      this.setState({...this.state, suggestionType: this.props.router?.query?.item_type ?? "Meal"})
+    }, 1000);
     // get all Meal Names***
     console.log(this.categories, "categories");
     // var url = "/meals/get-meals/1";
@@ -231,7 +236,7 @@ class SuggestMeal extends Component {
   openSuggestionModal() {
     setTimeout(() => {
       if (!localStorage.getItem("x-auth-token")) {
-        this.setState({ suggestionModal: true });
+        this.setState({...this.state, suggestionModal: true });
       }
     }, 3000);
   }
@@ -412,4 +417,4 @@ class SuggestMeal extends Component {
   }
 }
 
-export default SuggestMeal;
+export default withRouter(SuggestMeal);
