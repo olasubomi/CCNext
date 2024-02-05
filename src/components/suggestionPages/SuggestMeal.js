@@ -19,6 +19,7 @@ import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { base_url } from "../../util/Api";
+import { withRouter } from "next/router";
 
 class SuggestMealForm extends Component {
   ingredientsQuantityMeasurements = [];
@@ -211,7 +212,7 @@ class SuggestMealForm extends Component {
       let doc = document.querySelector("#formmeal");
       if (doc) {
         setInterval(() => {
-          localStorage.setItem("suggestMealForm", JSON.stringify(this.state));
+          // localStorage.setItem("suggestMealForm", JSON.stringify(this.state));
         }, 100);
       }
 
@@ -223,17 +224,25 @@ class SuggestMealForm extends Component {
           intro,
           ItemIntro,
           ingredientNames,
+          ingredeintsInItem,
           // do we need product group list AND strings ?
           ingredientGroupList,
           // store product names of inputted strings to compare with db products
-          ingredientStrings,
+          ingredientStrings = ingredeintsInItem?.map(
+            (elem) => elem?.formatted_string_of_item
+          ) || [],
           // do we want to use current ingredient formats ? Yes.
           currentIngredient,
           currentIngredientMeasurement,
           currentIngredientQuantity,
           currentProductImgSrc,
           currentProductDisplayIndex,
-
+          instructionChunk1Step,
+          instructionChunk2Step,
+          instructionChunk3Step,
+          instructionChunk4Step,
+          instructionChunk5Step,
+          instructionChunk6Step,
           currentStore,
 
           // we need to update how we create image paths
@@ -270,12 +279,17 @@ class SuggestMealForm extends Component {
           stepInputs,
         } = JSON.parse(localStorage.getItem("suggestMealForm"));
 
+        console.log(instructionChunk1, "instructionChunk1instructionChunk1");
+
+        // let stepInpu ts_ =
+
         this.setState({
           mealName,
-          itemMealName,
+          itemMealName: mealName,
           intro,
           ItemIntro,
           ingredientNames,
+          ingredeintsInItem,
           // do we need product group list AND strings ?
           ingredientGroupList,
           // store product names of inputted strings to compare with db products
@@ -299,45 +313,45 @@ class SuggestMealForm extends Component {
 
           cookTime,
           prepTime,
-
-          instructionChunk6: {
-            title: instructionChunk6.title,
-            instructionSteps: instructionChunk6.instructionSteps,
-            dataName: "",
-          },
+          instructionChunk1Step,
+          instructionChunk2Step,
+          instructionChunk3Step,
+          instructionChunk4Step,
+          instructionChunk5Step,
+          instructionChunk6Step,
+          stepInputs,
           instructionChunk1: {
-            title: instructionChunk1.title,
-            instructionSteps: instructionChunk1?.instructionSteps || [], //[],
-
+            title: instructionChunk1,
+            instructionSteps: instructionChunk1Step || [], //[],
             dataName: "",
           },
           instructionChunk2: {
-            title: instructionChunk2.title,
-            instructionSteps: instructionChunk2?.instructionSteps || [],
+            title: instructionChunk2,
+            instructionSteps: instructionChunk2Step || [],
 
             dataName: "",
           },
           instructionChunk3: {
-            title: instructionChunk3?.title,
-            instructionSteps: instructionChunk3?.instructionSteps || [],
+            title: instructionChunk3,
+            instructionSteps: instructionChunk3Step || [],
 
             dataName: "",
           },
           instructionChunk4: {
-            title: instructionChunk4.title,
-            instructionSteps: instructionChunk4?.instructionSteps || [],
+            title: instructionChunk4,
+            instructionSteps: instructionChunk4Step || [],
 
             dataName: "",
           },
           instructionChunk5: {
-            title: instructionChunk5.title,
-            instructionSteps: instructionChunk5?.instructionSteps || [],
+            title: instructionChunk5,
+            instructionSteps: instructionChunk5Step || [],
 
             dataName: "",
           },
           instructionChunk6: {
-            title: instructionChunk6.title,
-            instructionSteps: instructionChunk6?.instructionSteps || [],
+            title: instructionChunk6,
+            instructionSteps: instructionChunk6Step || [],
 
             dataName: "",
           },
@@ -364,6 +378,7 @@ class SuggestMealForm extends Component {
         var videoElementId = "chunk1Video";
       }
     }
+    console.log(this.state, "dd");
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -671,8 +686,9 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   handleAddIngredientChip(chip) {
+    console.log(this.state.ingredientStrings, chip, "ingredientStrings");
     this.setState({
-      ingredientStrings: [...this.state.ingredientStrings, chip],
+      ingredientStrings: [...this.state?.ingredientStrings, chip],
     });
   }
 
@@ -1094,8 +1110,8 @@ class SuggestMealForm extends Component {
     }
     ingredientValue = this.capitalizeWords(ingredientValue);
     if (quantityValue === "") {
-      window.alert("Enter quantity to add to meal");
-      return;
+      // window.alert("Enter quantity to add to meal");
+      // return;
     }
     // update ingredient string syntax for no quantity or no measurement.
     if (quantityValue === "") {
@@ -1510,23 +1526,23 @@ class SuggestMealForm extends Component {
     console.log(suggestedCategories, "suggests");
     console.log(suggestedUtensils, "utensils");
     // RecipeSteps
-    
-    let ingredientList = []
-    for (let element of ingredientGroupList){
-      let obj = {} 
-      if(element.productName){
-        obj.item_name = element.productName
+
+    let ingredientList = [];
+    for (let element of ingredientGroupList) {
+      let obj = {};
+      if (element.productName) {
+        obj.item_name = element.productName;
       }
-      if(element.quantity){
-        obj.item_quantity = element.quantity
+      if (element.quantity) {
+        obj.item_quantity = element.quantity;
       }
-      if(element.measurement){
-        obj.item_measurement = element.measurement
+      if (element.measurement) {
+        obj.item_measurement = element.measurement;
       }
-      if(element.properIngredientStringSyntax){
-        obj.formatted_string_of_item = element.properIngredientStringSyntax
+      if (element.properIngredientStringSyntax) {
+        obj.formatted_string_of_item = element.properIngredientStringSyntax;
       }
-      ingredientList.push(obj)
+      ingredientList.push(obj);
     }
     suggestMealForm.append(
       "formatted_ingredients",
@@ -1552,6 +1568,10 @@ class SuggestMealForm extends Component {
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
     var url = `${base_url}/items`;
+
+    if(this.props.router?.query?.id){
+      url = url + `?action=${'update'}&_id=${this.props.router.query.id}`
+    }
 
     const config_ = {
       method: "POST",
@@ -1752,6 +1772,9 @@ class SuggestMealForm extends Component {
 
     // console.log(this.props.categories);
     const { ingredientStrings, stepInputs } = this.state;
+    console.log(stepInputs, "steps");
+
+    console.log(this.state, "ingredientStrings");
 
     return (
       <div className={styles.suggestion_section_2}>
@@ -2040,7 +2063,7 @@ class SuggestMealForm extends Component {
             {/* Show all Products in display format as expected in Meal Page*/}
 
             <Stack direction="row" spacing={1} className={styles.stack}>
-              {ingredientStrings.map((data, index) => (
+              {ingredientStrings?.map((data, index) => (
                 <Chip
                   key={index}
                   label={data}
@@ -2070,7 +2093,7 @@ class SuggestMealForm extends Component {
                   freeSolo
                   clearOnBlur
                   onBlur={this.kitBlur}
-                  options={this.props.kitchenUtensils.map((option) => option)}
+                  options={this.props.kitchenUtensils?.map((option) => option)}
                   // onChange={(ev,val)=>this.handleUtensilsDropdownChange(ev,val)}
                   onChange={(e, val) => this.handleKitchenUtensilInputName(val)}
                   renderInput={(params) => (
@@ -2142,8 +2165,12 @@ class SuggestMealForm extends Component {
                   <label className={styles.suggestion_form_label}>
                     Step 1 Title
                   </label>
+                  {console.log(
+                    this.state.instructionChunk1?.title,
+                    "this.state.instructionChunk1?.title"
+                  )}
                   <TextField
-                    value={this.state.instructionChunk1.title}
+                    value={this.state.instructionChunk1?.title}
                     id="chunk1Title"
                     onChange={(ev) => this.handleInstructionTitle(ev, 1)}
                     variant="outlined"
@@ -2566,4 +2593,4 @@ class SuggestMealForm extends Component {
   }
 }
 
-export default SuggestMealForm;
+export default withRouter(SuggestMealForm);

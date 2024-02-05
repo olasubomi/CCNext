@@ -118,6 +118,7 @@ const SuggestedMeals = (props) => {
     getUserItems();
   }, [props.auth]);
 
+  console.log(suggestion, 'ooo')
   useEffect(() => {
     getAllDescriptions();
   }, [status, props.auth]);
@@ -394,9 +395,8 @@ const SuggestedMeals = (props) => {
       });
       toggleChangeStoreStatus();
       console.log("resss", res);
-        getAllStores();
-        toast.success("Status successfully updated");
-      
+      getAllStores();
+      toast.success("Status successfully updated");
     } catch (e) {
       console.log(e, "errr");
     }
@@ -405,9 +405,9 @@ const SuggestedMeals = (props) => {
   const deleteStore = async (id) => {
     try {
       const resp = await axios.delete(`/stores/deletestore/${id}`);
-        toast.success("Store deleted successfully");
-        getAllStores();
-      console.log(resp, 'respo')
+      toast.success("Store deleted successfully");
+      getAllStores();
+      console.log(resp, "respo");
     } catch (e) {
       console.log(e);
     }
@@ -1991,7 +1991,7 @@ const SuggestedMeals = (props) => {
           tips={suggestion?.meal_tips}
           mealImageData={suggestion?.itemImage0}
           suggested={true}
-          id={suggestion.id}
+          id={suggestion._id}
           categories={suggestion?.item_categories?.map(
             (ele) => ele?.category_name
           )}
@@ -2019,7 +2019,7 @@ const SuggestedMeals = (props) => {
               : []
           }
           suggested={true}
-          id={suggestion.id}
+          id={suggestion._id}
           ingredientGroupList={suggestion.formatted_ingredients}
           item_description={suggestion.item_description}
         />
@@ -2135,13 +2135,13 @@ const SuggestedMeals = (props) => {
         </div>
       )}
 
-      {transferToInventory && (
-        <TransferToInventory
-          type={searchType}
-          meal={suggestion}
-          toggleTransferToInventory={toggleTransferToInventory}
-        />
-      )}
+      <TransferToInventory
+        type={searchType}
+        setTransferToInventoryState={setTransferToInventoryState}
+        meal={suggestion}
+        transferToInventory={transferToInventory}
+        toggleTransferToInventory={toggleTransferToInventory}
+      />
 
       {sent && <Sent toggleSent={toggleSent} />}
     </div>

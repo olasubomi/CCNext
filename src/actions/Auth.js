@@ -341,6 +341,7 @@ export const userSignOut = () => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     localStorage.removeItem("x-auth-token");
+    localStorage.removeItem("x-auth-refresh-token")
     localStorage.removeItem("in");
     localStorage.removeItem("user");
     dispatch({ type: FETCH_SUCCESS });
