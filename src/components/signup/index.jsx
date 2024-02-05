@@ -171,7 +171,7 @@ function SignUp(props){
                       className={styles.login_main_logo_img}
                     />
                           </Link>
-                          <h4 className={styles.login_promo_text} style={{marginTop: 100}}>
+                          <h4 className={styles.login_promo_text}>
               Get your African Delicacies delievered to your Door
             </h4>
             </div>

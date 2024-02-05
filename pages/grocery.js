@@ -327,12 +327,20 @@ const Grocery = () => {
                   style={{ marginBottom: "1rem", marginTop: "1rem" }}
                 >
                   <div className={styles.flex}>
-                    <Image
+                    {/* <Image
                       src={girl}
                       width={40}
                       height={40}
                       className={styles.person}
-                    />
+                    /> */}
+                     {authUser?.profile_picture !== "" && authUser?.profile_picture !== undefined ? 
+                        <Image 
+                        width={50} height={50}
+                        style={{borderRadius: 30}}
+                        alt={ele.user.first_name}
+                        src={authUser?.profile_picture}
+                        className={styles.user_img}
+                        /> : <UserIcon style={styles.user_img}/> }
                     <p className={styles.name}>
                       {ele.user.first_name} {ele.user.last_name}
                     </p>
