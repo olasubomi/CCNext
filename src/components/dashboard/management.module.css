@@ -244,10 +244,10 @@
 .categories {
   width: 160px;
   margin-left: 2rem;
-  margin-right: 4rem;
+  margin-right: 19.8rem;
   background-color: #fff;
   border-radius: 0 4px 4px 0;
-  margin-top: 0.5rem;
+  margin-top: 22.3rem;
   padding: 0 1.5rem 2.5rem 1.5rem;
   position: absolute;
   z-index: 2;
@@ -302,7 +302,7 @@
 .searchDropdown {
   z-index: 1000;
   width: 100%;
-  height: 50vh;
+  height: 25vh;
   padding: 1.2rem 2rem 2rem 2rem;
   overflow-y: scroll;
   position: absolute;
@@ -310,7 +310,12 @@
   border-radius: 0px 0px 4px 4px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
-
+.storeTitle{
+  font-size: 18px;
+}
+.searchDropdown p{
+  font-size: 14px;
+}
 .searchflex {
   display: flex;
   width: 100%;
@@ -421,12 +426,11 @@
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
-
 .top {
   margin-top: 4rem;
   padding-bottom: 2rem;
 }
-.span{
+.span {
 }
 .card {
   display: flex;
@@ -580,7 +584,6 @@
   line-height: normal;
   margin-left: 1.3rem;
 }
-
 .car {
   color: #949494;
   font-size: 11px;
@@ -588,7 +591,9 @@
   font-weight: 400;
   line-height: normal;
 }
-
+.storeTitle {
+  font-size: 12;
+}
 .number {
   color: #353535;
   font-size: 12px;
@@ -682,6 +687,7 @@
   padding-left: 1rem;
   padding-top: 0.5rem;
 }
+
 @media only screen and (max-width: 1100px) {
   .summaryCard {
     width: 100%;
@@ -829,7 +835,7 @@
     row-gap: 2rem;
     justify-content: center;
   }
-  .one_store{
+  .one_store {
     width: 100%;
   }
 }

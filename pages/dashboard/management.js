@@ -33,6 +33,8 @@ import moment from "moment";
 import { ModalPopup } from "../../src/components/modal/modal";
 import { FormModal } from "../../src/components/modal/form-modal";
 import { SuccessModal } from "../../src/components/suggest-store/success-modal";
+import { getAllISOCodes } from "iso-country-currency";
+
 const List = [
   {
     name: "Store Info",
@@ -114,11 +116,14 @@ const Management = () => {
   const [showCategory, setShowCategory] = useState(false);
   const ref = useRef();
   const [value, setValue] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
   const [show, setShow] = useState(false);
   const [items, setItems] = useState([]);
   const [store, setStore] = useState([]);
+  const [oneStore, setOneStore] = useState("");
   const [open, setOpen] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
+  const [userInventory, setUserInventory] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const matches = useMediaQuery("(min-width: 700px)");
   const days = [
@@ -172,20 +177,45 @@ const Management = () => {
     setTimes({ ...times, [day]: { ...times[day], [when]: time } });
   }
 
+  const filteredItem = () => {
+    return userInventory.filter((elem) => elem.item_type === "Meal");
+  };
+
+  const filteredProduct = () => {
+    return userInventory.filter((elem) => elem.item_type === "Product");
+  };
+
+  const filteredUtensils = () => {
+    return userInventory.filter((elem) => elem.item_type === "Utensils");
+  };
+  const [filteredMeals, setFilteredMeals] = useState(filteredItem());
+  const [filteredProducts, setFilteredProducts] = useState(filteredProduct());
+
+  useEffect(() => {
+    setFilteredMeals(filteredItem());
+    setFilteredProducts(filteredProduct());
+  }, []);
+  console.log(filteredProducts, "jjd");
+
   function handleDayAvailabiltyChange(value, day, when) {
     setTimes({ ...times, [day]: { ...times[day], [when]: value } });
   }
+  const handleSearch = () => {
+    const filteredMeals = value
+      ? filteredItem().filter((meal) =>
+          meal.label.toLowerCase().includes(value.toLowerCase())
+        )
+      : filteredItem();
 
-  const filteredItem = () => {
-    return items.filter((elem) => elem.item_type === "Meal");
+    const filteredProducts = value
+      ? filteredProduct().filter((product) =>
+          product.label.toLowerCase().includes(value.toLowerCase())
+        )
+      : filteredProduct();
+
+    setFilteredMeals(filteredMeals);
+    setFilteredProducts(filteredProducts);
   };
-  const filteredProduct = () => {
-    return items.filter((elem) => elem.item_type === "Product");
-  };
-  const filteredUtensils = () => {
-    return items.filter((elem) => elem.item_type === "Utensils");
-  };
-  console.log(filteredItem(), "fil");
 
   const [formState, setFormState] = useState({
     store_name: "",
@@ -222,28 +252,35 @@ const Management = () => {
       [name]: value,
     });
   };
-  const getItem = async (name) => {
+
+  const fetchOneUserInventory = async (name) => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}")?._id;
-      const response = await axios.get(`/items/users/${user}`);
-      const resp = response.data.data.map((element) => {
+      const response = await axios.get(`/inventory/user-inventory/${user}`);
+      console.log(response, 'repsonse')
+      const resp = response.data.data.inventoryItems.map((element) => {
         return {
-          label: element.item_name,
+          label: element.item.item_name,
           value: element._id,
-          image: element?.itemImage0,
-          price: element?.item_price ? `$${element?.item_price}` : "No Price",
-          store: element?.store_available?.store_name || "No store",
+          image: element?.item.itemImage0,
+          price: element?.item.item_price
+            ? `${element?.item.item_price}`
+            : "No Price",
+          store: element?.storeId?.store_name || "No store",
           item_type: element?.item_type,
+          currency: element.storeId?.currency?.symbol,
         };
       });
-      setItems(resp);
+      console.log(resp, 'respsp')
+      setUserInventory(resp);
+      setFilteredMeals(resp.filter((item) => item.item_type === "Meal"));
+      setFilteredProducts(resp.filter((item) => item.item_type === "Product"));
       console.log(response.data.data, "resp");
     } catch (error) {
       console.log(error);
     }
     return name;
   };
-  console.log(items, "item");
 
   const getStore = async (name) => {
     try {
@@ -280,9 +317,7 @@ const Management = () => {
       true
     );
   }, []);
-  useEffect(() => {
-    getItem();
-  }, []);
+
   function uploadImage(picture) {
     if (picture === "profile") {
       const input = document.createElement("input");
@@ -403,27 +438,23 @@ const Management = () => {
     }
   }, [storeId]);
 
-  const handleClaimStore = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const form = new FormData();
-      for (let element in formState) {
-        if (formState[element]) {
-          form.append(element, formState[element]);
-        }
-      }
-      form.append("store_owner", user?._id);
-      const response = await axios.put(`/stores/updatestore/${storeId}`, form);
-      console.log(response.data.data, "response");
-    } catch (e) {}
-  };
+  // const handleClaimStore = async () => {
+  //   try {
+  //     const user = JSON.parse(localStorage.getItem("user") || "{}");
+  //     const form = new FormData();
+  //     for (let element in formState) {
+  //       if (formState[element]) {
+  //         form.append(element, formState[element]);
+  //       }
+  //     }
+  //     form.append("store_owner", user?._id);
+  //     const response = await axios.put(`/stores/updatestore/${storeId}`, form);
+  //     console.log(response.data.data, "response");
+  //   } catch (e) {}
+  // };
   const [categories, setCategories] = useState([
     {
       label: "All categories",
-      value: true,
-    },
-    {
-      label: "Stores",
       value: true,
     },
     {
@@ -458,7 +489,7 @@ const Management = () => {
       const form = new FormData();
       for (let element in formState) {
         if (formState[element]) {
-          if (element === "supplier_address") {
+          if (element === "supplier_address" || element === "currency") {
             form.append(element, JSON.stringify(formState[element]));
           } else {
             form.append(element, formState[element]);
@@ -491,6 +522,24 @@ const Management = () => {
     } catch (e) {}
   }, [times]);
 
+  const deleteInventory = async (id) => {
+    console.log(id, 'idd')
+    try {
+      const res = await axios.delete(`/inventory/delete-inventory/${id}`);
+      console.log("resss", res);
+      if (res.status === 202) {
+        fetchOneUserInventory();
+        toast.success("Deleted successful");
+      } else {
+        toast.error("This Item does not exist!");
+      }
+    } catch (e) {
+      console.log(e, "errr");
+    }
+  };
+  useEffect(() => {
+    fetchOneUserInventory();
+  }, []);
   return (
     <div className={container + " " + col2}>
       <Head>
@@ -537,14 +586,6 @@ const Management = () => {
                     <div
                       key={elem.id}
                       onClick={() => {
-                        // {
-                        //   name: "Store Information",
-                        //   id: 1,
-                        // },
-                        // {
-                        //   name: "Meals/Products",
-                        //   id: 2,
-                        // },
                         if (
                           elem.name === "Store Info" ||
                           elem.name === "Meals/Products"
@@ -554,7 +595,6 @@ const Management = () => {
                           if (formState.store_owner) {
                             handleActive(elem.id);
                           } else {
-                            // alert("This store has not been claimed");
                             setOpen(true);
                           }
                         }
@@ -590,14 +630,6 @@ const Management = () => {
                   <div
                     key={elem.id}
                     onClick={() => {
-                      // {
-                      //   name: "Store Information",
-                      //   id: 1,
-                      // },
-                      // {
-                      //   name: "Meals/Products",
-                      //   id: 2,
-                      // },
                       if (
                         elem.name === "Store Info" ||
                         elem.name === "Meals/Products"
@@ -607,7 +639,6 @@ const Management = () => {
                         if (formState.store_owner) {
                           handleActive(elem.id);
                         } else {
-                          // alert("This store has not been claimed");
                           setOpen(true);
                         }
                       }
@@ -817,19 +848,7 @@ const Management = () => {
                       </div>
                       <div className={styles.column}>
                         <label>Address</label>
-                        {/* <input
-                        onChange={(e) => {
-                          setFormState({
-                            ...formState,
-                            supplier_address: {
-                              address: e.target.value,
-                            },
-                          });
-                        }}
-                        value={formState.supplier_address.address}
-                        type="text"
-                        name="supplier_address.address"
-                      /> */}
+
                         <GooglePlacesAutocomplete
                           defaultInputValue={formState.supplier_address.address}
                           handleValueChange={(
@@ -842,8 +861,15 @@ const Management = () => {
                             state,
                             city
                           ) => {
+                            const countries = getAllISOCodes().find(
+                              (ele) => ele?.countryName === country
+                            );
                             setFormState({
                               ...formState,
+                              currency: {
+                                name: countries.countryName,
+                                symbol: countries.symbol,
+                              },
                               supplier_address: {
                                 address,
                                 place_id,
@@ -913,62 +939,13 @@ const Management = () => {
                           value={value}
                           onChange={(e) => {
                             setValue(e.target.value);
-                            getItem(e.target.value);
-                            getStore(e.target.value);
+                            fetchOneUserInventory(e.target.value);
                           }}
                           type="text"
                           name="search"
                         />
                         {show && (
                           <div className={styles.searchDropdown}>
-                            <>
-                              <>
-                                {categories.find(
-                                  (ele) => ele.label === "Stores"
-                                )?.value && (
-                                  <>
-                                    <h4 className={styles.storeTitle}>
-                                      Stores ({store.length})
-                                    </h4>
-                                    <div className={styles.bord} />
-                                    <div className={styles.list}>
-                                      {store.length === 0 ? (
-                                        Boolean(value) ? (
-                                          <div className={styles.result}>
-                                            <p>No Result Found</p>
-                                            <button
-                                              onClick={() =>
-                                                router.push(
-                                                  `/suggest-store/${value}`
-                                                )
-                                              }
-                                            >
-                                              Suggest Store
-                                            </button>
-                                          </div>
-                                        ) : null
-                                      ) : (
-                                        store.slice(0, 4).map((stores) => (
-                                          <p
-                                            key={stores.value}
-                                            onClick={() => {
-                                              setOneStore({
-                                                visible: true,
-                                                id: stores.value,
-                                              });
-                                              setValue(stores.label);
-                                            }}
-                                            style={{ cursor: "pointer" }}
-                                          >
-                                            {stores.label}
-                                          </p>
-                                        ))
-                                      )}
-                                    </div>
-                                  </>
-                                )}
-                              </>
-                            </>
                             <>
                               {categories.find((ele) => ele.label === "Meals")
                                 ?.value && (
@@ -982,13 +959,6 @@ const Management = () => {
                                       Boolean(value) ? (
                                         <div className={styles.result}>
                                           <p>No Result Found</p>
-                                          <button
-                                            onClick={() =>
-                                              router.push("/suggestmeal")
-                                            }
-                                          >
-                                            Suggest Meal
-                                          </button>
                                         </div>
                                       ) : null
                                     ) : (
@@ -1014,7 +984,6 @@ const Management = () => {
                                 </>
                               )}
                             </>
-
                             <>
                               {categories.find(
                                 (ele) => ele.label === "Products"
@@ -1029,33 +998,34 @@ const Management = () => {
                                       Boolean(value) ? (
                                         <div className={styles.result}>
                                           <p>No Result Found</p>
-                                          <button
-                                            onClick={() =>
-                                              router.push("/suggestmeal")
-                                            }
-                                          >
-                                            Suggest Product
-                                          </button>
                                         </div>
                                       ) : null
                                     ) : (
                                       filteredProduct()
                                         ?.slice(0, 4)
-                                        .map((elem) => (
-                                          <p
-                                            key={elem.value}
-                                            onClick={() => {
-                                              setOneStore({
-                                                visible: false,
-                                                id: "",
-                                              });
-                                              setValue(elem.label);
-                                            }}
-                                            style={{ cursor: "pointer" }}
-                                          >
-                                            {elem.label}
-                                          </p>
-                                        ))
+                                        .map(
+                                          (elem) =>
+                                            value &&
+                                            elem.label
+                                              .toLowerCase()
+                                              .includes(
+                                                value.toLowerCase()
+                                              ) && (
+                                              <p
+                                                key={elem.value}
+                                                onClick={() => {
+                                                  setOneStore({
+                                                    visible: false,
+                                                    id: "",
+                                                  });
+                                                  setValue(elem.label);
+                                                }}
+                                                style={{ cursor: "pointer" }}
+                                              >
+                                                {elem.label}
+                                              </p>
+                                            )
+                                        )
                                     )}
                                   </div>
                                 </>
@@ -1077,13 +1047,6 @@ const Management = () => {
                                       Boolean(value) ? (
                                         <div className={styles.result}>
                                           <p>No Result Found</p>
-                                          <button
-                                            onClick={() =>
-                                              router.push("/suggestmeal")
-                                            }
-                                          >
-                                            Suggest Utensil
-                                          </button>
                                         </div>
                                       ) : null
                                     ) : (
@@ -1114,16 +1077,9 @@ const Management = () => {
                       </div>
                       <button
                         className={styles.searchbtn}
+                        style={{ cursor: "pointer" }}
                         onClick={() => {
-                          if (oneStore.visible) {
-                            router.push(`/store/${oneStore.id}`);
-                          } else {
-                            items.item_type === "Meal"
-                              ? router.push(`/meal/${value}`)
-                              : items.item_type === "Product"
-                              ? router.push(`/product/${value}`)
-                              : router.push(`/product/${value}`);
-                          }
+                          handleSearch();
                         }}
                       >
                         Search
@@ -1184,95 +1140,128 @@ const Management = () => {
                           ))}
                         </div>
                       )}
-                      <div className={styles.suggestbtn}>
+                      <div className={styles.suggestbtn} onClick={() => router.push('/suggestmeal')}>
                         <p>+ New Suggestion</p>
                       </div>
                     </div>
                   </div>
-                  <div className={styles.span}>
-                    <p>Meal</p>
-                    <p className={styles.red}>Remove selection(s)</p>
-                  </div>
-                  <table className={styles.table}>
-                    <thead className={styles.thead}>
-                      <th>Name</th>
-                      <th>Price</th>
-                      <th style={{ textAlign: "center" }}>Action</th>
-                    </thead>
-                    <tbody style={{ width: "100%" }}>
-                      {filteredItem()?.map((ele) => (
-                        <tr className={styles.tr}>
-                          <td style={{ display: "flex", alignItems: "center" }}>
-                            <input type="checkbox" />
-                            <Image
-                              src={ele.image}
-                              width={40}
-                              height={40}
-                              objectFit="contain"
-                              objectPosition="center"
-                              style={{ marginLeft: "1rem" }}
-                            />
-                            <p className={styles.label}>{ele?.label}</p>
-                          </td>
-                          <td style={{ display: "flex", alignItems: "center" }}>
-                            <p className={styles.label2}>{ele?.price}</p>
-                          </td>
-                          <td
-                            style={{ textAlign: "center" }}
-                            onClick={() => deleteItem(ele.value)}
-                            className={styles.close2}
-                          >
-                            <IoIosCloseCircle color="#949494" size={20} />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <div className={styles.top}>
-                    <div className={styles.span}>
-                      <p>Product</p>
-                      <p className={styles.red}>Remove selection(s)</p>
+
+                  {categories.find((ele) => ele.label === "Meals")?.value && (
+                    <div>
+                      <div className={styles.span}>
+                        <p>Meal</p>
+                        <p className={styles.red}>Remove selection(s)</p>
+                      </div>
+                      <table className={styles.table}>
+                        <thead className={styles.thead}>
+                          <th>Name</th>
+                          <th>Price</th>
+                          <th style={{ textAlign: "center" }}>Action</th>
+                        </thead>
+                        <tbody style={{ width: "100%" }}>
+                          {filteredMeals?.map((ele) => (
+                            <tr className={styles.tr}>
+                              <td
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <input type="checkbox" />
+                                <Image
+                                  src={ele.image}
+                                  width={40}
+                                  height={40}
+                                  objectFit="contain"
+                                  objectPosition="center"
+                                  style={{ marginLeft: "1rem" }}
+                                />
+                                <p className={styles.label}>{ele?.label}</p>
+                              </td>
+                              <td
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <p className={styles.label2}>
+                                  {ele.currency}
+                                  {ele?.price}
+                                </p>
+                              </td>
+                              <td
+                                style={{ textAlign: "center" }}
+                                onClick={() => deleteInventory(ele.value)}
+                                className={styles.close2}
+                              >
+                                <IoIosCloseCircle color="#949494" size={20} />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
-                    <table className={styles.table}>
-                      <thead className={styles.thead}>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th style={{ textAlign: "center" }}>Action</th>
-                      </thead>
-                      <tbody style={{ width: "100%" }}>
-                        {filteredProduct()?.map((ele) => (
-                          <tr className={styles.tr}>
-                            <td
-                              style={{ display: "flex", alignItems: "center" }}
-                            >
-                              <input type="checkbox" />
-                              <Image
-                                src={ele.image}
-                                width={40}
-                                height={40}
-                                objectFit="contain"
-                                objectPosition="center"
-                                style={{ marginLeft: "1rem" }}
-                              />
-                              <p className={styles.label}>{ele?.label}</p>
-                            </td>
-                            <td
-                              style={{ display: "flex", alignItems: "center" }}
-                            >
-                              <p className={styles.label2}>{ele?.price}</p>
-                            </td>
-                            <td
-                              style={{ textAlign: "center" }}
-                              onClick={() => deleteItem(ele.value)}
-                              className={styles.close2}
-                            >
-                              <IoIosCloseCircle color="#949494" size={20} />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  )}
+                  {categories.find((ele) => ele.label === "Products")
+                    ?.value && (
+                    <div className={styles.top}>
+                      <div className={styles.span}>
+                        <p>Product</p>
+                        <p className={styles.red}>Remove selection(s)</p>
+                      </div>
+                      <table className={styles.table}>
+                        <thead className={styles.thead}>
+                          <th>Name</th>
+                          <th>Price</th>
+                          <th style={{ textAlign: "center" }}>Action</th>
+                        </thead>
+                        <tbody style={{ width: "100%" }}>
+                          {filteredProducts?.map((ele) => (
+                            <>
+                              <tr className={styles.tr}>
+                                <td
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <input type="checkbox" />
+                                  <Image
+                                    src={ele.image}
+                                    width={40}
+                                    height={40}
+                                    objectFit="contain"
+                                    objectPosition="center"
+                                    style={{ marginLeft: "1rem" }}
+                                  />
+                                  <p className={styles.label}>{ele?.label}</p>
+                                </td>
+                                <td
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <p className={styles.label2}>
+                                    {ele.currency}
+                                    {ele?.price}
+                                  </p>
+                                </td>
+                                <td
+                                  style={{ textAlign: "center" }}
+                                  onClick={() => deleteInventory(ele.value)}
+                                  className={styles.close2}
+                                >
+                                  <IoIosCloseCircle color="#949494" size={20} />
+                                </td>
+                              </tr>
+                            </>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
                   {/* <div className={styles.top}>
                   <div className={styles.flex}>
                     <p>Utensil</p>
