@@ -283,28 +283,6 @@ function Header(props) {
                     </div>
 
                   </Link>
-                  <div className={styles.navbar_user_signedin_logout}>
-                    <div>
-                      <div
-                        className={
-                          styles.navbar_user_signedin_link + " " + styles.black
-                        }
-                      >
-                        <DashBoardIcon style={styles.navbar_main_link_icon} />
-                        <h3>Dashboard</h3>
-                      </div>
-                    </Link>
-                    <Link href="/dashboard/userprofile">
-                      <div
-                        className={
-                          styles.navbar_user_signedin_link + " " + styles.black
-                        }
-                      >
-                        {/* <Image src={openIcon} alt="profile" /> */}
-                        <UserIcon style={styles.navbar_main_link_icon} />
-                        <h3>Profile</h3>
-                      </div>
-                    </Link>
                     <div className={styles.navbar_user_signedin_logout}>
                       <div>
                         <div
