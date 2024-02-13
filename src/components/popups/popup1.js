@@ -14,15 +14,20 @@ class Popup1 extends Component {
   edit = () => {
     const {
       name,
+      intro,
       description,
       categories,
       ingredientList,
+      ingredientStrings,
       sizesList,
       ingredientGroupList,
+      ingredientsInItem,
+      item_description,
     } = this.props;
+    
     let group = ingredientGroupList.map((ingredient) => {
       return {
-        productName: ingredient.product_name?.join(" "),
+        productName: ingredient.item_name,
         // productImgFile: this.state.currentProductImgSrc,
         productImgPath: null,
 
@@ -36,15 +41,18 @@ class Popup1 extends Component {
     console.log(group);
     let product = {
       productName: description,
-      productDescription: description,
+      intro,
+      productDescription: intro,
+      ingredientsInItem,
 
+      item_description: item_description,
       // ingredientNames,
       // do we need product group list AND strings ?
       ingredientGroupList: group,
       // descriptionGroupList,
       sizeGroupList: sizesList,
       // store product names of inputted strings to compare with db products
-      ingredientStrings: ingredientList,
+      ingredientStrings: ingredientsInItem,
       // nutritionalStrings,
       sizeStrings: sizesList,
       // do we want to use current ingredient formats ? Yes.
@@ -69,7 +77,10 @@ class Popup1 extends Component {
     localStorage.setItem("suggestionType", "Product");
     localStorage.setItem("productId", this.props.id);
     localStorage.setItem("suggestProductForm", JSON.stringify(product));
-    window.location.assign(`/suggestmeal?id=${this.props.id}&item_type=Product`);
+    console.log(product, "orop");
+    window.location.assign(
+      `/suggestmeal?id=${this.props.id}&item_type=Product`
+    );
   };
 
   render() {
@@ -85,6 +96,7 @@ class Popup1 extends Component {
       sizesList,
       nutritionalStrings,
       ingredientGroupList,
+      ingredientsInItem,
       item_description,
     } = this.props;
     console.log(imageData, "imageData");
@@ -158,35 +170,42 @@ class Popup1 extends Component {
                           Product Ingredients
                         </h3>
                         {/* <p className={styles.popup_category}>
-                                                    {
-                                                        ingredientList?.map((ingredient) => {
-                                                            return (ingredient.split('of').length > 1 ?
-                                                                ingredient.split('of')[1] + '(' + ingredient.split(' ')[0] + ingredient.split(' ')[1] + ')' :
-                                                                ingredient.split(' ')[1] + ingredient.split(' ')[0]) + ', '
-                                                        })}
-                                                </p> */}
+                          {ingredientList?.map((ingredient) => {
+                            return (
+                              (ingredient.split("of").length > 1
+                                ? ingredient.split("of")[1] +
+                                  "(" +
+                                  ingredient.split(" ")[0] +
+                                  ingredient.split(" ")[1] +
+                                  ")"
+                                : ingredient.split(" ")[1] +
+                                  ingredient.split(" ")[0]) + ", "
+                            );
+                          })}
+                        </p> */}
                         <p className={styles.popup_category}>
-                          {ingredientGroupList?.map((ingredient, idx) => (
+                          {ingredientList?.map((ingredient, idx) => (
                             <div>{ingredient}, </div>
                           ))}
                         </p>
                       </div>
                       {/* <div className={styles.popup_categories}>
-                                                <h3 className={styles.popup_category_name}>Product Description</h3>
-                                                <p className={styles.popup_category}>{item_description.map((descrip) => (
-                                                    <div key={descrip._id}>
-                                                        <div>{descrip?.formatted_string}</div><br />
-                                                    </div>
-                                                ))}
-                                                </p>
-                                                
-                                            </div> */}
+                        <h3 className={styles.popup_category_name}>
+                          Product Description
+                        </h3>
+                        <p className={styles.popup_category}>
+                          {item_description.map((descrip) => (
+                            <div key={descrip._id}>
+                              <div>{descrip?.formatted_string}</div>
+                              <br />
+                            </div>
+                          ))}
+                        </p>
+                      </div> */}
 
                       {/* <div>
-                                                <p>
-                                                    {nutritionalStrings}
-                                                </p>
-                                            </div> */}
+                        <p>{nutritionalStrings}</p>
+                      </div> */}
                     </React.Fragment>
                   )}
                   {popup === "kitchen" && (

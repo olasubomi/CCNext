@@ -3,14 +3,8 @@ import styles from "./header.module.css";
 
 import Link from "next/link";
 import React, { useEffect, useState, useContext, useRef } from "react";
-import {
-  Link as ScrollLink,
-  animateScroll as scroll,
-  scrollSpy,
-  Events,
-  scroller,
-} from "react-scroll";
-import { ScrollableLink } from "../smooth-scroll-link";
+import { MobileHeader } from "../mobile/header-mobile";
+import { animateScroll as scroll, scrollSpy, Events } from "react-scroll";
 import { FaCheck } from "react-icons/fa6";
 import { RiMessage2Fill } from "react-icons/ri";
 import Image from "next/image";
@@ -27,7 +21,6 @@ import {
 } from "../icons";
 import { Auth } from "../auth";
 import { connect, useSelector } from "react-redux";
-import { SmoothScrollLink } from "../smooth-scroll-link";
 import { getPath } from "../../actions/Common";
 import { useRouter } from "next/router";
 import { userSignOut, verifyToken, setOpenLogin } from "../../actions";
@@ -40,6 +33,7 @@ import signup from "../signup";
 // import profile_pic from "../assets/icons/user-icon.jpg"
 import profile_pic from "../../../public/assets/icons/user.png";
 import moment from "moment";
+import { useMediaQuery } from "../../hooks/usemediaquery";
 
 function Header(props) {
   // const [isAuthenticated, setIsAuthenticatedState] = useState(false);
@@ -623,6 +617,7 @@ export default connect(mapStateToProp, mapDispatchToProps)(Header);
 
 export function Header2() {
   const router = useRouter();
+  const matches = useMediaQuery("(min-width: 520px)");
 
   useEffect(() => {
     // Registering the 'begin' event and logging it to the console when triggered.
@@ -677,65 +672,71 @@ export function Header2() {
   // Use the hash value as the target ID for scrolling
   const targetId = hash ? hash.substring(1) : "store";
   return (
-    <div className={styles.navbar2}>
-      <div className={styles.navbar_main_container}>
-        <div className={styles.navbar_main}>
-          <ul className={styles.navbar_main_links}>
-            <li className={styles.navbar_main_link}>
-              <Link
-                activeClass="active"
-                href="/publicMarket/#store"
-                onSetActive={handleSetActive}
-                onClick={() =>
-                  scroll.scrollTo(0, { smooth: true, duration: 100 })
-                }
-              >
-                Stores
-              </Link>
-            </li>
-            <li className={styles.navbar_main_link}>
-              {/* <Link href="/publicMarket/#meal">Meals</Link> */}
-              <Link
-                activeClass="active"
-                href="/publicMarket/#meal"
-                onClick={() =>
-                  scroll.scrollTo(450, { smooth: true, duration: 100 })
-                }
-              >
-                Meals
-              </Link>
-            </li>
-            <li className={styles.navbar_main_link}>
-              {/* <Link href="/publicMarket/#products">Products</Link> */}
-              <Link
-                activeClass="active"
-                href="/publicMarket/#product"
-                onClick={() =>
-                  scroll.scrollTo(1200, { smooth: true, duration: 100 })
-                }
-              >
-                Products
-              </Link>
-            </li>
-            <li className={styles.navbar_main_link}>
-              {/* <Link href="/publicMarket/#utensils">Utensils</Link> */}
-              <Link
-                activeClass="active"
-                href="/publicMarket/#utensils"
-                onClick={() =>
-                  scroll.scrollTo(1700, { smooth: true, duration: 100 })
-                }
-              >
-                Utensils
-              </Link>
-            </li>
-          </ul>
+    <>
+      {matches ? (
+        <div className={styles.navbar2}>
+          <div className={styles.navbar_main_container}>
+            <div className={styles.navbar_main}>
+              <ul className={styles.navbar_main_links}>
+                <li className={styles.navbar_main_link}>
+                  <Link
+                    activeClass="active"
+                    href="/publicMarket/#store"
+                    onSetActive={handleSetActive}
+                    onClick={() =>
+                      scroll.scrollTo(0, { smooth: true, duration: 100 })
+                    }
+                  >
+                    Stores
+                  </Link>
+                </li>
+                <li className={styles.navbar_main_link}>
+                  {/* <Link href="/publicMarket/#meal">Meals</Link> */}
+                  <Link
+                    activeClass="active"
+                    href="/publicMarket/#meal"
+                    onClick={() =>
+                      scroll.scrollTo(450, { smooth: true, duration: 100 })
+                    }
+                  >
+                    Meals
+                  </Link>
+                </li>
+                <li className={styles.navbar_main_link}>
+                  {/* <Link href="/publicMarket/#products">Products</Link> */}
+                  <Link
+                    activeClass="active"
+                    href="/publicMarket/#product"
+                    onClick={() =>
+                      scroll.scrollTo(1200, { smooth: true, duration: 100 })
+                    }
+                  >
+                    Products
+                  </Link>
+                </li>
+                <li className={styles.navbar_main_link}>
+                  {/* <Link href="/publicMarket/#utensils">Utensils</Link> */}
+                  <Link
+                    activeClass="active"
+                    href="/publicMarket/#utensils"
+                    onClick={() =>
+                      scroll.scrollTo(4000, { smooth: true, duration: 100 })
+                    }
+                  >
+                    Utensils
+                  </Link>
+                </li>
+              </ul>
 
-          <div className={styles.navbar_main_grocery}>
-            <Link href="/grocery">Grocery Lists</Link>
+              <div className={styles.navbar_main_grocery}>
+                <Link href="/grocery">Grocery Lists</Link>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <MobileHeader />
+      )}
+    </>
   );
 }
