@@ -28,7 +28,7 @@ class Popup1 extends Component {
                 properIngredientStringSyntax: ingredient.properIngredientStringSyntax
             }
         })
-        console.log(this.props, DISPLAY)
+        console.log(this.props, "DISPLAY")
         console.log(group)
         let product = {
             productName: name,

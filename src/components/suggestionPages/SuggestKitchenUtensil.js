@@ -23,7 +23,6 @@ class SuggestKitchenUtensilForm extends Component {
   utensilsList = []
   ingredientsQuantityMeasurements = [];
 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -74,8 +73,8 @@ class SuggestKitchenUtensilForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-    console.log(this.props, "whales")
-    console.log(this.props.categories, "sssssssss")
+    console.log(this.props)
+    console.log(this.props.categories)
     // get all Meal Names***
     var url = "/get-all-products";
     var url = `${base_url}/products/get-all-products`
