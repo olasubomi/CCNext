@@ -769,6 +769,7 @@
   .navbar {
     display: grid;
     grid-template-rows: 55px;
+    
   }
 
   .navbar2 {
@@ -777,11 +778,15 @@
   }
 
   .navbar_user_loginbtn {
-    /* display: none; */
     width: 100%;
-    font-size: 10px;
+    height: 100%;
+    font-size: 9px;
     font-weight: 400;
-    padding-inline: 5px;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 16px;
+    border-color: #ff8000;
   }
 
   .navbar_user_upgradebtn {
@@ -790,10 +795,11 @@
 
   .navbar_top_container {
     height: 58px;
+    
   }
 
   
-  .navbar_user_info>h4 {
+  .navbar_user_info>div>h4 {
     display: none;
   }
 
@@ -828,10 +834,12 @@
   .navbar_main {
     width: 90%;
     grid-template-columns: 1fr;
+   
   }
 
   .navbar_main_link {
     margin: 0;
+    
   }
 
   .navbar_main_grocery {
@@ -847,6 +855,7 @@
   .navbar_top_details_col > h5 {
     display: none;
   }
+  
 
   .numberofitems {
     top: 7px;

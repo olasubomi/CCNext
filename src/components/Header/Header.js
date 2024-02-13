@@ -287,6 +287,7 @@ function Header(props) {
                       </div>
                     </Link>
 
+
                     <Link href="/dashboard/userprofile">
                       <div
                         className={
@@ -329,6 +330,7 @@ function Header(props) {
                 <h5 id="notText" onClick={(e) => toggleNotification(e)}>
                   Notification
                 </h5>
+
                 <span
                   id="notNo"
                   style={{ background: "#F47900" }}
@@ -579,6 +581,7 @@ function Header(props) {
             </div>
           </div>
           {/* {isOpen && <Auth />} */}
+
         </div>
       </div>
     </>
