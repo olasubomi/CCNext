@@ -29,16 +29,35 @@ class Popup2 extends Component {
     };
   }
 
+  // incIn = () => {
+  //     this.setState({
+  //         curIn: this.state.curIn + 1
+  //     })
+
+  // }
+
+  // decIn = () => {
+  //     if (this.state.curIn > 1) {
+  //         this.setState({
+  //             curIn: this.state.curIn - 1
+  //         })
+  //     }
+  // }
+
   incIn = () => {
-    this.setState({
-      curIn: this.state.curIn + 1,
-    });
+    const { curIn } = this.state;
+    if (this.props[`instructionChunk${curIn + 1}`] !== undefined) {
+      this.setState({
+        curIn: curIn + 1,
+      });
+    }
   };
 
   decIn = () => {
-    if (this.state.curIn > 1) {
+    const { curIn } = this.state;
+    if (curIn > 1) {
       this.setState({
-        curIn: this.state.curIn - 1,
+        curIn: curIn - 1,
       });
     }
   };
@@ -50,13 +69,6 @@ class Popup2 extends Component {
       categories,
       ingredientsList,
       ingredientGroupList,
-      ingredientsInItem,
-      instructionChunk1Step,
-      instructionChunk2Step,
-      instructionChunk3Step,
-      instructionChunk4Step,
-      instructionChunk5Step,
-      instructionChunk6Step,
       cookTime,
       prepTime,
       serves,
@@ -73,6 +85,7 @@ class Popup2 extends Component {
     if (instructionChunk1) {
       stepInputs = [];
     }
+
     if (instructionChunk2) {
       stepInputs = [2];
     }
@@ -116,7 +129,8 @@ class Popup2 extends Component {
       ingredientGroupList: group,
       // store product names of inputted strings to compare with db products
       ingredientStrings: ingredientsList,
-      ingredeintsInItem: ingredientsInItem,
+      ingredeintsInItem: ingredeints_in_item,
+
       // do we want to use current ingredient formats ? Yes.
       // currentIngredient,
       // currentIngredientMeasurement,
@@ -136,12 +150,7 @@ class Popup2 extends Component {
 
       cookTime: cookTime,
       prepTime: prepTime,
-      instructionChunk1Step,
-      instructionChunk2Step,
-      instructionChunk3Step,
-      instructionChunk4Step,
-      instructionChunk5Step,
-      instructionChunk6Step,
+
       instructionChunk6: this.props.instructionChunk6,
       instructionChunk1: this.props.instructionChunk1,
       instructionChunk2: this.props.instructionChunk2,
@@ -164,8 +173,8 @@ class Popup2 extends Component {
     localStorage.setItem("suggestionType", "Meal");
     localStorage.setItem("mealId", this.props.id);
     localStorage.setItem("suggestMealForm", JSON.stringify(meal));
-    console.log(meal, "mealss");
-    window.location.assign(`/suggestmeal?id=${this.props.id}&item_type=Meal`);
+    window.location.assign("/suggestmeal");
+
   };
   handleShareClick = () => {
     const shareUrl =
@@ -210,7 +219,6 @@ class Popup2 extends Component {
       categories,
       ingredientsList,
       ingredientsInItem,
-      instructionChunk1,
       isDashboard,
     } = this.props;
     const { curIn, length } = this.state;
@@ -374,8 +382,55 @@ class Popup2 extends Component {
                 </div>
                 <div className={styles.popup2_col_3}>
                   <h2>Recipe Steps</h2>
+                  {/* <div className={styles.popup2_steps}>
+                                        {this.props['instructionChunk' + curIn] !== '' &&
+                                            <>
+                                                {
+                                                    allowedImageExtensions
+                                                        .exec(this.props[`instructionChunk${curIn}DataName`])
+                                                    &&
+                                                    <Image
+                                                        src={this.props['chunk' + curIn + 'Content']}
+                                                        alt={this.props['instructionChunk' + curIn]?.title}
+                                                        className={styles.popup2_step_img}
+                                                        height={150} width={70}
+                                                        objectFit="cover"
+                                                        objectPosition="center"
+                                                    />
+                                                }
+
+                                                {allowedVideoExtensions.exec(this.props[`instructionChunk${curIn}DataName`]) &&
+                                                    <video controls className={styles.popup2_step_img}
+                                                        height={150} width={70}>
+                                                        <source
+                                                            src={this.props['chunk' + curIn + 'Content']} type="video/mp4" />
+                                                        Your browser does not support the video tag.
+                                                    </video>}
+                                                <div className={styles.del}>
+                                                    <h2 className={styles.popup2_step_name}>{this.props['instructionChunk' + curIn]}</h2>
+                                                    <p className={styles.popup2_instructions}>
+                                                        {this.props['instructionChunk' + curIn + "Step"]?.map((step, index) => (
+                                                            <div key={index}>
+                                                                {index + 1}. {step}
+                                                                <br />
+                                                            </div>
+                                                        ))}
+                                                    </p>
+                                                </div>
+                                            </>
+                                        }
+                                        {
+                                            this.props['instructionChunk' + (curIn + 1)] !== undefined && curIn <= length &&
+                                            <ArrowCircleRightIcon onClick={this.incIn} className={styles.popup2_inc_con} />}
+
+                                             <ArrowCircleRightIcon onClick={this.incIn} className={styles.popup2_inc_con} />
+                                        {
+                                            curIn > 1 && <ArrowCircleLeftIcon onClick={this.decIn} className={styles.popup2_dec_con} />}
+                                            <ArrowCircleLeftIcon onClick={this.decIn} className={styles.popup2_dec_con} />
+                                    </div> */}
+
                   <div className={styles.popup2_steps}>
-                    {this.props["instructionChunk" + curIn] !== "" && (
+                    {this.props[`instructionChunk${curIn}`] !== "" && (
                       <>
                         {allowedImageExtensions.exec(
                           this.props[`instructionChunk${curIn}DataName`]
@@ -424,20 +479,21 @@ class Popup2 extends Component {
                         </div>
                       </>
                     )}
-                    {this.props["instructionChunk" + (curIn + 1)] !==
-                      undefined &&
-                      curIn <= length && (
-                        <ArrowCircleRightIcon
-                          onClick={this.incIn}
-                          className={styles.popup2_inc_con}
-                        />
-                      )}
+
                     {curIn > 1 && (
                       <ArrowCircleLeftIcon
                         onClick={this.decIn}
                         className={styles.popup2_dec_con}
                       />
                     )}
+                    {this.props[`instructionChunk${curIn + 1}`] !==
+                      undefined && (
+                      <ArrowCircleRightIcon
+                        onClick={this.incIn}
+                        className={styles.popup2_inc_con}
+                      />
+                    )}
+
                   </div>
                 </div>
               </div>

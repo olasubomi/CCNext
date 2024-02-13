@@ -41,11 +41,11 @@
     justify-content: space-between;
     /* grid-template-rows: 3rem; */
     grid-template-columns: 1fr 4rem;
-    grid-template-columns: max-content max-content;
+    /* grid-template-columns: max-content max-content; */
     align-items: center;
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    padding: 3px 1rem;
+    padding: 3px 3rem;
 }
 
 .popup2_top>h2 {
@@ -171,9 +171,6 @@
     line-height: 16px;
     /* identical to box height */
     color: #353535;
-
-
-    color: #353535;
 }
 
 .tr:nth-child(even) {
@@ -198,6 +195,7 @@
     margin-top: 3rem;
     color: #6D6D6D;
     overflow-y: scroll;
+    padding-right: 25px;
 }
 
 .popup2_del {
@@ -380,7 +378,7 @@
     margin: 2rem 0 0 0;
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 10px;
     line-height: 17px;
     text-align: justify;
     /* identical to box height */
@@ -454,28 +452,65 @@
     display: grid;
     grid-auto-flow: column;
     grid-gap: 1rem;
-    justify-content: start;
+    justify-content: center;
     border-top: 1px solid rgba(0, 0, 0, 0.2);
     padding: 1rem;
     align-items: center;
+    font-size: 12px;
 }
 
 .popup2_footer>p {
+    margin: 0; 
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-    /* identical to box height */
-
-
+    line-height: 1.4; 
     color: #000000;
+    font-size: 8px;
 }
 
 .popup2_footer>img {
     cursor: pointer;
-    width: 18px;
-    height: 18px;
+    width: 16px; 
+    height: 16px; 
 }
+
+.popup2_footer .icons {
+    width: 16px; 
+    height: 16px;
+}
+
+.popup2_footer .para {
+    font-size: 8px; 
+    margin-right: 0.5rem; 
+}
+
+.popup2_footer .printIcon {
+    width: 16px; 
+    height: 16px;
+}
+
+.popup2_footer .edit_button2 {
+    font-size: 12px; 
+    width: 80px; 
+    height: 30px; 
+}
+
+.popup2_footer .iconSpan,
+.popup2_footer .iconSpan1,
+.popup2_footer .iconSpan2,
+.popup2_footer .iconSpan3 {
+    width: 2rem; 
+    height: 2rem; 
+}
+
+.popup2_footer .icons {
+    border-radius: 50%;
+    object-position: center;
+    object-fit: contain;
+    display: flex;
+    justify-content: center;
+}
+
 
 .img_col {
     display: grid;
@@ -492,13 +527,11 @@
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
-    /* identical to box height */
 
 
     color: #FFFFFF;
     outline: none;
     border: none;
-    /* align-self: end; */
     justify-self: end;
 }
 
@@ -560,7 +593,7 @@
     }
 
     .popup2_details {
-        overflow: unset;
+        overflow: auto;
         grid-template-rows: 1fr;
     }
 

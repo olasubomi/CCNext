@@ -47,37 +47,12 @@ class SuggestProductForm extends Component {
     "Rosemary Powder",
   ];
   productImageLink = [];
-  categories = ["Baking", "Cooking", "Home", "Ethiopian"];
-  measurements = [
-    "mL",
-    "oz",
-    "L",
-    "cup(s)",
-    "Tbsp",
-    "tsp",
-    "pt",
-    "g",
-    "kg",
-    "lb",
-    "qt",
-    "gallon",
-    "dash/pinch",
-    "Leaves",
-    "cloves",
-    "cubes",
-    "Large",
-    "medium",
-    "small",
-  ];
+  categories = ["Baking", "Cooking", "Home", "Ethiopian",];
+  // measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
+  //   "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
 
-  nutritionFacts = [
-    "Calories",
-    "Total Carbs",
-    "Net Carbs",
-    "Fiber",
-    "Fat",
-    "Protein",
-  ];
+  nutritionFacts = ["Calories", "Total Carbs", "Net Carbs", "Fiber", "Fat", "Protein"]
+
   ingredientsQuantityMeasurements = [];
 
   constructor(props) {
@@ -481,20 +456,11 @@ class SuggestProductForm extends Component {
 
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
-      // set currProductIndexInDBsProductsList variable
-      const searchResult = this.measurements.map(function callback(element) {
-        if (element.toLowerCase() === val.toLowerCase()) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      const tmpcurrMeasurementIndexInDBsMeasurementList =
-        searchResult.indexOf(true);
-      console.log(
-        "Curr Product Index If Exists In Products List is: \n" +
-          tmpcurrMeasurementIndexInDBsMeasurementList
-      );
+      // set currProductIndexInDBsProductsList variable 
+      const searchResult = this.props.measurements?.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
+      console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
+
 
       // check if product name is an existing product
       // set product existense to index, so one will not need to edit
@@ -523,20 +489,11 @@ class SuggestProductForm extends Component {
 
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
-      // set currProductIndexInDBsProductsList variable
-      const searchResult = this.measurements.map(function callback(element) {
-        if (element.toLowerCase() === val.toLowerCase()) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      const tmpcurrMeasurementIndexInDBsMeasurementList =
-        searchResult.indexOf(true);
-      console.log(
-        "Curr Product Index If Exists In Products List is: \n" +
-          tmpcurrMeasurementIndexInDBsMeasurementList
-      );
+      // set currProductIndexInDBsProductsList variable 
+      const searchResult = this.props.measurements?.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
+      console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
+
 
       // check if product name is an existing product
       // set product existense to index, so one will not need to edit
@@ -975,11 +932,9 @@ class SuggestProductForm extends Component {
 
       // get new_Measurements from inputted ingredient packets
       if (ingredientGroupList[i].measurement !== "") {
-        let index = this.measurements.indexOf(
-          ingredientGroupList[i].measurement
-        );
-        if (index === -1)
-          new_measurements.push(ingredientGroupList[i].measurement);
+        let index = this.props.measurements?.indexOf(ingredientGroupList[i].measurement);
+        if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
+
       }
     }
 
@@ -1330,9 +1285,8 @@ console.log(nutritionalStrings, item_description, ingredientStrings, 'pppr')
                   </label>
                   <Autocomplete
                     id="sizeMeasurement"
-                    options={this.measurements.map((option) => option)}
-                    value={this.state.sizeMeasurement}
-                    x
+                    options={this.props.measurements?.map((option) => option)}
+                    value={this.state.sizeMeasurement} 
                     onChange={this.handleSizeMeasurement}
                     freeSolo
                     renderInput={(params) => (
@@ -1430,7 +1384,7 @@ console.log(nutritionalStrings, item_description, ingredientStrings, 'pppr')
                   </label>
                   <Autocomplete
                     id="currentIngredientMeasurement"
-                    options={this.measurements.map((option) => option)}
+                    options={this.props.measurements?.map((option) => option)}
                     value={this.state.currentIngredientMeasurement}
                     onChange={this.handleIngredientMeasurement}
                     freeSolo
@@ -1482,7 +1436,7 @@ console.log(nutritionalStrings, item_description, ingredientStrings, 'pppr')
               </label>
               <Autocomplete
                 id="currentNutritionName"
-                options={this.nutritionFacts.map((option) => option)}
+                options={this.props.nutritionFacts?.map((option) => option)}
                 // onChange={(ev)=>this.onTextFieldChange(ev)}
                 value={this.state.currentNutritionName}
                 onChange={(ev, val) =>
@@ -1532,8 +1486,9 @@ console.log(nutritionalStrings, item_description, ingredientStrings, 'pppr')
                   </label>
                   <Autocomplete
                     id="currentIngredientMeasurement1"
-                    options={this.measurements.map((option) => option)}
-                    // value={this.state.currentIngredientMeasurement}
+                    options={this.props.measurements?.map((option) => option)}
+                    value={this.state.currentIngredientMeasurement}
+
                     onChange={this.handleIngredientMeasurement}
                     freeSolo
                     renderInput={(params) => (
@@ -1605,7 +1560,7 @@ console.log(nutritionalStrings, item_description, ingredientStrings, 'pppr')
                   clearOnBlur
                   onBlur={this.categoryBlur}
                   // filterSelectedOptions
-                  options={this.categories.map((option) => option)}
+                  options={this.props.categories.map((option) => option)}
                   // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
                   onChange={(e, newValue) =>
                     this.handleCategoryDropdownChange(newValue)
