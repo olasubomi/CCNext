@@ -224,4 +224,4 @@ const SuggestMeal = () => {
 };
 };
 
-export default SuggestMeal;
+export default withRouter(SuggestMeal);
