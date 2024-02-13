@@ -853,8 +853,9 @@
     right: -12px;
   }
   .summaries_min {
-    top: 30px;
-    right: 3px;
+    top: 40px;
+    right: -20px;
+    overflow-y: scroll !important;
   }
 }
 
