@@ -45,7 +45,11 @@ const SuggestMeal = () => {
   const handleSuggestionType = (type) => {
     setSuggestionType(type);
     setSuggestOption(!suggestOption);
+
   };
+  handleNavigation = () => {
+    // Access router properties using this.props.router
+    const { router } = this.props;
 
   const { isPending, error, data } = useQuery({
     queryKey: ['suggestMeals'],
@@ -136,6 +140,7 @@ const SuggestMeal = () => {
                 <div onClick={() => setSuggestOption(!suggestOption)} className={styles.select_box}>
                   <p>{suggestionType}</p>
                   <ArrowDropDownIcon className={styles.select_box_icon} />
+
                 </div>
                 {suggestOption && (
                   <div className={styles.select_options}>
@@ -218,4 +223,4 @@ const SuggestMeal = () => {
   );
 };
 
-export default SuggestMeal;
+export default withRouter(SuggestMeal);

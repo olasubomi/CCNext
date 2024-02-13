@@ -4,6 +4,7 @@ import styles from "./stores.module.css";
 import { MealDropDown } from "./dropdown";
 import stored from "../../../public/assets/store_pics/store.jpg";
 import Image from "next/image";
+import { Element } from "react-scroll";
 
 export const Stores = () => {
   const [stores, setStores] = useState([]);
@@ -54,63 +55,83 @@ export const Stores = () => {
     fetchStores();
   }, []);
   console.log(selectedStore, "selectedStore");
+  useEffect(() => {
+    // Get the hash value from the URL
+    const hash = window.location.hash;
+
+    // Use the hash value as the target ID for scrolling
+    const targetId = hash ? hash.substring(1) : 'store';
+
+    // Scroll to the target section
+    if (targetId) {
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, []);
 
   return (
     <div className={styles.storeContainer}>
-      <h4>Stores</h4>
+      <Element id="store" style={{ fontSize: "2rem", marginBottom: "1rem" }}>
+        Stores
+      </Element>
       <div className={styles.stores}>
-        {stores.slice(0, loadMore).filter((elem) => elem.status === 'PUBLIC').map((store, id) => {
-          return (
-            <>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <div key={id} className={`${styles.cardWrapper}`}>
-                  <div
-                    className={styles.card}
-                    onClick={() => {
-                      fetchOneStore(store._id);
-                      SetSelected(id);
-                    }}
-                  >
-                    {
-                      <div>
-                        <Image
-                          src={
-                            store?.background_picture
-                              ? store?.background_picture
-                              : stored
-                          }
-                          className={styles.storeImg}
-                          width={200}
-                          height={200}
-                          objectFit="cover"
-                          objectPosition="center"
-                        />
-                        <p className={styles.name}>{store?.store_name}</p>
-                        <p
-                          className={styles.storeName}
-                          style={{ marginTop: ".4rem" }}
-                        >
-                          {store?.supplier_address
-                            ? store?.supplier_address?.city +
-                              " - " +
-                              store?.supplier_address?.country
-                            : ""}
-                        </p>
-                      </div>
-                    }
+        {stores
+          .slice(0, loadMore)
+          .filter((elem) => elem.status === "PUBLIC")
+          .map((store, id) => {
+            return (
+              <>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <div key={id} className={`${styles.cardWrapper}`}>
+                    <div
+                      className={styles.card}
+                      onClick={() => {
+                        fetchOneStore(store._id);
+                        SetSelected(id);
+                      }}
+                    >
+                      {
+                        <div>
+                          <Image
+                            src={
+                              store?.background_picture
+                                ? store?.background_picture
+                                : stored
+                            }
+                            className={styles.storeImg}
+                            width={200}
+                            height={200}
+                            objectFit="cover"
+                            objectPosition="center"
+                          />
+                          <p className={styles.name}>{store?.store_name}</p>
+                          <p
+                            className={styles.storeName}
+                            style={{ marginTop: ".4rem" }}
+                          >
+                            {store?.supplier_address
+                              ? store?.supplier_address?.city +
+                                " - " +
+                                store?.supplier_address?.country
+                              : ""}
+                          </p>
+                        </div>
+                      }
+                    </div>
                   </div>
+                  {isShow && selected === id && (
+                    <MealDropDown
+                      setIsShow={setIsShow}
+                      selectedStore={selectedStore}
+                      id={selectedStore?.supplier?._id}
+                    />
+                  )}
                 </div>
-                {isShow && selected === id && (
-                  <MealDropDown
-                    setIsShow={setIsShow}
-                    selectedStore={selectedStore}
-                    id={selectedStore?.supplier?._id}
-                  />
-                )}
-              </div>
-            </>
-          );
-        })}
+              </>
+            );
+          })}
       </div>
 
       <p className={styles.view} onClick={() => handleLoadMore()}>

@@ -85,6 +85,7 @@ class Popup2 extends Component {
     if (instructionChunk1) {
       stepInputs = [];
     }
+
     if (instructionChunk2) {
       stepInputs = [2];
     }
@@ -129,6 +130,7 @@ class Popup2 extends Component {
       // store product names of inputted strings to compare with db products
       ingredientStrings: ingredientsList,
       ingredeintsInItem: ingredeints_in_item,
+
       // do we want to use current ingredient formats ? Yes.
       // currentIngredient,
       // currentIngredientMeasurement,
@@ -172,6 +174,7 @@ class Popup2 extends Component {
     localStorage.setItem("mealId", this.props.id);
     localStorage.setItem("suggestMealForm", JSON.stringify(meal));
     window.location.assign("/suggestmeal");
+
   };
   handleShareClick = () => {
     const shareUrl =
@@ -476,7 +479,7 @@ class Popup2 extends Component {
                         </div>
                       </>
                     )}
-                    {/* Uncomment the following lines */}
+
                     {curIn > 1 && (
                       <ArrowCircleLeftIcon
                         onClick={this.decIn}
@@ -490,6 +493,7 @@ class Popup2 extends Component {
                         className={styles.popup2_inc_con}
                       />
                     )}
+
                   </div>
                 </div>
               </div>

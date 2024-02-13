@@ -40,23 +40,29 @@ function SideNav(props){
         <div id="mySidenav" className={styles.sidenav}>
             <div id='side_top' className={styles.sidenav_top}>
                 <div className={styles.sidenav_top_row_1}>
+                  <div>
                 <Image src={closeIcon} alt="close nav" />
+                  </div>
+                  <div>
                 <Link href="/" className={styles.social_link} >
                   <Image src={img_logo} alt="logo" className={styles.sidenav_logo} />
                 </Link>
+                  </div>
                 </div>
-                {props.auth.authUser && 
+                
                 <div className={styles.sidenav_top_row_2}>
-                    {props.auth.authUser.profile_picture ? 
-                    <Image width={100} height={100} src={props.auth.authUser.profile_picture} alt="logo" className={styles.sidenav_top_row_2_img} />:
+                {props?.auth?.authUser?.profile_picture ? 
+                    <Image width={100} height={100} src={props?.auth?.authUser?.profile_picture} alt={props?.auth?.authUser?.first_name} className={styles.sidenav_top_row_2_img} />:
+                    <div className={styles.sidenav_top_row_2_img}>
                     <UserIcon />
+                    </div>
                     }
-                    <div>
-                        <h3>{props.auth.authUser.first_name +" " + props.auth.authUser.last_name}</h3>
-                        <p>{props.auth.authUser.user_type}</p>
+                    <div >
+                        <h3>{props?.auth?.authUser?.first_name +" " + props?.auth?.authUser?.last_name}</h3>
+                        <p className={styles.sidenav_top_row_2_text}>{props?.auth?.authUser?.user_type}</p>
                     </div>
                 </div>
-                }
+                
             </div>
             <Sidenav2 showBottom={true} />
         </div>

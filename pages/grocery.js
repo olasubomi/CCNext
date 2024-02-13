@@ -8,7 +8,6 @@ import noteGif from "../public/assets/icons/gif.gif";
 import Footer from "../src/components/Footer/Footer";
 import { Modal } from "../src/components/modal/popup-modal";
 import { disableBodyScroll } from "body-scroll-lock";
-import girl from "../public/assets/icons/girl.jpg";
 import { AiFillEdit } from "react-icons/ai";
 import { MdDelete, MdRemoveRedEye } from "react-icons/md";
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -17,12 +16,10 @@ import { useRouter } from "next/router";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { toast } from "react-toastify";
-import yellow from "../public/assets/meal_pics/yellow.jpeg";
 import Frame from "../public/assets/logos/Frame.png";
 import { GroceryModal } from "../src/components/modal/grocery-modal";
 import SideNav from "../src/components/Header/sidenav";
 import { getLocalGroceryList } from "../src/util";
-import { ModalPopup } from "../src/components/modal/modal";
 import { useSelector } from "react-redux";
 import { UserIcon } from "../src/components/icons";
 
@@ -32,8 +29,7 @@ const Grocery = () => {
   const [groceryList, setGroceryList] = useState([]);
   const [isUserOnline, setIsUserOnline] = useState(true);
   const router = useRouter();
-    const {authUser} = useSelector(state => state.Auth)
-
+  const { authUser } = useSelector((state) => state.Auth);
 
   const [localGroceryList, setLocalGroceryList] = useState([]);
 
@@ -134,7 +130,6 @@ const Grocery = () => {
               <p onClick={() => setShow(!show)}>Create New List</p>
             </div>
           </div>
-        </div>
         {(isUserOnline ? groceryList : localGroceryList).length > 0 ? (
           <div className={styles.all_cards}>
             {(isUserOnline ? groceryList : localGroceryList)?.map((ele, id) => (
@@ -327,12 +322,25 @@ const Grocery = () => {
                   style={{ marginBottom: "1rem", marginTop: "1rem" }}
                 >
                   <div className={styles.flex}>
-                    <Image
+                    {/* <Image
                       src={girl}
                       width={40}
                       height={40}
                       className={styles.person}
-                    />
+                    /> */}
+                    {authUser?.profile_picture !== "" &&
+                    authUser?.profile_picture !== undefined ? (
+                      <Image
+                        width={50}
+                        height={50}
+                        style={{ borderRadius: 30 }}
+                        alt={ele.user.first_name}
+                        src={authUser?.profile_picture}
+                        className={styles.user_img}
+                      />
+                    ) : (
+                      <UserIcon style={styles.user_img} />
+                    )}
                     <p className={styles.name}>
                       {ele.user.first_name} {ele.user.last_name}
                     </p>
@@ -388,6 +396,7 @@ const Grocery = () => {
           </div>
         )}
       </div>
+      </div>
 
       {show && (
         <Modal
@@ -409,6 +418,7 @@ const Grocery = () => {
       )}
       <Footer />
     </>
+    
   );
 };
 

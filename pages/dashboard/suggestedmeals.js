@@ -118,6 +118,7 @@ const SuggestedMeals = (props) => {
     getUserItems();
   }, [props.auth]);
 
+  console.log(suggestion, "ooo");
   useEffect(() => {
     getAllDescriptions();
   }, [status, props.auth]);
@@ -133,6 +134,7 @@ const SuggestedMeals = (props) => {
   useEffect(() => {
     getAllStores();
   }, [props.Auth]);
+
 
   const getUserItems = (newPage) => {
     if (props.auth.authUser) {
@@ -394,9 +396,8 @@ const SuggestedMeals = (props) => {
       });
       toggleChangeStoreStatus();
       console.log("resss", res);
-        getAllStores();
-        toast.success("Status successfully updated");
-      
+      getAllStores();
+      toast.success("Status successfully updated");
     } catch (e) {
       console.log(e, "errr");
     }
@@ -405,9 +406,9 @@ const SuggestedMeals = (props) => {
   const deleteStore = async (id) => {
     try {
       const resp = await axios.delete(`/stores/deletestore/${id}`);
-        toast.success("Store deleted successfully");
-        getAllStores();
-      console.log(resp, 'respo')
+      toast.success("Store deleted successfully");
+      getAllStores();
+      console.log(resp, "respo");
     } catch (e) {
       console.log(e);
     }
@@ -1023,7 +1024,7 @@ const SuggestedMeals = (props) => {
     setOpenModalState(true);
     // console.log(typeof suggestion.formatted_instructions[0], "find instructionss")
     // console.log(eval('(' + suggestion.instructions + ')'), "help")
-    console.log(suggestion, "suggests");
+    console.log(suggestion.ingredeints_in_item, "suggy");
     // console.log(suggestion.instructions, "wordlength")
     // console.log(suggestion.id, "show the id")
   }
@@ -1991,7 +1992,7 @@ const SuggestedMeals = (props) => {
           tips={suggestion?.meal_tips}
           mealImageData={suggestion?.itemImage0}
           suggested={true}
-          id={suggestion.id}
+          id={suggestion._id}
           categories={suggestion?.item_categories?.map(
             (ele) => ele?.category_name
           )}
@@ -2008,20 +2009,29 @@ const SuggestedMeals = (props) => {
           description={suggestion.item_name}
           imageData={suggestion.item_images}
           image={suggestion.item_images[0]}
+          intro={suggestion?.item_intro}
           // imagesData={suggestion.product_images.slice(1)}
           categories={suggestion?.item_categories?.map(
             (ele) => ele?.category_name
           )}
-          sizesList={suggestion.item_data?.product_size}
+          sizesList={suggestion?.product_size}
           ingredientsList={
             suggestion.formatted_ingredients?.length
               ? suggestion.formatted_ingredients
               : []
           }
           suggested={true}
-          id={suggestion.id}
+          id={suggestion._id}
           ingredientGroupList={suggestion.formatted_ingredients}
-          item_description={suggestion.item_description}
+          item_description={suggestion?.item_description.map(
+            (ele) => ele?.formatted_string
+          )}
+          ingredientsInItem={suggestion?.ingredeints_in_item?.map(
+            (ele) => ele?.formatted_string_of_item
+          )}
+          ingredientList={suggestion?.ingredeints_in_item?.map(
+            (ele) => ele?.formatted_string_of_item
+          )}
         />
       )}
 
@@ -2135,13 +2145,13 @@ const SuggestedMeals = (props) => {
         </div>
       )}
 
-      {transferToInventory && (
-        <TransferToInventory
-          type={searchType}
-          meal={suggestion}
-          toggleTransferToInventory={toggleTransferToInventory}
-        />
-      )}
+      <TransferToInventory
+        type={searchType}
+        setTransferToInventoryState={setTransferToInventoryState}
+        meal={suggestion}
+        transferToInventory={transferToInventory}
+        toggleTransferToInventory={toggleTransferToInventory}
+      />
 
       {sent && <Sent toggleSent={toggleSent} />}
     </div>

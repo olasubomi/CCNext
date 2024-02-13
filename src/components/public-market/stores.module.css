@@ -830,6 +830,19 @@
         padding: 1.5rem 2.5rem 2rem 2.5rem;
     
     }
+    .storeContainer {
+        padding: 1rem 2rem;
+        /* position: relative; */
+    }
+    .mealContainer {
+        width: 100%;
+        padding: 2rem 2rem;
+    }
+    
+    .mealContainer1 {
+        width: 100%;
+        padding: 2rem 2rem;
+    }
   
 }
 @media only screen and (max-width: 400px){
