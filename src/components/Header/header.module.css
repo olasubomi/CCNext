@@ -3,8 +3,10 @@
   grid-auto-flow: row;
   position: fixed;
   top: 0;
+
   width: 100%;
   z-index: 200;
+  align-content: center;
   grid-template-rows: 88px;
   grid-template-columns: 100%;
   /* border-bottom: 1px solid #e7e7e7; */
@@ -14,7 +16,7 @@
   display: grid;
   grid-auto-flow: row;
   position: fixed;
-  top: 85px;
+  top: 90px;
   width: 100%;
   z-index: 199;
   grid-template-rows: 70px;
@@ -24,11 +26,13 @@
 .navbar_top_container {
   background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
-  display: grid;
+  padding: 0 10px 0 10px;
+  display: flex;
   justify-items: center;
   align-items: center;
-  animation: slidefromup 0.3s ease-in-out;
-  height: 90px;
+
+  animation: slidefromup .3s ease-in-out;
+  height: 100px;
 }
 
 .navbar_top {
@@ -208,12 +212,16 @@
 
 .navbar_main_link_icon {
   fill: #000000;
-  width: 17px;
+  width: 15px;
 }
 
 .navbar_main_link_icon2 {
   fill: #ffffff;
   width: 18px;
+}
+.navlink{
+  font-size: 15px;
+  font-weight: 300;
 }
 
 .navbar_main_link > p {
@@ -471,7 +479,6 @@
 
 .navbar_user_signedin {
   width: 160px;
-  height: 155px;
   display: none;
   grid-gap: 1rem;
   padding: 1.5rem;
@@ -491,8 +498,8 @@
 
 .navbar_user_signedin_link > h3 {
   font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
+  font-weight: 300;
+  font-size: 14px;
   line-height: 19px;
   margin: 0;
 }
@@ -597,8 +604,8 @@
 }
 
 .sidenav_top_row_1 {
-  display: grid;
-  grid-auto-flow: column;
+  display: flex;
+  flex-direction: row;
   width: 100%;
   height: 100%;
   justify-content: space-between;
@@ -606,11 +613,11 @@
 }
 
 .sidenav_top_row_2 {
-  display: grid;
-  grid-template-columns: 62px 1fr;
-  grid-gap: 10px;
-  align-items: start;
-  margin-top: -3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .sidenav_top_row_2 > span {
@@ -618,33 +625,39 @@
 }
 
 .sidenav_top_row_2_img {
-  width: 40px;
-  height: 40px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
 }
 
-.sidenav_top_row_2 > div {
-  display: grid;
+
+.sidenav_top_row_2>div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .sidenav_top_row_2 > div > h3 {
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
-  line-height: 17px;
+  line-height: 16px;
   /* identical to box height */
 
   color: #000000;
   margin: 0;
 }
 
-.sidenav_top_row_2 > div > p {
+
+.sidenav_top_row_2_text {
   font-style: italic;
   font-weight: 400;
-  font-size: 9px;
-  line-height: 11px;
+  font-size: 12px;
+  line-height: 12px;
+  align-self: center;
+  justify-content: center;
+  color: #04D505;
   /* identical to box height */
-
-  color: #04d505;
 }
 
 .sidenav_links_con {
@@ -742,8 +755,11 @@
   font-size: 3rem;
 }
 
-/* .sidenav_logo{
-} */
+.sidenav_logo{
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
 
 .closebtn {
   font-size: 30px;
@@ -756,6 +772,7 @@
   .navbar {
     display: grid;
     grid-template-rows: 55px;
+    
   }
 
   .navbar2 {
@@ -764,7 +781,15 @@
   }
 
   .navbar_user_loginbtn {
-    display: none;
+    width: 100%;
+    height: 100%;
+    font-size: 9px;
+    font-weight: 400;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 16px;
+    border-color: #ff8000;
   }
 
   .navbar_user_upgradebtn {
@@ -773,9 +798,11 @@
 
   .navbar_top_container {
     height: 58px;
+    
   }
 
-  .navbar_user_info {
+  
+  .navbar_user_info>div>h4 {
     display: none;
   }
 
@@ -804,15 +831,18 @@
   .navbar_top {
     grid-gap: 1rem;
     width: 90%;
+    padding: auto;
   }
 
   .navbar_main {
     width: 90%;
     grid-template-columns: 1fr;
+   
   }
 
   .navbar_main_link {
     margin: 0;
+    
   }
 
   .navbar_main_grocery {
@@ -828,14 +858,16 @@
   .navbar_top_details_col > h5 {
     display: none;
   }
+  
 
   .numberofitems {
     top: 7px;
     right: -12px;
   }
   .summaries_min {
-    top: 30px;
-    right: 3px;
+    top: 40px;
+    right: -20px;
+    overflow-y: scroll !important;
   }
 }
 

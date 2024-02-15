@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import styles from "./transferToInventory.module.css";
-import { styled } from "@mui/material/styles";
+import styled from "styled-components";
 import Switch from "@mui/material/Switch";
 import { useEffect, useState } from "react";
 import axios from "../../util/Api";
@@ -8,55 +8,59 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Image from "next/image";
 import { AiFillInfoCircle } from "react-icons/ai";
 
-const AntSwitch = styled(Switch)(({ theme }) => ({
-  width: 58,
-  height: 27,
-  padding: 0,
-  borderRadius: 15,
-  display: "flex",
-  "&:active": {
-    "& .MuiSwitch-thumb": {
-      width: 15,
-    },
-    "& .MuiSwitch-switchBase.Mui-checked": {
-      transform: "translateX(9px)",
-    },
-  },
-  "& .MuiSwitch-switchBase": {
-    padding: 2,
-    "&.Mui-checked": {
-      transform: "translateX(28px)",
-      color: "#fff",
-      "& + .MuiSwitch-track": {
-        opacity: 1,
-        backgroundColor: "#ffffff",
-      },
-      "& > .MuiSwitch-thumb": {
-        backgroundColor: theme.palette.mode === "dark" ? "#949494" : "#04D505",
-      },
-    },
-  },
-  "& .MuiSwitch-thumb": {
-    boxShadow: "0 2px 4px 0 rgb(0 35 11 / 20%)",
-    width: 26.22,
-    height: 23,
-    borderRadius: 11,
-    backgroundColor: theme.palette.mode === "dark" ? "#04D505" : "#949494",
-    transition: theme.transitions.create(["width"], {
-      duration: 200,
-    }),
-  },
-  "& .MuiSwitch-track": {
-    width: 58,
-    height: 27,
-    borderRadius: 16 / 2,
-    opacity: 1,
-    backgroundColor: "#ffffff",
-    boxSizing: "border-box",
-  },
-}));
+const CustomSwitch = ({ checked, onChange }) => {
+  return (
+    <SwitchContainer onClick={() => onChange(!checked)}>
+      <SwitchSlider checked={checked} />
+      <SwitchLabel>{checked ? "Yes" : "No"}</SwitchLabel>
+    </SwitchContainer>
+  );
+};
+
+const SwitchContainer = styled.div`
+  display: inline-block;
+  position: relative;
+  width: 70px;
+  height: 30px;
+  cursor: pointer;
+`;
+
+const SwitchSlider = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${(props) => (props.checked ? "#04D505" : "#949494")};
+  border-radius: 20px;
+  transition: background-color 0.3s;
+  pointer-events: none;
+  &::before {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    left: ${(props) => (props.checked ? "calc(100% - 30px)" : "0")};
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    border-radius: 50%;
+    transition: left 0.3s;
+  }
+`;
+
+const SwitchLabel = styled('span')`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+`;
+
 
 export default function TransferToInventory(props) {
+  console.log( props.checked, 'pppp')
   const [restockOption, setRestockOption] = useState();
   const [restockTime, setRestockTime] = useState("1 day");
   const [message, setMessage] = useState({
@@ -481,10 +485,9 @@ export default function TransferToInventory(props) {
               <div className={styles.transToIn_details_col3}>
                 <div>
                   <h3>Are the ingredients available in your store</h3>
-                  <AntSwitch
+                  <CustomSwitch
                     checked={in_stock}
-                    onChange={(_, checked) => handleInStockChange(checked)}
-                    inputProps={{ "aria-label": "ant design" }}
+                    onChange={handleInStockChange}
                   />
                 </div>
                 <div>
@@ -611,7 +614,7 @@ export default function TransferToInventory(props) {
                                     />
                                   </div>
                                   <div className={styles.request_td}>
-                                    <AntSwitch
+                                    <CustomSwitch
                                       checked={
                                         formState.ingredientsAvailable[index]
                                           ?.product_available

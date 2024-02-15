@@ -3,24 +3,24 @@ import TextField from "@mui/material/TextField";
 // import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/lab/Autocomplete"; // createFilterOptions,
 // import axios from 'axios';
-import axios from '../../util/Api';
+import axios from "../../util/Api";
 import { Row, Col } from "react-bootstrap";
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Chip from '@mui/material/Chip';
-import AddIcon from '@mui/icons-material/Add';
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Chip from "@mui/material/Chip";
+import AddIcon from "@mui/icons-material/Add";
 // import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 // import MealPageModal from "../mealsPage/MealPageModal";
 import styles from "./suggestion.module.css";
 import Popup1 from "../popups/popup1";
-import Image from 'next/image';
+import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { base_url } from "../../util/Api";
+import { withRouter } from "next/router";
 
 class SuggestKitchenUtensilForm extends Component {
-
-  utensilsList = []
+  utensilsList = [];
   ingredientsQuantityMeasurements = [];
 
   constructor(props) {
@@ -62,7 +62,7 @@ class SuggestKitchenUtensilForm extends Component {
 
       //mealsModal controller
       openModal: false,
-      stepInputs: []
+      stepInputs: [],
     };
 
     this.closeModal = this.closeModal.bind(this);
@@ -73,23 +73,25 @@ class SuggestKitchenUtensilForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-    console.log(this.props)
-    console.log(this.props.categories)
+    console.log(this.props);
+    console.log(this.props.categories);
     // get all Meal Names***
     var url = "/get-all-products";
-    var url = `${base_url}/products/get-all-products`
+    var url = `${base_url}/products/get-all-products`;
 
-    axios.get(url).then((body) => {
-      var utensilsList = body.data;
-      if (utensilsList && utensilsList.data.length !== 0) {
-        console.log("returns GET of ALL MEALS ");
-        for (var i = 0; i < mealList.data.length; i++) {
-          this.allMealNames.push(mealList.data[i].mealName);
+    axios
+      .get(url)
+      .then((body) => {
+        var utensilsList = body.data;
+        if (utensilsList && utensilsList.data.length !== 0) {
+          console.log("returns GET of ALL MEALS ");
+          for (var i = 0; i < mealList.data.length; i++) {
+            this.allMealNames.push(mealList.data[i].mealName);
+          }
+        } else {
+          console.log("get all Utensils names function does not return");
         }
-      } else {
-        console.log("get all Utensils names function does not return");
-      }
-    })
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -108,7 +110,7 @@ class SuggestKitchenUtensilForm extends Component {
     //     for (var i = 0; i < this.productsList.data.length; i++) {
     //       this.utensilNames.push(this.productsList.data[i].product_name);
     //       this.productImageLink.push(this.productsList.data[i].product_image);
-    //     }       
+    //     }
     //   } else {
     //     console.log("get all products function does not return");
     //   }
@@ -137,15 +139,14 @@ class SuggestKitchenUtensilForm extends Component {
     //   });
     this.categories = this.categories;
 
-    let doc = document.querySelector('#formutensil')
+    let doc = document.querySelector("#formutensil");
     if (doc) {
       setInterval(() => {
-        localStorage.setItem('suggestUtensilForm', JSON.stringify(this.state))
-
-      }, 100)
+        localStorage.setItem("suggestUtensilForm", JSON.stringify(this.state));
+      }, 100);
     }
 
-    if (localStorage.getItem('suggestUtensilForm')) {
+    if (localStorage.getItem("suggestUtensilForm")) {
       let {
         utensilName,
         intro,
@@ -172,15 +173,14 @@ class SuggestKitchenUtensilForm extends Component {
 
         suggestedCategories,
 
-        booleanOfDisplayOfDialogBoxConfirmation
-      } = JSON.parse(localStorage.getItem('suggestUtensilForm'))
-
+        booleanOfDisplayOfDialogBoxConfirmation,
+      } = JSON.parse(localStorage.getItem("suggestUtensilForm"));
 
       this.setState({
         utensilName,
-        utensilImage: '',
-        utensilImageName: '',
-        utensilImageData: '',
+        utensilImage: "",
+        utensilImageName: "",
+        utensilImageData: "",
         utensilImagesData: [],
         intro,
 
@@ -206,15 +206,15 @@ class SuggestKitchenUtensilForm extends Component {
         suggestedCategories,
 
         booleanOfDisplayOfDialogBoxConfirmation,
-      })
+      });
     }
   }
 
   onInputChange = (e) => {
     console.log("Comes in on text field change; ");
-    console.log(e.target.value)
+    console.log(e.target.value);
     // console.log(" " + [e.target.id] + " " + e.target.value);
-    this.setState({ "utensilName": e.target.value });
+    this.setState({ utensilName: e.target.value });
   };
 
   uploadUtensilImage = () => {
@@ -226,8 +226,8 @@ class SuggestKitchenUtensilForm extends Component {
     input.type = "file";
     input.onchange = (ev) => this.onUpdateUtensilImage(ev);
     input.hidden = true;
-    input.click()
-  }
+    input.click();
+  };
 
   onUpdateUtensilImage = (event) => {
     if (event.target.files[0] === undefined) return;
@@ -238,22 +238,20 @@ class SuggestKitchenUtensilForm extends Component {
       //display utensils main image or videoin suggest utensil
       // if (this.state.utensilImage === '') {
       this.setState({
-        utensilImagesData: [...this.state.utensilImagesData, URL.createObjectURL(event.target.files[0])]
+        utensilImagesData: [
+          ...this.state.utensilImagesData,
+          URL.createObjectURL(event.target.files[0]),
+        ],
       });
 
       if (this.state.utensilImage1 == "") {
         this.setState({ utensilImage1: event.target.files[0] });
-      }
-      else if (this.state.utensilImage2 == "") {
+      } else if (this.state.utensilImage2 == "") {
         this.setState({ utensilImage2: event.target.files[0] });
-      }
-      else if (this.state.utensilImage3 == "") {
+      } else if (this.state.utensilImage3 == "") {
         this.setState({ utensilImage3: event.target.files[0] });
-
-      }
-      else {
+      } else {
         this.setState({ utensilImage4: event.target.files[0] });
-
       }
       // this.setState({
       //   utensilImage: event.target.files[0],
@@ -276,11 +274,9 @@ class SuggestKitchenUtensilForm extends Component {
       // image.src = URL.createObjectURL(event.target.files[0]);
 
       // }
-    }
-    else {
+    } else {
       alert("Invalid image type");
     }
-
   };
 
   onTextFieldChange = (e) => {
@@ -291,34 +287,35 @@ class SuggestKitchenUtensilForm extends Component {
   };
 
   handleCategoryDropdownChange = (val) => {
-    console.log(this.state.suggestedCategories)
+    console.log(this.state.suggestedCategories);
     this.setState({ suggestedCategories: val });
     // below setstate causes an error to make each new set a sum of all previous.
     // this.setState({ suggestedCategories: [...this.state.suggestedCategories, val] });
-
-  }
+  };
 
   categoryBlur = (e) => {
     this.setState({
-      categoryVal: e.target.value
-    })
-  }
+      categoryVal: e.target.value,
+    });
+  };
 
   addCategory = () => {
     let cat = this.state.categoryVal;
     const categorySentence = cat;
     const categoryWords = categorySentence.split(" ");
 
-    categoryWords.map((categoryWord) => {
-      return categoryWord[0].toUpperCase() + categoryWord.substring(1);
-    }).join(" ");
+    categoryWords
+      .map((categoryWord) => {
+        return categoryWord[0].toUpperCase() + categoryWord.substring(1);
+      })
+      .join(" ");
 
     let suggestedCategories = this.state.suggestedCategories;
     suggestedCategories.push(categoryWords);
     this.setState({
-      suggestedCategories
-    })
-  }
+      suggestedCategories,
+    });
+  };
 
   handleDeleteCategoryChip(chip) {
     var array = [...this.state.suggestedCategories]; // make a separate copy of the array
@@ -340,10 +337,22 @@ class SuggestKitchenUtensilForm extends Component {
 
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
-      // set currProductIndexInDBsProductsList variable 
-      const searchResult = this.props.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
-      const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
-      console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
+      // set currProductIndexInDBsProductsList variable
+      const searchResult = this.props.measurements.map(function callback(
+        element
+      ) {
+        if (element.toLowerCase() === val.toLowerCase()) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      const tmpcurrMeasurementIndexInDBsMeasurementList =
+        searchResult.indexOf(true);
+      console.log(
+        "Curr Product Index If Exists In Products List is: \n" +
+          tmpcurrMeasurementIndexInDBsMeasurementList
+      );
 
       // check if product name is an existing product
       // set product existense to index, so one will not need to edit
@@ -353,15 +362,13 @@ class SuggestKitchenUtensilForm extends Component {
       // console.log("Event is: \n"+ event.target);
       if (event != null && event.target.value !== null) {
         this.setState({ measurement: event.target.innerHTML });
-
       } else {
         this.setState({ measurement: val });
       }
+    } else {
+      console.log("val is null!");
     }
-    else {
-      console.log('val is null!');
-    }
-  }
+  };
 
   addDescription = (event) => {
     event.preventDefault();
@@ -376,13 +383,12 @@ class SuggestKitchenUtensilForm extends Component {
     properDescriptionStringSyntax =
       descriptionValue + ":" + quantityValue + "" + measurementValue;
 
-
     // This is the Object for an Ingredient of a Known Product
     var descriptionObject = {
       description_name: descriptionValue,
       quantity: quantityValue,
       measurement: measurementValue,
-      properDescriptionStringSyntax: properDescriptionStringSyntax
+      properDescriptionStringSyntax: properDescriptionStringSyntax,
     };
 
     // edit product details for new product object
@@ -390,17 +396,21 @@ class SuggestKitchenUtensilForm extends Component {
     descriptionObject.productIndex = 0;
     // descriptionObject.calories = 0;
 
-    this.setState({ descriptionGroupList: [...this.state.descriptionGroupList, descriptionObject] });
+    console.log(descriptionObject, "descriptionObjectdescriptionObject");
+
+    this.setState({
+      descriptionGroupList: [
+        ...this.state?.descriptionObject,
+        descriptionObject,
+      ],
+    });
     // after adding product to ingredient group list
     // reset current product img src and path to null, and same for current ingredient inputs
     // this.setState({ currentProductImgSrc: null, productImg_path: "" });
-    this.setState({ quantity: '', measurement: "null" });
+    this.setState({ quantity: "", measurement: "null" });
     this.setState({ measurement: "", descriptionName: "" });
     this.handleAddDescriptionChip(properDescriptionStringSyntax);
-
-    console.log(this.state.descriptionGroupList);
-
-  }
+  };
 
   handleAddDescriptionChip(chip) {
     this.setState({
@@ -417,7 +427,10 @@ class SuggestKitchenUtensilForm extends Component {
       array.splice(index, 1);
       removeFromGroup.splice(index, 1);
 
-      this.setState({ descriptionStrings: array, descriptionGroupList: removeFromGroup });
+      this.setState({
+        descriptionStrings: array,
+        descriptionGroupList: removeFromGroup,
+      });
     }
   }
 
@@ -427,14 +440,15 @@ class SuggestKitchenUtensilForm extends Component {
     // this.func_removeutensilFlag();
   }
   capitalizeWords(text) {
-    return text.replace(/\b\w/g, (match) => match.toUpperCase());
+    return text?.replace(/\b\w/g, (match) => match.toUpperCase());
   }
 
   openMealDetailsModal = (index) => {
-
     console.log("Comes in toggle product details div id. Index is : " + index);
 
-    var individualProductDisplay = document.getElementById("ProductAdditionalDataDisplayed");
+    var individualProductDisplay = document.getElementById(
+      "ProductAdditionalDataDisplayed"
+    );
     console.log(individualProductDisplay);
 
     // if (individualProductDisplay.style.display === "block") {
@@ -444,19 +458,36 @@ class SuggestKitchenUtensilForm extends Component {
     //   individualProductDisplay.style.display = "block";
     // }
     this.setState({ openModal: true });
-  }
+  };
 
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedUtensilToDB = async (e) => {
-    const { utensilName, utensilImagesData, intro,
-      suggestedCategories, descriptionGroupList,
-      utensilImage1, utensilImage2, utensilImage3, utensilImage4 } = this.state;
+    const {
+      utensilName,
+      utensilImagesData,
+      intro,
+      suggestedCategories,
+      descriptionGroupList,
+      utensilImage1,
+      utensilImage2,
+      utensilImage3,
+      utensilImage4,
+    } = this.state;
 
     // handle edge case Product name, ingredienrs or image upload required to submit form
-    if (utensilName === "") { console.log("product label blank"); return; }
+    if (utensilName === "") {
+      console.log("product label blank");
+      return;
+    }
     // if (ingredientStrings.length === 0) { window.alert("Suggested Product requires adding at least one ingredient to submit"); return; }
-    if (utensilImagesData === null || utensilImagesData === undefined ||
-      utensilImagesData === []) { window.alert("You didn't add suggested product image"); return; }
+    if (
+      utensilImagesData === null ||
+      utensilImagesData === undefined ||
+      utensilImagesData === []
+    ) {
+      window.alert("You didn't add suggested product image");
+      return;
+    }
 
     // Handle instruction/product images to create url for product images on server
     /*Loop through Ingredients product data
@@ -479,7 +510,10 @@ class SuggestKitchenUtensilForm extends Component {
     console.log("product name:");
     console.log(this.state.utensilName);
 
-    contentNameToContentImageOrVideoMapForS3.append('productContentName', this.state.utensilName);
+    contentNameToContentImageOrVideoMapForS3.append(
+      "productContentName",
+      this.state.utensilName
+    );
     console.log(contentNameToContentImageOrVideoMapForS3);
     var keyValueData = { productContentName: this.state.utensilName };
     // console.log("Stringified version:");
@@ -487,52 +521,82 @@ class SuggestKitchenUtensilForm extends Component {
     var singleTitleTest = JSON.stringify(keyValueData);
     console.log(singleTitleTest);
 
-
     //-------------Submit remainder data of product to Mongo ------------------------------------------
     let suggestProductForm = new FormData();
     const utensilString = utensilName;
     const utensilWords = utensilString.split(" ");
 
-    utensilWords.map((utensilWord) => {
-      return utensilWord[0].toUpperCase() + utensilWord.substring(1);
-    }).join(" ");
-    suggestProductForm.append('item_name', utensilName);
-   
-    suggestProductForm.append('item_intro', intro);
+    utensilWords
+      .map((utensilWord) => {
+        return utensilWord[0].toUpperCase() + utensilWord.substring(1);
+      })
+      .join(" ");
+    suggestProductForm.append("item_name", utensilName);
+
+    suggestProductForm.append("item_intro", intro);
 
     if (utensilImage1) {
-      suggestProductForm.append('item_images', utensilImage1);
+      suggestProductForm.append("item_images", utensilImage1);
     }
     if (utensilImage2) {
-      suggestProductForm.append('item_images', utensilImage2);
-    } if (utensilImage3) {
-      suggestProductForm.append('item_images', utensilImage3);
-    } if (utensilImage4) {
-      suggestProductForm.append('item_images', utensilImage4);
+      suggestProductForm.append("item_images", utensilImage2);
+    }
+    if (utensilImage3) {
+      suggestProductForm.append("item_images", utensilImage3);
+    }
+    if (utensilImage4) {
+      suggestProductForm.append("item_images", utensilImage4);
     }
     // descriptionGroupList.map((individualDescriptions) => {
     //   console.log(individualDescriptions);
     //   suggestProductForm.append('product_descriptions', JSON.stringify(individualDescriptions));
     // })
 
-    suggestProductForm.append("user", JSON.parse(localStorage.getItem('user'))._id);
+    suggestProductForm.append(
+      "user",
+      JSON.parse(localStorage.getItem("user"))._id
+    );
 
-    console.log(descriptionGroupList, 'descriptionGroupList')
-    const arr = descriptionGroupList.map(ele => {
+    console.log(descriptionGroupList, "descriptionGroupList");
+    const arr = descriptionGroupList?.map((ele) => {
       return {
         object_name: ele.description_name,
         object_quantity: ele.quantity,
         object_measurement: ele.measurement,
-        formatted_string: `${this.capitalizeWords(ele.description_name)} : ${ele.quantity}${ele.measurement}`
+        formatted_string: `${this.capitalizeWords(ele.description_name)} : ${
+          ele.quantity
+        }${ele.measurement}`,
+      };
+    });
 
+    const arr_2 = this.state.descriptionStrings?.map((element) => {
+      const splited = element.split(":");
+      const descripName = splited[0];
+      let qty = "";
+
+      const ele = splited[1];
+      for (let i = 0; i < ele.length; i++) {        
+        if (!Object.is(Number(ele.charAt(i)), NaN)){
+          console.log(ele.charAt(i), 'ele.charAt(i)')
+          qty = qty.concat(ele.charAt(i))
+        }
       }
-    })
+      const measurement = ele.slice(ele.indexOf(qty));
+      const formatted_string = `${this.capitalizeWords(
+        descripName
+      )} : ${ele}`;
 
-   
-    suggestProductForm.append('description', JSON.stringify(arr));
+      return {
+        object_name: descripName,
+        object_quantity: Number(qty),
+        object_measurement: measurement,
+        formatted_string
+      }
+    });
 
-    suggestProductForm.append("item_type", "Utensil")
+    suggestProductForm.append("description", JSON.stringify(arr_2));
 
+    suggestProductForm.append("item_type", "Utensil");
 
     // suggestProductForm.append('ingredientStrings', ingredientStrings);
     // list of products quantity measurements (created on submit Product)
@@ -551,8 +615,13 @@ class SuggestKitchenUtensilForm extends Component {
     //   suggestProductForm.append('product_categories', individualCategories);
     // })
 
-    const capitalizedSuggestedCategories = suggestedCategories?.map(ele => this.capitalizeWords(ele))
-    suggestProductForm.append("item_categories", JSON.stringify(capitalizedSuggestedCategories));
+    const capitalizedSuggestedCategories = suggestedCategories?.map((ele) =>
+      this.capitalizeWords(ele)
+    );
+    suggestProductForm.append(
+      "item_categories",
+      JSON.stringify(capitalizedSuggestedCategories)
+    );
     // suggestProductForm.append('product_details', descriptionGroupList);
     console.log(this.state.chunk1Content);
 
@@ -561,15 +630,22 @@ class SuggestKitchenUtensilForm extends Component {
     // var url = "/createProduct/";
     var url = `${base_url}/items/`;
 
+    console.log(this.props.router, "this.props.router");
+    if (this.props.router?.query?.id) {
+      url = url + `?action=update&_id=${this.props.router.query.id}`;
+    }
+
     const config = {
-      method: 'POST', data: suggestProductForm, url: url,
+      method: "POST",
+      data: suggestProductForm,
+      url: url,
       headers: {
         // 'application/json' is the modern content-type for JSON, but some
         // older servers may use 'text/json'.
         // See: http://bit.ly/text-json
         // application/x-www-form-urlencoded
         // 'content-type': 'multipart/form-data'
-      }
+      },
     };
 
     console.log("Printing Chunk Contents");
@@ -577,32 +653,32 @@ class SuggestKitchenUtensilForm extends Component {
     var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
     console.log(instructionData);
 
-    axios(config).then(response => {
-      if (response.status >= 200 && response.status < 300) {
-        this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
-        console.log(response);
-        console.log("Display Product submitted successfully");
-        toast.success("Kitchen Utensils submitted successfully")
-        // window.location.href = "/SuggestProduct"
-      } else {
-        console.log("Something wrong happened ");
-      }
-    }).catch(error => {
-      console.log(error);
-      toast.error(error.message)
-    });
-
-  }
+    axios(config)
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
+          console.log(response);
+          console.log("Display Product submitted successfully");
+          toast.success("Kitchen Utensils submitted successfully");
+          // window.location.href = "/SuggestProduct"
+        } else {
+          console.log("Something wrong happened ");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
+  };
 
   deleteImages(id) {
-    const delImages = this.state.utensilImagesData
-    delImages.splice(id, 1)
-    this.setState({ ...this.state, utensilImagesData: delImages })
+    const delImages = this.state.utensilImagesData;
+    delImages.splice(id, 1);
+    this.setState({ ...this.state, utensilImagesData: delImages });
   }
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
-
-    // const [ingredientInput, setIngredientInput] = useState('');    
+    // const [ingredientInput, setIngredientInput] = useState('');
 
     // const theme = createMuiTheme({
     //   palette: { primary: green },
@@ -612,73 +688,135 @@ class SuggestKitchenUtensilForm extends Component {
 
     return (
       <div className={styles.suggestion_section_2}>
-        <form id="formutensil" className={styles.suggestion_forms} noValidate autoComplete="off" encType="multipart/form-data" method="post" >
+        <form
+          id="formutensil"
+          className={styles.suggestion_forms}
+          noValidate
+          autoComplete="off"
+          encType="multipart/form-data"
+          method="post"
+        >
           <div className={styles.suggestion_form}>
             <div className={styles.suggestion_form_group}>
-              <label htmlFor="utensilName" className={styles.suggestion_form_label}>
+              <label
+                htmlFor="utensilName"
+                className={styles.suggestion_form_label}
+              >
                 Utensil Name
               </label>
-              <TextField value={this.state.utensilName} id="utensilName" fullWidth onChange={this.onInputChange} variant="outlined" required />
+              <TextField
+                value={this.state.utensilName}
+                id="utensilName"
+                fullWidth
+                onChange={this.onInputChange}
+                variant="outlined"
+                required
+              />
             </div>
 
-            <h3>Upload Utensil Images <em>(Up to 4)</em></h3>
-            {this.state.utensilImagesData.length < 4 &&
+            <h3>
+              Upload Utensil Images <em>(Up to 4)</em>
+            </h3>
+            {this.state.utensilImagesData.length < 4 && (
               <div className={styles.suggestion_form_image}>
                 <div className={styles.suggestion_form_image_col_1}>
-                  <div onClick={() => this.uploadUtensilImage()} className={styles.suggestion_form_image_icon_con}>
+                  <div
+                    onClick={() => this.uploadUtensilImage()}
+                    className={styles.suggestion_form_image_icon_con}
+                  >
                     <AddIcon className={styles.suggestion_form_image_icon} />
                   </div>
                 </div>
                 <div className={styles.suggestion_form_image_col_2}>
-                  <p>Upload picture with : Jpeg or Png format and not more than 500kb</p>
+                  <p>
+                    Upload picture with : Jpeg or Png format and not more than
+                    500kb
+                  </p>
                 </div>
-              </div>}
+              </div>
+            )}
 
-            {
-              this.state.utensilImagesData.map((data, index) =>
-                <Row key={index}>
-                  <Col md={12} style={{ marginTop: "20px" }}>
-                    <p><Image id="UtensilsMainImages" src={data} width={100} height={100} alt="main_Utensil_Image" />
-                    </p>
-                    <div className={styles.close} onClick={() => this.deleteImages(index)}>
-                      <AiOutlineClose className={styles.closeIcon} />
-                    </div>
-                  </Col>
-                </Row>
-              )
-            }
+            {this.state.utensilImagesData.map((data, index) => (
+              <Row key={index}>
+                <Col md={12} style={{ marginTop: "20px" }}>
+                  <p>
+                    <Image
+                      id="UtensilsMainImages"
+                      src={data}
+                      width={100}
+                      height={100}
+                      alt="main_Utensil_Image"
+                    />
+                  </p>
+                  <div
+                    className={styles.close}
+                    onClick={() => this.deleteImages(index)}
+                  >
+                    <AiOutlineClose className={styles.closeIcon} />
+                  </div>
+                </Col>
+              </Row>
+            ))}
 
             <h3>Description</h3>
             <div className={styles.suggestion_form_group}>
               <label htmlFor="intro" className={styles.suggestion_form_label}>
                 Intro (150 words)
               </label>
-              <TextField value={this.state.intro} multiline id="intro" fullWidth onChange={this.onTextFieldChange} variant="outlined" />
+              <TextField
+                value={this.state.intro}
+                multiline
+                id="intro"
+                fullWidth
+                onChange={this.onTextFieldChange}
+                variant="outlined"
+              />
             </div>
           </div>
           <h3>Utensil Descriptions</h3>
           <div className={styles.suggestion_form}>
             <div className={styles.suggestion_form_group}>
-              <label htmlFor="descriptionName" className={styles.suggestion_form_label}>
+              <label
+                htmlFor="descriptionName"
+                className={styles.suggestion_form_label}
+              >
                 Description Name
               </label>
-              <TextField fullWidth id="descriptionName" onChange={this.onTextFieldChange}
-                variant="outlined" value={this.state.descriptionName} />
+              <TextField
+                fullWidth
+                id="descriptionName"
+                onChange={this.onTextFieldChange}
+                variant="outlined"
+                value={this.state.descriptionName}
+              />
             </div>
             <div className={styles.suggestion_form_2_col}>
               <div className={styles.suggestion_form_2_col_2}>
                 <div className={styles.suggestion_form_group}>
-                  <label htmlFor="quantity" className={styles.suggestion_form_label}>
+                  <label
+                    htmlFor="quantity"
+                    className={styles.suggestion_form_label}
+                  >
                     Quantity
                   </label>
-                  <TextField fullWidth id="quantity" type="number" onChange={this.onTextFieldChange}
-                    variant="outlined" placeholder="1.." value={this.state.quantity} />
+                  <TextField
+                    fullWidth
+                    id="quantity"
+                    type="number"
+                    onChange={this.onTextFieldChange}
+                    variant="outlined"
+                    placeholder="1.."
+                    value={this.state.quantity}
+                  />
                 </div>
               </div>
 
               <div className={styles.suggestion_form_2_col_1}>
                 <div className={styles.suggestion_form_group}>
-                  <label htmlFor="measurement" className={styles.suggestion_form_label}>
+                  <label
+                    htmlFor="measurement"
+                    className={styles.suggestion_form_label}
+                  >
                     Measurement
                   </label>
                   <Autocomplete
@@ -687,37 +825,51 @@ class SuggestKitchenUtensilForm extends Component {
                     value={this.state.measurement}
                     onChange={this.handleMeasurement}
                     freeSolo
-                    renderInput={(params) => (<TextField {...params}
-                      value={this.state.measurement} id="measurement"
-                      variant="outlined" type="text" />)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        value={this.state.measurement}
+                        id="measurement"
+                        variant="outlined"
+                        type="text"
+                      />
+                    )}
                   />
                 </div>
               </div>
 
-              <Button variant="contained" disableRipple onClick={this.addDescription} className={styles.ingredient_button} style={{ width: "max-content" }} > Add Description</Button>
+              <Button
+                variant="contained"
+                disableRipple
+                onClick={this.addDescription}
+                className={styles.ingredient_button}
+                style={{ width: "max-content" }}
+              >
+                {" "}
+                Add Description
+              </Button>
             </div>
 
             <Stack direction="row" spacing={1} className={styles.stack}>
-              {
-                descriptionStrings.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data}
-                    className={styles.chip}
-                    onClick={() => this.handleDeleteSizeChip(data)}
-                    onDelete={() => this.handleDeleteSizeChip(data)}
-                  />
-                ))
-              }
+              {descriptionStrings?.map((data, index) => (
+                <Chip
+                  key={index}
+                  label={data}
+                  className={styles.chip}
+                  onClick={() => this.handleDeleteSizeChip(data)}
+                  onDelete={() => this.handleDeleteSizeChip(data)}
+                />
+              ))}
             </Stack>
-
           </div>
-
 
           <h3>Utensil Categories</h3>
           <div className={styles.suggestion_form}>
             <div className={styles.suggestion_form_group}>
-              <label htmlFor="tags-outlined" className={styles.suggestion_form_label}>
+              <label
+                htmlFor="tags-outlined"
+                className={styles.suggestion_form_label}
+              >
                 Suggest category for this Utensil
               </label>
               <div className={styles.input_button}>
@@ -756,39 +908,53 @@ class SuggestKitchenUtensilForm extends Component {
                   Add Category
                 </Button>
               </div>
-
             </div>
             <Stack direction="row" spacing={1} className={styles.stack}>
-              {
-                this.state.suggestedCategories.map((data, index) => (
-                  <Chip
-                    key={index}
-                    label={data}
-                    className={styles.chip}
-                    onClick={() => this.handleDeleteCategoryChip(data)}
-                    onDelete={() => this.handleDeleteCategoryChip(data)}
-                  />
-                ))
-              }
+              {this.state.suggestedCategories.map((data, index) => (
+                <Chip
+                  key={index}
+                  label={data}
+                  className={styles.chip}
+                  onClick={() => this.handleDeleteCategoryChip(data)}
+                  onDelete={() => this.handleDeleteCategoryChip(data)}
+                />
+              ))}
             </Stack>
           </div>
 
-          <u style={{ color: "#F47900" }} onClick={this.openMealDetailsModal}> Show Preview</u>
+          <u style={{ color: "#F47900" }} onClick={this.openMealDetailsModal}>
+            {" "}
+            Show Preview
+          </u>
 
           {/* <Row>
                 <Col md={12}> */}
           {/* <ThemeProvider theme={theme}> */}
-          <Button variant="contained" className={styles.ingredient_button} style={{ width: "100%" }} onClick={() => this.sendSuggestedUtensilToDB()}> Add Utensil</Button>
+          <Button
+            variant="contained"
+            className={styles.ingredient_button}
+            style={{ width: "100%" }}
+            onClick={() => this.sendSuggestedUtensilToDB()}
+          >
+            {" "}
+            Add Utensil
+          </Button>
           {/* </ThemeProvider> */}
           {/* </Col>
                 
               </Row> */}
-          <u >View privacy policy</u>
-          <div id="ProductAdditionalDataDisplayed" >
-            <Popup1 popup='kitchen' openModal={this.state.openModal} closeModal={this.closeModal}
-              name={this.state.utensilName} description={this.state.intro}
-              imageData={this.state.utensilImagesData[0]} image={this.state.utensilImagesData[0]}
-              imagesData={this.state.utensilImagesData.slice(1)} categories={this.state.suggestedCategories}
+          <u>View privacy policy</u>
+          <div id="ProductAdditionalDataDisplayed">
+            <Popup1
+              popup="kitchen"
+              openModal={this.state.openModal}
+              closeModal={this.closeModal}
+              name={this.state.utensilName}
+              description={this.state.intro}
+              imageData={this.state.utensilImagesData[0]}
+              image={this.state.utensilImagesData[0]}
+              imagesData={this.state.utensilImagesData.slice(1)}
+              categories={this.state.suggestedCategories}
               descriptionsList={this.state.descriptionStrings}
             />
           </div>
@@ -798,4 +964,4 @@ class SuggestKitchenUtensilForm extends Component {
   }
 }
 
-export default SuggestKitchenUtensilForm;
+export default withRouter(SuggestKitchenUtensilForm);

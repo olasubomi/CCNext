@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { RiDeleteBin5Line } from "react-icons/ri"
 import moment from 'moment'
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
 
 function Reviews({ itemId, callback }) {
 
@@ -20,6 +21,7 @@ function Reviews({ itemId, callback }) {
     const [isEditing, setIsEditing] = useState(false)
     const [commentId, setCommentId] = useState("")
     const profileImage = JSON.parse(localStorage.getItem('user'))?.profile_picture
+    const {authUser} = useSelector(state => state.Auth)
 
 
     useEffect(() => {

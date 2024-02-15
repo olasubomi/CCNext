@@ -37,9 +37,14 @@ function SuggestedMealRow(props) {
     setShowState(!show);
   }
   const [selectedAction, setSelectedAction] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleClickPopup = () => {
+    setShowPopup(true);
+  };
 
   const options = [
-    { value: "default", label: "Select Action" },
+    { value: "default", label: "Select..." },
     {
       value: "sendForReview",
       label: "Send for review",
@@ -48,7 +53,7 @@ function SuggestedMealRow(props) {
     {
       value: "availableInInventory",
       label: "Available in Inventory",
-      isDisabled: !suggestion.item_price,
+      isDisabled: suggestion.item_available === false && suggestion.item_price === 0,
     },
     {
       value: "sendToInventory",
@@ -71,7 +76,7 @@ function SuggestedMealRow(props) {
   const customStyles = {
     control: (provided) => ({
       ...provided,
-      width: "200px", // Set your desired fixed width
+      width: "100%", // Set your desired fixed width
     }),
   };
 
@@ -197,29 +202,32 @@ function SuggestedMealRow(props) {
             <td className={styles.td_name}>
               <div className={styles.actions_con}>
                 {props.auth.authUser.user_type !== "admin" && (
-                  <Select
-                    styles={customStyles}
-                    defaultValue={selectedAction}
-                    onChange={handleSelectChange}
-                    options={options.filter((option) => {
-                      if (suggestion.item_status[0]?.status === "Draft") {
-                        return option.value === "sendForReview";
-                      } else if (
-                        suggestion.item_status[0]?.status === "Public" &&
-                        suggestion.item_price
-                      ) {
-                        return option.value === "availableInInventory";
-                      }
-                      return true;
-                    })}
-                  />
+                  <div className={styles.selectContainer}>
+                    <Select
+                      styles={customStyles}
+                      defaultValue={selectedAction}
+                      onChange={handleSelectChange}
+                      options={options.filter((option) => {
+                        if (suggestion.item_status[0]?.status === "Draft") {
+                          return option.value === "sendForReview";
+                        } else if (
+                          suggestion.item_status[0]?.status === "Public" &&
+                          suggestion.item_price
+                        ) {
+                          return option.value === "availableInInventory";
+                        }
+                        return true;
+                      })}
+                    />
+                  </div>
                 )}
 
                 <i
                   className={styles.hideData}
                   onClick={() => {
                     // props.deleteSuggestion(suggestion._id)
-                    props.deleteItem(suggestion._id);
+
+                    handleClickPopup();
                   }}
                 >
                   <CloseFillIcon style={actionIcon} />
@@ -232,6 +240,30 @@ function SuggestedMealRow(props) {
                   <i onClick={showDropDown} className={styles.showData}>
                     <ArrowDropDownIcon className={styles.arrowDown} />
                   </i>
+                )}
+                {showPopup && (
+                  <div className={styles.addpublicMeal_container}>
+                    <div className={styles.popup}>
+                      <p>
+                        Are you sure you want to delete {suggestion.item_name}?
+                      </p>
+                      <div className={styles.flexPopup}>
+                        <div
+                          className={styles.deletePopup}
+                          onClick={() => props.deleteItem(suggestion._id)}
+                        >
+                          <p>Yes</p>
+                        </div>
+                        <div
+                          className={styles.deleteOutline}
+                          onClick={() => setShowPopup(false)}
+                        >
+                          {" "}
+                          <p>No</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
             </td>
