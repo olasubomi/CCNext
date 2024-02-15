@@ -105,30 +105,31 @@ const Grocery = () => {
   }, [show]);
 
   return (
-    <div className={styles.container}>      <Header />
+    <div className={styles.container}>
+      {" "}
+      <Head>
+        <title>Chop Chow Grocery</title>
+        <meta
+          key="title"
+          name="viewport"
+          content="initial-scale=1.0, width=device-width"
+        />
+      </Head>
+      <Header />
       <Header2 />
       <SideNav />
-      <div className={styles.grocery_container} id="modal_container">
-        <Head>
-          <title>Chop Chow Grocery</title>
-          <meta
-            key="title"
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-        </Head>
-
+      {/* <div className={styles.grocery_container} id="modal_container"> */}
         {/* <GroceryComponent productNames={['prod1', 'prod2']} /> */}
-       
-          <div className={styles.header}>
-            <div className={styles.one}>
-              <GoBack />
-              <h3 className={styles.title}>My Grocery List</h3>
-            </div>
-            <div className={styles.two}>
-              <p onClick={() => setShow(!show)}>Create New List</p>
-            </div>
+
+        <div className={styles.header}>
+          <div className={styles.one}>
+            <GoBack />
+            <h3 className={styles.title}>My Grocery List</h3>
           </div>
+          <div className={styles.two}>
+            <p onClick={() => setShow(!show)}>Create New List</p>
+          </div>
+        </div>
         {(isUserOnline ? groceryList : localGroceryList).length > 0 ? (
           <div className={styles.all_cards}>
             {(isUserOnline ? groceryList : localGroceryList)?.map((ele, id) => (
@@ -394,8 +395,7 @@ const Grocery = () => {
             </div>
           </div>
         )}
-      </div>
-
+      {/* </div> */}
       {show && (
         <Modal
           show={show}
@@ -416,7 +416,6 @@ const Grocery = () => {
       )}
       <Footer />
     </div>
-    
   );
 };
 

@@ -18,10 +18,10 @@ html{
   font-family: 'Inter', sans-serif;
 } */
 
-::-webkit-scrollbar {
-  width: 0;  /* Remove scrollbar space */
-  background: transparent;  /* Optional: just make scrollbar invisible */
-}
+/* ::-webkit-scrollbar {
+  width: 0;  Remove scrollbar space
+  background: transparent;  Optional: just make scrollbar invisible
+} */
 
 .App {
   text-align: center; }
