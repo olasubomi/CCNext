@@ -105,8 +105,7 @@ const Grocery = () => {
   }, [show]);
 
   return (
-    <>
-      <Header />
+    <div className={styles.container}>      <Header />
       <Header2 />
       <SideNav />
       <div className={styles.grocery_container} id="modal_container">
@@ -120,7 +119,7 @@ const Grocery = () => {
         </Head>
 
         {/* <GroceryComponent productNames={['prod1', 'prod2']} /> */}
-        <div className={styles.container}>
+       
           <div className={styles.header}>
             <div className={styles.one}>
               <GoBack />
@@ -396,7 +395,6 @@ const Grocery = () => {
           </div>
         )}
       </div>
-      </div>
 
       {show && (
         <Modal
@@ -417,7 +415,7 @@ const Grocery = () => {
         />
       )}
       <Footer />
-    </>
+    </div>
     
   );
 };

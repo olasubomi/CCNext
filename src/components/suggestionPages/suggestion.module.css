@@ -567,7 +567,18 @@
 .stack {
   flex-wrap: wrap;
 }
-
+@media only screen and (max-width: 1000px) {
+  .suggestionModal {
+    width: 50%;
+    height: 45%;
+  }
+}
+@media only screen and (max-width: 730px) {
+  .suggestionModal {
+    width: 60%;
+    height: 45%;
+  }
+}
 @media screen and (max-width: 650px) {
   .suggestion_container {
     margin-top: 102px;
@@ -577,6 +588,28 @@
 @media screen and (max-width: 650px) {
   .more_steps {
     grid-template-columns: 1fr;
+  }
+  .suggestionModal {
+    width: 75%;
+    height: 45%;
+  }
+  .successMessage {
+    font-size: 2rem;
+  }
+  .successText {
+    font-size: 11px;
+  }
+  .gif {
+    width: 8rem;
+    height: 8rem;
+  }
+  .btn {
+    width: 110px;
+    height: 40px;
+    font-size: 11px;
+  }
+  .btn Link {
+    font-size: 11px;
   }
 }
 

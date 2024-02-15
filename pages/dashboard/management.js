@@ -191,6 +191,7 @@ const Management = () => {
   const [filteredMeals, setFilteredMeals] = useState(filteredItem());
   const [filteredProducts, setFilteredProducts] = useState(filteredProduct());
 
+  console.log(filteredMeals, 'filteredMeals--')
   useEffect(() => {
     setFilteredMeals(filteredItem());
     setFilteredProducts(filteredProduct());
@@ -269,6 +270,7 @@ const Management = () => {
           store: element?.storeId?.store_name || "No store",
           item_type: element?.item_type,
           currency: element.storeId?.currency?.symbol,
+          item_id: element?.item?._id
         };
       });
       console.log(resp, 'respsp')
@@ -522,10 +524,10 @@ const Management = () => {
     } catch (e) {}
   }, [times]);
 
-  const deleteInventory = async (id) => {
+  const deleteInventory = async (id, item_id) => {
     console.log(id, 'idd')
     try {
-      const res = await axios.delete(`/inventory/delete-inventory/${id}`);
+      const res = await axios.delete(`/inventory/delete-inventory/${id}?item_id=${item_id}`);
       console.log("resss", res);
       if (res.status === 202) {
         fetchOneUserInventory();
@@ -1191,7 +1193,11 @@ const Management = () => {
                               </td>
                               <td
                                 style={{ textAlign: "center" }}
-                                onClick={() => deleteInventory(ele.value)}
+                                onClick={() => {
+                                  console.log(ele)
+                                  deleteInventory(ele.value, ele?.item_id)
+                                
+                                }}
                                 className={styles.close2}
                               >
                                 <IoIosCloseCircle color="#949494" size={20} />

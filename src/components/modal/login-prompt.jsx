@@ -1,6 +1,7 @@
+import Link from "next/link";
 import styles from "../../components/suggest-store/suggest-store.module.css";
 import { useRouter } from "next/navigation";
-export const LoginPrompt = ({setShowLoginPrompt}) => {
+export const LoginPrompt = ({ setShowLoginPrompt }) => {
   const router = useRouter();
   return (
     <div className={styles.modalContainer}>
@@ -14,9 +15,9 @@ export const LoginPrompt = ({setShowLoginPrompt}) => {
         </p>
         <div className={styles.flexCol}>
           {" "}
-          <button className={styles.btn} onClick={() => router.push("/login")}>
+          <Link href="/login" className={styles.btn}>
             Login
-          </button>
+          </Link>
           <p onClick={() => setShowLoginPrompt(false)}>No, thanks</p>
         </div>
       </div>

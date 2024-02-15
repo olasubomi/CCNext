@@ -18,6 +18,7 @@ import {
   NotificationIcon,
   Order2Icon,
   UserIcon,
+  fastFoodIcon,
 } from "../icons";
 import { Auth } from "../auth";
 import { connect, useSelector } from "react-redux";
@@ -260,6 +261,7 @@ function Header(props) {
                         <h3>Dashboard</h3>
                       </div>
                     </Link>
+
                     <Link href="/dashboard/userprofile">
                       <div
                         className={
@@ -271,32 +273,18 @@ function Header(props) {
                         <h3>Profile</h3>
                       </div>
                     </Link>
-                    <Link href="#">
-                      <div className={styles.navbar_user_signedin_logout}>
-                        <div>
-                          <div
-                            className={
-                              styles.navbar_user_signedin_link +
-                              " " +
-                              styles.black
-                            }
-                          ></div>
-                          <DashBoardIcon style={styles.navbar_main_link_icon} />
-                          <h3>Dashboard</h3>
+                    <Link href="/suggestmeal">
+                      <div
+                        className={
+                          styles.navbar_user_signedin_link + " " + styles.black
+                        }
+                        style={{ marginTop: "-1rem", alignItems: "center" }}
+                      >
+                        {/* <Image src={openIcon} alt="profile" /> */}
+                        <div className={styles.navbar_main_link_icon}>
+                          <img src="/assets/icons/fastfood.svg" />
                         </div>
-                      </div>
-                    </Link>
-
-
-                    <Link href="/dashboard/userprofile">
-                      <div
-                        className={
-                          styles.navbar_user_signedin_link + " " + styles.black
-                        }
-                      >
-                        {/* <Image src={openIcon} alt="profile" /> */}
-                        <UserIcon style={styles.navbar_main_link_icon} />
-                        <h3>Profile</h3>
+                        <h3>Suggest A Meal</h3>
                       </div>
                     </Link>
                     <div className={styles.navbar_user_signedin_logout}>
@@ -557,7 +545,7 @@ function Header(props) {
                     (props.path === "/grocery-list" && styles.activeLinkDown)
                   }
                 >
-                  <Link href="/grocerylist">
+                  <Link href="/grocery">
                     <BasketIcon style={styles.navbar_down_col_icon} />
                     <p>Grocery List</p>
                   </Link>
@@ -581,7 +569,6 @@ function Header(props) {
             </div>
           </div>
           {/* {isOpen && <Auth />} */}
-
         </div>
       </div>
     </>

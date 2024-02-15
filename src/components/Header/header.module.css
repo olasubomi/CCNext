@@ -16,7 +16,7 @@
   display: grid;
   grid-auto-flow: row;
   position: fixed;
-  top: 85px;
+  top: 90px;
   width: 100%;
   z-index: 199;
   grid-template-rows: 70px;
@@ -212,12 +212,16 @@
 
 .navbar_main_link_icon {
   fill: #000000;
-  width: 17px;
+  width: 15px;
 }
 
 .navbar_main_link_icon2 {
   fill: #ffffff;
   width: 18px;
+}
+.navlink{
+  font-size: 15px;
+  font-weight: 300;
 }
 
 .navbar_main_link > p {
@@ -475,7 +479,6 @@
 
 .navbar_user_signedin {
   width: 160px;
-  height: 155px;
   display: none;
   grid-gap: 1rem;
   padding: 1.5rem;
@@ -495,8 +498,8 @@
 
 .navbar_user_signedin_link > h3 {
   font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
+  font-weight: 300;
+  font-size: 14px;
   line-height: 19px;
   margin: 0;
 }

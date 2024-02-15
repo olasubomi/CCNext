@@ -111,7 +111,10 @@
   outline: none;
   border-radius: 4px;
   border: none;
-  font-size: 12px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #fff;
   cursor: pointer;
 }
@@ -222,4 +225,31 @@
   font-weight: 400;
   line-height: normal;
   cursor: pointer;
+}
+@media screen and (max-width: 900px) {
+  .modal {
+    width: 60%;
+    padding: 2rem 4rem;
+  }
+  
+}
+@media screen and (max-width: 700px){
+  .successMessage{
+    font-size: 18px;
+  }
+  .successText{
+    font-size: 11px;
+  }
+  .btn{
+    width: 130px;
+    height: 45px;
+  }
+  .gif{
+    height: 8rem;
+  }
+}
+@media screen and (max-width: 400px){
+  .modal {
+    width: 80%;
+  }
 }

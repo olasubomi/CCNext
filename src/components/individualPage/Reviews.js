@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { RiDeleteBin5Line } from "react-icons/ri"
 import moment from 'moment'
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
 
 function Reviews({ itemId, callback }) {
 

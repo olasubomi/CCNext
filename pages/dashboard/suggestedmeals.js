@@ -2007,6 +2007,7 @@ const SuggestedMeals = (props) => {
           closeModal={closeModal}
           name={suggestion.meal_name}
           description={suggestion.item_name}
+          itemType={suggestion?.item_type}
           imageData={suggestion.item_images}
           image={suggestion.item_images[0]}
           intro={suggestion?.item_intro}
