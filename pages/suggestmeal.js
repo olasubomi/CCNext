@@ -282,6 +282,8 @@ class SuggestMeal extends Component {
               name="viewport"
               content="initial-scale=1.0, width=device-width"
             />
+            <meta name="description" content="Share your go to meals and 
+            everyday cooking ingredients and utensils here on Chop Chow" />
           </Head>
           <div className={styles.suggestion_sections}>
             <div className={styles.suggestion_section_1}>
