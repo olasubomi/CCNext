@@ -131,6 +131,10 @@ const PublicMarket = () => {
           name="viewport"
           content="initial-scale=1.0, width=device-width"
         />
+        <meta name="description" content="Search recipes by ingredients and 
+        many more categories. Curious to know what to make with an Ingredient 
+        you already have? Use Chop Chow to find new recipes and share meals 
+        made from home." />
       </Head>
       <Header />
       <Header2 />

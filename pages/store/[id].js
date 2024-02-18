@@ -39,12 +39,13 @@ const IndividualStorePage = (props) => {
   return (
     <div>
       <Head>
-        <title>Chop Chow Store Page</title>
+        <title>Chop Chow Store</title>
         <meta
           key="title"
           name="viewport"
           content="initial-scale=1.0, width=device-width"
         />
+        <meta name="description" content="Chop Chow Store." />
       </Head>
       <Header />
       <Header2 />

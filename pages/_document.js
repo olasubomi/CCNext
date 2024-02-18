@@ -66,6 +66,7 @@ export default function Document() {
                     />
 
                     <title>Chop Chow</title>
+                    <meta name="description" content="Adding convenience to cooking from home." />
                 </head>
             </Head>
             <body>

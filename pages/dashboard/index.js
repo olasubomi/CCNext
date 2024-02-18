@@ -191,8 +191,10 @@ const DashboardHomePage = (props) => {
     return (
         <div className={styles.container + " " + (props.auth.authUser && props.auth.authUser.user_type === 'admin' ? styles.col3 : styles.col2)}>
             <Head>
-                <title>Chop Chow Dashboard Home Page</title>
+                <title>Chop Chow Dashboard</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta name="description" content="View your suggested meals 
+                and grocery list on your Chop Chow dashboard" />
             </Head>
             <Header />
             <SideNav />

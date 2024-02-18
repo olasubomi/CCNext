@@ -6,8 +6,10 @@ import Head from "next/head";
 const App = () => {
     return <div className={home_container2}>
      <Head>
-            <title>Chop Chow Log-In Form</title>
+            <title>Log in to Chop Chow</title>
             <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+            <meta name="description" content="Log in to Chop Chow to view your 
+            custom dashboard, grocery list and more." />
         </Head>
         <div className={login_container}>
 
