@@ -5,6 +5,7 @@ const PrivacyPolicy = () => {
         <Head>
             <title>Chop Chow Privacy Policy</title>
             <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+            <meta name="description" content="View Chop Chow's Privacy Policy" />
         </Head>
 
         <h1>Privacy Policy</h1>

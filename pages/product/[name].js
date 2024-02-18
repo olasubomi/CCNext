@@ -51,8 +51,9 @@ const individualProductPage = () => {
     return (
         <div>
             <Head>
-                <title>Chop Chow Product Page</title>
+                <title>Chop Chow Product</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta name="description" content="Chop Chow Product" />
             </Head>
             <Header />
             <Header2 />

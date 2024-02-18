@@ -552,6 +552,7 @@ const UserProfile = (props) => {
             <Head>
                 <title>User Profile</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta name="description" content="View Your Chop Chow User Profile as a logged in user." />
             </Head>
             <Header />
             <SideNav />

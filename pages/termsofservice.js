@@ -5,8 +5,9 @@ const TermsOfService = () => {
 
     return <div>
         <Head>
-            <title>Chop Chow Subscriptions Page</title>
+            <title>Chop Chow Terms of Service</title>
             <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+            <meta name="description" content="View Chop hows Terms of Service" />
         </Head>
         <h1>Chop Chow Terms of Service </h1>
 
