@@ -45,10 +45,10 @@
 
 .header {
     height: 20%;
-    width: 94%;
+    width: 90%;
     margin-top: 8%;
-    margin-left: 3%;
-    margin-right: 3%;
+    margin-left: 5%;
+    margin-right: 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -153,6 +153,7 @@
     flex-direction: column;
     justify-content: space-between;
     margin-bottom: -3rem;
+    width: 100%;
     padding: 1rem 2rem;
     border-radius: 8px;
     background: #FFF;
@@ -377,8 +378,8 @@
 .all_cards {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    column-gap: 2rem;
     width: 95%;
+    column-gap: 2rem;
     row-gap: 3.5rem;
     margin: 0 auto 2rem auto;
     height: auto;
@@ -927,11 +928,11 @@
         font-size: 14px;
     }
 
-    .all_cards {
-        grid-template-columns: 1fr;
-        width: 90%;
-    }
-
+   
+.all_cards{
+    display: grid;
+    grid-template-columns: 1fr;
+}
     .tr3 {
         padding: 1.5rem 0 2rem 0;
     }
@@ -1138,7 +1139,10 @@
     .td2 {
         font-size: 9px;
     }
-
+    .card2 {
+        padding: 1rem 1rem;
+    }
+    
     .td {
         font-size: 9px;
     }

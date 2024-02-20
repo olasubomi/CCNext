@@ -31,7 +31,7 @@ export const MobileTable = ({
                   style={{ cursor: "pointer", paddingRight: "2rem" }}
                 >
                   <div style={{ width: "30%" }}>
-                    <Image src={Frame} height={50} width={55} />
+                    <Image src={Frame} height={45} width={45} />
                   </div>
                   <div
                     style={{
@@ -39,7 +39,7 @@ export const MobileTable = ({
                       flexDirection: "column",
                       alignItems: "flex-start",
                       justifyContent: "flex-start",
-                      marginLeft: ".4rem",
+                      marginLeft: "1rem",
                       width: "70%",
                     }}
                   >
@@ -74,8 +74,8 @@ export const MobileTable = ({
                           ? element?.other?.item_image
                           : Frame
                       }
-                      height={50}
-                      width={55}
+                      height={45}
+                      width={45}
                     />
                   </div>
                   <div
@@ -126,8 +126,8 @@ export const MobileTable = ({
                     {element?.item?.itemImage0 && (
                       <Image
                         src={element?.item?.itemImage0}
-                        height={50}
-                        width={55}
+                        height={45}
+                        width={45}
                       />
                     )}
                   </div>
@@ -137,7 +137,7 @@ export const MobileTable = ({
                       flexDirection: "column",
                       alignItems: "flex-start",
                       justifyContent: "flex-start",
-                      marginLeft: ".4rem",
+                      marginLeft: "1.5rem",
                       marginTop: "-.7rem",
                       width: "70%",
                     }}
