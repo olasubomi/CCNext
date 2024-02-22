@@ -7,6 +7,7 @@ import { MobileHeader } from "../mobile/header-mobile";
 import { animateScroll as scroll, scrollSpy, Events } from "react-scroll";
 import { FaCheck } from "react-icons/fa6";
 import { RiMessage2Fill } from "react-icons/ri";
+import { IoSearchOutline } from "react-icons/io5";
 import Image from "next/image";
 import {
   ArrowDownIcon,
@@ -23,7 +24,7 @@ import {
 import { Auth } from "../auth";
 import { connect, useSelector } from "react-redux";
 import { getPath } from "../../actions/Common";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { userSignOut, verifyToken, setOpenLogin } from "../../actions";
 import { SimpleSnackbar } from "../../common";
 import { triggerAlert } from "../../actions/";
@@ -35,6 +36,9 @@ import signup from "../signup";
 import profile_pic from "../../../public/assets/icons/user.png";
 import moment from "moment";
 import { useMediaQuery } from "../../hooks/usemediaquery";
+import { SearchDropdown } from "../dropdown/search-dropdown";
+import { MobileSearch } from "../dropdown/mobile-search";
+import axios from "../../util/Api";
 
 function Header(props) {
   // const [isAuthenticated, setIsAuthenticatedState] = useState(false);
@@ -45,10 +49,12 @@ function Header(props) {
   const [openLogin, setOpenLoginState] = useState(false);
   const [user, setUser] = useState({});
   const router = useRouter();
+  const [showDropdown, setShowDropdown] = useState(false);
   const [showSignup, setShowSignUp] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
-
+  const [openUserDetails, setOpenUserDetails] = useState(false);
   const cartCtx = useContext(CartContext);
+  const matches = useMediaQuery("(min-width: 768px)");
 
   const { items } = cartCtx;
 
@@ -143,7 +149,19 @@ function Header(props) {
   // function handleDashborad() {
   //   // this.props.history.push('/admin');
   // }
-
+  const deleteNotification = async (id) => {
+    try {
+      const response = await axios.delete(`/user/notification/${id}`);
+      setUser((prevUser) => ({
+        ...prevUser,
+        notification: prevUser.notification?.filter(
+          (notification) => notification._id !== id
+        ),
+      }));
+    } catch (err) {
+      console.log(`Error deleting notification with ID ${id}:`, err);
+    }
+  };
   function toggleNotification(e) {
     const notification = document.getElementById("notification");
 
@@ -152,8 +170,7 @@ function Header(props) {
     } else {
       notification.style.display = "grid";
     }
-
-    e.stopPropagation(); // Prevent the click event from reaching the document click listener
+    e.stopPropagation();
   }
 
   document.addEventListener("click", () => {
@@ -164,25 +181,41 @@ function Header(props) {
     }
   });
 
-  function toggleUserDetails(e) {
-    document.getElementById("userdetails").style.display = "grid";
-    document.addEventListener("click", (e) => {
-      if (document.getElementById("userdetails")) {
-        if (
-          e.target.id !== "userImg" &&
-          e.target.id !== "usericon" &&
-          e.target.id !== "userName"
-        )
-          document.getElementById("userdetails").style.display = "none";
-      }
-    });
+  // function toggleUserDetails(e) {
+  //   document.getElementById("userdetails").style.display = "grid";
+  //   document.addEventListener("click", (e) => {
+  //     if (document.getElementById("userdetails")) {
+  //       if (
+  //         e.target.id !== "userImg" &&
+  //         e.target.id !== "usericon" &&
+  //         e.target.id !== "userName"
+  //       )
+  //         document.getElementById("userdetails").style.display = "none";
+  //     }
+  //   });
 
-    window.event.returnValue = false;
-  }
-
+  //   window.event.returnValue = false;
+  // }
+  const ref = useRef();
+  const toggleUserDetails = () => {
+    setOpenUserDetails(true);
+    console.log("hello");
+  };
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setOpenUserDetails(false);
+        }
+      },
+      true
+    );
+  }, []);
   function toggleLogin() {
     setOpenLoginState(!openLogin);
   }
+  console.log(user, "userr");
 
   function logout() {
     props.logout();
@@ -216,7 +249,21 @@ function Header(props) {
                 alt="logo"
               />
             </Link>
+
             <div className={styles.navbar_top_details}>
+              <div
+                onClick={() => setShowDropdown(true)}
+                className={styles.searchoutline}
+              >
+                <IoSearchOutline size={19} color="#F47900" />
+              </div>
+              {showDropdown &&
+                (matches ? (
+                  <SearchDropdown setShowDropdown={setShowDropdown} />
+                ) : (
+                  <MobileSearch setShowDropdown={setShowDropdown} />
+                ))}
+
               {!props.auth.isAuthenticated && authUser === null ? (
                 <Link legacyBehavior href="/login">
                   <a className={styles.navbar_user_loginbtn}>Log In/Register</a>
@@ -225,86 +272,99 @@ function Header(props) {
                 <div className={styles.navbar_user_info}>
                   {authUser?.profile_picture !== "" &&
                   authUser?.profile_picture !== undefined ? (
-                    <Image
-                      id="userImg"
-                      onClick={(e) => toggleUserDetails(e)}
-                      width={50}
-                      height={50}
-                      src={authUser?.profile_picture}
-                      alt={props?.auth?.authUser?.username}
-                      className={styles.navbar_user_img}
-                    />
+                    <div>
+                      {" "}
+                      <Image
+                        id="userImg"
+                        width={50}
+                        height={50}
+                        src={authUser?.profile_picture}
+                        alt={props?.auth?.authUser?.username}
+                        className={styles.navbar_user_img}
+                      />
+                    </div>
                   ) : (
-                    <UserIcon style={styles.navbar_user_img} />
+                    <div>
+                      <UserIcon style={styles.navbar_user_img} />
+                    </div>
                   )}
 
-                  <h4
-                    id="userName"
-                    onClick={(e) => toggleUserDetails(e)}
-                    className={styles.navbar_user_name}
-                  >
+                  <h4 id="userName" className={styles.navbar_user_name}>
                     {props?.auth?.authUser?.username}
                   </h4>
-                  <ArrowDownIcon
-                    id="usericon"
-                    onClick={(e) => toggleUserDetails(e)}
-                    style={styles.navbar_user_icon}
-                  />
-                  <div id="userdetails" className={styles.navbar_user_signedin}>
-                    <Link href="/dashboard">
-                      <div
-                        className={
-                          styles.navbar_user_signedin_link + " " + styles.black
-                        }
-                      >
-                        <DashBoardIcon style={styles.navbar_main_link_icon} />
-                        <h3>Dashboard</h3>
-                      </div>
-                    </Link>
+                  <div
+                    onClick={toggleUserDetails}
+                    style={{ marginTop: "-1rem" }}
+                  >
+                    <ArrowDownIcon
+                      id="usericon"
+                      style={styles.navbar_user_icon}
+                    />
+                  </div>
 
-                    <Link href="/dashboard/userprofile">
-                      <div
-                        className={
-                          styles.navbar_user_signedin_link + " " + styles.black
-                        }
-                      >
-                        {/* <Image src={openIcon} alt="profile" /> */}
-                        <UserIcon style={styles.navbar_main_link_icon} />
-                        <h3>Profile</h3>
-                      </div>
-                    </Link>
-                    <Link href="/suggestmeal">
-                      <div
-                        className={
-                          styles.navbar_user_signedin_link + " " + styles.black
-                        }
-                        style={{ marginTop: "-1rem", alignItems: "center" }}
-                      >
-                        {/* <Image src={openIcon} alt="profile" /> */}
-                        <div className={styles.navbar_main_link_icon}>
-                          <img src="/assets/icons/fastfood.svg" />
-                        </div>
-                        <h3>Suggest A Meal</h3>
-                      </div>
-                    </Link>
-                    <div className={styles.navbar_user_signedin_logout}>
-                      <div>
+                  {openUserDetails && (
+                    <div ref={ref} className={styles.userdetails}>
+                      <Link href="/dashboard">
                         <div
-                          onClick={logout}
                           className={
                             styles.navbar_user_signedin_link +
                             " " +
-                            styles.white
+                            styles.black
                           }
                         >
-                          <ArrowLeftFillIcon
-                            style={styles.navbar_main_link_icon2}
-                          />
-                          <h3>Logout</h3>
+                          <DashBoardIcon style={styles.navbar_main_link_icon} />
+                          <h3>Dashboard</h3>
+                        </div>
+                      </Link>
+
+                      <Link href="/dashboard/userprofile">
+                        <div
+                          className={
+                            styles.navbar_user_signedin_link +
+                            " " +
+                            styles.black
+                          }
+                        >
+                          {/* <Image src={openIcon} alt="profile" /> */}
+                          <UserIcon style={styles.navbar_main_link_icon} />
+                          <h3>Profile</h3>
+                        </div>
+                      </Link>
+                      <Link href="/suggestmeal">
+                        <div
+                          className={
+                            styles.navbar_user_signedin_link +
+                            " " +
+                            styles.black
+                          }
+                          style={{ marginTop: "-1rem", alignItems: "center" }}
+                        >
+                          {/* <Image src={openIcon} alt="profile" /> */}
+                          <div className={styles.navbar_main_link_icon}>
+                            <img src="/assets/icons/fastfood.svg" />
+                          </div>
+                          <h3>Suggest A Meal</h3>
+                        </div>
+                      </Link>
+                      <div className={styles.navbar_user_signedin_logout}>
+                        <div>
+                          <div
+                            onClick={logout}
+                            className={
+                              styles.navbar_user_signedin_link +
+                              " " +
+                              styles.white
+                            }
+                          >
+                            <ArrowLeftFillIcon
+                              style={styles.navbar_main_link_icon2}
+                            />
+                            <h3>Logout</h3>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               )}
               <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
@@ -351,7 +411,19 @@ function Header(props) {
                                 {elem.message}
                               </h3>
                               <p className={styles.summary_notification_link}>
-                                View Order
+                                {elem.message.includes("Suggested Meal") ? (
+                                  <p
+                                    onClick={() => {
+                                      deleteNotification(elem._id);
+
+                                      router.push("/dashboard/suggestedmeals");
+                                    }}
+                                  >
+                                    View Item
+                                  </p>
+                                ) : (
+                                  <p>View Comment</p>
+                                )}
                               </p>
                               <p className={styles.summary_notification_time}>
                                 {moment(elem.createdAt).fromNow()}
@@ -647,16 +719,16 @@ export function Header2() {
   };
 
   const scrollMore = () => {
-    scroll.scrollMore(100); // Scrolling an additional 100px from the current scroll position.
+    scroll.scrollMore(100);
   };
 
-  // Function to handle the activation of a link.
   const handleSetActive = (to) => {
     console.log(to);
   };
   const hash = window.location.hash;
 
-  // Use the hash value as the target ID for scrolling
+  const [showDropdown, setShowDropdown] = useState(false);
+
   const targetId = hash ? hash.substring(1) : "store";
   return (
     <>
@@ -716,10 +788,20 @@ export function Header2() {
               </ul>
 
               <div className={styles.navbar_main_grocery}>
-                <Link href="/grocery">Grocery Lists</Link>
+                <div
+                style={{cursor: 'pointer'}}
+                  className={styles.flex}
+                  onClick={() => setShowDropdown(!showDropdown)}
+                >
+                  <IoSearchOutline size={19} color="#F47900" />
+                  <p>Search</p>
+                </div>
+                <Link href="/suggestmeal">Suggest a Meal</Link>
+                <Link href="/grocery">Grocery List</Link>
               </div>
             </div>
           </div>
+          {showDropdown && <SearchDropdown setShowDropdown={setShowDropdown} />}
         </div>
       ) : (
         <MobileHeader />
@@ -727,3 +809,5 @@ export function Header2() {
     </>
   );
 }
+
+// className={styles.navbar_user_signedin}

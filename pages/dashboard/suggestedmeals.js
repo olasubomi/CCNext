@@ -2151,6 +2151,7 @@ const SuggestedMeals = (props) => {
         setTransferToInventoryState={setTransferToInventoryState}
         meal={suggestion}
         transferToInventory={transferToInventory}
+        reloadData={getUserItems}
         toggleTransferToInventory={toggleTransferToInventory}
       />
 

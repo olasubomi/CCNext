@@ -224,6 +224,8 @@ a{
   text-decoration: none;
   color: inherit;
   height: max-content;
+  text-transform: capitalize;
+
 }
 
 .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input{
@@ -430,4 +432,14 @@ input[type="checkbox"]:checked{
     height: 3.6rem;
     margin-top: .5rem;
   }
+}
+@media only screen and (max-width: 480px) {
+  a{
+    text-decoration: none;
+    color: inherit;
+    height: max-content;
+    font-size: 10px;
+    text-transform: capitalize;
+  }
+  
 }

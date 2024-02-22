@@ -49,7 +49,7 @@ const SwitchSlider = styled.div`
   }
 `;
 
-const SwitchLabel = styled('span')`
+const SwitchLabel = styled("span")`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -58,9 +58,8 @@ const SwitchLabel = styled('span')`
   font-size: 14px;
 `;
 
-
 export default function TransferToInventory(props) {
-  console.log( props.checked, 'pppp')
+  console.log(props.checked, "pppp");
   const [restockOption, setRestockOption] = useState();
   const [restockTime, setRestockTime] = useState("1 day");
   const [message, setMessage] = useState({
@@ -77,6 +76,7 @@ export default function TransferToInventory(props) {
     item_type: "Meal",
     in_stock: true,
   });
+  const { reloadData } = props;
 
   const { ingredientsAvailable, item_type, in_stock } = formState;
   console.log(props, "pp");
@@ -186,6 +186,7 @@ export default function TransferToInventory(props) {
               "Your request has been sent to the administrator; you will be notified when it is approved or rejected. It might take up to 2-3 hours, so please be patient.",
             success: true,
           });
+          reloadData();
           // window.location.href = "/SuggestMeal"
         } else {
           setMessage("Something wrong happened");

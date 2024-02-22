@@ -53,7 +53,7 @@ function SuggestedMealRow(props) {
     {
       value: "availableInInventory",
       label: "Available in Inventory",
-      isDisabled: suggestion.item_available === false && suggestion.item_price === 0,
+      isDisabled: suggestion.item_available === false || suggestion.item_available === undefined,
     },
     {
       value: "sendToInventory",

@@ -301,7 +301,7 @@ class Popup2 extends Component {
                 </div>
                 <div className={styles.popup2_col_2}>
                   <div className={styles.popup2_details}>
-                    <div style={{ overflowY: "scroll" }}>
+                    <div >
                       <h3 className={styles.popup2_category_name}>
                         Ingredients
                       </h3>
@@ -385,7 +385,7 @@ class Popup2 extends Component {
                             alt={this.props["instructionChunk" + curIn]?.title}
                             className={styles.popup2_step_img}
                             height={150}
-                            width={70}
+                            width={100}
                             objectFit="cover"
                             objectPosition="center"
                           />
@@ -442,7 +442,7 @@ class Popup2 extends Component {
                 </div>
               </div>
               <div className={styles.popup2_footer}>
-                <p style={{ display: "flex", alignItems: "center" }}>
+                <p style={{ alignItems: "center" }} className={styles.shares}>
                   <BsFillShareFill style={{ marginRight: ".5rem" }} />
                   Share this product:
                 </p>
