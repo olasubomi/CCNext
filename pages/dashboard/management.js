@@ -1194,7 +1194,7 @@ const Management = () => {
                               <td
                                 style={{ textAlign: "center" }}
                                 onClick={() => {
-                                  console.log(ele)
+                                  console.log(ele, 'item_idd')
                                   deleteInventory(ele.value, ele?.item_id)
                                 
                                 }}
@@ -1255,7 +1255,7 @@ const Management = () => {
                                 </td>
                                 <td
                                   style={{ textAlign: "center" }}
-                                  onClick={() => deleteInventory(ele.value)}
+                                  onClick={() => deleteInventory(ele.value, ele.item_id)}
                                   className={styles.close2}
                                 >
                                   <IoIosCloseCircle color="#949494" size={20} />
