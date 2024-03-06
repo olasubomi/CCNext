@@ -32,7 +32,7 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "next": "13.5.4",
+    "next": "^14.1.2",
     "next-auth": "^4.22.1",
     "next-redux-wrapper": "^8.0.0",
     "os": "^0.1.2",

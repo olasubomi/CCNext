@@ -1,12 +1,15 @@
 
 import { Html, Head, Main, NextScript } from "next/document";
-
+import { GoogleTagManager } from '@next/third-parties/google'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 export default function Document() {
     return (
         <Html>
             <Head>
                 <head>
+                <GoogleAnalytics gaId="G-937TLLF4H3" />
+                <GoogleTagManager gtmId="GTM-NRQ9VM4" />
                     <meta charSet="utf-8" />
                     <meta
                         name="viewport"
@@ -51,3 +54,12 @@ export default function Document() {
         </Html>
     );
 }
+ 
+// export default function RootLayout({ children }) {
+//   return (
+//     <html lang="en">
+//       <body>{children}</body>
+//       <GoogleAnalytics gaId="G-937TLLF4H3" />
+//     </html>
+//   )
+// }
