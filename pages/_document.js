@@ -1,7 +1,5 @@
 
 import { Html, Head, Main, NextScript } from "next/document";
-import { GoogleTagManager } from '@next/third-parties/google'
-import { GoogleAnalytics } from '@next/third-parties/google'
 
 export default function Document() {
     return (
@@ -25,41 +23,18 @@ export default function Document() {
                         rel="stylesheet"
                         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
                     /> */}
-
-
-                    {/* <!-- Google Ad Sense --> */}
-                    <script
-                        async
-                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1235109639918263"
-                        crossOrigin="anonymous"
-                    ></script>
-
-                    {/* <!-- Google Search Console verification  --> */}
-
-                    <meta
-                        name="google-site-verification"
-                        content="gSw3jQhBGdgewRLveIbM41Lu923ZEzTLJDTrCEQb4Fc"
-                    />
-
                     <title>Chop Chow</title>
                     <meta name="description" content="Adding convenience to cooking from home." />
                 </head>
             </Head>
             <body>
+            {/* <!-- Google Tag Manager (noscript) --> */}
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NRQ9VM4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+{/* <!-- End Google Tag Manager (noscript) --> */}
                 <Main />
                 <NextScript />
             </body>
-            <GoogleAnalytics gaId="G-937TLLF4H3" />
-                <GoogleTagManager gtmId="GTM-NRQ9VM4" />
         </Html>
     );
 }
- 
-// export default function RootLayout({ children }) {
-//   return (
-//     <html lang="en">
-//       <body>{children}</body>
-//       <GoogleAnalytics gaId="G-937TLLF4H3" />
-//     </html>
-//   )
-// }
