@@ -8,8 +8,6 @@ export default function Document() {
         <Html>
             <Head>
                 <head>
-                <GoogleAnalytics gaId="G-937TLLF4H3" />
-                <GoogleTagManager gtmId="GTM-NRQ9VM4" />
                     <meta charSet="utf-8" />
                     <meta
                         name="viewport"
@@ -51,6 +49,8 @@ export default function Document() {
                 <Main />
                 <NextScript />
             </body>
+            <GoogleAnalytics gaId="G-937TLLF4H3" />
+                <GoogleTagManager gtmId="GTM-NRQ9VM4" />
         </Html>
     );
 }
