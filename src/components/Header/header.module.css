@@ -11,6 +11,13 @@
   grid-template-columns: 100%;
   /* border-bottom: 1px solid #e7e7e7; */
 }
+.readDot{
+  width: 1rem;
+  height: 1rem;
+  background-color: #f47900;
+  border-radius: 50%;
+  margin-top: .3rem;
+}
 
 .navbar2 {
   display: grid;
@@ -57,7 +64,7 @@
   width: 79px !important;
   height: 46px !important;
 }
-.searchoutline{
+.searchoutline {
   display: none;
 }
 
@@ -174,7 +181,6 @@
   grid-template-columns: 100%;
   background-color: white;
   height: 65px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .navbar_main {
@@ -344,6 +350,7 @@
   top: 5px;
   left: 55.5%;
   width: 34px;
+  padding-left: 1.5rem;
 }
 
 .summaries_min {
@@ -498,7 +505,7 @@
   top: 36%;
   right: 0;
 } */
-.userdetails{
+.userdetails {
   position: absolute;
   width: 160px;
   grid-gap: 1.5rem;
@@ -792,7 +799,7 @@
   }
 
   .navbar2 {
-    top: 54px;
+    top: 51px;
     grid-template-rows: 48px;
   }
 
@@ -813,7 +820,8 @@
   }
 
   .navbar_top_container {
-    height: 58px;
+    height: 54px;
+    padding: 0 10px 0 5px;
   }
 
   .navbar_user_name {
@@ -830,7 +838,7 @@
     height: 20px;
     border-radius: 50%;
   }
-  .navbar_top_details{
+  .navbar_top_details {
     grid-gap: 1.5rem;
   }
   .navbar_user_info > div > h4 {
@@ -845,10 +853,10 @@
     display: none;
   }
 
-  .navbar_side {
+  /* .navbar_side {
     width: 1%;
     background-color: rebeccapurple;
-  }
+  } */
 
   .openbtn {
     display: block;
@@ -857,21 +865,26 @@
   .navbar_down {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 40px;
   }
+  .navbar_down_2 {
+    display: none;
+  }
+
   .navbar_user_signedin_link {
     display: flex;
     gap: 10px;
     align-items: center;
     margin-bottom: 10px;
   }
-  .searchoutline{
+  .searchoutline {
     display: block;
   }
 
   .navbar_top {
     grid-gap: 1rem;
     width: 90%;
-    padding: auto;
+    margin: auto;
   }
 
   .navbar_main {
@@ -898,7 +911,7 @@
   }
 
   .numberofitems {
-    top: 7px;
+    top: -3px;
     right: -12px;
   }
   .summaries_min {
@@ -917,5 +930,18 @@
     font-weight: 400;
     font-size: 1px;
     line-height: 12px;
+  }
+  .navbar_main_container {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    animation: slidefromleft 0.6s ease-in-out;
+    position: relative;
+    grid-template-columns: 100%;
+    background-color: white;
+    height: 40px;
+  }
+  .navbar_main_container2 {
+    display: none;
   }
 }

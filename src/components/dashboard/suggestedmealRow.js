@@ -223,7 +223,7 @@ function SuggestedMealRow(props) {
                 )}
 
                 <i
-                  className={styles.hideData}
+                  
                   onClick={() => {
                     // props.deleteSuggestion(suggestion._id)
 
@@ -232,15 +232,7 @@ function SuggestedMealRow(props) {
                 >
                   <CloseFillIcon style={actionIcon} />
                 </i>
-                {show ? (
-                  <i onClick={showDropDown} className={styles.showData}>
-                    <ArrowDropUp className={styles.arrowDown} />
-                  </i>
-                ) : (
-                  <i onClick={showDropDown} className={styles.showData}>
-                    <ArrowDropDownIcon className={styles.arrowDown} />
-                  </i>
-                )}
+               
                 {showPopup && (
                   <div className={styles.addpublicMeal_container}>
                     <div className={styles.popup}>

@@ -50,12 +50,14 @@ function Header(props) {
   const [user, setUser] = useState({});
   const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const [showSignup, setShowSignUp] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
   const [openUserDetails, setOpenUserDetails] = useState(false);
   const cartCtx = useContext(CartContext);
   const matches = useMediaQuery("(min-width: 768px)");
-
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
   const { items } = cartCtx;
 
   const numberOfCartItems = items.reduce((curNumber, item) => {
@@ -149,17 +151,13 @@ function Header(props) {
   // function handleDashborad() {
   //   // this.props.history.push('/admin');
   // }
-  const deleteNotification = async (id) => {
+  const updateNotification = async (id) => {
     try {
-      const response = await axios.delete(`/user/notification/${id}`);
-      setUser((prevUser) => ({
-        ...prevUser,
-        notification: prevUser.notification?.filter(
-          (notification) => notification._id !== id
-        ),
-      }));
+      const response = await axios.patch(`/user/notification/${id}`);
+
+      getAllNotifications();
     } catch (err) {
-      console.log(`Error deleting notification with ID ${id}:`, err);
+      console.log(`Error updating notification with ID ${id}:`, err);
     }
   };
   function toggleNotification(e) {
@@ -221,25 +219,52 @@ function Header(props) {
     props.logout();
     router.push("/");
   }
+  const unreadMessages = notifications.filter(message => !message.read);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user" || "{}"));
     setUser(user);
     console.log(user, "user");
   }, []);
 
+  const getAllNotifications = async () => {
+    try {
+      const response = await axios.get(`/user/notifications`);
+      setNotifications(response.data.data);
+      console.log(response.data.data, "noti");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getAllNotifications();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [prevScrollPos]);
   return (
     <>
       <div className={styles.navbar}>
-        <div className="alert">
-          {/* {props.message.length > 0 &&
+        {/* <div className="alert">
+          {props.message.length > 0 &&
           <div className="alert-success">
             {props.message}
           </div>}
         {props.error.length > 0 &&
           <div className="alert-danger">
             {props.error}
-          </div>} */}
-        </div>
+          </div>}
+        </div> */}
         <div className={styles.navbar_top_container}>
           <div className={styles.navbar_top}>
             <Link href="/">
@@ -259,7 +284,7 @@ function Header(props) {
               </div>
               {showDropdown &&
                 (matches ? (
-                  <SearchDropdown setShowDropdown={setShowDropdown} />
+               ''
                 ) : (
                   <MobileSearch setShowDropdown={setShowDropdown} />
                 ))}
@@ -369,23 +394,43 @@ function Header(props) {
               )}
               <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
               <div className={styles.navbar_top_details_col}>
-                <div id="noticon" onClick={(e) => toggleNotification(e)}>
-                  <NotificationIcon
-                    id="notImg"
-                    style={styles.navbar_top_details_col_icon}
-                  />
-                </div>
-                <h5 id="notText" onClick={(e) => toggleNotification(e)}>
-                  Notification
-                </h5>
+                {matches ? (
+                  <>
+                    <div id="noticon" onClick={(e) => toggleNotification(e)}>
+                      <NotificationIcon
+                        id="notImg"
+                        style={styles.navbar_top_details_col_icon}
+                      />
+                    </div>
+                    <h5 id="notText" onClick={(e) => toggleNotification(e)}>
+                      Notification
+                    </h5>
 
-                <span
-                  id="notNo"
-                  style={{ background: "#F47900" }}
-                  className={styles.numberofitems}
-                >
-                  {user?.notifications?.length}
-                </span>
+                    <span
+                      id="notNo"
+                      style={{ background: "#F47900" }}
+                      className={styles.numberofitems}
+                    >
+                      {unreadMessages?.length}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/notification">
+                      <NotificationIcon
+                        id="notImg"
+                        style={styles.navbar_top_details_col_icon}
+                      />
+                    </Link>
+                    <span
+                      id="notNo"
+                      style={{ background: "#F47900" }}
+                      className={styles.numberofitems}
+                    >
+                      {unreadMessages?.length}
+                    </span>
+                  </>
+                )}
                 <div id="notification" className={styles.summaries_min}>
                   <div className={styles.summary_min}>
                     <div className={styles.summary_min_head}>
@@ -393,7 +438,7 @@ function Header(props) {
                     </div>
                     <div className={styles.summary_min_notifications}>
                       <div className={styles.not}>
-                        {user?.notifications?.map((elem) => (
+                        {notifications?.map((elem) => (
                           <div className={styles.summary_notification}>
                             {elem.message.includes("Suggested Meal") ? (
                               <div className={styles.rounded}>
@@ -414,7 +459,7 @@ function Header(props) {
                                 {elem.message.includes("Suggested Meal") ? (
                                   <p
                                     onClick={() => {
-                                      deleteNotification(elem._id);
+                                      updateNotification(elem._id);
 
                                       router.push("/dashboard/suggestedmeals");
                                     }}
@@ -429,6 +474,7 @@ function Header(props) {
                                 {moment(elem.createdAt).fromNow()}
                               </p>
                             </div>
+                            <div className={!elem.read ? styles.readDot : styles.readDot2} />
                           </div>
                         ))}
                       </div>
@@ -584,60 +630,71 @@ function Header(props) {
                   </div>
                 </div>
               </div>
-              <div className={styles.navbar_down}>
+              {matches ? (
+                ""
+              ) : (
                 <div
                   className={
-                    styles.navbar_down_col +
-                    " " +
-                    (props.path === "/" && styles.activeLinkDown)
+                    visible ? styles.navbar_down : styles.navbar_down_2
                   }
                 >
-                  <Link href="/">
-                    <HomeIcon style={styles.navbar_down_col_icon} />
-                    <p>Home</p>
-                  </Link>
-                </div>
-                <div
-                  className={
-                    styles.navbar_down_col +
-                    " " +
-                    (props.path === "/dashboard/orders/orders" &&
-                      styles.activeLinkDown)
-                  }
-                >
-                  <Link href="/dashboard/orders/orders">
-                    <Order2Icon style={styles.navbar_down_col_icon} />
-                    <p>Order</p>
-                  </Link>
-                </div>
-                <div
-                  className={
-                    styles.navbar_down_col +
-                    " " +
-                    (props.path === "/grocery-list" && styles.activeLinkDown)
-                  }
-                >
-                  <Link href="/grocery">
-                    <BasketIcon style={styles.navbar_down_col_icon} />
-                    <p>Grocery List</p>
-                  </Link>
-                </div>
-                <div
-                  className={
-                    styles.navbar_down_col +
-                    " " +
-                    (props.path === "/cart" && styles.activeLinkDown)
-                  }
-                >
-                  <Link href="/cart">
-                    <CartIcon style={styles.navbar_down_col_icon} />
-                    <p>Cart</p>
-                  </Link>
-                </div>
+                  <div
+                    className={
+                      styles.navbar_down_col +
+                      " " +
+                      (props.path === "/" && styles.activeLinkDown)
+                    }
+                  >
+                    <Link href="/">
+                      <HomeIcon style={styles.navbar_down_col_icon} />
+                      <p>Home</p>
+                    </Link>
+                  </div>
+                  <div
+                    className={
+                      styles.navbar_down_col +
+                      " " +
+                      (props.path === "/dashboard/orders/orders" &&
+                        styles.activeLinkDown)
+                    }
+                  >
+                    <Link
+                      href="#"
+                      // href="/dashboard/orders/orders"
+                    >
+                      <Order2Icon style={styles.navbar_down_col_icon} />
+                      <p>Order</p>
+                    </Link>
+                  </div>
+                  <div
+                    className={
+                      styles.navbar_down_col +
+                      " " +
+                      (props.path === "/grocery-list" && styles.activeLinkDown)
+                    }
+                  >
+                    <Link href="/grocery">
+                      <BasketIcon style={styles.navbar_down_col_icon} />
+                      <p>Grocery List</p>
+                    </Link>
+                  </div>
+                  <div
+                    className={
+                      styles.navbar_down_col +
+                      " " +
+                      (props.path === "/cart" && styles.activeLinkDown)
+                    }
+                  >
+                    <Link href="#">
+                      <CartIcon style={styles.navbar_down_col_icon} />
+                      <p>Cart</p>
+                    </Link>
+                  </div>
 
-                {/* <Auth toggleLogin={toggleLogin} /> */}
-                {/* {openLogin && <Auth toggleLogin={toggleLogin} />} */}
-              </div>
+                  {/* <Auth toggleLogin={toggleLogin} /> */}
+                  {/* {openLogin && <Auth toggleLogin={toggleLogin} />} */}
+                </div>
+              )}
             </div>
           </div>
           {/* {isOpen && <Auth />} */}
@@ -730,6 +787,7 @@ export function Header2() {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const targetId = hash ? hash.substring(1) : "store";
+
   return (
     <>
       {matches ? (
@@ -788,20 +846,20 @@ export function Header2() {
               </ul>
 
               <div className={styles.navbar_main_grocery}>
-                <div
-                style={{cursor: 'pointer'}}
+                {/* <div
+                  style={{ cursor: "pointer" }}
                   className={styles.flex}
                   onClick={() => setShowDropdown(!showDropdown)}
                 >
                   <IoSearchOutline size={19} color="#F47900" />
                   <p>Search</p>
-                </div>
+                </div> */}
                 <Link href="/suggestmeal">Suggest a Meal</Link>
                 <Link href="/grocery">Grocery List</Link>
               </div>
             </div>
           </div>
-          {showDropdown && <SearchDropdown setShowDropdown={setShowDropdown} />}
+          {/* {showDropdown && <SearchDropdown setShowDropdown={setShowDropdown} />} */}
         </div>
       ) : (
         <MobileHeader />
