@@ -23,14 +23,11 @@ export default function Document() {
                         rel="stylesheet"
                         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
                     /> */}
-                    <script>
-window.dataLayer = window.dataLayer || [];
-</script>
 
 {/* <!-- Google tag (gtag.js) --> */}
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-937TLLF4H3"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
+var dataLayer = window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments)}
   gtag('js', new Date());
 
