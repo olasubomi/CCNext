@@ -25,6 +25,9 @@ export default function Document() {
                     /> */}
 
 {/* <!-- Google tag (gtag.js) --> */}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-937TLLF4H3"></script>
 <script>
 var dataLayer = window.dataLayer = window.dataLayer || [];
