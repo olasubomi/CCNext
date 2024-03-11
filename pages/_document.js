@@ -24,18 +24,6 @@ export default function Document() {
                         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
                     /> */}
 
-{/* <!-- Google tag (gtag.js) --> */}
-<script>
-  window.dataLayer = window.dataLayer || [];
-  </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-937TLLF4H3"></script>
-<script>
-var dataLayer = window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments)}
-  gtag('js', new Date());
-
-  gtag('config', 'G-937TLLF4H3');
-</script>
 
 
     {/* <!-- Google Ad Sense --> */}
