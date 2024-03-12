@@ -29,12 +29,23 @@ const Notification = () => {
       console.log(`Error updating notification with ID ${id}:`, err);
     }
   };
-  const getOneItem = async (id) => {
+  const getOneItemById = async (id, commentId) => {
     try {
+      console.log(id);
       const response = await axios.get(`/items/item/${id}`);
-      console.log(response.data, "resp");
-    } catch (err) {
-      console.log(err);
+      const data = Array.isArray(response.data?.data)
+        ? response.data?.data[0]
+        : {};
+      console.log(response.data);
+      if (data?.item_name) {
+        router.push(
+          `/${data?.item_type === "Meal" ? "meal" : "product"}/${
+            data?.item_name
+          }?id=${commentId}`
+        );
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
   useEffect(() => {
@@ -84,12 +95,12 @@ const Notification = () => {
                     </p>
                   ) : (
                     <p
-                      onClick={() => {
-                        if (elem.notifiableType === "Comment") {
-                          getOneItem(elem.notifiable.id);
-                          router.push(`/meal/${elem?.notifiable?.id}`);
-                        } 
-                      }}
+                      onClick={() =>
+                        getOneItemById(
+                          elem?.notifiable?.item,
+                          elem?.notifiable?._id
+                        )
+                      }
                     >
                       View Comment
                     </p>

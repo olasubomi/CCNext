@@ -64,6 +64,7 @@ function Header(props) {
     return curNumber + item.amount;
   }, 0);
 
+  console.log(notifications, "notific0ppjations");
   // useEffect(() => {
   //   props.getPath(router.pathname);
   //   let token = localStorage.getItem("x-auth-token");
@@ -179,6 +180,24 @@ function Header(props) {
     }
   });
 
+  const getOneItemById = async (id, commentId) => {
+    try {
+      console.log(id);
+      const response = await axios.get(`/items/item/${id}`);
+      const data = Array.isArray(response.data?.data) ? response.data?.data[0] : {};
+      console.log(response.data)
+      if (data?.item_name) {
+        router.push(
+          `/${data?.item_type === "Meal" ? "meal" : "product"}/${data?.item_name}?id=${
+            commentId
+          }`
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   // function toggleUserDetails(e) {
   //   document.getElementById("userdetails").style.display = "grid";
   //   document.addEventListener("click", (e) => {
@@ -219,7 +238,7 @@ function Header(props) {
     props.logout();
     router.push("/");
   }
-  const unreadMessages = notifications.filter(message => !message.read);
+  const unreadMessages = notifications.filter((message) => !message.read);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user" || "{}"));
     setUser(user);
@@ -284,7 +303,7 @@ function Header(props) {
               </div>
               {showDropdown &&
                 (matches ? (
-               ''
+                  ""
                 ) : (
                   <MobileSearch setShowDropdown={setShowDropdown} />
                 ))}
@@ -460,21 +479,30 @@ function Header(props) {
                                   <p
                                     onClick={() => {
                                       updateNotification(elem._id);
-
                                       router.push("/dashboard/suggestedmeals");
                                     }}
                                   >
                                     View Item
                                   </p>
                                 ) : (
-                                  <p>View Comment</p>
+                                  <p
+                                    onClick={() =>
+                                      getOneItemById(elem?.notifiable?.item, elem?.notifiable?._id)
+                                    }
+                                  >
+                                    View Comment
+                                  </p>
                                 )}
                               </p>
                               <p className={styles.summary_notification_time}>
                                 {moment(elem.createdAt).fromNow()}
                               </p>
                             </div>
-                            <div className={!elem.read ? styles.readDot : styles.readDot2} />
+                            <div
+                              className={
+                                !elem.read ? styles.readDot : styles.readDot2
+                              }
+                            />
                           </div>
                         ))}
                       </div>
