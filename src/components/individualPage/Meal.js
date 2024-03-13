@@ -28,25 +28,28 @@ import InstagramShareButton from "../SocialShare/InstagramShare";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "../../util/Api";
 import { Modal } from "../modal/popup-modal";
+import { toast } from "react-toastify";
+import { useMediaQuery } from "../../hooks/usemediaquery";
 
 function Meal(props) {
   //const url = 'http://localhost:3000/'
   const url = "https://www.chopchow.app/";
 
+  const matches = useMediaQuery("(min-width: 768px)");
   const [serves, setServes] = useState(parseInt(props.meal?.servings));
   const [user, setUser] = useState({});
   const [openList, setOpenList] = useState(false);
   const [selectGrocery, setSelectGrocery] = useState([]);
   const [show, setShow] = useState(false);
-  const [groceryList, setGroceryList] = useState([])
+  const [groceryList, setGroceryList] = useState([]);
   const [selectedItem, setSelectedItem] = useState({});
-  console.log(selectedItem, 'sele')
+  console.log(selectedItem, "sele");
   const [quantity, setQuantity] = useState(1);
 
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
   });
-  console.log(groceryList, 'gro')
+  console.log(groceryList, "gro");
 
   const addItemToGrocery = async (listName) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -61,7 +64,6 @@ function Meal(props) {
       },
     };
 
-    console.log(payload, "payload");
     try {
       const response = await axios(`/groceries`, {
         method: "post",
@@ -111,7 +113,6 @@ function Meal(props) {
       setServes(s);
     }
   }
-
 
   // console.log(props.props.props.props.meal, "meal props.props")
   let num = 0;
@@ -236,7 +237,7 @@ function Meal(props) {
                       <p>{props.meal.meal_chef}</p>
                     </div>
                   </div>
-                  <div className={styles.meal_details}>
+                  <div className={styles.meal_details2}>
                     <div>
                       <h3>intro: </h3>
                       <p>{props.meal.item_intro}</p>
@@ -313,11 +314,10 @@ function Meal(props) {
                 <div className={styles.btnGroup}>
                   <div
                     className={styles.btnoutline}
-                    onClick={() =>{
-                        setOpenList(true)
-                        setSelectedItem(props?.meal)
+                    onClick={() => {
+                      setOpenList(true);
+                      setSelectedItem(props?.meal);
                     }}
-
                   >
                     Add to Grocery List
                   </div>
@@ -329,7 +329,7 @@ function Meal(props) {
           {/* } */}
           <div className={styles.meal_section_3}>
             <div className={styles.meal_details}>
-              <div className={styles.hide}>
+              <div>
                 <h3>Serves: </h3>
                 <div>
                   <p onClick={() => addServe(-1)}>-</p>
@@ -360,11 +360,11 @@ function Meal(props) {
                     className={styles.ingredients_head}
                     style={{ backgroundColor: "transparent" }}
                   >
-                    <div></div>
+                    {/* {matches ? <div></div> : ""} */}
                     <div className={styles.ingredients_th}>Names</div>
                     <div
-                      className={styles.ingredients_th + " " + styles.hide}
-                      style={{ textAlign: "center" }}
+                      className={styles.ingredients_th}
+                     
                     >
                       Quantity
                     </div>
@@ -373,7 +373,7 @@ function Meal(props) {
                     </div>
                     <div
                       className={styles.ingredients_th}
-                      style={{ textAlign: "center" }}
+                   
                     >
                       Availability in store
                     </div>
@@ -391,14 +391,17 @@ function Meal(props) {
                                     key={index}
                                     className={styles.ingredients_tr}
                                   >
-                                    <input name="id" type="checkbox" />
-                                    <td className={styles.td}>
+                                    <td className={styles.ingredients_td}>
+                                      <input name="id" type="checkbox" style={{marginRight: '20px'}} />
+
                                       {ingredient.item_name}
                                     </td>
-                                    <td className={styles.td}>
+                                    <td className={styles.ingredients_td}>
                                       {ingredient.item_quantity}
                                     </td>
-                                    <td className={styles.td}>
+                                    <td
+                                      className={styles.td + " " + styles.hide}
+                                    >
                                       {ingredient.item_measurement}
                                     </td>
                                     <div className={styles.ingredients_td}>
@@ -437,7 +440,7 @@ function Meal(props) {
                       className={styles.ingredient_radio_radioLabel}
                     >
                       Get all ingredient from Chopchow Official Store{" "}
-                      <span>(Recommeded)</span>
+                      <span className={styles.recommend}>(Recommeded)</span>
                     </label>
                   </div>
                   <div className={styles.ingredient_radio_option}>
@@ -646,7 +649,7 @@ function Meal(props) {
                 className={styles.outlinebtn}
                 onClick={() => {
                   setOpenList(false);
-                    setShow(true);
+                  setShow(true);
                 }}
               >
                 Add to New List
