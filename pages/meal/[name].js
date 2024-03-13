@@ -53,8 +53,9 @@ console.log(props, 'meals id page')
     return (
         <div>
             <Head>
-                <title>Chop Chow Meal Page</title>
+                <title>Chop Chow Meal</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta name="description" content="Chop Chow Meal" />
             </Head>
             <Header />
             <Header2 />

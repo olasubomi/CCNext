@@ -98,12 +98,14 @@ const SuggestStore = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Chop Chow Grocery</title>
+        <title>Suggest a Store on Chop Chow </title>
         <meta
           key="title"
           name="viewport"
           content="initial-scale=1.0, width=device-width"
         />
+        <meta name="description" content="Suggest local stores near you without owning the store.
+        Manage your stores to include pictures and prices. We partner with chefs and stores to sell thier products" />
       </Head>
       <Header />
       <Header2 />

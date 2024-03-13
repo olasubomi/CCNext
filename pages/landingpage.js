@@ -103,8 +103,15 @@ class LandingPage extends Component {
                 {/* <Banner/> */}
                 {/* Slideshow container */}
                 <Head>
-                    <title>Chop Chow Home Page</title>
+                    <title>Chop Chow Cooking App</title>
                     <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                    <meta name="description" content="Chop Chow app is
+                     the ultimate kitchen utensil that adds 
+                     convenience to your home cooking experience.
+                      Discover new recipes or find new twists on your go-to meals.
+                       Share your recipes on Chop Chow. We partner with food bloggers,
+                        restaurants and marketplaces to provide a new experience
+                         with cooking from home." />
                 </Head>
                 <div className={styles.home_section_1}>
                     <div className={styles.slideshow_container}>
