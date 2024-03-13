@@ -76,7 +76,7 @@ function SuggestedMealRow(props) {
   const customStyles = {
     control: (provided) => ({
       ...provided,
-      width: "100%", // Set your desired fixed width
+      width: "100%",
     }),
   };
 

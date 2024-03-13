@@ -69,7 +69,7 @@ export const Modal = ({
       JSON.stringify([...localGrocery, payload])
     );
     setShow(false);
-    fetchList();
+    fetchList && fetchList();
     toast.success("Grocery list created locally successfully");
   }, [description, listName, getLocalGroceryList, setShow, localStorage]);
 
@@ -100,7 +100,9 @@ export const Modal = ({
   ]);
 
   const handleCreate = async () => {
-    if (!isUserOnline) {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    
+    if (!Boolean(Object.keys(user).length)) {
       handleCreateLocalGroceryList();
     } else {
       if (!modalState.listName && !modalState.description) {
@@ -123,7 +125,8 @@ export const Modal = ({
         if (addItemToGrocery) {
           addItemToGrocery(modalState.listName);
         }
-        fetchList();
+        fetchList && fetchList();
+
         if (!addItemToGrocery) {
           toast.success("Grocery list created successfully");
         }
@@ -135,9 +138,9 @@ export const Modal = ({
   };
 
   const handleEdit = async () => {
-    if(!isUserOnline){
-      editLocalList()
-    }else{
+    if (!isUserOnline) {
+      editLocalList();
+    } else {
       if (!modalState.listName && !modalState.description) {
         return alert("Enter List Name and description");
       }

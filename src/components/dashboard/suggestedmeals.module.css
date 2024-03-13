@@ -1217,3 +1217,9 @@
     display: none;
   }
 }
+@media  screen and (max-width: 400px) {
+  .selectContainer {
+    width: 100px;
+    font-size: 10px;
+  }
+}

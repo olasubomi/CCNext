@@ -240,8 +240,6 @@ class Popup2 extends Component {
                         className={styles.popup2_main_img}
                         height={160}
                         width={100}
-                        objectFit="cover"
-                        objectPosition="center"
                       />
                     )}
                     {imagesData?.length > 0 && (
