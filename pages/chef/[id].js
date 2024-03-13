@@ -64,8 +64,9 @@ const ChefPage = () => {
     return (
         <div className={styles.ChefContainer}>
             <Head>
-                <title>Chop Chow Grocery</title>
+                <title>Chop Chow Chef</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta name="description" content="Discover Chef's recipes and grocery lists on Chop Chow" />
             </Head>
             <Header />
             <Header2 />

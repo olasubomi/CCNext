@@ -108,12 +108,16 @@ const Grocery = () => {
     <div className={styles.container}>
       {" "}
       <Head>
-        <title>Chop Chow Grocery</title>
+        <title>Chop Chow Grocery List</title>
         <meta
           key="title"
           name="viewport"
           content="initial-scale=1.0, width=device-width"
         />
+        <meta name="description" content="Add meals, ingredients, utensils 
+        and other items to your chop chow grocery list. Get recommendations 
+        on similar meals and ingredient alternatives from items in your
+         grocery list." />
       </Head>
       <Header />
       <Header2 />
