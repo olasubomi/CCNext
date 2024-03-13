@@ -112,17 +112,20 @@ export const MobileSearch = ({ setShowDropdown }) => {
   return (
     <div className={styles.two3} ref={ref}>
       <div>
-        <div
-          className={styles.searchbox2}
-          onClick={() => setShowCategory(!showCategory)}
-        >
-          {categories[0].value && categories.some((ele) => !ele.value)
-            ? "All"
-            : categories.find((ele) => ele.value).label}
-          <GoTriangleUp
-            className={!showCategory ? styles.rotate : styles.nonrotate}
-            size={15}
-          />
+        <div style={{display: 'flex', alignItems: 'center', background: '#FFF', width: '100%'}}>
+          <div
+            className={styles.cats}
+            onClick={() => setShowCategory(!showCategory)}
+          >
+            {categories[0].value && categories.some((ele) => !ele.value)
+              ? "All"
+              : categories.find((ele) => ele.value).label}
+            <GoTriangleUp
+              className={!showCategory ? styles.rotate : styles.nonrotate}
+              size={15}
+            />
+          </div>
+          <div className={styles.leftBorder} />
         </div>
 
         {showCategory && (
@@ -166,7 +169,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
         )}
       </div>
       <div className={styles.searchflex}>
-        <div className={styles.searchfield}>
+        <div className={styles.searchboxfield}>
           <input
             placeholder="Search"
             autoComplete="off"

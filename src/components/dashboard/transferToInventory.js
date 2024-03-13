@@ -1,65 +1,83 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import styles from "./transferToInventory.module.css";
 import styled from "styled-components";
-import Switch from "@mui/material/Switch";
+import Switch from "react-switch";
 import { useEffect, useState } from "react";
 import axios from "../../util/Api";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Image from "next/image";
 import { AiFillInfoCircle } from "react-icons/ai";
+import { useMediaQuery } from "../../hooks/usemediaquery";
 
+// const CustomSwitch = ({ checked, onChange }) => {
+//   return (
+//     <SwitchContainer onClick={() => onChange(!checked)}>
+//       <SwitchSlider checked={checked}>
+//         <SwitchBackground />
+//         <SwitchLabel checked={checked}>{checked ? "Yes" : "No"}</SwitchLabel>
+//       </SwitchSlider>
+//     </SwitchContainer>
+//   );
+// };
 const CustomSwitch = ({ checked, onChange }) => {
+  const handleClick = () => {
+    const newChecked = !checked;
+    onChange(newChecked);
+  };
+
   return (
-    <SwitchContainer onClick={() => onChange(!checked)}>
-      <SwitchSlider checked={checked} />
-      <SwitchLabel>{checked ? "Yes" : "No"}</SwitchLabel>
-    </SwitchContainer>
+    <div className={styles.switch} onClick={handleClick}>
+      <div className={styles.flexed}>
+        <p style={{ fontSize: "12px", marginLeft: "2px" }}>Yes</p>
+        <p style={{ fontSize: "12px", marginLeft: "2px" }}>No</p>
+      </div>
+      <div className={checked ? styles.roundSwitch : styles.roundSwitch2}>
+        <p>{checked ? "Yes" : "No"}</p>
+      </div>
+    </div>
   );
 };
 
 const SwitchContainer = styled.div`
-  display: inline-block;
   position: relative;
-  width: 70px;
-  height: 30px;
-  cursor: pointer;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  background-color: "#FFF"
+  box-shadow: "0px 4px 5px 0px #0000001A",
+
 `;
 
 const SwitchSlider = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: ${(props) => (props.checked ? "#04D505" : "#949494")};
-  border-radius: 20px;
-  transition: background-color 0.3s;
-  pointer-events: none;
-  &::before {
-    content: "";
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    left: ${(props) => (props.checked ? "calc(100% - 30px)" : "0")};
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: white;
-    border-radius: 50%;
-    transition: left 0.3s;
-  }
+  position: relative;
+  cursor: pointer;
+  width: 60px;
+  height: 34px;
+  background-color: ${(props) => (props.checked ? "#fff" : "#4CAF50")};
+  border-radius: 34px;
 `;
 
-const SwitchLabel = styled("span")`
+const SwitchBackground = styled.div`
+  position: absolute;
+  width: ${(props) => (props.checked ? "100%" : "0%")};
+  height: 100%;
+  background-color: #4caf50;
+  border-radius: 34px;
+  transition: width 0.2s ease;
+`;
+
+const SwitchLabel = styled.span`
+  color: black;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: ${(props) => (props.checked ? "5px" : "calc(100% - 25px)")};
   transform: translate(-50%, -50%);
-  color: white;
-  font-size: 14px;
+  transition: left 0.2s ease;
 `;
 
 export default function TransferToInventory(props) {
   console.log(props.checked, "pppp");
+  const matches = useMediaQuery("(min-width: 700px)");
   const [restockOption, setRestockOption] = useState();
   const [restockTime, setRestockTime] = useState("1 day");
   const [message, setMessage] = useState({
@@ -79,7 +97,7 @@ export default function TransferToInventory(props) {
   const { reloadData } = props;
 
   const { ingredientsAvailable, item_type, in_stock } = formState;
-  console.log(props, "pp");
+  console.log(in_stock, "in");
   // useEffect(() => {
   //   console.log( props.meal.ingredeints_in_item, 'propsss');
   //   if (props.meal.item_type === "Meal" && props.meal.ingredeints_in_item) {
@@ -150,13 +168,31 @@ export default function TransferToInventory(props) {
     });
   }
 
+  // function handleIngredientAvailabilityChange(value, id, key) {
+  //   console.log(value);
+  //   let ingredientsAvailable = formState.ingredientsAvailable;
+  //   ingredientsAvailable[id][key] = value;
+  //   setFormState({
+  //     ...formState,
+  //     ["ingredientsAvailable"]: ingredientsAvailable,
+  //   });
+  // }
   function handleIngredientAvailabilityChange(value, id, key) {
     console.log(value);
-    let ingredientsAvailable = formState.ingredientsAvailable;
-    ingredientsAvailable[id][key] = value;
+
+    // Create a shallow copy of the ingredientsAvailable array
+    const updatedIngredientsAvailable = [...formState.ingredientsAvailable];
+
+    // Update the availability of the ingredient at the specified index
+    updatedIngredientsAvailable[id] = {
+      ...updatedIngredientsAvailable[id],
+      [key]: value,
+    };
+
+    // Update the formState with the updated ingredientsAvailable array
     setFormState({
       ...formState,
-      ["ingredientsAvailable"]: ingredientsAvailable,
+      ingredientsAvailable: updatedIngredientsAvailable,
     });
   }
 
@@ -260,7 +296,11 @@ export default function TransferToInventory(props) {
   useEffect(() => {
     fetchOneUserStore();
   }, []);
-  console.log(formState.ingredientsAvailable, "avail");
+  if (in_stock) {
+    console.log(formState.ingredientsAvailable, "avail");
+  } else {
+    console.log("not in stock");
+  }
   return (
     <>
       {show && (
@@ -327,17 +367,11 @@ export default function TransferToInventory(props) {
                   borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                 }}
               >
-                <label htmlFor="mySelect" style={{ paddingBottom: "1rem" }}>
+                <label htmlFor="mySelect" style={{ paddingBottom: "1rem", fontSize:'14px' }}>
                   Which store are you sending from?
                 </label>
                 <select
-                  style={{
-                    width: "25%",
-                    height: "34px",
-                    border: "1px solid #E6E6E6",
-                    outline: "none",
-                    borderRadius: "4px",
-                  }}
+                 className={styles.selected}
                   onChange={(e) => {
                     setFormState({
                       ...formState,
@@ -547,7 +581,24 @@ export default function TransferToInventory(props) {
                         style={{ height: "2px" }}
                       >
                         <thead>
-                          <div
+                         {
+                          matches ?  <div
+                          className={styles.request_tr1}
+                          style={{ backgroundColor: "transparent" }}
+                        >
+                          <th className={styles.request_th}>Items</th>
+                          <th
+                            className={
+                              styles.request_th + " " + styles.hideData
+                            }
+                          >
+                            Quantity
+                          </th>
+                          <th className={styles.request_th}>Set Price</th>
+                          <th className={styles.request_th}>
+                            Product Available
+                          </th>
+                        </div> :  <div
                             className={styles.request_tr1}
                             style={{ backgroundColor: "transparent" }}
                           >
@@ -560,10 +611,9 @@ export default function TransferToInventory(props) {
                               Quantity
                             </th>
                             <th className={styles.request_th}>Set Price</th>
-                            <th className={styles.request_th}>
-                              Product Available
-                            </th>
+                          
                           </div>
+                         }
                         </thead>
                         <tbody className={styles.tbody}>
                           {formState.ingredientsAvailable?.map(

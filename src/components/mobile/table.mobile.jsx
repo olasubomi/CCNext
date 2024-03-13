@@ -30,8 +30,13 @@ export const MobileTable = ({
                   className={styles.td2}
                   style={{ cursor: "pointer", paddingRight: "2rem" }}
                 >
-                  <div style={{ width: "30%" }}>
-                    <Image src={Frame} height={45} width={45} />
+                  <div style={{ width: "30%",}}>
+                    <Image
+                      src={Frame}
+                      height={45}
+                      width={45}
+                      style={{ borderRadius: "4px" }}
+                    />
                   </div>
                   <div
                     style={{
@@ -76,6 +81,7 @@ export const MobileTable = ({
                       }
                       height={45}
                       width={45}
+                      style={{borderRadius: '4px'}}
                     />
                   </div>
                   <div
@@ -128,6 +134,7 @@ export const MobileTable = ({
                         src={element?.item?.itemImage0}
                         height={45}
                         width={45}
+                        style={{borderRadius: '4px'}}
                       />
                     )}
                   </div>
