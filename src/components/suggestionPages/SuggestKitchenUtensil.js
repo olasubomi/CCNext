@@ -397,10 +397,11 @@ class SuggestKitchenUtensilForm extends Component {
     // descriptionObject.calories = 0;
 
     console.log(descriptionObject, "descriptionObjectdescriptionObject");
+    // console.log(this.state?.descriptionObject, 'descree')
 
     this.setState({
       descriptionGroupList: [
-        ...this.state?.descriptionObject,
+        // ...this.state?.descriptionObject,
         descriptionObject,
       ],
     });
