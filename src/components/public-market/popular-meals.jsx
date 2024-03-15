@@ -102,18 +102,15 @@ export const PopularMeals = () => {
   console.log(filteredMeals, "fill");
 
   useEffect(() => {
-    // Get the hash value from the URL
     const hash = window.location.hash;
 
-    // Use the hash value as the target ID for scrolling
-    const targetId = hash ? hash.substring(1) : 'store';
+    const targetId = hash ? hash.substring(1) : "store";
 
-    // Scroll to the target section
     if (targetId) {
       scroller.scrollTo(targetId, {
         duration: 1000,
         delay: 0,
-        smooth: 'easeInOutQuart',
+        smooth: "easeInOutQuart",
         offset: -1000,
       });
     }

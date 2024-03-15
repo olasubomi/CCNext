@@ -386,7 +386,7 @@ const GroceryPage = () => {
         <div className={styles.one}>
           <GoBack />
           <p className={styles.title3}>My Grocery List </p>
-          <p className={styles.title3}>/ {itemList.listName}</p>
+          <p className={styles.titles}>/ {itemList.listName}</p>
         </div>
 
         {itemList?.groceryItems?.length === 0 ? (
@@ -461,8 +461,8 @@ const GroceryPage = () => {
               className={styles.user_img}
             />
           ) : (
-            <div className={styles.user_img} >
-              <UserIcon/>
+            <div className={styles.user_img}>
+              <UserIcon />
             </div>
           )}
 
@@ -659,8 +659,7 @@ const GroceryPage = () => {
           </>
         ) : (
           <div style={{ width: "100%", marginTop: "5rem" }}>
-            <h5 className={styles.text4}>Items</h5>
-
+            {matches ? <h5 className={styles.text4}>Items</h5> : ""}
             {matches ? (
               <table className={styles.table1}>
                 <thead
@@ -786,6 +785,7 @@ const GroceryPage = () => {
                                 src={element?.item?.itemImage0}
                                 height={50}
                                 width={55}
+                                style={{borderRadius: '4px'}}
                               />
                             ) : (
                               <Image

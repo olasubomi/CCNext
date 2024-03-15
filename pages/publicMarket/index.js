@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Header, { Header2 } from "../../src/components/Header/Header";
 import GoBack from "../../src/components/CommonComponents/goBack";
 import styles from "../../src/components/public-market/public-market.module.css";
@@ -26,9 +26,11 @@ const PublicMarket = () => {
   const [showLocation, setShowLocation] = useState(false);
   const [showAddress, setShowAddress] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
+  const [currentAddress, setCurrentAddress] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [showCurrentLocation, setShowCurrentLocation] = useState(false);
   const addressRef = useRef();
-  const matches = useMediaQuery("(min-width: 768px)")
+  const matches = useMediaQuery("(min-width: 768px)");
 
   const ref = useRef();
   const [oneStore, setOneStore] = useState({
@@ -103,6 +105,37 @@ const PublicMarket = () => {
   const filteredUtensils = () => {
     return items.filter((elem) => elem.item_type === "Utensils");
   };
+  const onSuccess = useCallback(async (location) => {
+    if (location?.coords?.latitude && location?.coords?.longitude) {
+      setIsLoading(true);
+      try {
+        setLongLat({
+          longitude: location?.coords?.longitude,
+          latitude: location?.coords?.latitude,
+        });
+        const res = await BaseAxios.get(
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location?.coords?.latitude},${location?.coords?.longitude}&key=AIzaSyDJ2OXLQoX_83t-DYmg-zIs3keZmNAZHzk`
+        );
+        const data = res.data;
+        const curr_location =
+          data?.results?.find(
+            (ele) =>
+              ele?.types?.includes("street_address") ||
+              ele?.types?.includes("route")
+          )?.formatted_address || "";
+        setCurrentAddress(curr_location);
+        setIsLoading(false);
+      } catch (e) {
+        console.log(e);
+        setIsLoading(false);
+      }
+    }
+  }, []);
+
+  const onError = useCallback((error) => {
+    console.log(error, "error");
+    window.alert(error?.message || "Unable to get location");
+  }, []);
   useEffect(() => {
     const path = router.asPath.split("#");
     if (Array.isArray(path) && path.length === 2) {
@@ -144,9 +177,13 @@ const PublicMarket = () => {
         <p className={styles.title}>Access stores near you</p>
         <AddressInput
           showLocation={showLocation}
+          currentAddress={currentAddress}
+          isLoading={isLoading}
           setShowLocation={setShowLocation}
           showAddress={showAddress}
           ref={addressRef}
+          setIsLoading={setIsLoading}
+          setCurrentAddress={setCurrentAddress}
           setShowAddress={setShowAddress}
           showCurrentLocation={showCurrentLocation}
           setShowCurrentLocation={setShowCurrentLocation}
@@ -155,6 +192,7 @@ const PublicMarket = () => {
           className={styles.location}
           style={{ cursor: "pointer" }}
           onClick={() => {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
             addressRef.current?.handleGetStoreByLocation();
             setShowLocation(!showLocation);
             setShowCurrentLocation(true);
@@ -169,274 +207,276 @@ const PublicMarket = () => {
       </div>
       <div className={styles.header2}>
         <GoBack />
-     {
-      matches ?    <div className={styles.two}>
-      <div>
-        <div
-          className={styles.searchbox}
-          onClick={() => setShowCategory(!showCategory)}
-        >
-          {categories[0].value && categories.some((ele) => !ele.value)
-            ? "All categories"
-            : categories.find((ele) => ele.value).label}
-          <GoTriangleUp
-            className={!showCategory ? styles.rotate : styles.nonrotate}
-            size={15}
-          />
-        </div>
-        {showCategory && (
-          <div className={styles.categories}>
-            {categories.map((option) => (
-              <p
-                onClick={() => {
-                  let arr = [];
-                  if (option.label === "All categories") {
-                    arr = categories.map((ele) => {
-                      return {
-                        ...ele,
-                        value: true,
-                      };
-                    });
-                  } else {
-                    arr = categories.map((ele) => {
-                      if (ele.label === option.label) {
-                        return {
-                          ...ele,
-                          value: true,
-                        };
-                      } else {
-                        return {
-                          ...ele,
-                          value: false,
-                        };
-                      }
-                    });
-                  }
-
-                  setCategories(arr);
-                }}
-                key={option?.label}
+        {matches ? (
+          <div className={styles.two}>
+            <div>
+              <div
+                className={styles.searchbox}
+                onClick={() => setShowCategory(!showCategory)}
               >
-                {option?.label}
-              </p>
-            ))}
-          </div>
-        )}
-      </div>
-      <div ref={ref} className={styles.searchflex}>
-        <div className={styles.search}>
-          <input
-            placeholder="Search"
-            autoComplete="off"
-            onFocus={() => setShow(true)}
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-              getItem(e.target.value);
-              getStore(e.target.value);
-            }}
-            type="text"
-            name="search"
-          />
-          {show && (
-            <div className={styles.searchDropdown}>
-              <>
-                <>
-                  {categories.find((ele) => ele.label === "Stores")
-                    ?.value && (
-                    <>
-                      <h4 className={styles.storeTitle}>
-                        Stores ({store.length})
-                      </h4>
-                      <div className={styles.bord} />
-                      <div className={styles.list}>
-                        {store.length === 0 ? (
-                          Boolean(value) ? (
-                            <div className={styles.result}>
-                              <p>No Result Found</p>
-                              <button
-                                onClick={() =>
-                                  router.push(`/suggest-store/${value}`)
-                                }
-                              >
-                                Suggest Store
-                              </button>
-                            </div>
-                          ) : null
-                        ) : (
-                          store.slice(0, 4).map((stores) => (
-                            <p
-                              key={stores.value}
-                              onClick={() => {
-                                setOneStore({
-                                  visible: true,
-                                  id: stores.value,
-                                });
-                                setValue(stores.label);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {stores.label}
-                            </p>
-                          ))
-                        )}
-                      </div>
-                    </>
-                  )}
-                </>
-              </>
-              <>
-                {categories.find((ele) => ele.label === "Meals")?.value && (
-                  <>
-                    <h4 className={styles.storeTitle}>
-                      Meals ({filteredItem().length})
-                    </h4>
-                    <div className={styles.bord} />
-                    <div className={styles.list}>
-                      {filteredItem().length === 0 ? (
-                        Boolean(value) ? (
-                          <div className={styles.result}>
-                            <p>No Result Found</p>
-                            <button
-                              onClick={() => router.push("/suggestmeal")}
-                            >
-                              Suggest Meal
-                            </button>
-                          </div>
-                        ) : null
-                      ) : (
-                        filteredItem()
-                          ?.slice(0, 4)
-                          .map((elem) => (
-                            <p
-                              key={elem.value}
-                              onClick={() => {
-                                setOneStore({
-                                  visible: false,
-                                  id: "",
-                                });
-                                setValue(elem.label);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {elem.label}
-                            </p>
-                          ))
-                      )}
-                    </div>
-                  </>
-                )}
-              </>
+                {categories[0].value && categories.some((ele) => !ele.value)
+                  ? "All categories"
+                  : categories.find((ele) => ele.value).label}
+                <GoTriangleUp
+                  className={!showCategory ? styles.rotate : styles.nonrotate}
+                  size={15}
+                />
+              </div>
+              {showCategory && (
+                <div className={styles.categories}>
+                  {categories.map((option) => (
+                    <p
+                      onClick={() => {
+                        let arr = [];
+                        if (option.label === "All categories") {
+                          arr = categories.map((ele) => {
+                            return {
+                              ...ele,
+                              value: true,
+                            };
+                          });
+                        } else {
+                          arr = categories.map((ele) => {
+                            if (ele.label === option.label) {
+                              return {
+                                ...ele,
+                                value: true,
+                              };
+                            } else {
+                              return {
+                                ...ele,
+                                value: false,
+                              };
+                            }
+                          });
+                        }
 
-              <>
-                {categories.find((ele) => ele.label === "Products")
-                  ?.value && (
-                  <>
-                    <h4 className={styles.storeTitle}>
-                      Products ({filteredProduct().length})
-                    </h4>
-                    <div className={styles.bord} />
-                    <div className={styles.list}>
-                      {filteredProduct().length === 0 ? (
-                        Boolean(value) ? (
-                          <div className={styles.result}>
-                            <p>No Result Found</p>
-                            <button
-                              onClick={() => router.push("/suggestmeal")}
-                            >
-                              Suggest Product
-                            </button>
-                          </div>
-                        ) : null
-                      ) : (
-                        filteredProduct()
-                          ?.slice(0, 4)
-                          .map((elem) => (
-                            <p
-                              key={elem.value}
-                              onClick={() => {
-                                setOneStore({
-                                  visible: false,
-                                  id: "",
-                                });
-                                setValue(elem.label);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {elem.label}
-                            </p>
-                          ))
-                      )}
-                    </div>
-                  </>
-                )}
-              </>
-
-              <>
-                {categories.find((ele) => ele.label === "Kitchen Utensils")
-                  ?.value && (
-                  <>
-                    <h4 className={styles.storeTitle}>
-                      Kitchen Utensils ({filteredUtensils().length})
-                    </h4>
-                    <div className={styles.bord} />
-                    <div className={styles.list}>
-                      {filteredUtensils().length === 0 ? (
-                        Boolean(value) ? (
-                          <div className={styles.result}>
-                            <p>No Result Found</p>
-                            <button
-                              onClick={() => router.push("/suggestmeal")}
-                            >
-                              Suggest Utensil
-                            </button>
-                          </div>
-                        ) : null
-                      ) : (
-                        filteredUtensils()
-                          ?.slice(0, 4)
-                          .map((elem) => (
-                            <p
-                              key={elem.value}
-                              onClick={() => {
-                                setOneStore({
-                                  visible: false,
-                                  id: "",
-                                });
-                                setValue(elem.label);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {elem.label}
-                            </p>
-                          ))
-                      )}
-                    </div>
-                  </>
-                )}
-              </>
+                        setCategories(arr);
+                      }}
+                      key={option?.label}
+                    >
+                      {option?.label}
+                    </p>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <button
-          className={styles.searchbtn}
-          onClick={() => {
-            if (oneStore.visible) {
-              router.push(`/store/${oneStore.id}`);
-            } else {
-              items.item_type === "Meal"
-                ? router.push(`/meal/${value}`)
-                : items.item_type === "Product"
-                ? router.push(`/product/${value}`)
-                : router.push(`/product/${value}`);
-            }
-          }}
-        >
-          Search
-        </button>
-      </div>
-    </div> : null
-     }
+            <div ref={ref} className={styles.searchflex}>
+              <div className={styles.search}>
+                <input
+                  placeholder="Search"
+                  autoComplete="off"
+                  onFocus={() => setShow(true)}
+                  value={value}
+                  onChange={(e) => {
+                    setValue(e.target.value);
+                    getItem(e.target.value);
+                    getStore(e.target.value);
+                  }}
+                  type="text"
+                  name="search"
+                />
+                {show && (
+                  <div className={styles.searchDropdown}>
+                    <>
+                      <>
+                        {categories.find((ele) => ele.label === "Stores")
+                          ?.value && (
+                          <>
+                            <h4 className={styles.storeTitle}>
+                              Stores ({store.length})
+                            </h4>
+                            <div className={styles.bord} />
+                            <div className={styles.list}>
+                              {store.length === 0 ? (
+                                Boolean(value) ? (
+                                  <div className={styles.result}>
+                                    <p>No Result Found</p>
+                                    <button
+                                      onClick={() =>
+                                        router.push(`/suggest-store/${value}`)
+                                      }
+                                    >
+                                      Suggest Store
+                                    </button>
+                                  </div>
+                                ) : null
+                              ) : (
+                                store.slice(0, 4).map((stores) => (
+                                  <p
+                                    key={stores.value}
+                                    onClick={() => {
+                                      setOneStore({
+                                        visible: true,
+                                        id: stores.value,
+                                      });
+                                      setValue(stores.label);
+                                    }}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    {stores.label}
+                                  </p>
+                                ))
+                              )}
+                            </div>
+                          </>
+                        )}
+                      </>
+                    </>
+                    <>
+                      {categories.find((ele) => ele.label === "Meals")
+                        ?.value && (
+                        <>
+                          <h4 className={styles.storeTitle}>
+                            Meals ({filteredItem().length})
+                          </h4>
+                          <div className={styles.bord} />
+                          <div className={styles.list}>
+                            {filteredItem().length === 0 ? (
+                              Boolean(value) ? (
+                                <div className={styles.result}>
+                                  <p>No Result Found</p>
+                                  <button
+                                    onClick={() => router.push("/suggestmeal")}
+                                  >
+                                    Suggest Meal
+                                  </button>
+                                </div>
+                              ) : null
+                            ) : (
+                              filteredItem()
+                                ?.slice(0, 4)
+                                .map((elem) => (
+                                  <p
+                                    key={elem.value}
+                                    onClick={() => {
+                                      setOneStore({
+                                        visible: false,
+                                        id: "",
+                                      });
+                                      setValue(elem.label);
+                                    }}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    {elem.label}
+                                  </p>
+                                ))
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </>
+
+                    <>
+                      {categories.find((ele) => ele.label === "Products")
+                        ?.value && (
+                        <>
+                          <h4 className={styles.storeTitle}>
+                            Products ({filteredProduct().length})
+                          </h4>
+                          <div className={styles.bord} />
+                          <div className={styles.list}>
+                            {filteredProduct().length === 0 ? (
+                              Boolean(value) ? (
+                                <div className={styles.result}>
+                                  <p>No Result Found</p>
+                                  <button
+                                    onClick={() => router.push("/suggestmeal")}
+                                  >
+                                    Suggest Product
+                                  </button>
+                                </div>
+                              ) : null
+                            ) : (
+                              filteredProduct()
+                                ?.slice(0, 4)
+                                .map((elem) => (
+                                  <p
+                                    key={elem.value}
+                                    onClick={() => {
+                                      setOneStore({
+                                        visible: false,
+                                        id: "",
+                                      });
+                                      setValue(elem.label);
+                                    }}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    {elem.label}
+                                  </p>
+                                ))
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </>
+
+                    <>
+                      {categories.find(
+                        (ele) => ele.label === "Kitchen Utensils"
+                      )?.value && (
+                        <>
+                          <h4 className={styles.storeTitle}>
+                            Kitchen Utensils ({filteredUtensils().length})
+                          </h4>
+                          <div className={styles.bord} />
+                          <div className={styles.list}>
+                            {filteredUtensils().length === 0 ? (
+                              Boolean(value) ? (
+                                <div className={styles.result}>
+                                  <p>No Result Found</p>
+                                  <button
+                                    onClick={() => router.push("/suggestmeal")}
+                                  >
+                                    Suggest Utensil
+                                  </button>
+                                </div>
+                              ) : null
+                            ) : (
+                              filteredUtensils()
+                                ?.slice(0, 4)
+                                .map((elem) => (
+                                  <p
+                                    key={elem.value}
+                                    onClick={() => {
+                                      setOneStore({
+                                        visible: false,
+                                        id: "",
+                                      });
+                                      setValue(elem.label);
+                                    }}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    {elem.label}
+                                  </p>
+                                ))
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </>
+                  </div>
+                )}
+              </div>
+              <button
+                className={styles.searchbtn}
+                onClick={() => {
+                  if (oneStore.visible) {
+                    router.push(`/store/${oneStore.id}`);
+                  } else {
+                    items.item_type === "Meal"
+                      ? router.push(`/meal/${value}`)
+                      : items.item_type === "Product"
+                      ? router.push(`/product/${value}`)
+                      : router.push(`/product/${value}`);
+                  }
+                }}
+              >
+                Search
+              </button>
+            </div>
+          </div>
+        ) : null}
       </div>
       <div className={styles.storeContainer}>
         {categories.find((ele) => ele.label === "Stores")?.value && <Stores />}
