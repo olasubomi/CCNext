@@ -184,13 +184,15 @@ function Header(props) {
     try {
       console.log(id);
       const response = await axios.get(`/items/item/${id}`);
-      const data = Array.isArray(response.data?.data) ? response.data?.data[0] : {};
-      console.log(response.data)
+      const data = Array.isArray(response.data?.data)
+        ? response.data?.data[0]
+        : {};
+      console.log(response.data);
       if (data?.item_name) {
         router.push(
-          `/${data?.item_type === "Meal" ? "meal" : "product"}/${data?.item_name}?id=${
-            commentId
-          }`
+          `/${data?.item_type === "Meal" ? "meal" : "product"}/${
+            data?.item_name
+          }?id=${commentId}`
         );
       }
     } catch (e) {
@@ -457,54 +459,63 @@ function Header(props) {
                     </div>
                     <div className={styles.summary_min_notifications}>
                       <div className={styles.not}>
-                        {notifications?.map((elem) => (
-                          <div className={styles.summary_notification}>
-                            {elem.message.includes("Suggested Meal") ? (
-                              <div className={styles.rounded}>
-                                <FaCheck color="black" size={14} />
+                        {[...notifications]
+                          ?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                          ?.map((elem) => (
+                            <div className={styles.summary_notification}>
+                              {elem.message.includes("Suggested Meal") ? (
+                                <div className={styles.rounded}>
+                                  <FaCheck color="black" size={14} />
+                                </div>
+                              ) : (
+                                <div className={styles.rounded2}>
+                                  <RiMessage2Fill size={15} color="#FFF" />
+                                </div>
+                              )}
+                              <div
+                                className={styles.summary_notification_Details}
+                              >
+                                <h3
+                                  className={styles.summary_notification_desc}
+                                >
+                                  {elem.message}
+                                </h3>
+                                <p className={styles.summary_notification_link}>
+                                  {elem.message.includes("Suggested Meal") ? (
+                                    <p
+                                      onClick={() => {
+                                        updateNotification(elem._id);
+                                        router.push(
+                                          "/dashboard/suggestedmeals"
+                                        );
+                                      }}
+                                    >
+                                      View Item
+                                    </p>
+                                  ) : (
+                                    <p
+                                      onClick={() =>
+                                        getOneItemById(
+                                          elem?.notifiable?.item,
+                                          elem?.notifiable?._id
+                                        )
+                                      }
+                                    >
+                                      View Comment
+                                    </p>
+                                  )}
+                                </p>
+                                <p className={styles.summary_notification_time}>
+                                  {moment(elem.createdAt).fromNow()}
+                                </p>
                               </div>
-                            ) : (
-                              <div className={styles.rounded2}>
-                                <RiMessage2Fill size={15} color="#FFF" />
-                              </div>
-                            )}
-                            <div
-                              className={styles.summary_notification_Details}
-                            >
-                              <h3 className={styles.summary_notification_desc}>
-                                {elem.message}
-                              </h3>
-                              <p className={styles.summary_notification_link}>
-                                {elem.message.includes("Suggested Meal") ? (
-                                  <p
-                                    onClick={() => {
-                                      updateNotification(elem._id);
-                                      router.push("/dashboard/suggestedmeals");
-                                    }}
-                                  >
-                                    View Item
-                                  </p>
-                                ) : (
-                                  <p
-                                    onClick={() =>
-                                      getOneItemById(elem?.notifiable?.item, elem?.notifiable?._id)
-                                    }
-                                  >
-                                    View Comment
-                                  </p>
-                                )}
-                              </p>
-                              <p className={styles.summary_notification_time}>
-                                {moment(elem.createdAt).fromNow()}
-                              </p>
+                              <div
+                                className={
+                                  !elem.read ? styles.readDot : styles.readDot2
+                                }
+                              />
                             </div>
-                            <div
-                              className={
-                                !elem.read ? styles.readDot : styles.readDot2
-                              }
-                            />
-                          </div>
-                        ))}
+                          ))}
                       </div>
 
                       <div className={styles.navbar_top_details_col}>
