@@ -171,7 +171,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
       <div className={styles.searchflex}>
         <div className={styles.searchboxfield}>
           <input
-            placeholder="Search"
+            placeholder="Search Marketplace"
             autoComplete="off"
             onFocus={() => setShow(true)}
             value={value}

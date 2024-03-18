@@ -264,7 +264,7 @@ const PublicMarket = () => {
             <div ref={ref} className={styles.searchflex}>
               <div className={styles.search}>
                 <input
-                  placeholder="Search"
+                  placeholder="Search Marketplace"
                   autoComplete="off"
                   onFocus={() => setShow(true)}
                   value={value}
