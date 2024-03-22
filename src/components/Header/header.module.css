@@ -945,3 +945,6 @@
     display: none;
   }
 }
+@media (orientation: landscape) {
+
+}

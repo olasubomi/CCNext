@@ -56,6 +56,7 @@ function Header(props) {
   const [openUserDetails, setOpenUserDetails] = useState(false);
   const cartCtx = useContext(CartContext);
   const matches = useMediaQuery("(min-width: 768px)");
+  const isLandscape = useMediaQuery("(orientation: landscape)");
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const { items } = cartCtx;
@@ -215,21 +216,23 @@ function Header(props) {
 
   //   window.event.returnValue = false;
   // }
-  const ref = useRef();
+  const dropdownRef = useRef(null);
   const toggleUserDetails = () => {
-    setOpenUserDetails(true);
+    if (!openUserDetails || dropdownRef.current === event.target) {
+      setOpenUserDetails(!openUserDetails);
+    }
     console.log("hello");
   };
   useEffect(() => {
-    document.addEventListener(
-      "click",
-      (e) => {
-        if (ref.current && !ref.current.contains(e.target)) {
-          setOpenUserDetails(false);
-        }
-      },
-      true
-    );
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenUserDetails(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
   function toggleLogin() {
     setOpenLoginState(!openLogin);
@@ -315,10 +318,10 @@ function Header(props) {
                   <a className={styles.navbar_user_loginbtn}>Log In/Register</a>
                 </Link>
               ) : (
-                <div className={styles.navbar_user_info}>
+                <div className={styles.navbar_user_info} ref={dropdownRef}>
                   {authUser?.profile_picture !== "" &&
                   authUser?.profile_picture !== undefined ? (
-                    <div>
+                    <div onClick={toggleUserDetails}>
                       {" "}
                       <Image
                         id="userImg"
@@ -330,7 +333,7 @@ function Header(props) {
                       />
                     </div>
                   ) : (
-                    <div>
+                    <div onClick={toggleUserDetails}>
                       <UserIcon style={styles.navbar_user_img} />
                     </div>
                   )}
@@ -349,7 +352,7 @@ function Header(props) {
                   </div>
 
                   {openUserDetails && (
-                    <div ref={ref} className={styles.userdetails}>
+                    <div className={styles.userdetails}>
                       <Link href="/dashboard">
                         <div
                           className={
@@ -460,7 +463,11 @@ function Header(props) {
                     <div className={styles.summary_min_notifications}>
                       <div className={styles.not}>
                         {[...notifications]
-                          ?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                          ?.sort(
+                            (a, b) =>
+                              new Date(b.createdAt).getTime() -
+                              new Date(a.createdAt).getTime()
+                          )
                           ?.map((elem) => (
                             <div className={styles.summary_notification}>
                               {elem.message.includes("Suggested Meal") ? (
@@ -772,60 +779,29 @@ export default connect(mapStateToProp, mapDispatchToProps)(Header);
 
 export function Header2() {
   const router = useRouter();
-  const matches = useMediaQuery("(min-width: 520px)");
+  const matches = useMediaQuery("(min-width: 900px)");
+  const isLandscape = useMediaQuery("(orientation: landscape)");
 
   useEffect(() => {
-    // Registering the 'begin' event and logging it to the console when triggered.
     Events.scrollEvent.register("begin", (to, element) => {
       console.log("begin", to, element);
     });
 
-    // Registering the 'end' event and logging it to the console when triggered.
     Events.scrollEvent.register("end", (to, element) => {
       console.log("end", to, element);
     });
 
-    // Updating scrollSpy when the component mounts.
     scrollSpy.update();
 
-    // Returning a cleanup function to remove the registered events when the component unmounts.
     return () => {
       Events.scrollEvent.remove("begin");
       Events.scrollEvent.remove("end");
     };
   }, []);
 
-  // Defining functions to perform different types of scrolling.
-  const scrollToTop = () => {
-    scroll.scrollToTop();
-  };
-
-  const scrollToBottom = () => {
-    scroll.scrollToBottom();
-  };
-
-  const scrollToWithOffset = () => {
-    const offset = 100; // Adjust the offset value as needed
-    scroll.scrollTo("meal", {
-      duration: 1000,
-      delay: 0,
-      smooth: true,
-      offset: offset,
-    });
-  };
-
-  const scrollMore = () => {
-    scroll.scrollMore(100);
-  };
-
   const handleSetActive = (to) => {
     console.log(to);
   };
-  const hash = window.location.hash;
-
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  const targetId = hash ? hash.substring(1) : "store";
 
   return (
     <>
@@ -900,6 +876,9 @@ export function Header2() {
           </div>
           {/* {showDropdown && <SearchDropdown setShowDropdown={setShowDropdown} />} */}
         </div>
+      ) : isLandscape ? (
+        <MobileHeader />
+
       ) : (
         <MobileHeader />
       )}
