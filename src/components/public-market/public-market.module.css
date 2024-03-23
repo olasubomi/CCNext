@@ -166,7 +166,7 @@
   margin-top: -0.6rem;
   z-index: 200;
 }
-.two3{
+.two3 {
   display: none;
 }
 
@@ -273,7 +273,6 @@
 .searchflex {
   display: flex;
   width: 90%;
-
 }
 
 .searchbtn {
@@ -704,7 +703,7 @@
 .rate {
   font-size: 20px;
 }
-.two2{
+.two2 {
   display: flex;
 }
 .text {
@@ -805,7 +804,8 @@
   .two2 {
     padding-left: 22%;
     display: flex;
-  }.two3{
+  }
+  .two3 {
     display: none;
   }
   .storeContainer {
@@ -886,12 +886,23 @@
     width: 100%;
     padding-left: 3rem;
     flex-direction: column;
-    top: 260px;
+    top: 160px;
+    position: relative;
   }
 
   .header {
-    top: 118px;
+    position: relative;
+    top: 100px;
     padding: 0.5rem 2rem 0.5rem 2rem;
+  }
+  .searchbar {
+    padding-left: 6rem;
+  }
+  .locationIcon {
+    top: 30%;
+  }
+  .storeContainer {
+    padding-top: 20rem;
   }
 
   .profile_picture {
@@ -918,59 +929,59 @@
 
 @media only screen and (max-width: 768px) {
   .header2 {
-    top: 228px;
+    top: 100px;
     padding-bottom: 1rem;
+    position: relative;
   }
   .two2 {
-    display: none
+    display: none;
   }
-  .categories{
+  .categories {
     margin-top: 0.2rem;
   }
   .searchflex {
     display: flex;
     width: 77%;
   }
-  .two3{
+  .two3 {
     display: flex;
     position: absolute;
     width: 100%;
     top: 63px;
     right: 0;
     padding-left: 5%;
-    background-color: #F9F9F9;
-    padding-bottom: .7rem;
-    padding-top: .7rem;
+    background-color: #f9f9f9;
+    padding-bottom: 0.7rem;
+    padding-top: 0.7rem;
     margin-top: -1rem;
   }
-  .cats{
-    background: #FFF;
+  .cats {
+    background: #fff;
     display: flex;
     align-items: center;
     font-size: 11px;
     height: 40px;
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
     color: #353535;
   }
-  .leftBorder{
+  .leftBorder {
     height: 30px;
     margin: auto;
     width: 1px;
     background-color: #9d9d9d;
-    
   }
-  .searchboxfield{
+  .searchboxfield {
     position: relative;
-    background: #FFF;
+    background: #fff;
     display: flex;
     width: 90%;
     align-items: center;
     font-size: 11px;
     height: 40px;
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
     color: #353535;
   }
-  .searchboxfield input{
+  .searchboxfield input {
     border: none;
     outline: none;
     width: 100%;
@@ -990,14 +1001,15 @@
     background: #f47900;
     color: #fff;
   }
-  .storeContainer{
+  .storeContainer {
     padding-top: 22rem;
   }
-  .header{
-    background-color: #F9F9F9;
+  .header {
+    background-color: #f9f9f9;
     height: 79px;
+    top: 50px;
   }
-  .title{
+  .title {
     color: #000;
   }
 }
@@ -1005,8 +1017,7 @@
 @media only screen and (max-width: 600px) {
   .header2 {
     flex-direction: column;
-    top: 206px;
-
+    top: 120px;
   }
   .searchbtn {
     height: 45px;
@@ -1035,7 +1046,7 @@
   .header2 {
     flex-direction: column;
     position: relative;
-    top: 110px;
+    top: 90px;
     padding-left: 2rem;
   }
 
@@ -1108,3 +1119,14 @@
     font-size: 18px;
   }
 }
+/* @media screen and (orientation: landscape) {
+  .header {
+    top: 50px;
+  }
+  .searchbar {
+    padding-left: 6rem;
+  }
+  .locationIcon{
+    top: 30%;
+  }
+} */

@@ -71,7 +71,6 @@ export const MobileSearch = ({ setShowDropdown }) => {
     }
     return name;
   };
-  console.log(items, "item");
 
   const getStore = async (name) => {
     try {
@@ -112,7 +111,14 @@ export const MobileSearch = ({ setShowDropdown }) => {
   return (
     <div className={styles.two3} ref={ref}>
       <div>
-        <div style={{display: 'flex', alignItems: 'center', background: '#FFF', width: '100%'}}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            background: "#FFF",
+            width: "100%",
+          }}
+        >
           <div
             className={styles.cats}
             onClick={() => setShowCategory(!showCategory)}
@@ -361,11 +367,26 @@ export const MobileSearch = ({ setShowDropdown }) => {
             if (oneStore.visible) {
               router.push(`/store/${oneStore.id}`);
             } else {
-              items.item_type === "Meal"
-                ? router.push(`/meal/${value}`)
-                : items.item_type === "Product"
-                ? router.push(`/product/${value}`)
-                : router.push(`/product/${value}`);
+              if (
+                items.find(
+                  (ele) =>
+                    ele.item_type === "Meal" && ele.item_type !== "Product"
+                )
+              ) {
+                // console.log("navigating to /meal/" + value);
+                router.push(`/meal/${value}`);
+              } else if (
+                items.filter(
+                  (ele) =>
+                    ele.item_type === "Product" && ele.item_type !== "Meal"
+                )
+              ) {
+                // console.log("navigating to /product/" + value);
+                router.push(`/product/${value}`);
+              } else {
+                // console.log("Fallback navigating to /meal/" + value);
+                // router.push(`/meal/${value}`);
+              }
             }
           }}
         >

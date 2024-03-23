@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import axios from "../../src/util/Api";
 import { AddressInput } from "../../src/components/public-market/input";
 import { useMediaQuery } from "../../src/hooks/usemediaquery";
+import Sidenav from "../../src/components/Header/sidenav";
 
 const PublicMarket = () => {
   const router = useRouter();
@@ -166,13 +167,18 @@ const PublicMarket = () => {
           name="viewport"
           content="initial-scale=1.0, width=device-width"
         />
-        <meta name="description" content="Search recipes by ingredients and 
+        <meta
+          name="description"
+          content="Search recipes by ingredients and 
         many more categories. Curious to know what to make with an Ingredient 
         you already have? Use Chop Chow to find new recipes and share meals 
-        made from home." />
+        made from home."
+        />
       </Head>
       <Header />
       <Header2 />
+      <Sidenav />
+
       <div className={styles.header}>
         <p className={styles.title}>Access stores near you</p>
         <AddressInput
