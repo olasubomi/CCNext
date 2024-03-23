@@ -184,13 +184,13 @@ function Product(props) {
             <FacebookShareButton>
               <FacebookEIcon
                 quote={props.product.product_name}
-                url={url + "product/" + props.product._id}
+                url={url + "product/" + props.product.product_name}
               />
             </FacebookShareButton>
             <TwitterShareButton
               title={props.product.product_name}
               via="ChopChowMarket"
-              url={url + "product/" + props.product._id}
+              url={url + "product/" + props.product.product_name}
             >
               <TwitterEIcon />
             </TwitterShareButton>
@@ -199,7 +199,7 @@ function Product(props) {
                         </InstagramShareButton> */}
             <WhatsappShareButton
               title={props.product.product_name}
-              url={url + "product/" + props.product._id}
+              url={url + "product/" + props.product.product_name}
             >
               <WhatsappEIcon />
             </WhatsappShareButton>
