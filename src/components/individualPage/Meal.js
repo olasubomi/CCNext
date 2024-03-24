@@ -285,7 +285,7 @@ function Meal(props) {
                 Share this product:
               </p>
               <FacebookShareButton
-                url={url + "/meal/"+ props.meal.item_name}
+                url={url + "meal/"+ props.meal.item_name}
                 quote={props.meal.item_name}
                 hashtag={props.meal.item_intro}
               >
@@ -294,7 +294,7 @@ function Meal(props) {
               <TwitterShareButton
                 title={props.meal.item_name}
                 via="ChopChowMarket"
-                url={url + "/meal/" + props.meal.item_name}
+                url={url + "meal/" + props.meal.item_name}
               >
                 <TwitterEIcon />
               </TwitterShareButton>
@@ -303,7 +303,7 @@ function Meal(props) {
                         </InstagramShareButton> */}
               <WhatsappShareButton
                 title={props.meal.item_name}
-                url={url + "/meal/" + props.meal.item_name}
+                url={url + "meal/" + props.meal.item_name}
               >
                 <WhatsappEIcon />
               </WhatsappShareButton>
