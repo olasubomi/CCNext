@@ -32,7 +32,7 @@ function Product(props) {
   const [formatted_ingredients, set_formatted_ingredients] = useState([""]);
   //const url = 'http://localhost:3000/'
   const url = "https://www.chopchow.app/";
-  const productURL = "https://www.chopchow.app/";
+  const productURL = "https://www.chopchow.app/product/";
   const params = useSearchParams();
   // console.log(props.product.item_data.product_size, 'item_data')
   // console.log(props.product.item_data.product_size?.map((elem, id) => (
@@ -187,13 +187,13 @@ function Product(props) {
             <FacebookShareButton>
               <FacebookEIcon
                 quote={props.product.product_name}
-                url={productURL}
+                url={url + "product/" + props.product.product_name}
               />
             </FacebookShareButton>
             <TwitterShareButton
               title={props.product.product_name}
               via="ChopChowMarket"
-              url={productURL}
+              url={url + "product/" + props.product.product_name}
             >
               <TwitterEIcon />
             </TwitterShareButton>
@@ -202,13 +202,13 @@ function Product(props) {
                         </InstagramShareButton> */}
             <WhatsappShareButton
               title={props.product.product_name}
-              url={productURL}
+              url={url + "product/" + props.product.product_name}
             >
               <WhatsappEIcon />
             </WhatsappShareButton>
             <RedditShareButton
               title={props.product.product_name}
-              url={productURL}
+              url={url + "product/" + props.product.product_name}
             >
               <RedditIcon />
             </RedditShareButton>
