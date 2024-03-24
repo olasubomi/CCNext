@@ -206,12 +206,12 @@ function Product(props) {
             >
               <WhatsappEIcon />
             </WhatsappShareButton>
-            <RedditShareButton
+            {/* <RedditShareButton
               title={props.product.product_name}
               url={url + "product/" + props.product.product_name}
             >
               <RedditIcon />
-            </RedditShareButton>
+            </RedditShareButton> */}
           </div>
           <div>
             <p>Print Preview</p>
