@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { MealDropDown } from "./dropdown";
-import stored from "../../../public/assets/store_pics/store.jpg";
+import stored from "../../../public/assets/store_pics/no-image-store.png";
 import Image from "next/image";
 import { Element } from "react-scroll";
 
@@ -54,19 +54,19 @@ export const Stores = () => {
   useEffect(() => {
     fetchStores();
   }, []);
-  console.log(selectedStore, "selectedStore");
+  console.log(stores, "stores");
   useEffect(() => {
     // Get the hash value from the URL
     const hash = window.location.hash;
 
     // Use the hash value as the target ID for scrolling
-    const targetId = hash ? hash.substring(1) : 'store';
+    const targetId = hash ? hash.substring(1) : "store";
 
     // Scroll to the target section
     if (targetId) {
       const element = document.getElementById(targetId);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        element.scrollIntoView({ behavior: "smooth" });
       }
     }
   }, []);
@@ -96,9 +96,9 @@ export const Stores = () => {
                         <div>
                           <Image
                             src={
-                              store?.background_picture
-                                ? store?.background_picture
-                                : stored
+                              store?.profile_picture
+                                ? store?.profile_picture
+                                : "/assets/store_pics/no-image-store.png"
                             }
                             className={styles.storeImg}
                             width={200}

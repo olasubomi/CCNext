@@ -357,10 +357,10 @@ const Management = () => {
         var image = document.getElementById("profile_picture");
         image.style.display = "block";
         // image.src = URL.createObjectURL(event.target.files[0]);
-        setFormState({
-          ...formState,
-          profile_picture: URL.createObjectURL(event.target.files[0]),
-        });
+        // setFormState({
+        //   ...formState,
+        //   profile_picture: URL.createObjectURL(event.target.files[0]),
+        // });
       } else {
         setFormState({
           ...formState,
@@ -373,10 +373,10 @@ const Management = () => {
         var image = document.getElementById("background_picture");
         image.style.display = "block";
         // image.src = URL.createObjectURL(event.target.files[0]);
-        setFormState({
-          ...formState,
-          background_picture: URL.createObjectURL(event.target.files[0]),
-        });
+        // setFormState({
+        //   ...formState,
+        //   background_picture: URL.createObjectURL(event.target.files[0]),
+        // });
       }
     } else {
       alert("Invalid image type");
@@ -472,6 +472,8 @@ const Management = () => {
       value: true,
     },
   ]);
+
+
   const deleteItem = async (id) => {
     try {
       const res = await axios.delete(`/items/delete/${id}`);
@@ -694,7 +696,7 @@ const Management = () => {
                         <img
                           id="profile_picture"
                           {...(formState.profile_picture && {
-                            src: formState.profile_picture,
+                            src: formState?.profile_picture_data ?? formState.profile_picture,
                           })}
                           width="100%"
                           height="100%"
@@ -726,7 +728,7 @@ const Management = () => {
                         {" "}
                         <img
                           {...(formState.background_picture && {
-                            src: formState.background_picture,
+                            src: formState?.background_picture_data ?? formState.background_picture,
                           })}
                           id="background_picture"
                           width="100%"

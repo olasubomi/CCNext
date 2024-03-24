@@ -3,14 +3,10 @@ import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
 import { useRouter } from "next/router";
-import { AiOutlineClose } from "react-icons/ai";
-import { GrStar } from "react-icons/gr";
-import { BsCurrencyDollar } from "react-icons/bs";
-import Link from "next/link";
-import { Modal } from "../modal/popup-modal";
 import { toast } from "react-toastify";
 import { ProductModal } from "../modal/individual-meal-product";
 import { Element } from "react-scroll";
+import productImg from "../../../public/assets/store_pics/no-image-product.png";
 
 export const TopSellingProducts = () => {
   const [products, setProducts] = useState([]);
@@ -105,13 +101,13 @@ export const TopSellingProducts = () => {
     const hash = window.location.hash;
 
     // Use the hash value as the target ID for scrolling
-    const targetId = hash ? hash.substring(1) : 'product';
+    const targetId = hash ? hash.substring(1) : "product";
 
     // Scroll to the target section
     if (targetId) {
       const element = document.getElementById(targetId);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        element.scrollIntoView({ behavior: "smooth" });
       }
     }
   }, []);
@@ -142,7 +138,14 @@ export const TopSellingProducts = () => {
             >
               {product?.itemImage0 && (
                 <div className={styles.box}>
-                  <img src={product?.itemImage0} className={styles.storeImg2} />
+                  <img
+                    src={
+                      product?.itemImage0
+                        ?   product?.itemImage0
+                        : "/assets/store_pics/no-image-product.png"
+                    }
+                    className={styles.storeImg2}
+                  />
                   <div className={styles.flex}>
                     <p className={styles.name2}>{product.item_name}</p>
                     <p>$8.43</p>

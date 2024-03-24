@@ -19,51 +19,53 @@ import { toast } from "react-toastify";
 import { base_url } from "../../util/Api";
 import { withRouter } from "next/router";
 
+const initialState = {
+  utensilName: "",
+  utensilImage1: "",
+  utensilImage2: "",
+  utensilImage3: "",
+  utensilImage4: "",
+  utensilImagesData: [],
+  intro: "",
+
+  sizeNames: [],
+  // do we need product group list AND strings ?
+  descriptionGroupList: [],
+  // store product names of inputted strings to compare with db products
+  descriptionStrings: [],
+  // do we want to use current ingredient formats ? Yes.
+  currentIngredient: "",
+  measurement: "",
+  quantity: "",
+  currentProductImgSrc: null,
+  currentProductDisplayIndex: 0,
+
+  currentStore: "",
+
+  // we need to update how we create image paths
+  productImg_path: "",
+  suggested_stores: [],
+  currProductIndexInDBsProductsList: -1,
+  // currStoreIndexIfExistsInProductsList: -1,
+
+  instructionWordlength: 0,
+
+  suggestedCategories: [],
+
+  booleanOfDisplayOfDialogBoxConfirmation: false,
+
+  //mealsModal controller
+  openModal: false,
+  stepInputs: [],
+};
+
 class SuggestKitchenUtensilForm extends Component {
   utensilsList = [];
   ingredientsQuantityMeasurements = [];
 
   constructor(props) {
     super(props);
-    this.state = {
-      utensilName: "",
-      utensilImage1: "",
-      utensilImage2: "",
-      utensilImage3: "",
-      utensilImage4: "",
-      utensilImagesData: [],
-      intro: "",
-
-      sizeNames: [],
-      // do we need product group list AND strings ?
-      descriptionGroupList: [],
-      // store product names of inputted strings to compare with db products
-      descriptionStrings: [],
-      // do we want to use current ingredient formats ? Yes.
-      currentIngredient: "",
-      measurement: "",
-      quantity: "",
-      currentProductImgSrc: null,
-      currentProductDisplayIndex: 0,
-
-      currentStore: "",
-
-      // we need to update how we create image paths
-      productImg_path: "",
-      suggested_stores: [],
-      currProductIndexInDBsProductsList: -1,
-      // currStoreIndexIfExistsInProductsList: -1,
-
-      instructionWordlength: 0,
-
-      suggestedCategories: [],
-
-      booleanOfDisplayOfDialogBoxConfirmation: false,
-
-      //mealsModal controller
-      openModal: false,
-      stepInputs: [],
-    };
+    this.state = initialState
 
     this.closeModal = this.closeModal.bind(this);
     // this.handleStoreNameInput = this.handleStoreNameInput.bind(this);
@@ -661,6 +663,8 @@ class SuggestKitchenUtensilForm extends Component {
           console.log(response);
           console.log("Display Product submitted successfully");
           toast.success("Kitchen Utensils submitted successfully");
+          localStorage.setItem("suggestUtensilForm", JSON.stringify({}));
+          this.setState(initialState)
           // window.location.href = "/SuggestProduct"
         } else {
           console.log("Something wrong happened ");
