@@ -10,6 +10,7 @@ import { useMediaQuery } from "../../hooks/usemediaquery";
 import { Mealmodal } from "../mobile/meal-modal";
 import { Element, scroller } from "react-scroll";
 import { ScrollableElement } from "../smooth-scroll-link";
+import mealImg from "../../../public/assets/store_pics/no-image-meal.png";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
@@ -140,7 +141,14 @@ export const PopularMeals = () => {
               >
                 {
                   <div className={styles.box}>
-                    <img src={meal?.itemImage0} className={styles.storeImg1} />
+                    <img
+                      src={
+                        meal?.itemImage0
+                          ? meal?.itemImage0
+                          : "/assets/store_pics/no-image-meal.png"
+                      }
+                      className={styles.storeImg1}
+                    />
                     <div className={styles.flex}>
                       <p className={styles.name2}>{meal.item_name}</p>
                       <p>${meal.item_price ? meal.item_price : "0"}</p>
