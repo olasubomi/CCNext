@@ -307,12 +307,12 @@ function Meal(props) {
               >
                 <WhatsappEIcon />
               </WhatsappShareButton>
-              <RedditShareButton
+              {/* <RedditShareButton
                 title={props.meal.item_name}
                 url={url + "/meal/"+ props.meal.item_name}
               >
                 <RedditIcon />
-              </RedditShareButton>
+              </RedditShareButton> */}
             </div>
             <div className={styles.hide}>
               <p>Print Preview</p>
