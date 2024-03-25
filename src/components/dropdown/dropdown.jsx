@@ -16,7 +16,7 @@ export const CardDropdown = ({element}) => {
                             <div key={ingredient._id} className={styles.tr3}>
                                 <span style={{ display: 'flex', alignItems: 'center' }}>
                                     <input type='checkbox' className={styles.checkbox1}/>
-                                    <Image src={yellow} width={35} height={35} objectFit='cover' objectPosition='center' />
+                                    <Image src="/assets/store_pics/no-image-product.png" width={35} height={35} objectFit='cover' objectPosition='center' />
                                 </span>
                                 <span style={{ display: 'flex', alignItems: 'center' }}>
                                     <p>{ingredient?.item_name}</p>

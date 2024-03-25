@@ -181,12 +181,16 @@
 }
 
 .oneImage {
-  width: 100%;
-  height: 100%;
+  width: 95%;
+  height: 140px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-self: center;
+}
+.oneImage img{
+  width: 100%;
+  height: 90px;
 }
 
 .name2 {
@@ -1046,7 +1050,7 @@
   .title3 {
     font-size: 11px;
   }
-  .titles{
+  .titles {
     font-size: 11px;
   }
 
