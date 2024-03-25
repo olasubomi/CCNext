@@ -68,6 +68,7 @@ const Grocery = () => {
   };
 
   console.log(details, "getLocalGroceryList();");
+  console.log(groceryList, "my grocery");
 
   const deleteLocalGrocery = (id) => {
     let localGrocery = getLocalGroceryList();
@@ -77,7 +78,7 @@ const Grocery = () => {
       1
     );
     localStorage.setItem("grocery-list", JSON.stringify([...copy]));
-    toast.success("Delete successful");
+    toast.success("Deleted successfully");
     fetchList();
   };
 
@@ -85,7 +86,7 @@ const Grocery = () => {
     if (isUserOnline) {
       try {
         const response = await axios.delete(`/groceries/create/${id}`);
-        toast.success("Delete successful");
+        toast.success("Deleted successfully");
         fetchList();
       } catch (err) {
         console.log(err);
@@ -114,291 +115,312 @@ const Grocery = () => {
           name="viewport"
           content="initial-scale=1.0, width=device-width"
         />
-        <meta name="description" content="Add meals, ingredients, utensils 
+        <meta
+          name="description"
+          content="Add meals, ingredients, utensils 
         and other items to your chop chow grocery list. Get recommendations 
         on similar meals and ingredient alternatives from items in your
-         grocery list." />
+         grocery list."
+        />
       </Head>
       <Header />
       <Header2 />
       <SideNav />
       {/* <div className={styles.grocery_container} id="modal_container"> */}
-        {/* <GroceryComponent productNames={['prod1', 'prod2']} /> */}
-
-        <div className={styles.header}>
-          <div className={styles.one}>
-            <GoBack />
-            <h3 className={styles.title}>My Grocery List</h3>
-          </div>
-          <div className={styles.two}>
-            <p onClick={() => setShow(!show)}>Create New List</p>
-          </div>
+      {/* <GroceryComponent productNames={['prod1', 'prod2']} /> */}
+      <div className={styles.header}>
+        <div className={styles.one}>
+          <GoBack />
+          <h3 className={styles.title}>My Grocery List</h3>
         </div>
-        {(isUserOnline ? groceryList : localGroceryList).length > 0 ? (
-          <div className={styles.all_cards}>
-            {(isUserOnline ? groceryList : localGroceryList)?.map((ele, id) => (
-              <div
-                className={
-                  ele.groceryItems.length > 0 ? styles.card2 : styles.noImages
-                }
-                key={id}
-              >
-                <div className={styles.column1}>
-                  <div className={styles.flex2}>
-                    <h4 className={styles.title2}>{ele.listName}</h4>
-                    <Popup
-                      trigger={
-                        <div>
-                          {" "}
-                          <HiDotsHorizontal className={styles.dots} />{" "}
-                        </div>
-                      }
-                      position="bottom right"
-                      className={styles.popup_content}
-                    >
+        <div className={styles.two}>
+          <p onClick={() => setShow(!show)}>Create New List</p>
+        </div>
+      </div>
+      {(isUserOnline ? groceryList : localGroceryList).length > 0 ? (
+        <div className={styles.all_cards}>
+          {(isUserOnline ? groceryList : localGroceryList)?.map((ele, id) => (
+            <div
+              className={
+                ele.groceryItems.length > 0 ? styles.card2 : styles.noImages
+              }
+              key={id}
+            >
+              <div className={styles.column1}>
+                <div className={styles.flex2}>
+                  <h4 className={styles.title2}>{ele.listName}</h4>
+                  <Popup
+                    trigger={
                       <div>
-                        <div
-                          onClick={() => {
-                            setDetails({
-                              listName: ele.listName,
-                              description: ele.description,
-                              id: ele._id,
-                            });
-                            setShow(true);
-                          }}
-                          className={styles.flex}
-                          style={{
-                            justifyContent: "flex-start",
-                            cursor: "pointer",
-                            padding: ".7rem",
-                          }}
+                        {" "}
+                        <HiDotsHorizontal className={styles.dots} />{" "}
+                      </div>
+                    }
+                    position="bottom right"
+                    className={styles.popup_content}
+                  >
+                    <div>
+                      <div
+                        onClick={() => {
+                          setDetails({
+                            listName: ele.listName,
+                            description: ele.description,
+                            id: ele._id,
+                          });
+                          setShow(true);
+                        }}
+                        className={styles.flex}
+                        style={{
+                          justifyContent: "flex-start",
+                          cursor: "pointer",
+                          padding: ".7rem",
+                        }}
+                      >
+                        <AiFillEdit size={17} color="#F47900" />
+                        <p
+                          className={styles.text3}
+                          style={{ marginLeft: ".5rem" }}
                         >
-                          <AiFillEdit size={17} color="#F47900" />
-                          <p
-                            className={styles.text3}
-                            style={{ marginLeft: ".5rem" }}
-                          >
-                            Edit List
-                          </p>
-                        </div>
+                          Edit List
+                        </p>
+                      </div>
+                      <div
+                        onClick={() => deleteGrocery(ele._id)}
+                        className={styles.flex}
+                        style={{
+                          justifyContent: "flex-start",
+                          cursor: "pointer",
+                          padding: ".8rem",
+                          zIndex: "1000",
+                        }}
+                      >
+                        <MdDelete size={19} color="#F47900" />
+                        <p
+                          className={styles.text3}
+                          style={{ marginLeft: ".5rem" }}
+                        >
+                          Delete List
+                        </p>
+                      </div>
+                      {ele.groceryItems.length ? (
                         <div
-                          onClick={() => deleteGrocery(ele._id)}
                           className={styles.flex}
                           style={{
                             justifyContent: "flex-start",
                             cursor: "pointer",
                             padding: ".8rem",
-                            zIndex: "1000",
+                            opacity: ele?.groceryItems?.length ? "1" : "0.4",
                           }}
                         >
-                          <MdDelete size={19} color="#F47900" />
+                          <MdRemoveRedEye size={17} color="#F47900" />
+                          <p
+                            className={styles.text3}
+                            style={{ marginLeft: ".5rem" }}
+                            onClick={() => {
+                              setDetails({
+                                listName: ele.listName,
+                                description: ele.description,
+                                status: ele?.status,
+                                id: ele._id,
+                              });
+                              setOpenModal(true);
+                            }}
+                          >
+                            Make Public
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          className={styles.flex}
+                          style={{
+                            justifyContent: "flex-start",
+                            cursor: "pointer",
+                            padding: ".8rem",
+                            opacity: ele?.groceryItems?.length ? "1" : "0.4",
+                          }}
+                        >
+                          <MdRemoveRedEye size={17} color="#F47900" />
                           <p
                             className={styles.text3}
                             style={{ marginLeft: ".5rem" }}
                           >
-                            Delete List
+                            Make Public
                           </p>
                         </div>
-                        {ele.groceryItems.length ? (
+                      )}
+                    </div>
+                  </Popup>
+                </div>
+                <p className={styles.text}>{ele.description}</p>
+                <p
+                  className={
+                    ele.groceryItems.length > 0 ? styles.length : styles.length2
+                  }
+                >
+                  {ele.groceryItems?.length} Items
+                </p>
+                <div
+                  className={
+                    ele.groceryItems?.length ? styles.images : styles.noimages
+                  }
+                >
+                  {ele.groceryItems?.length ? (
+                    ele.groceryItems?.slice(0, 3)?.map((elem, idx) => (
+                      <>
+                        {!elem.hasOwnProperty("itemData") ? (
                           <div
-                            className={styles.flex}
-                            style={{
-                              justifyContent: "flex-start",
-                              cursor: "pointer",
-                              padding: ".8rem",
-                              opacity: ele?.groceryItems?.length ? "1" : "0.4",
-                            }}
+                            style={{ display: "flex", alignItems: "center" }}
+                            key={idx}
                           >
-                            <MdRemoveRedEye size={17} color="#F47900" />
-                            <p
-                              className={styles.text3}
-                              style={{ marginLeft: ".5rem" }}
-                              onClick={() => {
-                                setDetails({
-                                  listName: ele.listName,
-                                  description: ele.description,
-                                  status: ele?.status,
-                                  id: ele._id,
-                                });
-                                setOpenModal(true);
-                              }}
-                            >
-                              Make Public
-                            </p>
-                          </div>
-                        ) : (
-                          <div
-                            className={styles.flex}
-                            style={{
-                              justifyContent: "flex-start",
-                              cursor: "pointer",
-                              padding: ".8rem",
-                              opacity: ele?.groceryItems?.length ? "1" : "0.4",
-                            }}
-                          >
-                            <MdRemoveRedEye size={17} color="#F47900" />
-                            <p
-                              className={styles.text3}
-                              style={{ marginLeft: ".5rem" }}
-                            >
-                              Make Public
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    </Popup>
-                  </div>
-                  <p className={styles.text}>{ele.description}</p>
-                  <p
-                    className={
-                      ele.groceryItems.length > 0
-                        ? styles.length
-                        : styles.length2
-                    }
-                  >
-                    {ele.groceryItems?.length} Items
-                  </p>
-                  <div
-                    className={
-                      ele.groceryItems?.length ? styles.images : styles.noimages
-                    }
-                  >
-                    {ele.groceryItems?.length ? (
-                      ele.groceryItems?.slice(0, 3)?.map((elem, idx) => (
-                        <>
-                          {!elem.hasOwnProperty("itemData") ? (
-                            <div
-                              style={{ display: "flex", alignItems: "center" }}
-                              key={idx}
-                            >
-                              <div className={styles.oneImage}>
-                                {elem.item?.itemImage0 ? (
-                                  <Image
-                                    src={elem?.item?.itemImage0}
-                                    width={95}
-                                    height={100}
-                                    className={styles.imgs}
-                                  />
-                                ) : (
-                                  <Image
-                                    src={Frame}
-                                    width={95}
-                                    height={100}
-                                    objectFit="cover"
-                                    objectPosition="center"
-                                    className={styles.imgs2}
-                                  />
-                                )}
-                                <p className={styles.name2}>
-                                  {elem?.item?.item_name}
-                                </p>
-                              </div>
-                            </div>
-                          ) : (
-                            <div
-                              style={{ display: "flex", alignItems: "center" }}
-                              key={idx}
-                            >
-                              <div className={styles.oneImage}>
+                            <div className={styles.oneImage}>
+                              {elem.item?.itemImage0 ? (
                                 <Image
-                                  src={Frame}
+                                  src={elem?.item?.itemImage0}
                                   width={95}
                                   height={100}
+                                  className={styles.imgs}
+                                />
+                              ) : elem.item.item_type === "Meal" ? (
+                                <Image
+                                  src="/assets/store_pics/no-image-meal.png"
+                                  width={95}
+                                  height={95}
                                   objectFit="cover"
                                   objectPosition="center"
                                   className={styles.imgs}
                                 />
-                                <p className={styles.name2}>
-                                  {elem?.itemData?.item_name}
-                                </p>
-                              </div>
+                              ) : elem.item.item_type === "Product" ? (
+                                <Image
+                                  src="/assets/store_pics/no-image-product.png"
+                                  width={95}
+                                  height={95}
+                                  objectFit="cover"
+                                  objectPosition="center"
+                                  className={styles.imgs}
+                                />
+                              ) : elem.item.item_type === "Utensil" ? (
+                                <Image
+                                  src="/assets/store_pics/no-image-utensil.png"
+                                  width={95}
+                                  height={95}
+                                  objectFit="cover"
+                                  objectPosition="center"
+                                  className={styles.imgs}
+                                />
+                              ) : (
+                                <Image
+                                  src="/assets/store_pics/no-image-meal.png"
+                                  width={95}
+                                  height={95}
+                                  objectFit="cover"
+                                  objectPosition="center"
+                                  className={styles.imgs}
+                                />
+                              )}
+                              <p className={styles.name2}>
+                                {elem?.item?.item_name}
+                              </p>
                             </div>
-                          )}
-                        </>
-                      ))
-                    ) : (
-                      <div></div>
-                    )}
-                  </div>
+                          </div>
+                        ) : (
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                            key={idx}
+                          >
+                            <div className={styles.oneImage}>
+                              <Image
+                                src="/assets/store_pics/no-image-meal.png"
+                                width={95}
+                                height={100}
+                                objectFit="cover"
+                                objectPosition="center"
+                                className={styles.imgs}
+                              />
+                              <p className={styles.name2}>
+                                {elem?.itemData?.item_name}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    ))
+                  ) : (
+                    <div></div>
+                  )}
                 </div>
-                <div
-                  className={styles.flex2}
-                  style={{ marginBottom: "1rem", marginTop: "1rem" }}
-                >
-                  <div className={styles.flex}>
-                    {/* <Image
-                      src={girl}
-                      width={40}
-                      height={40}
-                      className={styles.person}
-                    /> */}
-                    {authUser?.profile_picture !== "" &&
-                    authUser?.profile_picture !== undefined ? (
-                      <Image
-                        width={50}
-                        height={50}
-                        style={{ borderRadius: 30 }}
-                        alt={ele.user.first_name}
-                        src={authUser?.profile_picture}
-                        className={styles.user_img}
-                      />
-                    ) : (
-                      <UserIcon style={styles.user_img} />
-                    )}
-                    <p className={styles.name}>
-                      {ele.user.first_name} {ele.user.last_name}
+              </div>
+              <div
+                className={styles.flex2}
+                style={{ marginBottom: "1rem", marginTop: "1rem" }}
+              >
+                <div className={styles.flex}>
+                  {authUser?.profile_picture !== "" &&
+                  authUser?.profile_picture !== undefined ? (
+                    <Image
+                      width={50}
+                      height={50}
+                      style={{ borderRadius: 30 }}
+                      alt={ele.user.first_name}
+                      src={authUser?.profile_picture}
+                      className={styles.user_img}
+                    />
+                  ) : (
+                    <UserIcon style={styles.user_img} />
+                  )}
+                  <p className={styles.name}>
+                    {ele.user.first_name} {ele.user.last_name}
+                  </p>
+                </div>
+                {
+                  <div
+                    onClick={() => {
+                      router.push(`/grocerylist/groceries/${ele._id}`);
+                      // if (isUserOnline) {
+                      //   router.push(`/grocerylist/groceries/${ele._id}`);
+                      // } else {
+                      // alert('Login to add Items to Grocery List')
+                      // }
+                    }}
+                    className={styles.two2}
+                  >
+                    <p
+                      className={styles.button_text}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {ele.groceryItems?.length ? "Show Items" : " Add Items"}
                     </p>
                   </div>
-                  {
-                    <div
-                      onClick={() => {
-                        router.push(`/grocerylist/groceries/${ele._id}`);
-                        // if (isUserOnline) {
-                        //   router.push(`/grocerylist/groceries/${ele._id}`);
-                        // } else {
-                        // alert('Login to add Items to Grocery List')
-                        // }
-                      }}
-                      className={styles.two2}
-                    >
-                      <p
-                        className={styles.button_text}
-                        style={{ cursor: "pointer" }}
-                      >
-                        {ele.groceryItems?.length ? "Show Items" : " Add Items"}
-                      </p>
-                    </div>
-                  }
-                </div>
-              </div>
-            ))}{" "}
-          </div>
-        ) : (
-          <div className={styles.card}>
-            <Image
-              src={noteGif}
-              height={200}
-              width={250}
-              objectFit="contain"
-              objectPosition="center"
-            />
-            <div className={styles.flex}>
-              <p className={styles.card_text}>You have no Grocery List.</p>
-              <div onClick={() => setShow(!show)}>
-                <p
-                  className={styles.card_text}
-                  style={{
-                    color: "#F47900",
-                    marginLeft: ".5rem",
-                    cursor: "pointer",
-                  }}
-                >
-                  Create New List
-                </p>
+                }
               </div>
             </div>
+          ))}{" "}
+        </div>
+      ) : (
+        <div className={styles.card}>
+          <Image
+            src={noteGif}
+            height={200}
+            width={250}
+            objectFit="contain"
+            objectPosition="center"
+          />
+          <div className={styles.flex}>
+            <p className={styles.card_text}>You have no Grocery List.</p>
+            <div onClick={() => setShow(!show)}>
+              <p
+                className={styles.card_text}
+                style={{
+                  color: "#F47900",
+                  marginLeft: ".5rem",
+                  cursor: "pointer",
+                }}
+              >
+                Create New List
+              </p>
+            </div>
           </div>
-        )}
+        </div>
+      )}
       {/* </div> */}
       {show && (
         <Modal

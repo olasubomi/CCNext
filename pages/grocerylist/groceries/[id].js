@@ -121,7 +121,7 @@ const GroceryPage = () => {
     status: "",
   });
 
-  console.log(measurements, "measurementsmeasurements");
+  console.log(itemList, "itemList");
 
   function closeModal() {
     setOpenModalState(false);
@@ -545,7 +545,7 @@ const GroceryPage = () => {
                           />
                         ) : (
                           <Image
-                            src={yellow}
+                            src="/assets/store_pics/no-image-meal.png"
                             width={40}
                             height={40}
                             objectPosition="center"
@@ -704,7 +704,7 @@ const GroceryPage = () => {
                               }}
                             />
                             <Image
-                              src={Frame}
+                              src="/assets/store_pics/no-image-meal.png"
                               height={50}
                               width={55}
                               style={{ borderRadius: "5px" }}
@@ -785,11 +785,32 @@ const GroceryPage = () => {
                                 src={element?.item?.itemImage0}
                                 height={50}
                                 width={55}
-                                style={{borderRadius: '4px'}}
+                                style={{ borderRadius: "4px" }}
+                              />
+                            ) : element.item.item_type === "Meal" ? (
+                              <Image
+                                src="/assets/store_pics/no-image-meal.png"
+                                height={50}
+                                width={55}
+                                style={{ borderRadius: "5px" }}
+                              />
+                            ) : element.item.item_type === "Product" ? (
+                              <Image
+                                src="/assets/store_pics/no-image-product.png"
+                                height={50}
+                                width={55}
+                                style={{ borderRadius: "5px" }}
+                              />
+                            ) : element.item.item_type === "Utensil" ? (
+                              <Image
+                                src="/assets/store_pics/no-image-utensil.png"
+                                height={50}
+                                width={55}
+                                style={{ borderRadius: "5px" }}
                               />
                             ) : (
                               <Image
-                                src={Frame}
+                                src="/assets/store_pics/no-image-meal.png"
                                 height={50}
                                 width={55}
                                 style={{ borderRadius: "5px" }}

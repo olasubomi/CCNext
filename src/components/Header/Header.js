@@ -420,39 +420,56 @@ function Header(props) {
               <div className={styles.navbar_top_details_col}>
                 {matches ? (
                   <>
-                    <div id="noticon" onClick={(e) => toggleNotification(e)}>
-                      <NotificationIcon
-                        id="notImg"
-                        style={styles.navbar_top_details_col_icon}
-                      />
-                    </div>
-                    <h5 id="notText" onClick={(e) => toggleNotification(e)}>
-                      Notification
-                    </h5>
-
-                    <span
-                      id="notNo"
-                      style={{ background: "#F47900" }}
-                      className={styles.numberofitems}
-                    >
-                      {unreadMessages?.length}
-                    </span>
+                    {!props.auth.isAuthenticated && authUser === null ? (
+                      ""
+                    ) : (
+                      <>
+                        <div
+                          id="noticon"
+                          onClick={(e) => toggleNotification(e)}
+                        >
+                          <NotificationIcon
+                            id="notImg"
+                            style={styles.navbar_top_details_col_icon}
+                          />
+                        </div>
+                        <h5 id="notText" onClick={(e) => toggleNotification(e)}>
+                          Notification
+                        </h5>
+                        (
+                        <span
+                          id="notNo"
+                          style={{ background: "#F47900" }}
+                          className={styles.numberofitems}
+                        >
+                          {unreadMessages?.length}
+                        </span>
+                        )
+                      </>
+                    )}
                   </>
                 ) : (
                   <>
-                    <Link href="/notification">
-                      <NotificationIcon
-                        id="notImg"
-                        style={styles.navbar_top_details_col_icon}
-                      />
-                    </Link>
-                    <span
-                      id="notNo"
-                      style={{ background: "#F47900" }}
-                      className={styles.numberofitems}
-                    >
-                      {unreadMessages?.length}
-                    </span>
+                    {" "}
+                    {!props.auth.isAuthenticated && authUser === null ? (
+                      ""
+                    ) : (
+                      <>
+                        <Link href="/notification">
+                          <NotificationIcon
+                            id="notImg"
+                            style={styles.navbar_top_details_col_icon}
+                          />
+                        </Link>
+                        <span
+                          id="notNo"
+                          style={{ background: "#F47900" }}
+                          className={styles.numberofitems}
+                        >
+                          {unreadMessages?.length}
+                        </span>
+                      </>
+                    )}
                   </>
                 )}
                 <div id="notification" className={styles.summaries_min}>
@@ -878,7 +895,6 @@ export function Header2() {
         </div>
       ) : isLandscape ? (
         <MobileHeader />
-
       ) : (
         <MobileHeader />
       )}

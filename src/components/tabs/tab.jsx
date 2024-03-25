@@ -14,6 +14,7 @@ import { BiSolidMessageRounded, BiSolidShareAlt } from 'react-icons/bi'
 import { IndividualModal } from '../modal/individual-meal-product';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { UserIcon } from '../icons';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
