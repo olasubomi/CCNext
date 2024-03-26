@@ -36,7 +36,9 @@ import { useMediaQuery } from "../../hooks/usemediaquery";
 function Meal(props) {
   //const url = 'http://localhost:3000/'
   const url = "https://www.chopchow.app/";
-  // const mealURL = 'https://www.chopchow.app/meal/';
+  const mealName = props.meal.item_name;
+  const mealNameWithoutSpaces = mealName.replaceAll(' ', '%20') 
+  const mealURL = 'https://www.chopchow.app/meal/' + mealNameWithoutSpaces;
 
   const matches = useMediaQuery("(min-width: 768px)");
   const [serves, setServes] = useState(parseInt(props.meal?.servings));
@@ -285,7 +287,7 @@ function Meal(props) {
                 Share this product:
               </p>
               <FacebookShareButton
-                url={url + "meal/"+ props.meal.item_name}
+                url={mealURL}
                 quote={props.meal.item_name}
                 hashtag={props.meal.item_intro}
               >
@@ -294,7 +296,7 @@ function Meal(props) {
               <TwitterShareButton
                 title={props.meal.item_name}
                 via="ChopChowMarket"
-                url={url + "meal/" + props.meal.item_name}
+                url={mealURL}
               >
                 <TwitterEIcon />
               </TwitterShareButton>
@@ -303,7 +305,7 @@ function Meal(props) {
                         </InstagramShareButton> */}
               <WhatsappShareButton
                 title={props.meal.item_name}
-                url={url + "meal/" + props.meal.item_name}
+                url={mealURL}
               >
                 <WhatsappEIcon />
               </WhatsappShareButton>
