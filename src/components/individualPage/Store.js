@@ -86,7 +86,11 @@ function Store(props) {
         <div className={styles.product_section_2}>
           <div className={styles.product_section_2_col_1}>
             <Image
-              src={props.store?.profile_picture}
+              src={
+                props.store?.profile_picture
+                  ? props.store?.profile_picture
+                  : "/assets/store_pics/no-image-store.png"
+              }
               alt="pop up"
               className={styles.product_section_2_main_img}
               height={350}
@@ -223,7 +227,9 @@ function Store(props) {
                             {data.item_name}
                           </h6>
                           <p className={styles.productcard_productcard_price}>
-                           {data.item_price ?  props?.store?.currency?.symbol + data.item_price : "N/A"}
+                            {data.item_price
+                              ? props?.store?.currency?.symbol + data.item_price
+                              : "N/A"}
                           </p>
                         </div>
                         <div className={styles.productcard_productcard_col}>
@@ -306,7 +312,9 @@ function Store(props) {
                             </div>
                           </div>
                           <p className={styles.productcard_productcard_price}>
-                          {data.item_price ?  props?.store?.currency?.symbol + data.item_price : "N/A"}
+                            {data.item_price
+                              ? props?.store?.currency?.symbol + data.item_price
+                              : "N/A"}
                           </p>
                         </div>
                       </div>

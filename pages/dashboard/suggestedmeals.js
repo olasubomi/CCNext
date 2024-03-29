@@ -113,6 +113,7 @@ const SuggestedMeals = (props) => {
     item_type: false,
     first_letter: false,
   });
+  console.log(suggestion, 'sugessss')
 
   useEffect(() => {
     getUserItems();

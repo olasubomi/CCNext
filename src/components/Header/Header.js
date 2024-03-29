@@ -338,7 +338,11 @@ function Header(props) {
                     </div>
                   )}
 
-                  <h4 id="userName" className={styles.navbar_user_name}>
+                  <h4
+                    onClick={toggleUserDetails}
+                    id="userName"
+                    className={styles.navbar_user_name}
+                  >
                     {props?.auth?.authUser?.username}
                   </h4>
                   <div
