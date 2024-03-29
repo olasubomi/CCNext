@@ -46,6 +46,7 @@ class Popup2 extends Component {
   edit = () => {
     const {
       name,
+      imagesData,
       description,
       categories,
       ingredientsList,
@@ -110,6 +111,7 @@ class Popup2 extends Component {
       mealId: this.props.id,
       mealName: name,
       intro: description,
+      mealImagesData: imagesData,
 
       // ingredientNames,
       // do we need product group list AND strings ?
@@ -136,6 +138,7 @@ class Popup2 extends Component {
 
       cookTime: cookTime,
       prepTime: prepTime,
+      chunk1Content: chunk1Content,
       instructionChunk1Step,
       instructionChunk2Step,
       instructionChunk3Step,
@@ -164,7 +167,7 @@ class Popup2 extends Component {
     localStorage.setItem("suggestionType", "Meal");
     localStorage.setItem("mealId", this.props.id);
     localStorage.setItem("suggestMealForm", JSON.stringify(meal));
-    console.log(meal, "mealss");
+    console.log(this.props, "mealss");
     window.location.assign(`/suggestmeal?id=${this.props.id}&item_type=Meal`);
   };
   handleShareClick = () => {
@@ -212,6 +215,8 @@ class Popup2 extends Component {
       ingredientsInItem,
       instructionChunk1,
       isDashboard,
+      chunk1Content,
+
     } = this.props;
     const { curIn, length } = this.state;
 
@@ -299,7 +304,7 @@ class Popup2 extends Component {
                 </div>
                 <div className={styles.popup2_col_2}>
                   <div className={styles.popup2_details}>
-                    <div >
+                    <div>
                       <h3 className={styles.popup2_category_name}>
                         Ingredients
                       </h3>

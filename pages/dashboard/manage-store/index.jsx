@@ -37,6 +37,7 @@ const ManageStores = () => {
   useEffect(() => {
     fetchOneUserStore();
   }, []);
+  console.log(allStores, 'ALL')
   return (
     <div className={container + " " + col2}>
       <Head>

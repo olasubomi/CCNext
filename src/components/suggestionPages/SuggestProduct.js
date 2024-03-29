@@ -91,6 +91,7 @@ class SuggestProductForm extends Component {
       productImage3: "",
       productImage4: "",
       productImagesData: [],
+      imageData: [],
       productDescription: "",
       intro: "",
       ingredientsInItem: [],
@@ -153,7 +154,7 @@ class SuggestProductForm extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
     console.log("nutritional-strings=-=-=-", this.state);
-    console.log(this.state.ingredientGroupList, 'ingredientGroupList')
+    console.log(this.state.ingredientGroupList, "ingredientGroupList");
     // get all product Names***
     // var url = "https://chopchowdev/api/products/getAllProducts";
     var url = `${base_url}/products/getAllProducts`;
@@ -241,8 +242,10 @@ class SuggestProductForm extends Component {
       if (localStorage.getItem("suggestProductForm")) {
         let {
           productName,
+          imageData,
           intro,
           productDescription = intro,
+          productImagesData,
           ingredientsInItem,
           ingredientNames,
           item_description,
@@ -252,7 +255,7 @@ class SuggestProductForm extends Component {
           sizeGroupList,
           // store product names of inputted strings to compare with db products
           ingredientStrings = ingredientsInItem,
-          nutritionalStrings= item_description,
+          nutritionalStrings = item_description,
           sizeStrings,
           // do we want to use current ingredient formats ? Yes.
           currentIngredient,
@@ -285,6 +288,8 @@ class SuggestProductForm extends Component {
           productName,
           productDescription,
           intro,
+          productImagesData,
+          imageData,
           ingredientsInItem,
           item_description,
           ingredientNames,
@@ -324,6 +329,7 @@ class SuggestProductForm extends Component {
         });
       }
     }
+
   }
 
   onInputChange = (e) => {
@@ -992,7 +998,7 @@ class SuggestProductForm extends Component {
     contentNameToContentImageOrVideoMapForS3.append(
       "productContentName",
       this.state.productName
-    );
+    );  
     console.log(contentNameToContentImageOrVideoMapForS3);
     var keyValueData = { productContentName: this.state.productName };
     // console.log("Stringified version:");
@@ -1003,7 +1009,7 @@ class SuggestProductForm extends Component {
     //-------------Submit remainder data of product to Mongo ------------------------------------------
     let suggestProductForm = new FormData();
     suggestProductForm.append("item_name", productName);
-
+console.log(productImage1, productImage2, productImage3, productImage4, 'product image 1SßßS')
     if (productImage1) {
       suggestProductForm.append("item_images", productImage1);
     }
@@ -1026,7 +1032,12 @@ class SuggestProductForm extends Component {
       console.log(individualDescriptions);
       // suggestProductForm.append('product_descriptions', individualDescriptions);
     });
-console.log(nutritionalStrings, item_description, ingredientStrings, 'pppr')
+    console.log(
+      nutritionalStrings,
+      item_description,
+      ingredientStrings,
+      "pppr"
+    );
     const arr = nutritionalStrings.map((ele) => {
       let obj = {};
       let information = ele.split(":")[0]?.trim()?.toLowerCase();
@@ -1058,7 +1069,7 @@ console.log(nutritionalStrings, item_description, ingredientStrings, 'pppr')
       }
     }
 
-    productObject.product_size = sizeStrings.toString();
+    productObject.product_size = sizeStrings?.toString();
 
     let arr2 = [];
 
@@ -1078,31 +1089,25 @@ console.log(nutritionalStrings, item_description, ingredientStrings, 'pppr')
       });
     }
 
-
-
     suggestProductForm.append("item_data", JSON.stringify(productObject));
 
     suggestProductForm.append("description", JSON.stringify(arr2));
 
     let arr_1 = [];
 
-    for(let ele of ingredientStrings){
+    for (let ele of ingredientStrings) {
       let obj = {};
-      const splited = ele.split(" ")
-      obj.item_name = splited.slice(3,)?.toString().split(',').join(' ')
-      obj.item_quantity = splited[0]
-      obj.item_measurement = splited[1]
+      const splited = ele.split(" ");
+      obj.item_name = splited.slice(3)?.toString().split(",").join(" ");
+      obj.item_quantity = splited[0];
+      obj.item_measurement = splited[1];
       obj.formatted_string_of_item = ele;
 
-      arr_1.push(obj)
+      arr_1.push(obj);
     }
 
-    suggestProductForm.append(
-      "formatted_ingredients",
-      JSON.stringify(arr_1)
-    );
-    console.log(ingredientStrings, 'nfnn')
-
+    suggestProductForm.append("formatted_ingredients", JSON.stringify(arr_1));
+    console.log(ingredientStrings, "nfnn");
 
     // suggestProductForm.append("store_available", '63d426b416b83177aaeaed96');
     suggestProductForm.append("item_type", this.props.suggestionType);
@@ -1140,13 +1145,11 @@ console.log(nutritionalStrings, item_description, ingredientStrings, 'pppr')
     // var url = "http://localhost:5000/api/products/create/";
     var url = `${base_url}/items/`;
 
-    
-
     console.log("Printing Chunk Contents");
 
     var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
-    
-    console.log(this.props.router, 'this.props.router');
+
+    console.log(this.props.router, "this.props.router");
     if (this.props.router?.query?.id) {
       url = url + `?action=update&_id=${this.props.router.query.id}`;
     }
@@ -1189,6 +1192,7 @@ console.log(nutritionalStrings, item_description, ingredientStrings, 'pppr')
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
     const { ingredientStrings, sizeStrings, nutritionalStrings } = this.state;
+    console.log(this.state.productImagesData, 'this.state.productImagesData')
 
     return (
       <div className={styles.suggestion_section_2}>

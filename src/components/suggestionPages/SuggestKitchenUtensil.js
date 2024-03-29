@@ -65,7 +65,7 @@ class SuggestKitchenUtensilForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = initialState
+    this.state = initialState;
 
     this.closeModal = this.closeModal.bind(this);
     // this.handleStoreNameInput = this.handleStoreNameInput.bind(this);
@@ -144,7 +144,7 @@ class SuggestKitchenUtensilForm extends Component {
     let doc = document.querySelector("#formutensil");
     if (doc) {
       setInterval(() => {
-        localStorage.setItem("suggestUtensilForm", JSON.stringify(this.state));
+        // localStorage.setItem("suggestUtensilForm", JSON.stringify(this.state));
       }, 100);
     }
 
@@ -152,8 +152,8 @@ class SuggestKitchenUtensilForm extends Component {
       let {
         utensilName,
         intro,
-
         sizeNames,
+        utensilImagesData,
         // do we need product group list AND strings ?
         descriptionGroupList,
         // store product names of inputted strings to compare with db products
@@ -174,7 +174,7 @@ class SuggestKitchenUtensilForm extends Component {
         // currStoreIndexIfExistsInProductsList,
 
         suggestedCategories,
-
+        productImagesData,
         booleanOfDisplayOfDialogBoxConfirmation,
       } = JSON.parse(localStorage.getItem("suggestUtensilForm"));
 
@@ -183,9 +183,8 @@ class SuggestKitchenUtensilForm extends Component {
         utensilImage: "",
         utensilImageName: "",
         utensilImageData: "",
-        utensilImagesData: [],
+        utensilImagesData: Array.isArray(productImagesData) ? productImagesData : [],
         intro,
-
         sizeNames,
         // do we need product group list AND strings ?
         descriptionGroupList,
@@ -578,23 +577,21 @@ class SuggestKitchenUtensilForm extends Component {
       let qty = "";
 
       const ele = splited[1];
-      for (let i = 0; i < ele.length; i++) {        
-        if (!Object.is(Number(ele.charAt(i)), NaN)){
-          console.log(ele.charAt(i), 'ele.charAt(i)')
-          qty = qty.concat(ele.charAt(i))
+      for (let i = 0; i < ele.length; i++) {
+        if (!Object.is(Number(ele.charAt(i)), NaN)) {
+          console.log(ele.charAt(i), "ele.charAt(i)");
+          qty = qty.concat(ele.charAt(i));
         }
       }
       const measurement = ele.slice(ele.indexOf(qty));
-      const formatted_string = `${this.capitalizeWords(
-        descripName
-      )} : ${ele}`;
+      const formatted_string = `${this.capitalizeWords(descripName)} : ${ele}`;
 
       return {
         object_name: descripName,
         object_quantity: Number(qty),
         object_measurement: measurement,
-        formatted_string
-      }
+        formatted_string,
+      };
     });
 
     suggestProductForm.append("description", JSON.stringify(arr_2));
@@ -664,7 +661,7 @@ class SuggestKitchenUtensilForm extends Component {
           console.log("Display Product submitted successfully");
           toast.success("Kitchen Utensils submitted successfully");
           localStorage.setItem("suggestUtensilForm", JSON.stringify({}));
-          this.setState(initialState)
+          this.setState(initialState);
           // window.location.href = "/SuggestProduct"
         } else {
           console.log("Something wrong happened ");

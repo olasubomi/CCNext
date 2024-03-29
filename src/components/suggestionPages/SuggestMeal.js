@@ -173,7 +173,8 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-    console.log("this.props.suggestionType---**", this.props);
+    
+      console.log("this.props.---**", this.props);
     console.log(JSON.parse(localStorage.getItem("user")));
     // get all Meal Names***
     // var url = "/meals/get-meals/1";
@@ -225,6 +226,7 @@ class SuggestMealForm extends Component {
           ItemIntro,
           ingredientNames,
           ingredeintsInItem,
+          mealImagesData,
           // do we need product group list AND strings ?
           ingredientGroupList,
           // store product names of inputted strings to compare with db products
@@ -242,6 +244,7 @@ class SuggestMealForm extends Component {
           instructionChunk3Step,
           instructionChunk4Step,
           instructionChunk5Step,
+          chunk1Content,
           instructionChunk6Step,
           currentStore,
 
@@ -289,7 +292,9 @@ class SuggestMealForm extends Component {
           intro,
           ItemIntro,
           ingredientNames,
+          chunk1Content,
           ingredeintsInItem,
+          mealImagesData,
           // do we need product group list AND strings ?
           ingredientGroupList,
           // store product names of inputted strings to compare with db products
@@ -1569,8 +1574,8 @@ class SuggestMealForm extends Component {
     // var url = "/addMealSuggestion/";
     var url = `${base_url}/items`;
 
-    if(this.props.router?.query?.id){
-      url = url + `?action=${'update'}&_id=${this.props.router.query.id}`
+    if (this.props.router?.query?.id) {
+      url = url + `?action=${"update"}&_id=${this.props.router.query.id}`;
     }
 
     const config_ = {
