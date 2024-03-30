@@ -37,8 +37,8 @@ function Meal(props) {
   //const url = 'http://localhost:3000/'
   const url = "https://www.chopchow.app/";
   const mealName = props.meal.item_name;
-  const mealNameWithoutSpaces = mealName.replaceAll(' ', '%20') 
-  const mealURL = 'https://www.chopchow.app/meal/' + mealNameWithoutSpaces;
+  // const mealNameWithoutSpaces = props.meal.item_name.replaceAll(' ', '%20') ;
+  const mealURL = 'https://www.chopchow.app/meal/' + mealName;
 
   const matches = useMediaQuery("(min-width: 768px)");
   const [serves, setServes] = useState(parseInt(props.meal?.servings));
