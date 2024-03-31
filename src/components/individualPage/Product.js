@@ -13,7 +13,7 @@ import {
   StarIcon,
   TwitterEIcon,
   WhatsappEIcon,
-  RedditIcon
+  
 } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
@@ -23,7 +23,8 @@ import {
   InstapaperShareButton,
   TwitterShareButton,
   WhatsappShareButton,
-  RedditShareButton
+  RedditShareButton,
+  RedditIcon
 } from "react-share";
 import InstagramShareButton from "../SocialShare/InstagramShare";
 import { useSearchParams } from "next/navigation";
@@ -208,12 +209,12 @@ function Product(props) {
             >
               <WhatsappEIcon />
             </WhatsappShareButton>
-            {/* <RedditShareButton
+            <RedditShareButton
               title={props.product.product_name}
-              url={url + "product/" + props.product.product_name}
+              url={productURL}
             >
               <RedditIcon />
-            </RedditShareButton> */}
+            </RedditShareButton>
           </div>
           <div>
             <p>Print Preview</p>

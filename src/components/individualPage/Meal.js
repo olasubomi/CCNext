@@ -5,7 +5,7 @@ import Head from "next/head";
 import Image from "next/image";
 import {
   FacebookEIcon,
-  RedditIcon,
+  // RedditIcon,
   InstaEIcon,
   LocationIcon,
   PrintEIcon,
@@ -24,7 +24,8 @@ import {
   InstapaperShareButton,
   TwitterShareButton,
   WhatsappShareButton,
-  RedditShareButton
+  RedditShareButton,
+  RedditIcon
 } from "react-share";
 import InstagramShareButton from "../SocialShare/InstagramShare";
 import { AiOutlineClose } from "react-icons/ai";
@@ -309,12 +310,12 @@ function Meal(props) {
               >
                 <WhatsappEIcon />
               </WhatsappShareButton>
-              {/* <RedditShareButton
+              <RedditShareButton
                 title={props.meal.item_name}
-                url={url + "/meal/"+ props.meal.item_name}
+                url={mealURL}
               >
                 <RedditIcon />
-              </RedditShareButton> */}
+              </RedditShareButton>
             </div>
             <div className={styles.hide}>
               <p>Print Preview</p>

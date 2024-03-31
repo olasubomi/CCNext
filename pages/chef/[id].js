@@ -6,7 +6,10 @@ import styles from '../../src/components/chef/chef.module.css'
 import chef from '../../public/assets/homepage/chef.jpg'
 import Image from "next/image";
 import { BsFillShareFill } from 'react-icons/bs'
-import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import {
+    FacebookShareButton, TwitterShareButton, WhatsappShareButton,
+    RedditShareButton, RedditIcon
+} from "react-share";
 import { useEffect, useState } from "react";
 import MyTabs from "../../src/components/tabs/tab";
 import { useRouter } from "next/router";
@@ -37,9 +40,9 @@ const ChefPage = () => {
     console.log('rrr')
 
     useEffect(() => {
-       if(router.query.id){ 
-        fetchUserDetails(router.query.id)
-       }
+        if (router.query.id) {
+            fetchUserDetails(router.query.id)
+        }
     }, [router.query.id])
 
     const handleTabChange = (key) => {
@@ -51,16 +54,16 @@ const ChefPage = () => {
     function CheckStringsEnd(str) {
         let result = "";
         if (typeof str !== 'string' || str.length === 0) {
-          return str; // Return unchanged if not a string or empty string
+            return str; // Return unchanged if not a string or empty string
         }
-      
+
         // Check if the string ends with 's'
         if (str.endsWith('s')) {
-          return str + "'"; // Append apostrophe to the string
+            return str + "'"; // Append apostrophe to the string
         }
         result = str + "'s"
         return result; // Return unchanged if the string doesn't end with 's'
-      }
+    }
     return (
         <div className={styles.ChefContainer}>
             <Head>
@@ -76,7 +79,7 @@ const ChefPage = () => {
                         <GoBack />
                         <Image src={chef} className={styles.chefImg} width={200} height={200} />
                     </div>
-                    <h5 style={{textTransform: 'capitalize'}}>{user.first_name} {user.last_name}</h5>
+                    <h5 style={{ textTransform: 'capitalize' }}>{user.first_name} {user.last_name}</h5>
                 </div>
             </div>
             <div className={styles.share}>
@@ -86,14 +89,14 @@ const ChefPage = () => {
                 <div className={styles.share}>
                     <div className={styles.icon}>
                         <FacebookShareButton
-                            url={url + 'chef/'+ user._id}
+                            url={url + 'chef/' + user._id}
                             quote={'Chop chow awesome'}
-                            hashtag={`#${ user.first_name} ${ user.last_name}  #recipes   #ChopChow`}
-    
-                            
+                            hashtag={`#${user.first_name} ${user.last_name}  #recipes   #ChopChow`}
+
+
                             title={"Share to Facebook"}
                         >
-                              <FacebookEIcon  />
+                            <FacebookEIcon />
                             {/* <span className={styles.iconSpan}>
                                 <Image src="/assets/icons/Vector.svg" alt='facebook'
 
@@ -115,29 +118,36 @@ const ChefPage = () => {
                                 objectPosition="center" />
                         </span>
                     </div> */}
-                     <div  style={{ cursor: "pointer" }} className={styles.icon}>
-                     <WhatsappShareButton title={user.first_name} url={url + 'chef/'+ user._id} >
+                    <div style={{ cursor: "pointer" }} className={styles.icon}>
+                        <WhatsappShareButton title={user.first_name} url={url + 'chef/' + user._id} >
                             <WhatsappEIcon />
                         </WhatsappShareButton>
-                    </div> 
-                    
+                    </div>
+
                     <div>
                         <TwitterShareButton
                             className={styles.icon}
-                            url={url + 'chef/'+ user._id}
-                            title={"View" + " " + user.first_name + " " + CheckStringsEnd(user.last_name) + " " + "Recipes"} 
+                            url={url + 'chef/' + user._id}
+                            title={"View" + " " + user.first_name + " " + CheckStringsEnd(user.last_name) + " " + "Recipes"}
                             via="ChopChowMarket"
                         >
-                           
 
-                           <TwitterEIcon />
 
-                        </TwitterShareButton>
+                            <TwitterEIcon />
+
+                        </TwitterShareButton></div>
+                    <div>
+                        <RedditShareButton
+                            title={"View" + " " + user.first_name + " " + CheckStringsEnd(user.last_name) + " " + "Recipes"}
+                            url={url + 'chef/' + user._id}
+                        >
+                            <RedditIcon />
+                        </RedditShareButton>
 
                     </div>
                 </div>
             </div>
-            <InstagramBasicApi/>
+            <InstagramBasicApi />
             <MyTabs id={router.query.id} />
 
             <Footer />
