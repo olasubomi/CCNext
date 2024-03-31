@@ -14,7 +14,6 @@ import { useEffect, useState } from "react";
 import MyTabs from "../../src/components/tabs/tab";
 import { useRouter } from "next/router";
 import axios from '../../src/util/Api'
-import { IndividualModal } from "../../src/components/modal/individual-meal-product";
 import { WhatsappEIcon, FacebookEIcon, TwitterEIcon } from "../../src/components/icons";
 import InstagramBasicApi from "../../src/components/SocialShare/InstagramBasicApi";
 
