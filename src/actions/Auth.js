@@ -65,8 +65,8 @@ export const userSignUp = (form) => {
       })
       .catch((err) => {
         console.error("xxx userSignUp Request ERROR xxx");
-        console.log(err.response);
-        toast.error(err.response.data.message.message);
+        console.log(err?.response);
+        toast.error(err?.response?.data?.message?.message);
         dispatch({ type: IS_AUTHENTICATED, payload: false });
         if (err.response.status === 422) {
           dispatch({
@@ -358,7 +358,7 @@ export const resendEmail = () => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     axios
-      .get("/email/resend")
+      .post("/email/resend")
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
@@ -420,6 +420,111 @@ export const socialSignIn = (token) => {
         });
 
         return false;
+      });
+  };
+};
+
+
+export const sendEmailOTP = ({email}) => {
+  return (dispatch) => {
+    dispatch({ type: FETCH_START });
+    axios
+      .post("/user/sendemailotp",{email})
+      .then(({ data }) => {
+        console.log(" resend email api success: ", data.message);
+        dispatch({ type: FETCH_SUCCESS, payload: data.message });
+      })
+      .catch((err) => { 
+        dispatch({
+          type: FETCH_ERROR,
+          payload: "error resending email",
+        });
+        dispatch({
+          type: TRIGGER_SNACK,
+          payload: {
+            showSnack: true,
+            snackMessage: "error resending email",
+          },
+        });
+      });
+  };
+};
+
+
+export const verifyEmailOTP = ({email,otp}) => {
+  console.log({email,otp})
+  return (dispatch) => {
+    dispatch({ type: FETCH_START });
+    axios
+      .post("/user/verifyEmailOTP",{email,otp})
+      .then(({ data }) => {
+        console.log(" resend email api success: ", data.message);
+        dispatch({ type: FETCH_SUCCESS, payload: data.message });
+      })
+      .catch((err) => { 
+        dispatch({
+          type: FETCH_ERROR,
+          payload: "error resending email",
+        });
+        dispatch({
+          type: TRIGGER_SNACK,
+          payload: {
+            showSnack: true,
+            snackMessage: "error resending email",
+          },
+        });
+      });
+  };
+};
+
+
+export const requestnumber = ({number}) => {
+  return (dispatch) => {
+    dispatch({ type: FETCH_START });
+    axios
+      .post("/user/requestnumber",{number})
+      .then(({ data }) => {
+        console.log(" resend email api success: ", data.message);
+        dispatch({ type: FETCH_SUCCESS, payload: data.message });
+      })
+      .catch((err) => { 
+        dispatch({
+          type: FETCH_ERROR,
+          payload: "error resending email",
+        });
+        dispatch({
+          type: TRIGGER_SNACK,
+          payload: {
+            showSnack: true,
+            snackMessage: "error resending email",
+          },
+        });
+      });
+  };
+};
+
+
+export const verifynumber = ({request_id,code}) => {
+  return (dispatch) => {
+    dispatch({ type: FETCH_START });
+    axios
+      .post("/user/verifynumber",{request_id,code})
+      .then(({ data }) => {
+        console.log(" resend email api success: ", data.message);
+        dispatch({ type: FETCH_SUCCESS, payload: data.message });
+      })
+      .catch((err) => { 
+        dispatch({
+          type: FETCH_ERROR,
+          payload: "error resending email",
+        });
+        dispatch({
+          type: TRIGGER_SNACK,
+          payload: {
+            showSnack: true,
+            snackMessage: "error resending email",
+          },
+        });
       });
   };
 };
