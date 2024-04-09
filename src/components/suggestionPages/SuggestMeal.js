@@ -1860,7 +1860,7 @@ class SuggestMealForm extends Component {
             <h3>
               Upload Images <em>(Up to 4)</em>
             </h3>
-            {this.state.mealImagesData.length < 4 && (
+            {this.state.mealImagesData?.length < 4 && (
               <div className={styles.suggestion_form_image}>
                 <div className={styles.suggestion_form_image_col_1}>
                   <div
