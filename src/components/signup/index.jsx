@@ -8,14 +8,21 @@ import Image from "next/image";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { connect, useSelector } from 'react-redux';
-import { userSignUp } from '../../actions';
+import { userSignUp, sendEmailOTP, verifyEmailOTP, requestnumber, verifynumber } from '../../actions';
 import { base_url } from '../../util/Api';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import UserVerification from '../UserVerification'
+import UserVerificationSuccess from '../UserVerificationSuccess'
+import OTP from '../OTP'
 
 
 
 function SignUp(props){
+  const [openUserVerification, setOpenUserVerification] = React.useState(false);
+  const [openUserVerificationSuccess, setOpenUserVerificationSuccess] = React.useState(false);
+  const [openOTP, setOpenOTP] = React.useState(false);
+  const [type, setType] = React.useState('');
   const {authUser, isAuthenticated} = useSelector(state => state.Auth)
   const router = useRouter();
   const [message, setMessageState] = useState(null);
@@ -38,6 +45,17 @@ function SignUp(props){
     confirm_password: '',
     isAgreed: '',
   })
+
+  const handleOpenOtp = () =>{
+    setOpenUserVerification(false)
+    setOpenUserVerificationSuccess(false)
+    setOpenOTP(true)
+  }
+  const handleOpenSuccess = () =>{
+    setOpenUserVerification(false)
+    setOpenUserVerificationSuccess(true)
+    setOpenOTP(false)
+  }
 
   useEffect(()=>{
     if(isAuthenticated && authUser){
@@ -98,10 +116,13 @@ function SignUp(props){
       return stateObj;
     });
   }
+
+  console.log('redux',props.redux)
  
 
   function formSubmit(e){
     e.preventDefault();
+
     
     // Run validation logic
   const validationErrors = validateInput(e) ?? {};
@@ -128,9 +149,13 @@ function SignUp(props){
         last_name,
         password,
       });
+      setTimeout(() => {
+      setOpenUserVerification(true)   
+      }, 1000);
 
       if(isAuthenticated && authUser){
-        router.push("/dashboard");
+           
+      //   router.push("/dashboard");
       }
     }
  
@@ -365,18 +390,28 @@ function SignUp(props){
             <img width="100%" height="100%" className={styles.login_col_1_img} src="/assets/signup/signup_bg.jpg" alt="Signup" />
           </div>    
         </div>
+        <UserVerification formState={formState} setFormState={setFormState} requestnumberFunc={props.requestnumberFunc} type={type} setType={setType}  sendEmailOTPFunc={props.sendEmailOTPFunc}  next={handleOpenOtp} open={openUserVerification} setOpen={setOpenUserVerification} />
+        <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/dashboard")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} />
+        <OTP formState={formState} setFormState={setFormState} verifynumberFunc={props.verifynumberFunc} type={type} setType={setType}
+         verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} />
       </>
     )
   }
  function mapStateToProp(state) {
     return {
-      auth: state.Auth
+      auth: state.Auth,
+      redux: state
     };
   }
   
   function mapDispatchToProps(dispatch) {
     return {
-      signup: (form) => dispatch(userSignUp(form))
+      signup: (form) => dispatch(userSignUp(form)),
+      verifynumberFunc: (form) => dispatch(verifynumber(form)),
+      requestnumberFunc: (form) => dispatch(requestnumber(form)),
+      verifyEmailOTPFunc: (form) => dispatch(verifyEmailOTP(form)),
+      sendEmailOTPFunc: (form) => dispatch(sendEmailOTP(form)),
+
     };
   }
   
