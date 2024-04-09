@@ -1892,7 +1892,7 @@ class SuggestMealForm extends Component {
                 </p>
               </Col>
             </Row>
-            {this.state.mealImagesData.map((data, index) => (
+            {this.state.mealImagesData?.map((data, index) => (
               <Row key={index}>
                 <Col md={12} style={{ marginTop: "20px", width: "100%" }}>
                   <p className={styles.mealImg}>
