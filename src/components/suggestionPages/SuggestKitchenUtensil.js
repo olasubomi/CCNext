@@ -183,7 +183,9 @@ class SuggestKitchenUtensilForm extends Component {
         utensilImage: "",
         utensilImageName: "",
         utensilImageData: "",
-        utensilImagesData: Array.isArray(productImagesData) ? productImagesData : [],
+        utensilImagesData: Array.isArray(productImagesData)
+          ? productImagesData
+          : [],
         intro,
         sizeNames,
         // do we need product group list AND strings ?
@@ -802,6 +804,7 @@ class SuggestKitchenUtensilForm extends Component {
                     Quantity
                   </label>
                   <TextField
+                    inputProps={{ min: 0 }}
                     fullWidth
                     id="quantity"
                     type="number"
