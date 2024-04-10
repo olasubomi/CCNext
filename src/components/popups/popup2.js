@@ -309,11 +309,13 @@ class Popup2 extends Component {
                         Ingredients
                       </h3>
                       <table className={styles.table}>
-                        <tr>
+                      <thead>
+                      <tr>
                           <th className={styles.th}>Names</th>
                           <th className={styles.th}>Quantity</th>
                           <th className={styles.th}>Measurement</th>
                         </tr>
+                      </thead>
                         {!isDashboard ? (
                           ingredientsList?.map((ingredient, index) => (
                             <tr
