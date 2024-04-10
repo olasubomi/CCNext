@@ -325,36 +325,36 @@ class SuggestMealForm extends Component {
           instructionChunk6Step,
           stepInputs,
           instructionChunk1: {
-            title: instructionChunk1.title,
+            title: instructionChunk1,
             instructionSteps: instructionChunk1Step || [], //[],
             dataName: "",
           },
           instructionChunk2: {
-            title: instructionChunk2?.title,
+            title: instructionChunk2,
             instructionSteps: instructionChunk2Step || [],
 
             dataName: "",
           },
           instructionChunk3: {
-            title: instructionChunk3?.title,
+            title: instructionChunk3,
             instructionSteps: instructionChunk3Step || [],
 
             dataName: "",
           },
           instructionChunk4: {
-            title: instructionChunk4?.title,
+            title: instructionChunk4,
             instructionSteps: instructionChunk4Step || [],
 
             dataName: "",
           },
           instructionChunk5: {
-            title: instructionChunk5?.title,
+            title: instructionChunk5,
             instructionSteps: instructionChunk5Step || [],
 
             dataName: "",
           },
           instructionChunk6: {
-            title: instructionChunk6?.title,
+            title: instructionChunk6,
             instructionSteps: instructionChunk6Step || [],
 
             dataName: "",
