@@ -280,7 +280,7 @@ const Grocery = () => {
                                   height={100}
                                   className={styles.imgs}
                                 />
-                              ) : elem.item.item_type === "Meal" ? (
+                              ) : elem.item?.item_type === "Meal" ? (
                                 <Image
                                   src="/assets/store_pics/no-image-meal.png"
                                   width={95}
@@ -289,7 +289,7 @@ const Grocery = () => {
                                   objectPosition="center"
                                   className={styles.imgs}
                                 />
-                              ) : elem.item.item_type === "Product" ? (
+                              ) : elem.item?.item_type === "Product" ? (
                                 <Image
                                   src="/assets/store_pics/no-image-product.png"
                                   width={95}
@@ -298,7 +298,7 @@ const Grocery = () => {
                                   objectPosition="center"
                                   className={styles.imgs}
                                 />
-                              ) : elem.item.item_type === "Utensil" ? (
+                              ) : elem.item?.item_type === "Utensil" ? (
                                 <Image
                                   src="/assets/store_pics/no-image-utensil.png"
                                   width={95}
