@@ -1679,6 +1679,7 @@ class SuggestMealForm extends Component {
     });
   };
   getItem = async (name) => {
+    console.log(name, 'name')
     try {
       const response = await axios.get(`/items/filter/${name}`);
       const resp = response.data.data.map((element) => {
@@ -1695,8 +1696,7 @@ class SuggestMealForm extends Component {
       this.setState({
         ...this.state,
         allMealNames: filteredItems,
-        itemMealName: name,
-        mealName: name,
+       
       });
       console.log(filteredItems);
     } catch (error) {
@@ -1842,6 +1842,13 @@ class SuggestMealForm extends Component {
                 }
                 onInputChange={(e) => this.getItem(e?.target?.value)}
                 freeSolo
+                onSelect={(e) => {
+                  this.setState({
+                    ...this.state,
+                    itemMealName: e.target.value,
+                    mealName: e.target.value,
+                  });
+                }}
                 renderInput={(params) => (
                   <TextField {...params} variant="outlined" />
                 )}
@@ -1980,6 +1987,7 @@ class SuggestMealForm extends Component {
                     People to serve
                   </label>
                   <TextField
+                    inputProps={{ min: 0 }}
                     value={this.state.servings}
                     id="servings"
                     fullWidth
@@ -2049,6 +2057,7 @@ class SuggestMealForm extends Component {
                     Quantity
                   </label>
                   <TextField
+                   inputProps={{ min: 0 }}
                     fullWidth
                     id="currentIngredientQuantity"
                     type="number"
@@ -2143,7 +2152,7 @@ class SuggestMealForm extends Component {
                 />
                 <Button
                   variant="contained"
-                  disableRipple
+                 disableRipple
                   onClick={this.addKitchenUtensil}
                   className={styles.ingredient_button}
                   style={{ width: "max-content" }}

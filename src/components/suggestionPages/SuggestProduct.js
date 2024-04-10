@@ -1313,6 +1313,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                     Quantity
                   </label>
                   <TextField
+                   inputProps={{ min: 0 }}
                     fullWidth
                     id="sizeQuantity"
                     type="number"
@@ -1413,6 +1414,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                     Quantity
                   </label>
                   <TextField
+                   inputProps={{ min: 0 }}
                     fullWidth
                     id="currentIngredientQuantity"
                     type="number"
@@ -1515,6 +1517,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                     Quantity
                   </label>
                   <TextField
+                   inputProps={{ min: 0 }}
                     fullWidth
                     id="currentIngredientQuantity"
                     type="number"
