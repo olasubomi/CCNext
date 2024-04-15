@@ -7,6 +7,7 @@ import { RiMessage2Fill } from "react-icons/ri";
 import moment from "moment";
 import GoBack from "../../src/components/CommonComponents/goBack";
 import { useRouter } from "next/navigation";
+import { BsArrowLeft } from "react-icons/bs";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState([]);
@@ -54,8 +55,11 @@ const Notification = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div style={{ width: "20px", height: "20px" }}>
-          <GoBack />
+        <div
+          style={{ width: "20px", height: "20px" }}
+          onClick={() => router.back()}
+        >
+          <BsArrowLeft size={20} />
         </div>
         <h1 className={styles.title}>Notifications</h1>
       </div>

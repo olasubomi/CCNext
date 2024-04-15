@@ -113,7 +113,7 @@ const SuggestedMeals = (props) => {
     item_type: false,
     first_letter: false,
   });
-  console.log(suggestion, 'sugessss')
+  console.log(suggestion, "sugessss");
 
   useEffect(() => {
     getUserItems();
@@ -136,8 +136,7 @@ const SuggestedMeals = (props) => {
     getAllStores();
   }, [props.Auth]);
 
-
-  const getUserItems = (newPage) => {
+  const getUserItems = (newPage, item_name = "") => {
     if (props.auth.authUser) {
       setSearchType("Item");
       let url;
@@ -152,7 +151,7 @@ const SuggestedMeals = (props) => {
             newPage ? newPage : page
           }?type=Product,Meal,Utensil` +
           "&userId=" +
-          props.auth.authUser._id;
+          props.auth.authUser._id + `${item_name ? `&item_name=${item_name}` :''}`
       }
 
       axios.get(url).then((data) => {
@@ -458,111 +457,121 @@ const SuggestedMeals = (props) => {
   function handleSearch(e) {
     setSearchSuggestedSuggestionState(e.target.value);
   }
+  const searchSuggested = async (name) => {
+    const user = localStorage.getItem("user") ?? {};
+    getUserItems(0, searchSuggestedSuggestion)
+    try {
+      
+    } catch (error) {
+      console.log(error);
+    }
+    return name;
+  };
 
-  function searchSuggested(e) {
-    let url;
-    if (searchType === "Meal") {
-      if (props.auth.authUser.user_type === "admin") {
-        url = "/meals/get-meals/1?meal_name=" + searchSuggestedSuggestion;
-      } else {
-        url =
-          "/meals/get-meals/1?user=" +
-          props.auth.authUser._id +
-          "&meal_name=" +
-          searchSuggestedSuggestion;
-      }
-    } else if (searchType === "Product") {
-      if (props.auth.authUser.user_type === "admin") {
-        url =
-          "/products/get-all-products/1?product_name=" +
-          searchSuggestedSuggestion;
-      } else {
-        url =
-          "/products/get-all-products/1?user=" +
-          props.auth.authUser._id +
-          "&product_name=" +
-          searchSuggestedSuggestion;
-      }
-    } else {
-      if (props.auth.authUser.user_type === "admin") {
-        url =
-          "/categories/get-all-categories/1?product_name=" +
-          searchSuggestedSuggestion;
-      } else {
-        url =
-          "/categories/get-all-categories/1?user=" +
-          props.auth.authUser._id +
-          "&product_name=" +
-          searchSuggestedSuggestion;
-      }
-    }
-    let url2;
-    if (searchType === "Meal") {
-      if (props.auth.authUser.user_type === "admin") {
-        url2 = "/meals/get-meals/1";
-      } else {
-        url2 = "/meals/get-meals/1?user=" + props.auth.authUser._id;
-      }
-    } else if (searchType === "Product") {
-      if (props.auth.authUser.user_type === "admin") {
-        url2 = "/products/get-all-products/1";
-      } else {
-        url2 = "/products/get-all-products/1?user=" + props.auth.authUser._id;
-      }
-    } else {
-      if (props.auth.authUser.user_type === "admin") {
-        url2 = "/categories/get-all-categories/1";
-      } else {
-        url2 =
-          "/categories/get-all-categories/1?user=" + props.auth.authUser._id;
-      }
-    }
-    if (e.keyCode) {
-      if (e.keyCode === 13) {
-        if (searchSuggestedSuggestion.length >= 1) {
-          axios.get(url).then((data) => {
-            console.log(data.data);
-            if (data.data.data) {
-              setSuggestedCountState(data.data.data.count);
-              if (data.data.data.count > 10) {
-                setPagesState(Math.ceil(data.data.data.count / 10));
-              }
-              if (searchType === "Meal") {
-                setFilteredSuggestionsState(data.data.data.meals);
-                setSuggestionsState(data.data.data.meals);
-              } else {
-                setFilteredSuggestionsState(data.data.data.products);
-                setSuggestionsState(data.data.data.products);
-              }
-            }
-          });
-        } else {
-          getSuggestion(url2);
-        }
-      }
-    } else {
-      if (searchSuggestedSuggestion.length >= 1) {
-        axios.get(url).then((data) => {
-          console.log(data.data);
-          if (data.data.data) {
-            setSuggestedCountState(data.data.data.count);
-            if (data.data.data.count > 10) {
-              setPagesState(Math.ceil(data.data.data.count / 10));
-            }
-            if (searchType === "Meal") {
-              setFilteredSuggestionsState(data.data.data.meals);
-              setSuggestionsState(data.data.data.meals);
-            } else {
-              setFilteredSuggestionsState(data.data.data.products);
-              setSuggestionsState(data.data.data.products);
-            }
-          }
-        });
-      } else {
-        getSuggestion(url2);
-      }
-    }
-  }
+  // function searchSuggested(e) {
+  //   let url;
+  //   if (searchType === "Meal") {
+  //     if (props.auth.authUser.user_type === "admin") {
+  //       url = "/meals/get-meals/1?meal_name=" + searchSuggestedSuggestion;
+  //     } else {
+  //       url =
+  //         "/meals/get-meals/1?user=" +
+  //         props.auth.authUser._id +
+  //         "&meal_name=" +
+  //         searchSuggestedSuggestion;
+  //     }
+  //   } else if (searchType === "Product") {
+  //     if (props.auth.authUser.user_type === "admin") {
+  //       url =
+  //         "/products/get-all-products/1?product_name=" +
+  //         searchSuggestedSuggestion;
+  //     } else {
+  //       url =
+  //         "/products/get-all-products/1?user=" +
+  //         props.auth.authUser._id +
+  //         "&product_name=" +
+  //         searchSuggestedSuggestion;
+  //     }
+  //   } else {
+  //     if (props.auth.authUser.user_type === "admin") {
+  //       url =
+  //         "/categories/get-all-categories/1?product_name=" +
+  //         searchSuggestedSuggestion;
+  //     } else {
+  //       url =
+  //         "/categories/get-all-categories/1?user=" +
+  //         props.auth.authUser._id +
+  //         "&product_name=" +
+  //         searchSuggestedSuggestion;
+  //     }
+  //   }
+  //   let url2;
+  //   if (searchType === "Meal") {
+  //     if (props.auth.authUser.user_type === "admin") {
+  //       url2 = "/meals/get-meals/1";
+  //     } else {
+  //       url2 = "/meals/get-meals/1?user=" + props.auth.authUser._id;
+  //     }
+  //   } else if (searchType === "Product") {
+  //     if (props.auth.authUser.user_type === "admin") {
+  //       url2 = "/products/get-all-products/1";
+  //     } else {
+  //       url2 = "/products/get-all-products/1?user=" + props.auth.authUser._id;
+  //     }
+  //   } else {
+  //     if (props.auth.authUser.user_type === "admin") {
+  //       url2 = "/categories/get-all-categories/1";
+  //     } else {
+  //       url2 =
+  //         "/categories/get-all-categories/1?user=" + props.auth.authUser._id;
+  //     }
+  //   }
+  //   if (e.keyCode) {
+  //     if (e.keyCode === 13) {
+  //       if (searchSuggestedSuggestion.length >= 1) {
+  //         axios.get(url).then((data) => {
+  //           console.log(data.data);
+  //           if (data.data.data) {
+  //             setSuggestedCountState(data.data.data.count);
+  //             if (data.data.data.count > 10) {
+  //               setPagesState(Math.ceil(data.data.data.count / 10));
+  //             }
+  //             if (searchType === "Meal") {
+  //               setFilteredSuggestionsState(data.data.data.meals);
+  //               setSuggestionsState(data.data.data.meals);
+  //             } else {
+  //               setFilteredSuggestionsState(data.data.data.products);
+  //               setSuggestionsState(data.data.data.products);
+  //             }
+  //           }
+  //         });
+  //       } else {
+  //         getSuggestion(url2);
+  //       }
+  //     }
+  //   } else {
+  //     if (searchSuggestedSuggestion.length >= 1) {
+  //       axios.get(url).then((data) => {
+  //         console.log(data.data);
+  //         if (data.data.data) {
+  //           setSuggestedCountState(data.data.data.count);
+  //           if (data.data.data.count > 10) {
+  //             setPagesState(Math.ceil(data.data.data.count / 10));
+  //           }
+  //           if (searchType === "Meal") {
+  //             setFilteredSuggestionsState(data.data.data.meals);
+  //             setSuggestionsState(data.data.data.meals);
+  //           } else {
+  //             setFilteredSuggestionsState(data.data.data.products);
+  //             setSuggestionsState(data.data.data.products);
+  //           }
+  //         }
+  //       });
+  //     } else {
+  //       getSuggestion(url2);
+  //     }
+  //   }
+  // }
 
   function searchRelated(e) {
     let searchVal = e.target.value;
@@ -1358,22 +1367,30 @@ const SuggestedMeals = (props) => {
             {props.auth.authUser && (
               <div className={styles.suggestedmeal_container}>
                 <div className={styles.suggestedmeal_search_con}>
-                  {/* <div className={styles.search_con}>
-                                        <div className={styles.search_box}>
-                                            <p onClick={searchSuggested} className={styles.search_icon}>
-                                                <SearchIcon className={styles.search_icon} />
-                                            </p>
-                                            <input
-                                                type="text"
-                                                name="search"
-                                                onChange={handleSearch}
-                                                onKeyUp={searchSuggested}
-                                                className={styles.search_input}
-                                                placeholder="Search for products"
-                                            />
-                                        </div>
-                                        <div className={styles.search_button} onClick={searchSuggested}>Search</div>
-                                    </div> */}
+                  <div className={styles.search_con}>
+                    <div className={styles.search_box}>
+                      <p
+                        onClick={searchSuggested}
+                        className={styles.search_icon}
+                      >
+                        <SearchIcon className={styles.search_icon} />
+                      </p>
+                      <input
+                        type="text"
+                        name="search"
+                        onChange={handleSearch}
+                        onKeyUp={searchSuggested}
+                        className={styles.search_input}
+                        placeholder="Search for products"
+                      />
+                    </div>
+                    <div
+                      className={styles.search_button}
+                      onClick={searchSuggested}
+                    >
+                      Search
+                    </div>
+                  </div>
                   {props.auth.authUser.user_type === "customer" && (
                     <Link href="/dashboard/createstore">Create Store</Link>
                   )}

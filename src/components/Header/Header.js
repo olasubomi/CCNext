@@ -437,7 +437,11 @@ function Header(props) {
                             style={styles.navbar_top_details_col_icon}
                           />
                         </div>
-                        <h5 id="notText" onClick={(e) => toggleNotification(e)}>
+                        <h5
+                          id="notText"
+                          style={{ cursor: "pointer" }}
+                          onClick={(e) => toggleNotification(e)}
+                        >
                           Notification
                         </h5>
                         (
@@ -490,7 +494,21 @@ function Header(props) {
                               new Date(a.createdAt).getTime()
                           )
                           ?.map((elem) => (
-                            <div className={styles.summary_notification}>
+                            <div
+                              style={{ cursor: "pointer" }}
+                              className={styles.summary_notification}
+                              onClick={() => {
+                                if (elem.message.includes("Suggested Meal")) {
+                                  updateNotification(elem._id);
+                                  router.push("/dashboard/suggestedmeals");
+                                } else {
+                                  getOneItemById(
+                                    elem?.notifiable?.item,
+                                    elem?.notifiable?._id
+                                  );
+                                }
+                              }}
+                            >
                               {elem.message.includes("Suggested Meal") ? (
                                 <div className={styles.rounded}>
                                   <FaCheck color="black" size={14} />
@@ -510,27 +528,9 @@ function Header(props) {
                                 </h3>
                                 <p className={styles.summary_notification_link}>
                                   {elem.message.includes("Suggested Meal") ? (
-                                    <p
-                                      onClick={() => {
-                                        updateNotification(elem._id);
-                                        router.push(
-                                          "/dashboard/suggestedmeals"
-                                        );
-                                      }}
-                                    >
-                                      View Item
-                                    </p>
+                                    <p onClick={() => {}}>View Item</p>
                                   ) : (
-                                    <p
-                                      onClick={() =>
-                                        getOneItemById(
-                                          elem?.notifiable?.item,
-                                          elem?.notifiable?._id
-                                        )
-                                      }
-                                    >
-                                      View Comment
-                                    </p>
+                                    <p>View Comment</p>
                                   )}
                                 </p>
                                 <p className={styles.summary_notification_time}>

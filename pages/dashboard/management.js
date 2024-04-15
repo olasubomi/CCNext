@@ -502,6 +502,7 @@ const Management = () => {
       }
       const response = await axios.put(`/stores/updatestore/${storeId}`, form);
       console.log(response.data.data, "responses");
+      handleGetStore();
       toast.success("Store updated");
     } catch (e) {}
   }, [formState, storeId]);
