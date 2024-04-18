@@ -34,7 +34,7 @@ const setupAxiosInterceptors = () => {
         (response) => response,
         async (error) => {
             const originalRequest = error.config;
-            if (error.response?.status === 401 && !originalRequest._retry) {
+            if ((error.response?.status === 401 || error.response?.status === 500 )&& !originalRequest._retry) {
                 originalRequest._retry = true;
 
                 try {
@@ -45,8 +45,8 @@ const setupAxiosInterceptors = () => {
                             Authorization: `Bearer ${refreshToken}`
                         }
                     });
-
                     const response = await fetchResp.json();
+                    console.log(response, 'resss')
                     const newAccessToken = response.data.token;
                     const newRefreshToken = response.data.refreshToken;
 

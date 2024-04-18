@@ -7,6 +7,7 @@ import { Element } from "react-scroll";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { toast } from "react-toastify";
 import { UtensilModal } from "../modal/individual-meal-product";
+import utensilImg from "../../../public/assets/store_pics/no-image-utensil.png";
 
 export const SuggestedUtensils = () => {
   const [meals, setMeals] = useState([]);
@@ -104,13 +105,13 @@ export const SuggestedUtensils = () => {
     const hash = window.location.hash;
 
     // Use the hash value as the target ID for scrolling
-    const targetId = hash ? hash.substring(1) : 'utensils';
+    const targetId = hash ? hash.substring(1) : "utensils";
 
     // Scroll to the target section
     if (targetId) {
       const element = document.getElementById(targetId);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        element.scrollIntoView({ behavior: "smooth" });
       }
     }
   }, []);
@@ -118,7 +119,8 @@ export const SuggestedUtensils = () => {
   return (
     <div className={styles.mealContainer}>
       <Element
-        name="utensils" id="utensils"
+        name="utensils"
+        id="utensils"
         style={{ fontSize: "2rem", marginBottom: "1rem" }}
       >
         Suggested Utensils for you
@@ -140,7 +142,11 @@ export const SuggestedUtensils = () => {
                 {
                   <div className={styles.box}>
                     <img
-                      src={utensil?.itemImage0}
+                      src={
+                        utensil?.itemImage0
+                          ? utensil?.itemImage0
+                          : "/assets/store_pics/no-image-utensil.png"
+                      }
                       className={styles.storeImg1}
                     />
                     <div className={styles.flex}>

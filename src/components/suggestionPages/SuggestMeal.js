@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 // import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete"; // createFilterOptions,
@@ -173,7 +173,7 @@ class SuggestMealForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-    console.log("this.props.suggestionType---**", this.props);
+    console.log("this.props.---**", this.props);
     console.log(JSON.parse(localStorage.getItem("user")));
     // get all Meal Names***
     // var url = "/meals/get-meals/1";
@@ -192,7 +192,7 @@ class SuggestMealForm extends Component {
     console.log("all meals", this.props.allMealNames);
     const currentUser = JSON.parse(localStorage.getItem("user")) || {};
 
-    if (Object.keys(currentUser).length) {
+    if (Object.keys(currentUser)?.length) {
       this.setState({
         ...this.state,
         username: currentUser?.first_name?.concat(" ", currentUser?.last_name),
@@ -225,6 +225,7 @@ class SuggestMealForm extends Component {
           ItemIntro,
           ingredientNames,
           ingredeintsInItem,
+          mealImagesData,
           // do we need product group list AND strings ?
           ingredientGroupList,
           // store product names of inputted strings to compare with db products
@@ -242,6 +243,7 @@ class SuggestMealForm extends Component {
           instructionChunk3Step,
           instructionChunk4Step,
           instructionChunk5Step,
+          chunk1Content,
           instructionChunk6Step,
           currentStore,
 
@@ -289,7 +291,9 @@ class SuggestMealForm extends Component {
           intro,
           ItemIntro,
           ingredientNames,
+          chunk1Content,
           ingredeintsInItem,
+          mealImagesData,
           // do we need product group list AND strings ?
           ingredientGroupList,
           // store product names of inputted strings to compare with db products
@@ -1464,7 +1468,7 @@ class SuggestMealForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
-    var url = `${base_url}/items/`;
+    // var url = `${base_url}/items/`;
 
     for (let i = 1; i < 7; i++) {
       if (
@@ -1479,7 +1483,9 @@ class SuggestMealForm extends Component {
     // chunk content should be passed as file
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     // var url = "/addMealSuggestion/";
-    var url = `${base_url}/items`;
+    // var url = `${base_url}/items`;
+
+    console.log(this.state.allMealNames, "item");
 
     const formDataObj = {};
     suggestMealForm.forEach((value, key) => (formDataObj[key] = value));
@@ -1569,8 +1575,8 @@ class SuggestMealForm extends Component {
     // var url = "/addMealSuggestion/";
     var url = `${base_url}/items`;
 
-    if(this.props.router?.query?.id){
-      url = url + `?action=${'update'}&_id=${this.props.router.query.id}`
+    if (this.props.router?.query?.id) {
+      url = url + `?action=${"update"}&_id=${this.props.router.query.id}`;
     }
 
     const config_ = {
@@ -1672,6 +1678,32 @@ class SuggestMealForm extends Component {
       stepInputs,
     });
   };
+  getItem = async (name) => {
+    console.log(name, 'name')
+    try {
+      const response = await axios.get(`/items/filter/${name}`);
+      const resp = response.data.data.map((element) => {
+        return {
+          label: element.item_name,
+          value: element._id,
+          image: element?.itemImage0,
+          price: element?.item_price ? `$${element?.item_price}` : "No Price",
+          store: element?.store_available?.store_name || "No store",
+          item_type: element?.item_type,
+        };
+      });
+      const filteredItems = resp.filter((item) => item.item_type === "Meal");
+      this.setState({
+        ...this.state,
+        allMealNames: filteredItems,
+       
+      });
+      console.log(filteredItems);
+    } catch (error) {
+      console.log(error);
+    }
+    return name;
+  };
 
   uploadMediaStep = (id) => {
     // <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent1" name="instructionChunkContent1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 1)} />
@@ -1762,6 +1794,7 @@ class SuggestMealForm extends Component {
     // delImage.slice(id, 1)
     // this.setState({ ...this.state, instructionChunk1: delImage })
   }
+
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
     // const [ingredientInput, setIngredientInput] = useState('');
@@ -1775,7 +1808,7 @@ class SuggestMealForm extends Component {
     console.log(stepInputs, "steps");
 
     console.log(this.state, "ingredientStrings");
-
+    console.log(this.state.instructionChunk1?.title, "render");
     return (
       <div className={styles.suggestion_section_2}>
         <form
@@ -1799,16 +1832,29 @@ class SuggestMealForm extends Component {
               <Autocomplete
                 // id="mealName"
                 id="itemMealName"
-                options={this.props.allMealNames}
-                // onChange={(ev, val) => this.onInputChange(ev, val)}
-                onInputChange={(ev, val) => this.onInputChange(ev, val)}
+                options={this.state.allMealNames}
+                onChange={(ev, val) =>
+                  this.setState({
+                    ...this.state,
+                    itemMealName: val?.label,
+                    mealName: val?.label,
+                  })
+                }
+                onInputChange={(e) => this.getItem(e?.target?.value)}
                 freeSolo
+                onSelect={(e) => {
+                  this.setState({
+                    ...this.state,
+                    itemMealName: e.target.value,
+                    mealName: e.target.value,
+                  });
+                }}
                 renderInput={(params) => (
                   <TextField {...params} variant="outlined" />
                 )}
                 fullWidth
                 // value={this.state.mealName}
-                value={this.state.itemMealName}
+                // value={this.state.itemMealName}
               />
             </div>
             <div className={styles.suggestion_form_2_col}>
@@ -1941,6 +1987,7 @@ class SuggestMealForm extends Component {
                     People to serve
                   </label>
                   <TextField
+                    inputProps={{ min: 0 }}
                     value={this.state.servings}
                     id="servings"
                     fullWidth
@@ -2010,6 +2057,7 @@ class SuggestMealForm extends Component {
                     Quantity
                   </label>
                   <TextField
+                   inputProps={{ min: 0 }}
                     fullWidth
                     id="currentIngredientQuantity"
                     type="number"
@@ -2104,7 +2152,7 @@ class SuggestMealForm extends Component {
                 />
                 <Button
                   variant="contained"
-                  disableRipple
+                 disableRipple
                   onClick={this.addKitchenUtensil}
                   className={styles.ingredient_button}
                   style={{ width: "max-content" }}
@@ -2165,10 +2213,7 @@ class SuggestMealForm extends Component {
                   <label className={styles.suggestion_form_label}>
                     Step 1 Title
                   </label>
-                  {console.log(
-                    this.state.instructionChunk1?.title,
-                    "this.state.instructionChunk1?.title"
-                  )}
+
                   <TextField
                     value={this.state.instructionChunk1?.title}
                     id="chunk1Title"

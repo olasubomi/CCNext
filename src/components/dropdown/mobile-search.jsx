@@ -71,7 +71,6 @@ export const MobileSearch = ({ setShowDropdown }) => {
     }
     return name;
   };
-  console.log(items, "item");
 
   const getStore = async (name) => {
     try {
@@ -113,16 +112,26 @@ export const MobileSearch = ({ setShowDropdown }) => {
     <div className={styles.two3} ref={ref}>
       <div>
         <div
-          className={styles.searchbox2}
-          onClick={() => setShowCategory(!showCategory)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            background: "#FFF",
+            width: "100%",
+          }}
         >
-          {categories[0].value && categories.some((ele) => !ele.value)
-            ? "All"
-            : categories.find((ele) => ele.value).label}
-          <GoTriangleUp
-            className={!showCategory ? styles.rotate : styles.nonrotate}
-            size={15}
-          />
+          <div
+            className={styles.cats}
+            onClick={() => setShowCategory(!showCategory)}
+          >
+            {categories[0].value && categories.some((ele) => !ele.value)
+              ? "All"
+              : categories.find((ele) => ele.value).label}
+            <GoTriangleUp
+              className={!showCategory ? styles.rotate : styles.nonrotate}
+              size={15}
+            />
+          </div>
+          <div className={styles.leftBorder} />
         </div>
 
         {showCategory && (
@@ -166,7 +175,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
         )}
       </div>
       <div className={styles.searchflex}>
-        <div className={styles.searchfield}>
+        <div className={styles.searchboxfield}>
           <input
             placeholder="Search"
             autoComplete="off"
@@ -358,11 +367,26 @@ export const MobileSearch = ({ setShowDropdown }) => {
             if (oneStore.visible) {
               router.push(`/store/${oneStore.id}`);
             } else {
-              items.item_type === "Meal"
-                ? router.push(`/meal/${value}`)
-                : items.item_type === "Product"
-                ? router.push(`/product/${value}`)
-                : router.push(`/product/${value}`);
+              if (
+                items.find(
+                  (ele) =>
+                    ele.item_type === "Meal" && ele.item_type !== "Product"
+                )
+              ) {
+                // console.log("navigating to /meal/" + value);
+                router.push(`/meal/${value}`);
+              } else if (
+                items.filter(
+                  (ele) =>
+                    ele.item_type === "Product" && ele.item_type !== "Meal"
+                )
+              ) {
+                // console.log("navigating to /product/" + value);
+                router.push(`/product/${value}`);
+              } else {
+                // console.log("Fallback navigating to /meal/" + value);
+                // router.push(`/meal/${value}`);
+              }
             }
           }}
         >

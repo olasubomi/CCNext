@@ -121,7 +121,7 @@ const GroceryPage = () => {
     status: "",
   });
 
-  console.log(measurements, "measurementsmeasurements");
+  console.log(itemList, "itemList");
 
   function closeModal() {
     setOpenModalState(false);
@@ -386,7 +386,7 @@ const GroceryPage = () => {
         <div className={styles.one}>
           <GoBack />
           <p className={styles.title3}>My Grocery List </p>
-          <p className={styles.title3}>/ {itemList.listName}</p>
+          <p className={styles.titles}>/ {itemList.listName}</p>
         </div>
 
         {itemList?.groceryItems?.length === 0 ? (
@@ -461,8 +461,8 @@ const GroceryPage = () => {
               className={styles.user_img}
             />
           ) : (
-            <div className={styles.user_img} >
-              <UserIcon/>
+            <div className={styles.user_img}>
+              <UserIcon />
             </div>
           )}
 
@@ -545,7 +545,7 @@ const GroceryPage = () => {
                           />
                         ) : (
                           <Image
-                            src={yellow}
+                            src="/assets/store_pics/no-image-meal.png"
                             width={40}
                             height={40}
                             objectPosition="center"
@@ -659,8 +659,7 @@ const GroceryPage = () => {
           </>
         ) : (
           <div style={{ width: "100%", marginTop: "5rem" }}>
-            <h5 className={styles.text4}>Items</h5>
-
+            {matches ? <h5 className={styles.text4}>Items</h5> : ""}
             {matches ? (
               <table className={styles.table1}>
                 <thead
@@ -705,7 +704,7 @@ const GroceryPage = () => {
                               }}
                             />
                             <Image
-                              src={Frame}
+                              src="/assets/store_pics/no-image-meal.png"
                               height={50}
                               width={55}
                               style={{ borderRadius: "5px" }}
@@ -786,10 +785,32 @@ const GroceryPage = () => {
                                 src={element?.item?.itemImage0}
                                 height={50}
                                 width={55}
+                                style={{ borderRadius: "4px" }}
+                              />
+                            ) : element.item.item_type === "Meal" ? (
+                              <Image
+                                src="/assets/store_pics/no-image-meal.png"
+                                height={50}
+                                width={55}
+                                style={{ borderRadius: "5px" }}
+                              />
+                            ) : element.item.item_type === "Product" ? (
+                              <Image
+                                src="/assets/store_pics/no-image-product.png"
+                                height={50}
+                                width={55}
+                                style={{ borderRadius: "5px" }}
+                              />
+                            ) : element.item.item_type === "Utensil" ? (
+                              <Image
+                                src="/assets/store_pics/no-image-utensil.png"
+                                height={50}
+                                width={55}
+                                style={{ borderRadius: "5px" }}
                               />
                             ) : (
                               <Image
-                                src={Frame}
+                                src="/assets/store_pics/no-image-meal.png"
                                 height={50}
                                 width={55}
                                 style={{ borderRadius: "5px" }}

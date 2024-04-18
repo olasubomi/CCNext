@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { animateScroll as scroll, scrollSpy, Events } from "react-scroll";
 import styles from "../../components/Header/header.module.css";
 export const MobileHeader = () => {
@@ -20,34 +20,29 @@ export const MobileHeader = () => {
     };
   }, []);
 
-  const scrollToTop = () => {
-    scroll.scrollToTop();
-  };
-
-  const scrollToBottom = () => {
-    scroll.scrollToBottom();
-  };
-
-  const scrollToWithOffset = () => {
-    const offset = 100;
-    scroll.scrollTo("meal", {
-      duration: 1000,
-      delay: 0,
-      smooth: true,
-      offset: offset,
-    });
-  };
-
-  const scrollMore = () => {
-    scroll.scrollMore(100);
-  };
 
   const handleSetActive = (to) => {
     console.log(to);
   };
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollPos]);
   return (
     <div>
-      <div className={styles.navbar2}>
+      <div className={visible ? styles.navbar2 : ''}>
         <div className={styles.navbar_main_container}>
           <div className={styles.navbar_main}>
             <ul className={styles.navbar_main_links}>

@@ -49,6 +49,7 @@ const SuggestedStores = ({
       console.log(error);
     }
   };
+  console.log(selected, 'selected')
   const router = useRouter();
   return (
     <>
@@ -214,20 +215,22 @@ const SuggestedStores = ({
                 {changeStoreStatus && (
                   <div className={styles.select_options2}>
                     <p
-                      onClick={() => updateStoreStatus("PUBLIC", selectedStore)}
+                      onClick={() => {
+                        updateStoreStatus("PUBLIC", selected.supplier._id)
+                      }}
                     >
                       Public
                     </p>
                     <p
                       onClick={() =>
-                        updateStoreStatus("PENDING", selectedStore)
+                        updateStoreStatus("PENDING",  selected.supplier._id)
                       }
                     >
                       Pending
                     </p>
                     <p
                       onClick={() =>
-                        updateStoreStatus("REJECTED", selectedStore)
+                        updateStoreStatus("REJECTED",  selected.supplier._id)
                       }
                     >
                       Rejected

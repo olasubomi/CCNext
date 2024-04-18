@@ -65,7 +65,11 @@ const IndividualStorePage = (props) => {
                 </div> */}
         <div
           style={{
-            background: `url(${props.store.data.supplier.background_picture})`,
+            background: `url(${
+              props.store.data.supplier.background_picture
+                ? props.store.data.supplier.background_picture
+                : "/assets/store_pics/no-image-store.png"
+            })`,
             width: "100%",
             backgroundPosition: "center",
             backgroundSize: "cover",

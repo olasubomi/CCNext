@@ -24,8 +24,10 @@ class Popup1 extends Component {
       ingredientGroupList,
       ingredientsInItem,
       item_description,
+      image,
+      imageData,
     } = this.props;
-    
+
     let group = ingredientGroupList.map((ingredient) => {
       return {
         productName: ingredient.item_name,
@@ -44,6 +46,8 @@ class Popup1 extends Component {
       productName: description,
       utensilName: description,
       intro,
+      imageData,
+      productImagesData: imageData,
       productDescription: intro,
       ingredientsInItem,
       itemType,
@@ -82,19 +86,19 @@ class Popup1 extends Component {
     localStorage.setItem("productId", this.props.id);
     localStorage.setItem("suggestProductForm", JSON.stringify(product));
     console.log(this.props, "orop");
-   if(this.props.itemType === 'Product'){
-    window.location.assign(
+    if (this.props.itemType === "Product") {
+      window.location.assign(
         `/suggestmeal?id=${this.props.id}&item_type=Product`
       );
-   }
-   if(this.props.itemType === 'Utensil'){
-    localStorage.setItem("suggestionType", "Kitchen Utensil")
-    localStorage.setItem("utensilId", this.props.id)
-    localStorage.setItem("suggestUtensilForm", JSON.stringify(product))
-    window.location.assign(
+    }
+    if (this.props.itemType === "Utensil") {
+      localStorage.setItem("suggestionType", "Kitchen Utensil");
+      localStorage.setItem("utensilId", this.props.id);
+      localStorage.setItem("suggestUtensilForm", JSON.stringify(product));
+      window.location.assign(
         `/suggestmeal?id=${this.props.id}&item_type=Kitchen Utensil`
       );
-   }
+    }
   };
 
   render() {

@@ -59,6 +59,8 @@ const SuggestStore = () => {
     if (details.isStoreOwner) {
       form.append("email", user?.email);
       form.append("store_owner", user?._id);
+    } else {
+      form.append('store_admin', user?._id)
     }
     axios.post("/stores/createstore", form).then((response) => {
       if (response.status >= 200 && response.status < 300) {

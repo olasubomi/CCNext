@@ -50,18 +50,22 @@ function Header(props) {
   const [user, setUser] = useState({});
   const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const [showSignup, setShowSignUp] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
   const [openUserDetails, setOpenUserDetails] = useState(false);
   const cartCtx = useContext(CartContext);
   const matches = useMediaQuery("(min-width: 768px)");
-
+  const isLandscape = useMediaQuery("(orientation: landscape)");
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
   const { items } = cartCtx;
 
   const numberOfCartItems = items.reduce((curNumber, item) => {
     return curNumber + item.amount;
   }, 0);
 
+  console.log(notifications, "notific0ppjations");
   // useEffect(() => {
   //   props.getPath(router.pathname);
   //   let token = localStorage.getItem("x-auth-token");
@@ -149,17 +153,13 @@ function Header(props) {
   // function handleDashborad() {
   //   // this.props.history.push('/admin');
   // }
-  const deleteNotification = async (id) => {
+  const updateNotification = async (id) => {
     try {
-      const response = await axios.delete(`/user/notification/${id}`);
-      setUser((prevUser) => ({
-        ...prevUser,
-        notification: prevUser.notification?.filter(
-          (notification) => notification._id !== id
-        ),
-      }));
+      const response = await axios.patch(`/user/notification/${id}`);
+
+      getAllNotifications();
     } catch (err) {
-      console.log(`Error deleting notification with ID ${id}:`, err);
+      console.log(`Error updating notification with ID ${id}:`, err);
     }
   };
   function toggleNotification(e) {
@@ -181,6 +181,26 @@ function Header(props) {
     }
   });
 
+  const getOneItemById = async (id, commentId) => {
+    try {
+      console.log(id);
+      const response = await axios.get(`/items/item/${id}`);
+      const data = Array.isArray(response.data?.data)
+        ? response.data?.data[0]
+        : {};
+      console.log(response.data);
+      if (data?.item_name) {
+        router.push(
+          `/${data?.item_type === "Meal" ? "meal" : "product"}/${
+            data?.item_name
+          }?id=${commentId}`
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   // function toggleUserDetails(e) {
   //   document.getElementById("userdetails").style.display = "grid";
   //   document.addEventListener("click", (e) => {
@@ -196,21 +216,23 @@ function Header(props) {
 
   //   window.event.returnValue = false;
   // }
-  const ref = useRef();
+  const dropdownRef = useRef(null);
   const toggleUserDetails = () => {
-    setOpenUserDetails(true);
+    if (!openUserDetails || dropdownRef.current === event.target) {
+      setOpenUserDetails(!openUserDetails);
+    }
     console.log("hello");
   };
   useEffect(() => {
-    document.addEventListener(
-      "click",
-      (e) => {
-        if (ref.current && !ref.current.contains(e.target)) {
-          setOpenUserDetails(false);
-        }
-      },
-      true
-    );
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenUserDetails(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
   function toggleLogin() {
     setOpenLoginState(!openLogin);
@@ -221,25 +243,52 @@ function Header(props) {
     props.logout();
     router.push("/");
   }
+  const unreadMessages = notifications.filter((message) => !message.read);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user" || "{}"));
     setUser(user);
     console.log(user, "user");
   }, []);
 
+  const getAllNotifications = async () => {
+    try {
+      const response = await axios.get(`/user/notifications`);
+      setNotifications(response.data.data);
+      console.log(response.data.data, "noti");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getAllNotifications();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [prevScrollPos]);
   return (
     <>
       <div className={styles.navbar}>
-        <div className="alert">
-          {/* {props.message.length > 0 &&
+        {/* <div className="alert">
+          {props.message.length > 0 &&
           <div className="alert-success">
             {props.message}
           </div>}
         {props.error.length > 0 &&
           <div className="alert-danger">
             {props.error}
-          </div>} */}
-        </div>
+          </div>}
+        </div> */}
         <div className={styles.navbar_top_container}>
           <div className={styles.navbar_top}>
             <Link href="/">
@@ -259,7 +308,7 @@ function Header(props) {
               </div>
               {showDropdown &&
                 (matches ? (
-                  <SearchDropdown setShowDropdown={setShowDropdown} />
+                  ""
                 ) : (
                   <MobileSearch setShowDropdown={setShowDropdown} />
                 ))}
@@ -269,10 +318,10 @@ function Header(props) {
                   <a className={styles.navbar_user_loginbtn}>Log In/Register</a>
                 </Link>
               ) : (
-                <div className={styles.navbar_user_info}>
+                <div className={styles.navbar_user_info} ref={dropdownRef}>
                   {authUser?.profile_picture !== "" &&
                   authUser?.profile_picture !== undefined ? (
-                    <div>
+                    <div onClick={toggleUserDetails}>
                       {" "}
                       <Image
                         id="userImg"
@@ -284,12 +333,16 @@ function Header(props) {
                       />
                     </div>
                   ) : (
-                    <div>
+                    <div onClick={toggleUserDetails}>
                       <UserIcon style={styles.navbar_user_img} />
                     </div>
                   )}
 
-                  <h4 id="userName" className={styles.navbar_user_name}>
+                  <h4
+                    onClick={toggleUserDetails}
+                    id="userName"
+                    className={styles.navbar_user_name}
+                  >
                     {props?.auth?.authUser?.username}
                   </h4>
                   <div
@@ -303,7 +356,7 @@ function Header(props) {
                   </div>
 
                   {openUserDetails && (
-                    <div ref={ref} className={styles.userdetails}>
+                    <div className={styles.userdetails}>
                       <Link href="/dashboard">
                         <div
                           className={
@@ -369,23 +422,64 @@ function Header(props) {
               )}
               <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
               <div className={styles.navbar_top_details_col}>
-                <div id="noticon" onClick={(e) => toggleNotification(e)}>
-                  <NotificationIcon
-                    id="notImg"
-                    style={styles.navbar_top_details_col_icon}
-                  />
-                </div>
-                <h5 id="notText" onClick={(e) => toggleNotification(e)}>
-                  Notification
-                </h5>
-
-                <span
-                  id="notNo"
-                  style={{ background: "#F47900" }}
-                  className={styles.numberofitems}
-                >
-                  {user?.notifications?.length}
-                </span>
+                {matches ? (
+                  <>
+                    {!props.auth.isAuthenticated && authUser === null ? (
+                      ""
+                    ) : (
+                      <>
+                        <div
+                          id="noticon"
+                          onClick={(e) => toggleNotification(e)}
+                        >
+                          <NotificationIcon
+                            id="notImg"
+                            style={styles.navbar_top_details_col_icon}
+                          />
+                        </div>
+                        <h5
+                          id="notText"
+                          style={{ cursor: "pointer" }}
+                          onClick={(e) => toggleNotification(e)}
+                        >
+                          Notification
+                        </h5>
+                        (
+                        <span
+                          id="notNo"
+                          style={{ background: "#F47900" }}
+                          className={styles.numberofitems}
+                        >
+                          {unreadMessages?.length}
+                        </span>
+                        )
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    {!props.auth.isAuthenticated && authUser === null ? (
+                      ""
+                    ) : (
+                      <>
+                        <Link href="/notification">
+                          <NotificationIcon
+                            id="notImg"
+                            style={styles.navbar_top_details_col_icon}
+                          />
+                        </Link>
+                        <span
+                          id="notNo"
+                          style={{ background: "#F47900" }}
+                          className={styles.numberofitems}
+                        >
+                          {unreadMessages?.length}
+                        </span>
+                      </>
+                    )}
+                  </>
+                )}
                 <div id="notification" className={styles.summaries_min}>
                   <div className={styles.summary_min}>
                     <div className={styles.summary_min_head}>
@@ -393,44 +487,63 @@ function Header(props) {
                     </div>
                     <div className={styles.summary_min_notifications}>
                       <div className={styles.not}>
-                        {user?.notifications?.map((elem) => (
-                          <div className={styles.summary_notification}>
-                            {elem.message.includes("Suggested Meal") ? (
-                              <div className={styles.rounded}>
-                                <FaCheck color="black" size={14} />
-                              </div>
-                            ) : (
-                              <div className={styles.rounded2}>
-                                <RiMessage2Fill size={15} color="#FFF" />
-                              </div>
-                            )}
+                        {[...notifications]
+                          ?.sort(
+                            (a, b) =>
+                              new Date(b.createdAt).getTime() -
+                              new Date(a.createdAt).getTime()
+                          )
+                          ?.map((elem) => (
                             <div
-                              className={styles.summary_notification_Details}
+                              style={{ cursor: "pointer" }}
+                              className={styles.summary_notification}
+                              onClick={() => {
+                                if (elem.message.includes("Suggested Meal")) {
+                                  updateNotification(elem._id);
+                                  router.push("/dashboard/suggestedmeals");
+                                } else {
+                                  getOneItemById(
+                                    elem?.notifiable?.item,
+                                    elem?.notifiable?._id
+                                  );
+                                }
+                              }}
                             >
-                              <h3 className={styles.summary_notification_desc}>
-                                {elem.message}
-                              </h3>
-                              <p className={styles.summary_notification_link}>
-                                {elem.message.includes("Suggested Meal") ? (
-                                  <p
-                                    onClick={() => {
-                                      deleteNotification(elem._id);
-
-                                      router.push("/dashboard/suggestedmeals");
-                                    }}
-                                  >
-                                    View Item
-                                  </p>
-                                ) : (
-                                  <p>View Comment</p>
-                                )}
-                              </p>
-                              <p className={styles.summary_notification_time}>
-                                {moment(elem.createdAt).fromNow()}
-                              </p>
+                              {elem.message.includes("Suggested Meal") ? (
+                                <div className={styles.rounded}>
+                                  <FaCheck color="black" size={14} />
+                                </div>
+                              ) : (
+                                <div className={styles.rounded2}>
+                                  <RiMessage2Fill size={15} color="#FFF" />
+                                </div>
+                              )}
+                              <div
+                                className={styles.summary_notification_Details}
+                              >
+                                <h3
+                                  className={styles.summary_notification_desc}
+                                >
+                                  {elem.message}
+                                </h3>
+                                <p className={styles.summary_notification_link}>
+                                  {elem.message.includes("Suggested Meal") ? (
+                                    <p onClick={() => {}}>View Item</p>
+                                  ) : (
+                                    <p>View Comment</p>
+                                  )}
+                                </p>
+                                <p className={styles.summary_notification_time}>
+                                  {moment(elem.createdAt).fromNow()}
+                                </p>
+                              </div>
+                              <div
+                                className={
+                                  !elem.read ? styles.readDot : styles.readDot2
+                                }
+                              />
                             </div>
-                          </div>
-                        ))}
+                          ))}
                       </div>
 
                       <div className={styles.navbar_top_details_col}>
@@ -584,60 +697,71 @@ function Header(props) {
                   </div>
                 </div>
               </div>
-              <div className={styles.navbar_down}>
+              {matches ? (
+                ""
+              ) : (
                 <div
                   className={
-                    styles.navbar_down_col +
-                    " " +
-                    (props.path === "/" && styles.activeLinkDown)
+                    visible ? styles.navbar_down : styles.navbar_down_2
                   }
                 >
-                  <Link href="/">
-                    <HomeIcon style={styles.navbar_down_col_icon} />
-                    <p>Home</p>
-                  </Link>
-                </div>
-                <div
-                  className={
-                    styles.navbar_down_col +
-                    " " +
-                    (props.path === "/dashboard/orders/orders" &&
-                      styles.activeLinkDown)
-                  }
-                >
-                  <Link href="/dashboard/orders/orders">
-                    <Order2Icon style={styles.navbar_down_col_icon} />
-                    <p>Order</p>
-                  </Link>
-                </div>
-                <div
-                  className={
-                    styles.navbar_down_col +
-                    " " +
-                    (props.path === "/grocery-list" && styles.activeLinkDown)
-                  }
-                >
-                  <Link href="/grocery">
-                    <BasketIcon style={styles.navbar_down_col_icon} />
-                    <p>Grocery List</p>
-                  </Link>
-                </div>
-                <div
-                  className={
-                    styles.navbar_down_col +
-                    " " +
-                    (props.path === "/cart" && styles.activeLinkDown)
-                  }
-                >
-                  <Link href="/cart">
-                    <CartIcon style={styles.navbar_down_col_icon} />
-                    <p>Cart</p>
-                  </Link>
-                </div>
+                  <div
+                    className={
+                      styles.navbar_down_col +
+                      " " +
+                      (props.path === "/" && styles.activeLinkDown)
+                    }
+                  >
+                    <Link href="/">
+                      <HomeIcon style={styles.navbar_down_col_icon} />
+                      <p>Home</p>
+                    </Link>
+                  </div>
+                  <div
+                    className={
+                      styles.navbar_down_col +
+                      " " +
+                      (props.path === "/dashboard/orders/orders" &&
+                        styles.activeLinkDown)
+                    }
+                  >
+                    <Link
+                      href="#"
+                      // href="/dashboard/orders/orders"
+                    >
+                      <Order2Icon style={styles.navbar_down_col_icon} />
+                      <p>Order</p>
+                    </Link>
+                  </div>
+                  <div
+                    className={
+                      styles.navbar_down_col +
+                      " " +
+                      (props.path === "/grocery-list" && styles.activeLinkDown)
+                    }
+                  >
+                    <Link href="/grocery">
+                      <BasketIcon style={styles.navbar_down_col_icon} />
+                      <p>Grocery List</p>
+                    </Link>
+                  </div>
+                  <div
+                    className={
+                      styles.navbar_down_col +
+                      " " +
+                      (props.path === "/cart" && styles.activeLinkDown)
+                    }
+                  >
+                    <Link href="#">
+                      <CartIcon style={styles.navbar_down_col_icon} />
+                      <p>Cart</p>
+                    </Link>
+                  </div>
 
-                {/* <Auth toggleLogin={toggleLogin} /> */}
-                {/* {openLogin && <Auth toggleLogin={toggleLogin} />} */}
-              </div>
+                  {/* <Auth toggleLogin={toggleLogin} /> */}
+                  {/* {openLogin && <Auth toggleLogin={toggleLogin} />} */}
+                </div>
+              )}
             </div>
           </div>
           {/* {isOpen && <Auth />} */}
@@ -676,60 +800,30 @@ export default connect(mapStateToProp, mapDispatchToProps)(Header);
 
 export function Header2() {
   const router = useRouter();
-  const matches = useMediaQuery("(min-width: 520px)");
+  const matches = useMediaQuery("(min-width: 900px)");
+  const isLandscape = useMediaQuery("(orientation: landscape)");
 
   useEffect(() => {
-    // Registering the 'begin' event and logging it to the console when triggered.
     Events.scrollEvent.register("begin", (to, element) => {
       console.log("begin", to, element);
     });
 
-    // Registering the 'end' event and logging it to the console when triggered.
     Events.scrollEvent.register("end", (to, element) => {
       console.log("end", to, element);
     });
 
-    // Updating scrollSpy when the component mounts.
     scrollSpy.update();
 
-    // Returning a cleanup function to remove the registered events when the component unmounts.
     return () => {
       Events.scrollEvent.remove("begin");
       Events.scrollEvent.remove("end");
     };
   }, []);
 
-  // Defining functions to perform different types of scrolling.
-  const scrollToTop = () => {
-    scroll.scrollToTop();
-  };
-
-  const scrollToBottom = () => {
-    scroll.scrollToBottom();
-  };
-
-  const scrollToWithOffset = () => {
-    const offset = 100; // Adjust the offset value as needed
-    scroll.scrollTo("meal", {
-      duration: 1000,
-      delay: 0,
-      smooth: true,
-      offset: offset,
-    });
-  };
-
-  const scrollMore = () => {
-    scroll.scrollMore(100);
-  };
-
   const handleSetActive = (to) => {
     console.log(to);
   };
-  const hash = window.location.hash;
 
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  const targetId = hash ? hash.substring(1) : "store";
   return (
     <>
       {matches ? (
@@ -788,21 +882,23 @@ export function Header2() {
               </ul>
 
               <div className={styles.navbar_main_grocery}>
-                <div
-                style={{cursor: 'pointer'}}
+                {/* <div
+                  style={{ cursor: "pointer" }}
                   className={styles.flex}
                   onClick={() => setShowDropdown(!showDropdown)}
                 >
                   <IoSearchOutline size={19} color="#F47900" />
                   <p>Search</p>
-                </div>
+                </div> */}
                 <Link href="/suggestmeal">Suggest a Meal</Link>
                 <Link href="/grocery">Grocery List</Link>
               </div>
             </div>
           </div>
-          {showDropdown && <SearchDropdown setShowDropdown={setShowDropdown} />}
+          {/* {showDropdown && <SearchDropdown setShowDropdown={setShowDropdown} />} */}
         </div>
+      ) : isLandscape ? (
+        <MobileHeader />
       ) : (
         <MobileHeader />
       )}

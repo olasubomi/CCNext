@@ -19,51 +19,53 @@ import { toast } from "react-toastify";
 import { base_url } from "../../util/Api";
 import { withRouter } from "next/router";
 
+const initialState = {
+  utensilName: "",
+  utensilImage1: "",
+  utensilImage2: "",
+  utensilImage3: "",
+  utensilImage4: "",
+  utensilImagesData: [],
+  intro: "",
+
+  sizeNames: [],
+  // do we need product group list AND strings ?
+  descriptionGroupList: [],
+  // store product names of inputted strings to compare with db products
+  descriptionStrings: [],
+  // do we want to use current ingredient formats ? Yes.
+  currentIngredient: "",
+  measurement: "",
+  quantity: "",
+  currentProductImgSrc: null,
+  currentProductDisplayIndex: 0,
+
+  currentStore: "",
+
+  // we need to update how we create image paths
+  productImg_path: "",
+  suggested_stores: [],
+  currProductIndexInDBsProductsList: -1,
+  // currStoreIndexIfExistsInProductsList: -1,
+
+  instructionWordlength: 0,
+
+  suggestedCategories: [],
+
+  booleanOfDisplayOfDialogBoxConfirmation: false,
+
+  //mealsModal controller
+  openModal: false,
+  stepInputs: [],
+};
+
 class SuggestKitchenUtensilForm extends Component {
   utensilsList = [];
   ingredientsQuantityMeasurements = [];
 
   constructor(props) {
     super(props);
-    this.state = {
-      utensilName: "",
-      utensilImage1: "",
-      utensilImage2: "",
-      utensilImage3: "",
-      utensilImage4: "",
-      utensilImagesData: [],
-      intro: "",
-
-      sizeNames: [],
-      // do we need product group list AND strings ?
-      descriptionGroupList: [],
-      // store product names of inputted strings to compare with db products
-      descriptionStrings: [],
-      // do we want to use current ingredient formats ? Yes.
-      currentIngredient: "",
-      measurement: "",
-      quantity: "",
-      currentProductImgSrc: null,
-      currentProductDisplayIndex: 0,
-
-      currentStore: "",
-
-      // we need to update how we create image paths
-      productImg_path: "",
-      suggested_stores: [],
-      currProductIndexInDBsProductsList: -1,
-      // currStoreIndexIfExistsInProductsList: -1,
-
-      instructionWordlength: 0,
-
-      suggestedCategories: [],
-
-      booleanOfDisplayOfDialogBoxConfirmation: false,
-
-      //mealsModal controller
-      openModal: false,
-      stepInputs: [],
-    };
+    this.state = initialState;
 
     this.closeModal = this.closeModal.bind(this);
     // this.handleStoreNameInput = this.handleStoreNameInput.bind(this);
@@ -142,7 +144,7 @@ class SuggestKitchenUtensilForm extends Component {
     let doc = document.querySelector("#formutensil");
     if (doc) {
       setInterval(() => {
-        localStorage.setItem("suggestUtensilForm", JSON.stringify(this.state));
+        // localStorage.setItem("suggestUtensilForm", JSON.stringify(this.state));
       }, 100);
     }
 
@@ -150,8 +152,8 @@ class SuggestKitchenUtensilForm extends Component {
       let {
         utensilName,
         intro,
-
         sizeNames,
+        utensilImagesData,
         // do we need product group list AND strings ?
         descriptionGroupList,
         // store product names of inputted strings to compare with db products
@@ -172,7 +174,7 @@ class SuggestKitchenUtensilForm extends Component {
         // currStoreIndexIfExistsInProductsList,
 
         suggestedCategories,
-
+        productImagesData,
         booleanOfDisplayOfDialogBoxConfirmation,
       } = JSON.parse(localStorage.getItem("suggestUtensilForm"));
 
@@ -181,9 +183,10 @@ class SuggestKitchenUtensilForm extends Component {
         utensilImage: "",
         utensilImageName: "",
         utensilImageData: "",
-        utensilImagesData: [],
+        utensilImagesData: Array.isArray(productImagesData)
+          ? productImagesData
+          : [],
         intro,
-
         sizeNames,
         // do we need product group list AND strings ?
         descriptionGroupList,
@@ -397,10 +400,11 @@ class SuggestKitchenUtensilForm extends Component {
     // descriptionObject.calories = 0;
 
     console.log(descriptionObject, "descriptionObjectdescriptionObject");
+    // console.log(this.state?.descriptionObject, 'descree')
 
     this.setState({
       descriptionGroupList: [
-        ...this.state?.descriptionObject,
+        // ...this.state?.descriptionObject,
         descriptionObject,
       ],
     });
@@ -575,23 +579,21 @@ class SuggestKitchenUtensilForm extends Component {
       let qty = "";
 
       const ele = splited[1];
-      for (let i = 0; i < ele.length; i++) {        
-        if (!Object.is(Number(ele.charAt(i)), NaN)){
-          console.log(ele.charAt(i), 'ele.charAt(i)')
-          qty = qty.concat(ele.charAt(i))
+      for (let i = 0; i < ele.length; i++) {
+        if (!Object.is(Number(ele.charAt(i)), NaN)) {
+          console.log(ele.charAt(i), "ele.charAt(i)");
+          qty = qty.concat(ele.charAt(i));
         }
       }
       const measurement = ele.slice(ele.indexOf(qty));
-      const formatted_string = `${this.capitalizeWords(
-        descripName
-      )} : ${ele}`;
+      const formatted_string = `${this.capitalizeWords(descripName)} : ${ele}`;
 
       return {
         object_name: descripName,
         object_quantity: Number(qty),
         object_measurement: measurement,
-        formatted_string
-      }
+        formatted_string,
+      };
     });
 
     suggestProductForm.append("description", JSON.stringify(arr_2));
@@ -660,6 +662,8 @@ class SuggestKitchenUtensilForm extends Component {
           console.log(response);
           console.log("Display Product submitted successfully");
           toast.success("Kitchen Utensils submitted successfully");
+          localStorage.setItem("suggestUtensilForm", JSON.stringify({}));
+          this.setState(initialState);
           // window.location.href = "/SuggestProduct"
         } else {
           console.log("Something wrong happened ");
@@ -800,6 +804,7 @@ class SuggestKitchenUtensilForm extends Component {
                     Quantity
                   </label>
                   <TextField
+                    inputProps={{ min: 0 }}
                     fullWidth
                     id="quantity"
                     type="number"
