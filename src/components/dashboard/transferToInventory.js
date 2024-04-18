@@ -382,6 +382,7 @@ export default function TransferToInventory(props) {
                   name="storeId"
                   value={formState.storeId}
                 >
+                  <option disabled selected>Select...</option>
                   {allStores?.map((elem) => (
                     <option key={elem?._id} value={elem?._id}>
                       {elem?.store_name}
