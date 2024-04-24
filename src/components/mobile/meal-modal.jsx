@@ -29,6 +29,7 @@ export const Mealmodal = ({
   selectedItem,
 }) => {
   const router = useRouter();
+  console.log(selectedItem, "selectedItem.meal_formatted_instructions");
   return (
     <div>
       {openModal && (
@@ -117,14 +118,19 @@ export const Mealmodal = ({
                     <p className={styles.prep}>
                       {selectedItem.meal_servings} People
                     </p>
-                    <p className={styles.prep} style={{ color: "rgba(244, 121, 0, 1)" }}>
+                    <p
+                      className={styles.prep}
+                      style={{ color: "rgba(244, 121, 0, 1)" }}
+                    >
                       {selectedItem.meal_chef}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            <p className={styles.prep} style={{marginTop: '3rem'}}>Intro:</p>
+            <p className={styles.prep} style={{ marginTop: "3rem" }}>
+              Intro:
+            </p>
             <p className={styles.intro}>{selectedItem.item_intro}</p>
             <div>
               <h3 className={styles.modalTitle}>Ingredients</h3>
@@ -232,14 +238,21 @@ export const Mealmodal = ({
                         ) : (
                           <>
                             {elem.dataName.includes("mp4") && (
+                           
                               <video
-                                className={styles.instruction_img}
-                                src={
-                                  selectedItem[
-                                    `meal_image_or_video_content${index + 1}`
-                                  ]
-                                }
+                                controls
+                                className={styles.popup2_step_img}
+                                height={150}
+                                width={70}
                               >
+                                <source
+                                  src={
+                                    selectedItem[
+                                      `meal_image_or_video_content${index + 1}`
+                                    ]
+                                  }
+                                  type="video/mp4"
+                                />
                                 Your browser does not support the video tag.
                               </video>
                             )}
