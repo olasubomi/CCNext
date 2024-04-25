@@ -390,7 +390,7 @@ class Popup2 extends Component {
                             alt={this.props["instructionChunk" + curIn]?.title}
                             className={styles.popup2_step_img}
                             height={150}
-                            width={100}
+                            width={70}
                             objectFit="cover"
                             objectPosition="center"
                           />

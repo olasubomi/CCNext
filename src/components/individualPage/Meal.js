@@ -120,6 +120,10 @@ function Meal(props) {
   console.log("meald callback", props.callback);
   console.log(props.meal, "serve me");
   console.log(props.meal.itemImage0, "serve me");
+  console.log(
+    props?.meal[`meal_image_or_video_content${0 + 1}`],
+    "propsssmeal"
+  );
 
   //   let url = shareURL + "&via=" + "ChopChowMarket" +"&text=" + encodeURIComponent(`${props.meal.item_intro}`);
 
@@ -229,7 +233,7 @@ function Meal(props) {
                       <p>{props.meal.meal_prep_time} Minutes</p>
                     </div>
                     <div>
-                      <h3>CookTime : </h3>
+                      <h3>CookTime: </h3>
                       <p>{props.meal.meal_cook_time} Minutes </p>
                     </div>
                     <div>
@@ -342,7 +346,7 @@ function Meal(props) {
                 <p>{props.meal.meal_prep_time} Minutes</p>
               </div>
               <div>
-                <h3>Cook time : </h3>
+                <h3>Cook time: </h3>
                 <p>{props.meal.meal_cook_time} Minutes </p>
               </div>
               <div>
@@ -362,19 +366,11 @@ function Meal(props) {
                   >
                     {/* {matches ? <div></div> : ""} */}
                     <div className={styles.ingredients_th}>Names</div>
-                    <div
-                      className={styles.ingredients_th}
-                     
-                    >
-                      Quantity
-                    </div>
+                    <div className={styles.ingredients_th}>Quantity</div>
                     <div className={styles.ingredients_th + " " + styles.hide}>
                       Measurement
                     </div>
-                    <div
-                      className={styles.ingredients_th}
-                   
-                    >
+                    <div className={styles.ingredients_th}>
                       Availability in store
                     </div>
                     <div className={styles.ingredients_th}>Price</div>
@@ -392,7 +388,11 @@ function Meal(props) {
                                     className={styles.ingredients_tr}
                                   >
                                     <td className={styles.ingredients_td}>
-                                      <input name="id" type="checkbox" style={{marginRight: '20px'}} />
+                                      <input
+                                        name="id"
+                                        type="checkbox"
+                                        style={{ marginRight: "20px" }}
+                                      />
 
                                       {ingredient.item_name}
                                     </td>
@@ -471,58 +471,69 @@ function Meal(props) {
               </div>
             </div>
           )}
-          {props.meal.formatted_instructions && (
-            <div className={styles.meal_section_5}>
-              <h3>Steps</h3>
-              {props.meal.formatted_instructions.length > 0 && (
+          <div className={styles.meal_section_6}>
+            <h3>Kitchen Utensils</h3>
+            <ul>
+              {props.meal.meal_kitchen_utensils?.length > 0 && (
                 <>
-                  {props.meal.meal_formatted_instructions?.map(
-                    (instruction, index) => {
-                      num = index + 1;
-                      console.log(index + 1);
-                      return (
-                        <div key={index} className={styles.meal_section_5_row}>
-                          <div className={styles.meal_section_5_row_1}>
-                            {props.meal.hasOwnProperty([
-                              `meal_image_or_video_content_${Math.abs(
-                                index + 1
-                              )}`,
-                            ]) && (
-                              <Image
-                                width={300}
-                                height={300}
-                                src={
-                                  props.meal[
-                                    `meal_image_or_video_content_${Math.abs(
-                                      index + 1
-                                    )}`
-                                  ]
-                                }
-                                alt="home"
-                                className={styles.meal_section_5_row_1}
-                              />
-                            )}
-                          </div>
-                          <div className={styles.meal_section_5_row_2}>
-                            <h3 className={styles.meal_section_5_row_2_h3}>
-                              {meal_formatted_instructions.title}
-                            </h3>
-                            <p className={styles.meal_section_5_row_2_p}>
-                              {meal_formatted_instructionsinstructionSteps?.map(
-                                (int) => (
-                                  <> {int + ", "} </>
-                                )
-                              )}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    }
-                  )}
+                  {props.meal.meal_kitchen_utensils?.map((cat, index) => (
+                    <li key={index}>{cat}</li>
+                  ))}
                 </>
               )}
-            </div>
-          )}
+            </ul>
+          </div>
+          <div>
+            <h3>Steps</h3>
+            {props.meal.meal_formatted_instructions?.length > 0 && (
+              <div className={styles.all_steps}>
+                {props.meal?.meal_formatted_instructions?.map((elem, index) => {
+                  return (
+                    <div key={index} className={styles.meals_steps}>
+                      <>
+                        {elem.dataName.includes("mp4") ? (
+                          <video
+                            controls
+                            className={styles.popup2_step_img}
+                            height={150}
+                          >
+                            <source
+                              src={
+                                props?.meal[
+                                  `meal_image_or_video_content${index + 1}`
+                                ]
+                              }
+                              type="video/mp4"
+                            />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          <img
+                          height={150}
+                            src={
+                              props?.meal[
+                                `meal_image_or_video_content${index + 1}`
+                              ]
+                            }
+                            className={styles.instruction_img}
+                          />
+                        )}
+                      </>
+
+                      <span className={styles.carouselText}>
+                        <h6 className={styles.instructionTitle}>
+                          {elem.title}
+                        </h6>
+                        {elem.instructionSteps.map((ele) => (
+                          <p className={styles.instructionStep}>{ele}</p>
+                        ))}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
 
           <div className={styles.meal_section_6}>
             <h3>Meal Categories</h3>

@@ -27,7 +27,27 @@
   justify-content: center;
   align-items: center;
 }
-
+.meals_steps {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.all_steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+.instructionTitle {
+  margin-top: -0.7rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.carouselText p {
+  margin-top: -0.5rem;
+  font-size: 14px;
+  color: #353535;
+}
 .modalCard3 {
   background: #fff;
   width: 55%;
@@ -884,12 +904,12 @@
 
 .meal_section_6 > h3 {
   width: 100%;
-  margin: 0;
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
   text-transform: capitalize;
+
 
   color: #000000;
 }
@@ -1190,7 +1210,7 @@
   }
 
   .ingredients_head {
-    grid-template-columns: 0.7fr 0.5fr 1fr .6fr;
+    grid-template-columns: 0.7fr 0.5fr 1fr 0.6fr;
     margin-left: 0rem;
   }
 

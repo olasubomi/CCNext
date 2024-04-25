@@ -284,7 +284,7 @@ export const IndividualModal = ({
                               ))}
                             </span>
                           </div>
-                        );
+                        )
                       }
                     )}
                   </Carousel>
