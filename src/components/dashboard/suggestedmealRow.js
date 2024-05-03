@@ -80,7 +80,6 @@ function SuggestedMealRow(props) {
     }),
   };
 
-  console.log(suggestion, "hells");
   return (
     <div key={suggestion._id} className={styles.request_tr_div}>
       <table
