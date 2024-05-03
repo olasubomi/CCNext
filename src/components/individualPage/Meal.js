@@ -35,6 +35,7 @@ import moment from "moment";
 import { FaEnvelope } from "react-icons/fa";
 import { IoMdCall } from "react-icons/io";
 import { HiLocationMarker } from "react-icons/hi";
+import { RejectionModal } from "../modal/rejection-modal";
 
 function Meal(props) {
   //const url = 'http://localhost:3000/'
@@ -48,6 +49,7 @@ function Meal(props) {
   const [show, setShow] = useState(false);
   const [groceryList, setGroceryList] = useState([]);
   const [selectedItem, setSelectedItem] = useState({});
+  const [openModal, setOpenModal] = useState(false);
   console.log(selectedItem, "sele");
   const [quantity, setQuantity] = useState(1);
 
@@ -580,30 +582,36 @@ function Meal(props) {
                         gap: ".4rem",
                       }}
                     >
-                      <div style={{ width: "50px", height: "50px" }}>
-                        <UserIcon style={styles.user_img} />
+                      <div style={{ width: "47px", height: "47px" }}>
+                        <UserIcon style={{ width: "47px", height: "47px" }} />
                       </div>
                       <p>
                         {props?.meal?.user?.first_name}{" "}
                         {props.meal.user.last_name}{" "}
                       </p>
                     </div>
-                    <p>
-                      {moment(props?.meal?.createdAt).format("Do MMM, YYYY")}
-                    </p>
+                    <span className={styles.post}>
+                      Posted On:
+                      <p style={{ color: "#353535" }}>
+                        {moment(props?.meal?.createdAt).format("Do MMM, YYYY")}
+                      </p>
+                    </span>
                   </div>
                   <div>
-                    <div>
-                      <FaEnvelope />
+                    <div className={styles.contact}>
+                      <FaEnvelope color="#F47900" />
                       <p>{props?.meal?.user?.email}</p>
                     </div>
-                    <div>
-                      <IoMdCall />
+                    <div className={styles.contact}>
+                      <IoMdCall color="#F47900" />
                       <p>+ {props?.meal?.user.phone_number}</p>
                     </div>
-                   
                   </div>
                 </div>
+              </div>
+              <div className={styles.btns}>
+                <button className={styles.outline} onClick={() => setOpenModal(true)}>Reject</button>
+                <button className={styles.solid}>Accept Request</button>
               </div>
             </div>
           )}
@@ -725,6 +733,7 @@ function Meal(props) {
           show={show}
         />
       )}
+      {openModal && <RejectionModal setOpenModal={setOpenModal} />}
     </>
   );
 }
