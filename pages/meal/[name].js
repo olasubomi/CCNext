@@ -33,7 +33,7 @@ console.log("props", props)
         "Nov",
         "Dec",
       ]
-console.log(props, "mealsssss")
+
 console.log(router.query.id, "this meal")
 const getMeal = async (name) => {
     // let meal = await axios.get(`/meals/get-meal/${id}`)
@@ -41,7 +41,7 @@ const getMeal = async (name) => {
     console.log(meal, "meals")
     console.log(meal.data.data.meal, "get props")
 
-    setProps(meal.data.data[0] || {})
+    // setProps(meal.data.data[0] || {})
 
 }
 useEffect(() => {
@@ -50,6 +50,7 @@ useEffect(() => {
     }
 },[router.query?.name])
 console.log(props, 'meals id page')
+console.log(props, "mealsssss")
     return (
         <div>
             <Head>

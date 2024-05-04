@@ -13,6 +13,7 @@ import {
   WhatsappEIcon,
   EmailIcon,
   CallIcon,
+  MessageIcon,
 } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
@@ -30,6 +31,10 @@ import axios from "../../util/Api";
 import { Modal } from "../modal/popup-modal";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "../../hooks/usemediaquery";
+import moment from "moment";
+import { FaEnvelope } from "react-icons/fa";
+import { IoMdCall } from "react-icons/io";
+import { HiLocationMarker } from "react-icons/hi";
 
 function Meal(props) {
   //const url = 'http://localhost:3000/'
@@ -100,7 +105,7 @@ function Meal(props) {
   }, []);
 
   useEffect(() => {
-    const User = JSON.parse(localStorage.getItem("user")) || {};
+    const user = JSON.parse(localStorage.getItem("user")) || {};
     setUser(user);
   }, []);
   // useEffect(() => {
@@ -113,7 +118,7 @@ function Meal(props) {
       setServes(s);
     }
   }
-
+  console.log(props, "props.props.auth.authUser.user_type");
   // console.log(props.props.props.props.meal, "meal props.props")
   let num = 0;
 
@@ -509,7 +514,7 @@ function Meal(props) {
                           </video>
                         ) : (
                           <img
-                          height={150}
+                            height={150}
                             src={
                               props?.meal[
                                 `meal_image_or_video_content${index + 1}`
@@ -560,6 +565,48 @@ function Meal(props) {
               )}
             </div>
           </div>
+
+          {user?.user_type === "admin" && (
+            <div className={styles.reject_container}>
+              <h4>Posted By</h4>
+              <div className={styles.reject_card}>
+                <div>
+                  <div className={styles.flex_apart}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        gap: ".4rem",
+                      }}
+                    >
+                      <div style={{ width: "50px", height: "50px" }}>
+                        <UserIcon style={styles.user_img} />
+                      </div>
+                      <p>
+                        {props?.meal?.user?.first_name}{" "}
+                        {props.meal.user.last_name}{" "}
+                      </p>
+                    </div>
+                    <p>
+                      {moment(props?.meal?.createdAt).format("Do MMM, YYYY")}
+                    </p>
+                  </div>
+                  <div>
+                    <div>
+                      <FaEnvelope />
+                      <p>{props?.meal?.user?.email}</p>
+                    </div>
+                    <div>
+                      <IoMdCall />
+                      <p>+ {props?.meal?.user.phone_number}</p>
+                    </div>
+                   
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {user && user?.user_type !== "admin" && (
             <div className={styles.meal_section_8}>
