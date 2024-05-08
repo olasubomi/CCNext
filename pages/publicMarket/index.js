@@ -17,6 +17,7 @@ import axios from "../../src/util/Api";
 import { AddressInput } from "../../src/components/public-market/input";
 import { useMediaQuery } from "../../src/hooks/usemediaquery";
 import Sidenav from "../../src/components/Header/sidenav";
+import * as BaseAxios from 'axios'
 
 const PublicMarket = () => {
   const router = useRouter();
@@ -29,6 +30,10 @@ const PublicMarket = () => {
   const [showCategory, setShowCategory] = useState(false);
   const [currentAddress, setCurrentAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [longLat, setLongLat] = useState({
+    longitude: "",
+    latitude: "",
+  })
   const [showCurrentLocation, setShowCurrentLocation] = useState(false);
   const addressRef = useRef();
   const matches = useMediaQuery("(min-width: 768px)");
@@ -108,16 +113,23 @@ const PublicMarket = () => {
   };
   const onSuccess = useCallback(async (location) => {
     if (location?.coords?.latitude && location?.coords?.longitude) {
+      console.log('Longitude:', location.coords.longitude);
+      console.log('Latitude:', location.coords.latitude);
       setIsLoading(true);
+      
       try {
         setLongLat({
           longitude: location?.coords?.longitude,
           latitude: location?.coords?.latitude,
         });
+        // Log longitude and latitude
+        console.log(location.coords, 'long')
+
         const res = await BaseAxios.get(
           `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location?.coords?.latitude},${location?.coords?.longitude}&key=AIzaSyDJ2OXLQoX_83t-DYmg-zIs3keZmNAZHzk`
         );
         const data = res.data;
+        console.log(res, 'respo')
         const curr_location =
           data?.results?.find(
             (ele) =>

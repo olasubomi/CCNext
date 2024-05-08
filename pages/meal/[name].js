@@ -41,7 +41,7 @@ const getMeal = async (name) => {
     console.log(meal, "meals")
     console.log(meal.data.data.meal, "get props")
 
-    // setProps(meal.data.data[0] || {})
+    setProps(meal.data.data[0] || {})
 
 }
 useEffect(() => {

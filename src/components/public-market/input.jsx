@@ -37,6 +37,7 @@ export const AddressInput = forwardRef((props, ref) => {
   const router = useRouter();
   const pageRef = useRef();
 
+
   useImperativeHandle(ref, () => {
     return {
       handleGetStoreByLocation() {
@@ -44,7 +45,6 @@ export const AddressInput = forwardRef((props, ref) => {
       },
     };
   });
-
   const getAllStores = async (address) => {
     try {
       const response = await axios(`/stores/list/${address}`, {
@@ -63,6 +63,8 @@ export const AddressInput = forwardRef((props, ref) => {
       console.log(error);
     }
   };
+  console.log(allStores, 'all')
+
   useEffect(() => {
     document.addEventListener(
       "click",
