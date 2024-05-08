@@ -733,7 +733,7 @@ function Meal(props) {
           show={show}
         />
       )}
-      {openModal && <RejectionModal setOpenModal={setOpenModal} />}
+      {openModal && <RejectionModal itemId={props?.meal?._id ?? ""} setOpenModal={setOpenModal} />}
     </>
   );
 }
