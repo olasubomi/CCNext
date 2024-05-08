@@ -209,7 +209,7 @@ const GroceryPage = () => {
   const getList = async () => {
     console.log("local grocery", getLocalGroceryList());
 
-    if (isUserOnline) {
+    if (true) {
       try {
         const response = await axios(`/groceries/list/${id}`, {
           method: "GET",
@@ -357,7 +357,7 @@ const GroceryPage = () => {
   useEffect(() => {
     getAllMeasurement();
     getList();
-  }, [isUserOnline]);
+  }, [isUserOnline, id]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");

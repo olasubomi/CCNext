@@ -8,9 +8,60 @@
 
 .reject_card {
   background-color: white;
-  height: 35rem;
+  height: 18rem;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  padding: 2rem;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
+}
+.btns {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2rem;
+  padding-top: 1.5rem;
+}
+.outline {
+  padding: 0.7rem 4rem;
+  background: transparent;
+  border: 1px solid #0f0a0a;
+  color: #6d6d6d;
+  font-size: 12px;
+}
+.solid {
+  padding: 0.9rem 3rem;
+  background: #04d505;
+  color: #fff;
+  font-size: 12px;
+  border: none;
+}
+.post {
+  color: #6d6d6d;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+.contact p {
+  font-size: 15px;
+  color: #353535;
+}
+.reject_container {
+  width: 92%;
+  margin-left: 8%;
+}
+.flex_apart {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.contact {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 0.5rem;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 .modalContainer {
   width: 100%;
@@ -27,7 +78,27 @@
   justify-content: center;
   align-items: center;
 }
-
+.meals_steps {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.all_steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+.instructionTitle {
+  margin-top: -0.7rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.carouselText p {
+  margin-top: -0.5rem;
+  font-size: 14px;
+  color: #353535;
+}
 .modalCard3 {
   background: #fff;
   width: 55%;
@@ -884,7 +955,6 @@
 
 .meal_section_6 > h3 {
   width: 100%;
-  margin: 0;
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
@@ -1190,7 +1260,7 @@
   }
 
   .ingredients_head {
-    grid-template-columns: 0.7fr 0.5fr 1fr .6fr;
+    grid-template-columns: 0.7fr 0.5fr 1fr 0.6fr;
     margin-left: 0rem;
   }
 

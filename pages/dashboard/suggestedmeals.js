@@ -757,10 +757,15 @@ const SuggestedMeals = (props) => {
   const handleStatusType = async (type) => {
     try {
       setStatusTypeState(type);
+      
       const res = await axios.post(`/items/item-control`, {
         itemId: suggestion._id,
         status: type,
       });
+
+       
+     
+
       toggleChangeStatus();
       console.log("resss", res);
       if (res.status === 200) {

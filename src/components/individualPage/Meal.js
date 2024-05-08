@@ -14,6 +14,7 @@ import {
   WhatsappEIcon,
   EmailIcon,
   CallIcon,
+  MessageIcon,
 } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
@@ -33,6 +34,11 @@ import axios from "../../util/Api";
 import { Modal } from "../modal/popup-modal";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "../../hooks/usemediaquery";
+import moment from "moment";
+import { FaEnvelope } from "react-icons/fa";
+import { IoMdCall } from "react-icons/io";
+import { HiLocationMarker } from "react-icons/hi";
+import { RejectionModal } from "../modal/rejection-modal";
 
 function Meal(props) {
   //const url = 'http://localhost:3000/'
@@ -49,6 +55,7 @@ function Meal(props) {
   const [show, setShow] = useState(false);
   const [groceryList, setGroceryList] = useState([]);
   const [selectedItem, setSelectedItem] = useState({});
+  const [openModal, setOpenModal] = useState(false);
   console.log(selectedItem, "sele");
   const [quantity, setQuantity] = useState(1);
 
@@ -106,7 +113,7 @@ function Meal(props) {
   }, []);
 
   useEffect(() => {
-    const User = JSON.parse(localStorage.getItem("user")) || {};
+    const user = JSON.parse(localStorage.getItem("user")) || {};
     setUser(user);
   }, []);
   // useEffect(() => {
@@ -119,13 +126,17 @@ function Meal(props) {
       setServes(s);
     }
   }
-
+  console.log(props, "props.props.auth.authUser.user_type");
   // console.log(props.props.props.props.meal, "meal props.props")
   let num = 0;
 
   console.log("meald callback", props.callback);
   console.log(props.meal, "serve me");
   console.log(props.meal.itemImage0, "serve me");
+  console.log(
+    props?.meal[`meal_image_or_video_content${0 + 1}`],
+    "propsssmeal"
+  );
 
   //   let url = shareURL + "&via=" + "ChopChowMarket" +"&text=" + encodeURIComponent(`${props.meal.item_intro}`);
 
@@ -235,7 +246,7 @@ function Meal(props) {
                       <p>{props.meal.meal_prep_time} Minutes</p>
                     </div>
                     <div>
-                      <h3>CookTime : </h3>
+                      <h3>CookTime: </h3>
                       <p>{props.meal.meal_cook_time} Minutes </p>
                     </div>
                     <div>
@@ -354,7 +365,7 @@ function Meal(props) {
                 <p>{props.meal.meal_prep_time} Minutes</p>
               </div>
               <div>
-                <h3>Cook time : </h3>
+                <h3>Cook time: </h3>
                 <p>{props.meal.meal_cook_time} Minutes </p>
               </div>
               <div>
@@ -374,19 +385,11 @@ function Meal(props) {
                   >
                     {/* {matches ? <div></div> : ""} */}
                     <div className={styles.ingredients_th}>Names</div>
-                    <div
-                      className={styles.ingredients_th}
-                     
-                    >
-                      Quantity
-                    </div>
+                    <div className={styles.ingredients_th}>Quantity</div>
                     <div className={styles.ingredients_th + " " + styles.hide}>
                       Measurement
                     </div>
-                    <div
-                      className={styles.ingredients_th}
-                   
-                    >
+                    <div className={styles.ingredients_th}>
                       Availability in store
                     </div>
                     <div className={styles.ingredients_th}>Price</div>
@@ -404,7 +407,11 @@ function Meal(props) {
                                     className={styles.ingredients_tr}
                                   >
                                     <td className={styles.ingredients_td}>
-                                      <input name="id" type="checkbox" style={{marginRight: '20px'}} />
+                                      <input
+                                        name="id"
+                                        type="checkbox"
+                                        style={{ marginRight: "20px" }}
+                                      />
 
                                       {ingredient.item_name}
                                     </td>
@@ -483,58 +490,69 @@ function Meal(props) {
               </div>
             </div>
           )}
-          {props.meal.formatted_instructions && (
-            <div className={styles.meal_section_5}>
-              <h3>Steps</h3>
-              {props.meal.formatted_instructions.length > 0 && (
+          <div className={styles.meal_section_6}>
+            <h3>Kitchen Utensils</h3>
+            <ul>
+              {props.meal.meal_kitchen_utensils?.length > 0 && (
                 <>
-                  {props.meal.meal_formatted_instructions?.map(
-                    (instruction, index) => {
-                      num = index + 1;
-                      console.log(index + 1);
-                      return (
-                        <div key={index} className={styles.meal_section_5_row}>
-                          <div className={styles.meal_section_5_row_1}>
-                            {props.meal.hasOwnProperty([
-                              `meal_image_or_video_content_${Math.abs(
-                                index + 1
-                              )}`,
-                            ]) && (
-                              <Image
-                                width={300}
-                                height={300}
-                                src={
-                                  props.meal[
-                                    `meal_image_or_video_content_${Math.abs(
-                                      index + 1
-                                    )}`
-                                  ]
-                                }
-                                alt="home"
-                                className={styles.meal_section_5_row_1}
-                              />
-                            )}
-                          </div>
-                          <div className={styles.meal_section_5_row_2}>
-                            <h3 className={styles.meal_section_5_row_2_h3}>
-                              {meal_formatted_instructions.title}
-                            </h3>
-                            <p className={styles.meal_section_5_row_2_p}>
-                              {meal_formatted_instructionsinstructionSteps?.map(
-                                (int) => (
-                                  <> {int + ", "} </>
-                                )
-                              )}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    }
-                  )}
+                  {props.meal.meal_kitchen_utensils?.map((cat, index) => (
+                    <li key={index}>{cat}</li>
+                  ))}
                 </>
               )}
-            </div>
-          )}
+            </ul>
+          </div>
+          <div>
+            <h3>Steps</h3>
+            {props.meal.meal_formatted_instructions?.length > 0 && (
+              <div className={styles.all_steps}>
+                {props.meal?.meal_formatted_instructions?.map((elem, index) => {
+                  return (
+                    <div key={index} className={styles.meals_steps}>
+                      <>
+                        {elem.dataName.includes("mp4") ? (
+                          <video
+                            controls
+                            className={styles.popup2_step_img}
+                            height={150}
+                          >
+                            <source
+                              src={
+                                props?.meal[
+                                  `meal_image_or_video_content${index + 1}`
+                                ]
+                              }
+                              type="video/mp4"
+                            />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          <img
+                            height={150}
+                            src={
+                              props?.meal[
+                                `meal_image_or_video_content${index + 1}`
+                              ]
+                            }
+                            className={styles.instruction_img}
+                          />
+                        )}
+                      </>
+
+                      <span className={styles.carouselText}>
+                        <h6 className={styles.instructionTitle}>
+                          {elem.title}
+                        </h6>
+                        {elem.instructionSteps.map((ele) => (
+                          <p className={styles.instructionStep}>{ele}</p>
+                        ))}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
 
           <div className={styles.meal_section_6}>
             <h3>Meal Categories</h3>
@@ -561,6 +579,54 @@ function Meal(props) {
               )}
             </div>
           </div>
+
+          {user?.user_type === "admin" && (
+            <div className={styles.reject_container}>
+              <h4>Posted By</h4>
+              <div className={styles.reject_card}>
+                <div>
+                  <div className={styles.flex_apart}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        gap: ".4rem",
+                      }}
+                    >
+                      <div style={{ width: "47px", height: "47px" }}>
+                        <UserIcon style={{ width: "47px", height: "47px" }} />
+                      </div>
+                      <p>
+                        {props?.meal?.user?.first_name}{" "}
+                        {props.meal.user.last_name}{" "}
+                      </p>
+                    </div>
+                    <span className={styles.post}>
+                      Posted On:
+                      <p style={{ color: "#353535" }}>
+                        {moment(props?.meal?.createdAt).format("Do MMM, YYYY")}
+                      </p>
+                    </span>
+                  </div>
+                  <div>
+                    <div className={styles.contact}>
+                      <FaEnvelope color="#F47900" />
+                      <p>{props?.meal?.user?.email}</p>
+                    </div>
+                    <div className={styles.contact}>
+                      <IoMdCall color="#F47900" />
+                      <p>+ {props?.meal?.user.phone_number}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.btns}>
+                <button className={styles.outline} onClick={() => setOpenModal(true)}>Reject</button>
+                <button className={styles.solid}>Accept Request</button>
+              </div>
+            </div>
+          )}
 
           {user && user?.user_type !== "admin" && (
             <div className={styles.meal_section_8}>
@@ -679,6 +745,7 @@ function Meal(props) {
           show={show}
         />
       )}
+      {openModal && <RejectionModal itemId={props?.meal?._id ?? ""} setOpenModal={setOpenModal} />}
     </>
   );
 }

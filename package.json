@@ -2,7 +2,7 @@
   "name": "chop_chow_sd",
   "version": "0.1.0",
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "private": true,
   "dependencies": {
