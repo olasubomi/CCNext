@@ -2,8 +2,9 @@ import { useCallback, useState } from "react";
 import styles from "./rejection-modal.module.css";
 import { IoIosCloseCircle } from "react-icons/io";
 import axios from "../../util/Api";
+import { toast } from "react-toastify";
 
-export const RejectionModal = ({ setOpenModal, itemId }) => {
+export const RejectionModal = ({ setOpenModal, itemId, getUserItems }) => {
   const [form, setForm] = useState({
     title: "",
     message: "",
@@ -19,6 +20,9 @@ export const RejectionModal = ({ setOpenModal, itemId }) => {
           message: form.message,
         });
         console.log(res);
+        setOpenModal(false);
+        toast.success("Meal rejected successfully");
+        getUserItems()
       } catch (e) {
         console.log(e);
       }
