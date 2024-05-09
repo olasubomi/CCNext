@@ -21,7 +21,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/components/modal/received-rejection.jsx"  ],
   "exclude": [
     "node_modules"
   ]

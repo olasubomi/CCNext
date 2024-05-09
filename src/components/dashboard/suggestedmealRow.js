@@ -12,6 +12,7 @@ import { useState } from "react";
 import Select from "react-select";
 
 import ArrowDropUp from "@mui/icons-material/ArrowDropUp";
+import { ReceivedModal } from "../modal/received-rejection";
 function SuggestedMealRow(props) {
   const [show, setShowState] = useState(false);
   const months = [
@@ -38,6 +39,7 @@ function SuggestedMealRow(props) {
   }
   const [selectedAction, setSelectedAction] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [showRejection, setShowRejection] = useState(false);
 
   const handleClickPopup = () => {
     setShowPopup(true);
@@ -48,12 +50,16 @@ function SuggestedMealRow(props) {
     {
       value: "sendForReview",
       label: "Send for review",
-      isDisabled: suggestion.item_status[0]?.status !== "Draft",
+      isDisabled:
+        suggestion.item_status[0]?.status !== "Draft" &&
+        suggestion.item_status[0]?.status !== "Rejected",
     },
     {
       value: "availableInInventory",
       label: "Available in Inventory",
-      isDisabled: suggestion.item_available === false || suggestion.item_available === undefined,
+      isDisabled:
+        suggestion.item_available === false ||
+        suggestion.item_available === undefined,
     },
     {
       value: "sendToInventory",
@@ -79,7 +85,7 @@ function SuggestedMealRow(props) {
       width: "100%",
     }),
   };
-
+  console.log(suggestion, "suggested");
   return (
     <div key={suggestion._id} className={styles.request_tr_div}>
       <table
@@ -134,7 +140,11 @@ function SuggestedMealRow(props) {
                   : suggestion?.category_name}
               </p>
             </td>
-            <td className={styles.td_name}>
+            <td
+              className={styles.td_name}
+              onMouseEnter={() => setShowRejection(true)}
+              onMouseLeave={() => setShowRejection(false)}
+            >
               <p
                 onClick={
                   props.auth.authUser.user_type === "admin"
@@ -161,6 +171,9 @@ function SuggestedMealRow(props) {
                   : suggestion.publicly_available}
                 {/* {suggestion.item_status[0].status} */}
               </p>
+              {suggestion.item_status[0]?.status === "Rejected" &&
+                suggestion._id &&
+                showRejection && <ReceivedModal suggestion={suggestion} />}
             </td>
             <td className={styles.td_cat}>
               <p
@@ -222,7 +235,6 @@ function SuggestedMealRow(props) {
                 )}
 
                 <i
-                  
                   onClick={() => {
                     // props.deleteSuggestion(suggestion._id)
 
@@ -231,7 +243,7 @@ function SuggestedMealRow(props) {
                 >
                   <CloseFillIcon style={actionIcon} />
                 </i>
-               
+
                 {showPopup && (
                   <div className={styles.addpublicMeal_container}>
                     <div className={styles.popup}>

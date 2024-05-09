@@ -677,6 +677,7 @@
   display: flex;
   align-items: center;
   height: 6rem;
+  position: relative;
 }
 
 .td_name1 {

@@ -131,10 +131,10 @@ function Meal(props) {
   let num = 0;
 
   console.log("meald callback", props.callback);
-  console.log(props.meal, "serve me");
-  console.log(props.meal.itemImage0, "serve me");
+  console.log(props, "serve me");
+ 
   console.log(
-    props?.meal[`meal_image_or_video_content${0 + 1}`],
+    props,
     "propsssmeal"
   );
 
