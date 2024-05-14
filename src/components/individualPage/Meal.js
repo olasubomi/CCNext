@@ -325,7 +325,7 @@ function Meal(props) {
                 title={props.meal.item_name}
                 url={mealURL}
               >
-                <RedditIcon />
+                
               </RedditShareButton>
             </div>
             <div className={styles.hide}>
