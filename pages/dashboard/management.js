@@ -178,8 +178,11 @@ const Management = () => {
   }
 
   const filteredItem = () => {
-    return userInventory.filter((elem) => elem.item_type === "Meal");
+    if(storeId)
+      return userInventory.filter((elem) => elem.item_type === "Meal" );
   };
+
+  console.log(storeId, 'storeid')
 
   const filteredProduct = () => {
     return userInventory.filter((elem) => elem.item_type === "Product");
@@ -258,7 +261,7 @@ const Management = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}")?._id;
       const response = await axios.get(`/inventory/user-inventory/${user}`);
-      console.log(response, 'repsonse')
+      console.log(response, 'reponse')
       const resp = response.data.data.inventoryItems.map((element) => {
         return {
           label: element.item.item_name,
@@ -267,7 +270,7 @@ const Management = () => {
           price: element?.item.item_price
             ? `${element?.item.item_price}`
             : "No Price",
-          store: element?.storeId?.store_name || "No store",
+          store: element?.storeId?._id || "No store",
           item_type: element?.item_type,
           currency: element.storeId?.currency?.symbol,
           item_id: element?.item?._id
@@ -275,8 +278,8 @@ const Management = () => {
       });
       console.log(resp, 'respsp')
       setUserInventory(resp);
-      setFilteredMeals(resp.filter((item) => item.item_type === "Meal"));
-      setFilteredProducts(resp.filter((item) => item.item_type === "Product"));
+      setFilteredMeals(resp.filter((item) => item.item_type === "Meal" && item?.store === storeId));
+      setFilteredProducts(resp.filter((item) => item.item_type === "Product" && item?.store === storeId));
       console.log(response.data.data, "resp");
     } catch (error) {
       console.log(error);

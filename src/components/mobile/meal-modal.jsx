@@ -119,6 +119,7 @@ export const Mealmodal = ({
                       {selectedItem.meal_servings} People
                     </p>
                     <p
+                      onClick={() => router.push(`/chef/${selectedItem.user._id}`)}
                       className={styles.prep}
                       style={{ color: "rgba(244, 121, 0, 1)" }}
                     >
@@ -238,7 +239,6 @@ export const Mealmodal = ({
                         ) : (
                           <>
                             {elem.dataName.includes("mp4") && (
-                           
                               <video
                                 controls
                                 className={styles.popup2_step_img}

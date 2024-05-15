@@ -12,16 +12,16 @@
   z-index: 200;
 }
 .switch {
-  width: 92px;
-  height: 40px;
-  box-shadow: 0px 4px 5px 0px #0000001a;
-  border-radius: 20px;
+  max-width: 92px;
+  height: 36px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;  border-radius: 20px;
   position: relative;
   padding: 0 0.4rem;
   align-items: center;
   display: flex;
   align-items: center;
 }
+
 .roundSwitch {
   position: absolute;
   width: 45px;
@@ -31,7 +31,7 @@
   background-color: #04d505;
   border-radius: 35px;
   cursor: pointer;
-  margin-top: 5px;
+  /* margin-top: 1.5px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,10 +40,11 @@
   transition: transform 0.2s ease;
   transform: translateX(0); /* Initially at position */
 }
+
 .flexed {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 300px;
   padding: 0 1rem;
   margin-top: 0.5rem;
   align-items: center;
@@ -64,7 +65,7 @@
   background-color: #949494;
   border-radius: 35px;
   cursor: pointer;
-  margin-top: 5px;
+  /* margin-top: 1.5px; */
   display: flex;
   justify-content: center;
   align-items: center;

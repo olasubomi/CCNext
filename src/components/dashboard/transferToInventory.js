@@ -367,11 +367,14 @@ export default function TransferToInventory(props) {
                   borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                 }}
               >
-                <label htmlFor="mySelect" style={{ paddingBottom: "1rem", fontSize:'14px' }}>
+                <label
+                  htmlFor="mySelect"
+                  style={{ paddingBottom: "1rem", fontSize: "14px" }}
+                >
                   Which store are you sending from?
                 </label>
                 <select
-                 className={styles.selected}
+                  className={styles.selected}
                   onChange={(e) => {
                     setFormState({
                       ...formState,
@@ -382,7 +385,9 @@ export default function TransferToInventory(props) {
                   name="storeId"
                   value={formState.storeId}
                 >
-                  <option disabled selected>Select...</option>
+                  <option disabled selected>
+                    Select...
+                  </option>
                   {allStores?.map((elem) => (
                     <option key={elem?._id} value={elem?._id}>
                       {elem?.store_name}
@@ -582,39 +587,40 @@ export default function TransferToInventory(props) {
                         style={{ height: "2px" }}
                       >
                         <thead>
-                         {
-                          matches ?  <div
-                          className={styles.request_tr1}
-                          style={{ backgroundColor: "transparent" }}
-                        >
-                          <th className={styles.request_th}>Items</th>
-                          <th
-                            className={
-                              styles.request_th + " " + styles.hideData
-                            }
-                          >
-                            Quantity
-                          </th>
-                          <th className={styles.request_th}>Set Price</th>
-                          <th className={styles.request_th}>
-                            Product Available
-                          </th>
-                        </div> :  <div
-                            className={styles.request_tr1}
-                            style={{ backgroundColor: "transparent" }}
-                          >
-                            <th className={styles.request_th}>Items</th>
-                            <th
-                              className={
-                                styles.request_th + " " + styles.hideData
-                              }
+                          {matches ? (
+                            <div
+                              className={styles.request_tr1}
+                              style={{ backgroundColor: "transparent" }}
                             >
-                              Quantity
-                            </th>
-                            <th className={styles.request_th}>Set Price</th>
-                          
-                          </div>
-                         }
+                              <th className={styles.request_th}>Items</th>
+                              <th
+                                className={
+                                  styles.request_th + " " + styles.hideData
+                                }
+                              >
+                                Quantity
+                              </th>
+                              <th className={styles.request_th}>Set Price</th>
+                              <th className={styles.request_th}>
+                                Product Available
+                              </th>
+                            </div>
+                          ) : (
+                            <div
+                              className={styles.request_tr1}
+                              style={{ backgroundColor: "transparent" }}
+                            >
+                              <th className={styles.request_th}>Items</th>
+                              <th
+                                className={
+                                  styles.request_th + " " + styles.hideData
+                                }
+                              >
+                                Quantity
+                              </th>
+                              <th className={styles.request_th}>Set Price</th>
+                            </div>
+                          )}
                         </thead>
                         <tbody className={styles.tbody}>
                           {formState.ingredientsAvailable?.map(
