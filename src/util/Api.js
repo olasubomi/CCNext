@@ -4,10 +4,10 @@ import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
 let base_url = `http://localhost:3000/api/`;
 
-if (process.env.NODE_ENV !== "development") {
+if (process.env.NODE_ENV == "production") {
     base_url = BASE_URL_LIVE;
-} else {
-    base_url = BASE_URL_DEV;
+} else if (process.env.NODE_ENV == "development")  {
+    base_url = BASE_URL_LIVE_DEV;
 }
 
 let axios = Axios.create({
