@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { BASE_URL_LIVE, BASE_URL_DEV } from '../../api';
+import { BASE_URL_LIVE, BASE_URL_DEV, BASE_URL_LIVE_DEV } from '../../api';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
 let base_url = `http://localhost:3000/api/`;
