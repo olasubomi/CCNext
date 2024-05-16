@@ -24,7 +24,11 @@ const index = () => {
 
   async function fetchItems() {
     try {
+<<<<<<< HEAD
       const response = await fetch(`http://localhost:5000/api/items/1`, {
+=======
+      const response = await fetch(`https://chopchow.app/api/items`, {
+>>>>>>> a620ed30de86228588cf8bfe9fe767f8fbf4bcc0
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -113,6 +117,12 @@ const index = () => {
         <Cart closeCart={closeCart} />
       ) : (
         <div className={indexStyles.allBody}>
+          <Head>
+            <title>Chop Chow Grocery Lists</title>
+            <meta name="description" content="Use Chop Chow to store your 
+            shopping lists or recipe ideas. Make your grocery lists public
+             and share your favourite recipes with family and friends." />
+          </Head>
           <Header route="groceryList" openCart={openCart} />
           <Header2 />
           <SideNav />

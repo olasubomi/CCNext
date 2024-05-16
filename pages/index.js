@@ -121,12 +121,13 @@ class App extends Component {
     return (
       <CartProvider>
         <Head>
-          <title>Chop Chow Landing Page</title>
+          <title>Chop Chow Cooking App</title>
           <meta
             key="title"
             name="viewport"
             content="initial-scale=1.0, width=device-width"
           />
+          <meta name="description" content="Adding convenience to your home cooking." />
         </Head>
 
         <Header />

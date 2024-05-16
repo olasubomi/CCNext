@@ -50,7 +50,7 @@ const SuggestStore = () => {
 
   const handleCreate = async () => {
     let supplier_address = {
-      ...formState
+      ...formState,
     };
     const user = JSON.parse(localStorage.getItem("user"));
     const form = new FormData();
@@ -59,10 +59,12 @@ const SuggestStore = () => {
     if (details.isStoreOwner) {
       form.append("email", user?.email);
       form.append("store_owner", user?._id);
+    } else {
+      form.append('store_admin', user?._id)
     }
     axios.post("/stores/createstore", form).then((response) => {
       if (response.status >= 200 && response.status < 300) {
-        setStoreId(response.data?.data?._id)
+        setStoreId(response.data?.data?._id);
         setShow(true);
       }
     });
@@ -95,17 +97,17 @@ const SuggestStore = () => {
     }
   }, [details, index]);
 
-
-
   return (
     <div className={styles.container}>
       <Head>
-        <title>Chop Chow Grocery</title>
+        <title>Suggest a Store on Chop Chow </title>
         <meta
           key="title"
           name="viewport"
           content="initial-scale=1.0, width=device-width"
         />
+        <meta name="description" content="Suggest local stores near you without owning the store.
+        Manage your stores to include pictures and prices. We partner with chefs and stores to sell thier products" />
       </Head>
       <Header />
       <Header2 />
@@ -296,7 +298,18 @@ const SuggestStore = () => {
           </div>
         </div>
       </div>
-      {show && <SuccessModal storeId={storeId} />}
+      {show && (
+        <SuccessModal
+          storeId={storeId}
+          title={`Store Created Successfully`}
+          text={` Congratulations you have successfully created a store,
+       \n
+          To manage your store, click “Manage store”`}
+          button={true}
+          btnTitle={`Public Market`}
+          btnTitle2={`Manage Store`}
+        />
+      )}
     </div>
   );
 };

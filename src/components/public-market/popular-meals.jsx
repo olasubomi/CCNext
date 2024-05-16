@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -8,6 +8,9 @@ import { toast } from "react-toastify";
 import { IndividualModal } from "../modal/individual-meal-product";
 import { useMediaQuery } from "../../hooks/usemediaquery";
 import { Mealmodal } from "../mobile/meal-modal";
+import { Element, scroller } from "react-scroll";
+import { ScrollableElement } from "../smooth-scroll-link";
+import mealImg from "../../../public/assets/store_pics/no-image-meal.png";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
@@ -19,6 +22,7 @@ export const PopularMeals = () => {
   const [show, setShow] = useState(false);
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
+  const ref = useRef(null);
 
   const loadMore = () => {
     setVisibleMeals(visibleMeals + 4);
@@ -93,15 +97,35 @@ export const PopularMeals = () => {
   useEffect(() => {
     fetchGroceryList();
   }, []);
-
   const filteredMeals = meals.filter(
     (meal) => meal.item_type === "Meal" && meal.average_rating
   );
+  console.log(filteredMeals, "fill");
 
+  useEffect(() => {
+    const hash = window.location.hash;
+
+    const targetId = hash ? hash.substring(1) : "store";
+
+    if (targetId) {
+      scroller.scrollTo(targetId, {
+        duration: 1000,
+        delay: 0,
+        smooth: "easeInOutQuart",
+        offset: -1000,
+      });
+    }
+  }, []);
   return (
-    <div className={styles.mealContainer} >
-      <h4>Popular Meals</h4>
-      <div className={styles.stores2} >
+    <div className={styles.mealContainer}>
+      <Element
+        id="meal"
+        name="meal"
+        style={{ fontSize: "2rem", marginBottom: "1rem" }}
+      >
+        Popular Meals
+      </Element>
+      <div className={styles.stores2}>
         {filteredMeals
           .slice(0, visibleMeals)
           .filter((meal) => Boolean(meal.total_rating))
@@ -117,13 +141,20 @@ export const PopularMeals = () => {
               >
                 {
                   <div className={styles.box}>
-                    <img src={meal?.itemImage0} className={styles.storeImg1} />
+                    <img
+                      src={
+                        meal?.itemImage0
+                          ? meal?.itemImage0
+                          : "/assets/store_pics/no-image-meal.png"
+                      }
+                      className={styles.storeImg1}
+                    />
                     <div className={styles.flex}>
                       <p className={styles.name2}>{meal.item_name}</p>
                       <p>${meal.item_price ? meal.item_price : "0"}</p>
                     </div>
                     <p className={styles.storeName}>Chop Chow Official Store</p>
-                    <div className={styles.flex} >
+                    <div className={styles.flex}>
                       <div>
                         {Array(5)
                           .fill("_")
@@ -139,7 +170,7 @@ export const PopularMeals = () => {
                             />
                           ))}
                       </div>
-                      <p className={styles.prep}> 23 mins </p>
+                      <p className={styles.prep}> 0 mins </p>
                     </div>
                   </div>
                 }
@@ -148,20 +179,21 @@ export const PopularMeals = () => {
           })}
         {!matches ? (
           <Mealmodal
-          openList={openList}
-          openModal={openModal}
-          selectGrocery={selectGrocery}
-          selectedItem={selectedItem}
-          setOpenList={setOpenList}
-          setOpenModal={setOpenModal}
-          show={show}
-          details={details}
-          setDetails={setDetails}
-          addItemToGrocery={addItemToGrocery}
-          setItemAdd={setItemAdd}
-          setQuantity={setQuantity}
-          quantity={quantity}
-          setShow={setShow} />
+            openList={openList}
+            openModal={openModal}
+            selectGrocery={selectGrocery}
+            selectedItem={selectedItem}
+            setOpenList={setOpenList}
+            setOpenModal={setOpenModal}
+            show={show}
+            details={details}
+            setDetails={setDetails}
+            addItemToGrocery={addItemToGrocery}
+            setItemAdd={setItemAdd}
+            setQuantity={setQuantity}
+            quantity={quantity}
+            setShow={setShow}
+          />
         ) : (
           <IndividualModal
             openList={openList}

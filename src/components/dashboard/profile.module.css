@@ -126,8 +126,11 @@
 }
 
 .profile_image{
-    width: 132px;
-    height: 132px;
+    
+    object-fit: contain;
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
 }
 
 .profile_image > span{

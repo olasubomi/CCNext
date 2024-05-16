@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import axios from 'axios';
 import axios from "../src/util/Api";
 import WestIcon from "@mui/icons-material/West";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -19,8 +18,7 @@ import Header, { Header2 } from "../src/components/Header/Header";
 import SideNav from "../src/components/Header/sidenav";
 
 import Head from "next/head";
-import GoBack from "../src/components/CommonComponents/goBack";
-
+import { withRouter } from "next/router";
 class SuggestMeal extends Component {
   allMealNames = [];
   productNames = [
@@ -108,9 +106,11 @@ class SuggestMeal extends Component {
       openModal: false,
       suggestOption: false,
       suggestionType: "Meal",
+      suggestionModal: false,
     };
 
     this.openMealDetailsModal = this.openMealDetailsModal.bind(this);
+    this.openSuggestionModal = this.openSuggestionModal.bind(this);
 
     this.closeModal = this.closeModal.bind(this);
     // this.handleStoreNameInput = this.handleStoreNameInput.bind(this);
@@ -120,28 +120,46 @@ class SuggestMeal extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
+    this.openSuggestionModal();
+    console.log("suggestionType---", this.state.suggestionType);
+    console.log(this.props.router, 'this.props.router.query')
 
-    console.log('suggestionType---', this.state.suggestionType)
+    setTimeout(() => {
+      this.setState({...this.state, suggestionType: this.props.router?.query?.item_type ?? "Meal" })
+    }, 1000);
     // get all Meal Names***
-    console.log(this.categories, "categories")
+    console.log(this.categories, "categories");
     // var url = "/meals/get-meals/1";
-    var url = "/items";
-    axios
-      .get(url)
-      .then((body) => {
-        var mealList = body.data;
-        if (mealList) {
-          mealList.data.meals.map((meal) =>
-            // this.allMealNames.push(meal.meal_name)
-            this.allMealNames.push(meal.item_name)
-          );
-        } else {
-          console.log("get all meal names function does not return");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // var url = "/items/getallitemnames";
+
+    // try {
+    //   const response = await fetch(`http://localhost:5000/api/items`, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+
+    //   const data = await response.json();
+
+    //   console.log(data.data);
+    //   if (data.data === undefined) {
+    //     // setProductErrData(data);
+    //   } else {
+    //     var mealList = data.data;
+    //     if (mealList) {
+    //       mealList.data.meals.map((meal) =>
+    //         // this.allMealNames.push(meal.meal_name)
+    //         this.allMealNames.push(meal.item_name)
+    //       );
+    //     } else {
+    //       console.log("no data.");
+    //     }
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
 
     console.log("all meals", this.allMealNames);
     // get all store names*, if NEW products section exists.
@@ -167,7 +185,7 @@ class SuggestMeal extends Component {
     // });
 
     //----get category meals-------------------------
-    url = "/get-all-categories";
+    // url = "/get-all-categories";
     // axios.get(url).then((body) => {
     //   var categoriesFromDBList = body.data;
     //   if (categoriesFromDBList && categoriesFromDBList.data.length !== 0) {
@@ -185,7 +203,7 @@ class SuggestMeal extends Component {
     //     console.log(err);
     //   });
     this.categories = this.props.categories || this.categories;
-    console.log('PROPER', this.props.categories)
+    console.log("PROPER", this.props.categories);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -226,6 +244,13 @@ class SuggestMeal extends Component {
     // this.props.openModal = false;
     // this.props.func_removeMealFlag();
   }
+  openSuggestionModal() {
+    setTimeout(() => {
+      if (!localStorage.getItem("x-auth-token")) {
+        this.setState({...this.state, suggestionModal: true });
+      }
+    }, 3000);
+  }
 
   suggestOption = () => {
     this.setState({
@@ -239,7 +264,13 @@ class SuggestMeal extends Component {
     });
     this.suggestOption();
   };
+  handleNavigation = () => {
+    // Access router properties using this.props.router
+    const { router } = this.props;
 
+    // Example: Push a new URL to the router
+    router.push("/login");
+  };
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
     // const [ingredientInput, setIngredientInput] = useState('');
@@ -263,9 +294,38 @@ class SuggestMeal extends Component {
               name="viewport"
               content="initial-scale=1.0, width=device-width"
             />
+            <meta name="description" content="Share your go to meals and 
+            everyday cooking ingredients and utensils here on Chop Chow" />
           </Head>
           <div className={styles.suggestion_sections}>
             <div className={styles.suggestion_section_1}>
+              {this.state.suggestionModal && (
+                <div className={styles.suggestionContainer}>
+                  <div className={styles.suggestionModal}>
+                    <div className={styles.gif}>
+                      <img src="/assets/icons/login.svg" alt="" />
+                    </div>
+                    <p className={styles.successMessage}>Login to Continue</p>
+                    <p className={styles.successText}>
+                      To suggest this item, kindly login to your chopchow
+                      account{" "}
+                    </p>
+                    <div className={styles.flexCol}>
+                      {" "}
+                      <Link href="/login" className={styles.btn}>
+                        Login
+                      </Link>
+                      <p
+                        onClick={() =>
+                          this.setState({ suggestionModal: false })
+                        }
+                      >
+                        No, thanks
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className={styles.suggestion_section_1_col_1}>
                 <ul className={styles.suggestion_header_pages}>
                   <WestIcon className={styles.suggestion_header_page_arrow} />
@@ -298,7 +358,6 @@ class SuggestMeal extends Component {
                       <p
                         onClick={() =>
                           this.handleSuggestionType("Kitchen Utensil")
-
                         }
                       >
                         Kitchen Utensils
@@ -324,7 +383,7 @@ class SuggestMeal extends Component {
             )}
             {suggestionType === "Product" && (
               <SuggestProductForm
-                allMealNames={this.allMealNames}
+allMealNames={this.allMealNames}
                 productNames={this.productNames}
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}
@@ -372,6 +431,10 @@ class SuggestMeal extends Component {
   }
 }
 
+<<<<<<< HEAD
 export default SuggestMeal;
 
 
+=======
+export default withRouter(SuggestMeal);
+>>>>>>> a620ed30de86228588cf8bfe9fe767f8fbf4bcc0

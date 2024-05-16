@@ -33,7 +33,7 @@ console.log("props", props)
         "Nov",
         "Dec",
       ]
-console.log(props, "mealsssss")
+
 console.log(router.query.id, "this meal")
 const getMeal = async (name) => {
     // let meal = await axios.get(`/meals/get-meal/${id}`)
@@ -50,11 +50,13 @@ useEffect(() => {
     }
 },[router.query?.name])
 console.log(props, 'meals id page')
+console.log(props, "mealsssss")
     return (
         <div>
             <Head>
-                <title>Chop Chow Meal Page</title>
+                <title>Chop Chow Meal</title>
                 <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta name="description" content="Chop Chow Meal" />
             </Head>
             <Header />
             <Header2 />
@@ -72,7 +74,7 @@ console.log(props, 'meals id page')
                         </div>
                     </div>
                 </div>
-                <div style={{width: '95%'}}>
+                <div style={{width: '95%', margin: 'auto'}}>
                     
                     <Meal meal={props} callback={() => {
                         getMeal(router.query?.name)

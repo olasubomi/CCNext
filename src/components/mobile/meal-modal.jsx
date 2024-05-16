@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "../../util/Api";
 import { toast } from "react-toastify";
-
+import { Modal } from "../modal/popup-modal";
 
 export const Mealmodal = ({
   openList,
@@ -28,7 +28,8 @@ export const Mealmodal = ({
   quantity,
   selectedItem,
 }) => {
-  const router = useRouter()
+  const router = useRouter();
+  console.log(selectedItem, "selectedItem.meal_formatted_instructions");
   return (
     <div>
       {openModal && (
@@ -85,51 +86,52 @@ export const Mealmodal = ({
                   </div>
                 </div>
                 <div className={styles.flexer}>
-                  <div>
-                    <span className={styles.prepspan}>
-                      <p className={styles.prep}>PrepTime: </p>
-                      <p
-                        style={{ marginLeft: ".8rem" }}
-                        className={styles.preptext}
-                      >
-                        {selectedItem.meal_cook_time} Minutes
-                      </p>
-                    </span>
-                    <div className={styles.prepspan}>
-                      <h4 className={styles.prep}>Serves:</h4>
-                      <p className={styles.preptext}>
-                        {selectedItem.meal_servings} People
-                      </p>
-                    </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 8,
+                      marginTop: 10,
+                    }}
+                  >
+                    <p className={styles.prep}>PrepTime:</p>
+                    <p className={styles.prep}>CookTime:</p>
+
+                    <p className={styles.prep}>Serves:</p>
+                    <p className={styles.prep}>Chef:</p>
                   </div>
-                  <div>
-                    <span className={styles.prepspan}>
-                      <p className={styles.prep}>CookTime: </p>
-                      <p
-                        style={{ marginLeft: ".8rem" }}
-                        className={styles.preptext}
-                      >
-                        {selectedItem.meal_prep_time} Minutes
-                      </p>
-                    </span>
-                    <span className={styles.prepspan}>
-                      <p className={styles.prep}>Chef:</p>
-                      <p
-                        className={styles.underline}
-                        onClick={() =>
-                          router.push(`/chef/${selectedItem.user}`)
-                        }
-                      >
-                        {selectedItem.meal_chef}
-                      </p>
-                    </span>
-                  
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 8,
+                      marginTop: 10,
+                    }}
+                  >
+                    <p className={styles.prep}>
+                      {selectedItem.meal_cook_time} Minutes
+                    </p>
+                    <p className={styles.prep}>
+                      {selectedItem.meal_prep_time} Minutes
+                    </p>
+
+                    <p className={styles.prep}>
+                      {selectedItem.meal_servings} People
+                    </p>
+                    <p
+                      className={styles.prep}
+                      style={{ color: "rgba(244, 121, 0, 1)" }}
+                    >
+                      {selectedItem.meal_chef}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-            <p className={styles.prep}>Intro:</p>
-                    <p className={styles.intro}>{selectedItem.item_intro}</p>
+            <p className={styles.prep} style={{ marginTop: "3rem" }}>
+              Intro:
+            </p>
+            <p className={styles.intro}>{selectedItem.item_intro}</p>
             <div>
               <h3 className={styles.modalTitle}>Ingredients</h3>
               <div style={{ marginTop: "1rem", paddingBottom: "3rem" }}>
@@ -144,7 +146,7 @@ export const Mealmodal = ({
                     <th className={styles.th}>Names</th>
                     <th className={styles.th}>Quantity</th>
                     <th className={styles.th}>Measurement</th>
-                    <th className={styles.th}>Price</th>
+                    {/* <th className={styles.th}>Price</th> */}
                   </thead>
                   <tbody>
                     {selectedItem.ingredeints_in_item.map((elem, index) => (
@@ -152,9 +154,9 @@ export const Mealmodal = ({
                         <td className={styles.td}>{elem.item_name}</td>
                         <td className={styles.td}>{elem.item_quantity}</td>
                         <td className={styles.td}>{elem.item_measurement}</td>
-                        <td className={styles.td}>
+                        {/* <td className={styles.td}>
                           {elem?.item_price ? `$${elem?.item_price}` : "N/A"}
-                        </td>{" "}
+                        </td>{" "} */}
                       </tr>
                     ))}
                   </tbody>
@@ -236,14 +238,21 @@ export const Mealmodal = ({
                         ) : (
                           <>
                             {elem.dataName.includes("mp4") && (
+                           
                               <video
-                                className={styles.instruction_img}
-                                src={
-                                  selectedItem[
-                                    `meal_image_or_video_content${index + 1}`
-                                  ]
-                                }
+                                controls
+                                className={styles.popup2_step_img}
+                                height={150}
+                                width={70}
                               >
+                                <source
+                                  src={
+                                    selectedItem[
+                                      `meal_image_or_video_content${index + 1}`
+                                    ]
+                                  }
+                                  type="video/mp4"
+                                />
                                 Your browser does not support the video tag.
                               </video>
                             )}
@@ -261,11 +270,11 @@ export const Mealmodal = ({
                           >
                             {elem.title}
                           </h6>
-                         <ul className={styles.ul}>
-                         {elem.instructionSteps.map((ele) => (
-                            <li className={styles.instructionStep}>{ele}</li>
-                          ))}
-                         </ul>
+                          <ul className={styles.ul}>
+                            {elem.instructionSteps.map((ele) => (
+                              <li className={styles.instructionStep}>{ele}</li>
+                            ))}
+                          </ul>
                         </span>
                       </div>
                     );
@@ -320,7 +329,7 @@ export const Mealmodal = ({
               <button className={styles.btn}>Add to Cart</button>
             </div>
           </div>
-          
+
           {show && (
             <Modal
               addItemToGrocery={addItemToGrocery}
@@ -333,47 +342,125 @@ export const Mealmodal = ({
         </div>
       )}
       {openList && (
-            <div className={styles.modalContainer}>
-              <div className={styles.modalCard3}>
-                <div className={styles.flex3}>
-                  <h4 className={styles.addTitle}>Add Item to Grocery List</h4>
-                  <div
-                    onClick={() => setOpenList(false)}
-                    className={styles.round}
-                  >
-                    <AiOutlineClose />
-                  </div>
-                </div>
-                <div className={styles.lists}>
-                  {selectGrocery?.map((elem) => {
-                    return (
-                      <div
-                        onClick={() => setItemAdd({ listName: elem.listName })}
-                        className={styles.list}
-                      >
-                        <input type="checkbox" />
-                        <p>{elem.listName}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className={styles.flex} style={{ marginTop: "2rem" }}>
-                  <button onClick={addItemToGrocery} className={styles.btn}>
-                    Done
-                  </button>
-                  <button
-                    className={styles.outlinebtn}
-                    onClick={() => {
-                      setOpenList(false);
-                      setShow(true);
-                    }}
-                  >
-                    Add to New List
-                  </button>
-                </div>
+        <div className={styles.modalContainer}>
+          <div className={styles.modalCard3}>
+            <div className={styles.flex3}>
+              <h4 className={styles.addTitle}>Add Item to Grocery List</h4>
+              <div onClick={() => setOpenList(false)} className={styles.round}>
+                <AiOutlineClose />
               </div>
             </div>
-          )}
+            <div className={styles.lists}>
+              {selectGrocery?.map((elem) => {
+                return (
+                  <div
+                    onClick={() => setItemAdd({ listName: elem.listName })}
+                    className={styles.list}
+                  >
+                    <input type="checkbox" />
+                    <p>{elem.listName}</p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className={styles.flex} style={{ marginTop: "2rem" }}>
+              <button onClick={addItemToGrocery} className={styles.btn}>
+                Done
+              </button>
+              <button
+                className={styles.outlinebtn}
+                onClick={() => {
+                  setOpenList(false);
+                  setShow(true);
+                }}
+              >
+                Add to New List
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+{
+  /* <>
+  <div>
+                    <span className={styles.prepspan}>
+                      <p className={styles.prep}>PrepTime: </p>
+                      {/* <p
+                        className={styles.preptext}
+                      >
+                        {selectedItem.meal_cook_time} Minutes
+                      </p> */
+}
+//   </span>
+//   <div className={styles.prepspan}>
+//     <h4 className={styles.prep}>Serves:</h4>
+//     {/* <p className={styles.preptext}>
+//       {selectedItem.meal_servings} People
+//     </p> */}
+//   </div>
+// </div>
+// <div>
+//   <span className={styles.prepspan}>
+//     <p className={styles.prep}>CookTime: </p>
+//     {/* <p
+
+//       className={styles.preptext}
+//     >
+//       {selectedItem.meal_prep_time} Minutes
+//     </p> */}
+//   </span>
+//   <span className={styles.prepspan}>
+//     <p className={styles.prep}>Chef:</p>
+//     {/* <p
+//       className={styles.underline}
+//       onClick={() =>
+//         router.push(`/chef/${selectedItem.user}`)
+//       }
+//     >
+//       {selectedItem.meal_chef}
+//     </p> */}
+//   </span>
+
+// </div>
+// <div>
+//   <span className={styles.prepspan}>
+//     <p className={styles.prep}>PrepTime: </p>
+//     {/* <p
+//       className={styles.preptext}
+//     >
+//       {selectedItem.meal_cook_time} Minutes
+//     </p> */}
+//   </span>
+//   <div className={styles.prepspan}>
+//     <h4 className={styles.prep}>Serves:</h4>
+//     {/* <p className={styles.preptext}>
+//       {selectedItem.meal_servings} People
+//     </p> */}
+//   </div>
+// </div>
+// <div>
+//   <span className={styles.prepspan}>
+//     <p className={styles.prep}>CookTime: </p>
+//     {/* <p
+
+//       className={styles.preptext}
+//     >
+//       {selectedItem.meal_prep_time} Minutes
+//     </p> */}
+//   </span>
+//   <span className={styles.prepspan}>
+//     <p className={styles.prep}>Chef:</p>
+//     {/* <p
+//       className={styles.underline}
+//       onClick={() =>
+//         router.push(`/chef/${selectedItem.user}`)
+//       }
+//     >
+//       {selectedItem.meal_chef}
+//     </p> */}
+//   </span>
+
+// </div>

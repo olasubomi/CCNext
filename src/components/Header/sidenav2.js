@@ -57,7 +57,7 @@ function SideNav2(props) {
                 Dashboard
               </div>
             </Link>
-            {props.auth.authUser.user_type === "supplier" && (
+            {/* {props.auth.authUser.user_type === "supplier" && (
               <Link href="/dashboard/inventory">
                 <div
                   className={
@@ -70,7 +70,7 @@ function SideNav2(props) {
                   Inventory
                 </div>
               </Link>
-            )}
+            )} */}
             <Link href="/dashboard/orders/orders">
               <div
                 className={
@@ -116,7 +116,7 @@ function SideNav2(props) {
                 </div>
               </Link>
             )}
-            <Link href="/dashboard/userprofile">
+              <Link href={`/chef/${user?._id}`}>
               <div
                 className={
                   styles.sidenav_link +
@@ -128,7 +128,7 @@ function SideNav2(props) {
                 My Profile
               </div>
             </Link>
-            <Link href={`/chef/${user?._id}`}>
+            <Link href="/dashboard/userprofile">
               <div
                 className={
                   styles.sidenav_link +
@@ -137,20 +137,21 @@ function SideNav2(props) {
                 }
               >
                 <UserIcon style={styles.sidenav_link_icon} />
-                Public Profile
+                Profile Settings
               </div>
             </Link>
+          
             {props.auth.authUser.user_type === "supplier" && (
-              <Link href="/dashboard/management">
+              <Link href="/dashboard/manage-store">
                 <div
                   className={
                     styles.sidenav_link +
                     " " +
-                    (props.path === "/dashboard/management" && styles.active)
+                    (props.path === "/dashboard/manage-store" && styles.active)
                   }
                 >
                   <StoreMgtIcon style={styles.sidenav_link_icon} />
-                  Store Management
+                 Manage Stores
                 </div>
               </Link>
             )}
@@ -207,10 +208,12 @@ function SideNav2(props) {
           </div>
         )}
         {props.showBottom && !props.auth.authUser && (
+           <Link href="/login">
           <div onClick={toggleLogin} className={styles.sidenav_link}>
             <PowerIcon style={styles.sidenav_link_icon} />
             <p>Log In</p>
           </div>
+          </Link>
         )}
       </div>
     </div>
