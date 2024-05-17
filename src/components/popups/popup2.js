@@ -166,7 +166,7 @@ class Popup2 extends Component {
     };
     localStorage.setItem("suggestionType", "Meal");
     localStorage.setItem("mealId", this.props.id);
-    localStorage.setItem("suggestMealForm", JSON.stringify(meal));
+    localStorage.setItem("suggestMealForm_", JSON.stringify(meal));
     console.log(this.props, "mealss");
     window.location.assign(`/suggestmeal?id=${this.props.id}&item_type=Meal`);
   };
@@ -369,7 +369,7 @@ class Popup2 extends Component {
                       <h3 className={styles.popup2_category_name}>
                         Meal Category
                       </h3>
-                      <p className={styles.popup2_category}>
+                      <p className={styles.popup2_category} style={{textTransform: 'capitalize'}}>
                         {categories?.map((cat) => (
                           <span>{cat} &nbsp; &nbsp;</span>
                         ))}

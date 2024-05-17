@@ -209,15 +209,15 @@ class SuggestMealForm extends Component {
 
     this.categories = this.categories;
     if (typeof window !== "undefined") {
-      let doc = document.querySelector("#formmeal");
-      if (doc) {
-        setInterval(() => {
-          // localStorage.setItem("suggestMealForm", JSON.stringify(this.state));
-        }, 100);
-      }
+      // let doc = document.querySelector("#formmeal");
+      // if (doc) {
+      //   setInterval(() => {
+      //     localStorage.setItem("suggestMealForm", JSON.stringify(this.state));
+      //   }, 100);
+      // }
 
       console.log("This is the state ", this.state);
-      if (localStorage.getItem("suggestMealForm")) {
+      if (localStorage.getItem("suggestMealForm_")) {
         let {
           mealName,
           itemMealName,
@@ -279,8 +279,8 @@ class SuggestMealForm extends Component {
 
           booleanOfDisplayOfDialogBoxConfirmation,
           stepInputs,
-        } = JSON.parse(localStorage.getItem("suggestMealForm"));
-
+        } = JSON.parse(localStorage.getItem("suggestMealForm_"));
+        console.log(mealName, "malnames");
         console.log(instructionChunk1, "instructionChunk1instructionChunk1");
 
         // let stepInpu ts_ =
@@ -325,36 +325,36 @@ class SuggestMealForm extends Component {
           instructionChunk6Step,
           stepInputs,
           instructionChunk1: {
-            title: instructionChunk1,
+            title: instructionChunk1?.title,
             instructionSteps: instructionChunk1Step || [], //[],
             dataName: "",
           },
           instructionChunk2: {
-            title: instructionChunk2,
+            title: instructionChunk2?.title,
             instructionSteps: instructionChunk2Step || [],
 
             dataName: "",
           },
           instructionChunk3: {
-            title: instructionChunk3,
+            title: instructionChunk3?.title,
             instructionSteps: instructionChunk3Step || [],
 
             dataName: "",
           },
           instructionChunk4: {
-            title: instructionChunk4,
+            title: instructionChunk4?.title,
             instructionSteps: instructionChunk4Step || [],
 
             dataName: "",
           },
           instructionChunk5: {
-            title: instructionChunk5,
+            title: instructionChunk5?.title,
             instructionSteps: instructionChunk5Step || [],
 
             dataName: "",
           },
           instructionChunk6: {
-            title: instructionChunk6,
+            title: instructionChunk6?.title,
             instructionSteps: instructionChunk6Step || [],
 
             dataName: "",
@@ -384,10 +384,16 @@ class SuggestMealForm extends Component {
     }
     console.log(this.state, "dd");
   }
-  // componentDidUpdate() {
-  //   localStorage.setItem("suggestMealForm", JSON.stringify(this.state));
-  // }
+  componentWillUnmount() {
+    console.log("componentunmount");
+    let doc = document.querySelector("#formmeal");
+    console.log(doc, "doc", this.state);
+    if (doc) {
+      localStorage.removeItem("suggestMealForm_");
 
+      localStorage.setItem("suggestMealForm_", JSON.stringify(this.state));
+    }
+  }
   ///////////////////////////////////////////////////////////////////////////////////////
   handleCloseOfMealSubmissinoDialogMessage = () => {
     this.setState({ booleanOfDisplayOfDialogBoxConfirmation: false });

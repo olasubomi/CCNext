@@ -12,9 +12,9 @@ export const ReceivedModal = (props) => {
       <div className={styles.header2}>
         <p>Reason for rejection</p>
       </div>
-      <div className={styles.body}>{suggestion.rejectionMessage.title}</div>
+      <div className={styles.body}>{suggestion.rejectionMessage?.title}</div>
       <div className={styles.border} />
-      <div className={styles.body}>{suggestion.rejectionMessage.message}</div>
+      <div className={styles.body}>{suggestion.rejectionMessage?.message}</div>
     </div>
   );
 };
