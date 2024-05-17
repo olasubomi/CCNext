@@ -384,6 +384,9 @@ class SuggestMealForm extends Component {
     }
     console.log(this.state, "dd");
   }
+  // componentDidUpdate() {
+  //   localStorage.setItem("suggestMealForm", JSON.stringify(this.state));
+  // }
 
   ///////////////////////////////////////////////////////////////////////////////////////
   handleCloseOfMealSubmissinoDialogMessage = () => {
@@ -1679,7 +1682,7 @@ class SuggestMealForm extends Component {
     });
   };
   getItem = async (name) => {
-    console.log(name, 'name')
+    console.log(name, "name");
     try {
       const response = await axios.get(`/items/filter/${name}`);
       const resp = response.data.data.map((element) => {
@@ -1696,7 +1699,6 @@ class SuggestMealForm extends Component {
       this.setState({
         ...this.state,
         allMealNames: filteredItems,
-       
       });
       console.log(filteredItems);
     } catch (error) {
@@ -1833,6 +1835,7 @@ class SuggestMealForm extends Component {
                 // id="mealName"
                 id="itemMealName"
                 options={this.state.allMealNames}
+                value={this.state.mealName}
                 onChange={(ev, val) =>
                   this.setState({
                     ...this.state,
@@ -1901,7 +1904,7 @@ class SuggestMealForm extends Component {
             <h3>
               Upload Images <em>(Up to 4)</em>
             </h3>
-            {this.state.mealImagesData.length < 4 && (
+            {this.state.mealImagesData?.length < 4 && (
               <div className={styles.suggestion_form_image}>
                 <div className={styles.suggestion_form_image_col_1}>
                   <div
@@ -1933,7 +1936,7 @@ class SuggestMealForm extends Component {
                 </p>
               </Col>
             </Row>
-            {this.state.mealImagesData.map((data, index) => (
+            {this.state.mealImagesData?.map((data, index) => (
               <Row key={index}>
                 <Col md={12} style={{ marginTop: "20px", width: "100%" }}>
                   <p className={styles.mealImg}>
@@ -2057,7 +2060,7 @@ class SuggestMealForm extends Component {
                     Quantity
                   </label>
                   <TextField
-                   inputProps={{ min: 0 }}
+                    inputProps={{ min: 0 }}
                     fullWidth
                     id="currentIngredientQuantity"
                     type="number"
@@ -2152,7 +2155,7 @@ class SuggestMealForm extends Component {
                 />
                 <Button
                   variant="contained"
-                 disableRipple
+                  disableRipple
                   onClick={this.addKitchenUtensil}
                   className={styles.ingredient_button}
                   style={{ width: "max-content" }}
@@ -2169,7 +2172,7 @@ class SuggestMealForm extends Component {
               spacing={1}
               className={styles.stack}
             >
-              {this.state.suggestedUtensils.map((data, index) => (
+              {this.state.suggestedUtensils?.map((data, index) => (
                 <Chip
                   key={index}
                   label={data}
@@ -2203,7 +2206,7 @@ class SuggestMealForm extends Component {
 
             <div
               className={
-                stepInputs.length > 0
+                stepInputs?.length > 0
                   ? "suggestion_recipe_steps more_steps"
                   : "suggestion_recipe_steps"
               }
@@ -2308,7 +2311,7 @@ class SuggestMealForm extends Component {
                 </p>
               </div>
 
-              {stepInputs.map((id, index) => {
+              {stepInputs?.map((id, index) => {
                 return (
                   <div key={index} className={styles.suggestion_recipe_step}>
                     <div className={styles.suggestion_form_group}>
@@ -2317,7 +2320,7 @@ class SuggestMealForm extends Component {
                       </label>
                       <TextField
                         id={"chunk" + id + "Title"}
-                        value={this.state["instructionChunk" + id].title}
+                        value={this.state["instructionChunk" + id]?.title}
                         onChange={(ev) => this.handleInstructionTitle(ev, id)}
                         variant="outlined"
                       />
@@ -2415,7 +2418,7 @@ class SuggestMealForm extends Component {
               })}
             </div>
             <div className={styles.input_button}>
-              {stepInputs.length > 0 && (
+              {stepInputs?.length > 0 && (
                 <Button
                   variant="contained"
                   disableRipple
@@ -2429,7 +2432,7 @@ class SuggestMealForm extends Component {
                   REMOVE STEP
                 </Button>
               )}
-              {stepInputs.length < 5 && (
+              {stepInputs?.length < 5 && (
                 <Button
                   variant="contained"
                   disableRipple
@@ -2536,7 +2539,7 @@ class SuggestMealForm extends Component {
               </div>
             </div>
             <Stack direction="row" spacing={1} className={styles.stack}>
-              {this.state.tips.map((data, index) => (
+              {this.state.tips?.map((data, index) => (
                 <Chip
                   key={index}
                   label={data}

@@ -240,7 +240,7 @@ class Popup2 extends Component {
                   <div className={styles.img_col}>
                     {imagesData?.length !== 0 && (
                       <Image
-                        src={imagesData[0]}
+                        src={imagesData[0] || ''}
                         alt="pop up"
                         className={styles.popup2_main_img}
                         height={160}
