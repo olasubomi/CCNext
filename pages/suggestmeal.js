@@ -18,7 +18,6 @@ import Header, { Header2 } from "../src/components/Header/Header";
 import SideNav from "../src/components/Header/sidenav";
 
 import Head from "next/head";
-import GoBack from "../src/components/CommonComponents/goBack";
 import { withRouter } from "next/router";
 class SuggestMeal extends Component {
   allMealNames = [];
@@ -123,31 +122,44 @@ class SuggestMeal extends Component {
   componentDidMount() {
     this.openSuggestionModal();
     console.log("suggestionType---", this.state.suggestionType);
-    console.log(this.props.router, 'this.props.router.query00')
+    console.log(this.props.router, 'this.props.router.query')
 
     setTimeout(() => {
-      this.setState({...this.state, suggestionType: this.props.router?.query?.item_type ?? "Meal"})
+      this.setState({...this.state, suggestionType: this.props.router?.query?.item_type ?? "Meal" })
     }, 1000);
     // get all Meal Names***
     console.log(this.categories, "categories");
     // var url = "/meals/get-meals/1";
-    var url = "/items";
-    axios
-      .get(url)
-      .then((body) => {
-        var mealList = body.data;
-        if (mealList) {
-          mealList.data.meals.map((meal) =>
-            // this.allMealNames.push(meal.meal_name)
-            this.allMealNames.push(meal.item_name)
-          );
-        } else {
-          console.log("get all meal names function does not return");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // var url = "/items/getallitemnames";
+
+    // try {
+    //   const response = await fetch(`http://localhost:5000/api/items`, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+
+    //   const data = await response.json();
+
+    //   console.log(data.data);
+    //   if (data.data === undefined) {
+    //     // setProductErrData(data);
+    //   } else {
+    //     var mealList = data.data;
+    //     if (mealList) {
+    //       mealList.data.meals.map((meal) =>
+    //         // this.allMealNames.push(meal.meal_name)
+    //         this.allMealNames.push(meal.item_name)
+    //       );
+    //     } else {
+    //       console.log("no data.");
+    //     }
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
 
     console.log("all meals", this.allMealNames);
     // get all store names*, if NEW products section exists.
@@ -173,7 +185,7 @@ class SuggestMeal extends Component {
     // });
 
     //----get category meals-------------------------
-    url = "/get-all-categories";
+    // url = "/get-all-categories";
     // axios.get(url).then((body) => {
     //   var categoriesFromDBList = body.data;
     //   if (categoriesFromDBList && categoriesFromDBList.data.length !== 0) {
@@ -300,9 +312,9 @@ class SuggestMeal extends Component {
                     </p>
                     <div className={styles.flexCol}>
                       {" "}
-                        <Link href="/login" className={styles.btn}>
-                          Login
-                        </Link>
+                      <Link href="/login" className={styles.btn}>
+                        Login
+                      </Link>
                       <p
                         onClick={() =>
                           this.setState({ suggestionModal: false })
@@ -370,7 +382,7 @@ class SuggestMeal extends Component {
             )}
             {suggestionType === "Product" && (
               <SuggestProductForm
-                allMealNames={this.allMealNames}
+allMealNames={this.allMealNames}
                 productNames={this.productNames}
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}
