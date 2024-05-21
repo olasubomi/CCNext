@@ -15,6 +15,7 @@ import { IndividualModal } from "../modal/individual-meal-product";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { UserIcon } from "../icons";
+import { FaUser } from "react-icons/fa6";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -284,7 +285,7 @@ const MyTabs = ({ id }) => {
                         className={styles.user_img}
                       />
                     ) : (
-                      <UserIcon style={styles.user_img} />
+                      <FaUser size={24} />
                     )}
                     <p className={styles.name}>
                       {ele.user.first_name} {ele.user.last_name}

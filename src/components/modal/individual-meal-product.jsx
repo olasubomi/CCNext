@@ -132,9 +132,7 @@ export const IndividualModal = ({
                       <p className={styles.prep}>Chef:</p>
                       <p
                         className={styles.underline}
-                        onClick={() =>
-                          router.push(`/chef/${selectedItem.user}`)
-                        }
+                        onClick={() => router.push(`/chef/${selectedItem.user._id}`)}
                       >
                         {selectedItem.meal_chef}
                       </p>
