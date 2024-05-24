@@ -320,7 +320,7 @@ const GroceryPage = () => {
     try {
       await axios.patch(`/groceries/remove/${itemList._id}/${id}`);
       getList();
-      toast.success("Delete Success");
+      toast.success("Deleted Successfully");
     } catch (error) {
       console.log(error);
     }

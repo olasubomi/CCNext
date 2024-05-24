@@ -22,6 +22,7 @@ import SideNav from "../src/components/Header/sidenav";
 import { getLocalGroceryList } from "../src/util";
 import { useSelector } from "react-redux";
 import { UserIcon } from "../src/components/icons";
+import { PiEyeFill } from "react-icons/pi";
 
 const Grocery = () => {
   const [show, setShow] = useState(false);
@@ -104,7 +105,6 @@ const Grocery = () => {
     console.log(doc);
     disableBodyScroll(doc);
   }, [show]);
-
   return (
     <div className={styles.container}>
       {" "}
@@ -149,107 +149,122 @@ const Grocery = () => {
               <div className={styles.column1}>
                 <div className={styles.flex2}>
                   <h4 className={styles.title2}>{ele.listName}</h4>
-                  <Popup
-                    trigger={
-                      <div>
-                        {" "}
-                        <HiDotsHorizontal className={styles.dots} />{" "}
-                      </div>
-                    }
-                    position="bottom right"
-                    className={styles.popup_content}
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "2rem",
+                      alignItems: "center",
+                    }}
                   >
-                    <div>
-                      <div
-                        onClick={() => {
-                          setDetails({
-                            listName: ele.listName,
-                            description: ele.description,
-                            id: ele._id,
-                          });
-                          setShow(true);
-                        }}
-                        className={styles.flex}
-                        style={{
-                          justifyContent: "flex-start",
-                          cursor: "pointer",
-                          padding: ".7rem",
-                        }}
-                      >
-                        <AiFillEdit size={17} color="#F47900" />
-                        <p
-                          className={styles.text3}
-                          style={{ marginLeft: ".5rem" }}
-                        >
-                          Edit List
-                        </p>
+                    {ele?.status === "Public" && (
+                      <div style={{display: 'flex', alignItems: 'center', gap: '.6rem'}}>
+                        <PiEyeFill color="#00A001"/>
+                        <p className={styles.public}>{ele?.status}</p>
                       </div>
-                      <div
-                        onClick={() => deleteGrocery(ele._id)}
-                        className={styles.flex}
-                        style={{
-                          justifyContent: "flex-start",
-                          cursor: "pointer",
-                          padding: ".8rem",
-                          zIndex: "1000",
-                        }}
-                      >
-                        <MdDelete size={19} color="#F47900" />
-                        <p
-                          className={styles.text3}
-                          style={{ marginLeft: ".5rem" }}
-                        >
-                          Delete List
-                        </p>
-                      </div>
-                      {ele.groceryItems.length ? (
+                    )}
+
+                    <Popup
+                      trigger={
+                        <div>
+                          {" "}
+                          <HiDotsHorizontal className={styles.dots} />{" "}
+                        </div>
+                      }
+                      position="bottom right"
+                      className={styles.popup_content}
+                    >
+                      <div>
                         <div
+                          onClick={() => {
+                            setDetails({
+                              listName: ele.listName,
+                              description: ele.description,
+                              id: ele._id,
+                            });
+                            setShow(true);
+                          }}
+                          className={styles.flex}
+                          style={{
+                            justifyContent: "flex-start",
+                            cursor: "pointer",
+                            padding: ".7rem",
+                          }}
+                        >
+                          <AiFillEdit size={17} color="#F47900" />
+                          <p
+                            className={styles.text3}
+                            style={{ marginLeft: ".5rem" }}
+                          >
+                            Edit List
+                          </p>
+                        </div>
+                        <div
+                          onClick={() => deleteGrocery(ele._id)}
                           className={styles.flex}
                           style={{
                             justifyContent: "flex-start",
                             cursor: "pointer",
                             padding: ".8rem",
-                            opacity: ele?.groceryItems?.length ? "1" : "0.4",
+                            zIndex: "1000",
                           }}
                         >
-                          <MdRemoveRedEye size={17} color="#F47900" />
+                          <MdDelete size={19} color="#F47900" />
                           <p
                             className={styles.text3}
                             style={{ marginLeft: ".5rem" }}
-                            onClick={() => {
-                              setDetails({
-                                listName: ele.listName,
-                                description: ele.description,
-                                status: ele?.status,
-                                id: ele._id,
-                              });
-                              setOpenModal(true);
+                          >
+                            Delete List
+                          </p>
+                        </div>
+                        {ele.groceryItems.length ? (
+                          <div
+                            className={styles.flex}
+                            style={{
+                              justifyContent: "flex-start",
+                              cursor: "pointer",
+                              padding: ".8rem",
+                              opacity: ele?.groceryItems?.length ? "1" : "0.4",
                             }}
                           >
-                            Make Public
-                          </p>
-                        </div>
-                      ) : (
-                        <div
-                          className={styles.flex}
-                          style={{
-                            justifyContent: "flex-start",
-                            cursor: "pointer",
-                            padding: ".8rem",
-                            opacity: ele?.groceryItems?.length ? "1" : "0.4",
-                          }}
-                        >
-                          <MdRemoveRedEye size={17} color="#F47900" />
-                          <p
-                            className={styles.text3}
-                            style={{ marginLeft: ".5rem" }}
+                            <MdRemoveRedEye size={17} color="#F47900" />
+                            <p
+                              className={styles.text3}
+                              style={{ marginLeft: ".5rem" }}
+                              onClick={() => {
+                                setDetails({
+                                  listName: ele.listName,
+                                  description: ele.description,
+                                  status: ele?.status,
+                                  id: ele._id,
+                                });
+                                setOpenModal(true);
+                              }}
+                            >
+                              Make Public
+                            </p>
+                          </div>
+                        ) : (
+                          <div
+                            className={styles.flex}
+                            style={{
+                              justifyContent: "flex-start",
+                              cursor: "pointer",
+                              padding: ".8rem",
+                              opacity: ele?.groceryItems?.length ? "1" : "0.4",
+                            }}
                           >
-                            Make Public
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </Popup>
+                            <MdRemoveRedEye size={17} color="#F47900" />
+                            <p
+                              className={styles.text3}
+                              style={{ marginLeft: ".5rem" }}
+                            >
+                              Make Public
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </Popup>
+                  </div>
                 </div>
                 <p className={styles.text}>{ele.description}</p>
                 <p
@@ -309,7 +324,7 @@ const Grocery = () => {
                                 />
                               ) : (
                                 <Image
-                                  src="/assets/store_pics/no-image-meal.png"
+                                  src="/assets/store_pics/no-image-utensil.png"
                                   width={95}
                                   height={95}
                                   objectFit="cover"

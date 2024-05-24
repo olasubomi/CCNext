@@ -241,7 +241,7 @@ export const Mealmodal = ({
                             {elem.dataName.includes("mp4") && (
                               <video
                                 controls
-                                className={styles.popup2_step_img}
+                                className={styles.instruction_img}
                                 height={150}
                                 width={70}
                               >
