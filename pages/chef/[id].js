@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import MyTabs from "../../src/components/tabs/tab";
 import { useRouter } from "next/router";
+
 import axios from "../../src/util/Api";
 import { IndividualModal } from "../../src/components/modal/individual-meal-product";
 import {
@@ -62,6 +63,7 @@ const ChefPage = () => {
     if (typeof str !== "string" || str.length === 0) {
       return str; // Return unchanged if not a string or empty string
     }
+
 
     // Check if the string ends with 's'
     if (str.endsWith("s")) {
@@ -141,6 +143,7 @@ const ChefPage = () => {
                                 objectPosition="center" />
                         </span>
                     </div> */}
+
           <div style={{ cursor: "pointer" }} className={styles.icon}>
             <WhatsappShareButton
               title={user.first_name}
@@ -168,6 +171,7 @@ const ChefPage = () => {
               <TwitterEIcon />
             </TwitterShareButton>
           </div>
+
         </div>
       </div>
       <InstagramBasicApi />

@@ -48,7 +48,7 @@ function Login(props) {
   //   props.verifyEmail(userid, token);
   // }, [router.query])
 
-  console.log(process.env.GOOGLE_CLIENT_ID);
+  
 
   function openForgetPassword() {
     setForgetPasswordState(true);
@@ -123,13 +123,13 @@ function Login(props) {
   }
   console.log("useeffect isverified", isverified);
   async function handleSocialLogin(credentialResponse) {
-    // setLoginLoading(true);
-    // await props.socialLogin(credentialResponse.credential);
-    // if (props.auth.isAuthenticated) {
-    //   setLoginLoading(false);
-    // } else {
-    //   setLoginLoading(false);
-    // }
+    setLoginLoading(true);
+    await props.socialLogin(credentialResponse.credential);
+    if (props.auth.isAuthenticated) {
+      setLoginLoading(false);
+    } else {
+      setLoginLoading(false);
+    }
   }
 
   function togglePass() {
@@ -279,7 +279,7 @@ function Login(props) {
                 <div>
                   {showFacebook && (
                     <FacebookLogin
-                      appId="300185864007066"
+                      appId= {process.env.FB_APP_ID}
                       autoLoad={true}
                       fields="name,email,picture"
                       cssClass={styles.blue}

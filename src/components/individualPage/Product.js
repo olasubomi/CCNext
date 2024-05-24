@@ -13,6 +13,7 @@ import {
   StarIcon,
   TwitterEIcon,
   WhatsappEIcon,
+  
 } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
@@ -22,6 +23,8 @@ import {
   InstapaperShareButton,
   TwitterShareButton,
   WhatsappShareButton,
+  RedditShareButton,
+  RedditIcon
 } from "react-share";
 import InstagramShareButton from "../SocialShare/InstagramShare";
 import { useSearchParams } from "next/navigation";
@@ -30,6 +33,9 @@ function Product(props) {
   const [formatted_ingredients, set_formatted_ingredients] = useState([""]);
   //const url = 'http://localhost:3000/'
   const url = "https://www.chopchow.app/";
+  const productName = props.meal.item_name;
+  const productNameWithoutSpaces = productName.replaceAll(' ', '%20') 
+  const productURL = 'https://www.chopchow.app/product/' + productNameWithoutSpaces;
   const params = useSearchParams();
   // console.log(props.product.item_data.product_size, 'item_data')
   // console.log(props.product.item_data.product_size?.map((elem, id) => (
@@ -184,13 +190,13 @@ function Product(props) {
             <FacebookShareButton>
               <FacebookEIcon
                 quote={props.product.product_name}
-                url={url + "product/" + props.product._id}
+                url={productURL}
               />
             </FacebookShareButton>
             <TwitterShareButton
               title={props.product.product_name}
               via="ChopChowMarket"
-              url={url + "product/" + props.product._id}
+              url={productURL}
             >
               <TwitterEIcon />
             </TwitterShareButton>
@@ -199,10 +205,16 @@ function Product(props) {
                         </InstagramShareButton> */}
             <WhatsappShareButton
               title={props.product.product_name}
-              url={url + "product/" + props.product._id}
+              url={productURL}
             >
               <WhatsappEIcon />
             </WhatsappShareButton>
+            <RedditShareButton
+              title={props.product.product_name}
+              url={productURL}
+            >
+              <RedditIcon />
+            </RedditShareButton>
           </div>
           <div>
             <p>Print Preview</p>

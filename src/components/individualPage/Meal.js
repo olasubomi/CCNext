@@ -5,6 +5,7 @@ import Head from "next/head";
 import Image from "next/image";
 import {
   FacebookEIcon,
+  // RedditIcon,
   InstaEIcon,
   LocationIcon,
   PrintEIcon,
@@ -24,6 +25,8 @@ import {
   InstapaperShareButton,
   TwitterShareButton,
   WhatsappShareButton,
+  RedditShareButton,
+  RedditIcon
 } from "react-share";
 import InstagramShareButton from "../SocialShare/InstagramShare";
 import { AiOutlineClose } from "react-icons/ai";
@@ -40,6 +43,9 @@ import { RejectionModal } from "../modal/rejection-modal";
 function Meal(props) {
   //const url = 'http://localhost:3000/'
   const url = "https://www.chopchow.app/";
+  const mealName = props.meal.item_name;
+  // const mealNameWithoutSpaces = props.meal.item_name.replaceAll(' ', '%20') ;
+  const mealURL = 'https://www.chopchow.app/meal/' + mealName;
 
   const matches = useMediaQuery("(min-width: 768px)");
   const [serves, setServes] = useState(parseInt(props.meal?.servings));
@@ -293,7 +299,7 @@ function Meal(props) {
                 Share this product:
               </p>
               <FacebookShareButton
-                url={url + "meal/" + props.meal._id}
+                url={mealURL}
                 quote={props.meal.item_name}
                 hashtag={props.meal.item_intro}
               >
@@ -302,7 +308,7 @@ function Meal(props) {
               <TwitterShareButton
                 title={props.meal.item_name}
                 via="ChopChowMarket"
-                url={url + "meal/" + props.meal._id}
+                url={mealURL}
               >
                 <TwitterEIcon />
               </TwitterShareButton>
@@ -311,10 +317,16 @@ function Meal(props) {
                         </InstagramShareButton> */}
               <WhatsappShareButton
                 title={props.meal.item_name}
-                url={url + "meal/" + props.meal._id}
+                url={mealURL}
               >
                 <WhatsappEIcon />
               </WhatsappShareButton>
+              <RedditShareButton
+                title={props.meal.item_name}
+                url={mealURL}
+              >
+                <RedditIcon />
+              </RedditShareButton>
             </div>
             <div className={styles.hide}>
               <p>Print Preview</p>
