@@ -15,6 +15,7 @@ const INIT_STATE = {
   showSnack: false,
   snackMessage: "",
   snackDuration: 600,
+  
 };
 
 export default (state = INIT_STATE, action) => {

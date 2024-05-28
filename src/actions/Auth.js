@@ -274,24 +274,6 @@ export const verifyEmail = (userid, token) => {
   };
 };
 
-export const forgotPassword = (email) => {
-  return (dispatch) => {
-    dispatch({ type: FETCH_START });
-    axios
-      .post("/user/forgotpassword", { email: email })
-      .then(({ data }) => {
-        console.log(" email sent: ", data);
-        dispatch({ type: FETCH_SUCCESS });
-      })
-      .catch((err) => {
-        console.error("xxx forgotPassword Request ERROR xxx", err);
-        dispatch({
-          type: FETCH_ERROR,
-          payload: "Error during request to resend email",
-        });
-      });
-  };
-};
 
 export const changePassword = (payload) => {
   return (dispatch) => {
@@ -311,6 +293,25 @@ export const changePassword = (payload) => {
       .catch((err) => {
         console.error("xxx changePassword Request ERROR xxx", err.response);
         dispatch({ type: FETCH_ERROR, payload: "Password is not matched" });
+      });
+  };
+};
+
+export const forgotPassword = (email) => {
+  return (dispatch) => {
+    dispatch({ type: FETCH_START });
+    axios
+      .post("/user/forgotpassword", { email: email })
+      .then(({ data }) => {
+        console.log(" email sent: ", data);
+        dispatch({ type: FETCH_SUCCESS, payload: data.message });
+      })
+      .catch((err) => {
+        console.error("xxx forgotPassword Request ERROR xxx", err);
+        dispatch({
+          type: FETCH_ERROR,
+          payload: "Error during request to resend email",
+        });
       });
   };
 };
@@ -460,6 +461,7 @@ export const verifyEmailOTP = ({email,otp}) => {
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
+        dispatch({ type: IS_VERIFIED, payload: true });
       })
       .catch((err) => { 
         dispatch({
@@ -528,3 +530,46 @@ export const verifynumber = ({request_id,code}) => {
       });
   };
 };
+
+export const resetPassword = (password, token) => {
+  return (dispatch) => {
+    dispatch({ type: FETCH_START });
+    axios
+      .post("/user/resetpassword", {token, password})
+      .then(({ data }) => {
+        console.log(" reset password api: ", data.message);
+        dispatch({ type: FETCH_SUCCESS, payload: data.message });
+      })
+      .catch((err) => {
+        console.error("xxx error resetting password ERROR xxx", err);
+        var message = ""
+          if (err.response.status === 400 || err.response.status === 404) {
+            message = 'Bad Request , Check username or email ... !!'
+          } else if (err.response.status === 401) {
+            message ='you are UnAuthorized'
+          } else if (err.response.status >= 500) {
+            message = 'Sorry , Internal Server ERROR' 
+          } else {
+            message = 'Please check your inbox for more details! '
+          }
+
+          dispatch({
+            type: FETCH_ERROR,
+            payload: message,
+          });
+        })
+      
+
+        
+      
+  };
+}
+
+
+// dispatch({
+//   type: TRIGGER_SNACK,
+//   payload: {
+//     showSnack: true,
+//     snackMessage: "error resending email",
+//   },
+// });

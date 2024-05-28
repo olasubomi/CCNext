@@ -17,8 +17,8 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function UserVerificationSuccess({open, setOpen, next}) {
- 
+export default function ResetPasswordSuccess({open, setOpen, next}) {
+  //
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleOption = (title) => {
@@ -36,13 +36,13 @@ console.log(title)
         <Box  sx={style}>
           <div className='verification'>
           <div className='withbg' >   <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" /> </div>
-            <h3>Phone Number Verified</h3>
-            <p>Your phone number was successfully verified</p>
+            <h3>Password Reset</h3>
+            <p>Login with you new password</p>
            
  
 
 <div className='otp-options'> 
- <button className='verification-button bigger' onClick={next()}>Go to Homepage</button>
+ <button className='verification-button bigger' onClick={next()}>Login Now</button>
  </div>
 </div>
  

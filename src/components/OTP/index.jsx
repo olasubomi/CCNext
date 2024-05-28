@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect}  from 'react';
+import React, { useState, useEffect, useRef}  from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -7,6 +7,7 @@ import Modal from '@mui/material/Modal';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
+import { useSelector } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -18,39 +19,94 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function OTP({next, open, setOpen, type, setType, verifyEmailOTPFunc, verifynumberFunc, formState, setFormState}) {
-  const  [code, setCode] = useState([])
+export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTPFunc, verifynumberFunc, formState, setFormState, sendEmailOTPFunc}) {
+  
+  //const {}= useSelector( state => state.Auth);
+  //const {isVerified}= useSelector( state => state.Common)
+
+  let MaxLength = 6;
+  const  [password, setPassword] = useState(Array(MaxLength).fill(-1))
+  const inpRefs = useRef(null);
+  const [activeInput, setActiveInput] = useState(-1);
+  //const [open, setOpen] = useState(true);
  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleOption = (title) => {
-console.log(title)
-  }
+//   const handleOption = (title) => {
+// console.log(title)
+//   }
 
-  const handleCodeChanges = ({target: {value}}, key) => {
+//   const handleCodeChanges = ({target: {value}}, key) => {
 
-    const _code =  code;
+//     const _code =  code;
 
-    _code[key] = value
+//     _code[key] = value
 
-    setCode(_code)
-console.log('code', code)
-  }
+//     setCode(_code)
+// console.log('code', code)
+//   }
 
-  useEffect(()=>{
+
+
+  // useEffect(()=>{
+  // if(isVerified){
+  //   next();
+  // }
+  // }
+  // , [isVerified])
   
-  setFormState({...formState, code})}
-  , [code])
-
+  const handleKeyDown = (e, i)=>{
+     if (e.key == "Backspace") {
+       let pass = password
+       pass[i] = -1
+       setPassword(pass)  
+       setActiveInput(i - 1)
+       if (i != 0) {
+         let nextInput = inpRefs?.current?.[i - 1]
+         //@ts-ignore
+         nextInput?.focus()
+       } else {
+          //@ts-ignore
+          inpRefs?.current?.[i].blur()
+       }
+    }
+  }
+    const handleChange=(e, i)=>{
+      // @ts-ignore
+      //let v = e.nativeEvent["data"]
+      const {value} = e.target;
+      let pass = password
+      //let value = parseInt(v)
+      if (!isNaN(value)) {
+        pass[i] = value
+        setPassword(pass)
+        setActiveInput(i + 1)
+        
+        // Once the input finishes it focuses button which is the next element in the form
+        let nextInput = inpRefs?.current?.[i + 1]
+        //@ts-ignore
+        nextInput?.focus()
+      }
+                                  
+  }
+  
   const handleSubmit = () => {
 
     if(type =='Email Address'){
-      console.log(formState.email, code.reduce((a,b) =>a+b))
-      verifyEmailOTPFunc({email: formState?.email, otp: code?.reduce((a,b) =>a+b)})
+      console.log(formState.email, password.reduce((a,b) =>a+b))
+      verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
+      
     }else {
-      verifynumberFunc(request_id,code.reduce((a,b) =>a+b))
+      verifynumberFunc(request_id,password.reduce((a,b) =>a+b))
     }
+    setTimeout(() => {
+      next();
+    }, 1000);
     
+  }
+
+  const handleResendOtp = () => {
+    sendEmailOTPFunc({email: form?.email})
   }
 
   return (
@@ -73,29 +129,47 @@ console.log('code', code)
 <div className='options'>
    <small>Please Enter the code here</small>
    
- <div  className='otp-inputs'>
-<input onChange={(e)=>handleCodeChanges(e,0)} />
+ <div  className='otp-inputs' >
+{/* <input onChange={(e)=>handleCodeChanges(e,0)} />
 <input onChange={(e)=>handleCodeChanges(e,1)} />
 <input onChange={(e)=>handleCodeChanges(e,2)} />
 <input onChange={(e)=>handleCodeChanges(e,3)} />
 <input onChange={(e)=>handleCodeChanges(e,4)} />
-<input onChange={(e)=>handleCodeChanges(e,5)} />
+<input onChange={(e)=>handleCodeChanges(e,5)} /> */}
+<form  ref={inpRefs}>
+  {password.map((digit, i) => (
+                           
+    <input  type='text' key={i}
+        value={digit !== -1 ? digit : ""}
+        onKeyDown={(e) => handleKeyDown(e, i)}
+        onChange={(e) => handleChange(e, i)}
+        onFocus={() => setActiveInput(i)}
+        onBlur={() => setActiveInput(-1)}
+    ></input>
+      
+  ))}
+  <div className='otp-options'>
+
+  <button className='verification-button' onClick={handleSubmit} >Verify {type}</button>
+   <button className='verification-button alt' onClick={handleClose}>Cancel</button>
+</div>
+
+  </form>
  </div>
 
  
-<h4 style={{ marginLeft: 0, textAlign: 'center'}}>Didn’t receive code? <span>Resend</span> </h4>
+<h4 style={{ marginLeft: 0, textAlign: 'center'} }>Didn’t receive code? <span onClick={handleResendOtp}>Resend</span> </h4>
 
 
 
-<div className='otp-options'>
-<button className='verification-button alt' onClick={handleClose}>Cancel</button>
- <button className='verification-button' onClick={handleSubmit}>Verify {type}</button>
- </div>
+
+ 
 </div>
  
             </div>
         </Box>
       </Modal>
+      {/* {isVerified &&  next()} */}
     </div>
   );
 }

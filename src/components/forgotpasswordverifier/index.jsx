@@ -6,6 +6,7 @@ import Modal from '@mui/material/Modal';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
+import { useSelector } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -17,8 +18,9 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function UserVerificationSuccess({open, setOpen, next}) {
- 
+export default function ForgotPasswordVerifier({open, setOpen }) {
+  
+  const { message, status} = useSelector(state => state.Common)
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleOption = (title) => {
@@ -35,15 +37,13 @@ console.log(title)
       >
         <Box  sx={style}>
           <div className='verification'>
-          <div className='withbg' >   <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" /> </div>
-            <h3>Phone Number Verified</h3>
-            <p>Your phone number was successfully verified</p>
+          <div className='withbg' >  {status ? <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" /> : <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" style={{color: 'red'}} /> }  </div>
+            <h3>{status ? 'Reset Link Sent' : "An error Occured while sending mail"}</h3>
+            <p>{message } </p>
            
  
 
-<div className='otp-options'> 
- <button className='verification-button bigger' onClick={next()}>Go to Homepage</button>
- </div>
+
 </div>
  
              
