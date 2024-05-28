@@ -153,10 +153,10 @@ function SignUp(props){
       setOpenUserVerification(true)   
       }, 1000);
 
-      if(isAuthenticated && authUser){
+      // if(isAuthenticated && authUser){
            
-      //   router.push("/dashboard");
-      }
+      // //   router.push("/dashboard");
+      // }
     }
  
 
@@ -390,10 +390,12 @@ function SignUp(props){
             <img width="100%" height="100%" className={styles.login_col_1_img} src="/assets/signup/signup_bg.jpg" alt="Signup" />
           </div>    
         </div>
-        <UserVerification formState={formState} setFormState={setFormState} requestnumberFunc={props.requestnumberFunc} type={type} setType={setType}  sendEmailOTPFunc={props.sendEmailOTPFunc}  next={handleOpenOtp} open={openUserVerification} setOpen={setOpenUserVerification} />
-        <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/dashboard")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} />
-        <OTP formState={formState} setFormState={setFormState} verifynumberFunc={props.verifynumberFunc} type={type} setType={setType}
-         verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} />
+        {openUserVerification && <UserVerification formState={formState} setFormState={setFormState} requestnumberFunc={props.requestnumberFunc} type={type} setType={setType}  sendEmailOTPFunc={props.sendEmailOTPFunc}  next={handleOpenOtp} open={openUserVerification} setOpen={setOpenUserVerification} />}
+
+        {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/dashboard")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} />}
+
+        {openOTP && <OTP formState={formState} setFormState={setFormState} verifynumberFunc={props.verifynumberFunc} type={type} setType={setType}
+         verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} sendEmailOTPFunc={props.sendEmailOTPFunc} />}
       </>
     )
   }
