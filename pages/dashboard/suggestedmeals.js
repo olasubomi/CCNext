@@ -358,7 +358,7 @@ const SuggestedMeals = (props) => {
         resp?.data?.data?.products?.length
       ) {
         setAllStores(resp?.data?.data.products);
-        console.log("storess--", resp?.data?.data.products);
+        console.log("storess--", resp?.data?.data?.products);
 
         setStorePages(Math.ceil(data.data.data.count / 10));
       }
