@@ -360,7 +360,7 @@ const SuggestedMeals = (props) => {
         setAllStores(resp?.data?.data.products);
         console.log("storess--", resp?.data?.data?.products);
 
-        setStorePages(Math.ceil(data.data.data.count / 10));
+        setStorePages(Math.ceil(resp.data.data.count / 10));
       }
     } catch (e) {
       console.log("err", e);
