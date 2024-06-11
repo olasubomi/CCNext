@@ -2,6 +2,7 @@ import Login from "../src/components/Login"
 import {home_container2} from '../src/components/HomePage/home.module.css';
 import {login_container} from '../src/components/Login/style.module.css'
 import Head from "next/head";
+import useInactivityLogout from "../src/util/useinactivity";
 
 const App = () => {
     return <div className={home_container2}>

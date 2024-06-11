@@ -281,6 +281,8 @@
   width: 34%;
   margin-top: -2rem;
   padding-top: 3rem;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+
 }
 .third .adjust {
   width: 90%;
@@ -372,7 +374,6 @@
 }
 
 .third {
-  border-left: 1px solid rgba(0, 0, 0, 0.2);
   padding-left: 2rem;
   padding-right: 1.5rem;
   width: 30%;

@@ -1,4 +1,4 @@
-import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
+import img_logo from "../../../public/assets/logos/chopchow-logo.png";
 import styles from "./header.module.css";
 
 import Link from "next/link";
@@ -7,7 +7,7 @@ import { MobileHeader } from "../mobile/header-mobile";
 import { animateScroll as scroll, scrollSpy, Events } from "react-scroll";
 import { FaCheck } from "react-icons/fa6";
 import { RiMessage2Fill } from "react-icons/ri";
-import { IoSearchOutline } from "react-icons/io5";
+import { IoSearchCircle, IoSearchOutline } from "react-icons/io5";
 import Image from "next/image";
 import {
   ArrowDownIcon,
@@ -15,6 +15,7 @@ import {
   BasketIcon,
   CartIcon,
   DashBoardIcon,
+  FaqIcon,
   HomeIcon,
   NotificationIcon,
   Order2Icon,
@@ -49,13 +50,13 @@ function Header(props) {
   const [openLogin, setOpenLoginState] = useState(false);
   const [user, setUser] = useState({});
   const router = useRouter();
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(true);
   const [notifications, setNotifications] = useState([]);
   const [showSignup, setShowSignUp] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
   const [openUserDetails, setOpenUserDetails] = useState(false);
   const cartCtx = useContext(CartContext);
-  const matches = useMediaQuery("(min-width: 768px)");
+  const matches = useMediaQuery("(min-width: 1025px)");
   const isLandscape = useMediaQuery("(orientation: landscape)");
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
@@ -291,28 +292,22 @@ function Header(props) {
         </div> */}
         <div className={styles.navbar_top_container}>
           <div className={styles.navbar_top}>
-            <Link href="/">
-              <Image
-                className={styles.navbar_top_logo_img}
-                src={img_logo}
-                alt="logo"
-              />
-            </Link>
-
-            <div className={styles.navbar_top_details}>
-              <div
-                onClick={() => setShowDropdown(true)}
-                className={styles.searchoutline}
-              >
-                <IoSearchOutline size={19} color="#F47900" />
+            <div className={styles.navbar_top_logo_search}>
+              <Link href="/">
+                <Image
+                  className={styles.navbar_top_logo_img}
+                  src={img_logo}
+                  alt="logo"
+                />
+              </Link>
+              <div className={styles.searchbar}>
+                <MobileSearch setShowDropdown={setShowDropdown} />
               </div>
-              {showDropdown &&
-                (matches ? (
-                  ""
-                ) : (
-                  <MobileSearch setShowDropdown={setShowDropdown} />
-                ))}
-
+            </div>
+            <div className={styles.navbar_top_details}>
+              <div className={styles.searchIcon}>
+                <IoSearchOutline color="rgba(244, 121, 0, 1)" size={20} />
+              </div>
               {!props.auth.isAuthenticated && authUser === null ? (
                 <Link legacyBehavior href="/login">
                   <a className={styles.navbar_user_loginbtn}>Log In/Register</a>
@@ -325,8 +320,8 @@ function Header(props) {
                       {" "}
                       <Image
                         id="userImg"
-                        width={50}
-                        height={50}
+                        width={34}
+                        height={34}
                         src={authUser?.profile_picture}
                         alt={props?.auth?.authUser?.username}
                         className={styles.navbar_user_img}
@@ -378,7 +373,6 @@ function Header(props) {
                             styles.black
                           }
                         >
-                          {/* <Image src={openIcon} alt="profile" /> */}
                           <UserIcon style={styles.navbar_main_link_icon} />
                           <h3>Profile</h3>
                         </div>
@@ -420,14 +414,21 @@ function Header(props) {
                   )}
                 </div>
               )}
-              <button className={styles.navbar_user_upgradebtn}>Upgrage</button>
+              <button className={styles.navbar_user_upgradebtn}>
+                Subscribe
+              </button>
               <div className={styles.navbar_top_details_col}>
                 {matches ? (
                   <>
                     {!props.auth.isAuthenticated && authUser === null ? (
                       ""
                     ) : (
-                      <>
+                      <div
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                        }}
+                      >
                         <div
                           id="noticon"
                           onClick={(e) => toggleNotification(e)}
@@ -439,21 +440,18 @@ function Header(props) {
                         </div>
                         <h5
                           id="notText"
-                          style={{ cursor: "pointer" }}
+                          style={{
+                            cursor: "pointer",
+                          }}
+                          className={styles.notitext}
                           onClick={(e) => toggleNotification(e)}
                         >
                           Notification
                         </h5>
-                        (
-                        <span
-                          id="notNo"
-                          style={{ background: "#F47900" }}
-                          className={styles.numberofitems}
-                        >
+                        <span id="notNo" className={styles.numberofitems}>
                           {unreadMessages?.length}
                         </span>
-                        )
-                      </>
+                      </div>
                     )}
                   </>
                 ) : (
@@ -462,7 +460,7 @@ function Header(props) {
                     {!props.auth.isAuthenticated && authUser === null ? (
                       ""
                     ) : (
-                      <>
+                      <div style={{ position: "relative", display: "flex" }}>
                         <Link href="/notification">
                           <NotificationIcon
                             id="notImg"
@@ -471,15 +469,84 @@ function Header(props) {
                         </Link>
                         <span
                           id="notNo"
-                          style={{ background: "#F47900" }}
+                          style={{ marginLeft: "2px" }}
                           className={styles.numberofitems}
                         >
                           {unreadMessages?.length}
                         </span>
-                      </>
+                      </div>
                     )}
                   </>
                 )}
+                <div>
+                  {matches ? (
+                    <>
+                      {!props.auth.isAuthenticated && authUser === null ? (
+                        ""
+                      ) : (
+                        <div style={{ display: "flex" }}>
+                          <div>
+                            <CartIcon
+                              id="notImg"
+                              style={styles.navbar_top_details_col_icon2}
+                            />
+                          </div>
+                          <h5
+                            style={{ marginLeft: "2px" }}
+                            className={styles.notitext}
+                          >
+                            Cart
+                          </h5>
+
+                          <span
+                            className={styles.numberofitems}
+                            id="notNo"
+                            style={{
+                              position: "relative",
+                              right: "2px",
+                            }}
+                          >
+                            0
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {!props.auth.isAuthenticated && authUser === null ? (
+                        ""
+                      ) : (
+                        <div className={styles.show}>
+                          <div>
+                            <CartIcon
+                              id="notImg"
+                              style={styles.navbar_top_details_col_icon2}
+                            />
+                          </div>
+
+                          <span
+                            className={styles.numberofitems}
+                            id="notNo"
+                            style={{
+                              position: "relative",
+                              right: "2px",
+                            }}
+                          >
+                            0
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+                <div className={styles.show}>
+                  <div>
+                    <FaqIcon />
+                  </div>
+                  <h5 style={{}} className={styles.notitext}>
+                    FAQ
+                  </h5>
+                </div>
                 <div id="notification" className={styles.summaries_min}>
                   <div className={styles.summary_min}>
                     <div className={styles.summary_min_head}>
@@ -566,133 +633,16 @@ function Header(props) {
                                 >
                                   <h3
                                     className={styles.summary_notification_desc}
-                                  >
-                                    {/* {user?.noti} */}
-                                  </h3>
+                                  ></h3>
                                   <p
                                     className={styles.summary_notification_time}
-                                  >
-                                    {/* {moment(elem.createdAt).fromNow()} */}
-                                  </p>
+                                  ></p>
                                 </div>
                               </div>
-
-                              {/* <div className={styles.summary_notification}>
-                              <Image
-                                src={orderIcon}
-                                alt="order"
-                                className={styles.summary_notification_Img}
-                              />
-                              <div className={styles.summary_notification_Details}>
-                                <h3 className={styles.summary_notification_desc}>
-                                  hhh
-                                </h3>
-                                <p className={styles.summary_notification_link}>
-                                  View Order
-                                </p>
-                                <p className={styles.summary_notification_time}>
-                                  2 sec
-                                </p>
-                              </div>
-                            </div> */}
-                              {/* <div className={styles.summary_notification}>
-                              <Image
-                                src={messageIcon}
-                                alt="notification"
-                                className={styles.summary_notification_Img}
-                              />
-                              <div className={styles.summary_notification_Details}>
-                                <h3 className={styles.summary_notification_desc}>
-                                  Suggested meal : Baking with Flour approved
-                                </h3>
-                                <p className={styles.summary_notification_time}>
-                                  2 sec
-                                </p>
-                              </div>
-                            </div> */}
-
-                              {/* <div className={styles.summary_notification}>
-                              <Image
-                                src={verifiedIcon}
-                                alt="notification"
-                                className={styles.summary_notification_Img}
-                              />
-                              <div className={styles.summary_notification_Details}>
-                                <h3 className={styles.summary_notification_desc}>
-                                  Suggested meal : Baking with Flour approved
-                                </h3>
-                                <p className={styles.summary_notification_link}>
-                                  Track Order
-                                </p>
-                                <p className={styles.summary_notification_time}>
-                                  2 sec
-                                </p>
-                              </div>
-                            </div> */}
-
-                              {/* <div className={styles.summary_notification}>
-                              <Image
-                                src={verifiedIcon}
-                                alt="notification"
-                                className={styles.summary_notification_Img}
-                              />
-                              <div className={styles.summary_notification_Details}>
-                                <h3 className={styles.summary_notification_desc}>
-                                  Suggested meal : Baking with Flour approved
-                                </h3>
-                                <p className={styles.summary_notification_link}>
-                                  View Inventory
-                                </p>
-                                <p className={styles.summary_notification_time}>
-                                  2 sec
-                                </p>
-                              </div>
-                            </div> */}
-
-                              {/* <div className={styles.summary_notification}>
-                              <Image
-                                src={cancelredIcon}
-                                alt="notification"
-                                className={styles.summary_notification_Img}
-                              />
-                              <div className={styles.summary_notification_Details}>
-                                <h3 className={styles.summary_notification_desc}>
-                                  Suggested meal : Gbegiri rejected
-                                </h3>
-                                <p className={styles.summary_notification_link}>
-                                  View
-                                </p>
-                                <p className={styles.summary_notification_time}>
-                                  2 sec
-                                </p>
-                              </div>
-                            </div> */}
                             </div>
                           </div>
                         </div>
                       </div>
-                      {/* <div
-                        className={
-                          styles.navbar_top_details_col + " " + styles.hide
-                        }
-                      >
-                        <CartIcon
-                          style={styles.navbar_top_details_col_icon}
-                          cartOpen={props.openCart}
-                        />
-                        <div>
-                          <a>
-                            <h5 onClick={props.openCart}>Cart</h5>
-                          </a>
-                          <span
-                            style={{ background: "#F47900" }}
-                            className={styles.numberofitems}
-                            onClick={props.openCart}
-                          >
-                            {numberOfCartItems}
-                          </span>
-                        </div>
-                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -725,10 +675,7 @@ function Header(props) {
                         styles.activeLinkDown)
                     }
                   >
-                    <Link
-                      href="#"
-                      // href="/dashboard/orders/orders"
-                    >
+                    <Link href="#">
                       <Order2Icon style={styles.navbar_down_col_icon} />
                       <p>Order</p>
                     </Link>
@@ -757,15 +704,12 @@ function Header(props) {
                       <p>Cart</p>
                     </Link>
                   </div>
-
-                  {/* <Auth toggleLogin={toggleLogin} /> */}
-                  {/* {openLogin && <Auth toggleLogin={toggleLogin} />} */}
                 </div>
               )}
             </div>
           </div>
-          {/* {isOpen && <Auth />} */}
         </div>
+        {/* {isOpen && <Auth />} */}
       </div>
     </>
   );
@@ -802,27 +746,18 @@ export function Header2() {
   const router = useRouter();
   const matches = useMediaQuery("(min-width: 900px)");
   const isLandscape = useMediaQuery("(orientation: landscape)");
+  const [activeLink, setActiveLink] = useState(2);
 
-  useEffect(() => {
-    Events.scrollEvent.register("begin", (to, element) => {
-      console.log("begin", to, element);
-    });
-
-    Events.scrollEvent.register("end", (to, element) => {
-      console.log("end", to, element);
-    });
-
-    scrollSpy.update();
-
-    return () => {
-      Events.scrollEvent.remove("begin");
-      Events.scrollEvent.remove("end");
-    };
-  }, []);
-
-  const handleSetActive = (to) => {
-    console.log(to);
+  const handleSetActive = (id, path) => {
+    setActiveLink(id);
+    router.push(path);
   };
+
+  const menuItems = [
+    { name: "Marketplace", path: "/publicMarket" },
+    { name: "Chef", path: "/chef" },
+    { name: "Blog", path: "/blog" },
+  ];
 
   return (
     <>
@@ -831,54 +766,23 @@ export function Header2() {
           <div className={styles.navbar_main_container}>
             <div className={styles.navbar_main}>
               <ul className={styles.navbar_main_links}>
-                <li className={styles.navbar_main_link}>
-                  <Link
-                    activeClass="active"
-                    href="/publicMarket/#store"
-                    onSetActive={handleSetActive}
-                    onClick={() =>
-                      scroll.scrollTo(0, { smooth: true, duration: 100 })
-                    }
+                {menuItems?.map((elem, id) => (
+                  <li
+                    className={styles.navbar_main_link}
+                    key={id}
+                    onClick={() => handleSetActive(id, elem.path)}
                   >
-                    Stores
-                  </Link>
-                </li>
-                <li className={styles.navbar_main_link}>
-                  {/* <Link href="/publicMarket/#meal">Meals</Link> */}
-                  <Link
-                    activeClass="active"
-                    href="/publicMarket/#meal"
-                    onClick={() =>
-                      scroll.scrollTo(450, { smooth: true, duration: 100 })
-                    }
-                  >
-                    Meals
-                  </Link>
-                </li>
-                <li className={styles.navbar_main_link}>
-                  {/* <Link href="/publicMarket/#products">Products</Link> */}
-                  <Link
-                    activeClass="active"
-                    href="/publicMarket/#product"
-                    onClick={() =>
-                      scroll.scrollTo(1200, { smooth: true, duration: 100 })
-                    }
-                  >
-                    Products
-                  </Link>
-                </li>
-                <li className={styles.navbar_main_link}>
-                  {/* <Link href="/publicMarket/#utensils">Utensils</Link> */}
-                  <Link
-                    activeClass="active"
-                    href="/publicMarket/#utensils"
-                    onClick={() =>
-                      scroll.scrollTo(4000, { smooth: true, duration: 100 })
-                    }
-                  >
-                    Utensils
-                  </Link>
-                </li>
+                    <p
+                      className={
+                        activeLink === id
+                          ? styles.activelink
+                          : styles.inactivelink
+                      }
+                    >
+                      {elem.name}
+                    </p>
+                  </li>
+                ))}
               </ul>
 
               <div className={styles.navbar_main_grocery}>
@@ -890,8 +794,12 @@ export function Header2() {
                   <IoSearchOutline size={19} color="#F47900" />
                   <p>Search</p>
                 </div> */}
-                <Link href="/suggestmeal">Suggest a Meal</Link>
-                <Link href="/grocery">Grocery List</Link>
+                <Link className={styles.link} href="/suggestmeal">
+                  Suggest a Meal
+                </Link>
+                <Link className={styles.link} href="/grocery">
+                  Grocery List
+                </Link>
               </div>
             </div>
           </div>
