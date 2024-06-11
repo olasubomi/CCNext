@@ -39,7 +39,7 @@ export const IndividualModal = ({
                   className={styles.modalImg}
                 />
                 <div className={styles.images1}>
-                  {selectedItem.item_images.slice(1, 3).map((image, idx) => {
+                  {selectedItem?.item_images?.slice(1, 3).map((image, idx) => {
                     return (
                       <div className={styles.img1}>
                         <img src={image} />
@@ -78,7 +78,7 @@ export const IndividualModal = ({
                   <div className={styles.cat} style={{ marginTop: "-.5rem" }}>
                     <p className={styles.intro}>
                       {selectedItem?.item_categories
-                        .map((cat) => cat.category_name)
+                        ?.map((cat) => cat.category_name)
                         ?.toString()}
                     </p>
                   </div>
@@ -132,7 +132,9 @@ export const IndividualModal = ({
                       <p className={styles.prep}>Chef:</p>
                       <p
                         className={styles.underline}
-                        onClick={() => router.push(`/chef/${selectedItem.user._id}`)}
+                        onClick={() =>
+                          router.push(`/chef/${selectedItem.user._id}`)
+                        }
                       >
                         {selectedItem.meal_chef}
                       </p>
@@ -155,11 +157,13 @@ export const IndividualModal = ({
                       <th className={styles.th}>Price</th>
                     </thead>
                     <tbody>
-                      {selectedItem.ingredeints_in_item.map((elem, index) => (
+                      {selectedItem?.ingredeints_in_item?.map((elem, index) => (
                         <tr key={index} className={styles.tr}>
-                          <td className={styles.td}>{elem.item_name}</td>
-                          <td className={styles.td}>{elem.item_quantity}</td>
-                          <td className={styles.td}>{elem.item_measurement}</td>
+                          <td className={styles.td}>{elem?.item_name}</td>
+                          <td className={styles.td}>{elem?.item_quantity}</td>
+                          <td className={styles.td}>
+                            {elem?.item_measurement}
+                          </td>
                           <td className={styles.td}>
                             {elem?.item_price ? `$${elem?.item_price}` : "N/A"}
                           </td>{" "}
@@ -240,7 +244,7 @@ export const IndividualModal = ({
                       (elem, index) => {
                         return (
                           <div key={index}>
-                            {/\.(jpg|png|jpeg)$/i.test(elem.dataName) ? (
+                            {/\.(jpg|png|jpeg)$/i.test(elem?.dataName) ? (
                               <img
                                 src={
                                   selectedItem[
@@ -282,7 +286,7 @@ export const IndividualModal = ({
                               ))}
                             </span>
                           </div>
-                        )
+                        );
                       }
                     )}
                   </Carousel>

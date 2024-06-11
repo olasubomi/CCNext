@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=Poppins:wght@100;200;300;400;500;600&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 *,
 *::after,
 *::before {
@@ -14,14 +13,25 @@ html {
   font-family: "Inter";
   scroll-behavior: smooth;
 }
-/* body{
+body{
   font-family: 'Inter', sans-serif;
-} */
+}
 
 /* ::-webkit-scrollbar {
   width: 0;  Remove scrollbar space
   background: transparent;  Optional: just make scrollbar invisible
 } */
+
+
+
+.inter-font {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0;
+}
 
 .App {
   text-align: center;
@@ -485,177 +495,155 @@ input[type="checkbox"]:checked {
   box-sizing: border-box;
   width: 43px;
   height: 42px;
-  border: 1px solid #6D6D6D;
+  border: 1px solid #6d6d6d;
   border-radius: 4px;
   margin: 20px 10px;
   text-align: center;
-
-
 }
 .verification .otp-options {
   display: flex;
   margin-top: 30px;
   justify-content: center;
-
 }
 .verification .otp-options button {
   margin: 0 10px;
   width: 150px;
 }
 .verification small {
- 
-font-family: 'Inter';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 148%;
-/* or 21px */
-text-align: center;
-
-/* Text Color 1 */
-color: #6D6D6D;
-margin: auto;
-display: block;
-
-}
-
-.verification {
-  background: #FFFFFF;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 24px;
-  padding-bottom: 50p;
-  
-  }
-  .verification img {
-    /* tabler:mail-filled */
- 
-width: 62px;
-height: 62px;
- 
-
-  }
-  .verification img.success-img {
-    width: 100px;
-    height: 100px;
-  }
-  .verification .withbg{
-    /* Ellipse 72 */
-   
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-border-radius: 100%; 
-margin: 20px auto;
-    margin-bottom: 50px;
-
-  }
-  .verification .withbg.withcolor{
-    width: 120px;
-    height: 120px;
-background: rgba(244, 121, 0, 0.06);
- 
-
-  }
-  
-  .verification h3 {
-   
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 23px;
-  line-height: 28px;
-  /* identical to box height */
-  
-  color: #000000;
-  text-align: center;
-  
-  }
-  .verification p {
-  
-  font-family: 'Inter';
+  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 148%;
   /* or 21px */
   text-align: center;
-  
-  color: #353535;
-  
-  
-  }
-  .verification .options h4{
-    /* text-align: center; */
-  font-family: 'Inter';
+
+  /* Text Color 1 */
+  color: #6d6d6d;
+  margin: auto;
+  display: block;
+}
+
+.verification {
+  background: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 24px;
+  padding-bottom: 50p;
+}
+.verification img {
+  /* tabler:mail-filled */
+
+  width: 62px;
+  height: 62px;
+}
+.verification img.success-img {
+  width: 100px;
+  height: 100px;
+}
+.verification .withbg {
+  /* Ellipse 72 */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  border-radius: 100%;
+  margin: 20px auto;
+  margin-bottom: 50px;
+}
+.verification .withbg.withcolor {
+  width: 120px;
+  height: 120px;
+  background: rgba(244, 121, 0, 0.06);
+}
+
+.verification h3 {
+  font-family: "Inter";
   font-style: normal;
   font-weight: 500;
-  font-size: 12px; 
+  font-size: 23px;
+  line-height: 28px;
+  /* identical to box height */
+
+  color: #000000;
+  text-align: center;
+}
+.verification p {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 148%;
+  /* or 21px */
+  text-align: center;
+
+  color: #353535;
+}
+.verification .options h4 {
+  /* text-align: center; */
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
   /* identical to box height */
   margin-left: 45px;
   color: #000000;
   margin-bottom: 0;
+}
+.verification .options h4 span {
+  color: #f47900;
+}
+.verification .options {
+  margin-top: 50px;
+}
 
-  
-  }
-  .verification .options h4 span {
-    color: #F47900;
-  }
-  .verification .options{
-    margin-top: 50px;
-  }
-  
-  .verification .option {
-      display: flex;
-      background-color: white;
-  }
-  
-  .verification .option  .img {
-    padding: 10px;
-  }
-  .verification .option  .img svg {
-   
-width: 24px;
-height: 24px;
- 
+.verification .option {
+  display: flex;
+  background-color: white;
+}
 
+.verification .option .img {
+  padding: 10px;
+}
+.verification .option .img svg {
+  width: 24px;
+  height: 24px;
+}
+.verification .option .title {
+  width: 65%;
+}
+.verification .option .title h6 {
+  /* Email Address */
 
-  }
-  .verification .option  .title {
-    width: 65%;
-  }
-  .verification .option  .title h6 {/* Email Address */
-  
-      font-family: 'Inter';
-      font-style: normal;
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 19px;
-          width: 70%;
-      color: #000000;
-      
-      }
-  .verification .option  .title small {
-  font-family: 'Inter';
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 19px;
+  width: 70%;
+  color: #000000;
+}
+.verification .option .title small {
+  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
   line-height: 148%;
   width: 420px;
-  color: #6D6D6D;
+  color: #6d6d6d;
   display: flex;
   flex-direction: column;
   text-align: left;
   margin: 0;
-  }
-  .verification .option  .button {
-    display: flex;
-    align-items: center;
-    width: 223px;
-  }
-  .verification-button {
-    cursor: pointer;
+}
+.verification .option .button {
+  display: flex;
+  align-items: center;
+  width: 223px;
+}
+.verification-button {
+  cursor: pointer;
   margin-left: auto;
   /* Auto layout */
   display: flex;
@@ -663,111 +651,109 @@ height: 24px;
   justify-content: center;
   align-items: center;
   padding: 12px 20px;
- 
-  
-  background: #F47900;
+
+  background: #f47900;
   border-radius: 4px;
-   border: none;
-  font-family: 'Inter';
+  border: none;
+  font-family: "Inter";
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
   /* identical to box height */
-  
-  color: #FFFFFF;
-  
-  
+
+  color: #ffffff;
+
   /* Inside auto layout */
   flex: none;
   order: 0;
   flex-grow: 0;
-  
+}
+.verification-button.alt {
+  border: 2px solid #f47900;
+  background-color: #fff;
+  color: #f47900;
+}
+.verification-button.bigger {
+  width: 223px !important;
+}
+.verification-button:hover {
+  opacity: 0.9;
+}
+@media (max-width: 768px) {
+  .verification .option {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
   }
-  .verification-button.alt {
-    border: 2px solid #F47900;
-    background-color: #fff;
-    color: #F47900;
+  .verification .options h4 {
+    margin-left: 0;
+    text-align: center;
   }
-  .verification-button.bigger {
-    width: 223px !important;
-  }
-  .verification-button:hover {
-opacity: .9;
- 
-  }
-  @media (max-width: 768px) {
-    .verification .option{
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      align-items: center;
-    }
-    .verification .options h4 {
-      margin-left: 0;
-      text-align: center;
-    }
-  
-    .verification .option .img {
-      padding: 10px 0;
-    }
 
-    .verification .option .title {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-  
-    .verification .option .button {
-      width: 100%;
-    }
-  
-    .verification .otp-options {
-      flex-wrap: wrap;
-    }
-  
-    .verification .otp-options button {
-      margin: 10px;
-    }
-  
-    .verification .otp-inputs {
-      flex-wrap: wrap;
-    }
-  
-    .verification .otp-inputs input {
-      margin: 7px;
-    }
-    .verification-button{
-      margin: auto;
-      padding: 8px 12px;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-    .verification p, .verification .option .title h6, .verification small{
-      font-size: 11px;
-    }
+  .verification .option .img {
+    padding: 10px 0;
+  }
 
-    .verification .option .title small, .verification .options h4 {
-      font-size: 10px;
-    }
-    .verification h3{
-      font-size: 18px;
-      line-height: 22px;
-    }
-    .verification .otp-inputs input{
-      width: 30px;
-      height: 32px;
-    }
-    .verification img {
-      width: 52px;
-      height: 52px;
+  .verification .option .title {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .verification .option .button {
+    width: 100%;
+  }
+
+  .verification .otp-options {
+    flex-wrap: wrap;
+  }
+
+  .verification .otp-options button {
+    margin: 10px;
+  }
+
+  .verification .otp-inputs {
+    flex-wrap: wrap;
+  }
+
+  .verification .otp-inputs input {
+    margin: 7px;
+  }
+  .verification-button {
+    margin: auto;
+    padding: 8px 12px;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  .verification p,
+  .verification .option .title h6,
+  .verification small {
+    font-size: 11px;
+  }
+
+  .verification .option .title small,
+  .verification .options h4 {
+    font-size: 10px;
+  }
+  .verification h3 {
+    font-size: 18px;
+    line-height: 22px;
+  }
+  .verification .otp-inputs input {
+    width: 30px;
+    height: 32px;
+  }
+  .verification img {
+    width: 52px;
+    height: 52px;
   }
   .verification .withbg.withcolor {
     width: 100px;
     height: 100px;
   }
-  .verification .withbg{
+  .verification .withbg {
     margin-bottom: 10px;
   }
-  }
-  
+}

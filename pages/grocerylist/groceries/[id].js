@@ -368,7 +368,9 @@ const GroceryPage = () => {
       setMeasurementValue_1(measurement_value);
     }
   }, [measurement_value]);
-
+  const hello = () => {
+    console.log("hello");
+  };
   console.log(itemList, "itemList?.groceryItems");
   return (
     <div className={styles.container1}>
@@ -941,6 +943,7 @@ const GroceryPage = () => {
           value={value}
           refetch={() => getList()}
           listName={itemList.listName}
+          addJsonDataToGroceryList={addJsonDataToGroceryList}
           isShow={isShow}
           setIsShow={setIsShow}
         />

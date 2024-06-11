@@ -27,14 +27,14 @@ const responsive = {
     breakpoint: { max: 1024, min: 464 },
     items: 3,
   },
-  
+
   mobile: {
     breakpoint: { max: 464, min: 0 },
     items: 1,
   },
 };
 
-export const MealDropDown = ({ selectedStore,setIsShow, id }) => {
+export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, id }) => {
   const matches = useMediaQuery("(min-width: 920px)");
   const [selectGrocery, setSelectGrocery] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -135,13 +135,17 @@ export const MealDropDown = ({ selectedStore,setIsShow, id }) => {
         </div>
         <div className={styles.store_flex}>
           <div className={styles.profile_picture}>
-            <img src={selectedStore.supplier.profile_picture} />
+            <img
+              src={
+                storeInfo?.image
+                  ? storeInfo?.image
+                  : "/assets/store_pics/no-image-store.png"
+              }
+            />
           </div>
           <div className={styles.rightside}>
             <div>
-              <h4 className={styles.storeName2}>
-                {selectedStore.supplier.store_name}
-              </h4>
+              <h4 className={styles.storeName2}>{storeInfo?.name}</h4>
               <div className={styles.rating}>
                 {Array(5)
                   .fill("_")
@@ -149,7 +153,7 @@ export const MealDropDown = ({ selectedStore,setIsShow, id }) => {
                     <GrStar
                       key={idx + _}
                       color={
-                        selectedStore.supplier.average_rating > idx
+                        storeInfo?.average_rating > idx
                           ? "#04D505"
                           : "rgba(0,0,0,0.5)"
                       }
@@ -165,15 +169,13 @@ export const MealDropDown = ({ selectedStore,setIsShow, id }) => {
                 marginTop: "1rem",
               }}
             >
-              <FaLocationDot fill="#F47900" size={20}/>
+              <FaLocationDot fill="#F47900" size={20} />
               <p className={styles.text} style={{ marginLeft: ".4rem" }}>
-                {selectedStore?.supplier?.supplier_address?.address}
+                {storeInfo?.address}
               </p>
             </div>
             <h6 className={styles.title2}>About Store</h6>
-            <p className={styles.text}>
-             {selectedStore?.supplier?.description}
-            </p>
+            <p className={styles.text}>{storeInfo?.description}</p>
           </div>
         </div>
         <Carousel
@@ -182,21 +184,40 @@ export const MealDropDown = ({ selectedStore,setIsShow, id }) => {
           customRightArrow={<CustomRightArrow />}
           customLeftArrow={<CustomLeftArrow />}
         >
-          {selectedStore.items.map((meal, idx) => {
+          {selectedStore?.inventory?.map((meal, idx) => {
             return (
               <div
                 className={styles.mealCard}
                 onClick={() => {
-                  setSelectedItem(meal);
+                  setSelectedItem(meal.item);
                   setOpenModal(true);
                 }}
               >
-                <img src={meal?.itemImage0} alt="" className={styles.img} />
+                <img
+                  src={
+                    meal?.item?.itemImage0
+                      ? meal.item.itemImage0
+                      : !meal?.item?.itemImage0 &&
+                        meal?.item?.item_type === "Meal"
+                      ? "/assets/store_pics/no-image-meal.png"
+                      :!meal?.item?.itemImage0 && meal?.item?.item_type === "Product"
+                      ? "/assets/store_pics/no-image-product.png"
+                      : !meal?.item?.itemImage0 && meal?.item?.item_type === "Utensil"
+                      ? "/assets/store_pics/no-image-utensil.png"
+                      : ""
+                  }
+                  alt=""
+                  className={styles.img}
+                />
+
                 <div className={styles.flex}>
-                  <p className={styles.name}>{meal?.item_name}</p>
+                  <p className={styles.name}>{meal?.item?.item_name}</p>
                   <p className={styles.name2}>
                     {" "}
-                    {meal.item?.price ? "$" + `${meal?.item_price}` : "N/A"}
+                    {meal?.item?.item_price
+                      ? meal?.storeId?.currency?.symbol +
+                        `${meal?.item?.item_price}`
+                      : "N/A"}
                   </p>
                 </div>
               </div>
@@ -212,7 +233,7 @@ export const MealDropDown = ({ selectedStore,setIsShow, id }) => {
             View Store
           </button>
         </div>
-        {openModal && selectedItem.item_type === "Meal" && (
+        {openModal && selectedItem?.item_type === "Meal" && (
           <div>
             {!matches ? (
               <Mealmodal

@@ -35,15 +35,18 @@ export const SuggestModal = ({
   useEffect(() => {
     const targetElement = targetElementRef.current;
 
-    disableBodyScroll(targetElement);
     if (isShow && targetElement) {
       disableBodyScroll(targetElement);
     } else {
       enableBodyScroll(targetElement);
     }
+
+    return () => {
+      clearAllBodyScrollLocks();
+    };
   }, [isShow]);
 
-  const handlAdd = async () => {
+  const handleAdd = async () => {
     try {
       const form = new FormData();
       let value;
@@ -112,7 +115,12 @@ export const SuggestModal = ({
       <div className={styles.modal_card}>
         <div className={styles.flex2}>
           <h5 className={styles.header}>Add New Item to Grocery List</h5>
-          <div onClick={() => setIsShow(false)}>
+          <div
+            onClick={() => {
+              enableBodyScroll(targetElementRef.current);
+              setIsShow(false);
+            }}
+          >
             <AiFillCloseCircle color="#949494" size={28} />
           </div>
         </div>
@@ -241,7 +249,7 @@ export const SuggestModal = ({
             if (selectedOption === "other") {
               addOtherToGroceryList();
             } else {
-              handlAdd();
+              handleAdd();
             }
           }}
         >
