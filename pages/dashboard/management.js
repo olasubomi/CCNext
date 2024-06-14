@@ -17,7 +17,6 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import axios from "../../src/util/Api";
 import { GoTriangleUp } from "react-icons/go";
 import { useMediaQuery } from "../../src/hooks/usemediaquery";
-import { TbDotsVertical } from "react-icons/tb";
 import { IoIosCloseCircle } from "react-icons/io";
 import { BsFillCreditCard2BackFill } from "react-icons/bs";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -34,6 +33,7 @@ import { ModalPopup } from "../../src/components/modal/modal";
 import { FormModal } from "../../src/components/modal/form-modal";
 import { SuccessModal } from "../../src/components/suggest-store/success-modal";
 import { getAllISOCodes } from "iso-country-currency";
+import { SubAdmins } from "../../src/components/management";
 
 const List = [
   {
@@ -117,6 +117,7 @@ const Management = () => {
   const ref = useRef();
   const [value, setValue] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
+  const [storeData, setStoreData] = useState(null);
   const [show, setShow] = useState(false);
   const [items, setItems] = useState([]);
   const [store, setStore] = useState([]);
@@ -178,11 +179,11 @@ const Management = () => {
   }
 
   const filteredItem = () => {
-    if(storeId)
-      return userInventory.filter((elem) => elem.item_type === "Meal" );
+    if (storeId)
+      return userInventory.filter((elem) => elem.item_type === "Meal");
   };
 
-  console.log(storeId, 'storeid')
+  console.log(storeId, "storeid");
 
   const filteredProduct = () => {
     return userInventory.filter((elem) => elem.item_type === "Product");
@@ -194,7 +195,7 @@ const Management = () => {
   const [filteredMeals, setFilteredMeals] = useState(filteredItem());
   const [filteredProducts, setFilteredProducts] = useState(filteredProduct());
 
-  console.log(filteredMeals, 'filteredMeals--')
+  console.log(filteredMeals, "filteredMeals--");
   useEffect(() => {
     setFilteredMeals(filteredItem());
     setFilteredProducts(filteredProduct());
@@ -261,7 +262,7 @@ const Management = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}")?._id;
       const response = await axios.get(`/inventory/user-inventory/${user}`);
-      console.log(response, 'reponse')
+      console.log(response, "reponse");
       const resp = response.data.data.inventoryItems.map((element) => {
         return {
           label: element.item.item_name,
@@ -273,13 +274,21 @@ const Management = () => {
           store: element?.storeId?._id || "No store",
           item_type: element?.item_type,
           currency: element.storeId?.currency?.symbol,
-          item_id: element?.item?._id
+          item_id: element?.item?._id,
         };
       });
-      console.log(resp, 'respsp')
+      console.log(resp, "respsp");
       setUserInventory(resp);
-      setFilteredMeals(resp.filter((item) => item.item_type === "Meal" && item?.store === storeId));
-      setFilteredProducts(resp.filter((item) => item.item_type === "Product" && item?.store === storeId));
+      setFilteredMeals(
+        resp.filter(
+          (item) => item.item_type === "Meal" && item?.store === storeId
+        )
+      );
+      setFilteredProducts(
+        resp.filter(
+          (item) => item.item_type === "Product" && item?.store === storeId
+        )
+      );
       console.log(response.data.data, "resp");
     } catch (error) {
       console.log(error);
@@ -408,6 +417,7 @@ const Management = () => {
           background_picture: store?.background_picture || "",
           store_owner: store?.store_owner || "",
         });
+        setStoreData(store);
         if (store?.background_picture) {
           const image = document.querySelector("#background_picture");
           image.src = store?.background_picture;
@@ -436,6 +446,7 @@ const Management = () => {
             };
           });
           setTimes(time);
+         
         }
       } catch (error) {
         console.log(error);
@@ -475,7 +486,6 @@ const Management = () => {
       value: true,
     },
   ]);
-
 
   const deleteItem = async (id) => {
     try {
@@ -531,9 +541,11 @@ const Management = () => {
   }, [times]);
 
   const deleteInventory = async (id, item_id) => {
-    console.log(id, 'idd')
+    console.log(id, "idd");
     try {
-      const res = await axios.delete(`/inventory/delete-inventory/${id}?item_id=${item_id}`);
+      const res = await axios.delete(
+        `/inventory/delete-inventory/${id}?item_id=${item_id}`
+      );
       console.log("resss", res);
       if (res.status === 202) {
         fetchOneUserInventory();
@@ -700,7 +712,9 @@ const Management = () => {
                         <img
                           id="profile_picture"
                           {...(formState.profile_picture && {
-                            src: formState?.profile_picture_data ?? formState.profile_picture,
+                            src:
+                              formState?.profile_picture_data ??
+                              formState.profile_picture,
                           })}
                           width="100%"
                           height="100%"
@@ -732,7 +746,9 @@ const Management = () => {
                         {" "}
                         <img
                           {...(formState.background_picture && {
-                            src: formState?.background_picture_data ?? formState.background_picture,
+                            src:
+                              formState?.background_picture_data ??
+                              formState.background_picture,
                           })}
                           id="background_picture"
                           width="100%"
@@ -1148,7 +1164,10 @@ const Management = () => {
                           ))}
                         </div>
                       )}
-                      <div className={styles.suggestbtn} onClick={() => router.push('/suggestmeal')}>
+                      <div
+                        className={styles.suggestbtn}
+                        onClick={() => router.push("/suggestmeal")}
+                      >
                         <p>+ New Suggestion</p>
                       </div>
                     </div>
@@ -1200,9 +1219,8 @@ const Management = () => {
                               <td
                                 style={{ textAlign: "center" }}
                                 onClick={() => {
-                                  console.log(ele, 'item_idd')
-                                  deleteInventory(ele.value, ele?.item_id)
-                                
+                                  console.log(ele, "item_idd");
+                                  deleteInventory(ele.value, ele?.item_id);
                                 }}
                                 className={styles.close2}
                               >
@@ -1261,7 +1279,9 @@ const Management = () => {
                                 </td>
                                 <td
                                   style={{ textAlign: "center" }}
-                                  onClick={() => deleteInventory(ele.value, ele.item_id)}
+                                  onClick={() =>
+                                    deleteInventory(ele.value, ele.item_id)
+                                  }
                                   className={styles.close2}
                                 >
                                   <IoIosCloseCircle color="#949494" size={20} />
@@ -1425,90 +1445,7 @@ const Management = () => {
                 </div>
               )}
               {active === 5 && (
-                <div>
-                  <div className={styles.flex}>
-                    <h5>Admins</h5>
-                  </div>
-                  <div className={styles.subadmin}>
-                    <div className={styles.flexstart}>
-                      <div className={styles.user}>
-                        <img src="/assets/icons/girl.jpg" />
-                      </div>
-                      <div style={{ marginLeft: "1.5rem" }}>
-                        <h5 className={styles.admin_name}>Rachel Anterta</h5>
-                        <p className={styles.role}>Sub Admin</p>
-                      </div>
-                    </div>
-                    <div className={styles.center}>
-                      <TbDotsVertical color="#949494" size={20} />
-                    </div>
-                  </div>
-                  <div className={styles.flex} style={{ marginTop: "2rem" }}>
-                    <h5>Sub Admins</h5>
-                  </div>
-                  <div className={styles.subadmin}>
-                    <div className={styles.flexstart}>
-                      <div className={styles.user}>
-                        <img src="/assets/icons/girl.jpg" />
-                      </div>
-                      <div style={{ marginLeft: "1.5rem" }}>
-                        <h5 className={styles.admin_name}>Rachel Anterta</h5>
-                        <p className={styles.role}>Sub Admin</p>
-                      </div>
-                    </div>
-                    <div className={styles.center}>
-                      <TbDotsVertical color="#949494" size={20} />
-                    </div>
-                  </div>
-                  <p className={styles.add}>Add New Sub Admin</p>
-                  <div className={styles.payment}>
-                    <div className={styles.contact}>
-                      <p>Contact Information</p>
-
-                      <div className={styles.columnflex}>
-                        <div className={styles.column}>
-                          <label>First Name</label>
-                          <input
-                            onChange={handleChange}
-                            value={formState.city}
-                            type="text"
-                            name="first_name"
-                          />
-                        </div>
-                        <div className={styles.column}>
-                          <label>Last Name</label>
-                          <input
-                            onChange={handleChange}
-                            value={formState.state}
-                            type="text"
-                            name="Last Name"
-                          />
-                        </div>
-                      </div>
-                      <div className={styles.column}>
-                        <label>Email Address</label>
-                        <input
-                          onChange={handleChange}
-                          value={formState.address}
-                          type="text"
-                          name="email"
-                        />
-                      </div>
-                      <div className={styles.column}>
-                        <label>Phone Number</label>
-                        <input
-                          onChange={handleChange}
-                          value={formState.address}
-                          type="text"
-                          name="number"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className={styles.flexend}>
-                    <button className={styles.button}> Send Link</button>
-                  </div>
-                </div>
+                <SubAdmins storeId={storeId} storeData={storeData} handleGetStore={handleGetStore} />
               )}
               {active === 6 && (
                 <div>

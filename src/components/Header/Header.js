@@ -755,8 +755,8 @@ export function Header2() {
 
   const menuItems = [
     { name: "Marketplace", path: "/publicMarket" },
-    { name: "Chef", path: "/chef" },
-    { name: "Blog", path: "/blog" },
+    { name: "Chefs", path: "/chef" },
+    { name: "Blog", path: "#" },
   ];
 
   return (
