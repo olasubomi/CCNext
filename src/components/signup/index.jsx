@@ -171,6 +171,7 @@ function SignUp(props) {
 
     if (isAuthenticated && authUser) {
       //   router.push("/dashboard");
+
     }
   }
 
