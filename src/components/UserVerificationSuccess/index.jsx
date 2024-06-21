@@ -17,7 +17,9 @@ const style = {
   bgcolor: "background.paper",
   borderRadius: "8px",
 };
-export default function UserVerificationSuccess({ open, setOpen }) {
+
+export default function UserVerificationSuccess({open, setOpen, next}) {
+ 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleOption = (title) => {

@@ -122,6 +122,7 @@ function Login(props) {
     // }
   }
   console.log("useeffect isverified", isverified);
+  
   async function handleSocialLogin(credentialResponse) {
     setLoginLoading(true);
     await props.socialLogin(credentialResponse.credential);
@@ -214,7 +215,7 @@ function Login(props) {
                   type={showPass ? "text" : "password"}
                   id="password"
                   name="password"
-                  value={password}
+                  value={password }
                   placeholder="Your password"
                   onChange={onChange}
                   className={styles.login_form_input}
@@ -244,10 +245,12 @@ function Login(props) {
                   <label>Remember Password</label>
                 </div>
                 <div
-                  onClick={openForgetPassword}
+                  
                   className={styles.login_forgot_pass}
                 >
+                  <Link  href="/forgotpassword">
                   Forgot your Password?
+                  </Link>
                 </div>
               </div>
 
@@ -338,7 +341,9 @@ function Login(props) {
           />
         </div>
       </div>
-
+      {/* {forgetPassword && (
+      router.push("/forgotpassword")
+    )}  */}
       {/* {signUp && (
         <SignUp
           closeSignUp={closeSignUp}

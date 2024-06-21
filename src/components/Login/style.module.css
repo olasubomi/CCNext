@@ -442,6 +442,29 @@
       border: none;
       margin-bottom: 1rem;
   }
+  .login_button1{
+    justify-self: start;
+    width: 100%;
+    height: 46px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    
+    
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+    color: #000000;
+    
+    border: 1px solid #949494;
+    margin-bottom: 1rem;
+  }
+ 
+  
 
   .login_button2{
     justify-self: start;
@@ -663,7 +686,21 @@
   }
 
 
-
+  .forgot_password{
+    justify-self: center;
+    width: 516px;
+    height: max-content;
+    padding: 2rem;
+    
+    background: #FFFFFF;
+    border-radius: 0px;
+    display: grid;
+    grid-gap: 1rem;
+    animation: slidefromright .3s ease-in-out;
+    border-radius: 3px;
+    grid-template-columns: 1fr;
+    overflow: hidden;
+}
  
   .blue{
     background: #3B5998;
@@ -777,6 +814,7 @@ font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
     z-index: 1000;
     color: white;
     overflow-x: hidden;
+    cursor: pointer;
   }
 
   .login_backArr{
@@ -794,6 +832,7 @@ font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
 
   .login_main_logo_img{
     display: none;
+   
   }
 
   .login_options{
