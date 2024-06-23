@@ -27,3 +27,4 @@ export const CATEGORY_LIST = "category_list";
 export const JAWBONE_HANDLE = "jawbone_handle";
 
 export const USER_ADDED_TO_STORE = "user_added_to_store";
+export const USER_REMOVE_FROM_STORE = "user_remove_from_store";
