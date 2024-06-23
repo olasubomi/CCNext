@@ -1,34 +1,29 @@
-import React, { useState, useEffect } from "react";
-import styles from "../Login/style.module.css";
+import React, { useState, useEffect  } from 'react';
+import styles from '../Login/style.module.css';
 // import { Form, Button, Container, Modal, Row, Col, ButtonToolbar } from 'react-bootstrap';
 import { EyeSIcon } from "../icons";
-import Link from "next/link";
-import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
+import Link from 'next/link';
+import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import Image from "next/image";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
-import { connect, useSelector } from "react-redux";
-import {
-  userSignUp,
-  sendEmailOTP,
-  verifyEmailOTP,
-  requestnumber,
-  verifynumber,
-} from "../../actions";
-import { base_url } from "../../util/Api";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useRouter } from "next/router";
-import UserVerification from "../UserVerification";
-import UserVerificationSuccess from "../UserVerificationSuccess";
-import OTP from "../OTP";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+import { connect, useSelector } from 'react-redux';
+import { userSignUp, sendEmailOTP, verifyEmailOTP, requestnumber, verifynumber } from '../../actions';
+import { base_url } from '../../util/Api';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useRouter } from 'next/router';
+import UserVerification from '../UserVerification'
+import UserVerificationSuccess from '../UserVerificationSuccess'
+import OTP from '../OTP'
 
-function SignUp(props) {
+
+
+function SignUp(props){
   const [openUserVerification, setOpenUserVerification] = React.useState(false);
-  const [openUserVerificationSuccess, setOpenUserVerificationSuccess] =
-    React.useState(false);
+  const [openUserVerificationSuccess, setOpenUserVerificationSuccess] = React.useState(false);
   const [openOTP, setOpenOTP] = React.useState(false);
-  const [type, setType] = React.useState("");
-  const { authUser, isAuthenticated } = useSelector((state) => state.Auth);
+  const [type, setType] = React.useState('');
+  const {authUser, isAuthenticated} = useSelector(state => state.Auth)
   const router = useRouter();
   const [message, setMessageState] = useState(null);
   const [status, setStatusState] = useState(null);
@@ -45,38 +40,31 @@ function SignUp(props) {
     confirm_password: "",
   });
   const [error, setError] = useState({
-    username: "",
-    password: "",
-    confirm_password: "",
-    isAgreed: "",
-  });
+    username: '',
+    password: '',
+    confirm_password: '',
+    isAgreed: '',
+  })
 
-  const handleOpenOtp = () => {
-    setOpenUserVerification(false);
-    setOpenUserVerificationSuccess(false);
-    setOpenOTP(true);
-  };
-  const handleOpenSuccess = () => {
-    setOpenUserVerification(false);
-    setOpenUserVerificationSuccess(true);
-    setOpenOTP(false);
-  };
+  const handleOpenOtp = () =>{
+    setOpenUserVerification(false)
+    setOpenUserVerificationSuccess(false)
+    setOpenOTP(true)
+  }
+  const handleOpenSuccess = () =>{
+    setOpenUserVerification(false)
+    setOpenUserVerificationSuccess(true)
+    setOpenOTP(false)
+  }
 
-  useEffect(() => {
-    if (isAuthenticated && authUser) {
+  useEffect(()=>{
+    if(isAuthenticated && authUser){
       router.push("/dashboard");
     }
-  }, [authUser, isAuthenticated]);
+  }, [authUser, isAuthenticated ])
 
-  const {
-    username,
-    email,
-    phone_number,
-    first_name,
-    last_name,
-    password,
-    confirm_password,
-  } = formState;
+  const { username, email, phone_number, first_name, last_name, password, confirm_password, } = formState;
+
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -88,34 +76,31 @@ function SignUp(props) {
   }
 
   function handlePhoneChange(e) {
-    setFormState({ ...formState, ["phone_number"]: e });
+    setFormState({ ...formState, ['phone_number']: e });
   }
 
-  const validateInput = (e) => {
+  const validateInput = e => {
     let { name, value } = e.target;
-    setError((prev) => {
+    setError(prev => {
       const stateObj = { ...prev, [name]: "" };
-
+ 
       switch (name) {
         case "username":
           if (!value) {
             stateObj[name] = "Please enter Username.";
           }
           break;
-
+ 
         case "password":
           if (!value) {
             stateObj[name] = "Please enter Password";
           } else if (password && value !== confirm_password) {
-            stateObj["confirm_password"] =
-              "Password and Confirm Password does not match.";
+            stateObj["confirm_password"] = "Password and Confirm Password does not match.";
           } else {
-            stateObj["confirm_password"] = confirm_password
-              ? ""
-              : error.confirm_password;
+            stateObj["confirm_password"] = confirm_password ? "" : error.confirm_password;
           }
           break;
-
+ 
         case "confirm_password":
           if (!value) {
             stateObj[name] = "Please enter Confirm Password.";
@@ -123,139 +108,128 @@ function SignUp(props) {
             stateObj[name] = "Password and Confirm Password does not match.";
           }
           break;
-
+ 
         default:
           break;
       }
-
+ 
       return stateObj;
     });
-  };
-
-  console.log("redux", props.redux);
-
-  function formSubmit(e) {
-    e.preventDefault();
-
-    // Run validation logic
-    const validationErrors = validateInput(e) ?? {};
-
-    // Check if there are any validation errors
-    if (Object.values(validationErrors).some((error) => error !== "")) {
-      setError(validationErrors);
-      console.error("Form validation failed:", validationErrors);
-      return;
-    }
-
-    // Check if the user has agreed to terms and conditions
-    if (!isAgreed) {
-      setError((prev) => ({
-        ...prev,
-        isAgreed: "Please agree to terms and conditions",
-      }));
-      console.error("Please agree to the terms and conditions.");
-      return;
-    }
-
-    props.signup({
-      username,
-      email,
-      phone_number,
-      first_name,
-      last_name,
-      password,
-    });
-    setTimeout(() => {
-      setOpenUserVerification(true);
-    }, 1000);
-
-    if (isAuthenticated && authUser) {
-      //   router.push("/dashboard");
-
-    }
   }
 
-  return (
-    <>
-      <div className={styles.login}>
-        <div className={styles.login_col_2}>
-          <div className={styles.login_top}>
-            <div className={styles.login_cancel_con}>
-              <Link href="/" legacyBehavior>
-                <img
-                  src="/assets/grocery_list/backArr.svg"
-                  alt="goBack"
-                  width="20px"
-                  height="20px"
-                  className={styles.login_cancel}
-                />
-              </Link>
-              <Link href="/" legacyBehavior>
-                <img
-                  src="/assets/grocery_list/backArr_white.svg"
-                  alt="goBack"
-                  width="20px"
-                  height="20px"
-                  className={styles.login_backArr}
-                />
-              </Link>
+  console.log('redux',props.redux)
+ 
 
-              <Link href="/" legacyBehavior>
-                <h3 className={styles.login_cancel}>Back</h3>
-              </Link>
+  function formSubmit(e){
+    e.preventDefault();
+
+    
+    // Run validation logic
+  const validationErrors = validateInput(e) ?? {};
+
+  // Check if there are any validation errors
+  if (Object.values(validationErrors).some((error) => error !== '')) {
+    setError(validationErrors);
+    console.error('Form validation failed:', validationErrors);
+    return;
+  }
+
+  // Check if the user has agreed to terms and conditions
+  if (!isAgreed) {
+    setError((prev) => ({ ...prev, isAgreed: 'Please agree to terms and conditions' }));
+    console.error('Please agree to the terms and conditions.');
+    return;
+  }
+
+      props.signup({
+        username,
+        email,
+        phone_number,
+        first_name,
+        last_name,
+        password,
+      });
+      setTimeout(() => {
+      setOpenUserVerification(true)   
+      }, 1000);
+
+      // if(isAuthenticated && authUser){
+           
+      // //   router.push("/dashboard");
+      // }
+    }
+ 
+
+    return(
+      <>
+        <div className={styles.login}>
+          <div className={styles.login_col_2}>
+            <div className={styles.login_top}>
+            <div className={styles.login_cancel_con}>
+            <Link href="/" legacyBehavior>
+                    <img
+                      src="/assets/grocery_list/backArr.svg"
+                      alt="goBack"
+                      width="20px"
+                      height="20px"
+                      className={styles.login_cancel}
+                    />
+                  </Link>
+                  <Link href="/" legacyBehavior>
+                  <img
+                      src="/assets/grocery_list/backArr_white.svg"
+                      alt="goBack"
+                      width="20px"
+                      height="20px"
+                      className={styles.login_backArr}
+                    />
+                  </Link>
+                 
+                  <Link href="/" legacyBehavior>
+                    <h3 className={styles.login_cancel}>Back</h3>
+                  </Link>
             </div>
             <Link href="/" legacyBehavior>
-              <Image
-                src={img_logo}
-                alt="logo"
-                className={styles.login_main_logo_img}
-              />
-            </Link>
-            <h4 className={styles.login_promo_text}>
+                    <Image
+                      src={img_logo}
+                      alt="logo"
+                      className={styles.login_main_logo_img}
+                    />
+                          </Link>
+                          <h4 className={styles.login_promo_text}>
               Get your African Delicacies delievered to your Door
             </h4>
-          </div>
-          <div>
+            </div>
+            <div >
             <h3 className={styles.login_col_h3}>Sign Up</h3>
 
-            <div
-              className={styles.signup_form}
-              style={{ paddingLeft: 10, paddingRight: 10 }}
-            >
-              <div className={styles.login_form_col_2}>
-                <div className={styles.login_form_group}>
-                  <label
-                    htmlFor="first_name"
-                    className={styles.login_form_label}
-                  >
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    name="first_name"
-                    value={first_name}
-                    placeholder="First Name"
-                    onChange={handleChange}
-                    className={styles.login_form_input}
-                  />
+            
+            <div className={styles.signup_form} style={{ paddingLeft: 10, paddingRight: 10}}>
+            
+                <div className={styles.login_form_col_2}>
+                    <div className={styles.login_form_group}>
+                        <label htmlFor="first_name" className={styles.login_form_label}>First Name</label>
+                        <input 
+                        type="text"
+                        name="first_name"
+                        value={first_name}
+                        placeholder="First Name"
+                        onChange={handleChange}
+                         className={styles.login_form_input} />
+                        
+                    </div>
+                    <div className={styles.login_form_group}>
+                        <label htmlFor="last_name" className={styles.login_form_label}>Last Name</label>
+                        <input
+                        type="text"
+                        name="last_name"
+                        value={last_name}
+                        placeholder="Last Name"
+                        onChange={handleChange}
+                         className={styles.login_form_input} />
+                        
+                    </div>
                 </div>
-                <div className={styles.login_form_group}>
-                  <label
-                    htmlFor="last_name"
-                    className={styles.login_form_label}
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    name="last_name"
-                    value={last_name}
-                    placeholder="Last Name"
-                    onChange={handleChange}
-                    className={styles.login_form_input}
-                  />
-                </div>
-              </div>
               <div className={styles.login_form_group}>
                 <label htmlFor="username" className={styles.login_form_label}>
                   Username
@@ -269,11 +243,7 @@ function SignUp(props) {
                   onBlur={validateInput}
                   className={styles.login_form_input}
                 />
-                {error.username && (
-                  <span style={{ color: "#FF0000", fontSize: 14 }}>
-                    {error.username}
-                  </span>
-                )}
+                {error.username && <span style={{color: "#FF0000", fontSize: 14}}>{error.username}</span>}
               </div>
               <div className={styles.login_form_group}>
                 <label htmlFor="email" className={styles.login_form_label}>
@@ -289,53 +259,36 @@ function SignUp(props) {
                 />
               </div>
               <div className={styles.login_form_col_2}>
-                <div className={styles.login_form_group}>
-                  <label htmlFor="city" className={styles.login_form_label}>
-                    City
-                  </label>
-                  <input
-                    name="city"
-                    type="text"
-                    className={styles.login_form_input}
-                  />
-                </div>
-                <div className={styles.login_form_group}>
-                  <label htmlFor="country" className={styles.login_form_label}>
-                    Country
-                  </label>
-                  <input
-                    name="country"
-                    type="text"
-                    className={styles.login_form_input}
-                  />
-                </div>
+                  <div className={styles.login_form_group}>
+                      <label htmlFor="city" className={styles.login_form_label}>City</label>
+                      <input  name="city" type="text" className={styles.login_form_input} />
+                      
+                  </div>
+                  <div className={styles.login_form_group}>
+                      <label htmlFor="country" className={styles.login_form_label}>Country</label>
+                      <input name="country" type="text" className={styles.login_form_input} />
+                      
+                  </div>
               </div>
               <div className={styles.login_form_group}>
-                <label
-                  htmlFor="phone_number"
-                  className={styles.login_form_label}
-                >
+                <label htmlFor="phone_number" className={styles.login_form_label}>
                   Phone Number
                 </label>
-
+                
                 <PhoneInput
                   inputClass={styles.login_form_input}
-                  country={"us"}
+                  country={'us'}
                   name="phone_number"
                   value={phone_number}
-                  onChange={(phone) => handlePhoneChange(phone)}
+                  onChange={phone => handlePhoneChange(phone)}
                 />
               </div>
               <div className={styles.login_form_group}>
-                <label
-                  htmlFor="password"
-                  id="password"
-                  className={styles.login_form_label}
-                >
+                <label htmlFor="password" id='password' className={styles.login_form_label}>
                   Password
                 </label>
                 <input
-                  type={showPass ? "text" : "password"}
+                  type={showPass? "text" : "password"}
                   name="password"
                   id="password"
                   value={password}
@@ -344,26 +297,22 @@ function SignUp(props) {
                   onBlur={validateInput}
                   className={styles.login_form_input}
                 />
-
-                <div onClick={togglePass} className={styles.secureEye}>
-                  {showPass ? <VisibilityOff /> : <Visibility />}
-                </div>
-                {error.password && (
-                  <span style={{ color: "#FF0000", fontSize: 14 }}>
-                    {error.password}
-                  </span>
-                )}
+                
+              <div onClick={togglePass} className={styles.secureEye}>
+                {showPass ? 
+                  <VisibilityOff />
+                 : 
+                  <Visibility  />
+                }
+              </div>
+              {error.password && <span style={{color: "#FF0000", fontSize: 14}}>{error.password}</span>}
               </div>
               <div className={styles.login_form_group}>
-                <label
-                  htmlFor="password"
-                  id="confirm_password"
-                  className={styles.login_form_label}
-                >
+                <label htmlFor="password" id="confirm_password" className={styles.login_form_label}>
                   Confirm Password
                 </label>
                 <input
-                  type={showPass ? "text" : "password"}
+                  type={showPass? "text" : "password"}
                   id="confirm_password"
                   name="confirm_password"
                   value={confirm_password}
@@ -372,156 +321,103 @@ function SignUp(props) {
                   onBlur={validateInput}
                   className={styles.login_form_input}
                 />
+                
+               <div onClick={togglePass} className={styles.secureEye}>
+               {showPass ? 
+                  <VisibilityOff />
+                 : 
+                  <Visibility  />
+                }
+              </div>
+              {error.confirm_password && <span style={{color: "#FF0000", fontSize: 14}} >{error.confirm_password}</span>}
+              </div>
 
-                <div onClick={togglePass} className={styles.secureEye}>
-                  {showPass ? <VisibilityOff /> : <Visibility />}
+                <div className={styles.signup_form_option}>
+                <input
+                    className={styles.signup_form_radioInput}
+                    type="checkbox"
+                    id="agreement"
+                    name="isAgreed"
+                    required
+                    value={isAgreed}
+                    onChange={() => setIsAgreed(!isAgreed)}
+                    />
+                    
+                    <label htmlFor="agreement" className={styles.signup_form_radio_label}>
+                    I accept the Terms & Conditions and <Link legacyBehavior href="/privacypolicy"><a style={{textDecoration: "underline"}}>Privacy and Cookie Notice</a></Link>
+  
+                    </label>
+                    {!isAgreed && <span style={{color: "#FF0000", fontSize: 14}} >{error.isAgreed}</span>}
                 </div>
-                {error.confirm_password && (
-                  <span style={{ color: "#FF0000", fontSize: 14 }}>
-                    {error.confirm_password}
-                  </span>
-                )}
-              </div>
 
-              <div className={styles.signup_form_option}>
+                <div className={styles.signup_form_option}>
                 <input
-                  className={styles.signup_form_radioInput}
-                  type="checkbox"
-                  id="agreement"
-                  name="isAgreed"
-                  required
-                  value={isAgreed}
-                  onChange={() => setIsAgreed(!isAgreed)}
-                />
-
-                <label
-                  htmlFor="agreement"
-                  className={styles.signup_form_radio_label}
-                >
-                  I accept the Terms & Conditions and{" "}
-                  <Link legacyBehavior href="/privacypolicy">
-                    <a style={{ textDecoration: "underline" }}>
-                      Privacy and Cookie Notice
-                    </a>
-                  </Link>
-                </label>
-                {!isAgreed && (
-                  <span style={{ color: "#FF0000", fontSize: 14 }}>
-                    {error.isAgreed}
-                  </span>
-                )}
-              </div>
-
-              <div className={styles.signup_form_option}>
-                <input
-                  className={styles.signup_form_radioInput}
-                  type="checkbox"
-                  id="newsletter"
-                  name="newsletter"
-                  value="isSubscribed"
-                  onChange={(e) => setIsSubscribed(e.target.value)}
-                />
-
-                <label
-                  htmlFor="newsletter"
-                  className={styles.signup_form_radio_label}
-                >
-                  I want to receive Chop Chow Newletters and best deal
-                  promotional offers
-                </label>
-              </div>
-
-              {status === "success" ? (
-                <p className="msg-success">{message}</p>
-              ) : (
-                <p className="msg-err">{message}</p>
-              )}
-
-              <button onClick={formSubmit} className={styles.login_button}>
-                Register
-              </button>
-              <h3 className={styles.login_new}>
-                Already have an account?{" "}
-                {props.closeSignUp ? (
-                  <span onClick={props.closeSignUp}>Sign in here</span>
-                ) : (
-                  <Link legacyBehavior href="/login">
-                    <a>Sign in here</a>
-                  </Link>
-                )}
-              </h3>
+                    className={styles.signup_form_radioInput}
+                    type="checkbox"
+                    id="newsletter"
+                    name="newsletter"
+                    value="isSubscribed"
+                    onChange={(e) => setIsSubscribed(e.target.value)}
+                    />
+                    
+                    <label htmlFor="newsletter" className={styles.signup_form_radio_label}>
+                    I want to receive Chop Chow Newletters and best deal promotional offers
+                    </label>
+                </div>
+              
+            {status === 'success' ? 
+            <p className="msg-success">{message}</p>:
+            <p className="msg-err">{message}</p>}
+  
+            <button onClick={formSubmit} className={styles.login_button}>Register</button>
+            <h3 className={styles.login_new}>Already have an account? {props.closeSignUp ? <span onClick={props.closeSignUp}>Sign in here</span> : <Link legacyBehavior href='/login'><a>Sign in here</a></Link> }</h3>
             </div>
-          </div>
+          </div>   
+            </div>
+
+  
+          <div className={styles.login_col_1}>
+            
+                <div className={styles.login_col_1_img_2}>
+
+          
+            <img width="100%" height="100%" src="/assets/signup/signup_mobile.jpeg" alt="Signup" />
+                </div>
+            
+
+            
+            
+            <img width="100%" height="100%" className={styles.login_col_1_img} src="/assets/signup/signup_bg.jpg" alt="Signup" />
+          </div>    
         </div>
+        {openUserVerification && <UserVerification formState={formState} setFormState={setFormState} requestnumberFunc={props.requestnumberFunc} type={type} setType={setType}  sendEmailOTPFunc={props.sendEmailOTPFunc}  next={handleOpenOtp} open={openUserVerification} setOpen={setOpenUserVerification} />}
 
-        <div className={styles.login_col_1}>
-          <div className={styles.login_col_1_img_2}>
-            <img
-              width="100%"
-              height="100%"
-              src="/assets/signup/signup_mobile.jpeg"
-              alt="Signup"
-            />
-          </div>
+        {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/dashboard")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} />}
 
-          <img
-            width="100%"
-            height="100%"
-            className={styles.login_col_1_img}
-            src="/assets/signup/signup_bg.jpg"
-            alt="Signup"
-          />
-        </div>
-      </div>
-      <UserVerification
-        formState={formState}
-        setFormState={setFormState}
-        requestnumberFunc={props.requestnumberFunc}
-        type={type}
-        setType={setType}
-        sendEmailOTPFunc={props.sendEmailOTPFunc}
-        next={handleOpenOtp}
-        open={openUserVerification}
-        setOpen={setOpenUserVerification}
-      />
-      <UserVerificationSuccess
-        formState={formState}
-        setFormState={setFormState}
-        next={() => router.push("/dashboard")}
-        type={type}
-        setType={setType}
-        open={openUserVerificationSuccess}
-        setOpen={setOpenUserVerificationSuccess}
-      />
-      <OTP
-        formState={formState}
-        setFormState={setFormState}
-        verifynumberFunc={props.verifynumberFunc}
-        type={type}
-        setType={setType}
-        verifyEmailOTPFunc={props.verifyEmailOTPFunc}
-        next={handleOpenSuccess}
-        open={openOTP}
-        setOpen={setOpenOTP}
-      />
-    </>
-  );
-}
-function mapStateToProp(state) {
-  return {
-    auth: state.Auth,
-    redux: state,
-  };
-}
+        {openOTP && <OTP formState={formState} setFormState={setFormState} verifynumberFunc={props.verifynumberFunc} type={type} setType={setType}
+         verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} sendEmailOTPFunc={props.sendEmailOTPFunc} />}
+      </>
+    )
+  }
+ function mapStateToProp(state) {
+    return {
+      auth: state.Auth,
+      redux: state
+    };
+  }
+  
+  function mapDispatchToProps(dispatch) {
+    return {
+      signup: (form) => dispatch(userSignUp(form)),
+      verifynumberFunc: (form) => dispatch(verifynumber(form)),
+      requestnumberFunc: (form) => dispatch(requestnumber(form)),
+      verifyEmailOTPFunc: (form) => dispatch(verifyEmailOTP(form)),
+      sendEmailOTPFunc: (form) => dispatch(sendEmailOTP(form)),
 
-function mapDispatchToProps(dispatch) {
-  return {
-    signup: (form) => dispatch(userSignUp(form)),
-    verifynumberFunc: (form) => dispatch(verifynumber(form)),
-    requestnumberFunc: (form) => dispatch(requestnumber(form)),
-    verifyEmailOTPFunc: (form) => dispatch(verifyEmailOTP(form)),
-    sendEmailOTPFunc: (form) => dispatch(sendEmailOTP(form)),
-  };
-}
-
-export default connect(mapStateToProp, mapDispatchToProps)(SignUp);
+    };
+  }
+  
+  export default connect(
+    mapStateToProp,
+    mapDispatchToProps,
+  )(SignUp);

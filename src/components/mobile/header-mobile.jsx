@@ -1,43 +1,99 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { animateScroll as scroll, scrollSpy, Events } from "react-scroll";
 import styles from "../../components/Header/header.module.css";
-
 export const MobileHeader = () => {
-  const [activeLink, setActiveLink] = useState(2);
+  useEffect(() => {
+    Events.scrollEvent.register("begin", (to, element) => {
+      console.log("begin", to, element);
+    });
 
-  const handleSetActive = (id, path) => {
-    setActiveLink(id);
-    router.push(path);
+    Events.scrollEvent.register("end", (to, element) => {
+      console.log("end", to, element);
+    });
+
+    scrollSpy.update();
+
+    return () => {
+      Events.scrollEvent.remove("begin");
+      Events.scrollEvent.remove("end");
+    };
+  }, []);
+
+
+  const handleSetActive = (to) => {
+    console.log(to);
   };
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
 
-  const menuItems = [
-    { name: "Marketplace", path: "/publicMarket" },
-    { name: "Chef", path: "/chef" },
-    { name: "Blog", path: "/blog" },
-  ];
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollPos]);
   return (
     <div>
-      <div className={styles.navbar2}>
+      <div className={visible ? styles.navbar2 : ''}>
         <div className={styles.navbar_main_container}>
           <div className={styles.navbar_main}>
             <ul className={styles.navbar_main_links}>
-              {menuItems?.map((elem, id) => (
-                <li
-                  className={styles.navbar_main_link}
-                  key={id}
-                  onClick={() => handleSetActive(id, elem.path)}
+              <li className={styles.navbar_main_link}>
+                <Link
+                  activeClass="active"
+                  href="/publicMarket/#store"
+                  onSetActive={handleSetActive}
+                  onClick={() =>
+                    scroll.scrollTo(0, { smooth: true, duration: 100 })
+                  }
                 >
-                  <p
-                    className={
-                      activeLink === id
-                        ? styles.activelink
-                        : styles.inactivelink
-                    }
-                  >
-                    {elem.name}
-                  </p>
-                </li>
-              ))}
+                  Stores
+                </Link>
+              </li>
+              <li className={styles.navbar_main_link}>
+                {/* <Link href="/publicMarket/#meal">Meals</Link> */}
+                <Link
+                  activeClass="active"
+                  href="/publicMarket/#meal"
+                  onClick={() =>
+                    scroll.scrollTo(1100, { smooth: true, duration: 100 })
+                  }
+                >
+                  Meals
+                </Link>
+              </li>
+              <li className={styles.navbar_main_link}>
+                {/* <Link href="/publicMarket/#products">Products</Link> */}
+                <Link
+                  activeClass="active"
+                  href="/publicMarket/#product"
+                  onClick={() =>
+                    scroll.scrollTo(2900, { smooth: true, duration: 100 })
+                  }
+                >
+                  Products
+                </Link>
+              </li>
+              <li className={styles.navbar_main_link}>
+                {/* <Link href="/publicMarket/#utensils">Utensils</Link> */}
+                <Link
+                  activeClass="active"
+                  href="/publicMarket/#utensils"
+                  onClick={() =>
+                    scroll.scrollTo(4600, { smooth: true, duration: 100 })
+                  }
+                >
+                  Utensils
+                </Link>
+              </li>
             </ul>
 
             <div className={styles.navbar_main_grocery}>

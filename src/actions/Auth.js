@@ -61,7 +61,7 @@ export const userSignUp = (form) => {
         // }else{
         //   toast.success("A verifiation link was sent to your mail")
         // }
-        toast.success("A verifiation link was sent to your mail");
+        toast.success("Congratulation!!!!! You have Successfully Signed Up, Kindly Verify your account");
       })
       .catch((err) => {
         console.error("xxx userSignUp Request ERROR xxx");
@@ -462,6 +462,8 @@ export const verifyEmailOTP = ({email,otp}) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
         dispatch({ type: IS_VERIFIED, payload: true });
+        dispatch({ type: EMAIL_VERIFIED, payload: true });
+        
       })
       .catch((err) => { 
         dispatch({
@@ -514,6 +516,8 @@ export const verifynumber = ({request_id,code}) => {
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
+        dispatch({ type: IS_VERIFIED, payload: true });
+        dispatch({ type: PHONE_NUMBER_VERIFIED, payload: true });
       })
       .catch((err) => { 
         dispatch({

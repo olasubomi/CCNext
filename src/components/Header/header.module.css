@@ -5,47 +5,31 @@
   top: 0;
 
   width: 100%;
-  height: 88px;
   z-index: 200;
   align-content: center;
   grid-template-rows: 88px;
   grid-template-columns: 100%;
   /* border-bottom: 1px solid #e7e7e7; */
 }
-.readDot {
+.readDot{
   width: 1rem;
   height: 1rem;
   background-color: #f47900;
   border-radius: 50%;
-  margin-top: 0.3rem;
+  margin-top: .3rem;
 }
-.navbar_top_logo_search {
-  display: flex;
-  align-items: center;
-  gap: 3rem;
-  flex: 0 0 50%;
-  max-width: 50%;
-}
-.show {
-  display: flex;
-}
-.navbar_top_details {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 0 0 45%;
-  max-width: 45%;
-  gap: 2rem;
-  font-size: 25px;
-}
+
 .navbar2 {
   display: grid;
   grid-auto-flow: row;
   position: fixed;
+  top: 90px;
   width: 100%;
   z-index: 199;
-  top: 88px;
+  grid-template-rows: 70px;
   grid-template-columns: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
 }
 .flex {
   display: flex;
@@ -59,33 +43,39 @@
   display: flex;
   justify-items: center;
   align-items: center;
-  width: 100%;
-  gap: 2rem;
+
   animation: slidefromup 0.3s ease-in-out;
-  height: 88px;
+  height: 100px;
 }
-.notitext {
-  font-size: 14px;
-  font-weight: 100;
-  font-family: "Inter", sans-serif;
-}
+
 .navbar_top {
-  display: flex;
-  width: 100%;
-  padding: 0 20px;
-  margin: auto;
-  justify-content: space-between;
+  display: grid;
+  grid-auto-flow: column;
+  width: 95%;
+  color: #ffffffbd;
+  grid-template-columns: max-content 1fr;
+  grid-gap: 3rem;
+  justify-items: end;
   align-items: center;
+  font-size: 12px;
 }
 
 .navbar_top_logo_img {
   display: flex;
   align-items: center;
-  width: 72px !important;
-  height: 72px !important;
+  width: 79px !important;
+  height: 46px !important;
 }
 .searchoutline {
-  display: block;
+  display: none;
+}
+
+.navbar_top_details {
+  display: grid;
+  grid-gap: 3rem;
+  grid-auto-flow: column;
+  align-items: center;
+  font-size: 25px;
 }
 
 .navbar_user_loginbtn {
@@ -140,28 +130,29 @@
 
 .navbar_user_upgradebtn {
   cursor: pointer;
-  padding: 10px 12px;
+  width: 100px;
   height: 40px;
   display: grid;
   align-items: center;
   justify-items: center;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background: transparent;
+
+  background: #f47900;
   border-radius: 4px;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 13px;
   line-height: 16px;
   /* identical to box height */
-  color: rgba(255, 109, 0, 1);
+
+  color: #ffffff;
+  border: none;
 }
 
 .navbar_top_details_col {
   position: relative;
   display: flex;
+  gap: 1px;
   align-items: center;
-  justify-content: center;
-  gap: 2rem;
 }
 
 .navbar_top_details_col > div {
@@ -171,7 +162,7 @@
 .navbar_top_details_col h5 {
   font-style: normal;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 19px;
 
   color: #000000;
@@ -179,12 +170,6 @@
 
 .navbar_top_details_col_icon {
   width: 19px;
-  fill: #6d6d6d;
-  cursor: pointer;
-  line-height: 19px;
-}
-.navbar_top_details_col_icon2 {
-  width: 13px;
   fill: #6d6d6d;
   cursor: pointer;
 }
@@ -197,7 +182,7 @@
   position: relative;
   grid-template-columns: 100%;
   background-color: white;
-  height: 50px;
+  height: 65px;
 }
 
 .navbar_main {
@@ -254,29 +239,21 @@
   font-weight: 300;
 }
 
-.navbar_main_link .inactivelink {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 17px;
-  /* identical to box height */
-  text-transform: capitalize;
-  color: #000000;
-}
-.activelink {
+.navbar_main_link > p {
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
   /* identical to box height */
-  text-transform: capitalize;
-  color: rgba(244, 121, 0, 1);
+
+  color: #000000;
+  text-transform: uppercase;
 }
 
-.navbar_main_grocery .link {
+.navbar_main_grocery > p {
   font-style: normal;
-  font-weight: 400;
-  font-size: 13px;
+  font-weight: 500;
+  font-size: 14px;
   line-height: 17px;
   /* identical to box height */
 
@@ -284,7 +261,7 @@
 }
 .navbar_main_grocery {
   display: flex;
-  gap: 3rem;
+  gap: 2rem;
 }
 .navbar_main_icons {
   display: grid;
@@ -300,16 +277,17 @@
   position: absolute;
   border-radius: 50%;
   top: 3px;
-  right: -10px;
+  right: 3px;
   text-align: center;
   display: grid;
   align-items: center;
-  width: 14px;
-  height: 14px;
-  background: #f47900;
+  width: 19px;
+  height: 19px;
+
   font-style: normal;
   font-weight: 400;
-  font-size: 9px;
+  font-size: 10px;
+
   color: #ffffff;
 }
 
@@ -359,13 +337,6 @@
 .activeLinkDown > a {
   fill: #f47900;
   color: #f47900;
-}
-.searchbar {
-  display: flex;
-  width: 100%;
-}
-.searchIcon {
-  display: none;
 }
 .openbtn {
   display: none;
@@ -822,23 +793,17 @@
   color: #8c1d5a;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 768px) {
   .navbar {
     display: grid;
+    grid-template-rows: 55px;
   }
 
   .navbar2 {
-    top: 58px;
+    top: 51px;
+    grid-template-rows: 48px;
   }
-  .show {
-    display: none;
-  }
-  .searchbar {
-    display: none;
-  }
-  .navbar_top_details_col_icon {
-    width: 26px;
-  }
+
   .navbar_user_loginbtn {
     width: 100%;
     height: 100%;
@@ -850,15 +815,13 @@
     border-radius: 16px;
     border-color: #ff8000;
   }
-  .searchIcon {
-    display: block;
-  }
   .navbar_user_upgradebtn {
     display: none;
   }
 
   .navbar_top_container {
-    height: 58px;
+    height: 54px;
+    padding: 0 10px 0 5px;
   }
 
   .navbar_user_name {
@@ -920,7 +883,7 @@
 
   .navbar_top {
     grid-gap: 1rem;
-    width: 100%;
+    width: 90%;
     margin: auto;
   }
 
@@ -938,9 +901,9 @@
   }
 
   .navbar_top_logo_img {
-    width: 54px !important;
-    height: 52px !important;
-    margin-left: 2rem;
+    width: 66px !important;
+    height: 33px !important;
+    margin-left: 2.5rem;
   }
 
   .navbar_top_details_col > h5 {
@@ -948,9 +911,8 @@
   }
 
   .numberofitems {
-    top: 2px;
-    right: -2px;
-    background: rgba(4, 213, 5, 1);
+    top: -3px;
+    right: -12px;
   }
   .summaries_min {
     top: 40px;
@@ -982,16 +944,7 @@
   .navbar_main_container2 {
     display: none;
   }
-  .navbar_top {
-    padding: 0 0 0 20px;
-  }
-  .numberofitems {
-    top: -1px;
-    right: -4px;
-  }
-  .navbar_top_container {
-    padding: 0 0px 0 10px;
-  }
 }
 @media (orientation: landscape) {
+
 }

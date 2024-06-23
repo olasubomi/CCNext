@@ -6,7 +6,6 @@ import axios from "../../util/Api";
 import { useEffect } from "react";
 import { useMediaQuery } from "../../hooks/usemediaquery";
 import { IoIosSearch } from "react-icons/io";
-import { GoSearch } from "react-icons/go";
 
 export const MobileSearch = ({ setShowDropdown }) => {
   const router = useRouter();
@@ -14,6 +13,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
   const [value, setValue] = useState("");
   const [items, setItems] = useState([]);
   const [store, setStore] = useState([]);
+  const matches = useMediaQuery("(min-width: 767px)");
   const [showCategory, setShowCategory] = useState(false);
   const [categories, setCategories] = useState([
     {
@@ -131,13 +131,14 @@ export const MobileSearch = ({ setShowDropdown }) => {
               size={15}
             />
           </div>
+          <div className={styles.leftBorder} />
         </div>
 
         {showCategory && (
           <div className={styles.categories}>
             {categories.map((option) => (
               <p
-                style={{ color: "rgba(109, 109, 109, 1)" }}
+                style={{ color: "black" }}
                 onClick={() => {
                   let arr = [];
                   if (option.label === "All") {
@@ -175,7 +176,6 @@ export const MobileSearch = ({ setShowDropdown }) => {
       </div>
       <div className={styles.searchflex}>
         <div className={styles.searchboxfield}>
-          <GoSearch size={12} color="rgba(148, 148, 148, 1)" />
           <input
             placeholder="Search Marketplace"
             autoComplete="off"
@@ -186,7 +186,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
               getItem(e.target.value);
               getStore(e.target.value);
             }}
-            type="search"
+            type="text"
             name="search"
           />
           {show && (
@@ -373,6 +373,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
                     ele.item_type === "Meal" && ele.item_type !== "Product"
                 )
               ) {
+                // console.log("navigating to /meal/" + value);
                 router.push(`/meal/${value}`);
               } else if (
                 items.filter(
@@ -380,8 +381,10 @@ export const MobileSearch = ({ setShowDropdown }) => {
                     ele.item_type === "Product" && ele.item_type !== "Meal"
                 )
               ) {
+                // console.log("navigating to /product/" + value);
                 router.push(`/product/${value}`);
               } else {
+                // console.log("Fallback navigating to /meal/" + value);
                 // router.push(`/meal/${value}`);
               }
             }

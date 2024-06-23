@@ -10,14 +10,6 @@ export const Stores = () => {
   const [stores, setStores] = useState([]);
   const [isShow, setIsShow] = useState(false);
   const [selected, SetSelected] = useState(null);
-  const [storeInfo, setStoreInfo] = useState({
-    id: 0,
-    name: "",
-    image: "",
-    description: "",
-    address: "",
-    rating: 0,
-  });
   const [loadMore, setLoadMore] = useState(5);
   const ref = useRef();
 
@@ -29,17 +21,14 @@ export const Stores = () => {
     setLoadMore(loadMore + 5);
   };
 
-  const fetchOneStore = async (storeId) => {
+  const fetchOneStore = async (id) => {
     try {
-      const response = await axios(
-        `/inventory/get-store-inventory/${storeId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios(`/stores/getstore/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       console.log(response.data.data, "one store");
       setSelectedStore(response.data.data);
       setIsShow(true);
@@ -47,7 +36,6 @@ export const Stores = () => {
       console.log(error);
     }
   };
-  console.log(stores, "one store");
   const fetchStores = async () => {
     try {
       const response = await axios(`/stores/getallstores/1?limit=25`, {
@@ -101,18 +89,6 @@ export const Stores = () => {
                       onClick={() => {
                         fetchOneStore(store._id);
                         SetSelected(id);
-                        setStoreInfo({
-                          id: store._id,
-                          name: store?.store_name,
-                          image: store?.profile_picture,
-                          description: store?.description,
-                          address:
-                            store?.supplier_address?.address +
-                            ", " + store?.supplier_address?.city +
-                            " - " +
-                            store?.supplier_address?.country,
-                            rating: store?.average_rating
-                        });
                       }}
                     >
                       {
@@ -144,9 +120,9 @@ export const Stores = () => {
                       }
                     </div>
                   </div>
+                 
                   {isShow && selected === id && (
                     <MealDropDown
-                      storeInfo={storeInfo}
                       setIsShow={setIsShow}
                       selectedStore={selectedStore}
                       id={selectedStore?.supplier?._id}

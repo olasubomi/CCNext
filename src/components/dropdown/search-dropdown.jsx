@@ -371,5 +371,3 @@ export const SearchDropdown = ({ setShowDropdown }) => {
     </div>
   );
 };
-
-
