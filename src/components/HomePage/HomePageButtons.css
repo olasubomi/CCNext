@@ -1,0 +1,39 @@
+/* MOBILE FIRST DESIGN SMALLER SCREEN IS DEFAULT, */
+/* MEDIA QUERIES FOR LARGER SCREENS BELOW */
+/* USE MEDIA QUERIES TEMPLATE TO DETERMINE WHAT STYLING YOU WANT TO UPDATE */
+/* ONLY ADD STYLING IF CONFIRMED THAT IT WILL NOT AFFECT ANOUTHER STYLING */
+
+/* @media screen and (max-width: 429px) { */
+/* Potrait Mobile View */
+.homepage_button{
+    background-color: orange;
+    margin: 10px;
+    font-size: xx-large;
+}
+.buttons_div{
+    width: 100%;
+    /* position: absolute; */
+    /* top: 50%;
+    left: 50%; */
+}
+
+.row{
+    width: 100%;
+    justify-content: center;
+}
+
+  
+  /* MOBILE, TABLET AND ALL LANDSCAPE VIEW */
+  @media screen and (orientation: landscape) {
+
+  }
+  
+  /* TABLET  VIEW */
+  @media screen and (min-width: 567px) {
+  
+  }
+  
+  /* DESKTOP VIEW */
+  @media screen and (min-width: 768px) {
+
+  }

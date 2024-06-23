@@ -1,0 +1,185 @@
+{
+    "Parboiled Rice": {
+        "image": "./images/products/rice.jpeg"
+    },
+    "Tomatoes": {
+        "image": "./images/products/tomato.jpg"
+    },
+    "Apple": {
+        "image": "./images/products/apple.jpg"
+    },
+    "Assorted Meats": {
+        "image": "./images/products/assorted_meats.jpg"
+    },
+    "Avocado": {
+        "image": "./images/products/avocado.jpg"
+    },
+    "Bananas": {
+        "image": "./images/products/bananas.jpg"
+    },
+    "Basil": {
+        "image": "./images/products/basil.jpg"
+    },
+    "Barbeque Sauce": {
+        "image": "./images/products/bbq_sauce.jpg"
+    },
+    "Beans": {
+        "image": "./images/products/beans.jpeg"
+    },
+    "Beef": {
+        "image": "./images/products/beef.GIF"
+    },
+    "Bell Pepper": {
+        "image": "./images/products/bell_pepper.jpeg"
+    },
+    "Blueberries": {
+        "image": "./images/products/blueberries.jpg"
+    },
+    "Breadcrumbs": {
+        "image": "./images/products/breadcrumbs.jpg"
+    },
+    "Brown Sugar": {
+        "image": "./images/products/brown_sugar.jpeg"
+    },
+    "Butter": {
+        "image": "./images/products/butter.jpg"
+    },
+    "Cashews": {
+        "image": "./images/products/cashews.jpg"
+    },
+    "Chamomile Tea": {
+        "image": "./images/products/chamomile_tea.jpeg"
+    },
+    "Cheese": {
+        "image": "./images/products/cheese.jpg.jpg"
+    },
+    "Chicken": {
+        "image": "./images/products/chicken_beef.jpg"
+    },
+    "Cinnamon": {
+        "image": "./images/products/cinnamon.jpg"
+    },
+    "Cow Tripe": {
+        "image": "./images/products/cow_tripe.jpg"
+    },
+    "Crayfish": {
+        "image": "./images/products/crayfish.jpg"
+    },
+    "Sugar Cubes": {
+        "image": "./images/products/cubed_sugar.jpg"
+    },
+    "Dates": {
+        "image": "./images/products/dates.jpg"
+    },
+    "Eggs": {
+        "image": "./images/products/eggs.jpg"
+    },
+    "Egusi Melon": {
+        "image": "./images/products/egusi_melon.jpg"
+    },
+    "Flour": {
+        "image": "./images/products/flour.jpg"
+    },
+    "Garri": {
+        "image": "./images/products/garri.jpg"
+    },
+    "Ketchup": {
+        "image": "./images/products/heinz_ketchup.jpg"
+    },
+    "Kale": {
+        "image": "./images/products/kale.jpg"
+    },
+    "Knoor Chicken Cubes": {
+        "image": "./images/products/knoor_chicken_cubes.jpg"
+    },
+    "Maggi": {
+        "image": "./images/products/maggi.jpg"
+    },
+    "Melon Seeds": {
+        "image": "./images/products/melon_seeds.jpg"
+    },
+    "Oil": {
+        "image": "./images/products/oil.jpg"
+    },
+    "Okoro": {
+        "image": "./images/products/okoro.jpg"
+    },
+    "Palm Oil": {
+        "image": "./images/products/ola_ola_palm_oil.jpg"
+    },
+    "Onion": {
+        "image": "./images/products/onion.jpg"
+    },
+    "Oregano": {
+        "image": "./images/products/oregano.jpg"
+    },
+    "Paprika": {
+        "image": "./images/products/paprika.jpg"
+    },
+    "Parmesan Cheese": {
+        "image": "./images/products/parmesan_cheese.jpg"
+    },
+    "Peanuts": {
+        "image": "./images/products/peanuts.jpeg"
+    },
+    "Pineapple": {
+        "image": "./images/products/pineapple.jpg"
+    },
+    "Plantain Chips": {
+        "image": "./images/products/plantain_chips.jpg"
+    },
+    "Red Potatoes": {
+        "image": "./images/products/red_potatoes.jpg"
+    },
+    "Rice": {
+        "image": "./images/products/rice.jpg"
+    },
+    "Salt": {
+        "image": "./images/products/salt.jpg"
+    },
+    "Sardine": {
+        "image": "./images/products/sardine.jpg"
+    },
+    "Shaki": {
+        "image": "./images/products/shaki.jpg"
+    },
+    "Shrimp": {
+        "image": "./images/products/shrimp.jpg"
+    },
+    "Spinach": {
+        "image": "./images/products/spinach.jpeg"
+    },
+    "Squash Potatoes": {
+        "image": "./images/products/squash_potatoes.jpeg"
+    },
+    "Stockfish": {
+        "image": "./images/products/stockfish.jpg"
+    },
+    "Thyme": {
+        "image": "./images/products/thyme.jpg"
+    },
+    "Tuna": {
+        "image": "./images/products/titus_tuna.jpg"
+    },
+    "Tomato": {
+        "image": "./images/products/tomato.jpg"
+    },
+    "Vanilla Extract": {
+        "image": "./images/products/vanilla_extract.jpg"
+    },
+    "Vegetable Oil": {
+        "image": "./images/products/vegetable_oil.jpg"
+    },
+    "Water": {
+        "image": "./images/products/water.jpeg"
+    },
+    "Watermelon": {
+        "image": "./images/products/watermelon.jpg"
+    },
+    "Worcestershire Sauce": {
+        "image": "./images/products/worcestershire_Sauce.jpg"
+    },
+    "Yeast": {
+        "image": "./images/products/yeast.jpg"
+    }
+}

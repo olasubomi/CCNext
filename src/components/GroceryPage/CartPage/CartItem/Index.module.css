@@ -1,0 +1,242 @@
+.cartCard {
+    display: flex;
+    flex-direction: row;
+    /*align-self: center;
+    justify-self:center;*/
+    justify-content: space-between;
+    width: 100%;
+    height: 99px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding-left: 24px;
+    padding-right: 24px;
+    margin-bottom: 24px;
+}
+
+.cartProduct {
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.cartQuantity {
+    width: 20%;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.cartQuantity > label {
+    height: 19px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.qty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 25px;
+    background: #F47900;
+}
+
+.qty > label {
+    height: 18px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+
+.cartValues {
+    width: 55%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    justify-items: flex-start;
+}
+
+.cartValues > label {
+    width: 30%;
+    height: 19px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+
+}
+.cartProduct > img {
+    height: 65px;
+    width: 68px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+    .cartCard {
+        margin-top: 20px;
+    }
+}
+
+/*MOBILE SCREEN*/
+
+.mobileCardLeft {
+    display: flex;
+    width: 70%;
+    height: 77px;
+}
+
+.mobileImgDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10%;
+    height: 77px;
+    width: 35%;
+    padding-top: 25px;
+}
+
+.mobileImgDiv > img {
+    height: 100%;
+    width: 60px;
+}
+
+.mobileListItems {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 77px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.mobileListItems > label {
+    width: 73px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #000000;
+}
+
+.supplierDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3px;
+    height: 10px;
+}
+
+.supplierDiv > h2 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 10px;
+    color: #6D6D6D;
+}
+
+.supplierDiv > h5 {
+    width: 60px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 10px;
+    color: #000000;
+}
+
+.mobileCardRight {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 30%;
+    height: 77px;
+    justify-content: center;
+    align-items: flex-end;
+    padding-top: 25px;
+    padding-bottom: 5px;
+}
+
+.priceDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10%;
+    height: 25px;
+   justify-content: flex-end;   
+}
+
+.priceDiv > label {
+    width: 44px;
+    height: 15px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #000000;
+}
+
+.cardQuantity {
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.cardQuantity > label {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.cardQty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 20px;
+    background: #F47900;
+}
+
+.cardQty > label {
+    height: 18px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #FFFFFF;
+    cursor: pointer;
+}

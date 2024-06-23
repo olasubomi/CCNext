@@ -1,0 +1,49 @@
+.createstore{
+    display: grid;
+    grid-gap: 2rem;
+}
+
+.header2{
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form_group{
+    position: relative;
+    display: grid;
+    grid-gap: 10px;
+    width: 100%;
+    margin-top: 4rem;
+}
+
+.form_group > h3 {
+    margin: 0;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+
+    color: #000000;
+}
+
+
+.ingredient_button{
+    width: 134px;
+    height: 46px !important;
+
+    background-color: #F47900 !important;
+    border-radius: 4px !important;
+    text-transform: none !important;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px !important;
+    line-height: 17px !important;
+    /* identical to box height */
+
+
+    color: #FFFFFF;
+    align-self: end;
+}

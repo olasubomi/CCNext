@@ -1,0 +1,16 @@
+.registerme .form-group {
+    margin: auto;
+}
+
+.registerme label[for="formHorizontalCheck"] {
+    margin: 0;
+}
+
+.registerme .btn-toolbar button {
+    margin:  auto;
+}
+
+.registerme .login__form-btn.btn.btn-secondary {
+    width: auto;
+    padding: 0 15px;
+}

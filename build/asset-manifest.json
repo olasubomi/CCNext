@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ebdbb59c.css",
+    "main.js": "/static/js/main.1b7c00f0.js",
+    "static/media/food_prep.jpg": "/static/media/food_prep.25733fbe6d8d82d81cf5.jpg",
+    "static/media/grocery_bag.jpg": "/static/media/grocery_bag.fb448ffade2d2574c969.jpg",
+    "static/media/CC_Logo_no_bg.png": "/static/media/CC_Logo_no_bg.ab28aee4659a51f9fd46.png",
+    "static/media/ola_ola_palm_oil.jpg": "/static/media/ola_ola_palm_oil.71212b7a58caaa239801.jpg",
+    "static/media/no_meal_step_image.png": "/static/media/no_meal_step_image.db87af01898efd0c843a.png",
+    "static/media/logo2.png": "/static/media/logo2.2d4f6f905df348c5bf92.png",
+    "index.html": "/index.html",
+    "main.ebdbb59c.css.map": "/static/css/main.ebdbb59c.css.map",
+    "main.1b7c00f0.js.map": "/static/js/main.1b7c00f0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ebdbb59c.css",
+    "static/js/main.1b7c00f0.js"
+  ]
+}

@@ -1,0 +1,52 @@
+.meals-Page .mealPage-container {
+  max-width: 100% !important;
+  flex-wrap: wrap;
+  justify-content: left;
+  padding: 20px 0px 20px 20px; }
+  .meals-Page .mealPage-container .modal-content {
+    margin: auto;
+    margin-top: 25%; }
+  .meals-Page .mealPage-container .mealContainer {
+    width: 90%; }
+    .meals-Page .mealPage-container .mealContainer .meal-card {
+      justify-content: center;
+      padding: 26px 42px;
+      box-shadow: 2px 2px 12px 0px #c6c6c6;
+      margin-bottom: 30px;
+      cursor: pointer; }
+
+.meals-Page .loadmore-section {
+  text-align: center; }
+  .meals-Page .loadmore-section .btn-loadmore {
+    padding: 5px 20px;
+    border-radius: 5px;
+    font-size: 15px;
+    background: dodgerblue;
+    color: aliceblue;
+    font-weight: 700; }
+
+.meal-title {
+  font-size: 20px;
+  color: blue;
+  font-weight: 500;
+  margin-left: 50px;
+  margin-top: 20px; }
+
+.modal-100w {
+  max-width: 90% !important;
+  height: 400px;
+  margin: auto !important; }
+
+.fade.modal.show {
+  padding-right: 0px !important; }
+
+@media screen and (max-width: 600px) {
+  .modal-100w {
+    height: auto;
+    width: 90% !important;
+    max-width: 900px !important;
+    margin: auto !important;
+    margin-top: 25% !important; }
+  .meals-Page .mealPage-container .mealContainer {
+    width: 100%;
+    margin: auto; } }

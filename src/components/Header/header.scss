@@ -1,0 +1,159 @@
+.navbar-light .navbar-brand:hover {
+  background-color: white;
+}
+
+
+.navbar-light .navbar-brand {
+  padding-top: 15px;
+}
+
+.navbar-first{
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.nav-link {
+  padding: 10px 20px;
+}
+
+.header-wraper{
+  .header-panel{
+      display: flex;
+      justify-content: space-between;
+  }
+}
+
+.navbar a{
+  color: rgba(0,0,0,.6);
+  padding: 6px 16px
+}
+
+.navbar a:hover{
+  color: rgba(0,0,0,.6);
+  text-decoration: none;
+}
+
+.nav-item{
+padding: 1px 16px !important;
+
+a:hover{
+  color: rgba(0,0,0,.6);
+  text-decoration: none;
+  }
+}
+
+.dropdown a{
+  color: rgba(0,0,0,.6);
+  padding-left: 8px;
+}
+
+// .dropdown .dropdown-item{
+//     color: rgb(73, 70, 70);
+//     padding-left: 8px;
+// }
+
+// .dropdown .dropdown-item:hover{
+//     color: rgb(68, 66, 66);
+//     background-color: lightblue;
+//     padding-left: 8px;
+// }
+
+.input-group-append{
+  .navbar-toggle{
+      .fa-bars:hover{
+          background-color: red;
+      }
+  }
+}
+
+@media (max-width:768px){
+  .navbar-second{
+    display: none;
+  }
+  .navbar-first{
+    display: none;
+  }
+
+  .header-left .navbar-first{
+      display: none;
+  }
+  
+  .header-wraper .navbar-second{
+      display: none;
+  }
+
+  .nav-item{   
+      a:hover{
+        color: rgb(255, 255, 255);
+        text-decoration: none;
+        }
+    }
+
+  .dropdown a{
+  color: rgba(255, 255, 255, 1);
+  padding-left: 8px;
+}
+
+.dropdown .dropdown-item{
+  color: rgb(73, 70, 70);
+  padding-left: 8px;
+}
+
+.dropdown .dropdown-item:hover{
+  color: rgb(68, 66, 66);
+  background-color: lightblue;
+  padding-left: 8px;
+}
+}
+
+
+$height: 40px;
+
+.search_bar {
+position: relative;
+height: $height;
+
+.form-control {
+  padding: 0 20px 0 12px;
+  height: 35px;
+  border-radius: 5px;
+  font-weight: 400;
+  font-size: 13px;
+  color: #53576d;
+  // border: 1px;
+  outline: 0;
+  width: 100%;
+  background: #fd7e14;
+  border: 1px solid #FFFFFF;
+}
+
+&__icon {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  margin-top: -20px;
+  cursor: pointer;
+}
+}
+
+// loader
+.lds-ripple {
+//display: inline-block;
+display: none;
+position: absolute;
+width: 34px;
+height: 34px;
+right: 10px;
+top: 50%;
+margin-top: -16px;
+}
+.lds-ripple div {
+position: absolute;
+border: 4px solid #0042BA;
+opacity: 1;
+border-radius: 50%;
+animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lds-ripple div:nth-child(2) {
+animation-delay: -0.5s;
+}
