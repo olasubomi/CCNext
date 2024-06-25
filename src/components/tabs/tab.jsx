@@ -286,6 +286,7 @@ const MyTabs = ({ id }) => {
                       />
                     ) : (
                       <FaUser size={24} />
+                      //<UserIcon style={styles.user_img} />
                     )}
                     <p className={styles.name}>
                       {ele.user.first_name} {ele.user.last_name}

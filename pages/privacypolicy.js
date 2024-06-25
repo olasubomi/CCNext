@@ -35,7 +35,7 @@ const PrivacyPolicy = () => {
             You can always adjust your controls of how your data is managed or withdraw your consent for the future
             by emailing privacy@chopchow.com .
         </p> */}
-        <Checkout/>
+        //<Checkout/>
 
     </div>
 }

@@ -28,8 +28,11 @@
   z-index: 199;
   grid-template-rows: 70px;
   grid-template-columns: 100%;
+<<<<<<< HEAD
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   background-color: #ffffff;
+=======
+>>>>>>> f3624c41d0abcf7c3b2a8ad5863bd45c2398d793
 }
 .flex {
   display: flex;
