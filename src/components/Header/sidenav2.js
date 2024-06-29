@@ -8,6 +8,10 @@ import {
   StoreMgtIcon,
   SupportIcon,
   UserIcon,
+  StoreMgtIcon2,
+  ChatIcon,
+  AdminMgtIcon,
+  MealRequestIcon,
 } from "../icons";
 import Link from "next/link";
 import styles from "./header.module.css";
@@ -16,11 +20,11 @@ import React, { useEffect, useState } from "react";
 import { setOpenLogin, userSignOut } from "../../actions";
 import { useRouter } from "next/router";
 import { useAuth } from "../../context/auth.context";
-import icon from '../../../public/assets/fa_shopping-basket.png'
+import icon from "../../../public/assets/fa_shopping-basket.png";
 import Image from "next/image";
 
 function SideNav2(props) {
-  console.log(props, 'pops');
+  console.log(props, "pops");
   const { isOpen, setIsOpen } = useAuth();
   const router = useRouter();
 
@@ -34,12 +38,12 @@ function SideNav2(props) {
     router.push("/");
   }
 
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState({});
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('user') || "{}")
-    setUser(data)
-  }, [])
+    const data = JSON.parse(localStorage.getItem("user") || "{}");
+    setUser(data);
+  }, []);
   return (
     <div className={styles.sidenav_links_con}>
       <div className={styles.sidenav_links}>
@@ -92,31 +96,47 @@ function SideNav2(props) {
                 }
               >
                 {/* <GroceryIcon style={styles.sidenav_link_icon} /> */}
-                <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
-                <Image src={icon} />
-                Grocery List
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+                >
+                  <Image src={icon} />
+                  Grocery List
                 </div>
-                
               </div>
             </Link>
-            {props.auth.authUser.user_type !== "driver" && (
-              <Link href="/dashboard/suggestedmeals">
-                <div
-                  className={
-                    styles.sidenav_link +
-                    " " +
-                    (props.path === "/dashboard/suggestedmeals" &&
-                      styles.active)
-                  }
-                >
-                  <HotMealIcon style={styles.sidenav_link_icon} />
-                  {props.auth.authUser.user_type === "admin"
-                    ? "Meal Request"
-                    : "Meal/Product Suggestion"}
-                </div>
-              </Link>
-            )}
-              <Link href={`/chef/${user?._id}`}>
+            {props.auth.authUser.user_type !== "driver" &&
+              props.auth.authUser.user_type === "admin" && (
+                <Link href="/dashboard/suggestedmeals">
+                  <div
+                    className={
+                      styles.sidenav_link +
+                      " " +
+                      (props.path === "/dashboard/suggestedmeals" &&
+                        styles.active)
+                    }
+                  >
+                    <HotMealIcon style={styles.sidenav_link_icon} />
+                    Meal Request
+                  </div>
+                </Link>
+              )}
+            {props.auth.authUser.user_type !== "driver" &&
+              props.auth.authUser.user_type === "supplier" && (
+                <Link href="/dashboard/suggestedmeals">
+                  <div
+                    className={
+                      styles.sidenav_link +
+                      " " +
+                      (props.path === "/dashboard/suggestedmeals" &&
+                        styles.active)
+                    }
+                  >
+                    <MealRequestIcon style={styles.sidenav_link_icon} />
+                    Meal/Product Suggestion
+                  </div>
+                </Link>
+              )}
+            <Link href={`/chef/${user?._id}`}>
               <div
                 className={
                   styles.sidenav_link +
@@ -136,11 +156,11 @@ function SideNav2(props) {
                   (props.path === "/dashboard/userprofile" && styles.active)
                 }
               >
-                <UserIcon style={styles.sidenav_link_icon} />
+                <StoreMgtIcon style={styles.sidenav_link_icon} />
                 Profile Settings
               </div>
             </Link>
-          
+
             {props.auth.authUser.user_type === "supplier" && (
               <Link href="/dashboard/manage-store">
                 <div
@@ -150,8 +170,8 @@ function SideNav2(props) {
                     (props.path === "/dashboard/manage-store" && styles.active)
                   }
                 >
-                  <StoreMgtIcon style={styles.sidenav_link_icon} />
-                 Manage Stores
+                  <StoreMgtIcon2 style={styles.sidenav_link_icon} />
+                  Manage Stores
                 </div>
               </Link>
             )}
@@ -164,7 +184,7 @@ function SideNav2(props) {
                     (props.path === "/dashboard/management" && styles.active)
                   }
                 >
-                  <StoreMgtIcon style={styles.sidenav_link_icon} />
+                  <AdminMgtIcon style={styles.sidenav_link_icon} />
                   Admin Mgt
                 </div>
               </Link>
@@ -178,7 +198,7 @@ function SideNav2(props) {
                     (props.path === "/dashboard/management" && styles.active)
                   }
                 >
-                  <StoreMgtIcon style={styles.sidenav_link_icon} />
+                  <ChatIcon style={styles.sidenav_link_icon} />
                   Chat
                 </div>
               </Link>
@@ -208,11 +228,11 @@ function SideNav2(props) {
           </div>
         )}
         {props.showBottom && !props.auth.authUser && (
-           <Link href="/login">
-          <div onClick={toggleLogin} className={styles.sidenav_link}>
-            <PowerIcon style={styles.sidenav_link_icon} />
-            <p>Log In</p>
-          </div>
+          <Link href="/login">
+            <div onClick={toggleLogin} className={styles.sidenav_link}>
+              <PowerIcon style={styles.sidenav_link_icon} />
+              <p>Log In</p>
+            </div>
           </Link>
         )}
       </div>

@@ -789,21 +789,21 @@ const GroceryPage = () => {
                                 width={55}
                                 style={{ borderRadius: "4px" }}
                               />
-                            ) : element.item.item_type === "Meal" ? (
+                            ) : element.item?.item_type === "Meal" ? (
                               <Image
                                 src="/assets/store_pics/no-image-meal.png"
                                 height={50}
                                 width={55}
                                 style={{ borderRadius: "5px" }}
                               />
-                            ) : element.item.item_type === "Product" ? (
+                            ) : element.item?.item_type === "Product" ? (
                               <Image
                                 src="/assets/store_pics/no-image-product.png"
                                 height={50}
                                 width={55}
                                 style={{ borderRadius: "5px" }}
                               />
-                            ) : element.item.item_type === "Utensil" ? (
+                            ) : element.item?.item_type === "Utensil" ? (
                               <Image
                                 src="/assets/store_pics/no-image-utensil.png"
                                 height={50}
@@ -851,7 +851,7 @@ const GroceryPage = () => {
                                 >
                                   Include Ingredients
                                 </p>
-                                {open.isOpen && element._id === open.id && (
+                                {open.isOpen && element?._id === open.id && (
                                   <CardDropdown element={element} />
                                 )}
                               </div>
