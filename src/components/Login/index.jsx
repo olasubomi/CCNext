@@ -21,8 +21,8 @@ function Login(props) {
   const [status, setStatusState] = useState(null);
   const [message, setMessageState] = useState(null);
   const [showPass, setShowPassState] = useState(null);
-  const { isOpen, setIsOpen } = useAuth();
-  const [openVerifier, SetOpenVerifier] = useState(false)
+  //const { isOpen, setIsOpen } = useAuth();
+  //const [openVerifier, SetOpenVerifier] = useState(false)
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -79,7 +79,7 @@ function Login(props) {
         ? // user.super_app_admin
           router.push("/admin")
         : router.push("/dashboard");
-      setIsOpen(false);
+      //setIsOpen(false);
     } else if(props.auth.isAuthenticated && user && !props.auth.isVerified){
       
     }else{
