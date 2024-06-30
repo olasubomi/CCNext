@@ -129,14 +129,42 @@ export const MobileTable = ({
                   style={{ cursor: "pointer", paddingRight: "2rem" }}
                 >
                   <div style={{ width: "30%" }}>
-                    {element?.item?.itemImage0 && (
-                      <Image
-                        src={element?.item?.itemImage0}
-                        height={45}
-                        width={45}
-                        style={{borderRadius: '4px'}}
-                      />
-                    )}
+                  {element?.item?.itemImage0 ? (
+                              <Image
+                                src={element?.item?.itemImage0}
+                                height={45}
+                                width={45}
+                                style={{ borderRadius: "4px" }}
+                              />
+                            ) : element.item?.item_type === "Meal" ? (
+                              <Image
+                                src="/assets/store_pics/no-image-meal.png"
+                                height={45}
+                                width={45}
+                                style={{ borderRadius: "5px" }}
+                              />
+                            ) : element.item?.item_type === "Product" ? (
+                              <Image
+                                src="/assets/store_pics/no-image-product.png"
+                                height={45}
+                                width={45}
+                                style={{ borderRadius: "5px" }}
+                              />
+                            ) : element.item?.item_type === "Utensil" ? (
+                              <Image
+                                src="/assets/store_pics/no-image-utensil.png"
+                                height={45}
+                                width={45}
+                                style={{ borderRadius: "5px" }}
+                              />
+                            ) : (
+                              <Image
+                                src="/assets/store_pics/no-image-meal.png"
+                                height={45}
+                                width={45}
+                                style={{ borderRadius: "5px" }}
+                              />
+                            )}
                   </div>
                   <div
                     style={{

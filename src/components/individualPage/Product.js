@@ -36,8 +36,8 @@ function Product(props) {
   const dispatch = useDispatch();
   //const url = 'http://localhost:3000/'
   const url = "https://www.chopchow.app/";
-  const productName = props.meal.item_name;
-  const productNameWithoutSpaces = productName.replaceAll(' ', '%20') 
+  const productName = props?.product?.item_name;
+  const productNameWithoutSpaces = productName?.replaceAll(' ', '%20') 
   const productURL = 'https://www.chopchow.app/product/' + productNameWithoutSpaces;
   const params = useSearchParams();
   // console.log(props.product.item_data.product_size, 'item_data')

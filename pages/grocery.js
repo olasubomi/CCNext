@@ -7,7 +7,6 @@ import Image from "next/image";
 import noteGif from "../public/assets/icons/gif.gif";
 import Footer from "../src/components/Footer/Footer";
 import { Modal } from "../src/components/modal/popup-modal";
-import { disableBodyScroll } from "body-scroll-lock";
 import { AiFillEdit } from "react-icons/ai";
 import { MdDelete, MdRemoveRedEye } from "react-icons/md";
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -99,11 +98,6 @@ const Grocery = () => {
     fetchList();
   }, [isUserOnline]);
 
-  useEffect(() => {
-    const doc = document.querySelector("#modal_container");
-    console.log(doc);
-    disableBodyScroll(doc);
-  }, [show]);
   return (
     <div className={styles.container}>
       {" "}

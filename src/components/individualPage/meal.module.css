@@ -5,7 +5,27 @@
   justify-items: center;
   margin-top: 155px;
 }
-
+.public {
+  background-color: #deede5;
+  color: #5ca37b;
+  padding: 0.6rem 2rem;
+  font-size: 14px;
+  border-radius: 2rem;
+}
+.pending {
+  background-color: rgba(137, 62, 233, 0.25);
+  color: #893ee9;
+  padding: 0.6rem 2rem;
+  font-size: 14px;
+  border-radius: 2rem;
+}
+.rejected {
+  background-color: rgba(244, 7, 7, 0.25);
+  color: #f63636;
+  padding: 0.6rem 2rem;
+  font-size: 14px;
+  border-radius: 2rem;
+}
 .reject_card {
   background-color: white;
   height: 18rem;

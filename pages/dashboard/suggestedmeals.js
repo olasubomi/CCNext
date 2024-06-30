@@ -49,6 +49,7 @@ import { SuggestedMeasurement } from "../../src/components/dashboard/suggestedme
 import { SuggestedCategories } from "../../src/components/dashboard/suggestedCategories";
 import SuggestedStores from "../../src/components/dashboard/suggestedStores";
 import Store from "../../src/components/individualPage/Store";
+import { RejectionModal } from "../../src/components/modal/rejection-modal";
 
 const SuggestedMeals = (props) => {
   const router = useRouter();
@@ -80,6 +81,7 @@ const SuggestedMeals = (props) => {
   const [status2, setStatus2State] = useState("");
   const [message, setMessageState] = useState("");
   const [relateds, setRelatedsState] = useState([]);
+  const [openRejectionModal, setOpenRejectionModal] = useState(false);
 
   //status filter all "Draft", "Pending", "Public", "Rejected"
   const [status, setStatus] = useState("all");
@@ -151,7 +153,8 @@ const SuggestedMeals = (props) => {
             newPage ? newPage : page
           }?type=Product,Meal,Utensil` +
           "&userId=" +
-          props.auth.authUser._id + `${item_name ? `&item_name=${item_name}` :''}`
+          props.auth.authUser._id +
+          `${item_name ? `&item_name=${item_name}` : ""}`;
       }
 
       axios.get(url).then((data) => {
@@ -459,9 +462,8 @@ const SuggestedMeals = (props) => {
   }
   const searchSuggested = async (name) => {
     const user = localStorage.getItem("user") ?? {};
-    getUserItems(0, searchSuggestedSuggestion)
+    getUserItems(0, searchSuggestedSuggestion);
     try {
-      
     } catch (error) {
       console.log(error);
     }
@@ -757,14 +759,11 @@ const SuggestedMeals = (props) => {
   const handleStatusType = async (type) => {
     try {
       setStatusTypeState(type);
-      
+
       const res = await axios.post(`/items/item-control`, {
         itemId: suggestion._id,
         status: type,
       });
-
-       
-     
 
       toggleChangeStatus();
       console.log("resss", res);
@@ -1784,7 +1783,7 @@ const SuggestedMeals = (props) => {
                     <div className={styles.select_options2}>
                       <p onClick={() => handleStatusType("Public")}>Public</p>
                       <p onClick={() => handleStatusType("Pending")}>Pending</p>
-                      <p onClick={() => handleStatusType("Rejected")}>
+                      <p onClick={() => setOpenRejectionModal(true)}>
                         Rejected
                       </p>
                     </div>
@@ -1806,7 +1805,7 @@ const SuggestedMeals = (props) => {
                 >
                   {suggestion.publicly_available}
                 </p>
-              </div>
+            
               <div className={styles.status}>
                 {suggestion.item_status.map((elem) => (
                   <p
@@ -1824,9 +1823,15 @@ const SuggestedMeals = (props) => {
                   </p>
                 ))}
               </div>
+              </div>
             </div>
             {searchType === "Item" ? (
-              <Meal meal={suggestion} auth={props.auth} show={false} />
+              <Meal
+                meal={suggestion}
+                auth={props.auth}
+                show={false}
+                handleStatusType={handleStatusType}
+              />
             ) : (
               searchType === "Product" && (
                 <Product product={suggestion} auth={props.auth} />
@@ -1940,6 +1945,12 @@ const SuggestedMeals = (props) => {
           </div>
         )}
       </div>
+      {openRejectionModal && (
+        <RejectionModal
+          itemId={suggestion._id ?? ""}
+          setOpenModal={setOpenRejectionModal}
+        />
+      )}
       {openModal && (
         <Popup2
           popupType="Meal Suggestion Preview"

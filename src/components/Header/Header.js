@@ -13,11 +13,15 @@ import {
   ArrowDownIcon,
   ArrowLeftFillIcon,
   BasketIcon,
+  BasketIcon2,
   CartIcon,
+  CartIcon2,
   DashBoardIcon,
   HomeIcon,
+  HomeIcon2,
   NotificationIcon,
   Order2Icon,
+  Order3Icon,
   UserIcon,
   fastFoodIcon,
 } from "../icons";
@@ -59,7 +63,13 @@ function Header(props) {
   const isLandscape = useMediaQuery("(orientation: landscape)");
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
-  //const { items } = cartCtx;
+  const { items } = cartCtx;
+  const [activeNav, setActiveNav] = useState(0);
+
+  const handleSetActiveNav = (id, path) => {
+    setActiveNav(id);
+    router.push(path);
+  };
 
   // const numberOfCartItems = items.reduce((curNumber, item) => {
   //   return curNumber + item.amount;
@@ -238,7 +248,28 @@ function Header(props) {
     setOpenLoginState(!openLogin);
   }
   console.log(user, "userr");
-
+  const menu = [
+    {
+      name: "Home",
+      path: "/",
+      icon: <HomeIcon2 color={activeNav === 0 ? "#F47900" : "#6D6D6D"} />,
+    },
+    {
+      name: "Order",
+      path: "/dashboard/orders/orders",
+      icon: <Order3Icon color={activeNav === 1 ? "#F47900" : "#6D6D6D"} />,
+    },
+    {
+      name: "Grocery List",
+      path: "/grocery",
+      icon: <BasketIcon2 color={activeNav === 2 ? "#F47900" : "#6D6D6D"} />,
+    },
+    {
+      name: "Cart",
+      path: "#",
+      icon: <CartIcon2 color={activeNav === 3 ? "#F47900" : "#6D6D6D"} />,
+    },
+  ];
   function logout() {
     props.logout();
     router.push("/");
@@ -705,61 +736,19 @@ function Header(props) {
                     visible ? styles.navbar_down : styles.navbar_down_2
                   }
                 >
-                  <div
-                    className={
-                      styles.navbar_down_col +
-                      " " +
-                      (props.path === "/" && styles.activeLinkDown)
-                    }
-                  >
-                    <Link href="/">
-                      <HomeIcon style={styles.navbar_down_col_icon} />
-                      <p>Home</p>
-                    </Link>
-                  </div>
-                  <div
-                    className={
-                      styles.navbar_down_col +
-                      " " +
-                      (props.path === "/dashboard/orders/orders" &&
-                        styles.activeLinkDown)
-                    }
-                  >
-                    <Link
-                      href="#"
-                      // href="/dashboard/orders/orders"
+                  {menu.map((item, id) => (
+                    <div
+                      className={
+                        activeNav === id ? styles.activeOne : styles.links
+                      }
+                      onClick={() => handleSetActiveNav(id, item.path)}
                     >
-                      <Order2Icon style={styles.navbar_down_col_icon} />
-                      <p>Order</p>
-                    </Link>
-                  </div>
-                  <div
-                    className={
-                      styles.navbar_down_col +
-                      " " +
-                      (props.path === "/grocery-list" && styles.activeLinkDown)
-                    }
-                  >
-                    <Link href="/grocery">
-                      <BasketIcon style={styles.navbar_down_col_icon} />
-                      <p>Grocery List</p>
-                    </Link>
-                  </div>
-                  <div
-                    className={
-                      styles.navbar_down_col +
-                      " " +
-                      (props.path === "/cart" && styles.activeLinkDown)
-                    }
-                  >
-                    <Link href="#">
-                      <CartIcon style={styles.navbar_down_col_icon} />
-                      <p>Cart</p>
-                    </Link>
-                  </div>
-
-                  {/* <Auth toggleLogin={toggleLogin} /> */}
-                  {/* {openLogin && <Auth toggleLogin={toggleLogin} />} */}
+                      <div className={styles.navbar_down_col_icon}>
+                        {item.icon}
+                      </div>
+                      <p>{item.name}</p>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -802,6 +791,7 @@ export function Header2() {
   const router = useRouter();
   const matches = useMediaQuery("(min-width: 900px)");
   const isLandscape = useMediaQuery("(orientation: landscape)");
+  const [activeLink, setActiveLink] = useState(0);
 
   useEffect(() => {
     Events.scrollEvent.register("begin", (to, element) => {

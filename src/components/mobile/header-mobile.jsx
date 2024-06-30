@@ -2,30 +2,25 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { animateScroll as scroll, scrollSpy, Events } from "react-scroll";
 import styles from "../../components/Header/header.module.css";
+import { useRouter } from "next/router";
+
 export const MobileHeader = () => {
-  useEffect(() => {
-    Events.scrollEvent.register("begin", (to, element) => {
-      console.log("begin", to, element);
-    });
+  const [activeLink, setActiveLink] = useState(0);
+  const router = useRouter();
 
-    Events.scrollEvent.register("end", (to, element) => {
-      console.log("end", to, element);
-    });
-
-    scrollSpy.update();
-
-    return () => {
-      Events.scrollEvent.remove("begin");
-      Events.scrollEvent.remove("end");
-    };
-  }, []);
-
-
-  const handleSetActive = (to) => {
-    console.log(to);
+  const handleSetActive = (id, path) => {
+    console.log("Navigating to:", path); // Debug log
+    setActiveLink(id);
+    router.push(path);
   };
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+
+  const menuItems = [
+    { name: "Marketplace", path: "/publicMarket" },
+    { name: "Chef", path: "/chef" },
+    { name: "Blog", path: "/blog" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,15 +29,16 @@ export const MobileHeader = () => {
       setPrevScrollPos(currentScrollPos);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [prevScrollPos]);
+
   return (
     <div>
-      <div className={visible ? styles.navbar2 : ''}>
+      <div className={visible ? styles.navbar2 : styles.navbar_down_2}>
         <div className={styles.navbar_main_container}>
           <div className={styles.navbar_main}>
             <ul className={styles.navbar_main_links}>

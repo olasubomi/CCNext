@@ -1,8 +1,3 @@
-import {
-  disableBodyScroll,
-  enableBodyScroll,
-  clearAllBodyScrollLocks,
-} from "body-scroll-lock";
 import styles from "../../components/modal/modal.module.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -33,17 +28,6 @@ export const Modal = ({
   function onChange(e) {
     setModalState({ ...modalState, [e.target.name]: e.target.value });
   }
-
-  useEffect(() => {
-    const targetElement = targetElementRef.current;
-
-    disableBodyScroll(targetElement);
-    if (show && targetElement) {
-      disableBodyScroll(targetElement);
-    } else {
-      enableBodyScroll(targetElement);
-    }
-  }, [show]);
 
   const handleCreateLocalGroceryList = useCallback(() => {
     const localGrocery = getLocalGroceryList();
