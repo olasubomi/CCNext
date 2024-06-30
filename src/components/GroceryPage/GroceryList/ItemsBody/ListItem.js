@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import itemStyle from "./Index.module.css";
 import CartContext from "../../../../../pages/store/cart-context";
 import { useMobileMedia } from "../../../../customhooks/useResponsive";
 
 function ListItem(props) {
   const [checked, setChecked] = useState(false);
-  const cartCtx = useContext(CartContext);
+  //const cartCtx = useContext(CartContext);
 
   const mobileScreen = useMobileMedia();
 

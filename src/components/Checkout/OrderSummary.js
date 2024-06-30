@@ -1,15 +1,12 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
+
 import styles from '../../../src/components/Checkout/style.module.css';
 
-const [tax, setTax] = useState(40);
-const {cartItems: items} = useSelector((state) => {return state.Cart});
+
 
 
 //const totalQuantity = `${items.reduce((a, c) => a + c.amount, 0)} items`
-const SubTotal = items.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(2)
 
-const TotalPrice = SubTotal + tax;
 
 const orderData = [
     {
@@ -29,7 +26,7 @@ const orderData = [
     },
 ]
 
-const OrderSummary = () => {
+const OrderSummary = ({items, TotalPrice, SubTotal}) => {
   return (
     <div>
         <p className={styles.sectionHeaderText}>Order Summary</p>

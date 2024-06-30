@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import Head from "next/head";
 import Header, { Header2 } from "../Header/Header";
 import TimeBar from "../GroceryPage/CartPage/Cart/TimeBar";

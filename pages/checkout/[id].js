@@ -1,26 +1,29 @@
-import { useRouter } from 'next/router';
-import Head from "next/head";
+import React, { useState } from 'react'
 
-import Header, {Header2} from '../../src/components/Header/Header';
-import GoBack from '../../src/components/CommonComponents/goBack';
-
+import { useRouter } from 'next/router'
 import styles from '../../src/components/Checkout/style.module.css'
-
-import Subscription from '../../src/components/Checkout//Subscription';
-import Delivery from '../../src/components/Checkout//Delivery';
-
+import GoBack from '../../src/components/CommonComponents/goBack'
+import Header, { Header2 } from '../../src/components/Header/Header'
+import Head from 'next/head'
 import Footer from '../../src/components/Footer/Footer'
-import ContactInformation from '../../src/components/Checkout/ContactInformation';
-import DeliveryAddress from '../../src/components/Checkout/DeliveryAddress';
-import PaymentMethod from '../../src/components/Checkout/PaymentMethod';
-import OrderSummary from '../../src/components/Checkout/OrderSummary';
-import PlaceOrderBtn from '../../src/components/Checkout/PlaceOrderBtn';
-
+import Subscription from '../../src/components/Checkout/Subscription'
+import Delivery from '../../src/components/Checkout/Delivery'
+import ContactInformation from '../../src/components/Checkout/ContactInformation'
+import PaymentMethod from '../../src/components/Checkout/PaymentMethod'
+import DeliveryAddress from '../../src/components/Checkout/DeliveryAddress'
+import PlaceOrderBtn from '../../src/components/Checkout/PlaceOrderBtn'
+import OrderSummary  from '../../src/components/Checkout/OrderSummary'
+import { useSelector } from 'react-redux'
 const Checkout = () => {
     const router = useRouter()
     const { id } = router.query
+    const {cartItems: items} = useSelector((state) => {return state.Cart});
+    
+    const [tax, setTax] = useState(40);
 
+    const SubTotal = items.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(2)
 
+    const TotalPrice = SubTotal + tax;
 
     return (
         <div className={styles.container}>
@@ -48,14 +51,14 @@ const Checkout = () => {
                             <DeliveryAddress />
                             <PaymentMethod />
                             <div className={styles.show_on_mobile}>
-                                    <PlaceOrderBtn />
+                            <PlaceOrderBtn />
                                 </div>
                         </div>
                         <div className={styles.checkout_right}>
                             <div className={styles.sticky}>
-                                <OrderSummary />
+                            <OrderSummary items={items} TotalPrice={TotalPrice} SubTotal={SubTotal}/>
                                 <div className={styles.hide_on_mobile}>
-                                    <PlaceOrderBtn />
+                                <PlaceOrderBtn />
                                 </div>
                             </div>
                         </div>

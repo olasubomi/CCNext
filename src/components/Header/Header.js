@@ -2,7 +2,7 @@ import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
 import styles from "./header.module.css";
 
 import Link from "next/link";
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MobileHeader } from "../mobile/header-mobile";
 import { animateScroll as scroll, scrollSpy, Events } from "react-scroll";
 import { FaCheck } from "react-icons/fa6";
@@ -54,16 +54,16 @@ function Header(props) {
   const [showSignup, setShowSignUp] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
   const [openUserDetails, setOpenUserDetails] = useState(false);
-  const cartCtx = useContext(CartContext);
+  //const cartCtx = useContext(CartContext);
   const matches = useMediaQuery("(min-width: 768px)");
   const isLandscape = useMediaQuery("(orientation: landscape)");
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
-  const { items } = cartCtx;
+  //const { items } = cartCtx;
 
-  const numberOfCartItems = items.reduce((curNumber, item) => {
-    return curNumber + item.amount;
-  }, 0);
+  // const numberOfCartItems = items.reduce((curNumber, item) => {
+  //   return curNumber + item.amount;
+  // }, 0);
 
   console.log(notifications, "notific0ppjations");
   // useEffect(() => {
