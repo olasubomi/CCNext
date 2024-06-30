@@ -320,6 +320,7 @@
   bottom: 0;
   right: 0;
   width: 100%;
+  padding: 0.3rem 2rem;
   grid-template-rows: 70px;
   grid-template-columns: max-content max-content max-content max-content;
   justify-content: space-around;
@@ -336,7 +337,8 @@
 }
 
 .navbar_down_col_icon {
-  width: 15px;
+  color: red;
+  fill: red
 }
 
 .navbar_down_col > a > p {
@@ -821,6 +823,14 @@
   text-decoration: none;
   color: #8c1d5a;
 }
+@media only screen and (max-width: 1100px) {
+  .navbar_down_2 {
+    display: none;
+  }
+  .navbar_down {
+    display: none;
+  }
+}
 
 @media only screen and (max-width: 900px) {
   .navbar {
@@ -829,6 +839,7 @@
 
   .navbar2 {
     top: 58px;
+    z-index: 1000;
   }
   .show {
     display: none;
@@ -907,7 +918,22 @@
   .navbar_down_2 {
     display: none;
   }
-
+  .links {
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+  }
+  .activeOne {
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #f47900;
+  }
   .navbar_user_signedin_link {
     display: flex;
     gap: 10px;
@@ -978,6 +1004,7 @@
     grid-template-columns: 100%;
     background-color: white;
     height: 40px;
+    z-index: 1000;
   }
   .navbar_main_container2 {
     display: none;
@@ -991,6 +1018,11 @@
   }
   .navbar_top_container {
     padding: 0 0px 0 10px;
+  }
+}
+@media only screen and (max-width: 340px) {
+  .links {
+    font-size: 10px;
   }
 }
 @media (orientation: landscape) {

@@ -26,7 +26,7 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
   RedditShareButton,
-  RedditIcon
+  RedditIcon,
 } from "react-share";
 import InstagramShareButton from "../SocialShare/InstagramShare";
 import { AiOutlineClose } from "react-icons/ai";
@@ -45,15 +45,17 @@ function Meal(props) {
   const url = "https://www.chopchow.app/";
   const mealName = props.meal.item_name;
   // const mealNameWithoutSpaces = props.meal.item_name.replaceAll(' ', '%20') ;
-  const mealURL = 'https://www.chopchow.app/meal/' + mealName;
+  const mealURL = "https://www.chopchow.app/meal/" + mealName;
 
+  const updateStatus = (type) => {
+    props.handleStatusType(type);
+  };
   const matches = useMediaQuery("(min-width: 768px)");
   const [serves, setServes] = useState(parseInt(props.meal?.servings));
   const [user, setUser] = useState({});
   const [openList, setOpenList] = useState(false);
   const [selectGrocery, setSelectGrocery] = useState([]);
   const [show, setShow] = useState(false);
-  const [groceryList, setGroceryList] = useState([]);
   const [selectedItem, setSelectedItem] = useState({});
   const [openModal, setOpenModal] = useState(false);
   console.log(selectedItem, "sele");
@@ -62,7 +64,7 @@ function Meal(props) {
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
   });
-  console.log(groceryList, "gro");
+  console.log(props.meal, "gro");
 
   const addItemToGrocery = async (listName) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -132,11 +134,8 @@ function Meal(props) {
 
   console.log("meald callback", props.callback);
   console.log(props, "serve me");
- 
-  console.log(
-    props,
-    "propsssmeal"
-  );
+
+  console.log(props, "propsssmeal");
 
   //   let url = shareURL + "&via=" + "ChopChowMarket" +"&text=" + encodeURIComponent(`${props.meal.item_intro}`);
 
@@ -315,16 +314,10 @@ function Meal(props) {
               {/* <InstagramShareButton title={props.meal.item_name} url="https://www.instagram.com">
                             <InstaEIcon />
                         </InstagramShareButton> */}
-              <WhatsappShareButton
-                title={props.meal.item_name}
-                url={mealURL}
-              >
+              <WhatsappShareButton title={props.meal.item_name} url={mealURL}>
                 <WhatsappEIcon />
               </WhatsappShareButton>
-              <RedditShareButton
-                title={props.meal.item_name}
-                url={mealURL}
-              >
+              <RedditShareButton title={props.meal.item_name} url={mealURL}>
                 <RedditIcon />
               </RedditShareButton>
             </div>
@@ -599,7 +592,7 @@ function Meal(props) {
                       </div>
                       <p>
                         {props?.meal?.user?.first_name}{" "}
-                        {props.meal.user.last_name}{" "}
+                        {props.meal.user?.last_name}{" "}
                       </p>
                     </div>
                     <span className={styles.post}>
@@ -616,14 +609,37 @@ function Meal(props) {
                     </div>
                     <div className={styles.contact}>
                       <IoMdCall color="#F47900" />
-                      <p>+ {props?.meal?.user.phone_number}</p>
+                      <p>+ {props?.meal?.user?.phone_number}</p>
                     </div>
                   </div>
                 </div>
               </div>
               <div className={styles.btns}>
-                <button className={styles.outline} onClick={() => setOpenModal(true)}>Reject</button>
-                <button className={styles.solid}>Accept Request</button>
+                <button
+                  className={styles.outline}
+                  onClick={() => setOpenModal(true)}
+                >
+                  Reject
+                </button>
+                <button
+                  className={styles.solid}
+                  onClick={() => updateStatus("Public")}
+                >
+                  Make Public
+                </button>
+                <div
+                  className={
+                    props?.meal?.item_status[0].status === "Public"
+                      ? styles.public
+                      : props?.meal?.item_status[0].status === "Pending"
+                      ? styles.pending
+                      : props?.meal?.item_status[0].status === "Rejected"
+                      ? styles.rejected
+                      : styles.pending
+                  }
+                >
+                  <p>{props?.meal?.item_status[0].status}</p>
+                </div>
               </div>
             </div>
           )}
@@ -745,7 +761,12 @@ function Meal(props) {
           show={show}
         />
       )}
-      {openModal && <RejectionModal itemId={props?.meal?._id ?? ""} setOpenModal={setOpenModal} />}
+      {openModal && (
+        <RejectionModal
+          itemId={props?.meal?._id ?? ""}
+          setOpenModal={setOpenModal}
+        />
+      )}
     </>
   );
 }

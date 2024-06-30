@@ -1,11 +1,16 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styles from "../../components/Header/header.module.css";
+import { useRouter } from "next/router";
 
 export const MobileHeader = () => {
-  const [activeLink, setActiveLink] = useState(2);
+  const [activeLink, setActiveLink] = useState(0);
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
+  const router = useRouter();
 
   const handleSetActive = (id, path) => {
+    console.log("Navigating to:", path); // Debug log
     setActiveLink(id);
     router.push(path);
   };
@@ -15,9 +20,24 @@ export const MobileHeader = () => {
     { name: "Chef", path: "/chef" },
     { name: "Blog", path: "/blog" },
   ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [prevScrollPos]);
+
   return (
     <div>
-      <div className={styles.navbar2}>
+      <div className={visible ? styles.navbar2 : styles.navbar_down_2}>
         <div className={styles.navbar_main_container}>
           <div className={styles.navbar_main}>
             <ul className={styles.navbar_main_links}>

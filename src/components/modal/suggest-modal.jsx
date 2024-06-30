@@ -1,8 +1,4 @@
-import {
-  disableBodyScroll,
-  enableBodyScroll,
-  clearAllBodyScrollLocks,
-} from "body-scroll-lock";
+
 import styles from "../../components/modal/modal.module.css";
 import { useEffect, useRef, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -32,19 +28,19 @@ export const SuggestModal = ({
 
   console.log("value", value);
 
-  useEffect(() => {
-    const targetElement = targetElementRef.current;
+  // useEffect(() => {
+  //   const targetElement = targetElementRef.current;
 
-    if (isShow && targetElement) {
-      disableBodyScroll(targetElement);
-    } else {
-      enableBodyScroll(targetElement);
-    }
+  //   if (isShow && targetElement) {
+  //     disableBodyScroll(targetElement);
+  //   } else {
+  //     enableBodyScroll(targetElement);
+  //   }
 
-    return () => {
-      clearAllBodyScrollLocks();
-    };
-  }, [isShow]);
+  //   return () => {
+  //     clearAllBodyScrollLocks();
+  //   };
+  // }, [isShow]);
 
   const handleAdd = async () => {
     try {
