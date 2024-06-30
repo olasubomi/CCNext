@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Checkout from "../src/components/Checkout";
+
 
 const PrivacyPolicy = () => {
     return <div>
@@ -9,7 +9,7 @@ const PrivacyPolicy = () => {
             <meta name="description" content="View Chop Chow's Privacy Policy" />
         </Head>
 
-        {/* <h1>Privacy Policy</h1>
+        <h1>Privacy Policy</h1>
         <p>ChopChow provides this Privacy Policy to inform you of our policies
             and procedures regarding the collection, use and disclosure of
             personal information we recieve from our platform.<br />
@@ -34,8 +34,8 @@ const PrivacyPolicy = () => {
             this data as personal information.
             You can always adjust your controls of how your data is managed or withdraw your consent for the future
             by emailing privacy@chopchow.com .
-        </p> */}
-        <Checkout/>
+        </p>
+        
 
     </div>
 }
