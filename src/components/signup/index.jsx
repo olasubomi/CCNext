@@ -45,6 +45,7 @@ function SignUp(props){
     confirm_password: '',
     isAgreed: '',
   })
+  const isverified = useSelector((state) => state.Auth.isVerified);
 
   const handleOpenOtp = () =>{
     setOpenUserVerification(false)
@@ -53,10 +54,15 @@ function SignUp(props){
   }
   const handleOpenSuccess = () =>{
     setOpenUserVerification(false)
-    setOpenUserVerificationSuccess(true)
     setOpenOTP(false)
+    setOpenUserVerificationSuccess(true)
+    
   }
-
+  useEffect(()=>{
+    if(isverified){
+      setOpenUserVerificationSuccess(true)
+    }
+  }, [isverified])
   useEffect(()=>{
     if(isAuthenticated && authUser){
       router.push("/dashboard");
@@ -383,19 +389,17 @@ function SignUp(props){
           
             <img width="100%" height="100%" src="/assets/signup/signup_mobile.jpeg" alt="Signup" />
                 </div>
-            
-
-            
-            
             <img width="100%" height="100%" className={styles.login_col_1_img} src="/assets/signup/signup_bg.jpg" alt="Signup" />
           </div>    
         </div>
         {openUserVerification && <UserVerification formState={formState} setFormState={setFormState} requestnumberFunc={props.requestnumberFunc} type={type} setType={setType}  sendEmailOTPFunc={props.sendEmailOTPFunc}  next={handleOpenOtp} open={openUserVerification} setOpen={setOpenUserVerification} />}
 
-        {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/dashboard")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} />}
-
         {openOTP && <OTP formState={formState} setFormState={setFormState} verifynumberFunc={props.verifynumberFunc} type={type} setType={setType}
-         verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} sendEmailOTPFunc={props.sendEmailOTPFunc} />}
+         verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} sendEmailOTPFunc={props.sendEmailOTPFunc} requestnumberFunc={props.requestnumberFunc} setOpenUserVerificationSuccess={setOpenUserVerificationSuccess} />}
+
+        {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/login")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} />}
+
+       
       </>
     )
   }

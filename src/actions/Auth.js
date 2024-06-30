@@ -61,7 +61,7 @@ export const userSignUp = (form) => {
         // }else{
         //   toast.success("A verifiation link was sent to your mail")
         // }
-        toast.success("Congratulation!!!!! You have Successfully Signed Up, Kindly Verify your account");
+        //toast.success("Congratulation!!!!! You have Successfully Signed Up, Kindly Verify your account");
       })
       .catch((err) => {
         console.error("xxx userSignUp Request ERROR xxx");
@@ -114,8 +114,14 @@ export const userSignIn = (email, password, remember, callback) => {
         dispatch({ type: IS_AUTHENTICATED, payload: true });
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
         const customId = "custom-id-no";
+        if(data.data.isVerified){
+          toast.success("Login Successful", { toastId: customId });
+        }else{
+          toast.success("Kindly Verify your account, so as to login successfully");
+        }
 
-        toast.success("Login Successful", { toastId: customId });
+        //toast.success(data.data.message);
+        
 
         return true;
       })
@@ -403,6 +409,8 @@ export const socialSignIn = (token) => {
         dispatch({ type: USER_ROLE, payload: data.data.role });
         dispatch({ type: USER_DATA, payload: data.data.user });
         dispatch({ type: IS_AUTHENTICATED, payload: true });
+        dispatch({ type: IS_VERIFIED, payload: true });
+        dispatch({ type: EMAIL_VERIFIED, payload: true });
       })
       .catch((err) => {
         console.error("xxx userSignIn Request ERROR xxx", err);

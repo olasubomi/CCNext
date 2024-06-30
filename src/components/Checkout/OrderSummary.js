@@ -1,5 +1,14 @@
+import { useSelector } from 'react-redux';
 import styles from '../../../src/components/Checkout/style.module.css';
 
+const [tax, setTax] = useState(40);
+const {cartItems: items} = useSelector((state) => {return state.Cart});
+
+
+//const totalQuantity = `${items.reduce((a, c) => a + c.amount, 0)} items`
+const SubTotal = items.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(2)
+
+const TotalPrice = SubTotal + tax;
 
 const orderData = [
     {
@@ -25,11 +34,11 @@ const OrderSummary = () => {
         <p className={styles.sectionHeaderText}>Order Summary</p>
         <div className={styles.orderContainer}>
             {
-                orderData.map((value, key) => {
+                items.map((value, key) => {
                     return(
                         <div key={key} className={styles.order}>
                             <span>{value.name}</span>
-                            <span>x{value.quantity}</span>
+                            <span>x{value.amount}</span>
                             <span>${value.price}</span>
                         </div>
                     )
@@ -39,7 +48,7 @@ const OrderSummary = () => {
                 <div>
                     <p>Subtotal</p>
                     <hr />
-                    <span>$40.88</span>
+                    <span>${SubTotal}</span>
                 </div>
                 <div>
                     <p>Sales tax</p>
@@ -49,7 +58,7 @@ const OrderSummary = () => {
                 <div>
                     <p>Total</p>
                     <hr />
-                    <span>$40.88</span>
+                    <span>${TotalPrice}</span>
                 </div>
             </div>
         </div>

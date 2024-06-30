@@ -59,13 +59,13 @@ export const AuthReducers =  (state = INIT_STATE, action) => {
         case IS_VERIFIED: {
             return {
                 ...state,
-                isVerified: action.payload
+                isVerified: action.payload,
             }
         }
         case EMAIL_VERIFIED: {
             return {
                 ...state,
-                isEmailVerified: action.payload
+                isEmailVerified: action.payload,
             }
         }
         case PHONE_NUMBER_VERIFIED: {

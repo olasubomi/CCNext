@@ -31,14 +31,14 @@ const Checkout = () => {
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
                 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"></link>
             </Head>
-            {/* Checkout: {id} */}
+            
             <Header />
             <Header2 />
             <div className={styles.inner_container}>
                 <div className ={styles.constraint}>
                     <div className={styles.header}>
                         <GoBack />
-                        <b>Checkout</b>
+                        <b>Checkout: {id} </b>
                     </div>
                     <div className={styles.checkout}>
                         <div className={styles.checkout_left}>

@@ -11,6 +11,7 @@ import { useMobileMedia } from '../../customhooks/useResponsive';
 import { connect, useDispatch, useSelector } from "react-redux";
 import { addToCart, deleteFromCart, EmptyCart, removeFromCart } from "../../actions/Cart";
 import { useRouter } from "next/router";
+import { v4 as uuidv4 } from 'uuid';
 
 
 function Cart(props) {
@@ -47,7 +48,14 @@ const totalPrice = items.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(2
   //   cartCtx.clearCart(id);
   // };
 
+const generateOrderId = () => {
+  return uuidv4()
+}
 
+const Checkout = () => {
+  const id = generateOrderId();
+  router.push(`/checkout/${id}`)
+}
 
 const AddToCart = (item) => {
   const payload = {
@@ -168,7 +176,7 @@ const DeleteFromCart = (product) => {
                   )}
                 </div>
                 {hasItems && (
-                  <div className={indexStyles.greenButton}>
+                  <div className={indexStyles.greenButton} onClick = {() => Checkout()}>
                     <label>Check Out</label>
                   </div>
                 )}

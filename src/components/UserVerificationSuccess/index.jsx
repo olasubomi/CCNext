@@ -17,7 +17,7 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function UserVerificationSuccess({open, setOpen, next}) {
+export default function UserVerificationSuccess({open, setOpen, next, type, setType}) {
  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -36,13 +36,13 @@ console.log(title)
         <Box  sx={style}>
           <div className='verification'>
           <div className='withbg' >   <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" /> </div>
-            <h3>Phone Number Verified</h3>
-            <p>Your phone number was successfully verified</p>
+            <h3>{type == "Email Address" ? "Email Verified":"Phone Number Verified"}</h3>
+            <p>{type == "Email Address" ? "Your email address was successfully verified":"Your phone number was successfully verified"}</p>
            
  
 
 <div className='otp-options'> 
- <button className='verification-button bigger' onClick={next()}>Go to Homepage</button>
+ <button className='verification-button bigger' onClick={() => next()}>Go to Homepage</button>
  </div>
 </div>
  

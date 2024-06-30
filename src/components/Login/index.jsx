@@ -3,23 +3,15 @@ import styles from "./style.module.css";
 import { connect, useSelector } from "react-redux";
 import { userSignIn, socialSignIn, verifyEmail } from "../../actions";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
-import facebook from "../../../public/assets/logos/facebook.png";
-import closeIcon from "../../../public/assets/icons/eva_menu-close.png";
 import Image from "next/image";
 import Link from "next/link";
-import ForgetPassword from "../forgotpassword";
-import SignUp from "../signup";
-import { EyeSIcon } from "../icons";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Loader, SimpleSnackbar } from "../../common";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
-import { toast } from "react-toastify";
 import FacebookLogin from "react-facebook-login";
-import { useAuth } from "../../context/auth.context";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import * as Crypto from "crypto-hash";
 import { unHash } from "../../actions/utils";
+import UserVerification from "../UserVerification";
 
 function Login(props) {
   const isverified = useSelector((state) => state.Auth.isVerified);
@@ -30,6 +22,7 @@ function Login(props) {
   const [message, setMessageState] = useState(null);
   const [showPass, setShowPassState] = useState(null);
   const { isOpen, setIsOpen } = useAuth();
+  const [openVerifier, SetOpenVerifier] = useState(false)
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -50,27 +43,27 @@ function Login(props) {
 
   
 
-  function openForgetPassword() {
-    setForgetPasswordState(true);
-  }
+  // function openForgetPassword() {
+  //   setForgetPasswordState(true);
+  // }
 
-  function closeForgetPassword() {
-    setForgetPasswordState(false);
-  }
+  // function closeForgetPassword() {
+  //   setForgetPasswordState(false);
+  // }
 
-  function openSignUp() {
-    // props.setSignUpState(true)
-    setIsOpen(false);
-    setSignUpState(true);
-  }
+  // function openSignUp() {
+  //   // props.setSignUpState(true)
+  //   setIsOpen(false);
+  //   setSignUpState(true);
+  // }
 
-  function closeSignUp() {
-    if (isverified == "true" && isauthenticated == "true") {
-      setSignUpState(true);
-    } else {
-      setSignUpState(false);
-    }
-  }
+  // function closeSignUp() {
+  //   if (isverified == "true" && isauthenticated == "true") {
+  //     setSignUpState(true);
+  //   } else {
+  //     setSignUpState(false);
+  //   }
+  // }
 
   function onChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -81,16 +74,18 @@ function Login(props) {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (props.auth.isAuthenticated && user) {
+    if (props.auth.isAuthenticated && user && props.auth.isVerified) {
       props.auth.authUser.super_app_admin
         ? // user.super_app_admin
           router.push("/admin")
         : router.push("/dashboard");
       setIsOpen(false);
-    } else {
-      // setLoginLoading(false);
+    } else if(props.auth.isAuthenticated && user && !props.auth.isVerified){
+      
+    }else{
+
     }
-  }, [props.auth.isAuthenticated]);
+  }, [props.auth.isAuthenticated, props.auth.isVerified]);
 
   console.log(props);
   async function Login(e) {
@@ -101,12 +96,13 @@ function Login(props) {
     // props.toggleLogin() // then redirect to dashboard
 
     setLoginLoading(true);
-    
-
-    await props.login(email, password, rememberPassword, () => {
-      console.log("calling callback");
-      setLoginLoading(false);
-    });
+   
+      await props.login(email, password, rememberPassword, () => {
+        console.log("calling callback");
+        setLoginLoading(false);
+      });
+   
+   
 
     // setTimeout(() => {
     //   setLoginLoading(false)
@@ -341,6 +337,7 @@ function Login(props) {
           />
         </div>
       </div>
+      {/* {openVerifier && <UserVerification formState={formState} setFormState={setFormState} requestnumberFunc={props.requestnumberFunc} type={type} setType={setType}  sendEmailOTPFunc={props.sendEmailOTPFunc}  next={handleOpenOtp} open={openUserVerification} setOpen={setOpenUserVerification}/>} */}
       {/* {forgetPassword && (
       router.push("/forgotpassword")
     )}  */}

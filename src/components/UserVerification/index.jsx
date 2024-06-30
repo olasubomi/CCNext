@@ -42,7 +42,7 @@ export default function UserVerification({ next, open, setOpen, type, setType, s
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={style} style={{borderRadius:"8px"}}>
           <div className="verification">
             <h3>Complete your Registration</h3>
             <p>
