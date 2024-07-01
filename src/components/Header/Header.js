@@ -63,7 +63,7 @@ function Header(props) {
   const isLandscape = useMediaQuery("(orientation: landscape)");
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
-  const { items } = cartCtx;
+  //const { items } = cartCtx;
   const [activeNav, setActiveNav] = useState(0);
 
   const handleSetActiveNav = (id, path) => {
