@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
-import styles from '../../components/modal/modal.module.css'
-import { useEffect, useRef, useState } from 'react';
-import { AiFillCloseCircle } from 'react-icons/ai'
-import axios from '../../util/Api';
-import { toast } from 'react-toastify';
-import Image from 'next/image';
-import Frame from '../../../public/assets/logos/Frame.png'
-
-=======
 
 import styles from "../../components/modal/modal.module.css";
 import { useEffect, useRef, useState } from "react";
@@ -17,7 +6,6 @@ import axios from "../../util/Api";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import Frame from "../../../public/assets/logos/Frame.png";
->>>>>>> origin/Peter-master
 
 export const SuggestModal = ({
     isShow,
@@ -26,19 +14,6 @@ export const SuggestModal = ({
     value = '',
     refetch
 }) => {
-<<<<<<< HEAD
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [itemName, setItemName] = useState(value)
-    const handleRadioChange = (value) => {
-        setSelectedOption(value);
-    };
-    const [itemImage, setItemImage] = useState({
-        url: '',
-        file: null
-    })
-    const ref = useRef();
-    const targetElementRef = useRef(null);
-=======
   const [selectedOption, setSelectedOption] = useState(null);
   const [itemName, setItemName] = useState(value);
   const handleRadioChange = (value) => {
@@ -66,7 +41,6 @@ export const SuggestModal = ({
   //     clearAllBodyScrollLocks();
   //   };
   // }, [isShow]);
->>>>>>> origin/Peter-master
 
     console.log('value', value)
 
