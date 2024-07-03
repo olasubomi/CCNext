@@ -749,7 +749,7 @@ export function Header2() {
   };
 
   const menuItems = [
-    { name: "Marketplace", path: "/publicMarket" },
+    { name: "Marketplace", path: "/marketplace" },
     { name: "Chefs", path: "/chef" },
     { name: "Blog", path: "#" },
   ];

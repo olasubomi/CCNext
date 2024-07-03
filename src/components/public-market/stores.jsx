@@ -40,7 +40,7 @@ export const Stores = () => {
           },
         }
       );
-      console.log(response.data.data, "one store");
+      console.log(response.data.data, "one storey");
       setSelectedStore(response.data.data);
       setIsShow(true);
     } catch (error) {
@@ -65,7 +65,7 @@ export const Stores = () => {
   useEffect(() => {
     fetchStores();
   }, []);
-  console.log(stores, "stores");
+  console.log(selectedStore, "storess");
   useEffect(() => {
     // Get the hash value from the URL
     const hash = window.location.hash;
@@ -149,7 +149,7 @@ export const Stores = () => {
                       storeInfo={storeInfo}
                       setIsShow={setIsShow}
                       selectedStore={selectedStore}
-                      id={selectedStore?.supplier?._id}
+                      id={storeInfo?.id}
                     />
                   )}
                 </div>
