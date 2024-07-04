@@ -251,9 +251,10 @@ export const SearchDropdown = ({ setShowDropdown }) => {
                               onClick={() => {
                                 setOneStore({
                                   visible: false,
-                                  id: "",
+                                  id: elem.value,
                                 });
                                 setValue(elem.label);
+                                console.log(oneStore, 'one sttt')
                               }}
                               style={{ cursor: "pointer" }}
                             >
@@ -292,7 +293,7 @@ export const SearchDropdown = ({ setShowDropdown }) => {
                               onClick={() => {
                                 setOneStore({
                                   visible: false,
-                                  id: "",
+                                  id: elem.value,
                                 });
                                 setValue(elem.label);
                               }}
@@ -334,7 +335,7 @@ export const SearchDropdown = ({ setShowDropdown }) => {
                               onClick={() => {
                                 setOneStore({
                                   visible: false,
-                                  id: "",
+                                  id: elem.value,
                                 });
                                 setValue(elem.label);
                               }}

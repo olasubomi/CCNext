@@ -23,13 +23,16 @@ export const Stores = () => {
 
   const fetchOneStore = async (id) => {
     try {
-      const response = await axios(`/stores/getstore/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response.data.data, "one store");
+      const response = await axios(
+        `/inventory/get-store-inventory/${storeId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data.data, "one storey");
       setSelectedStore(response.data.data);
       setIsShow(true);
     } catch (error) {
@@ -53,7 +56,7 @@ export const Stores = () => {
   useEffect(() => {
     fetchStores();
   }, []);
-  console.log(stores, "stores");
+  console.log(selectedStore, "storess");
   useEffect(() => {
     // Get the hash value from the URL
     const hash = window.location.hash;
@@ -125,7 +128,7 @@ export const Stores = () => {
                     <MealDropDown
                       setIsShow={setIsShow}
                       selectedStore={selectedStore}
-                      id={selectedStore?.supplier?._id}
+                      id={storeInfo?.id}
                     />
                   )}
                 </div>

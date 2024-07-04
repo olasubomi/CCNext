@@ -93,7 +93,7 @@ const SuggestStore = () => {
         setIndex((prev) => prev - 1);
       }
     } else {
-      router.push("/publicMarket");
+      router.push("/marketplace");
     }
   }, [details, index]);
 

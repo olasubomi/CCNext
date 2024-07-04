@@ -798,21 +798,11 @@ export function Header2() {
       console.log("begin", to, element);
     });
 
-    Events.scrollEvent.register("end", (to, element) => {
-      console.log("end", to, element);
-    });
-
-    scrollSpy.update();
-
-    return () => {
-      Events.scrollEvent.remove("begin");
-      Events.scrollEvent.remove("end");
-    };
-  }, []);
-
-  const handleSetActive = (to) => {
-    console.log(to);
-  };
+  const menuItems = [
+    { name: "Marketplace", path: "/marketplace" },
+    { name: "Chefs", path: "#" },
+    { name: "Blog", path: "#" },
+  ];
 
   return (
     <>
