@@ -54,6 +54,7 @@ const generateOrderId = () => {
 
 const Checkout = () => {
   const id = generateOrderId();
+  
   router.push(`/checkout/${id}`)
 }
 
