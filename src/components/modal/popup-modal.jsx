@@ -149,7 +149,6 @@ export const Modal = ({
       }
     }
   };
-  console.log(details, "details");
   return (
     <div className={styles.modal} ref={targetElementRef}>
       <div className={styles.modal_card}>
@@ -189,14 +188,17 @@ export const Modal = ({
         <div
           className={styles.modal_btn}
           onClick={() => {
-            if (details.listName && details.id) {
+            if (details.listName && details.description && details.id) {
               handleEdit();
             } else {
               handleCreate();
             }
           }}
         >
-          <p> {details.listName && details.id ? "Update" : "Create"} Now</p>
+          <p>
+            {" "}
+            {details.listName && details.description ? "Update" : "Create"} Now
+          </p>
         </div>
       </div>
     </div>

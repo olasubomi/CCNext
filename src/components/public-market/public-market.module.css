@@ -126,74 +126,12 @@
   font-weight: 300;
   position: relative;
 }
-.cats {
-  background: #fff;
-  display: flex;
-  align-items: center;
-  font-size: 11px;
-  height: 40px;
-  width: 130px;
-  padding: 0.5rem 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  border-right: 0;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  color: rgba(109, 109, 109, 1);
-}
-.leftBorder {
-  height: 40px;
-  margin: auto;
-  width: 1px;
-  background-color: #9d9d9d;
-}
-.searchboxfield {
-  position: relative;
-  background: #fff;
-  display: flex;
-  width: 90%;
-  gap: 10px;
-  align-items: center;
-  font-size: 11px;
-  height: 40px;
-  padding: 0.5rem 1.5rem;
-  color: #353535;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-}
-.searchboxfield input {
-  outline: none;
-  border: none;
-  width: 100%;
-}
-.searchboxfield input::placeholder {
-  color: rgba(148, 148, 148, 1);
-}
-.searchDropdown {
-  width: 100%;
-  top: 42px;
-  right: 0%;
-}
 
-.searchbtn {
-  height: 40px;
-  width: 38px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 4px;
-  margin-left: 5px;
-  background: #f47900;
-  border: none;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .categories {
-  width: 130px;
+  width: 20rem;
   background-color: #fff;
   border-radius: 0 4px 4px 0;
-  margin-top: 0.2rem;
+  margin-top: 0.5rem;
   padding: 0 1.5rem 2.5rem 1.5rem;
   position: absolute;
   z-index: 2;
@@ -202,17 +140,12 @@
 
 .categories p {
   padding-top: 2rem;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
-  font-weight: 400;
 }
 
 .rotate {
   transform: rotate(180deg);
-  margin-left: 5px;
-}
-.nonrotate {
-  margin-left: 5px;
 }
 
 .two {
@@ -234,8 +167,7 @@
   z-index: 200;
 }
 .two3 {
-  display: flex;
-  width: 100%;
+  display: none;
 }
 
 .search {
@@ -329,11 +261,11 @@
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
 }
 .searchfield input {
-  height: 40px;
+  height: 53px;
   width: 100%;
   outline: none;
   padding-left: 2rem;
-  border: 1px solid rgba(148, 148, 148, 0.6);
+  border: 0px solid rgba(148, 148, 148, 0.6);
   background: #fff;
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
 }
@@ -343,12 +275,27 @@
   width: 90%;
 }
 
+.searchbtn {
+  display: flex;
+  height: 53px;
+  border: none;
+  outline: none;
+  padding: 14px 30px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0px 4px 4px 0px;
+  background: #f47900;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .storeContainer {
   background: #fcfcfc;
   width: 100%;
   height: 100%;
   position: relative;
-  padding-top: 4rem;
+  padding-top: 20rem;
 }
 
 .dropdown {
@@ -387,7 +334,7 @@
 }
 
 .mealCard {
-  width: 92%;
+  width: 90%;
   height: 158px;
 }
 
@@ -858,9 +805,11 @@
     padding-left: 22%;
     display: flex;
   }
-
+  .two3 {
+    display: none;
+  }
   .storeContainer {
-    padding-top: 6rem;
+    padding-top: 25rem;
   }
 }
 
@@ -906,7 +855,7 @@
   }
 
   .storeContainer {
-    padding-top: 8rem;
+    padding-top: 30rem;
   }
 
   .profile_picture {
@@ -953,7 +902,7 @@
     top: 30%;
   }
   .storeContainer {
-    padding-top: 7rem;
+    padding-top: 20rem;
   }
 
   .profile_picture {
@@ -996,17 +945,64 @@
   }
   .two3 {
     display: flex;
+    position: absolute;
     width: 100%;
     top: 63px;
     right: 0;
     padding-left: 5%;
+    background-color: #f9f9f9;
     padding-bottom: 0.7rem;
     padding-top: 0.7rem;
     margin-top: -1rem;
   }
+  .cats {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    height: 40px;
+    padding: 0.5rem 1rem;
+    color: #353535;
+  }
+  .leftBorder {
+    height: 30px;
+    margin: auto;
+    width: 1px;
+    background-color: #9d9d9d;
+  }
+  .searchboxfield {
+    position: relative;
+    background: #fff;
+    display: flex;
+    width: 90%;
+    align-items: center;
+    font-size: 11px;
+    height: 40px;
+    padding: 0.5rem 1rem;
+    color: #353535;
+  }
+  .searchboxfield input {
+    border: none;
+    outline: none;
+    width: 100%;
+  }
+  .searchDropdown {
+    width: 100%;
+    top: 42px;
+    right: 0%;
+  }
 
+  .searchbtn {
+    height: 40px;
+    padding: 5px 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px 4px 4px 0px;
+    background: #f47900;
+    color: #fff;
+  }
   .storeContainer {
-    padding-top: 8rem;
+    padding-top: 22rem;
   }
   .header {
     background-color: #f9f9f9;

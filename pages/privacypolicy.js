@@ -1,5 +1,6 @@
 import Head from "next/head";
 
+
 const PrivacyPolicy = () => {
     return <div>
         <Head>
@@ -34,6 +35,7 @@ const PrivacyPolicy = () => {
             You can always adjust your controls of how your data is managed or withdraw your consent for the future
             by emailing privacy@chopchow.com .
         </p>
+        
 
     </div>
 }

@@ -28,9 +28,12 @@ import {
 } from "react-share";
 import InstagramShareButton from "../SocialShare/InstagramShare";
 import { useSearchParams } from "next/navigation";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
 
 function Product(props) {
   const [formatted_ingredients, set_formatted_ingredients] = useState([""]);
+  const dispatch = useDispatch();
   //const url = 'http://localhost:3000/'
   const url = "https://www.chopchow.app/";
   const productName = props?.product?.item_name;
@@ -45,14 +48,13 @@ function Product(props) {
   // )), 'hellooo')
 
   useEffect(() => {
-    console.log("props", props.product);
+    console.log("line 51, product component, props", props.product);
     if (props.product.formatted_ingredients) {
       set_formatted_ingredients(props.product.formatted_ingredients);
     }
   }, [props.product.formatted_ingredients]);
   console.log(props.product.item_images, "image");
-
-  
+ 
   return (
     <>
       <Head>
@@ -223,7 +225,7 @@ function Product(props) {
           {props.product.publicly_available === "Public" && (
             <div className={styles.btnGroup}>
               <div className={styles.btnoutline}>Add to Grocery List</div>
-              <div className={styles.btnfill}>Add to Cart</div>
+              <div className={styles.btnfill} onClick={() => dispatch(addToCart(props.product))}>Add to Cart</div>
             </div>
           )}
         </div>
