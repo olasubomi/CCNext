@@ -1,12 +1,11 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { animateScroll as scroll, scrollSpy, Events } from "react-scroll";
 import styles from "../../components/Header/header.module.css";
 import { useRouter } from "next/router";
 
 export const MobileHeader = () => {
   const [activeLink, setActiveLink] = useState(0);
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [visible, setVisible] = useState(true);
   const router = useRouter();
 
   const handleSetActive = (id, path) => {
@@ -14,6 +13,8 @@ export const MobileHeader = () => {
     setActiveLink(id);
     router.push(path);
   };
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
 
   const menuItems = [
     { name: "Marketplace", path: "/publicMarket" },
@@ -41,23 +42,54 @@ export const MobileHeader = () => {
         <div className={styles.navbar_main_container}>
           <div className={styles.navbar_main}>
             <ul className={styles.navbar_main_links}>
-              {menuItems?.map((elem, id) => (
-                <li
-                  className={styles.navbar_main_link}
-                  key={id}
-                  onClick={() => handleSetActive(id, elem.path)}
+              <li className={styles.navbar_main_link}>
+                <Link
+                  activeClass="active"
+                  href="/publicMarket/#store"
+                  onSetActive={handleSetActive}
+                  onClick={() =>
+                    scroll.scrollTo(0, { smooth: true, duration: 100 })
+                  }
                 >
-                  <p
-                    className={
-                      activeLink === id
-                        ? styles.activelink
-                        : styles.inactivelink
-                    }
-                  >
-                    {elem.name}
-                  </p>
-                </li>
-              ))}
+                  Stores
+                </Link>
+              </li>
+              <li className={styles.navbar_main_link}>
+                {/* <Link href="/publicMarket/#meal">Meals</Link> */}
+                <Link
+                  activeClass="active"
+                  href="/publicMarket/#meal"
+                  onClick={() =>
+                    scroll.scrollTo(1100, { smooth: true, duration: 100 })
+                  }
+                >
+                  Meals
+                </Link>
+              </li>
+              <li className={styles.navbar_main_link}>
+                {/* <Link href="/publicMarket/#products">Products</Link> */}
+                <Link
+                  activeClass="active"
+                  href="/publicMarket/#product"
+                  onClick={() =>
+                    scroll.scrollTo(2900, { smooth: true, duration: 100 })
+                  }
+                >
+                  Products
+                </Link>
+              </li>
+              <li className={styles.navbar_main_link}>
+                {/* <Link href="/publicMarket/#utensils">Utensils</Link> */}
+                <Link
+                  activeClass="active"
+                  href="/publicMarket/#utensils"
+                  onClick={() =>
+                    scroll.scrollTo(4600, { smooth: true, duration: 100 })
+                  }
+                >
+                  Utensils
+                </Link>
+              </li>
             </ul>
 
             <div className={styles.navbar_main_grocery}>

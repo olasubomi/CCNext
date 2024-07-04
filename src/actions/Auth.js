@@ -61,7 +61,7 @@ export const userSignUp = (form) => {
         // }else{
         //   toast.success("A verifiation link was sent to your mail")
         // }
-        toast.success("A verifiation link was sent to your mail");
+        //toast.success("Congratulation!!!!! You have Successfully Signed Up, Kindly Verify your account");
       })
       .catch((err) => {
         console.error("xxx userSignUp Request ERROR xxx");
@@ -112,10 +112,19 @@ export const userSignIn = (email, password, remember, callback) => {
         dispatch({ type: USER_ROLE, payload: data.data.role });
         dispatch({ type: USER_DATA, payload: data.data.user });
         dispatch({ type: IS_AUTHENTICATED, payload: true });
+        
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
         const customId = "custom-id-no";
+        if(data.data.isVerified){
+          dispatch({ type: IS_VERIFIED, payload: true });
+          toast.success("Login Successful", { toastId: customId });
 
-        toast.success("Login Successful", { toastId: customId });
+        }else{
+          toast.success("Kindly Verify your account, so as to login successfully");
+        }
+
+        //toast.success(data.data.message);
+        
 
         return true;
       })
@@ -403,6 +412,8 @@ export const socialSignIn = (token) => {
         dispatch({ type: USER_ROLE, payload: data.data.role });
         dispatch({ type: USER_DATA, payload: data.data.user });
         dispatch({ type: IS_AUTHENTICATED, payload: true });
+        dispatch({ type: IS_VERIFIED, payload: true });
+        dispatch({ type: EMAIL_VERIFIED, payload: true });
       })
       .catch((err) => {
         console.error("xxx userSignIn Request ERROR xxx", err);
@@ -462,6 +473,8 @@ export const verifyEmailOTP = ({email,otp}) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
         dispatch({ type: IS_VERIFIED, payload: true });
+        dispatch({ type: EMAIL_VERIFIED, payload: true });
+        
       })
       .catch((err) => { 
         dispatch({
@@ -514,6 +527,8 @@ export const verifynumber = ({request_id,code}) => {
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
+        dispatch({ type: IS_VERIFIED, payload: true });
+        dispatch({ type: PHONE_NUMBER_VERIFIED, payload: true });
       })
       .catch((err) => { 
         dispatch({

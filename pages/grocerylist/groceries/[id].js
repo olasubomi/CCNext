@@ -320,7 +320,7 @@ const GroceryPage = () => {
     try {
       await axios.patch(`/groceries/remove/${itemList._id}/${id}`);
       getList();
-      toast.success("Deleted Successfully");
+      toast.success("Delete Success");
     } catch (error) {
       console.log(error);
     }
@@ -368,9 +368,6 @@ const GroceryPage = () => {
       setMeasurementValue_1(measurement_value);
     }
   }, [measurement_value]);
-  const hello = () => {
-    console.log("hello");
-  };
   console.log(itemList, "itemList?.groceryItems");
   return (
     <div className={styles.container1}>
@@ -943,7 +940,6 @@ const GroceryPage = () => {
           value={value}
           refetch={() => getList()}
           listName={itemList.listName}
-          addJsonDataToGroceryList={addJsonDataToGroceryList}
           isShow={isShow}
           setIsShow={setIsShow}
         />

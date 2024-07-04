@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import axios from "../../util/Api";
 import { toast } from "react-toastify";
 import { Modal } from "../modal/popup-modal";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
 
 export const Mealmodal = ({
   openList,
@@ -27,8 +29,13 @@ export const Mealmodal = ({
   setQuantity,
   quantity,
   selectedItem,
+  addToCart,
+  serve,
+  setServe
 }) => {
+ 
   const router = useRouter();
+  
   console.log(selectedItem, "selectedItem.meal_formatted_instructions");
   return (
     <div>
@@ -98,6 +105,25 @@ export const Mealmodal = ({
                     <p className={styles.prep}>CookTime:</p>
 
                     <p className={styles.prep}>Serves:</p>
+                    <div className={styles.flex2}>
+                <p
+                  style={{ fontSize: "15px", cursor: "pointer" }}
+                  onClick={() => {
+                    if (quantity !== 0) setServe((prev) => prev - 1);
+                  }}
+                  className={styles.box2}
+                >
+                  -
+                </p>
+                <p style={{ fontSize: "11px" }}>{serve}</p>
+                <p
+                  style={{ fontSize: "15px", cursor: "pointer" }}
+                  onClick={() => setServe((prev) => prev + 1)}
+                  className={styles.box2}
+                >
+                  +
+                </p>
+              </div>
                     <p className={styles.prep}>Chef:</p>
                   </div>
                   <div
@@ -241,7 +267,7 @@ export const Mealmodal = ({
                             {elem.dataName.includes("mp4") && (
                               <video
                                 controls
-                                className={styles.instruction_img}
+                                className={styles.popup2_step_img}
                                 height={150}
                                 width={70}
                               >
@@ -271,8 +297,8 @@ export const Mealmodal = ({
                             {elem.title}
                           </h6>
                           <ul className={styles.ul}>
-                            {elem.instructionSteps.map((ele) => (
-                              <li className={styles.instructionStep}>{ele}</li>
+                            {elem.instructionSteps.map((ele, i) => (
+                              <li className={styles.instructionStep} key={i}>{ele}</li>
                             ))}
                           </ul>
                         </span>
@@ -326,7 +352,7 @@ export const Mealmodal = ({
               >
                 Add to Grocery List
               </button>
-              <button className={styles.btn}>Add to Cart</button>
+              <button className={styles.btn} onClick={() => addToCart(selectedItem, quantity)}>Add to Cart</button>
             </div>
           </div>
 

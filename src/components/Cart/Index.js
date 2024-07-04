@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import Head from "next/head";
 import Header, { Header2 } from "../Header/Header";
 import TimeBar from "../GroceryPage/CartPage/Cart/TimeBar";
@@ -8,33 +8,91 @@ import Footer from "../Footer/Footer";
 import CartContext from "../../../pages/store/cart-context";
 import SideNav from "../Header/sidenav";
 import { useMobileMedia } from '../../customhooks/useResponsive';
+import { connect, useDispatch, useSelector } from "react-redux";
+import { addToCart, deleteFromCart, EmptyCart, removeFromCart } from "../../actions/Cart";
+import { useRouter } from "next/router";
+import { v4 as uuidv4 } from 'uuid';
 
-function Index(props) {
+
+function Cart(props) {
 
   const mobileScreen = useMobileMedia();
+  const {cartItems: items} = useSelector((state) => { console.log("line 21 Cart Page", state)
+  return state.Cart});
+  const dispatch = useDispatch();
+  const router = useRouter();
+  //const cartCtx = useContext(CartContext);
+  console.log("line 22 Cart Page", props)
+  console.log("line 23 Cart Page", items)
+  //const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
 
-  const cartCtx = useContext(CartContext);
+  const hasItems = items.length > 0 ;
+  
 
-  const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
+const totalQuantity = `${items.reduce((a, c) => a + c.amount, 0)} items`
+const totalPrice = items.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(2)
 
-  const hasItems = cartCtx.items.length > 0;
+  // const cartItemRemoveHandler = (id) => {
+  //   cartCtx.removeItem(id);
+  // };
 
-  const cartItemRemoveHandler = (id) => {
-    cartCtx.removeItem(id);
-  };
+  // const cartItemAddHandler = (item) => {
+  //   cartCtx.addItem({ ...item, amount: 1 });
+  // };
 
-  const cartItemAddHandler = (item) => {
-    cartCtx.addItem({ ...item, amount: 1 });
-  };
+  // const cartItemClearHandler = (id) => {
+  //   cartCtx.clearItem(id);
+  // };
 
-  const cartItemClearHandler = (id) => {
-    cartCtx.clearItem(id);
-  };
+  // const cartCartClearHandler = (id) => {
+  //   cartCtx.clearCart(id);
+  // };
 
-  const cartCartClearHandler = (id) => {
-    cartCtx.clearCart(id);
-  };
+const generateOrderId = () => {
+  return uuidv4()
+}
 
+const Checkout = () => {
+  const id = generateOrderId();
+  
+  router.push(`/checkout/${id}`)
+}
+
+const AddToCart = (item) => {
+  const payload = {
+    itemName: item.name,
+    item_image: item.picture,
+    item_price: item.price,
+    itemId : item.id,
+    userId: item.userId || "",
+    storeName: item.store,
+    currency: item.currency,
+    quantity: item.amount,
+    storeId : item.storeId,
+    
+} 
+console.log(payload, "Cart payload 65");
+try {
+  dispatch(addToCart(payload))
+  toast.success("Item Increased successfully");
+  
+} catch (error) {
+  console.log(error);
+}
+
+};
+
+const RemoveFromCart = (product) => {
+  dispatch(removeFromCart(product.id));
+};
+
+const CloseCart = () => {
+  router.push('/')
+}
+
+const DeleteFromCart = (product) => {
+  dispatch(deleteFromCart(product.id));
+};
   return (
     <div className={indexStyles.cartBackground}>
       <Head>
@@ -57,11 +115,11 @@ function Index(props) {
                 id="backArr"
                 src="/assets/grocery_list/backArr.svg"
                 alt="arrowDown"
-                onClick={props.closeCart}
+                onClick={CloseCart}
               />
               <label onClick={props.closeCart}>Back</label>
             </div>
-            <h1>CART</h1>
+            <h1>{hasItems ? "CART" : "CART IS EMPTY" }</h1>
           </div>
           {!mobileScreen ? <div className={indexStyles.cartHeader}>
             <div className={indexStyles.cartHeaderRow1}>
@@ -77,20 +135,21 @@ function Index(props) {
               <label>Action</label>
             </div>
           </div> : "Items"}
-          {cartCtx.items.map((item) => (
+          {items.map((item) => (
             <CartItem
-              key={item.id}
-              id={item.id}
+              key={item.itemId}
+              id={item.itemId}
               name={item.name}
               amount={item.amount}
-              picture={item.picture}
+              picture={item.image}
               price={item.price}
-              store={item.store}
-              totalAmount={totalAmount}
-              pickUpTime={item.pickUpTime}
-              onRemove={cartItemRemoveHandler.bind(null, item.id)}
-              onAdd={cartItemAddHandler.bind(null, item)}
-              onClearItem={cartItemClearHandler.bind(null, item.id)}
+              store={item.storeName}
+              totalAmount={item.totalAmount}
+              storeId = {item.storeId}
+              userId ={item.userId}             
+              onAdd= {AddToCart}
+              onRemove= {RemoveFromCart}
+              onDelete = {DeleteFromCart}
             />
           ))}
           <div className={indexStyles.couponPrice}>
@@ -106,18 +165,19 @@ function Index(props) {
             <div className={indexStyles.priceRow}>
               <div className={indexStyles.mainPrice}>
                 <label>Total Price</label>
-                <label>{totalAmount}</label>
+                
+                <label style={{marginRight:"10rem"}}>{`${Number(totalPrice)} for ${totalQuantity}`} </label>
               </div>
               <div className={indexStyles.checkoutButton}>
                 <div className={indexStyles.whiteButton}>
                   {hasItems ? (
-                    <label onClick={cartCartClearHandler}>Clear Cart</label>
+                    <label onClick={() => dispatch(EmptyCart()) }>Clear Cart</label>
                   ) : (
-                    <label onClick={props.closeCart}>Add Items</label>
+                    <label onClick={CloseCart}>Add Items</label>
                   )}
                 </div>
                 {hasItems && (
-                  <div className={indexStyles.greenButton}>
+                  <div className={indexStyles.greenButton} onClick = {() => Checkout()}>
                     <label>Check Out</label>
                   </div>
                 )}
@@ -131,4 +191,5 @@ function Index(props) {
   );
 }
 
-export default Index;
+
+export default Cart;

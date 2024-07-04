@@ -1,9 +1,14 @@
 import {combineReducers} from 'redux';
+import {AuthReducers} from './Auth';
+import {CartReducer} from './Cart';
+import {CommonReducer} from './Common';
 // import {connectRouter} from 'connected-react-router'
-import Auth from './Auth';
-import Common from './Common';
+
+
+
 
 export default combineReducers({
-  Auth,
-  Common,
+  Auth : AuthReducers,
+  Common: CommonReducer,
+  Cart : CartReducer,
 });

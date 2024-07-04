@@ -8,6 +8,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { toast } from "react-toastify";
 import { UtensilModal } from "../modal/individual-meal-product";
 import utensilImg from "../../../public/assets/store_pics/no-image-utensil.png";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
 
 export const SuggestedUtensils = () => {
   const [meals, setMeals] = useState([]);
@@ -18,6 +20,8 @@ export const SuggestedUtensils = () => {
   const [show, setShow] = useState(false);
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
+
+  const dispatch = useDispatch();
 
   const loadMore = () => {
     setVisibleMeals(visibleMeals + 4);
@@ -53,6 +57,47 @@ export const SuggestedUtensils = () => {
       console.log(error);
     }
   };
+  // Generate a random integer between a specified range
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Example usage to generate an ID between 1 and 1000
+let randomId = getRandomInt(1, 1000);
+
+const addItemToCart = (item, qty) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  
+  if(qty == 0 ){
+    toast.error("Pls add a quantity");
+  }else{
+     const payload = {
+      userId: (user && user._id) ? user._id : "",
+      storeId : randomId || "" ,
+      store_name: "Chop Chow Official Store",
+      itemId : item._id,
+      quantity: qty,
+      item_price: item.item_price,
+      currency: "$",
+      item_image: item.item_images[0],
+      itemName: item.item_name
+  } 
+  console.log(payload, "Cart payload line 76 utensil");
+  try {
+    dispatch(addToCart(payload))
+    toast.success("Item added successfully");
+    setOpenList(false);
+    setShow(false);
+    setOpenModal(false);
+  } catch (error) {
+    console.log(error);
+  }
+  };
+
+
+};
   const [details, setDetails] = useState({
     listName: "",
     description: "",
@@ -198,6 +243,7 @@ export const SuggestedUtensils = () => {
           setQuantity={setQuantity}
           quantity={quantity}
           setShow={setShow}
+          addToCart ={addItemToCart}
         />
       </div>
       <p className={styles.view} onClick={() => loadMore()}>

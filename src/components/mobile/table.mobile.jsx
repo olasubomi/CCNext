@@ -185,7 +185,7 @@ export const MobileTable = ({
                     >
                       {element?.item?.item_name}
                     </p>
-                    {/* <p className={styles.supplier}>
+                    <p className={styles.supplier}>
                       <p
                         style={{
                           color: "rgba(109, 109, 109, 1)",
@@ -197,7 +197,7 @@ export const MobileTable = ({
                       {element?.item?.store_name
                         ? element?.item?.store_name
                         : "-"}
-                    </p> */}
+                    </p>
                     {element?.item?.item_type === "Meal" ? (
                       <div>
                         {matches ? (

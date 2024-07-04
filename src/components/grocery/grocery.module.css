@@ -103,13 +103,8 @@
 .imgs {
   object-fit: cover;
   object-position: center;
-  height: 100px;
 }
-.public {
-  color: #00a701;
-  font-size: 13px;
-  font-weight: 100;
-}
+
 .card {
   width: 94%;
   margin: 3rem auto;
@@ -186,14 +181,14 @@
 }
 
 .oneImage {
-  width: 100%;
+  width: 95%;
   height: 140px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-self: center;
 }
-.oneImage img {
+.oneImage img{
   width: 100%;
   height: 90px;
 }
@@ -202,7 +197,6 @@
   font-size: 11.3px;
   margin-top: 0.2rem;
   text-align: center;
-  height: 40px;
 }
 
 .bord {
