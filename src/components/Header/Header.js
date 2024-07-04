@@ -796,7 +796,7 @@ export function Header2() {
   useEffect(() => {
     Events.scrollEvent.register("begin", (to, element) => {
       console.log("begin", to, element);
-    });
+    })});
 
   const menuItems = [
     { name: "Marketplace", path: "/marketplace" },
