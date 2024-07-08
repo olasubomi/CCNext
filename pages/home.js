@@ -50,6 +50,8 @@ export default function HomePage() {
         <Carousel
           showDots
           responsive={responsive}
+          autoPlay
+          autoPlaySpeed={0.5}
           className="home_page_container"
           customRightArrow={
             <div
@@ -235,6 +237,8 @@ export default function HomePage() {
         responsive={responsive}
         arrows={false}
         autoPlay
+        autoPlaySpeed={0.5}
+
       >
         <section className="section-seven">
           <div className="seven-seven-box">
