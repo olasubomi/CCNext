@@ -36,7 +36,7 @@ const responsive = {
       max: 1024,
       min: 464,
     },
-    items: 2,
+    items: 1,
     partialVisibilityGutter: 30,
   },
 };
@@ -50,8 +50,9 @@ export default function HomePage() {
         <Carousel
           showDots
           responsive={responsive}
+          infinite={true}
           autoPlay
-          autoPlaySpeed={0.5}
+          autoPlaySpeed={3000}
           className="home_page_container"
           customRightArrow={
             <div
@@ -236,8 +237,9 @@ export default function HomePage() {
         containerClass="footer-carousel"
         responsive={responsive}
         arrows={false}
+        infinite={true}
         autoPlay
-        autoPlaySpeed={0.5}
+        autoPlaySpeed={3000}
 
       >
         <section className="section-seven">
