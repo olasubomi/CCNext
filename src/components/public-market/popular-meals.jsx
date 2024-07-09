@@ -11,6 +11,8 @@ import { Mealmodal } from "../mobile/meal-modal";
 import { Element, scroller } from "react-scroll";
 import { ScrollableElement } from "../smooth-scroll-link";
 import mealImg from "../../../public/assets/store_pics/no-image-meal.png";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
@@ -58,6 +60,49 @@ export const PopularMeals = () => {
       console.log(error);
     }
   };
+
+    // Generate a random integer between a specified range
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Example usage to generate an ID between 1 and 1000
+let randomId = getRandomInt(1, 1000);
+
+const addItemToCart = (item, qty) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if(qty == 0 ){
+    toast.error("Pls add a quantity");
+  }else{
+     const payload = {
+      userId: (user && user._id) ? user._id : "",
+      storeId : randomId || "" ,
+      store_name: "Chop Chow Official Store",
+      itemId : item._id,
+      quantity: qty,
+      item_price: item.item_price,
+      currency: "$",
+      item_image: item.item_images[0],
+      itemName: item.item_name
+  } 
+  console.log(payload, "Cart payload line 76 top-selling-product");
+  try {
+    dispatch(addToCart(payload))
+    toast.success("Item added successfully");
+    setOpenList(false);
+    setShow(false);
+    setOpenModal(false);
+  } catch (error) {
+    console.log(error);
+  }
+  };
+
+
+};
+
   const [details, setDetails] = useState({
     listName: "",
     description: "",
@@ -193,6 +238,9 @@ export const PopularMeals = () => {
             setQuantity={setQuantity}
             quantity={quantity}
             setShow={setShow}
+            addToCart={addItemToCart}
+            serve={serve}
+            setServe={setServe}
           />
         ) : (
           <IndividualModal
@@ -210,6 +258,9 @@ export const PopularMeals = () => {
             setQuantity={setQuantity}
             quantity={quantity}
             setShow={setShow}
+            addToCart={addItemToCart}
+            serve={serve}
+            setServe={setServe}
           />
         )}
       </div>

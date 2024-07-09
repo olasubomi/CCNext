@@ -223,7 +223,8 @@ function Product(props) {
           {props.product.publicly_available === "Public" && (
             <div className={styles.btnGroup}>
               <div className={styles.btnoutline}>Add to Grocery List</div>
-              <div className={styles.btnfill}>Add to Cart</div>
+              <div className={styles.btnfill} 
+              onClick={() => dispatch(addToCart(props.product))}>Add to Cart</div>
             </div>
           )}
         </div>

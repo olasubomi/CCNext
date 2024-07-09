@@ -7,9 +7,9 @@ import { BsCurrencyDollar } from "react-icons/bs";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import axios from "../../util/Api";
-import { toast } from "react-toastify";
 import { Modal } from "../modal/popup-modal";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
 
 export const Mealmodal = ({
   openList,
@@ -23,10 +23,12 @@ export const Mealmodal = ({
   details,
   setDetails,
   setItemAdd,
-  itemToAdd,
   setQuantity,
   quantity,
   selectedItem,
+  addToCart,
+  serve,
+  setServe
 }) => {
   const router = useRouter();
   console.log(selectedItem, "selectedItem.meal_formatted_instructions");
@@ -326,7 +328,10 @@ export const Mealmodal = ({
               >
                 Add to Grocery List
               </button>
-              <button className={styles.btn}>Add to Cart</button>
+              <button className={styles.btn}
+               onClick={() => addToCart(selectedItem, quantity)}>
+                Add to Cart
+                </button>
             </div>
           </div>
 

@@ -12,6 +12,8 @@ import { IndividualModal } from "../modal/individual-meal-product";
 import { Mealmodal } from "../mobile/meal-modal";
 import axios from "../../util/Api";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../actions";
 
 const responsive = {
   superLargeDesktop: {
@@ -79,6 +81,38 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, id }) => {
     id: "",
     status: "",
   });
+
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if(qty == 0 ){
+      toast.error("Pls add a quantity");
+    }else{
+       const payload = {
+        userId: (user && user._id) ? user._id : "",
+        storeId : id,
+        store_name: selectedStore.supplier.store_name,
+        itemId : item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: selectedStore.supplier.currency.symbol,
+        item_image: item.item_images[0],
+        itemName: item.item_name
+    } 
+    console.log(payload, "Cart payload");
+    try {
+      dispatch(addToCart(payload))
+      toast.success("Item added successfully");
+      setOpenList(false);
+      setShow(false);
+      setOpenModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+    };
+
+
+  };
 
   const fetchGroceryList = async () => {
     try {
@@ -251,6 +285,9 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, id }) => {
                 setQuantity={setQuantity}
                 quantity={quantity}
                 setShow={setShow}
+                addToCart={addItemToCart}
+                serve= {serve}
+                setServe={setServe}
               />
             ) : (
               <IndividualModal
@@ -268,6 +305,9 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, id }) => {
                 setQuantity={setQuantity}
                 quantity={quantity}
                 setShow={setShow}
+                addToCart={addItemToCart}
+                serve= {serve}
+                setServe={setServe}
               />
             )}
           </div>

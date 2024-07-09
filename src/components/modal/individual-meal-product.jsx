@@ -9,6 +9,9 @@ import { Modal } from "../modal/popup-modal";
 import { useRouter } from "next/router";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
+
 export const IndividualModal = ({
   openList,
   openModal,
@@ -24,8 +27,12 @@ export const IndividualModal = ({
   setQuantity,
   quantity,
   selectedItem,
+  addToCart,
+  serve,
+  setServe
 }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   return (
     <div>
       {openModal && (
@@ -310,7 +317,7 @@ export const IndividualModal = ({
               >
                 Add to Grocery List
               </button>
-              <button className={styles.btn}>Add to Cart</button>
+              <button className={styles.btn} onClick={() => addToCart(selectedItem, quantity)} >Add to Cart</button>
             </div>
           </div>
         </div>
@@ -511,7 +518,7 @@ export const ProductModal = ({
               >
                 Add to Grocery List
               </button>
-              <button className={styles.btn}>Add to Cart</button>
+              <button className={styles.btn} onClick={() => addToCart(selectedItem, quantity)} >Add to Cart</button>
             </div>
           </div>
         </div>
@@ -793,7 +800,7 @@ export const UtensilModal = ({
                 >
                   Add to Grocery List
                 </button>
-                <button className={styles.btn}>Add to Cart</button>
+                <button className={styles.btn} onClick={() => addToCart(selectedItem, quantity)} >Add to Cart</button>
               </div>
             </div>
           </div>
