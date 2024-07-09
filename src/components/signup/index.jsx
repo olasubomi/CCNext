@@ -58,11 +58,11 @@ function SignUp(props){
     setOpenUserVerificationSuccess(true)
     
   }
-  useEffect(()=>{
-    if(isverified){
-      setOpenUserVerificationSuccess(true)
-    }
-  }, [isverified])
+  // useEffect(()=>{
+  //   if(isverified){
+  //     //setOpenUserVerificationSuccess(true)
+  //   }
+  // }, [isverified])
   useEffect(()=>{
     if(isAuthenticated && authUser){
       router.push("/dashboard");
