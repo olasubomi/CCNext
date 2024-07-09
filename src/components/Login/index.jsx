@@ -81,16 +81,18 @@ function Login(props) {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (props.auth.isAuthenticated && user) {
+    if (props.auth.isAuthenticated && user && props.auth.isVerified) {
       props.auth.authUser.super_app_admin
         ? // user.super_app_admin
           router.push("/admin")
         : router.push("/dashboard");
-      setIsOpen(false);
-    } else {
-      // setLoginLoading(false);
+      //setIsOpen(false);
+    } else if(props.auth.isAuthenticated && user && !props.auth.isVerified){
+      
+    }else{
+
     }
-  }, [props.auth.isAuthenticated]);
+  }, [props.auth.isAuthenticated, props.auth.isVerified]);
 
   console.log(props);
   async function Login(e) {

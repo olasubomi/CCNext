@@ -39,6 +39,8 @@ import { FaEnvelope } from "react-icons/fa";
 import { IoMdCall } from "react-icons/io";
 import { HiLocationMarker } from "react-icons/hi";
 import { RejectionModal } from "../modal/rejection-modal";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
 
 function Meal(props) {
   //const url = 'http://localhost:3000/'
@@ -337,7 +339,8 @@ function Meal(props) {
                   >
                     Add to Grocery List
                   </div>
-                  <div className={styles.btnfill}>Add to Cart</div>
+                  <div className={styles.btnfill}  onClick={() => useDispatch(addToCart(props.meal))}>Add to Cart</div>
+                  
                 </div>
               )}
           </div>

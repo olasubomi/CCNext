@@ -28,6 +28,8 @@ import {
 } from "react-share";
 import InstagramShareButton from "../SocialShare/InstagramShare";
 import { useSearchParams } from "next/navigation";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
 
 function Product(props) {
   const [formatted_ingredients, set_formatted_ingredients] = useState([""]);
@@ -220,10 +222,11 @@ function Product(props) {
             <p>Print Preview</p>
             <PrintEIcon />
           </div>
+          
           {props.product.publicly_available === "Public" && (
             <div className={styles.btnGroup}>
               <div className={styles.btnoutline}>Add to Grocery List</div>
-              <div className={styles.btnfill}>Add to Cart</div>
+              <div className={styles.btnfill} onClick={() => useDispatch(addToCart(props.product))}>Add to Cart</div>
             </div>
           )}
         </div>

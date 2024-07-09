@@ -15,6 +15,8 @@ export const USER_ROLE = "user_role_set";
 export const CUSTOMER_ID = "customer_id";
 export const IS_AUTHENTICATED = "isAuthenticated";
 export const IS_VERIFIED = "isVerified";
+export const EMAIL_VERIFIED = 'isEmailVerified';
+export const PHONE_NUMBER_VERIFIED = 'isNumberVerified';
 export const OPEN_LOGIN = "openLogin";
 
 export const SEARCH_TITLE = "search_title";
@@ -28,3 +30,11 @@ export const JAWBONE_HANDLE = "jawbone_handle";
 
 export const USER_ADDED_TO_STORE = "user_added_to_store";
 export const USER_REMOVE_FROM_STORE = "user_remove_from_store";
+
+//CART CONSTANT ADDED BY PETERS - 12/6/2024
+export const CART_ADD_ITEM = 'cart_add_and_update_item';
+export const CART_REMOVE_ITEM = 'cart_remove_item';
+export const CART_HAS_ITEM = 'cart_has_item';
+export const CART_EMPTY = 'empty_cart';
+export const CART_DELETE_ITEM = 'delete_cart_items';
+

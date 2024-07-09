@@ -64,7 +64,7 @@ function Header(props) {
   const isLandscape = useMediaQuery("(orientation: landscape)");
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
-  const { items } = cartCtx;
+  //const { items } = cartCtx;
   const [activeNav, setActiveNav] = useState(0);
 
   const handleSetActiveNav = (id, path) => {
@@ -72,10 +72,15 @@ function Header(props) {
     router.push(path);
   };
 
-  const numberOfCartItems = items.reduce((curNumber, item) => {
-    return curNumber + item.amount;
-  }, 0);
+  // const numberOfCartItems = items.reduce((curNumber, item) => {
+  //   return curNumber + item.amount;
+  // }, 0);
+  const {cartItems: items} = useSelector((state) => { console.log("line 21 Cart Page", state)
+  return state.Cart});
 
+  const goToCart = () => {
+    router.push('/cart/cart');
+  }
   console.log(notifications, "notific0ppjations");
   // useEffect(() => {
   //   props.getPath(router.pathname);
@@ -510,12 +515,12 @@ function Header(props) {
                   </>
                 )}
                 <div>
-                  {matches ? (
+                {matches ? (
                     <>
                       {!props.auth.isAuthenticated && authUser === null ? (
                         ""
                       ) : (
-                        <div style={{ display: "flex" }}>
+                        <div style={{ display: "flex" , cursor:"pointer"}} onClick={goToCart}>
                           <div>
                             <CartIcon
                               id="notImg"
@@ -537,7 +542,7 @@ function Header(props) {
                               right: "2px",
                             }}
                           >
-                            0
+                            {items?.length > 0 ?items.length: 0}
                           </span>
                         </div>
                       )}
@@ -547,7 +552,7 @@ function Header(props) {
                       {!props.auth.isAuthenticated && authUser === null ? (
                         ""
                       ) : (
-                        <div className={styles.show}>
+                        <div className={styles.show} style={{  cursor:"pointer"}} onClick={goToCart}>
                           <div>
                             <CartIcon
                               id="notImg"
@@ -563,7 +568,7 @@ function Header(props) {
                               right: "2px",
                             }}
                           >
-                            0
+                            {items?.length > 0 ? items.length: 0}
                           </span>
                         </div>
                       )}

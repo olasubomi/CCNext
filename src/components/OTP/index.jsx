@@ -19,7 +19,7 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTPFunc, verifynumberFunc, formState, setFormState, sendEmailOTPFunc}) {
+export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTPFunc, verifynumberFunc, formState, setFormState, sendEmailOTPFunc,requestnumberFunc}) {
   
   //const {}= useSelector( state => state.Auth);
   //const {isVerified}= useSelector( state => state.Common)
@@ -95,25 +95,32 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
     if(type =='Email Address'){
       console.log(formState.email, password.reduce((a,b) =>a+b))
       verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
+    
+     
       
     }else {
       verifynumberFunc(request_id,password.reduce((a,b) =>a+b))
+     
+      
     }
-    setTimeout(() => {
-      next();
-    }, 1000);
+    
     
   }
 
   const handleResendOtp = () => {
-    sendEmailOTPFunc({email: form?.email})
+    if(type == 'Email Address'){
+      sendEmailOTPFunc({email: formState?.email})
+    }else{
+      requestnumberFunc({number: formState?.phone_number})
+    }
+    
   }
 
   return (
     <div> 
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose=""
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -121,8 +128,8 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
           <div className='verification'>
             <div className='withbg withcolor' >
           <img    src="/assets/signup/tabler_mail-filled.svg" alt="Signup" /></div>
-            <h3>Verify email address to create a<br />new account</h3>
-            <small>An email with the verification code has been sent<br />to {formState?.email}</small>
+            <h3>Verify {type == "Email Address" ? "email address" : "your phone number"} to create a<br />new account</h3>
+            <small>{type == "Email Address" ? "An email" : "A message"} with the verification code has been sent<br />to {type == "Email Address" ? formState?.email : formState?.phone_number}</small>
            
 
 
@@ -158,7 +165,7 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
  </div>
 
  
-<h4 style={{ marginLeft: 0, textAlign: 'center'} }>Didn’t receive code? <span onClick={handleResendOtp}>Resend</span> </h4>
+<h4 style={{ marginLeft: 0, textAlign: 'center',  cursor:"pointer"} }>Didn’t receive code? <span onClick={handleResendOtp}>Resend</span> </h4>
 
 
 
