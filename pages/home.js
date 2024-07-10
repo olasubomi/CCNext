@@ -52,7 +52,7 @@ export default function HomePage() {
           responsive={responsive}
           infinite={true}
           autoPlay
-          autoPlaySpeed={3000}
+          autoPlaySpeed={7000}
           className="home_page_container"
           customRightArrow={
             <div
@@ -239,7 +239,7 @@ export default function HomePage() {
         arrows={false}
         infinite={true}
         autoPlay
-        autoPlaySpeed={3000}
+        autoPlaySpeed={7000}
 
       >
         <section className="section-seven">

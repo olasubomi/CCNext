@@ -758,12 +758,43 @@
     grid-template-columns: repeat(3, 1fr);
     margin-top: 10px;
 }
+.section-four-container {
+    margin-top: -180px;
+}
 
-@media screen and (min-width: 767px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .section-one-child .section-image,
+    .section-two-child .section-two-image, 
+    .section-one-child .section-3-image,
+    .section-box .section-image {
+        height: 420px;
+    }
+    .section-four {
+        transform: scaleX(1.7);
+    }
+    .section-box .section-image {
+        background-position: center;
+    }
+    .section-four-container {
+        height: 100vh;
+    }
+    .section-six {
+        margin-top: 20px;
+    }
+    .section-four-container {
+        margin-top: 0px;
+    }
+}
+
+@media screen and (min-width: 769px) {
     .home_page_container .hero .overlay h1 {
         font-size: 48px;
         line-height: 59.52px;
 
+    }
+
+    .section-four-container {
+        margin-top: 0px;
     }
 
     .home_page_container .arrow {
