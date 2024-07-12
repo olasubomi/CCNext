@@ -39,7 +39,7 @@ export const IndividualModal = ({
                   className={styles.modalImg}
                 />
                 <div className={styles.images1}>
-                  {selectedItem?.item_images?.slice(1, 3).map((image, idx) => {
+                  {selectedItem?.item_images?.slice(1, 4).map((image, idx) => {
                     return (
                       <div className={styles.img1}>
                         <img src={image} />

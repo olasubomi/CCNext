@@ -67,7 +67,7 @@ export const PopularMeals = () => {
 
   const fetchMeals = async () => {
     try {
-      const response = await axios(`/items/1?type=Meal&status=all&limit=50`, {
+      const response = await axios(`/items/1?type=Meal&status=all&limit=1000`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

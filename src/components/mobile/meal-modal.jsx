@@ -119,7 +119,9 @@ export const Mealmodal = ({
                       {selectedItem.meal_servings} People
                     </p>
                     <p
-                      onClick={() => router.push(`/chef/${selectedItem.user._id}`)}
+                      onClick={() =>
+                        router.push(`/chef/${selectedItem.user._id}`)
+                      }
                       className={styles.prep}
                       style={{ color: "rgba(244, 121, 0, 1)" }}
                     >

@@ -31,17 +31,12 @@ import { connect, useSelector } from "react-redux";
 import { getPath } from "../../actions/Common";
 import { useRouter } from "next/navigation";
 import { userSignOut, verifyToken, setOpenLogin } from "../../actions";
-import { SimpleSnackbar } from "../../common";
 import { triggerAlert } from "../../actions/";
 import CartContext from "../../../pages/store/cart-context";
-import Login from "../Login";
 import { useAuth } from "../../context/auth.context";
-import signup from "../signup";
 // import profile_pic from "../assets/icons/user-icon.jpg"
-import profile_pic from "../../../public/assets/icons/user.png";
 import moment from "moment";
 import { useMediaQuery } from "../../hooks/usemediaquery";
-import { SearchDropdown } from "../dropdown/search-dropdown";
 import { MobileSearch } from "../dropdown/mobile-search";
 import axios from "../../util/Api";
 
@@ -741,7 +736,7 @@ export function Header2() {
   const router = useRouter();
   const matches = useMediaQuery("(min-width: 900px)");
   const isLandscape = useMediaQuery("(orientation: landscape)");
-  const [activeLink, setActiveLink] = useState(0);
+  const [activeLink, setActiveLink] = useState(null);
 
   const handleSetActive = (id, path) => {
     setActiveLink(id);

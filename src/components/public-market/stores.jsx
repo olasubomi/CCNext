@@ -50,7 +50,7 @@ export const Stores = () => {
   console.log(stores, "one store");
   const fetchStores = async () => {
     try {
-      const response = await axios(`/stores/getallstores/1?limit=25`, {
+      const response = await axios(`/stores/getallstores/1?limit=2000`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -84,9 +84,14 @@ export const Stores = () => {
 
   return (
     <div className={styles.storeContainer}>
-      <Element id="store" style={{ fontSize: "2rem", marginBottom: "1rem" }}>
+   <div>
+   <Element id="store" style={{ fontSize: "2rem", marginBottom: "1rem" }}>
         Stores
       </Element>
+      {/* <div>
+        <p>Filter by: Distance</p>
+      </div> */}
+   </div>
       <div className={styles.stores}>
         {stores
           .slice(0, loadMore)
