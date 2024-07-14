@@ -48,8 +48,6 @@ function Login(props) {
   //   props.verifyEmail(userid, token);
   // }, [router.query])
 
-  
-
   function openForgetPassword() {
     setForgetPasswordState(true);
   }
@@ -101,7 +99,6 @@ function Login(props) {
     // props.toggleLogin() // then redirect to dashboard
 
     setLoginLoading(true);
-    
 
     await props.login(email, password, rememberPassword, () => {
       console.log("calling callback");
@@ -122,7 +119,7 @@ function Login(props) {
     // }
   }
   console.log("useeffect isverified", isverified);
-  
+
   async function handleSocialLogin(credentialResponse) {
     setLoginLoading(true);
     await props.socialLogin(credentialResponse.credential);
@@ -215,7 +212,7 @@ function Login(props) {
                   type={showPass ? "text" : "password"}
                   id="password"
                   name="password"
-                  value={password }
+                  value={password}
                   placeholder="Your password"
                   onChange={onChange}
                   className={styles.login_form_input}
@@ -244,13 +241,8 @@ function Login(props) {
                   />
                   <label>Remember Password</label>
                 </div>
-                <div
-                  
-                  className={styles.login_forgot_pass}
-                >
-                  <Link  href="/forgotpassword">
-                  Forgot your Password?
-                  </Link>
+                <div className={styles.login_forgot_pass}>
+                  <Link href="/forgotpassword">Forgot your Password?</Link>
                 </div>
               </div>
 
@@ -282,7 +274,7 @@ function Login(props) {
                 <div>
                   {showFacebook && (
                     <FacebookLogin
-                      appId= {process.env.FB_APP_ID}
+                      appId={process.env.FB_APP_ID}
                       autoLoad={true}
                       fields="name,email,picture"
                       cssClass={styles.blue}
@@ -325,12 +317,29 @@ function Login(props) {
         </div>
         <div className={styles.login_col_1}>
           <div className={styles.login_col_1_img_2}>
-            <img
+            {/* <img
               width="100%"
               height="100%"
               src="/assets/signup/signin_mobile.jpeg"
               alt="Signup"
-            />
+            /> */}
+            <div
+              style={{
+                backgroundImage: "url('/assets/signup/signin_mobile.jpeg')",
+                width: "100%",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat"
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                }}
+              />
+            </div>
           </div>
           <img
             width="100%"

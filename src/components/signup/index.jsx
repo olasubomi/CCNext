@@ -171,7 +171,6 @@ function SignUp(props) {
 
     if (isAuthenticated && authUser) {
       //   router.push("/dashboard");
-
     }
   }
 
@@ -456,12 +455,29 @@ function SignUp(props) {
 
         <div className={styles.login_col_1}>
           <div className={styles.login_col_1_img_2}>
-            <img
+          <div
+              style={{
+                backgroundImage: "url('/assets/signup/signup_mobile.jpeg')",
+                width: "100%",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat"
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                }}
+              />
+            </div>
+            {/* <img
               width="100%"
               height="100%"
               src="/assets/signup/signup_mobile.jpeg"
               alt="Signup"
-            />
+            /> */}
           </div>
 
           <img
