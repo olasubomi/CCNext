@@ -4,6 +4,7 @@ import styles from "../grocery/grocery.module.css";
 import yellow from "../../../public/assets/meal_pics/yellow.jpeg";
 
 export const CardDropdown = ({ element }) => {
+  console.log(element, 'element')
   return (
     <div className={styles.dropdown1}>
       <div className={styles.headtext}>

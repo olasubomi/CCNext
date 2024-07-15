@@ -115,7 +115,7 @@
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
   height: 160px;
   object-position: center;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .th {

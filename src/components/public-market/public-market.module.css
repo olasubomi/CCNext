@@ -9,6 +9,22 @@
   position: relative;
 }
 
+.marketplace{
+  padding-left: 4%;
+  margin-top: 6rem;
+}
+.marketplace h1{
+  font-size: 32px;
+  font-weight: 600;
+  font-family: Inter;
+}
+.marketplace p{
+  font-size: 16px;
+  font-weight: 400;
+  font-family: Inter;
+  color: #6D6D6D;
+  margin-top: -.6rem;
+}
 .header {
   width: 100%;
   height: 70px;

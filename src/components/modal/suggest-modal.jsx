@@ -113,7 +113,6 @@ export const SuggestModal = ({
           <h5 className={styles.header}>Add New Item to Grocery List</h5>
           <div
             onClick={() => {
-              enableBodyScroll(targetElementRef.current);
               setIsShow(false);
             }}
           >

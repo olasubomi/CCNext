@@ -187,7 +187,6 @@ class SuggestMealForm extends Component {
     // })
     //   .catch((err) => {
     //     console.log(err);
-    //   });
 
     console.log("all meals", this.props.allMealNames);
     const currentUser = JSON.parse(localStorage.getItem("user")) || {};
@@ -1996,7 +1995,7 @@ class SuggestMealForm extends Component {
                     People to serve
                   </label>
                   <TextField
-                    inputProps={{ min: 0 }}
+                    inputProps={{ min: 1 }}
                     value={this.state.servings}
                     id="servings"
                     fullWidth
