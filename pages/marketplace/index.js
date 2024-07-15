@@ -149,7 +149,7 @@ const PublicMarket = () => {
     console.log(error, "error");
     window.alert(error?.message || "Unable to get location");
   }, []);
-   
+
   useEffect(() => {
     document.addEventListener(
       "click",
@@ -215,10 +215,13 @@ const PublicMarket = () => {
           </p>
         </div>
       </div> */}
-     {/* <div className={styles.marketplace}>
-      <h1>Marketplace</h1>
-      <p>Put your meals and product on Chop Chow to show off what you’ve cooked with family and friends</p>
-     </div> */}
+      <div className={styles.marketplace}>
+        <h1>Marketplace</h1>
+        <p>
+          Put your meals and product on Chop Chow to show off what you’ve cooked
+          with family and friends
+        </p>
+      </div>
       <div className={styles.storeContainer}>
         {categories.find((ele) => ele.label === "Stores")?.value && <Stores />}
       </div>
