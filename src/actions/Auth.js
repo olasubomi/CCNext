@@ -416,7 +416,7 @@ export const socialSignIn = (token) => {
           payload: {
             showSnack: true,
             snackMessage:
-              err.response.data.message.message || "signin operation failed",
+              err?.response?.data?.message?.message || "signin operation failed",
           },
         });
 
