@@ -1,11 +1,76 @@
 .storeImg {
   width: 100%;
-  height: 194px;
+  height: 174px;
   background-size: contain;
   background-position: center;
   border-radius: 8px;
   position: relative;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
+}
+.marketplace {
+  margin-top: 4rem;
+}
+.marketplace h1 {
+  font-size: 30px;
+  font-weight: 600;
+  font-family: Inter;
+}
+.marketplaceText {
+  font-size: 14px;
+  font-weight: 300;
+  font-family: Inter;
+  color: #6d6d6d;
+  margin-top: -0.6rem;
+  width: 60%;
+}
+.flexItems{
+  display: flex;
+  justify-content: space-between;
+  gap: .7rem;
+}
+.alphabetContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 0.7rem;
+  margin-bottom: 4rem;
+  margin-top: 3rem;
+}
+.inactivespan {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  width: 42px;
+  height: 31px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.activespan {
+  background-color: #f47900;
+  width: 42px;
+  height: 31px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.inactiveLetter {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 15px;
+  font-weight: 300;
+}
+.activeLetter {
+  font-size: 15px;
+  font-weight: 300;
+  color: #ffffff;
+}
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4rem;
 }
 
 .storeImg1 {
@@ -18,29 +83,30 @@
   border-radius: 8px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
-.topcontainer{
+.topcontainer {
   display: flex;
   justify-content: space-between;
   margin-bottom: 2rem;
+  align-items: center;
 }
-.filter{
+.filter {
   display: flex;
   justify-content: center;
   border: 1px solid rgba(0, 0, 0, 0.5);
   align-items: center;
-  padding: 16px 15px 16px 15px;
+  padding: 10px 10px 10px 10px;
   border-radius: 4px;
   gap: 1rem;
 }
-.filter p{
-  font-size: 15px;
+.filter p {
+  font-size: 13px;
   font-family: Inter;
-  font-weight: 400;
-
+  font-weight: 300;
 }
 .card {
   width: 100%;
 }
+
 .dropdownContainer1 {
   background: #000;
   height: 400px;
@@ -66,13 +132,15 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   width: 100%;
-  gap: 5rem;
+  gap: 6rem;
+  row-gap: 6rem;
 }
 
 .stores2 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 70px;
+  row-gap: 90px;
 }
 
 .stores3 {
@@ -173,7 +241,15 @@
 
 .mealContainer {
   width: 100%;
-  padding: 2rem 5rem;
+  padding: 3rem 5rem;
+}
+.mealContain {
+  width: 100%;
+  padding: 0 5rem;
+}
+.top{
+  width: 100%;
+  padding: 6rem 5rem 0rem 5rem;
 }
 
 .mealContainer1 {
@@ -302,7 +378,6 @@
   margin-top: -2rem;
   padding-top: 3rem;
   border-right: 1px solid rgba(0, 0, 0, 0.2);
-
 }
 .third .adjust {
   width: 90%;

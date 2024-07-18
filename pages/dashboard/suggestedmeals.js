@@ -147,6 +147,7 @@ const SuggestedMeals = (props) => {
       setSearchType("Item");
       let url;
       url = `/items/${newPage ? newPage : page}`;
+
       let num = 0;
 
       for (let entry in filteredItems) {
@@ -1558,7 +1559,7 @@ const SuggestedMeals = (props) => {
                                     item_type: item_types,
                                   },
                                 });
-                                handleFilter("item_type", item_types);
+                                handleFilter("type", item_types);
                               }}
                             >
                               Item Type <FillterIcon />
@@ -1590,7 +1591,7 @@ const SuggestedMeals = (props) => {
                                     item_status,
                                   },
                                 });
-                                handleFilter("item_status", item_status);
+                                handleFilter("status", item_status);
                               }}
                               style={{ display: "flex", cursor: "pointer" }}
                             >

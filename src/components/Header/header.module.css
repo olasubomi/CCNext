@@ -12,6 +12,26 @@
   pointer-events: auto;
   /* border-bottom: 1px solid #e7e7e7; */
 }
+.subrow {
+  display: flex;
+  padding: 1rem 2rem;
+  justify-content: space-between;
+  align-items: center;
+  width: 42%;
+}
+.subrowText {
+  font-size: 13px;
+  color: #000000;
+  font-weight: 300;
+  cursor: pointer;
+}
+.activesubrowText{
+  font-size: 13px;
+  color: #f47900;
+  font-weight: 300;
+  cursor: pointer;
+  text-decoration: underline;
+}
 .readDot {
   width: 1rem;
   height: 1rem;
@@ -47,7 +67,15 @@
   top: 88px;
   grid-template-columns: 100%;
 }
-
+.subheader {
+  position: fixed;
+  width: 100%;
+  z-index: 199;
+  top: 135px;
+  height: 45px;
+  background-color: #ffffff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
 .flex {
   display: flex;
   align-items: center;
