@@ -737,6 +737,7 @@ export function Header2() {
   const matches = useMediaQuery("(min-width: 900px)");
   const isLandscape = useMediaQuery("(orientation: landscape)");
   const [activeLink, setActiveLink] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(false);
 
   const handleSetActive = (id, path) => {
     setActiveLink(id);
@@ -760,7 +761,10 @@ export function Header2() {
                   <li
                     className={styles.navbar_main_link}
                     key={id}
-                    onClick={() => handleSetActive(id, elem.path)}
+                    onClick={() => {
+                      handleSetActive(id, elem.path);
+                      elem.name === "Marketplace" && setOpenDropdown(true);
+                    }}
                   >
                     <p
                       className={

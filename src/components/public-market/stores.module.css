@@ -18,6 +18,26 @@
   border-radius: 8px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
+.topcontainer{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.filter{
+  display: flex;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  align-items: center;
+  padding: 16px 15px 16px 15px;
+  border-radius: 4px;
+  gap: 1rem;
+}
+.filter p{
+  font-size: 15px;
+  font-family: Inter;
+  font-weight: 400;
+
+}
 .card {
   width: 100%;
 }

@@ -5,6 +5,7 @@ import { MealDropDown } from "./dropdown";
 import stored from "../../../public/assets/store_pics/no-image-store.png";
 import Image from "next/image";
 import { Element } from "react-scroll";
+import { BiSolidDownArrow } from "react-icons/bi";
 
 export const Stores = () => {
   const [stores, setStores] = useState([]);
@@ -18,7 +19,7 @@ export const Stores = () => {
     address: "",
     rating: 0,
   });
-  const [loadMore, setLoadMore] = useState(5);
+  const [loadMore, setLoadMore] = useState(6);
   const ref = useRef();
 
   const [selectedStore, setSelectedStore] = useState({
@@ -26,7 +27,7 @@ export const Stores = () => {
     supplier: {},
   });
   const handleLoadMore = () => {
-    setLoadMore(loadMore + 5);
+    setLoadMore(loadMore + 6);
   };
 
   const fetchOneStore = async (storeId) => {
@@ -84,14 +85,15 @@ export const Stores = () => {
 
   return (
     <div className={styles.storeContainer}>
-   <div>
-   <Element id="store" style={{ fontSize: "2rem", marginBottom: "1rem" }}>
-        Stores
-      </Element>
-      {/* <div>
-        <p>Filter by: Distance</p>
-      </div> */}
-   </div>
+      <div className={styles.topcontainer}>
+        <Element id="store" style={{ fontSize: "2rem", marginBottom: "1rem" }}>
+          Stores
+        </Element>
+        <div className={styles.filter}>
+          <p>Filter by: Distance</p>
+          <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
+        </div>
+      </div>
       <div className={styles.stores}>
         {stores
           .slice(0, loadMore)
@@ -113,10 +115,11 @@ export const Stores = () => {
                           description: store?.description,
                           address:
                             store?.supplier_address?.address +
-                            ", " + store?.supplier_address?.city +
+                            ", " +
+                            store?.supplier_address?.city +
                             " - " +
                             store?.supplier_address?.country,
-                            rating: store?.average_rating
+                          rating: store?.average_rating,
                         });
                       }}
                     >
