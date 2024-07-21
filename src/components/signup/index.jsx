@@ -476,63 +476,65 @@ function SignUp(props) {
                           const decoded = jwtDecode(
                             credentialResponse.credential
                           );
-                          const s3Client = new S3Client({
-                            region: process.env.NEXT_PUBLIC_S3_REGION,
-                            credentials: {
-                              accessKeyId:
-                                process.env
-                                  .NEXT_PUBLIC_CHOPCHOWAPP_USER_AWS_KEY,
-                              secretAccessKey:
-                                process.env
-                                  .NEXT_PUBLIC_CHOPCHOWAPP_USER_AWS_SECRET,
-                            },
-                          });
-                          console.log(decoded, "decoded");
-                          const resp = await fetch(decoded.picture);
-                          const blob = await resp.blob();
-                          const fileName = `images/${Date.now()}-${decoded.picture
-                            .split("/")
-                            .pop()}`;
-
-                          const params = {
-                            Bucket: process.env.NEXT_PUBLIC_S3_BUCKET,
-                            Key: fileName,
-                            Body: blob,
-                            ContentType: blob.type,
-                            ACL: "public-read",
-                          };
-                          console.log(params, 'params')
-
-                          const command = new PutObjectCommand(params);
-                          const uploadResult = await s3Client.send(command);
-                          console.log("Upload successful:", uploadResult);
-
-                          const s3Url = `https://${process.env.NEXT_PUBLIC_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_S3_REGION}.amazonaws.com/${fileName}`;
-                          console.log(s3Url, 's3Url')
-                          // const payload = {
-                          //   first_name: decoded?.given_name,
-                          //   last_name: decoded?.family_name,
-                          //   email: decoded?.email,
-                          //   username: decoded?.given_name,
-                          //   password: Math.floor(
-                          //     Math.random() * 100000000
-                          //   ).toString(),
-                          //   email_notifications: false,
-                          // };
-                          // const form = new FormData();
-                          // for (let entry in payload) {
-                          //   form.append(entry, payload[entry]);
-                          // }
-                          // form.append("profile_picture", blob);
-                          // const response = await axios("/user/signup", {
-                          //   method: "post",
-                          //   headers: {
-                          //     "Content-Type": "multipart/form-data",
+                          // const s3Client = new S3Client({
+                          //   region: process.env.NEXT_PUBLIC_S3_REGION,
+                          //   credentials: {
+                          //     accessKeyId:
+                          //       process.env
+                          //         .NEXT_PUBLIC_CHOPCHOWAPP_USER_AWS_KEY,
+                          //     secretAccessKey:
+                          //       process.env
+                          //         .NEXT_PUBLIC_CHOPCHOWAPP_USER_AWS_SECRET,
                           //   },
-                          //   data: form,
                           // });
-                          // toast.success("Registration was successful");
-                          // router.push("/login");
+                          // console.log(decoded, "decoded");
+                          // const resp = await fetch(decoded.picture);
+                          // const blob = await resp.blob();
+                          // const fileName = `images/${Date.now()}-${decoded.picture
+                          //   .split("/")
+                          //   .pop()}`;
+
+                          // const params = {
+                          //   Bucket: process.env.NEXT_PUBLIC_S3_BUCKET,
+                          //   Key: fileName,
+                          //   Body: blob,
+                          //   ContentType: blob.type,
+                          //   ACL: "public-read",
+                          // };
+                          // console.log(params, 'params')
+
+                          // const command = new PutObjectCommand(params);
+                          // const uploadResult = await s3Client.send(command);
+                          // console.log("Upload successful:", uploadResult);
+
+                          // const s3Url = `https://${process.env.NEXT_PUBLIC_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_S3_REGION}.amazonaws.com/${fileName}`;
+                          // console.log(s3Url, 's3Url')
+                          const payload = {
+                            first_name: decoded?.given_name,
+                            last_name: decoded?.family_name,
+                            email: decoded?.email,
+                            username: decoded?.given_name,
+                            password: Math.floor(
+                              Math.random() * 100000000
+                            ).toString(),
+                            email_notifications: false,
+                            profile_picture: decoded.picture
+
+                          };
+                          const form = new FormData();
+                          for (let entry in payload) {
+                            form.append(entry, payload[entry]);
+                          }
+                          // form.append("profile_picture", blob);
+                          const response = await axios("/user/signup", {
+                            method: "post",
+                            // headers: {
+                            //   "Content-Type": "multipart/form-data",
+                            // },
+                            data: payload,
+                          });
+                          toast.success("Registration was successful");
+                          router.push("/login");
                         } catch (error) {
                           toast.error(
                             error?.response?.data?.message?.message ||
