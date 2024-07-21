@@ -122,7 +122,7 @@
 .hero-content h1 {
     font-family: Inter;
     font-weight: 600;
-    font-size: 28px;
+    font-size: 22px;
     text-align: center;
     width: 70%;
     line-height: 32.52px;
@@ -130,7 +130,7 @@
 
 .home_page_container .hero .overlay h1,
 .hero-content h1 {
-    width: 100%;
+    width: 70%;
 }
 
 .home_page_container .hero-box {
@@ -199,36 +199,36 @@
 
 @media screen and (min-width: 768px) and (orientation: landscape) {
     .section-box {
-        margin-top: 120px;
+        /* margin-top: 120px; */
     }
     .section-four {
-        margin-top: -160px;
+        /* margin-top: -160px; */
     }
     .section-four-container h1 {
-        margin-top: -300px;
+        /* margin-top: -300px; */
     }
     .section-four-container .section-footer {
-        margin-top: -20px !important;
+        /* margin-top: -20px !important; */
     }
     .section-box .section-image {
-        height: 300px !important;
-        margin-top: -140px;
+        /* height: 300px !important; */
+        /* margin-top: -140px; */
     }
     .section-four {
-        height: 300vh !important;
+        /* height: 300vh !important; */
     }
     .section-six .chef-box {
-        height: fit-content !important;
+        /* height: fit-content !important; */
     }
     .chef-box .chef-image {
-        position: relative !important;
+        /* position: relative !important;
         width: 100% !important;
         background-size: cover !important;
         border-radius: 0px !important;
-        margin-top: 120px !important;
+        margin-top: 120px !important; */
     }
     .chef-box p {
-        width: 100% !important;
+        /* width: 100% !important; */
     }
 }
 

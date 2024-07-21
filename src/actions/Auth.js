@@ -79,24 +79,32 @@ export const userSignUp = (form) => {
   };
 };
 
-export const userSignIn = (email, password, remember, callback) => {
+export const userSignIn = (email, password, remember, callback, withAuth) => {
   const customId = "custom-id-yes";
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     dispatch({ type: USER_TOKEN_SET, payload: null });
     dispatch({ type: USER_DATA, payload: null });
+    const withAuth_ = {
+      password,
+      email: email,
+    }
+    const no_withAuth_ = {
+      withAuth: false,
+      email: email,
+    }
+
     axios
-      .post("/user/signin", {
-        email: email,
-        password: password,
-      })
+      .post("/user/signin",
+        withAuth ? withAuth_ : no_withAuth_
+      )
       .then(({ data }) => {
         console.log(" ___ userSignIn RESPONSE ___ ", data);
 
         axios.defaults.headers.common["Authorization"] =
           "Bearer " + data.data.token;
 
-          console.log(remember, 'rememberremember')
+        console.log(remember, 'rememberremember')
         if (remember) {
           hash(email, password);
         } else {
@@ -426,16 +434,16 @@ export const socialSignIn = (token) => {
 };
 
 
-export const sendEmailOTP = ({email}) => {
+export const sendEmailOTP = ({ email }) => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     axios
-      .post("/user/sendemailotp",{email})
+      .post("/user/sendemailotp", { email })
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
       })
-      .catch((err) => { 
+      .catch((err) => {
         dispatch({
           type: FETCH_ERROR,
           payload: "error resending email",
@@ -452,18 +460,18 @@ export const sendEmailOTP = ({email}) => {
 };
 
 
-export const verifyEmailOTP = ({email,otp}) => {
-  console.log({email,otp})
+export const verifyEmailOTP = ({ email, otp }) => {
+  console.log({ email, otp })
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     axios
-      .post("/user/verifyEmailOTP",{email,otp})
+      .post("/user/verifyEmailOTP", { email, otp })
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
         dispatch({ type: IS_VERIFIED, payload: true });
       })
-      .catch((err) => { 
+      .catch((err) => {
         dispatch({
           type: FETCH_ERROR,
           payload: "error resending email",
@@ -480,16 +488,16 @@ export const verifyEmailOTP = ({email,otp}) => {
 };
 
 
-export const requestnumber = ({number}) => {
+export const requestnumber = ({ number }) => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     axios
-      .post("/user/requestnumber",{number})
+      .post("/user/requestnumber", { number })
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
       })
-      .catch((err) => { 
+      .catch((err) => {
         dispatch({
           type: FETCH_ERROR,
           payload: "error resending email",
@@ -506,16 +514,16 @@ export const requestnumber = ({number}) => {
 };
 
 
-export const verifynumber = ({request_id,code}) => {
+export const verifynumber = ({ request_id, code }) => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     axios
-      .post("/user/verifynumber",{request_id,code})
+      .post("/user/verifynumber", { request_id, code })
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
       })
-      .catch((err) => { 
+      .catch((err) => {
         dispatch({
           type: FETCH_ERROR,
           payload: "error resending email",
@@ -535,7 +543,7 @@ export const resetPassword = (password, token) => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     axios
-      .post("/user/resetpassword", {token, password})
+      .post("/user/resetpassword", { token, password })
       .then(({ data }) => {
         console.log(" reset password api: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
@@ -543,25 +551,25 @@ export const resetPassword = (password, token) => {
       .catch((err) => {
         console.error("xxx error resetting password ERROR xxx", err);
         var message = ""
-          if (err.response.status === 400 || err.response.status === 404) {
-            message = 'Bad Request , Check username or email ... !!'
-          } else if (err.response.status === 401) {
-            message ='you are UnAuthorized'
-          } else if (err.response.status >= 500) {
-            message = 'Sorry , Internal Server ERROR' 
-          } else {
-            message = 'Please check your inbox for more details! '
-          }
+        if (err.response.status === 400 || err.response.status === 404) {
+          message = 'Bad Request , Check username or email ... !!'
+        } else if (err.response.status === 401) {
+          message = 'you are UnAuthorized'
+        } else if (err.response.status >= 500) {
+          message = 'Sorry , Internal Server ERROR'
+        } else {
+          message = 'Please check your inbox for more details! '
+        }
 
-          dispatch({
-            type: FETCH_ERROR,
-            payload: message,
-          });
-        })
-      
+        dispatch({
+          type: FETCH_ERROR,
+          payload: message,
+        });
+      })
 
-        
-      
+
+
+
   };
 }
 
