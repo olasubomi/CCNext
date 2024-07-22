@@ -67,12 +67,15 @@ export const PopularMeals = () => {
 
   const fetchMeals = async () => {
     try {
-      const response = await axios(`/items/1?type=Meal&status=all&limit=1000`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios(
+        `/items/1?type=Meal&status=Public&limit=1000`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log(response.data.data.items, "ressw");
       setMeals(response.data.data.items);
     } catch (error) {
