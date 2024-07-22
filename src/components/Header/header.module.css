@@ -25,7 +25,7 @@
   font-weight: 300;
   cursor: pointer;
 }
-.activesubrowText{
+.activesubrowText {
   font-size: 13px;
   color: #f47900;
   font-weight: 300;
@@ -1014,6 +1014,28 @@
     top: 40px;
     right: -32px;
     overflow-y: scroll !important;
+  }
+  .subheader {
+    width: 120px;
+    top: 119px;
+    height: auto;
+    left: 15px;
+  }
+  .subrow {
+    flex-direction: column;
+    padding: 1rem .5rem;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .subrowText {
+    font-size: 12px;
+  }
+  .dropdownborder{
+    border-bottom: .5px solid rgba(0, 0, 0, 0.5);
+    height: 1px;
+    width: 100%;
+    margin-top: .7rem;
+    margin-bottom: .7rem;
   }
 }
 

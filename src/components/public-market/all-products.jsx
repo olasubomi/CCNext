@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { ProductModal } from "../modal/individual-meal-product";
 import { Element } from "react-scroll";
 import { BiSolidDownArrow } from "react-icons/bi";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 export const AllProducts = () => {
   const alphabets = [
@@ -39,6 +40,9 @@ export const AllProducts = () => {
   ];
 
   const [activeLetter, setActiveLetter] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleActiveLetter = (id) => {
     setActiveLetter(id);
@@ -94,10 +98,11 @@ export const AllProducts = () => {
     id: "",
     status: "",
   });
-  const fetchProducts = async () => {
+  const fetchProducts = async (page) => {
+    setIsLoading(true);
     try {
       const response = await axios(
-        `/items/1?type=Product&status=all&limit=50`,
+        `/items/${page}?type=Product&status=Public&limit=10`,
         {
           method: "GET",
           headers: {
@@ -105,15 +110,29 @@ export const AllProducts = () => {
           },
         }
       );
-      console.log(response.data.data.items, "ressee");
-      setProducts(response.data.data.items);
+      const allItems = response.data.data.items;
+
+      const filteredProducts = allItems.filter(
+        (product) => product.average_rating
+      );
+
+      if (filteredProducts.length === 0) {
+        const lastPageWithItems = page - 1;
+        setTotalPages(lastPageWithItems);
+      } else {
+        setProducts(filteredProducts);
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(currentPage);
+  }, [currentPage]);
+
+  console.log(products, "ressw");
 
   const fetchGroceryList = async () => {
     try {
@@ -146,9 +165,24 @@ export const AllProducts = () => {
     }
   }, []);
 
-  const filteredProducts = products.filter(
-    (product) => product.item_type === "Product" && product.average_rating
-  );
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage === totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage !== totalPages) {
+      setCurrentPage(currentPage - 1);
+    }
+    if (currentPage === 1) {
+      setCurrentPage(currentPage);
+    }
+  };
   return (
     <>
       <div className={styles.top}>
@@ -192,10 +226,27 @@ export const AllProducts = () => {
             </span>
           ))}
         </div>
+        <div className={styles.storeImgContainer}>
+          <div className={styles.storeFlex}>
+            <div className={styles.storediv}>
+              <img src="/assets/products/popular-product.jpeg" />
+            </div>
+            <div className={styles.storeDetails}>
+              <h3>Sweet Sensations</h3>
+              <p>
+                At Sweet Sensations, we're dedicated to crafting irresistible
+                treats that tantalize your taste buds and warm your heart. From
+                decadent chocolate delights to delicate pastries, each creation
+                is made with passion and precision
+              </p>
+              <p className={styles.storeLocation}>Accra- Ghana</p>
+            </div>
+          </div>
+        </div>
       </div>
       <div className={styles.mealContainer1}>
         <div className={styles.stores3}>
-          {filteredProducts.slice(0, visibleProducts).map((product, idx) => {
+          {products?.map((product, idx) => {
             console.log(product.item_name, product?.itemImage0, "pp");
 
             return (
@@ -262,10 +313,36 @@ export const AllProducts = () => {
             setQuantity={setQuantity}
           />
         </div>
-        <p className={styles.view2} onClick={() => loadMore()}>
-          View More
-        </p>
-        <div className={styles.border} />
+        <div className={styles.paginationContainer}>
+          <div
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className={
+              currentPage === 1 ? styles.disableButn : styles.paginationButton2
+            }
+          >
+            <FaAngleLeft
+              size={17}
+              color={currentPage === 1 ? "#6D6D6D" : "#52575C"}
+            />
+          </div>
+          {[1, 2].map((pageNumber) => (
+            <div
+              key={pageNumber}
+              className={
+                currentPage === pageNumber
+                  ? styles.activepaginationButton
+                  : styles.paginationButton2
+              }
+              onClick={() => handlePageClick(pageNumber)}
+            >
+              {pageNumber}
+            </div>
+          ))}
+          <div onClick={handleNextPage} className={styles.paginationButton2}>
+            <FaAngleRight size={17} />
+          </div>
+        </div>
       </div>
     </>
   );

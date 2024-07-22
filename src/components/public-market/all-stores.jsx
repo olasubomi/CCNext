@@ -2,11 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { MealDropDown } from "./dropdown";
-import stored from "../../../public/assets/store_pics/no-image-store.png";
 import Image from "next/image";
-import { Element } from "react-scroll";
 import { BiSolidDownArrow } from "react-icons/bi";
-import { FaAngleLeft, FaAngleRight, FaAnglesLeft } from "react-icons/fa6";
+import StorePics from "../../../public/assets/store_pics/store.jpeg";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 export const AllStores = () => {
   const alphabets = [
@@ -39,6 +38,9 @@ export const AllStores = () => {
   ];
 
   const [activeLetter, setActiveLetter] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleActiveLetter = (id) => {
     setActiveLetter(id);
@@ -80,23 +82,38 @@ export const AllStores = () => {
     }
   };
   console.log(stores, "one store");
-  const fetchStores = async () => {
+  const fetchStores = async (page = 1) => {
+    setIsLoading(true);
     try {
-      const response = await axios(`/stores/getallstores/1?limit=2000`, {
+      const response = await axios(`/stores/getallstores/${page}?limit=10`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
       console.log(response.data.data.products, "resp");
-      setStores(response.data.data.products);
+      const allItems = response.data.data.products;
+
+      const filteredStores = allItems.filter(
+        (store) => store.status === "PUBLIC"
+      );
+
+      if (filteredStores.length === 0) {
+        const lastPageWithItems = page - 1;
+        setTotalPages(lastPageWithItems);
+      } else {
+        setStores(filteredStores);
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
   useEffect(() => {
-    fetchStores();
-  }, []);
+    fetchStores(currentPage);
+  }, [currentPage]);
   console.log(selectedStore, "storess");
   useEffect(() => {
     // Get the hash value from the URL
@@ -114,8 +131,27 @@ export const AllStores = () => {
     }
   }, []);
 
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage === totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage !== totalPages) {
+      setCurrentPage(currentPage - 1);
+    }
+    if (currentPage === 1) {
+      setCurrentPage(currentPage);
+    }
+  };
+
   return (
-    <div className={styles.storeContainer}>
+    <div className={styles.storeContainer1}>
       <div className={styles.marketplace}>
         <h1>Stores</h1>
       </div>
@@ -156,9 +192,25 @@ export const AllStores = () => {
           </span>
         ))}
       </div>
+      <div className={styles.storeImgContainer}>
+        <div className={styles.storeFlex}>
+          <div className={styles.storediv}>
+            <img src="/assets/store_pics/store.jpeg" />
+          </div>
+          <div className={styles.storeDetails}>
+            <h3>Sweet Sensations</h3>
+            <p>
+              At Sweet Sensations, we're dedicated to crafting irresistible
+              treats that tantalize your taste buds and warm your heart. From
+              decadent chocolate delights to delicate pastries, each creation is
+              made with passion and precision
+            </p>
+            <p className={styles.storeLocation}>Accra- Ghana</p>
+          </div>
+        </div>
+      </div>
       <div className={styles.stores}>
         {stores
-          .filter((elem) => elem.status === "PUBLIC")
           .map((store, id) => {
             return (
               <>
@@ -227,7 +279,36 @@ export const AllStores = () => {
           })}
       </div>
 
-      <div className={styles.paginationContainer}></div>
+      <div className={styles.paginationContainer}>
+        <div
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className={
+            currentPage === 1 ? styles.disableButn : styles.paginationButton2
+          }
+        >
+          <FaAngleLeft
+            size={17}
+            color={currentPage === 1 ? "#6D6D6D" : "#52575C"}
+          />
+        </div>
+        {[1, 2].map((pageNumber) => (
+          <div
+            key={pageNumber}
+            className={
+              currentPage === pageNumber
+                ? styles.activepaginationButton
+                : styles.paginationButton2
+            }
+            onClick={() => handlePageClick(pageNumber)}
+          >
+            {pageNumber}
+          </div>
+        ))}
+        <div onClick={handleNextPage} className={styles.paginationButton2}>
+          <FaAngleRight size={17} />
+        </div>
+      </div>
     </div>
   );
 };

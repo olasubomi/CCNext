@@ -63,7 +63,7 @@ export const TopSellingProducts = () => {
   const fetchProducts = async () => {
     try {
       const response = await axios(
-        `/items/1?type=Product&status=all&limit=50`,
+        `/items/1?type=Product&status=Public&limit=50`,
         {
           method: "GET",
           headers: {

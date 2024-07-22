@@ -8,6 +8,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { toast } from "react-toastify";
 import { UtensilModal } from "../modal/individual-meal-product";
 import { BiSolidDownArrow } from "react-icons/bi";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 export const AllUtensils = () => {
   const alphabets = [
@@ -40,11 +41,14 @@ export const AllUtensils = () => {
   ];
 
   const [activeLetter, setActiveLetter] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleActiveLetter = (id) => {
     setActiveLetter(id);
   };
-  const [meals, setMeals] = useState([]);
+  const [utensils, setUtensils] = useState([]);
   const [visibleMeals, setVisibleMeals] = useState(8);
   const [selectedItem, setSelectedItem] = useState({});
   const [selectGrocery, setSelectGrocery] = useState([]);
@@ -53,9 +57,6 @@ export const AllUtensils = () => {
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
 
-  const loadMore = () => {
-    setVisibleMeals(visibleMeals + 4);
-  };
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -94,10 +95,11 @@ export const AllUtensils = () => {
     status: "",
   });
 
-  const fetchMeals = async () => {
+  const fetchUtensils = async (page) => {
+    setIsLoading(true);
     try {
       const response = await axios(
-        `/items/1?type=Utensil&status=all&limit=50`,
+        `/items/${page}?type=Utensil&status=Public&limit=10`,
         {
           method: "GET",
           headers: {
@@ -105,15 +107,27 @@ export const AllUtensils = () => {
           },
         }
       );
-      console.log(response.data.data.items, "ee");
-      setMeals(response.data.data.items);
+      const allItems = response.data.data.items;
+
+      const filteredProducts = allItems.filter(
+        (product) => product.average_rating
+      );
+
+      if (filteredProducts.length === 0) {
+        const lastPageWithItems = page - 1;
+        setTotalPages(lastPageWithItems);
+      } else {
+        setUtensils(filteredProducts);
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
-    fetchMeals();
-  }, []);
+    fetchUtensils(currentPage);
+  }, [currentPage]);
   const fetchGroceryList = async () => {
     try {
       const response = await axios(`/groceries/list`, {
@@ -129,11 +143,7 @@ export const AllUtensils = () => {
   useEffect(() => {
     fetchGroceryList();
   }, []);
-  console.log(meals, "meals");
-  const filteredMeals = meals.filter(
-    (meal) =>
-      meal.item_type === "Utensil" && meal.item_status[0]?.status === "Public"
-  );
+
   useEffect(() => {
     // Get the hash value from the URL
     const hash = window.location.hash;
@@ -150,6 +160,24 @@ export const AllUtensils = () => {
     }
   }, []);
 
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage === totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage !== totalPages) {
+      setCurrentPage(currentPage - 1);
+    }
+    if (currentPage === 1) {
+      setCurrentPage(currentPage);
+    }
+  };
   return (
     <>
       <div className={styles.top}>
@@ -193,68 +221,80 @@ export const AllUtensils = () => {
             </span>
           ))}
         </div>
+        <div className={styles.storeImgContainer}>
+          <div className={styles.storeFlex}>
+            <div className={styles.storediv}>
+              <img src="/assets/products/popular-utensil.jpeg" />
+            </div>
+            <div className={styles.storeDetails}>
+              <h3>Sweet Sensations</h3>
+              <p>
+                At Sweet Sensations, we're dedicated to crafting irresistible
+                treats that tantalize your taste buds and warm your heart. From
+                decadent chocolate delights to delicate pastries, each creation
+                is made with passion and precision
+              </p>
+              <p className={styles.storeLocation}>Accra - Ghana</p>
+            </div>
+          </div>
+        </div>
       </div>
       <div className={styles.mealContain}>
         <div className={styles.stores2}>
-          {filteredMeals
-            .slice(0, visibleMeals)
-            .filter((utensil) => utensil)
-            .map((utensil, idx) => {
-              return (
-                <div
-                  className={styles.card1}
-                  key={idx}
-                  onClick={() => {
-                    setSelectedItem(utensil);
-                    setOpenModal(true);
-                  }}
-                >
-                  {
-                    <div className={styles.box}>
-                      <img
-                        src={
-                          utensil?.itemImage0
-                            ? utensil?.itemImage0
-                            : "/assets/store_pics/no-image-utensil.png"
-                        }
-                        className={styles.storeImg1}
-                      />
-                      <div className={styles.flex}>
-                        <p className={styles.name2}>{utensil.item_name}</p>
-                        <p>$8.43</p>
-                      </div>
-                      <p className={styles.storeName}>
-                        Chop Chow Official Store
-                      </p>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-start",
-                          marginTop: ".7rem",
-                          alignItems: "flex-start",
-                        }}
-                      >
-                        <div>
-                          {Array(5)
-                            .fill("_")
-                            .map((_, idx) => (
-                              <GoStarFill
-                                key={idx + _}
-                                color={
-                                  utensil.average_rating > idx
-                                    ? "#04D505"
-                                    : "rgba(0,0,0,0.5)"
-                                }
-                                style={{ marginLeft: ".2rem" }}
-                              />
-                            ))}
-                        </div>
+          {utensils?.map((utensil, idx) => {
+            return (
+              <div
+                className={styles.card1}
+                key={idx}
+                onClick={() => {
+                  setSelectedItem(utensil);
+                  setOpenModal(true);
+                }}
+              >
+                {
+                  <div className={styles.box}>
+                    <img
+                      src={
+                        utensil?.itemImage0
+                          ? utensil?.itemImage0
+                          : "/assets/store_pics/no-image-utensil.png"
+                      }
+                      className={styles.storeImg1}
+                    />
+                    <div className={styles.flex}>
+                      <p className={styles.name2}>{utensil.item_name}</p>
+                      <p>$8.43</p>
+                    </div>
+                    <p className={styles.storeName}>Chop Chow Official Store</p>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        marginTop: ".7rem",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <div>
+                        {Array(5)
+                          .fill("_")
+                          .map((_, idx) => (
+                            <GoStarFill
+                              key={idx + _}
+                              color={
+                                utensil.average_rating > idx
+                                  ? "#04D505"
+                                  : "rgba(0,0,0,0.5)"
+                              }
+                              style={{ marginLeft: ".2rem" }}
+                            />
+                          ))}
                       </div>
                     </div>
-                  }
-                </div>
-              );
-            })}
+                  </div>
+                }
+              </div>
+            );
+          })}
           <UtensilModal
             openList={openList}
             openModal={openModal}
@@ -272,9 +312,36 @@ export const AllUtensils = () => {
             setShow={setShow}
           />
         </div>
-        <p className={styles.view} onClick={() => loadMore()}>
-          View More
-        </p>
+        <div className={styles.paginationContainer}>
+          <div
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className={
+              currentPage === 1 ? styles.disableButn : styles.paginationButton2
+            }
+          >
+            <FaAngleLeft
+              size={17}
+              color={currentPage === 1 ? "#6D6D6D" : "#52575C"}
+            />
+          </div>
+          {[1, 2].map((pageNumber) => (
+            <div
+              key={pageNumber}
+              className={
+                currentPage === pageNumber
+                  ? styles.activepaginationButton
+                  : styles.paginationButton2
+              }
+              onClick={() => handlePageClick(pageNumber)}
+            >
+              {pageNumber}
+            </div>
+          ))}
+          <div onClick={handleNextPage} className={styles.paginationButton2}>
+            <FaAngleRight size={17} />
+          </div>
+        </div>
       </div>
     </>
   );

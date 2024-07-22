@@ -84,8 +84,8 @@ export const Stores = () => {
   }, []);
 
   return (
-    <div className={styles.storeContainer}>
-      <div className={styles.topcontainer}>
+    <div className={styles.storeContainer1}>
+      <div className={styles.topcontainer1}>
         <Element id="store" style={{ fontSize: "2rem", marginBottom: "1rem" }}>
           Stores
         </Element>

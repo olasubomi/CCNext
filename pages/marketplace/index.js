@@ -190,11 +190,13 @@ const PublicMarket = () => {
               cooked with family and friends
             </p>
           </div>
-          <div className={styles.storeContainer}>
+
+          <>
             {categories.find((ele) => ele.label === "Stores")?.value && (
               <Stores />
             )}
-          </div>
+          </>
+
           <>
             {categories.find((ele) => ele.label === "Meals")?.value && (
               <div>
@@ -220,11 +222,11 @@ const PublicMarket = () => {
         </>
       )}
       {activeSubLink === 1 && (
-        <div className={styles.storeContainer}>
+        <>
           {categories.find((ele) => ele.label === "Stores")?.value && (
             <AllStores />
           )}
-        </div>
+        </>
       )}
       <div>
         {activeSubLink === 2 && (

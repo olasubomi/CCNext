@@ -33,6 +33,7 @@ import moment from "moment";
 import { useMediaQuery } from "../../hooks/usemediaquery";
 import { MobileSearch } from "../dropdown/mobile-search";
 import axios from "../../util/Api";
+import { matches } from "lodash";
 
 function Header(props) {
   // const [isAuthenticated, setIsAuthenticatedState] = useState(false);
@@ -729,6 +730,7 @@ export default connect(mapStateToProp, mapDispatchToProps)(Header);
 export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
   const router = useRouter();
   const [openDropdown, setOpenDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleActiveSubLink = (id) => {
     setActiveSubLink(id);
@@ -745,6 +747,24 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
       router.push("/marketplace");
     }
   };
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    if (openDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openDropdown]);
+  const matches = useMediaQuery("(min-width: 900px)");
 
   return (
     <div className={styles.navbar2}>
@@ -814,37 +834,69 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
         </div>
       </div>
 
-      {openDropdown && pathname === "/marketplace" && (
-        <div className={styles.subheader}>
-          <div className={styles.subrow}>
-            {[
-              "",
-              "Stores",
-              "Meals",
-              "Products",
-              "Utensils",
-              "Categories",
-              "Collection",
-            ].map((elem, index, array) => (
-              <span key={index} style={{ display: "flex", gap: "1.4rem" }}>
-                <p
-                  className={
-                    activeSubLink === index
-                      ? styles.activesubrowText
-                      : styles.subrowText
-                  }
-                  onClick={() => handleActiveSubLink(index)}
-                >
-                  {elem}
-                </p>
-                {index > 0 && index !== array.length - 1 && (
-                  <p className={styles.subrowText}>|</p>
-                )}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
+      {matches
+        ? openDropdown &&
+          pathname === "/marketplace" && (
+            <div className={styles.subheader}>
+              <div className={styles.subrow}>
+                {[
+                  "",
+                  "Stores",
+                  "Meals",
+                  "Products",
+                  "Utensils",
+                  "Categories",
+                  "Collection",
+                ].map((elem, index, array) => (
+                  <span key={index} style={{ display: "flex", gap: "1.4rem" }}>
+                    <p
+                      className={
+                        activeSubLink === index
+                          ? styles.activesubrowText
+                          : styles.subrowText
+                      }
+                      onClick={() => handleActiveSubLink(index)}
+                    >
+                      {elem}
+                    </p>
+                    {index > 0 && index !== array.length - 1 && (
+                      <p className={styles.subrowText}>|</p>
+                    )}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )
+        : openDropdown &&
+          pathname === "/marketplace" && (
+            <div className={styles.subheader} ref={dropdownRef}>
+              <div className={styles.subrow}>
+                {[
+                  "",
+                  "Stores",
+                  "Meals",
+                  "Products",
+                  "Utensils",
+                  "Categories",
+                  "Collection",
+                ].map((elem, index, array) => (
+                  <>
+                    <span key={index}>
+                      <p
+                        className={styles.subrowText}
+                        onClick={() => handleActiveSubLink(index)}
+                      >
+                        {elem}
+                      </p>
+                    </span>
+                    {index > 0 && index !== array.length - 1 && (
+                      <div className={styles.dropdownborder} />
+                    )}
+                  </>
+                ))}
+              </div>
+            </div>
+          )}
     </div>
   );
 }

@@ -12,6 +12,7 @@ import { Element, scroller } from "react-scroll";
 import { ScrollableElement } from "../smooth-scroll-link";
 import mealImg from "../../../public/assets/store_pics/no-image-meal.png";
 import { BiSolidDownArrow } from "react-icons/bi";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 export const AllPopularMeals = () => {
   const alphabets = [
@@ -42,7 +43,9 @@ export const AllPopularMeals = () => {
     "Y",
     "Z",
   ];
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [activeLetter, setActiveLetter] = useState(null);
 
   const handleActiveLetter = (id) => {
@@ -50,7 +53,7 @@ export const AllPopularMeals = () => {
   };
   const matches = useMediaQuery("(min-width: 920px)");
   const [meals, setMeals] = useState([]);
-  const [visibleMeals, setVisibleMeals] = useState(8);
+  const [visibleMeals, setVisibleMeals] = useState(20);
   const [selectedItem, setSelectedItem] = useState({});
   const [selectGrocery, setSelectGrocery] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -59,9 +62,6 @@ export const AllPopularMeals = () => {
   const [quantity, setQuantity] = useState(0);
   const ref = useRef(null);
 
-  const loadMore = () => {
-    setVisibleMeals(visibleMeals + 4);
-  };
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -100,23 +100,40 @@ export const AllPopularMeals = () => {
     status: "",
   });
 
-  const fetchMeals = async () => {
+  const fetchMeals = async (page) => {
+    setIsLoading(true);
     try {
-      const response = await axios(`/items/1?type=Meal&status=all&limit=1000`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response.data.data.items, "ressw");
-      setMeals(response.data.data.items);
+      const response = await axios(
+        `/items/${page}?type=Meal&status=Public&limit=20`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const allItems = response.data.data.items;
+
+      const filteredItems = allItems.filter(
+        (meal) => meal.average_rating
+      );
+
+      if (filteredItems.length === 0) {
+        const lastPageWithItems = page - 1;
+        setTotalPages(lastPageWithItems);
+      } else {
+        setMeals(filteredItems);
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
-    fetchMeals();
-  }, []);
+    fetchMeals(currentPage);
+  }, [currentPage]);
   const fetchGroceryList = async () => {
     try {
       const response = await axios(`/groceries/list`, {
@@ -132,10 +149,6 @@ export const AllPopularMeals = () => {
   useEffect(() => {
     fetchGroceryList();
   }, []);
-  const filteredMeals = meals.filter(
-    (meal) => meal.item_type === "Meal" && meal.average_rating
-  );
-  console.log(filteredMeals, "fill");
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -151,6 +164,21 @@ export const AllPopularMeals = () => {
       });
     }
   }, []);
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage === totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage !== totalPages) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
   return (
     <>
       <div className={styles.top}>
@@ -194,12 +222,29 @@ export const AllPopularMeals = () => {
             </span>
           ))}
         </div>
+        <div className={styles.storeImgContainer}>
+          <div className={styles.storeFlex}>
+            <div className={styles.storediv}>
+              <img src="/assets/meal_pics/popular-meal.jpeg" />
+            </div>
+            <div className={styles.storeDetails}>
+              <h3>Sweet Sensations</h3>
+              <p>
+                At Sweet Sensations, we're dedicated to crafting irresistible
+                treats that tantalize your taste buds and warm your heart. From
+                decadent chocolate delights to delicate pastries, each creation
+                is made with passion and precision
+              </p>
+              <p className={styles.storeLocation}>Accra- Ghana</p>
+            </div>
+          </div>
+        </div>
       </div>
+
       <div className={styles.mealContain}>
         <div className={styles.stores2}>
-          {filteredMeals
-            .slice(0, visibleMeals)
-            .filter((meal) => Boolean(meal.total_rating))
+          {meals
+            // .filter((meal) => Boolean(meal.total_rating))
             .map((meal, idx) => {
               return (
                 <div
@@ -286,10 +331,37 @@ export const AllPopularMeals = () => {
             />
           )}
         </div>
-        <p className={styles.view} onClick={() => loadMore()}>
-          View More
-        </p>
-        <div className={styles.border} />
+
+        <div className={styles.paginationContainer}>
+          <div
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className={
+              currentPage === 1 ? styles.disableButn : styles.paginationButton2
+            }
+          >
+            <FaAngleLeft
+              size={17}
+              color={currentPage === 1 ? "#6D6D6D" : "#52575C"}
+            />
+          </div>
+          {[1, 2].map((pageNumber) => (
+            <div
+              key={pageNumber}
+              className={
+                currentPage === pageNumber
+                  ? styles.activepaginationButton
+                  : styles.paginationButton2
+              }
+              onClick={() => handlePageClick(pageNumber)}
+            >
+              {pageNumber}
+            </div>
+          ))}
+          <div onClick={handleNextPage} className={styles.paginationButton2}>
+            <FaAngleRight size={17} />
+          </div>
+        </div>
       </div>
     </>
   );
