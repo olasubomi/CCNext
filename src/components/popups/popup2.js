@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
@@ -27,6 +27,7 @@ class Popup2 extends Component {
       length: 0,
       resave: 0,
     };
+    this.modalRef = createRef();
   }
 
   incIn = () => {
@@ -170,6 +171,7 @@ class Popup2 extends Component {
     console.log(this.props, "mealss");
     window.location.assign(`/suggestmeal?id=${this.props.id}&item_type=Meal`);
   };
+
   handleShareClick = () => {
     const shareUrl =
       "https://www.instagram.com/share/create/?url=" +
@@ -177,7 +179,16 @@ class Popup2 extends Component {
     window.open(shareUrl, "_blank");
   };
 
+  handleClickOutside = (event) => {
+    if (
+      this.modalRef.current &&
+      !this.modalRef.current.contains(event.target)
+    ) {
+      this.props.closeModal();
+    }
+  };
   componentDidMount() {
+    document.addEventListener("mousedown", this.handleClickOutside);
     console.log(this.props, "props----");
     let length = 0;
 
@@ -202,7 +213,9 @@ class Popup2 extends Component {
     }, 1000);
     console.log(length, "length");
   }
-
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClickOutside);
+  }
   render() {
     const {
       popupType,
@@ -216,7 +229,6 @@ class Popup2 extends Component {
       instructionChunk1,
       isDashboard,
       chunk1Content,
-
     } = this.props;
     const { curIn, length } = this.state;
 
@@ -227,7 +239,7 @@ class Popup2 extends Component {
       <>
         {this.props.openModal && (
           <div className={styles.popup2_container}>
-            <div className={styles.popup2}>
+            <div className={styles.popup2} ref={this.modalRef}>
               <div className={styles.popup2_top}>
                 <h2>{popupType}</h2>
                 <CancelIcon
@@ -240,7 +252,7 @@ class Popup2 extends Component {
                   <div className={styles.img_col}>
                     {imagesData?.length !== 0 && (
                       <Image
-                        src={imagesData[0] || ''}
+                        src={imagesData[0] || ""}
                         alt="pop up"
                         className={styles.popup2_main_img}
                         height={160}
@@ -309,13 +321,13 @@ class Popup2 extends Component {
                         Ingredients
                       </h3>
                       <table className={styles.table}>
-                      <thead>
-                      <tr>
-                          <th className={styles.th}>Names</th>
-                          <th className={styles.th}>Quantity</th>
-                          <th className={styles.th}>Measurement</th>
-                        </tr>
-                      </thead>
+                        <thead>
+                          <tr>
+                            <th className={styles.th}>Names</th>
+                            <th className={styles.th}>Quantity</th>
+                            <th className={styles.th}>Measurement</th>
+                          </tr>
+                        </thead>
                         {!isDashboard ? (
                           ingredientsList?.map((ingredient, index) => (
                             <tr
@@ -369,7 +381,10 @@ class Popup2 extends Component {
                       <h3 className={styles.popup2_category_name}>
                         Meal Category
                       </h3>
-                      <p className={styles.popup2_category} style={{textTransform: 'capitalize'}}>
+                      <p
+                        className={styles.popup2_category}
+                        style={{ textTransform: "capitalize" }}
+                      >
                         {categories?.map((cat) => (
                           <span>{cat} &nbsp; &nbsp;</span>
                         ))}

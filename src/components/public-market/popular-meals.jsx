@@ -9,8 +9,6 @@ import { IndividualModal } from "../modal/individual-meal-product";
 import { useMediaQuery } from "../../hooks/usemediaquery";
 import { Mealmodal } from "../mobile/meal-modal";
 import { Element, scroller } from "react-scroll";
-import { ScrollableElement } from "../smooth-scroll-link";
-import mealImg from "../../../public/assets/store_pics/no-image-meal.png";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
