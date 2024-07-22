@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import axios from "../../util/Api";
 import { toast } from "react-toastify";
 import { Modal } from "../modal/popup-modal";
+import { useEffect, useRef } from "react";
 
 export const Mealmodal = ({
   openList,
@@ -29,12 +30,32 @@ export const Mealmodal = ({
   selectedItem,
 }) => {
   const router = useRouter();
+  const dropdownRef = useRef();
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenModal(false);
+    }
+  };
+
+  useEffect(() => {
+    if (openModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openModal]);
+
   console.log(selectedItem, "selectedItem.meal_formatted_instructions");
   return (
     <div>
       {openModal && (
         <div className={styles.modalContainer}>
-          <div className={styles.modalCard}>
+          <div className={styles.modalCard}  ref={dropdownRef}>
             <div className={styles.close}>
               <div className={styles.round} onClick={() => setOpenModal(false)}>
                 <AiOutlineClose />

@@ -154,6 +154,7 @@ export const Stores = () => {
                   </div>
                   {isShow && selected === id && (
                     <MealDropDown
+                    isShow={isShow}
                       storeInfo={storeInfo}
                       setIsShow={setIsShow}
                       selectedStore={selectedStore}

@@ -762,10 +762,12 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openDropdown]);
+
   const matches = useMediaQuery("(min-width: 900px)");
+
   useEffect(() => {
     if (pathname === "/marketplace") {
-      setOpenDropdown(true);
+      setOpenDropdown(!openDropdown);
     } else {
       setOpenDropdown(false);
     }

@@ -9,6 +9,7 @@ import { Modal } from "../modal/popup-modal";
 import { useRouter } from "next/router";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
+import { useEffect, useRef } from "react";
 export const IndividualModal = ({
   openList,
   openModal,
@@ -26,11 +27,30 @@ export const IndividualModal = ({
   selectedItem,
 }) => {
   const router = useRouter();
+  const dropdownRef = useRef();
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenModal(false);
+    }
+  };
+
+  useEffect(() => {
+    if (openModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openModal]);
   return (
     <div>
       {openModal && (
         <div className={styles.modalContainer}>
-          <div className={styles.modalCard2}>
+          <div className={styles.modalCard2} ref={dropdownRef}>
             <div className={styles.flexed2}>
               <div className={styles.images2}>
                 <img
@@ -383,11 +403,30 @@ export const ProductModal = ({
   setQuantity,
   quantity,
 }) => {
+  const dropdownRef = useRef();
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenModal(false);
+    }
+  };
+
+  useEffect(() => {
+    if (openModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openModal]);
   return (
     <div>
       {openModal && (
         <div className={styles.modalContainer}>
-          <div className={styles.modalCard}>
+          <div className={styles.modalCard} ref={dropdownRef}>
             <div className={styles.flexed}>
               <div className={styles.images}>
                 <img
@@ -583,6 +622,25 @@ export const UtensilModal = ({
   setQuantity,
   quantity,
 }) => {
+  const dropdownRef = useRef();
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenModal(false);
+    }
+  };
+
+  useEffect(() => {
+    if (openModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openModal]);
   return (
     <div>
       {openModal && (
@@ -595,7 +653,7 @@ export const UtensilModal = ({
             className={styles.modalContainer}
             onClick={() => setOpenModal(false)}
           >
-            <div className={styles.modalCard}>
+            <div className={styles.modalCard} ref={dropdownRef}>
               <div className={styles.flexed}>
                 <div className={styles.images}>
                   <img

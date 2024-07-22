@@ -1,5 +1,5 @@
 import styles from "../../components/public-market/public-market.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { GrStar } from "react-icons/gr";
 import { AiOutlineClose } from "react-icons/ai";
 import { useRouter } from "next/router";
@@ -34,7 +34,7 @@ const responsive = {
   },
 };
 
-export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, id }) => {
+export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }) => {
   const matches = useMediaQuery("(min-width: 920px)");
   const [selectGrocery, setSelectGrocery] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -125,9 +125,28 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, id }) => {
   };
 
   console.log(selectedStore, "selectedItem");
+  const dropdownRef = useRef();
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsShow(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isShow) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isShow]);
   return (
     <div className={styles.modalContainer}>
-      <div className={styles.modalCard2}>
+      <div className={styles.modalCard2} ref={dropdownRef}>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <div className={styles.round} onClick={() => setIsShow(false)}>
             <AiOutlineClose />
