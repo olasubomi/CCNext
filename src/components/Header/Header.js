@@ -738,12 +738,10 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
 
   const handleMarketplaceClick = () => {
     if (pathname === "/marketplace") {
-      // If already on the Marketplace page, toggle the dropdown
       setOpenDropdown(!openDropdown);
       setActiveSubLink(0);
     } else {
-      // If not on the Marketplace page, navigate there and close the dropdown
-      setOpenDropdown(false);
+      setOpenDropdown(true);
       router.push("/marketplace");
     }
   };
@@ -765,7 +763,13 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
     };
   }, [openDropdown]);
   const matches = useMediaQuery("(min-width: 900px)");
-
+  useEffect(() => {
+    if (pathname === "/marketplace") {
+      setOpenDropdown(true);
+    } else {
+      setOpenDropdown(false);
+    }
+  }, [pathname]);
   return (
     <div className={styles.navbar2}>
       <div className={styles.navbar_main_container}>
