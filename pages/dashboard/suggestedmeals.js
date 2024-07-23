@@ -160,6 +160,7 @@ const SuggestedMeals = (props) => {
         );
         num = num += 1;
       }
+      console.log(props.auth.authUser, "props.auth.authUser");
       if (props.auth.authUser.user_type !== "admin") {
         // url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
         url = url.concat(
@@ -167,8 +168,11 @@ const SuggestedMeals = (props) => {
             props.auth.authUser._id
         );
       }
+      console.log(item_name, "leo");
       if (item_name) {
-        `${Object.keys(filteredItems).length ? "?" : "&"}name=${item_name}`;
+        url = url.concat(
+          `${Object.keys(filteredItems).length ? "&" : "?"}name=${item_name}`
+        );
       }
 
       axios.get(url).then((data) => {
