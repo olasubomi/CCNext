@@ -54,8 +54,8 @@ export default function HomePage() {
           const mapped = response.data.data.map((ele) => ele?.supplier_address?.city);
           const arr = []
           for (let entry of mapped) {
-            if (mapped.indexOf(entry) === mapped.lastIndexOf(entry)) {
-              arr.push(entry)
+            if(!arr.includes(mapped[mapped.lastIndexOf(entry)])){
+              arr.push(mapped[mapped.lastIndexOf(entry)])
             }
           }
           setLocations(arr)
