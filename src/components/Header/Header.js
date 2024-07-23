@@ -298,6 +298,8 @@ function Header(props) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [prevScrollPos]);
+
+  console.log(authUser?.profile_picture, 'auth user')
   return (
     <>
       <div className={styles.navbar}>
