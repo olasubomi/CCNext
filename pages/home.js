@@ -58,7 +58,7 @@ export default function HomePage() {
               arr.push(mapped[mapped.lastIndexOf(entry)])
             }
           }
-          setLocations(arr)
+          setLocations(arr.filter((ele) => Boolean(ele)))
         }
 
       } catch (e) {
