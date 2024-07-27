@@ -65,7 +65,24 @@ body{
     transform: rotate(360deg);
   }
 }
-
+.marketplace-button2 {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 17px;
+  /* identical to box height */
+  text-transform: capitalize;
+  color: #000000;
+}
+.marketplace-button {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+  text-transform: capitalize;
+  color: rgba(244, 121, 0, 1);
+}
 .payback-disclaimer {
   font-size: 22px;
   color: black;
