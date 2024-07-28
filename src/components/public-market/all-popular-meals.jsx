@@ -53,7 +53,6 @@ export const AllPopularMeals = () => {
   };
   const matches = useMediaQuery("(min-width: 920px)");
   const [meals, setMeals] = useState([]);
-  const [visibleMeals, setVisibleMeals] = useState(20);
   const [selectedItem, setSelectedItem] = useState({});
   const [selectGrocery, setSelectGrocery] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -112,19 +111,16 @@ export const AllPopularMeals = () => {
           },
         }
       );
+      const totalItems = response.data.data.count;
 
       const allItems = response.data.data.items;
 
-      const filteredItems = allItems.filter(
-        (meal) => meal.average_rating
-      );
+      const filteredItem = allItems.filter((product) => product.average_rating);
 
-      if (filteredItems.length === 0) {
-        const lastPageWithItems = page - 1;
-        setTotalPages(lastPageWithItems);
-      } else {
-        setMeals(filteredItems);
-      }
+      const totalPages = Math.ceil(totalItems / 20);
+
+      setMeals(filteredItem);
+      setTotalPages(totalPages);
     } catch (error) {
       console.log(error);
     } finally {
@@ -169,7 +165,7 @@ export const AllPopularMeals = () => {
   };
 
   const handleNextPage = () => {
-    if (currentPage === totalPages) {
+    if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -345,7 +341,7 @@ export const AllPopularMeals = () => {
               color={currentPage === 1 ? "#6D6D6D" : "#52575C"}
             />
           </div>
-          {[1, 2].map((pageNumber) => (
+          {[1, 2, 3].map((pageNumber) => (
             <div
               key={pageNumber}
               className={

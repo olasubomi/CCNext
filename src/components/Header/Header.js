@@ -739,16 +739,15 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
   };
 
   const handleMarketplaceClick = () => {
-    if (pathname === "/marketplace") {
-      setOpenDropdown(!openDropdown);
-      setActiveSubLink(0);
-    } else {
-      setOpenDropdown(true);
-      router.push("/marketplace");
-    }
+    setOpenDropdown((prev) => !prev);
+    setActiveSubLink(0);
   };
   const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      !event.target.closest(".marketplace-button")
+    ) {
       setOpenDropdown(false);
     }
   };
@@ -769,7 +768,7 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
 
   useEffect(() => {
     if (pathname === "/marketplace") {
-      setOpenDropdown(!openDropdown);
+      setOpenDropdown(true);
     } else {
       setOpenDropdown(false);
     }
@@ -783,8 +782,8 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
               <span
                 className={
                   pathname === "/marketplace"
-                    ? styles.activelink
-                    : styles.inactivelink
+                    ? 'marketplace-button'
+                    : 'marketplace-button2'
                 }
                 onClick={handleMarketplaceClick}
               >

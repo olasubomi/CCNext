@@ -62,9 +62,6 @@ export const AllProducts = () => {
     listName: "",
   });
 
-  const loadMore = () => {
-    setVisibleProducts(visibleProducts + 5);
-  };
 
   const addItemToGrocery = async (listName) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -98,6 +95,7 @@ export const AllProducts = () => {
     id: "",
     status: "",
   });
+
   const fetchProducts = async (page) => {
     setIsLoading(true);
     try {
@@ -111,26 +109,27 @@ export const AllProducts = () => {
         }
       );
       const allItems = response.data.data.items;
+      const totalItems = response.data.data.count;
 
       const filteredProducts = allItems.filter(
         (product) => product.average_rating
       );
 
-      if (filteredProducts.length === 0) {
-        const lastPageWithItems = page - 1;
-        setTotalPages(lastPageWithItems);
-      } else {
-        setProducts(filteredProducts);
-      }
+      // Update totalPages based on actual number of items received
+      const totalPages = Math.ceil(totalItems / 20);
+
+      setProducts(filteredProducts);
+      setTotalPages(totalPages);
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     fetchProducts(currentPage);
-  }, [currentPage]);
+  }, [currentPage, totalPages]);
 
   console.log(products, "ressw");
 
@@ -170,19 +169,17 @@ export const AllProducts = () => {
   };
 
   const handleNextPage = () => {
-    if (currentPage === totalPages) {
+    if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
 
   const handlePreviousPage = () => {
-    if (currentPage !== totalPages) {
+    if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
-    if (currentPage === 1) {
-      setCurrentPage(currentPage);
-    }
   };
+
   return (
     <>
       <div className={styles.top}>
@@ -258,41 +255,39 @@ export const AllProducts = () => {
                   setOpenModal(true);
                 }}
               >
-                {product?.itemImage0 && (
-                  <div className={styles.box}>
-                    <img
-                      src={
-                        product?.itemImage0
-                          ? product?.itemImage0
-                          : "/assets/store_pics/no-image-product.png"
-                      }
-                      className={styles.storeImg2}
-                    />
-                    <div className={styles.flex}>
-                      <p className={styles.name2}>{product.item_name}</p>
-                      <p>$8.43</p>
-                    </div>
-                    <p className={styles.storeName}>Chop Chow Official Store</p>
-                    <div className={styles.flex}>
-                      <div>
-                        {Array(5)
-                          .fill("_")
-                          .map((_, idx) => (
-                            <GoStarFill
-                              key={idx + _}
-                              color={
-                                product.average_rating > idx
-                                  ? "#04D505"
-                                  : "rgba(0,0,0,0.5)"
-                              }
-                              style={{ marginLeft: ".2rem" }}
-                            />
-                          ))}
-                      </div>
-                      <p className={styles.prep}> 23 mins </p>
-                    </div>
+                <div className={styles.box}>
+                  <img
+                    src={
+                      product?.itemImage0
+                        ? product?.itemImage0
+                        : "/assets/store_pics/no-image-product.png"
+                    }
+                    className={styles.storeImg2}
+                  />
+                  <div className={styles.flex}>
+                    <p className={styles.name2}>{product.item_name}</p>
+                    <p>$8.43</p>
                   </div>
-                )}
+                  <p className={styles.storeName}>Chop Chow Official Store</p>
+                  <div className={styles.flex}>
+                    <div>
+                      {Array(5)
+                        .fill("_")
+                        .map((_, idx) => (
+                          <GoStarFill
+                            key={idx + _}
+                            color={
+                              product.average_rating > idx
+                                ? "#04D505"
+                                : "rgba(0,0,0,0.5)"
+                            }
+                            style={{ marginLeft: ".2rem" }}
+                          />
+                        ))}
+                    </div>
+                    <p className={styles.prep}> 23 mins </p>
+                  </div>
+                </div>
               </div>
             );
           })}
@@ -326,7 +321,7 @@ export const AllProducts = () => {
               color={currentPage === 1 ? "#6D6D6D" : "#52575C"}
             />
           </div>
-          {[1, 2].map((pageNumber) => (
+          {[1, 2, 3].map((pageNumber) => (
             <div
               key={pageNumber}
               className={

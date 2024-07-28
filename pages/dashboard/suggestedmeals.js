@@ -1633,7 +1633,7 @@ const SuggestedMeals = (props) => {
                       {searchType === "Item" && (
                         <>
                           {data.item &&
-                            data.item.reverse().map((suggestion) => {
+                            data.item.map((suggestion) => {
                               return (
                                 <SuggestedMealRow
                                   searchType={searchType}
