@@ -737,9 +737,15 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
   };
 
   const handleMarketplaceClick = () => {
-    setOpenDropdown((prev) => !prev);
-    setActiveSubLink(0);
+    if (pathname === "/marketplace") {
+      setOpenDropdown((prev) => !prev);
+      setActiveSubLink(0);
+    } else {
+      setOpenDropdown(false);
+      router.push("/marketplace");
+    }
   };
+
   const handleClickOutside = (event) => {
     if (
       dropdownRef.current &&
@@ -780,8 +786,8 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
               <span
                 className={
                   pathname === "/marketplace"
-                    ? 'marketplace-button'
-                    : 'marketplace-button2'
+                    ? "marketplace-button"
+                    : "marketplace-button2"
                 }
                 onClick={handleMarketplaceClick}
               >
