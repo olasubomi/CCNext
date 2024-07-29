@@ -9,28 +9,46 @@ import CartContext from "../../../pages/store/cart-context";
 import SideNav from "../Header/sidenav";
 import { useMobileMedia } from '../../customhooks/useResponsive';
 import { connect, useDispatch, useSelector } from "react-redux";
-import { addToCart, deleteFromCart, EmptyCart, removeFromCart } from "../../actions/Cart";
+import { addToCart, deleteFromCart, EmptyCart, FetchCart, removeFromCart } from "../../actions/Cart";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from 'uuid';
+import { useEffect } from "react";
 
 
 function Cart(props) {
 
   const mobileScreen = useMobileMedia();
-  const {cartItems: items} = useSelector((state) => { console.log("line 21 Cart Page", state)
+  const {cartItems:items} = useSelector((state) => { console.log("line 21 Cart Page", state)
   return state.Cart});
+
+  //let items = cartItems
+  console.log("line 25 Cart Page", items)
+  //const [item, setItem] = seState(null)
   const dispatch = useDispatch();
   const router = useRouter();
+
+  // if(items.length == 0){
+  //   items = dispatch(FetchCart())
+  //   console.log("line 31 Cart fetch cart", items)
+  // }
+  useEffect(() => {
+    dispatch(FetchCart())
+  },[])
+  // useEffect(() => {
+  //   const data = dispatch(FetchCart())
+  //   console.log("line 28 cart", data);
+  //   setItem(data);
+  // }, [])
   //const cartCtx = useContext(CartContext);
   console.log("line 22 Cart Page", props)
   console.log("line 23 Cart Page", items)
   //const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
 
-  const hasItems = items.length > 0 ;
+  const hasItems = items?.length > 0 ;
   
 
-const totalQuantity = `${items.reduce((a, c) => a + c.amount, 0)} items`
-const totalPrice = items.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(2)
+const totalQuantity = `${items?.reduce((a, c) => a + c.amount, 0)} items`
+const totalPrice = items?.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(2)
 
   // const cartItemRemoveHandler = (id) => {
   //   cartCtx.removeItem(id);
@@ -69,12 +87,13 @@ const AddToCart = (item) => {
     currency: item.currency,
     quantity: item.amount,
     storeId : item.storeId,
+    item_type: item.item_type ? item.item_type : "",
     
 } 
 console.log(payload, "Cart payload 65");
 try {
   dispatch(addToCart(payload))
-  toast.success("Item Increased successfully");
+  
   
 } catch (error) {
   console.log(error);
@@ -87,7 +106,7 @@ const RemoveFromCart = (product) => {
 };
 
 const CloseCart = () => {
-  router.push('/')
+  router.push('/marketplace')
 }
 
 const DeleteFromCart = (product) => {
@@ -106,7 +125,7 @@ const DeleteFromCart = (product) => {
       <Header route="groceryList" />
       <Header2 />
       <SideNav/> 
-      <TimeBar />
+       {/* <TimeBar />  */}
       <div className={indexStyles.cartBody}>
         <div className={indexStyles.cartMainBody}>
           <div className={indexStyles.arrowBack}>
@@ -119,7 +138,7 @@ const DeleteFromCart = (product) => {
               />
               <label onClick={props.closeCart}>Back</label>
             </div>
-            <h1>{hasItems ? "CART" : "CART IS EMPTY" }</h1>
+            <h2 style={{fontWeight: '1000px', fontSize: '3.5rem' }}>Cart</h2>
           </div>
           {!mobileScreen ? <div className={indexStyles.cartHeader}>
             <div className={indexStyles.cartHeaderRow1}>
@@ -135,7 +154,7 @@ const DeleteFromCart = (product) => {
               <label>Action</label>
             </div>
           </div> : "Items"}
-          {items.map((item) => (
+          {items?.map((item) => (
             <CartItem
               key={item.itemId}
               id={item.itemId}
@@ -166,7 +185,7 @@ const DeleteFromCart = (product) => {
               <div className={indexStyles.mainPrice}>
                 <label>Total Price</label>
                 
-                <label style={{marginRight:"10rem"}}>{`${Number(totalPrice)} for ${totalQuantity}`} </label>
+                <label >{`${Number(totalPrice) == "NAN" ? 0 : Number(totalPrice)} `} </label>
               </div>
               <div className={indexStyles.checkoutButton}>
                 <div className={indexStyles.whiteButton}>

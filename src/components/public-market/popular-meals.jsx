@@ -64,14 +64,14 @@ export const PopularMeals = () => {
   };
 
   // Generate a random integer between a specified range
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+// function getRandomInt(min, max) {
+//   min = Math.ceil(min);
+//   max = Math.floor(max);
+//   return Math.floor(Math.random() * (max - min + 1)) + min;
+// }
 
 // Example usage to generate an ID between 1 and 1000
-let randomId = getRandomInt(1, 1000);
+//let randomId = getRandomInt(1, 1000);
 
 const addItemToCart = (item, qty) => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -81,19 +81,19 @@ const addItemToCart = (item, qty) => {
   }else{
      const payload = {
       userId: (user && user._id) ? user._id : "",
-      storeId : randomId || "" ,
-      store_name: "Chop Chow Official Store",
+      storeId : "",
+      store_name: "",
       itemId : item._id,
       quantity: qty,
       item_price: item.item_price,
       currency: "$",
       item_image: item.item_images[0],
-      itemName: item.item_name
+      itemName: item.item_name,
+      item_type:  item.item_type? item.item_type : "Meal",
   } 
   console.log(payload, "Cart payload line 76 top-selling-product");
   try {
     dispatch(addToCart(payload))
-    toast.success("Item added successfully");
     setOpenList(false);
     setShow(false);
     setOpenModal(false);
@@ -119,7 +119,7 @@ const addItemToCart = (item, qty) => {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data.data.items, "ressw");
+      console.log(response.data.data.items, "fetched meals");
       setMeals(response.data.data.items);
     } catch (error) {
       console.log(error);

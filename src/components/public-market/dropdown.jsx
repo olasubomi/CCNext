@@ -99,12 +99,12 @@ export const MealDropDown = ({ selectedStore,setIsShow, id }) => {
         item_price: item.item_price,
         currency: selectedStore.supplier.currency.symbol,
         item_image: item.item_images[0],
-        itemName: item.item_name
+        itemName: item.item_name,
+        item_type: item.item_type? item.item_type : "",
     } 
     console.log(payload, "Cart payload");
     try {
       dispatch(addToCart(payload))
-      toast.success("Item added successfully");
       setOpenList(false);
       setShow(false);
       setOpenModal(false);

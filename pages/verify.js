@@ -1,15 +1,13 @@
 
 import React, { useState, useEffect, useRef}  from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+
 import Modal from '@mui/material/Modal';
-import EmailIcon from '@mui/icons-material/Email';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
-import { useSelector } from 'react-redux';
-import { Router } from 'react-router-dom';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 import { useRouter } from 'next/router';
+import UserVerificationSuccess from '../src/components/UserVerificationSuccess';
 
 const style = {
   position: 'absolute',
@@ -21,23 +19,22 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTPFunc, verifynumberFunc, formState, setFormState, sendEmailOTPFunc,requestnumberFunc}) {
+export default function OTP() {
   
   //const {}= useSelector( state => state.Auth);
   //const {isVerified}= useSelector( state => state.Common)
-
+  const dispatch = useDispatch()
+  const router = useRouter();
+  const [openUserVerificationSuccess, setOpenUserVerificationSuccess] = React.useState(false);
   let MaxLength = 6;
   const  [password, setPassword] = useState(Array(MaxLength).fill(-1))
   const inpRefs = useRef(null);
-  //const [close, setClose] = useState(false)
   const [activeInput, setActiveInput] = useState(-1);
-  const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
-  const [submissionFailed, setSubmissionFailed] = useState(false);
-  //const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(true);
  
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false)
+  const handleClose = () => setOpen(false);
+  //const [type, setType] = React.useState('');
 //   const handleOption = (title) => {
 // console.log(title)
 //   }
@@ -60,7 +57,12 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
   // }
   // }
   // , [isVerified])
-  
+  const type = localStorage.getItem("type") || "";
+   console.log("typeData", type)
+  const formState = JSON.parse(localStorage.getItem("formData") || "{}");
+
+
+  console.log("formState", formState)
   const handleKeyDown = (e, i)=>{
      if (e.key == "Backspace") {
        let pass = password
@@ -95,50 +97,47 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
       }
                                   
   }
-  console.log(type);
-  const handleSubmit = async () => {
-  //   setSubmitting(true);
-  //   setTimeout(async () => {
-  //   if(type =='Email Address'){
-  //     console.log(formState.email, password.reduce((a,b) =>a+b))
-  //    await  verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
+  
+  const handleSubmit = ()  =>{
     
-  //    setSubmitting(false);
-  //     setSubmissionFailed(false);
+    if(type =='Email Address'){
+      console.log(formState.email, password.reduce((a,b) =>a+b))
+      dispatch(verifyEmailOTP({email: formState?.email, otp: password?.reduce((a,b) =>a+b)}))
+      setOpen(false)
+            setOpenUserVerificationSuccess(true)
+        
       
-  //   }else {
-  //     await verifynumberFunc(request_id,password.reduce((a,b) =>a+b))
-  //     setSubmitting(false);
-  //     setSubmissionFailed(true);
+    }else {
+
+        dispatch(verifynumber("request_id", password.reduce((a,b) =>a+b)))
+        setOpen(false)
+        setOpenUserVerificationSuccess(true)
+        
       
-  //   }
-  // }, 2000);
-  if(type =='Email Address'){
-    //     console.log(formState.email, password.reduce((a,b) =>a+b))
-       await verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
-  }else {
-       await verifynumberFunc("request_id", password.reduce((a,b) =>a+b))
-  }
+      
+    }
+    
+    
   }
 
-  const handleResendOtp = async () => {
+  const handleResendOtp = () => {
     if(type == 'Email Address'){
-      await sendEmailOTPFunc({email: formState?.email})
+        dispatch(sendEmailOTP({email: formState?.email}))
     }else{
-      await requestnumberFunc({number: formState?.phone_number})
+        dispatch(requestnumber({number: formState?.phone_number}))
     }
     
   }
 
   return (
     <div> 
-      <Modal
+      {/* { open && <Modal
         open={open}
-        onClose={handleClose}
+        onClose={handleOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box  sx={style}>
+        <Box  sx={style}> */}
           <div className='verification'>
             <div className='withbg withcolor' >
           <img    src="/assets/signup/tabler_mail-filled.svg" alt="Signup" /></div>
@@ -171,8 +170,7 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
   ))}
   <div className='otp-options'>
 
-  {/* <button className='verification-button' onClick={handleSubmit} >{submitting ? "submitting" : `Verify ${type}`}</button> */}
-  <button className='verification-button' onClick={() => handleSubmit()} >Verify {type}</button>
+  <button className='verification-button' onClick={() => handleSubmit} >Verify {type}</button>
    <button className='verification-button alt' onClick={handleClose}>Cancel</button>
 </div>
 
@@ -189,8 +187,9 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
 </div>
  
             </div>
-        </Box>
-      </Modal>
+        {/* </Box>
+      </Modal>} */}
+      {openUserVerificationSuccess && !open && <UserVerificationSuccess formState={formState} next={()=>router.push("/login")} type={type} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} />}
       {/* {isVerified &&  next()} */}
     </div>
   );

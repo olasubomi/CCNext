@@ -46,7 +46,7 @@ function SignUp(props){
     isAgreed: '',
   })
   const isverified = useSelector((state) => state.Auth.isVerified);
-
+  const openVerified = useSelector((state) => state.Common.openVerification);
   const handleOpenOtp = () =>{
     setOpenUserVerification(false)
     setOpenUserVerificationSuccess(false)
@@ -58,6 +58,7 @@ function SignUp(props){
     setOpenUserVerificationSuccess(true)
     
   }
+  console.log("openVerified", openVerified)
   // useEffect(()=>{
   //   if(isverified){
   //     //setOpenUserVerificationSuccess(true)
@@ -68,6 +69,14 @@ function SignUp(props){
       router.push("/dashboard");
     }
   }, [authUser, isAuthenticated ])
+
+  
+  useEffect(()=>{
+  if(openVerified){
+    setOpenUserVerificationSuccess(true);
+  }
+  }
+  , [openVerified])
 
   const { username, email, phone_number, first_name, last_name, password, confirm_password, } = formState;
 
@@ -156,6 +165,7 @@ function SignUp(props){
         password,
       });
       setTimeout(() => {
+      localStorage.setItem("formState", JSON.stringify(formState));
       setOpenUserVerification(true)   
       }, 1000);
 
@@ -165,7 +175,7 @@ function SignUp(props){
       // }
     }
  
-
+    console.log("openUserVerificationSuccess", openUserVerificationSuccess)
     return(
       <>
         <div className={styles.login}>
@@ -396,7 +406,7 @@ function SignUp(props){
 
         {openOTP && <OTP formState={formState} setFormState={setFormState} verifynumberFunc={props.verifynumberFunc} type={type} setType={setType}
          verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} sendEmailOTPFunc={props.sendEmailOTPFunc} requestnumberFunc={props.requestnumberFunc} setOpenUserVerificationSuccess={setOpenUserVerificationSuccess} />}
-
+       
         {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/login")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} />}
 
        

@@ -18,12 +18,126 @@ const Checkout = () => {
     const router = useRouter()
     const { id } = router.query
     const {cartItems: items} = useSelector((state) => {return state.Cart});
-    
+    const [deliveryType, setDeliveryType] = useState();
     const [tax, setTax] = useState(40);
 
     const SubTotal = items.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(2)
 
     const TotalPrice = SubTotal + tax;
+
+    const payload = {
+        subscription: "",
+        dateOfDelivery: "",
+        Delivery:"",
+        firstname: "",
+        lastname: "",
+        email: "",
+        phone: "",
+        address: "",
+        address1: "",
+        address12: "",
+        state: "",
+        city: "",
+        postalcode: "",
+        country: "",
+        delivery_note: "",
+
+
+    }
+
+    const [data, setData] = useState(payload)
+
+    function handleChange(e) {
+        setData({ ...data, [e.target.name]: e.target.value });
+        validateInput(e);
+      }
+
+      const validateInput = e => {
+        let { name, value } = e.target;
+        setError(prev => {
+          const stateObj = { ...prev, [name]: "" };
+     
+          switch (name) {
+            case "firstname":
+              if (!value) {
+                stateObj[name] = "Please enter your first name.";
+              }
+              break;
+
+              case "lastname":
+                if (!value) {
+                  stateObj[name] = "Please enter your last name.";
+                }
+                break;
+
+                case "email":
+                    if (!value) {
+                      stateObj[name] = "Please enter your email address.";
+                    }
+                    break;
+
+                case "phone":
+                    if (!value) {
+                        stateObj[name] = "Please enter your phone number.";
+                    }
+                    break;
+
+                case "address":
+                    if (!value) {
+                        stateObj[name] = "Please enter your home address.";
+                    }
+                    break;
+
+                case "address1":
+                    if (!value) {
+                        stateObj[name] = "Please enter other address.";
+                    }
+                    break;
+
+                case "address2":
+                if (!value) {
+                    stateObj[name] = "Please enter other address.";
+                }
+                break;
+
+                case "state":
+                if (!value) {
+                    stateObj[name] = "Please enter your state.";
+                }
+                break;
+
+                case "city":
+                if (!value) {
+                    stateObj[name] = "Please enter your city.";
+                }
+                break;
+
+                case "postalcode":
+                if (!value) {
+                    stateObj[name] = "Please enter your postal code.";
+                }
+                break;
+                
+                case "country":
+                if (!value) {
+                    stateObj[name] = "Please enter your country.";
+                }
+                break;
+
+                case "delivery_note":
+                if (!value) {
+                    stateObj[name] = "Kindly enter a Delivery Note.";
+                }
+                break;
+        
+     
+            default:
+              break;
+          }
+     
+          return stateObj;
+        });
+      }
 
     return (
         <div className={styles.container}>
@@ -45,10 +159,14 @@ const Checkout = () => {
                     </div>
                     <div className={styles.checkout}>
                         <div className={styles.checkout_left}>
-                            <Subscription />
-                            <Delivery />
-                            <ContactInformation />
-                            <DeliveryAddress />
+                            <Subscription data={data} setData={setData} handleChange={handleChange}/>
+
+                            <Delivery data={data} setData={setData} handleChange={handleChange} deliveryType={deliveryType} setDeliveryType={setDeliveryType} />
+
+                            <ContactInformation  data={data} setData={setData} handleChange={handleChange} />
+
+                            <DeliveryAddress data={data} setData={setData} handleChange={handleChange} />
+                            
                             <PaymentMethod />
                             <div className={styles.show_on_mobile}>
                             <PlaceOrderBtn />

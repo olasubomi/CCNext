@@ -6,6 +6,9 @@ import Modal from '@mui/material/Modal';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
+import { useEffect } from 'react';
+import { userSignIn, verifyEmailOTP, verifynumber } from '../../actions';
+import { useDispatch } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -17,16 +20,23 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function UserVerificationSuccess({open, setOpen, next, type, setType}) {
+export default function UserVerificationSuccess({open, setOpen, next, type, formState}) {
  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleOption = (title) => {
-console.log(title)
-  }
+  //const dispatch = useDispatch()
+//   const handleOption = (title) => {
+// console.log(title)
+//   }
 
+  //dispatch(userSignIn(formState?.email, formState?.password))
+const handleClick = () => {
+
+  
+  next()
+}
   return (
-    <div> 
+     <div> 
       <Modal
         open={open}
         onClose={handleClose}
@@ -36,14 +46,15 @@ console.log(title)
         <Box  sx={style}>
           <div className='verification'>
           <div className='withbg' >   <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" /> </div>
-            <h3>{type == "Email Address" ? "Email Verified":"Phone Number Verified"}</h3>
-            <p>{type == "Email Address" ? "Your email address was successfully verified":"Your phone number was successfully verified"}</p>
+            <h3>Account Verified</h3>
+            <p>Thanks For successfully verifying your Account</p>
            
  
 
 <div className='otp-options'> 
- <button className='verification-button bigger' onClick={() => next()}>Go to Homepage</button>
- </div>
+ {/* <button className='verification-button bigger' onClick={() => handleClick(type)}>Go to Homepage</button>*/}
+ <button className='verification-button bigger' onClick={() => handleClick()}>Go to Homepage</button>
+ </div> 
 </div>
  
              
@@ -52,3 +63,5 @@ console.log(title)
     </div>
   );
 }
+
+

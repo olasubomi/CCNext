@@ -54,6 +54,37 @@ function Product(props) {
   }, [props.product.formatted_ingredients]);
   console.log(props.product.item_images, "image");
 
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    if(qty == 0 ){
+      toast.error("Pls add a quantity");
+    }else{
+       const payload = {
+        userId: (user && user._id) ? user._id : "",
+        storeId : "",
+        store_name: "",
+        itemId : item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: "$",
+        item_image: item.item_images[0],
+        itemName: item.item_name,
+        item_type: item.item_type? item.item_type : "Product",
+    } 
+    console.log(payload, "Cart payload line 76 top-selling-product");
+    try {
+      dispatch(addToCart(payload))
+      setOpenList(false);
+      setShow(false);
+      setOpenModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+    };
+  
+  
+  };
   
   return (
     <>
@@ -226,7 +257,7 @@ function Product(props) {
           {props.product.publicly_available === "Public" && (
             <div className={styles.btnGroup}>
               <div className={styles.btnoutline}>Add to Grocery List</div>
-              <div className={styles.btnfill} onClick={() => useDispatch(addToCart(props.product))}>Add to Cart</div>
+              <div className={styles.btnfill} onClick={() => addItemToCart(props.product, 1)}>Add to Cart</div>
             </div>
           )}
         </div>

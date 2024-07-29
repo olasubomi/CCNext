@@ -81,19 +81,19 @@ let randomId = getRandomInt(1, 1000);
     }else{
        const payload = {
         userId: (user && user._id) ? user._id : "",
-        storeId : randomId || "" ,
-        store_name: "Chop Chow Official Store",
+        storeId :  "" ,
+        store_name: "",
         itemId : item._id,
         quantity: qty,
         item_price: item.item_price,
         currency: "$",
         item_image: item.item_images[0],
-        itemName: item.item_name
+        itemName: item.item_name,
+        item_type: item.item_type? item.item_type : "Product",
     } 
     console.log(payload, "Cart payload line 76 top-selling-product");
     try {
       dispatch(addToCart(payload))
-      toast.success("Item added successfully");
       setOpenList(false);
       setShow(false);
       setOpenModal(false);

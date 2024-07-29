@@ -2,9 +2,7 @@ import { useState } from 'react'
 import styles from '../../../src/components/Checkout/style.module.css'
 import { LocalActivity } from '@mui/icons-material';
 
-const Delivery = () => {
-
-    const [deliveryType, setDeliveryType] = useState();
+const Delivery = ({data, setData, handleChange, deliveryType,setDeliveryType}) => {
 
     const changeDeliveryType = (type) => {
         setDeliveryType(type)
@@ -24,7 +22,7 @@ const Delivery = () => {
                 <p>Pick up</p>
             </label>
         </div>
-        {deliveryType === 'delivery' ? (
+        {deliveryType === 'pickUp' ? (
             <div>
                 <p style={{fontWeight: 'bold'}}>Pick up address</p>
                 <div style={{display: 'flex', alignItems: 'center', gap: '1em', marginBlock: '24px'}}>
@@ -37,10 +35,10 @@ const Delivery = () => {
 
             </div>) : (<div>
             <label>Deliver Every </label>
-            <select>
-                <option>Today</option>
-                <option>Tomorrow</option>
-                <option>2 days time</option>
+            <select value={data.Delivery} onChange={() => handleChange()}>
+                <option value="Today">Today</option>
+                <option value="Tomorrow">Tomorrow</option>
+                <option value="2 days time">2 days time</option>
             </select>
         </div>)} 
         

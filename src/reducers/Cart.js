@@ -1,4 +1,4 @@
-import { CART_ADD_ITEM, CART_DELETE_ITEM, CART_EMPTY, CART_HAS_ITEM, CART_REMOVE_ITEM } from "../constants/ActionTypes";
+import { CART_ADD_ITEM, CART_DELETE_ITEM, CART_EMPTY, CART_HAS_ITEM, CART_REMOVE_ITEM, CART_STATE, FETCH_CART } from "../constants/ActionTypes";
 
 const IntialState = {
   cartItems: typeof window !== 'undefined' && localStorage.getItem('cartItems')
@@ -59,8 +59,21 @@ export default (state = IntialState, action) => {
             cartItems: state.cartItems.some((x) => x.itemId === item.itemId)
       }
 
+      case FETCH_CART:
+        // console.log("action.payload ", action.payload )
+        let array  = action.payload.data 
+        //  console.log("action.payload ", itemData.data.data )
+        // let cartUser = action.payload.user
+       
+        //console.log("array ",array )
+        return { ...state, cartItems: [...array] };
+
       case CART_EMPTY:
         return { ...state, cartItems: [] };
+      
+      case CART_STATE:
+        return {...state, cartItems:[...state.cartItems]}
+    
 
 
       default:

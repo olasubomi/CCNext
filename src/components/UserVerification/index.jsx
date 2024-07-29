@@ -20,6 +20,8 @@ const style = {
 export default function UserVerification({ next, open, setOpen, type, setType, sendEmailOTPFunc, requestnumberFunc, formState, setFormState }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  console.log("type",type);
+  localStorage.setItem("type", type );
   const handleOption = (title) => {
     console.log(title);
     setType(title)
