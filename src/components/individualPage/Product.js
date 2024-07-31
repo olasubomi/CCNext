@@ -45,7 +45,7 @@ function Product(props) {
   //         <p>{elem}</p>
   //     </div>
   // )), 'hellooo')
-
+  const dispatch  = useDispatch()
   useEffect(() => {
     console.log("props", props.product);
     if (props.product.formatted_ingredients) {

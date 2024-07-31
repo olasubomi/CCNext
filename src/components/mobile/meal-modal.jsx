@@ -177,7 +177,7 @@ export const Mealmodal = ({
                   </thead>
                   <tbody>
                     {selectedItem.ingredeints_in_item.map((elem, index) => (
-                      <tr key={index} className={styles.tr}>
+                      <tr key={index} className={styles.tr} styles ={{color: "#353839"}} >
                         <td className={styles.td}>{elem.item_name}</td>
                         <td className={styles.td}>{elem.item_quantity}</td>
                         <td className={styles.td}>{elem.item_measurement}</td>

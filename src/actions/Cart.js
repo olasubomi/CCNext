@@ -17,7 +17,7 @@ export const addToCart = (product) => async (dispatch, getState) => {
         item: product.itemId,
             item_type: product.item_type ,
             storeId: product.storeId,
-            quantity: `${product.quantity}`,
+            quantity: product.quantity,
             item_price: product.item_price,
             item_Name: product.itemName,
             item_image: product.item_image
@@ -168,7 +168,7 @@ export const addToCart = (product) => async (dispatch, getState) => {
     if(user !== undefined && user !== "{}" && user !== null ){
       axios.post("/cart/cart/",{ user: user}).then(({data}) => {
         console.log("user cart action line 143", data);
-        if(Array.isArray(data.data.data)){
+        if(Array.isArray(data.data.data) && data.data.data[0] != null && data.data.data[0] > 0){
           let array = []
           console.log("user cart action line 173", data);
           data.data.data.forEach(x => {

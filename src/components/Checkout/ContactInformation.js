@@ -10,31 +10,31 @@ const ContactInformation = ({data, setData, handleChange,}) => {
                 <label htmlFor='fistname'>Firstname</label>
                 <input type='text' name='firstname' id='fistname'  value={firstname}
                   placeholder="first Name"
-                  onChange={() => handleChange()}/>
+                  onChange={handleChange}/>
            </div>
            <div>
                 <label htmlFor='lastname'>Lastname</label>
                 <input type='text'name='lastname' id='lastname'  value={lastname}
                   placeholder="Last Name"
-                  onChange={() => handleChange()} />
+                  onChange={handleChange} />
            </div>
            <div>
                 <label htmlFor='email'>Email address</label>
                 <input type='email' name='email' id='email'   value={email}
                   placeholder="Email"
-                  onChange={() => handleChange()}/>
+                  onChange={handleChange}/>
            </div>
            <div>
                 <label htmlFor='phone'>Phone number</label>
                 <input type='tel' name='phone' id='phone'  value={phone}
                   placeholder="Phone Number"
-                  onChange={() => handleChange()} />
+                  onChange={handleChange} />
            </div>
            <div>
                 <label htmlFor='address'>Address</label>
                 <input type='text' name='address' id='address'  value={address}
                   placeholder="Address"
-                  onChange={() => handleChange()}/>
+                  onChange={handleChange}/>
            </div>
         </div>
     </div>

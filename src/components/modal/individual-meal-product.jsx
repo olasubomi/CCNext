@@ -179,6 +179,7 @@ export const IndividualModal = ({
                       width: "100%",
                       borderCollapse: "collapse",
                       marginTop: "1rem",
+                      
                     }}
                   >
                     <thead className={styles.thead}>
@@ -187,7 +188,7 @@ export const IndividualModal = ({
                       <th className={styles.th}>Measurement</th>
                       <th className={styles.th}>Price</th>
                     </thead>
-                    <tbody>
+                    <tbody> 
                       {selectedItem.ingredeints_in_item.map((elem, index) => (
                         <tr key={index} className={styles.tr}>
                           <td className={styles.td}>{elem.item_name}</td>

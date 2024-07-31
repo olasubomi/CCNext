@@ -7,6 +7,8 @@ const Delivery = ({data, setData, handleChange, deliveryType,setDeliveryType}) =
     const changeDeliveryType = (type) => {
         setDeliveryType(type)
         console.log(type)
+       
+        
     }
 
   return (
@@ -14,11 +16,11 @@ const Delivery = ({data, setData, handleChange, deliveryType,setDeliveryType}) =
         <p>How do you want to receieve your order?</p>
          <div>
             <label>
-                <input type='radio' name='delivery' value='delivery' onChange={() => changeDeliveryType('delivery')} />
+                <input type='radio' name='deliveryType' value='delivery' onChange = {() => changeDeliveryType('delivery')} />
                 <p>Delivery</p>
             </label>
             <label>
-                <input type='radio' name='delivery' value='pick up' onChange={() => changeDeliveryType('pickUp')}  />
+                <input type='radio' name='deliveryType' value='pick up' onChange={() => changeDeliveryType('pickUp')}  />
                 <p>Pick up</p>
             </label>
         </div>
@@ -35,7 +37,7 @@ const Delivery = ({data, setData, handleChange, deliveryType,setDeliveryType}) =
 
             </div>) : (<div>
             <label>Deliver Every </label>
-            <select value={data.Delivery} onChange={() => handleChange()}>
+            <select name= "timetodeliver" value={data.timetodeliver} onChange={handleChange}>
                 <option value="Today">Today</option>
                 <option value="Tomorrow">Tomorrow</option>
                 <option value="2 days time">2 days time</option>

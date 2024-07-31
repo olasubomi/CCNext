@@ -1,57 +1,58 @@
-import { CART_ADD_ITEM, CART_DELETE_ITEM, CART_EMPTY, CART_HAS_ITEM, CART_REMOVE_ITEM } from "../constants/ActionTypes";
+// import { CREATE_ORDER } from "../constants/ActionTypes";
 
-export const addToOrderList = (product) => async (dispatch, getState) => {
+// export const CreateOrder = (order, TotalPrice) => async (dispatch, getState) => {
     
-    dispatch({
-      type: ORDER_ADD_ITEM,
-      payload: {
-        name: product.itemName,
-        image: product.item_image,
-        price: product.item_price,
-        itemId: product.itemId,
-        userId: product.userId,
-        storeName: product.store_name,
-        currency: product.currency,
-        amount: product.quantity,
-        storeId: product.storeId
-      },
-    });
-    if (typeof window !== 'undefined') {
-    localStorage.setItem('cartItems', JSON.stringify(getState().Cart.cartItems));
-    }
-  };
+//     dispatch({
+//       type: CREATE_ORDER,
+//       payload: {
 
-  export const removeFromCart = (productId) => async (dispatch, getState) => {
+//         name: order.itemName,
+//         image: order.item_image,
+//         price: order.item_price,
+//         itemId: order.itemId,
+//         userId: order.userId,
+//         storeName: order.store_name,
+//         currency: order.currency,
+//         amount: order.quantity,
+//         storeId: order.storeId
+//       },
+//     });
+//     if (typeof window !== 'undefined') {
+//     localStorage.setItem('cartItems', JSON.stringify(getState().Cart.cartItems));
+//     }
+//   };
+
+  // export const removeFromCart = (productId) => async (dispatch, getState) => {
     
-    dispatch({
-      type: CART_REMOVE_ITEM,
-      payload: {
-        itemId: productId,
+  //   dispatch({
+  //     type: CART_REMOVE_ITEM,
+  //     payload: {
+  //       itemId: productId,
         
-      },
-    });
-    if (typeof window !== 'undefined') {
-    localStorage.setItem('cartItems', JSON.stringify(getState().Cart.cartItems));
-    }
-  };
+  //     },
+  //   });
+  //   if (typeof window !== 'undefined') {
+  //   localStorage.setItem('cartItems', JSON.stringify(getState().Cart.cartItems));
+  //   }
+  // };
 
-  export const deleteFromCart = (productId) => (dispatch, getState) => {
-    dispatch({ type: CART_DELETE_ITEM, payload: { itemId:productId} });
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('cartItems', JSON.stringify(getState().Cart.cartItems));
-      }
-  };
+  // export const deleteFromCart = (productId) => (dispatch, getState) => {
+  //   dispatch({ type: CART_DELETE_ITEM, payload: { itemId:productId} });
+  //   if (typeof window !== 'undefined') {
+  //     localStorage.setItem('cartItems', JSON.stringify(getState().Cart.cartItems));
+  //     }
+  // };
 
-  export const IsItemPresent = () => (dispatch) => {
-    dispatch({ type: CART_HAS_ITEM});
-  };
+  // export const IsItemPresent = () => (dispatch) => {
+  //   dispatch({ type: CART_HAS_ITEM});
+  // };
 
-  export const EmptyCart = () => (dispatch, getState) => {
-    dispatch({ type: CART_EMPTY});
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('cartItems', JSON.stringify(getState().Cart.cartItems));
-    }
-  };
+  // export const EmptyCart = () => (dispatch, getState) => {
+  //   dispatch({ type: CART_EMPTY});
+  //   if (typeof window !== 'undefined') {
+  //     localStorage.setItem('cartItems', JSON.stringify(getState().Cart.cartItems));
+  //   }
+  // };
 
   
 

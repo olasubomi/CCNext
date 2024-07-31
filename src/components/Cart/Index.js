@@ -46,7 +46,7 @@ function Cart(props) {
 
   const hasItems = items?.length > 0 ;
   
-
+  console.log("line 31 Cart fetch cart", items)
 const totalQuantity = `${items?.reduce((a, c) => a + c.amount, 0)} items`
 const totalPrice = items?.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(2)
 
@@ -66,14 +66,12 @@ const totalPrice = items?.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(
   //   cartCtx.clearCart(id);
   // };
 
-const generateOrderId = () => {
-  return uuidv4()
-}
+
 
 const Checkout = () => {
-  const id = generateOrderId();
+ 
   
-  router.push(`/checkout/${id}`)
+  router.push(`/checkout/`)
 }
 
 const AddToCart = (item) => {

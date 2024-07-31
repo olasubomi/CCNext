@@ -42,7 +42,7 @@ export const CART_STATE = "cart_state";
 
 
 //Orders
-export const ORDER_ADD_ITEM = 'add_order';
+export const CREATE_ORDER = 'create_order';
 export const ORDER_REMOVE_ITEM = 'remove_order';
 export const ORDER_DELETE = 'delete_orders';
 

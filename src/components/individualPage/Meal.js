@@ -60,6 +60,7 @@ function Meal(props) {
   const [show, setShow] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
   const [openModal, setOpenModal] = useState(false);
+  const dispatch  = useDispatch()
   console.log(selectedItem, "sele");
   const [quantity, setQuantity] = useState(1);
 
