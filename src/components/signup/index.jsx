@@ -5,16 +5,27 @@ import { EyeSIcon } from "../icons";
 import Link from 'next/link';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import Image from "next/image";
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
-import { connect, useSelector } from 'react-redux';
-import { userSignUp, sendEmailOTP, verifyEmailOTP, requestnumber, verifynumber } from '../../actions';
-import { base_url } from '../../util/Api';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useRouter } from 'next/router';
-import UserVerification from '../UserVerification'
-import UserVerificationSuccess from '../UserVerificationSuccess'
-import OTP from '../OTP'
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { toast } from "react-toastify";
+import { connect, useSelector } from "react-redux";
+import {
+  userSignUp,
+  sendEmailOTP,
+  verifyEmailOTP,
+  requestnumber,
+  verifynumber,
+} from "../../actions";
+import { GoogleLogin } from "@react-oauth/google";
+import FacebookLogin from "react-facebook-login";
+import axios, { base_url } from "../../util/Api";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useRouter } from "next/router";
+import UserVerification from "../UserVerification";
+import UserVerificationSuccess from "../UserVerificationSuccess";
+import OTP from "../OTP";
+import { jwtDecode } from "jwt-decode";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 
 
@@ -130,7 +141,9 @@ function SignUp(props){
  
       return stateObj;
     });
-  }
+  };
+
+
 
   console.log('redux',props.redux)
  
@@ -348,7 +361,7 @@ function SignUp(props){
               {error.confirm_password && <span style={{color: "#FF0000", fontSize: 14}} >{error.confirm_password}</span>}
               </div>
 
-                <div className={styles.signup_form_option}>
+                {/* <div className={styles.signup_form_option}>
                 <input
                     className={styles.signup_form_radioInput}
                     type="checkbox"
@@ -364,34 +377,186 @@ function SignUp(props){
   
                     </label>
                     {!isAgreed && <span style={{color: "#FF0000", fontSize: 14}} >{error.isAgreed}</span>}
-                </div>
+                </div> */}
 
                 <div className={styles.signup_form_option}>
                 <input
-                    className={styles.signup_form_radioInput}
-                    type="checkbox"
-                    id="newsletter"
-                    name="newsletter"
-                    value="isSubscribed"
-                    onChange={(e) => setIsSubscribed(e.target.value)}
+                  className={styles.signup_form_radioInput}
+                  type="checkbox"
+                  id="agreement"
+                  name="isAgreed"
+                  required
+                  value={isAgreed}
+                  onChange={() => setIsAgreed(!isAgreed)}
+                />
+
+                <label
+                  htmlFor="agreement"
+                  className={styles.signup_form_radio_label}
+                >
+                  I accept the Terms & Conditions and{" "}
+                  <Link legacyBehavior href="/privacypolicy">
+                    <a style={{ textDecoration: "underline" }}>
+                      Privacy and Cookie Notice
+                    </a>
+                  </Link>
+                </label>
+                {!isAgreed && (
+                  <span style={{ color: "#FF0000", fontSize: 14 }}>
+                    {error.isAgreed}
+                  </span>
+                )}
+              </div>
+
+              <div className={styles.signup_form_option}>
+                <input
+                  className={styles.signup_form_radioInput}
+                  type="checkbox"
+                  id="newsletter"
+                  name="newsletter"
+                  value="isSubscribed"
+                  onChange={(e) => setIsSubscribed(e.target.value)}
+                />
+
+                <label
+                  htmlFor="newsletter"
+                  className={styles.signup_form_radio_label}
+                >
+                  I want to receive Chop Chow Newletters and best deal
+                  promotional offers
+                </label>
+              </div>
+
+              {status === "success" ? (
+                <p className="msg-success">{message}</p>
+              ) : (
+                <p className="msg-err">{message}</p>
+              )}
+
+              <button onClick={formSubmit} className={styles.login_button}>
+                Register
+              </button>
+              <div className={styles.login_options}>
+                <h3>Sign up with social media</h3>
+
+                <div className={styles.flex}>
+                  <div>
+                    {
+                      <FacebookLogin
+                        appId={process.env.FB_APP_ID}
+                        autoLoad={true}
+                        fields="name,email,picture"
+                        cssClass={styles.blue}
+                        // callback={responseFacebook}
+                        render={(renderProps) => (
+                          <button
+                            className={styles.blue}
+                            onClick={() => {
+                              renderProps.onClick();
+                            }}
+                          >
+                            This is my custom FB button
+                          </button>
+                        )}
+                      />
+                    }
+                  </div>
+                  <div>
+                    <GoogleLogin
+                      onSuccess={async (credentialResponse) => {
+                        try {
+                          const decoded = jwtDecode(
+                            credentialResponse.credential
+                          );
+                          // const s3Client = new S3Client({
+                          //   region: process.env.NEXT_PUBLIC_S3_REGION,
+                          //   credentials: {
+                          //     accessKeyId:
+                          //       process.env
+                          //         .NEXT_PUBLIC_CHOPCHOWAPP_USER_AWS_KEY,
+                          //     secretAccessKey:
+                          //       process.env
+                          //         .NEXT_PUBLIC_CHOPCHOWAPP_USER_AWS_SECRET,
+                          //   },
+                          // });
+                          // console.log(decoded, "decoded");
+                          // const resp = await fetch(decoded.picture);
+                          // const blob = await resp.blob();
+                          // const fileName = `images/${Date.now()}-${decoded.picture
+                          //   .split("/")
+                          //   .pop()}`;
+
+                          // const params = {
+                          //   Bucket: process.env.NEXT_PUBLIC_S3_BUCKET,
+                          //   Key: fileName,
+                          //   Body: blob,
+                          //   ContentType: blob.type,
+                          //   ACL: "public-read",
+                          // };
+                          // console.log(params, 'params')
+
+                          // const command = new PutObjectCommand(params);
+                          // const uploadResult = await s3Client.send(command);
+                          // console.log("Upload successful:", uploadResult);
+
+                          // const s3Url = `https://${process.env.NEXT_PUBLIC_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_S3_REGION}.amazonaws.com/${fileName}`;
+                          // console.log(s3Url, 's3Url')
+                          const payload = {
+                            first_name: decoded?.given_name,
+                            last_name: decoded?.family_name,
+                            email: decoded?.email,
+                            username: decoded?.given_name,
+                            password: Math.floor(
+                              Math.random() * 100000000
+                            ).toString(),
+                            email_notifications: false,
+                            profile_picture: decoded.picture
+
+                          };
+                          const form = new FormData();
+                          for (let entry in payload) {
+                            form.append(entry, payload[entry]);
+                          }
+                          // form.append("profile_picture", blob);
+                          const response = await axios("/user/signup", {
+                            method: "post",
+                            // headers: {
+                            //   "Content-Type": "multipart/form-data",
+                            // },
+                            data: payload,
+                          });
+                          toast.success("Registration was successful");
+                          router.push("/login");
+                        } catch (error) {
+                          toast.error(
+                            error?.response?.data?.message?.message ||
+                              "An error occured"
+                          );
+                          console.log(error, "error");
+                        }
+                      }}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
                     />
-                    
-                    <label htmlFor="newsletter" className={styles.signup_form_radio_label}>
-                    I want to receive Chop Chow Newletters and best deal promotional offers
-                    </label>
+                  </div>
                 </div>
-              
-            {status === 'success' ? 
-            <p className="msg-success">{message}</p>:
-            <p className="msg-err">{message}</p>}
-  
-            <button onClick={formSubmit} className={styles.login_button}>Register</button>
-            <h3 className={styles.login_new}>Already have an account? {props.closeSignUp ? <span onClick={props.closeSignUp}>Sign in here</span> : <Link legacyBehavior href='/login'><a>Sign in here</a></Link> }</h3>
+              </div>
+              <h3 className={styles.login_new}>
+                Already have an account?{" "}
+                {props.closeSignUp ? (
+                  <span onClick={props.closeSignUp}>Sign in here</span>
+                ) : (
+                  <Link legacyBehavior href="/login">
+                    <a>Sign in here</a>
+                  </Link>
+                )}
+              </h3>
             </div>
           </div>   
             </div>
 
-  
+{/*   
           <div className={styles.login_col_1}>
             
                 <div className={styles.login_col_1_img_2}>
@@ -400,7 +565,35 @@ function SignUp(props){
             <img width="100%" height="100%" src="/assets/signup/signup_mobile.jpeg" alt="Signup" />
                 </div>
             <img width="100%" height="100%" className={styles.login_col_1_img} src="/assets/signup/signup_bg.jpg" alt="Signup" />
-          </div>    
+          </div>     */}
+          <div className={styles.login_col_1}>
+          <div className={styles.login_col_1_img_2}>
+            <div
+              style={{
+                backgroundImage: "url('/assets/signup/signup_mobile.jpeg')",
+                width: "100%",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                }}
+              />
+            </div>
+            {/* <img
+              width="100%"
+              height="100%"
+              src="/assets/signup/signup_mobile.jpeg"
+              alt="Signup"
+            /> */}
+          </div>
+          </div>
+
         </div>
         {openUserVerification && <UserVerification formState={formState} setFormState={setFormState} requestnumberFunc={props.requestnumberFunc} type={type} setType={setType}  sendEmailOTPFunc={props.sendEmailOTPFunc}  next={handleOpenOtp} open={openUserVerification} setOpen={setOpenUserVerification} />}
 
@@ -408,7 +601,7 @@ function SignUp(props){
          verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} sendEmailOTPFunc={props.sendEmailOTPFunc} requestnumberFunc={props.requestnumberFunc} setOpenUserVerificationSuccess={setOpenUserVerificationSuccess} />}
        
         {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/login")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} />}
-
+        
        
       </>
     )

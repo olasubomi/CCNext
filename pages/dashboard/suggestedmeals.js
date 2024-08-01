@@ -32,6 +32,7 @@ import Popup1 from "../../src/components/popups/popup1";
 import Product from "../../src/components/individualPage/Product";
 import AddIcon from "@mui/icons-material/Add";
 import moment from "moment";
+import { useParams } from "next/navigation";
 
 import {
   suggestion_form_image,
@@ -53,6 +54,7 @@ import { RejectionModal } from "../../src/components/modal/rejection-modal";
 
 const SuggestedMeals = (props) => {
   const router = useRouter();
+  console.log(router, "router");
   const [addPublicMeal, setAddPublicMeal] = useState();
   const [searchType, setSearchType] = useState("Meal");
   const [searchOption, setSearchOption] = useState();
@@ -82,7 +84,8 @@ const SuggestedMeals = (props) => {
   const [message, setMessageState] = useState("");
   const [relateds, setRelatedsState] = useState([]);
   const [openRejectionModal, setOpenRejectionModal] = useState(false);
-
+  const params = useParams();
+  console.log(params, "params");
   //status filter all "Draft", "Pending", "Public", "Rejected"
   const [status, setStatus] = useState("all");
   const [mealStatus, setMealStatus] = useState("all");
@@ -115,11 +118,12 @@ const SuggestedMeals = (props) => {
     item_type: false,
     first_letter: false,
   });
+  const [filteredItems, setFilteredItems] = useState({});
   console.log(suggestion, "sugessss");
 
   useEffect(() => {
     getUserItems();
-  }, [props.auth]);
+  }, [props.auth, filteredItems]);
 
   console.log(suggestion, "ooo");
   useEffect(() => {
@@ -142,19 +146,33 @@ const SuggestedMeals = (props) => {
     if (props.auth.authUser) {
       setSearchType("Item");
       let url;
-      if (props.auth.authUser.user_type === "admin") {
-        url = `/items/${
-          newPage ? newPage : page
-        }?type=Product,Meal,Utensil&status=${itemStatus}`;
-      } else {
+      url = `/items/${newPage ? newPage : page}`;
+
+      let num = 0;
+
+      for (let entry in filteredItems) {
+        url = url.concat(
+          `${
+            num === 0
+              ? `?${entry}=${filteredItems[entry]}`
+              : `&${entry}=${filteredItems[entry]}`
+          }`
+        );
+        num = num += 1;
+      }
+      console.log(props.auth.authUser, "props.auth.authUser");
+      if (props.auth.authUser.user_type !== "admin") {
         // url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
-        url =
-          `/items/user-items/${
-            newPage ? newPage : page
-          }?type=Product,Meal,Utensil` +
-          "&userId=" +
-          props.auth.authUser._id +
-          `${item_name ? `&item_name=${item_name}` : ""}`;
+        url = url.concat(
+          `${Object.keys(filteredItems).length ? "&" : "?"}user=` +
+            props.auth.authUser._id
+        );
+      }
+      console.log(item_name, "leo");
+      if (item_name) {
+        url = url.concat(
+          `${Object.keys(filteredItems).length ? "&" : "?"}name=${item_name}`
+        );
       }
 
       axios.get(url).then((data) => {
@@ -165,20 +183,24 @@ const SuggestedMeals = (props) => {
           console.log("data.data.data.count", data.data.data.count);
           console.log("data.data", data.data.data.items);
           const products = data.data.data.items?.filter(
-            (ele) => ele.item_type === "Product"
+            (ele) => ele.item_type === "Product" || ele.item_type === "Products"
           );
           const utensils = data.data.data.items?.filter(
-            (ele) => ele.item_type === "Utensil"
+            (ele) => ele.item_type === "Utensil" || ele.item_type === "Utensils"
           );
           const meals = data.data.data.items?.filter(
-            (ele) => ele.item_type === "Meal"
+            (ele) => ele.item_type === "Meal" || ele.item_type === "Meals"
           );
           const item = data.data.data.items?.filter(
             (ele) =>
               ele.item_type === "Product" ||
               ele.item_type === "Meal" ||
-              ele.item_type === "Utensil"
+              ele.item_type === "Utensil" ||
+              ele.item_type === "Utensils" ||
+              ele.item_type === "Meals" ||
+              ele.item_type === "Products"
           );
+          console.log(products, utensils, meals, "products");
           setData({ products, meals, item, utensils });
           setFilteredSuggestionsState(data.data.data);
           setSuggestionsState(data.data.data);
@@ -186,7 +208,15 @@ const SuggestedMeals = (props) => {
       });
     }
   };
+  console.log(data, "datass");
 
+  const handleFilter = (key, value) => {
+    setPageState(1);
+    setFilteredItems({
+      ...filteredItems,
+      [key]: value,
+    });
+  };
   const filterItemByDate = () => {
     let item = [];
     if (!dateFilter) {
@@ -1499,20 +1529,74 @@ const SuggestedMeals = (props) => {
                             {/* <input name='id' type="checkbox" /> */}
                             {/* <p className={styles.request_th}>ID number</p> */}
                             <p
-                              onClick={handleFilterFirstLetter}
+                              // onClick={handleFilterFirstLetter}
+                              onClick={() => {
+                                handleFilter(
+                                  "item_name",
+                                  Number(filteredItems?.item_name) === 1
+                                    ? -1
+                                    : 1
+                                );
+                              }}
                               className={styles.request_th}
                             >
                               Name <FillterIcon />
                             </p>
                             <p
                               className={styles.request_th + " " + styles.hide}
-                              onClick={handleFilterByType}
+                              // onClick={handleFilterByType}
+                              onClick={() => {
+                                let item_types = "Product";
+                                if (router?.query.item_type === "Product") {
+                                  item_types = "Meal";
+                                } else if (router?.query.item_type === "Meal") {
+                                  item_types = "Utensil";
+                                } else if (
+                                  router?.query.item_type === "Utensil"
+                                ) {
+                                  item_types = "Product";
+                                }
+                                router.push({
+                                  pathname: router.pathname,
+                                  query: {
+                                    ...router.query,
+                                    item_type: item_types,
+                                  },
+                                });
+                                handleFilter("type", item_types);
+                              }}
                             >
                               Item Type <FillterIcon />
                             </p>
                             <p
                               className={styles.request_th}
-                              onClick={handleStatus}
+                              // onClick={handleStatus}
+                              onClick={() => {
+                                let item_status = "Public";
+                                if (router?.query.item_status === "Public") {
+                                  item_status = "Draft";
+                                } else if (
+                                  router?.query.item_status === "Draft"
+                                ) {
+                                  item_status = "Pending";
+                                } else if (
+                                  router?.query.item_status === "Pending"
+                                ) {
+                                  item_status = "Rejected";
+                                } else if (
+                                  router?.query.item_status === "Rejected"
+                                ) {
+                                  item_status = "Public";
+                                }
+                                router.push({
+                                  pathname: router.pathname,
+                                  query: {
+                                    ...router.query,
+                                    item_status,
+                                  },
+                                });
+                                handleFilter("status", item_status);
+                              }}
                               style={{ display: "flex", cursor: "pointer" }}
                             >
                               Status <FillterIcon />
@@ -1526,7 +1610,15 @@ const SuggestedMeals = (props) => {
                             </p>
 
                             <p
-                              onClick={filterItemByDate}
+                              // onClick={filterItemByDate}
+                              onClick={() => {
+                                handleFilter(
+                                  "createdAt",
+                                  Number(filteredItems?.createdAt) === 1
+                                    ? -1
+                                    : 1
+                                );
+                              }}
                               className={
                                 styles.request_th + " " + styles.hideData
                               }
@@ -1541,7 +1633,7 @@ const SuggestedMeals = (props) => {
                       {searchType === "Item" && (
                         <>
                           {data.item &&
-                            data.item.reverse().map((suggestion) => {
+                            data.item.map((suggestion) => {
                               return (
                                 <SuggestedMealRow
                                   searchType={searchType}
@@ -1805,24 +1897,24 @@ const SuggestedMeals = (props) => {
                 >
                   {suggestion.publicly_available}
                 </p>
-            
-              <div className={styles.status}>
-                {suggestion.item_status.map((elem) => (
-                  <p
-                    className={
-                      elem.status === "Public"
-                        ? styles.statusText
-                        : elem.status === "Pending"
-                        ? styles.statusText2
-                        : elem.status === "Rejected"
-                        ? styles.rejected
-                        : styles.statusText2
-                    }
-                  >
-                    {elem.status}
-                  </p>
-                ))}
-              </div>
+
+                <div className={styles.status}>
+                  {suggestion.item_status.map((elem) => (
+                    <p
+                      className={
+                        elem.status === "Public"
+                          ? styles.statusText
+                          : elem.status === "Pending"
+                          ? styles.statusText2
+                          : elem.status === "Rejected"
+                          ? styles.rejected
+                          : styles.statusText2
+                      }
+                    >
+                      {elem.status}
+                    </p>
+                  ))}
+                </div>
               </div>
             </div>
             {searchType === "Item" ? (

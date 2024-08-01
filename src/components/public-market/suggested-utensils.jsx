@@ -108,7 +108,7 @@ const addItemToCart = (item, qty) => {
   const fetchMeals = async () => {
     try {
       const response = await axios(
-        `/items/1?type=Utensil&status=all&limit=50`,
+        `/items/1?type=Utensil&status=Public&limit=50`,
         {
           method: "GET",
           headers: {

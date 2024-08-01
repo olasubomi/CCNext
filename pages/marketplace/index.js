@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Header, { Header2 } from "../../src/components/Header/Header";
+import Header, { Header2, Header3 } from "../../src/components/Header/Header";
 import GoBack from "../../src/components/CommonComponents/goBack";
 import styles from "../../src/components/public-market/public-market.module.css";
 import { HiLocationMarker } from "react-icons/hi";
@@ -18,6 +18,10 @@ import { AddressInput } from "../../src/components/public-market/input";
 import { useMediaQuery } from "../../src/hooks/usemediaquery";
 import Sidenav from "../../src/components/Header/sidenav";
 import * as BaseAxios from "axios";
+import { AllStores } from "../../src/components/public-market/all-stores";
+import { AllPopularMeals } from "../../src/components/public-market/all-popular-meals";
+import { AllProducts } from "../../src/components/public-market/all-products";
+import { AllUtensils } from "../../src/components/public-market/all-utensils";
 
 const PublicMarket = () => {
   const router = useRouter();
@@ -66,51 +70,6 @@ const PublicMarket = () => {
     },
   ]);
 
-  const getItem = async (name) => {
-    try {
-      const response = await axios.get(`/items/filter/${name}`);
-      const resp = response.data.data.map((element) => {
-        return {
-          label: element.item_name,
-          value: element._id,
-          image: element?.itemImage0,
-          price: element?.item_price ? `$${element?.item_price}` : "No Price",
-          store: element?.store_available?.store_name || "No store",
-          item_type: element?.item_type,
-        };
-      });
-      setItems(resp);
-      console.log(response.data.data, "resp");
-    } catch (error) {
-      console.log(error);
-    }
-    return name;
-  };
-  console.log(items, "item");
-
-  const getStore = async (name) => {
-    try {
-      const response = await axios.get(`/stores/store/${name}`);
-      const resp = response.data.data.supplier.map((element) => {
-        return {
-          label: element.store_name,
-          value: element._id,
-        };
-      });
-      setStore(resp);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const filteredItem = () => {
-    return items.filter((elem) => elem.item_type === "Meal");
-  };
-  const filteredProduct = () => {
-    return items.filter((elem) => elem.item_type === "Product");
-  };
-  const filteredUtensils = () => {
-    return items.filter((elem) => elem.item_type === "Utensils");
-  };
   const onSuccess = useCallback(async (location) => {
     if (location?.coords?.latitude && location?.coords?.longitude) {
       console.log("Longitude:", location.coords.longitude);
@@ -149,7 +108,7 @@ const PublicMarket = () => {
     console.log(error, "error");
     window.alert(error?.message || "Unable to get location");
   }, []);
-   
+
   useEffect(() => {
     document.addEventListener(
       "click",
@@ -162,6 +121,8 @@ const PublicMarket = () => {
     );
   }, []);
   console.log(store, "store");
+  const [activeSubLink, setActiveSubLink] = useState(0);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -180,7 +141,11 @@ const PublicMarket = () => {
         />
       </Head>
       <Header />
-      <Header2 />
+      <Header2
+        pathname={router.pathname}
+        activeSubLink={activeSubLink}
+        setActiveSubLink={setActiveSubLink}
+      />
       <Sidenav />
 
       {/* <div className={styles.header}>
@@ -215,24 +180,83 @@ const PublicMarket = () => {
           </p>
         </div>
       </div> */}
-     
-      <div className={styles.storeContainer}>
-        {categories.find((ele) => ele.label === "Stores")?.value && <Stores />}
+
+      {activeSubLink === 0 && (
+        <>
+          <div className={styles.marketplace}>
+            <h1>Marketplace</h1>
+            <p>
+              Put your meals and product on Chop Chow to show off what you’ve
+              cooked with family and friends
+            </p>
+          </div>
+
+          <>
+            {categories.find((ele) => ele.label === "Stores")?.value && (
+              <Stores />
+            )}
+          </>
+
+          <>
+            {categories.find((ele) => ele.label === "Meals")?.value && (
+              <div>
+                <PopularMeals />
+              </div>
+            )}
+          </>
+          <>
+            {categories.find((ele) => ele.label === "Products")?.value && (
+              <div>
+                <TopSellingProducts />
+              </div>
+            )}
+          </>
+          <>
+            {categories.find((ele) => ele.label === "Kitchen Utensils")
+              ?.value && (
+              <div>
+                <SuggestedUtensils />
+              </div>
+            )}
+          </>
+        </>
+      )}
+      {activeSubLink === 1 && (
+        <>
+          {categories.find((ele) => ele.label === "Stores")?.value && (
+            <AllStores />
+          )}
+        </>
+      )}
+      <div>
+        {activeSubLink === 2 && (
+          <>
+            {categories.find((ele) => ele.label === "Meals")?.value && (
+              <div>
+                <AllPopularMeals />
+              </div>
+            )}
+          </>
+        )}
       </div>
-      {categories.find((ele) => ele.label === "Meals")?.value && (
-        <div>
-          <PopularMeals />
-        </div>
+      {activeSubLink === 3 && (
+        <>
+          {categories.find((ele) => ele.label === "Products")?.value && (
+            <div>
+              <AllProducts />
+            </div>
+          )}
+        </>
       )}
-      {categories.find((ele) => ele.label === "Products")?.value && (
-        <div>
-          <TopSellingProducts />
-        </div>
-      )}
-      {categories.find((ele) => ele.label === "Kitchen Utensils")?.value && (
-        <div>
-          <SuggestedUtensils />
-        </div>
+      {activeSubLink === 4 && (
+        <>
+          {categories.find((ele) => ele.label === "Kitchen Utensils")
+            ?.value && (
+            <div>
+              <AllUtensils />
+            </div>
+          )}
+        </>
       )}
       <Footer />
     </div>

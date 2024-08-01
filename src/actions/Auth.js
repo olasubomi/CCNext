@@ -82,25 +82,33 @@ export const userSignUp = (form) => {
   };
 };
 
-export const userSignIn = (email, password, remember, callback) => {
+export const userSignIn = (email, password, remember, callback, withAuth) => {
   const customId = "custom-id-yes";
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     dispatch({ type: OPEN_VERIFICATION, payload: false });
     dispatch({ type: USER_TOKEN_SET, payload: null });
     dispatch({ type: USER_DATA, payload: null });
+    const withAuth_ = {
+      password,
+      email: email,
+    }
+    const no_withAuth_ = {
+      withAuth: false,
+      email: email,
+    }
+
     axios
-      .post("/user/signin", {
-        email: email,
-        password: password,
-      })
+      .post("/user/signin",
+        withAuth ? withAuth_ : no_withAuth_
+      )
       .then(({ data }) => {
         console.log(" ___ userSignIn RESPONSE ___ ", data);
 
         axios.defaults.headers.common["Authorization"] =
           "Bearer " + data.data.token;
 
-          console.log(remember, 'rememberremember')
+        console.log(remember, 'rememberremember')
         if (remember) {
           hash(email, password);
         } else {
@@ -433,7 +441,7 @@ export const socialSignIn = (token) => {
           payload: {
             showSnack: true,
             snackMessage:
-              err.response.data.message.message || "signin operation failed",
+              err?.response?.data?.message?.message || "signin operation failed",
           },
         });
 
@@ -443,18 +451,17 @@ export const socialSignIn = (token) => {
 };
 
 
-export const sendEmailOTP =  ({email}) => {
-  return async (dispatch) => {
+export const sendEmailOTP = ({ email }) => {
+  return (dispatch) => {
     dispatch({ type: FETCH_START });
-   
-    await axios
-      .post("/user/sendemailotp",{email})
+    axios
+      .post("/user/sendemailotp", { email })
       .then(({ data }) => {
         console.log(" resend email api success ----: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
         
       })
-      .catch((err) => { 
+      .catch((err) => {
         dispatch({
           type: FETCH_ERROR,
           payload: "error resending email",
@@ -501,7 +508,7 @@ export const sendEmailOTP =  ({email}) => {
 export const verifyEmailOTP =  ({email,otp}) => {
   console.log({email,otp})
   //dispatch({ type: OPEN_VERIFICATION, payload: true });
-  return async (dispatch) => {
+  return  (dispatch) => {
     dispatch({ type: OPEN_VERIFICATION, payload: true });
     dispatch({ type: FETCH_START });
     // dispatch({ type: IS_AUTHENTICATED, payload: true });
@@ -532,7 +539,7 @@ export const verifyEmailOTP =  ({email,otp}) => {
         // Redirect on successful signup
         //dispatch(push('/login')); // Using 'push' action from 'connected-react-router'
       })
-      .catch((err) => { 
+      .catch((err) => {
         dispatch({
           type: FETCH_ERROR,
           payload: "error resending email",
@@ -549,16 +556,16 @@ export const verifyEmailOTP =  ({email,otp}) => {
 };
 
 
-export const requestnumber =  ({number}) => {
-  return async (dispatch) => {
+export const requestnumber = ({ number }) => {
+  return (dispatch) => {
     dispatch({ type: FETCH_START });
-    await axios
-      .post("/user/requestnumber",{number})
+    axios
+      .post("/user/requestnumber", { number })
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
       })
-      .catch((err) => { 
+      .catch((err) => {
         dispatch({
           type: FETCH_ERROR,
           payload: "error resending email",
@@ -576,7 +583,7 @@ export const requestnumber =  ({number}) => {
 
 
 export const verifynumber =  ({request_id,code}) => {
-  return async (dispatch) => {
+  return  (dispatch) => {
     dispatch({ type: OPEN_VERIFICATION, payload: true });
     dispatch({ type: FETCH_START });
     dispatch({ type: IS_AUTHENTICATED, payload: true });
@@ -592,7 +599,7 @@ export const verifynumber =  ({request_id,code}) => {
         dispatch({ type: IS_AUTHENTICATED, payload: true });
         return data;
       })
-      .catch((err) => { 
+      .catch((err) => {
         dispatch({
           type: FETCH_ERROR,
           payload: "error resending email",
@@ -612,7 +619,7 @@ export const resetPassword = (password, token) => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     axios
-      .post("/user/resetpassword", {token, password})
+      .post("/user/resetpassword", { token, password })
       .then(({ data }) => {
         console.log(" reset password api: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
@@ -620,25 +627,25 @@ export const resetPassword = (password, token) => {
       .catch((err) => {
         console.error("xxx error resetting password ERROR xxx", err);
         var message = ""
-          if (err.response.status === 400 || err.response.status === 404) {
-            message = 'Bad Request , Check username or email ... !!'
-          } else if (err.response.status === 401) {
-            message ='you are UnAuthorized'
-          } else if (err.response.status >= 500) {
-            message = 'Sorry , Internal Server ERROR' 
-          } else {
-            message = 'Please check your inbox for more details! '
-          }
+        if (err.response.status === 400 || err.response.status === 404) {
+          message = 'Bad Request , Check username or email ... !!'
+        } else if (err.response.status === 401) {
+          message = 'you are UnAuthorized'
+        } else if (err.response.status >= 500) {
+          message = 'Sorry , Internal Server ERROR'
+        } else {
+          message = 'Please check your inbox for more details! '
+        }
 
-          dispatch({
-            type: FETCH_ERROR,
-            payload: message,
-          });
-        })
-      
+        dispatch({
+          type: FETCH_ERROR,
+          payload: message,
+        });
+      })
 
-        
-      
+
+
+
   };
 }
 

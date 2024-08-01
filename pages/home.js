@@ -11,7 +11,8 @@ import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import locationPin from "../public/assets/home/location.svg";
 import "react-multi-carousel/lib/styles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "../src/util/Api";
 
 
 const responsive = {
@@ -36,13 +37,35 @@ const responsive = {
       max: 1024,
       min: 464,
     },
-    items: 2,
+    items: 1,
     partialVisibilityGutter: 30,
   },
 };
 
 export default function HomePage() {
   const [active, setActive] = useState(1);
+  const [locations, setLocations] = useState([])
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get('/stores/getallstores/1?withPaginate=false')
+        if (Array.isArray(response.data.data)) {
+          const mapped = response.data.data.map((ele) => ele?.supplier_address?.city);
+          const arr = []
+          for (let entry of mapped) {
+            if(!arr.includes(mapped[mapped.lastIndexOf(entry)])){
+              arr.push(mapped[mapped.lastIndexOf(entry)])
+            }
+          }
+          setLocations(arr.filter((ele) => Boolean(ele)))
+        }
+
+      } catch (e) {
+        console.log(e)
+      }
+    })()
+  }, [])
 
   return (
     <div>
@@ -50,6 +73,9 @@ export default function HomePage() {
         <Carousel
           showDots
           responsive={responsive}
+          infinite={true}
+          autoPlay
+          autoPlaySpeed={7000}
           className="home_page_container"
           customRightArrow={
             <div
@@ -234,7 +260,10 @@ export default function HomePage() {
         containerClass="footer-carousel"
         responsive={responsive}
         arrows={false}
+        infinite={true}
         autoPlay
+        autoPlaySpeed={7000}
+
       >
         <section className="section-seven">
           <div className="seven-seven-box">
@@ -287,9 +316,7 @@ export default function HomePage() {
           <h1>Our Locations</h1>
           <div className="section-eight-container">
             {
-              ['San Diego', 'Houston', 'San Antonio', "Chicago", "New York", "Philadelphia", "Los Angeles", "Phoenix",
-                "Philadelphia", "Los Angeles", "Chicago", "San Diego", "Phoenix", "Houston", "San Antonio", "New York"]
-                .map((element, idx) => <p className="section-name" key={element + idx}>{element}</p>)
+              locations.map((element, idx) => <p className="section-name" key={element + idx}>{element}</p>)
             }
           </div>
         </div>

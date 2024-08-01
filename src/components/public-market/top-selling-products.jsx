@@ -113,7 +113,7 @@ let randomId = getRandomInt(1, 1000);
   const fetchProducts = async () => {
     try {
       const response = await axios(
-        `/items/1?type=Product&status=all&limit=50`,
+        `/items/1?type=Product&status=Public&limit=1000`,
         {
           method: "GET",
           headers: {
@@ -122,7 +122,10 @@ let randomId = getRandomInt(1, 1000);
         }
       );
       console.log(response.data.data.items, "ressee");
-      setProducts(response.data.data.items);
+      const filteredProducts = response.data.data.items.filter(
+        (item) => item.item_type === "Product" && item.average_rating
+      );
+      setProducts(filteredProducts);
     } catch (error) {
       console.log(error);
     }
@@ -162,9 +165,7 @@ let randomId = getRandomInt(1, 1000);
     }
   }, []);
 
-  const filteredProducts = products.filter(
-    (product) => product.item_type === "Product" && product.average_rating
-  );
+  console.log(products, "products");
   return (
     <div className={styles.mealContainer1}>
       <Element
@@ -174,9 +175,9 @@ let randomId = getRandomInt(1, 1000);
         Top Selling Products
       </Element>
       <div className={styles.stores3}>
-        {filteredProducts.slice(0, visibleProducts).map((product, idx) => {
-          console.log(product.item_name, product?.itemImage0, "pp");
-
+        {products
+        ?.slice(0, visibleProducts)
+        ?.map((product, idx) => {
           return (
             <div
               className={styles.card1}
@@ -186,41 +187,39 @@ let randomId = getRandomInt(1, 1000);
                 setOpenModal(true);
               }}
             >
-              {product?.itemImage0 && (
-                <div className={styles.box}>
-                  <img
-                    src={
-                      product?.itemImage0
-                        ?   product?.itemImage0
-                        : "/assets/store_pics/no-image-product.png"
-                    }
-                    className={styles.storeImg2}
-                  />
-                  <div className={styles.flex}>
-                    <p className={styles.name2}>{product.item_name}</p>
-                    <p>$8.43</p>
-                  </div>
-                  <p className={styles.storeName}>Chop Chow Official Store</p>
-                  <div className={styles.flex}>
-                    <div>
-                      {Array(5)
-                        .fill("_")
-                        .map((_, idx) => (
-                          <GoStarFill
-                            key={idx + _}
-                            color={
-                              product.average_rating > idx
-                                ? "#04D505"
-                                : "rgba(0,0,0,0.5)"
-                            }
-                            style={{ marginLeft: ".2rem" }}
-                          />
-                        ))}
-                    </div>
-                    <p className={styles.prep}> 23 mins </p>
-                  </div>
+              <div className={styles.box}>
+                <img
+                  src={
+                    product?.itemImage0
+                      ? product?.itemImage0
+                      : "assets/store_pics/no-image-product.png"
+                  }
+                  className={styles.storeImg2}
+                />
+                <div className={styles.flex}>
+                  <p className={styles.name2}>{product.item_name}</p>
+                  <p>{product?.item_price ? product.item_price : "$0.00"}</p>
                 </div>
-              )}
+                <p className={styles.storeName}>Chop Chow Official Store</p>
+                <div className={styles.flex}>
+                  <div>
+                    {Array(5)
+                      .fill("_")
+                      .map((_, idx) => (
+                        <GoStarFill
+                          key={idx + _}
+                          color={
+                            product.average_rating > idx
+                              ? "#04D505"
+                              : "rgba(0,0,0,0.5)"
+                          }
+                          style={{ marginLeft: ".2rem" }}
+                        />
+                      ))}
+                  </div>
+                  <p className={styles.prep}> 23 mins </p>
+                </div>
+              </div>
             </div>
           );
         })}

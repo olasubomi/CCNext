@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ['meal-chunk-images-and-videos.s3.us-west-1.amazonaws.com','meal-chunk-images-and-videos.s3.amazonaws.com'],
+    domains: ['meal-chunk-images-and-videos.s3.us-west-1.amazonaws.com','meal-chunk-images-and-videos.s3.amazonaws.com', 'lh3.googleusercontent.com'],
   }
 }
 // const path = require('path'); // Import the 'path' module

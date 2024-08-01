@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.css";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { userSignIn, socialSignIn, verifyEmail } from "../../actions";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
 import facebook from "../../../public/assets/logos/facebook.png";
@@ -20,6 +20,14 @@ import { useAuth } from "../../context/auth.context";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as Crypto from "crypto-hash";
 import { unHash } from "../../actions/utils";
+import { jwtDecode } from "jwt-decode";
+import axios from "../../util/Api";
+import {
+  IS_AUTHENTICATED,
+  USER_DATA,
+  USER_ROLE,
+  USER_TOKEN_SET,
+} from "../../constants/ActionTypes";
 
 function Login(props) {
   const isverified = useSelector((state) => state.Auth.isVerified);
@@ -37,7 +45,7 @@ function Login(props) {
   });
   const [loginLoading, setLoginLoading] = useState(false);
   const { email, password, rememberPassword } = formState;
-
+  const dispatch = useDispatch();
   const [showFacebook, setShowFacebook] = useState(false);
   const router = useRouter();
 
@@ -47,8 +55,6 @@ function Login(props) {
   //   console.log("useeffect query", router.query)
   //   props.verifyEmail(userid, token);
   // }, [router.query])
-
-  
 
   function openForgetPassword() {
     setForgetPasswordState(true);
@@ -142,7 +148,6 @@ const signIn  = async(userLogin) => {
     // props.toggleLogin() // then redirect to dashboard
 
     setLoginLoading(true);
-    
 
     await props.login(email, password, rememberPassword, () => {
       console.log("calling callback");
@@ -163,15 +168,36 @@ const signIn  = async(userLogin) => {
     // }
   }
   console.log("useeffect isverified", isverified);
-  
+
   async function handleSocialLogin(credentialResponse) {
-    setLoginLoading(true);
-    await props.socialLogin(credentialResponse.credential);
-    if (props.auth.isAuthenticated) {
-      setLoginLoading(false);
-    } else {
-      setLoginLoading(false);
+    console.log(credentialResponse, "credentialResponse");
+    const decoded = jwtDecode(credentialResponse.credential);
+    try {
+      const decoded = jwtDecode(credentialResponse.credential);
+      console.log(decoded, 'decoded')
+      await props.login(
+        decoded?.email,
+        null,
+        false,
+        () => {
+          console.log("calling callback");
+          setLoginLoading(false);
+        },
+        true
+      );
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message?.message || "An error occured"
+      );
+      console.log(error, "error");
     }
+    // setLoginLoading(true);
+    // await props.socialLogin(credentialResponse.credential);
+    // if (props.auth.isAuthenticated) {
+    //   setLoginLoading(false);
+    // } else {
+    //   setLoginLoading(false);
+    // }
   }
 
   function togglePass() {
@@ -256,7 +282,7 @@ const signIn  = async(userLogin) => {
                   type={showPass ? "text" : "password"}
                   id="password"
                   name="password"
-                  value={password }
+                  value={password}
                   placeholder="Your password"
                   onChange={onChange}
                   className={styles.login_form_input}
@@ -285,13 +311,8 @@ const signIn  = async(userLogin) => {
                   />
                   <label>Remember Password</label>
                 </div>
-                <div
-                  
-                  className={styles.login_forgot_pass}
-                >
-                  <Link  href="/forgotpassword">
-                  Forgot your Password?
-                  </Link>
+                <div className={styles.login_forgot_pass}>
+                  <Link href="/forgotpassword">Forgot your Password?</Link>
                 </div>
               </div>
 
@@ -323,7 +344,7 @@ const signIn  = async(userLogin) => {
                 <div>
                   {showFacebook && (
                     <FacebookLogin
-                      appId= {process.env.FB_APP_ID}
+                      appId={process.env.FB_APP_ID}
                       autoLoad={true}
                       fields="name,email,picture"
                       cssClass={styles.blue}
@@ -366,12 +387,29 @@ const signIn  = async(userLogin) => {
         </div>
         <div className={styles.login_col_1}>
           <div className={styles.login_col_1_img_2}>
-            <img
+            {/* <img
               width="100%"
               height="100%"
               src="/assets/signup/signin_mobile.jpeg"
               alt="Signup"
-            />
+            /> */}
+            <div
+              style={{
+                backgroundImage: "url('/assets/signup/signin_mobile.jpeg')",
+                width: "100%",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                }}
+              />
+            </div>
           </div>
           <img
             width="100%"

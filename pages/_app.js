@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }) {
   useInactivityLogout(1200000)
   return (
     <>
-      <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
+      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <AuthProvider>

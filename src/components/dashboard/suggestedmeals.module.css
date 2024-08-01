@@ -695,6 +695,7 @@
   align-self: center;
   display: flex;
   align-items: center;
+  text-transform: capitalize;
 }
 
 .request_th {

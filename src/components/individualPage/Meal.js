@@ -157,19 +157,16 @@ function Meal(props) {
   // useEffect(() => {
   //     setServes(parseInt(props.props.meal.servings))
   // })
-  console.log(props, "line 24");
   function addServe(val) {
     let s = serves + val;
     if (s >= props.meal.servings) {
       setServes(s);
     }
   }
-  console.log(props, "props.props.auth.authUser.user_type");
   // console.log(props.props.props.props.meal, "meal props.props")
   let num = 0;
 
   console.log("meald callback", props.callback);
-  console.log(props, "serve me");
 
   console.log(props, "propsssmeal");
 
@@ -666,16 +663,16 @@ function Meal(props) {
                 </button>
                 <div
                   className={
-                    props?.meal?.item_status[0].status === "Public"
+                    props?.meal?.item_status?.[0]?.status === "Public"
                       ? styles.public
-                      : props?.meal?.item_status[0].status === "Pending"
+                      : props?.meal?.item_status?.[0]?.status === "Pending"
                       ? styles.pending
-                      : props?.meal?.item_status[0].status === "Rejected"
+                      : props?.meal?.item_status?.[0]?.status === "Rejected"
                       ? styles.rejected
                       : styles.pending
                   }
                 >
-                  <p>{props?.meal?.item_status[0].status}</p>
+                  <p>{props?.meal?.item_status?.[0]?.status}</p>
                 </div>
               </div>
             </div>
