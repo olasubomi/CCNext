@@ -513,7 +513,7 @@ export const verifyEmailOTP =  ({email,otp}) => {
     dispatch({ type: FETCH_START });
     // dispatch({ type: IS_AUTHENTICATED, payload: true });
     // dispatch({ type: IS_VERIFIED, payload: true });
-    await axios
+      axios
       .post("/user/verifyEmailOTP",{email,otp})
       .then(({ data }) => {
         // window.location.assign("/login")
@@ -588,7 +588,7 @@ export const verifynumber =  ({request_id,code}) => {
     dispatch({ type: FETCH_START });
     dispatch({ type: IS_AUTHENTICATED, payload: true });
     dispatch({ type: IS_VERIFIED, payload: true });
-    await axios
+     axios
       .post("/user/verifynumber",{request_id,code})
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
