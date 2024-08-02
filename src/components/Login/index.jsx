@@ -77,26 +77,67 @@ function Login(props) {
       setSignUpState(false);
     }
   }
-
+console.log("redux login", isverified)
+console.log("redux login", isauthenticated)
   function onChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   }
   const responseFacebook = (response) => {
     console.log(response);
   };
+  
+  // useEffect(async () => {
+  //   const userLogin = JSON.parse(localStorage.getItem("formState"));
+  //   if(props.common.openVerification){
+  //     await props.login(userLogin.email, userLogin.password, rememberPassword, () => {
+  //       console.log("calling callback");
+  //       //setLoginLoading(false);
+  //     });
+  //   }
+
+  // })
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (props.auth.isAuthenticated && user) {
+    console.log("user local storage", user);
+    if (props.auth.isAuthenticated && user && props.auth.isVerified) {
       props.auth.authUser.super_app_admin
         ? // user.super_app_admin
           router.push("/admin")
         : router.push("/dashboard");
-      setIsOpen(false);
-    } else {
-      // setLoginLoading(false);
+      //setIsOpen(false);
+    } else if(user && props.common.openVerification){
+      const userLogin = JSON.parse(localStorage.getItem("formState"));
+      console.log("calling callback");
+      signIn(userLogin);
+   } else if(props.auth.isAuthenticated && user && !props.auth.isVerified){
+      
+    }else{
+
     }
-  }, [props.auth.isAuthenticated]);
+  }, [props.auth.isAuthenticated, props.auth.isVerified]);
+
+const signIn  = async(userLogin) => {
+  await props.login(userLogin.email, userLogin.password, rememberPassword, () => {
+    console.log("calling callback");
+    
+  });
+}
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+  //   console.log("user local storage",user);
+  //   if (props.auth.isAuthenticated && user && props.auth.isVerified) {
+  //     props.auth.authUser.super_app_admin
+  //       ? // user.super_app_admin
+  //         router.push("/admin")
+  //       : router.push("/dashboard");
+  //     //setIsOpen(false);
+  //   } else if(props.auth.isAuthenticated && user && !props.auth.isVerified){
+      
+  //   }else{
+
+  //   }
+  // }, [props.auth.isAuthenticated, props.auth.isVerified]);
 
   console.log(props);
   async function Login(e) {
@@ -404,6 +445,7 @@ function Login(props) {
 function mapStateToProp(state) {
   return {
     auth: state.Auth,
+    common: state.Common
   };
 }
 

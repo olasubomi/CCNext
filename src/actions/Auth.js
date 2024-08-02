@@ -12,6 +12,7 @@ import {
   TRIGGER_SNACK,
   OPEN_LOGIN,
   IS_VERIFIED,
+  OPEN_VERIFICATION,
 } from "../constants/ActionTypes";
 import axios from "../util/Api";
 import Alert from "@mui/material/Alert";
@@ -44,12 +45,14 @@ export const userSignUp = (form) => {
 
         // localStorage.setItem("x-auth-token", data.data.token);
         // localStorage.setItem("in", Date.now());
-        // localStorage.setItem("user", JSON.stringify(data.data.user));
+        console.log("auth user signup", data.data.user)
+        localStorage.setItem("user", JSON.stringify(data.data.user));
 
         dispatch({ type: FETCH_SUCCESS });
         // dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
-        // dispatch({ type: USER_ROLE, payload: data.data.user.user_type });
-        // dispatch({ type: USER_DATA, payload: data.data.user });
+        //dispatch({ type: USER_ROLE, payload: data.data.user.user_type });
+        dispatch({ type: USER_DATA, payload: data.data.user });
+        //dispatch({ type: USER_ROLE, payload: data.data.role });
         // dispatch({ type: IS_AUTHENTICATED, payload: true });
         dispatch({ type: IS_VERIFIED, payload: false });
         // dispatch({ type: USER_DATA, payload: data.user });
@@ -61,7 +64,7 @@ export const userSignUp = (form) => {
         // }else{
         //   toast.success("A verifiation link was sent to your mail")
         // }
-        toast.success("A verifiation link was sent to your mail");
+        //toast.success("Congratulation!!!!! You have Successfully Signed Up, Kindly Verify your account");
       })
       .catch((err) => {
         console.error("xxx userSignUp Request ERROR xxx");
@@ -83,6 +86,7 @@ export const userSignIn = (email, password, remember, callback, withAuth) => {
   const customId = "custom-id-yes";
   return (dispatch) => {
     dispatch({ type: FETCH_START });
+    dispatch({ type: OPEN_VERIFICATION, payload: false });
     dispatch({ type: USER_TOKEN_SET, payload: null });
     dispatch({ type: USER_DATA, payload: null });
     const withAuth_ = {
@@ -120,10 +124,20 @@ export const userSignIn = (email, password, remember, callback, withAuth) => {
         dispatch({ type: USER_ROLE, payload: data.data.role });
         dispatch({ type: USER_DATA, payload: data.data.user });
         dispatch({ type: IS_AUTHENTICATED, payload: true });
+        dispatch({ type: OPEN_VERIFICATION, payload: false });
+        
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
         const customId = "custom-id-no";
+        if(data.data.isVerified){
+          dispatch({ type: IS_VERIFIED, payload: true });
+          toast.success("Login Successful", { toastId: customId });
 
-        toast.success("Login Successful", { toastId: customId });
+        }else{
+          toast.success("Kindly Verify your account, so as to login successfully");
+        }
+
+        //toast.success(data.data.message);
+        
 
         return true;
       })
@@ -354,6 +368,7 @@ export const cancelSubscription = () => {
 export const userSignOut = () => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
+    dispatch({ type: OPEN_VERIFICATION, payload: false});
     localStorage.removeItem("x-auth-token");
     localStorage.removeItem("x-auth-refresh-token");
     localStorage.removeItem("in");
@@ -411,6 +426,8 @@ export const socialSignIn = (token) => {
         dispatch({ type: USER_ROLE, payload: data.data.role });
         dispatch({ type: USER_DATA, payload: data.data.user });
         dispatch({ type: IS_AUTHENTICATED, payload: true });
+        dispatch({ type: IS_VERIFIED, payload: true });
+        dispatch({ type: EMAIL_VERIFIED, payload: true });
       })
       .catch((err) => {
         console.error("xxx userSignIn Request ERROR xxx", err);
@@ -440,8 +457,9 @@ export const sendEmailOTP = ({ email }) => {
     axios
       .post("/user/sendemailotp", { email })
       .then(({ data }) => {
-        console.log(" resend email api success: ", data.message);
+        console.log(" resend email api success ----: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
+        
       })
       .catch((err) => {
         dispatch({
@@ -460,16 +478,66 @@ export const sendEmailOTP = ({ email }) => {
 };
 
 
-export const verifyEmailOTP = ({ email, otp }) => {
-  console.log({ email, otp })
-  return (dispatch) => {
+// export const OpenVerification = () => {
+//   return (dispatch) => {
+//     dispatch({ type: FETCH_START });
+//     axios
+//       .post("/user/sendemailotp",{email})
+//       .then(({ data }) => {
+//         console.log(" resend email api success ----: ", data.message);
+//         dispatch({ type: FETCH_SUCCESS, payload: data.message });
+//         dispatch({ type: OPEN_VERIFICATION, payload: true });
+//       })
+//       .catch((err) => { 
+//         dispatch({
+//           type: FETCH_ERROR,
+//           payload: "error resending email",
+//         });
+//         dispatch({
+//           type: TRIGGER_SNACK,
+//           payload: {
+//             showSnack: true,
+//             snackMessage: "error resending email",
+//           },
+//         });
+//       });
+//   };
+// };
+
+
+export const verifyEmailOTP =  ({email,otp}) => {
+  console.log({email,otp})
+  //dispatch({ type: OPEN_VERIFICATION, payload: true });
+  return  (dispatch) => {
+    dispatch({ type: OPEN_VERIFICATION, payload: true });
     dispatch({ type: FETCH_START });
-    axios
-      .post("/user/verifyEmailOTP", { email, otp })
+    // dispatch({ type: IS_AUTHENTICATED, payload: true });
+    // dispatch({ type: IS_VERIFIED, payload: true });
+      axios
+      .post("/user/verifyEmailOTP",{email,otp})
       .then(({ data }) => {
+        // window.location.assign("/login")
+        // dispatch(push('/login'));
+        
         console.log(" resend email api success: ", data.message);
-        dispatch({ type: FETCH_SUCCESS, payload: data.message });
+        console.log(" resend email api success: ", data.data.user);
+
+
+        localStorage.setItem("x-auth-token", data.data.token);
+        localStorage.setItem("x-auth-refresh-token", data.data.refreshToken);
+        localStorage.setItem("in", Date.now());
+        localStorage.setItem("user", JSON.stringify(data.data.user));
+
+        dispatch({ type: FETCH_SUCCESS });
+        dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+        dispatch({ type: USER_ROLE, payload: data.data.role });
+        dispatch({ type: USER_DATA, payload: data.data.user });
+        dispatch({ type: IS_AUTHENTICATED, payload: true });
         dispatch({ type: IS_VERIFIED, payload: true });
+        dispatch({ type: EMAIL_VERIFIED, payload: true });
+        //window.location.assign("/login")
+        // Redirect on successful signup
+        //dispatch(push('/login')); // Using 'push' action from 'connected-react-router'
       })
       .catch((err) => {
         dispatch({
@@ -514,14 +582,22 @@ export const requestnumber = ({ number }) => {
 };
 
 
-export const verifynumber = ({ request_id, code }) => {
-  return (dispatch) => {
+export const verifynumber =  ({request_id,code}) => {
+  return  (dispatch) => {
+    dispatch({ type: OPEN_VERIFICATION, payload: true });
     dispatch({ type: FETCH_START });
-    axios
-      .post("/user/verifynumber", { request_id, code })
+    dispatch({ type: IS_AUTHENTICATED, payload: true });
+    dispatch({ type: IS_VERIFIED, payload: true });
+     axios
+      .post("/user/verifynumber",{request_id,code})
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
+        dispatch({ type: IS_VERIFIED, payload: true });
+        dispatch({ type: PHONE_NUMBER_VERIFIED, payload: true });
+        dispatch({ type: USER_DATA, payload: data.data.user });
+        dispatch({ type: IS_AUTHENTICATED, payload: true });
+        return data;
       })
       .catch((err) => {
         dispatch({
