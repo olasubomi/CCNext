@@ -47,4 +47,5 @@ export const ORDER_REMOVE_ITEM = 'remove_order';
 export const ORDER_DELETE = 'delete_orders';
 
 
-export const  OPEN_VERIFICATION = 'open_verificatio';
+export const  OPEN_VERIFICATION = 'open_verification';
+export const  LOGIN_ON_VERIFICATION = 'login_on_verification';

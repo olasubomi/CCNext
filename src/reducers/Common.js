@@ -3,6 +3,7 @@ import {
   FETCH_START,
   FETCH_SUCCESS,
   GET_PATH,
+  LOGIN_ON_VERIFICATION,
   OPEN_VERIFICATION,
   TRIGGER_SNACK,
 } from "../constants/ActionTypes";
@@ -16,7 +17,8 @@ const INIT_STATE = {
   showSnack: false,
   snackMessage: "",
   snackDuration: 600,
-  openVerification: false
+  openVerification: false,
+  loginOnVerification: false
   
 };
 
@@ -70,6 +72,14 @@ export default (state = INIT_STATE, action) => {
         openVerification: action.payload,
       };
     }
+
+    case LOGIN_ON_VERIFICATION: {
+      return {
+        ...state,
+        loginOnVerification: action.payload,
+      };
+    }
+    
     default:
       return state;
   }

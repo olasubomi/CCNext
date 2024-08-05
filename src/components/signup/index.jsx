@@ -15,6 +15,7 @@ import {
   verifyEmailOTP,
   requestnumber,
   verifynumber,
+  confirmAccount,
 } from "../../actions";
 import { GoogleLogin } from "@react-oauth/google";
 import FacebookLogin from "react-facebook-login";
@@ -34,6 +35,7 @@ function SignUp(props){
   const [openUserVerificationSuccess, setOpenUserVerificationSuccess] = React.useState(false);
   const [openOTP, setOpenOTP] = React.useState(false);
   const [type, setType] = React.useState('');
+  const [isSuccess, SetIsSuccess] = React.useState(false);
   const {authUser, isAuthenticated} = useSelector(state => state.Auth)
   const router = useRouter();
   const [message, setMessageState] = useState(null);
@@ -66,7 +68,6 @@ function SignUp(props){
   const handleOpenSuccess = () =>{
     setOpenUserVerification(false)
     setOpenOTP(false)
-    setOpenUserVerificationSuccess(true)
     
   }
   console.log("openVerified", openVerified)
@@ -84,10 +85,31 @@ function SignUp(props){
   
   useEffect(()=>{
   if(openVerified){
-    setOpenUserVerificationSuccess(true);
+    const userLogin = JSON.parse(localStorage.getItem("formState"));
+    console.log("line 87", userLogin.email)
+    try{
+      let result = ConfirmAccount(userLogin)
+    console.log("result", result)
+    if(result){
+      SetIsSuccess(true)
+      setOpenUserVerificationSuccess(true);
+    }else{
+      SetIsSuccess(false)
+      setOpenUserVerificationSuccess(true);
+    }
+    }catch(err){
+      SetIsSuccess(false)
+      setOpenUserVerificationSuccess(false);
+    }
+    
+    
   }
   }
   , [openVerified])
+
+  const ConfirmAccount = async(userLogin) => {
+     await props.confirmAccount(userLogin.email);
+  }
 
   const { username, email, phone_number, first_name, last_name, password, confirm_password, } = formState;
 
@@ -148,7 +170,7 @@ function SignUp(props){
   console.log('redux',props.redux)
  
 
-  function formSubmit(e){
+  async function formSubmit(e){
     e.preventDefault();
 
     
@@ -169,18 +191,22 @@ function SignUp(props){
     return;
   }
 
-      props.signup({
+     let result =  await props.signup({
         username,
         email,
         phone_number,
         first_name,
         last_name,
         password,
-      });
-      setTimeout(() => {
-      localStorage.setItem("formState", JSON.stringify(formState));
+      })
+      console.log("result",result)
+      if(result){
+        localStorage.setItem("formState", JSON.stringify(formState));
       setOpenUserVerification(true)   
-      }, 1000);
+      }
+     
+      
+     
 
       // if(isAuthenticated && authUser){
            
@@ -556,7 +582,7 @@ function SignUp(props){
           </div>   
             </div>
 
-{/*   
+  
           <div className={styles.login_col_1}>
             
                 <div className={styles.login_col_1_img_2}>
@@ -565,7 +591,7 @@ function SignUp(props){
             <img width="100%" height="100%" src="/assets/signup/signup_mobile.jpeg" alt="Signup" />
                 </div>
             <img width="100%" height="100%" className={styles.login_col_1_img} src="/assets/signup/signup_bg.jpg" alt="Signup" />
-          </div>     */}
+          </div>    
           <div className={styles.login_col_1}>
           <div className={styles.login_col_1_img_2}>
             <div
@@ -600,7 +626,7 @@ function SignUp(props){
         {openOTP && <OTP formState={formState} setFormState={setFormState} verifynumberFunc={props.verifynumberFunc} type={type} setType={setType}
          verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} sendEmailOTPFunc={props.sendEmailOTPFunc} requestnumberFunc={props.requestnumberFunc} setOpenUserVerificationSuccess={setOpenUserVerificationSuccess} />}
        
-        {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/login")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} />}
+        {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/login")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} isSuccess= {isSuccess} />}
         
        
       </>
@@ -620,6 +646,7 @@ function SignUp(props){
       requestnumberFunc: (form) => dispatch(requestnumber(form)),
       verifyEmailOTPFunc: (form) => dispatch(verifyEmailOTP(form)),
       sendEmailOTPFunc: (form) => dispatch(sendEmailOTP(form)),
+      confirmAccount: (email) => dispatch(confirmAccount(email)),
 
     };
   }

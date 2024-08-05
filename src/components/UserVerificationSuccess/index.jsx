@@ -20,7 +20,7 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function UserVerificationSuccess({open, setOpen, next, type, formState}) {
+export default function UserVerificationSuccess({open, setOpen, next, type, formState, isSuccess}) {
  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -28,7 +28,7 @@ export default function UserVerificationSuccess({open, setOpen, next, type, form
 //   const handleOption = (title) => {
 // console.log(title)
 //   }
-
+console.log("isSuccess", isSuccess)
   //dispatch(userSignIn(formState?.email, formState?.password))
 const handleClick = () => {
 
@@ -36,8 +36,10 @@ const handleClick = () => {
   next()
 }
   return (
+   
      <div> 
-      <Modal
+       {isSuccess ?
+       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -46,21 +48,47 @@ const handleClick = () => {
         <Box  sx={style}>
           <div className='verification'>
           <div className='withbg' >   <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" /> </div>
-            <h3>Account Verified</h3>
-            <p>Thanks For successfully verifying your Account</p>
+          <h3>Account Verified</h3>
+    <p>Thanks For successfully verifying your Account</p>
+            
            
  
 
 <div className='otp-options'> 
  {/* <button className='verification-button bigger' onClick={() => handleClick(type)}>Go to Homepage</button>*/}
- <button className='verification-button bigger' onClick={() => handleClick()}>Go to Homepage</button>
+ <button className='verification-button bigger' style= {{marginBottom: "10px"}} onClick={() => handleClick()}>Go to Homepage</button>
  </div> 
 </div>
  
              
         </Box>
-      </Modal>
-    </div>
+      </Modal>:
+
+<Modal
+open={open}
+onClose={handleClose}
+aria-labelledby="modal-modal-title"
+aria-describedby="modal-modal-description"
+>
+<Box  sx={style}>
+  <div className='verification'>
+  <div className='withbg' >   <img className='error-img' src="/assets/signup/remove.png"  alt="Signup"/> </div>
+  <h3>Account Verification Failed</h3>
+            {/* <p>Thanks For successfully verifying your Account</p> */}
+   
+
+
+<div className='otp-options'> 
+{/* <button className='verification-button bigger' onClick={() => handleClick(type)}>Go to Homepage</button>*/}
+<button className='verification-button bigger' style= {{marginBottom: "10px"}} onClick={() => handleClick()}>Go to Homepage</button>
+</div> 
+</div>
+
+     
+</Box>
+</Modal>
+}
+</div>
   );
 }
 

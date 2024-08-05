@@ -106,7 +106,7 @@ console.log("redux login", isauthenticated)
           router.push("/admin")
         : router.push("/dashboard");
       //setIsOpen(false);
-    } else if(user && props.common.openVerification){
+    } else if(user && props.common.loginOnVerification){
       const userLogin = JSON.parse(localStorage.getItem("formState"));
       console.log("calling callback");
       signIn(userLogin);
@@ -121,7 +121,7 @@ const signIn  = async(userLogin) => {
   await props.login(userLogin.email, userLogin.password, rememberPassword, () => {
     console.log("calling callback");
     
-  });
+  }, true);
 }
   // useEffect(() => {
   //   const user = JSON.parse(localStorage.getItem("user"));
@@ -152,7 +152,7 @@ const signIn  = async(userLogin) => {
     await props.login(email, password, rememberPassword, () => {
       console.log("calling callback");
       setLoginLoading(false);
-    });
+    }, true);
 
     // setTimeout(() => {
     //   setLoginLoading(false)
@@ -452,7 +452,7 @@ function mapStateToProp(state) {
 function mapDispatchToProps(dispatch) {
   return {
     login: (email, password, rememberPassword, callback) =>
-      dispatch(userSignIn(email, password, rememberPassword, callback)),
+      dispatch(userSignIn(email, password, rememberPassword, callback,true)),
     socialLogin: (code) => dispatch(socialSignIn(code)),
     verifyEmail: (userid, token) => dispatch(verifyEmail(userid, token)),
   };

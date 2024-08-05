@@ -7,9 +7,10 @@ import Modal from '@mui/material/Modal';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { useRouter } from 'next/router';
+import { verifyEmailOTP } from '../../actions';
 
 const style = {
   position: 'absolute',
@@ -35,7 +36,7 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
   const [submitting, setSubmitting] = useState(false);
   const [submissionFailed, setSubmissionFailed] = useState(false);
   //const [open, setOpen] = useState(true);
- 
+ const dispatch = useDispatch()
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false)
 //   const handleOption = (title) => {
@@ -96,29 +97,16 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
                                   
   }
   console.log(type);
-  const handleSubmit = async () => {
-  //   setSubmitting(true);
-  //   setTimeout(async () => {
-  //   if(type =='Email Address'){
-  //     console.log(formState.email, password.reduce((a,b) =>a+b))
-  //    await  verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
-    
-  //    setSubmitting(false);
-  //     setSubmissionFailed(false);
-      
-  //   }else {
-  //     await verifynumberFunc(request_id,password.reduce((a,b) =>a+b))
-  //     setSubmitting(false);
-  //     setSubmissionFailed(true);
-      
-  //   }
-  // }, 2000);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
   if(type =='Email Address'){
     //     console.log(formState.email, password.reduce((a,b) =>a+b))
-       await verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
+       //await verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
+       await dispatch(verifyEmailOTP({email: formState?.email, otp: password?.reduce((a,b) =>a+b)}))
   }else {
        await verifynumberFunc("request_id", password.reduce((a,b) =>a+b))
   }
+  next()
   }
 
   const handleResendOtp = async () => {
@@ -172,7 +160,7 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
   <div className='otp-options'>
 
   {/* <button className='verification-button' onClick={handleSubmit} >{submitting ? "submitting" : `Verify ${type}`}</button> */}
-  <button className='verification-button' onClick={() => handleSubmit()} >Verify {type}</button>
+  <button className='verification-button' onClick={() => handleSubmit(event)} >Verify {type}</button>
    <button className='verification-button alt' onClick={handleClose}>Cancel</button>
 </div>
 
