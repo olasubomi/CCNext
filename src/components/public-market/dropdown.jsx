@@ -189,12 +189,12 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
         </div>
         <div className={styles.store_flex}>
           <div className={styles.profile_picture}>
-            <img src={selectedStore.supplier.profile_picture} />
+            <img src={selectedStore.supplier?.profile_picture} />
           </div>
           <div className={styles.rightside}>
             <div>
               <h4 className={styles.storeName2}>
-                {selectedStore.supplier.store_name}
+                {selectedStore.supplier?.store_name}
               </h4>
               <div className={styles.rating}>
                 {Array(5)
@@ -203,7 +203,7 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
                     <GrStar
                       key={idx + _}
                       color={
-                        selectedStore.supplier.average_rating > idx
+                        selectedStore.supplier?.average_rating > idx
                           ? "#04D505"
                           : "rgba(0,0,0,0.5)"
                       }
@@ -236,7 +236,7 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
           customRightArrow={<CustomRightArrow />}
           customLeftArrow={<CustomLeftArrow />}
         >
-          {selectedStore.items.map((meal, idx) => {
+          {selectedStore?.items.map((meal, idx) => {
             return (
               <div
                 className={styles.mealCard}

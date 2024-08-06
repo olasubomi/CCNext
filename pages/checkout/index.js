@@ -192,7 +192,7 @@ const Checkout = () => {
                 <div className ={styles.constraint}>
                     <div className={styles.header}>
                         <GoBack />
-                        <b>Checkout: {id} </b>
+                        <b>Checkout</b>
                     </div>
                     <div className={styles.checkout}>
                         <div className={styles.checkout_left}>
