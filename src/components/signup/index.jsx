@@ -27,6 +27,7 @@ import UserVerificationSuccess from "../UserVerificationSuccess";
 import OTP from "../OTP";
 import { jwtDecode } from "jwt-decode";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { useMobileMedia } from '../../customhooks/useResponsive';
 
 
 
@@ -58,6 +59,7 @@ function SignUp(props){
     confirm_password: '',
     isAgreed: '',
   })
+  const mobileScreen = useMobileMedia();
   const isverified = useSelector((state) => state.Auth.isVerified);
   const openVerified = useSelector((state) => state.Common.openVerification);
   const handleOpenOtp = () =>{
@@ -583,7 +585,7 @@ function SignUp(props){
             </div>
 
   
-          <div className={styles.login_col_1}>
+          {!mobileScreen ? <div className={styles.login_col_1}>
             
                 <div className={styles.login_col_1_img_2}>
 
@@ -591,7 +593,7 @@ function SignUp(props){
             <img width="100%" height="100%" src="/assets/signup/signup_mobile.jpeg" alt="Signup" />
                 </div>
             <img width="100%" height="100%" className={styles.login_col_1_img} src="/assets/signup/signup_bg.jpg" alt="Signup" />
-          </div>    
+          </div> :   
           <div className={styles.login_col_1}>
           <div className={styles.login_col_1_img_2}>
             <div
@@ -618,7 +620,7 @@ function SignUp(props){
               alt="Signup"
             /> */}
           </div>
-          </div>
+          </div>}
 
         </div>
         {openUserVerification && <UserVerification formState={formState} setFormState={setFormState} requestnumberFunc={props.requestnumberFunc} type={type} setType={setType}  sendEmailOTPFunc={props.sendEmailOTPFunc}  next={handleOpenOtp} open={openUserVerification} setOpen={setOpenUserVerification} />}
