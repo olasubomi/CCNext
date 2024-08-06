@@ -579,8 +579,9 @@ export const requestnumber = ({ number }) => {
     axios
       .post("/user/requestnumber", { number })
       .then(({ data }) => {
-        console.log(" resend email api success: ", data.message);
+        console.log(" resend email api success: ", data);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
+        localStorage.setItem("requestId", JSON.stringify(data.request_id));
       })
       .catch((err) => {
         dispatch({
@@ -599,12 +600,13 @@ export const requestnumber = ({ number }) => {
 };
 
 
-export const verifynumber =  ({request_id,code}) => {
+export const verifynumber =  (request_id, code) => {
   return  (dispatch) => {
     dispatch({ type: OPEN_VERIFICATION, payload: true });
     dispatch({ type: FETCH_START });
-    dispatch({ type: IS_AUTHENTICATED, payload: true });
-    dispatch({ type: IS_VERIFIED, payload: true });
+    // dispatch({ type: IS_AUTHENTICATED, payload: true });
+    // dispatch({ type: IS_VERIFIED, payload: true });
+    console.log("request_id",request_id)
      axios
       .post("/user/verifynumber",{request_id,code})
       .then(({ data }) => {
@@ -614,6 +616,7 @@ export const verifynumber =  ({request_id,code}) => {
         dispatch({ type: PHONE_NUMBER_VERIFIED, payload: true });
         dispatch({ type: USER_DATA, payload: data.data.user });
         dispatch({ type: IS_AUTHENTICATED, payload: true });
+        
         return data;
       })
       .catch((err) => {

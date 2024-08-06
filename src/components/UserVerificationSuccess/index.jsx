@@ -7,7 +7,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
 import { useEffect } from 'react';
-import { userSignIn, verifyEmailOTP, verifynumber } from '../../actions';
+import { confirmAccount, userSignIn, verifyEmailOTP, verifynumber } from '../../actions';
 import { useDispatch } from 'react-redux';
 
 const style = {
@@ -24,7 +24,7 @@ export default function UserVerificationSuccess({open, setOpen, next, type, form
  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  //const dispatch = useDispatch()
+  const dispatch = useDispatch()
 //   const handleOption = (title) => {
 // console.log(title)
 //   }
@@ -32,7 +32,7 @@ console.log("isSuccess", isSuccess)
   //dispatch(userSignIn(formState?.email, formState?.password))
 const handleClick = () => {
 
-  
+  dispatch(confirmAccount(formState.email))
   next()
 }
   return (

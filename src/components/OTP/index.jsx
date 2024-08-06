@@ -10,7 +10,7 @@ import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
 import { useDispatch, useSelector } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { useRouter } from 'next/router';
-import { verifyEmailOTP } from '../../actions';
+import { verifyEmailOTP, verifynumber } from '../../actions';
 
 const style = {
   position: 'absolute',
@@ -23,6 +23,7 @@ const style = {
   borderRadius: '8px',
 };
 export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTPFunc, verifynumberFunc, formState, setFormState, sendEmailOTPFunc,requestnumberFunc}) {
+  
   
   //const {}= useSelector( state => state.Auth);
   //const {isVerified}= useSelector( state => state.Common)
@@ -103,10 +104,19 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
     //     console.log(formState.email, password.reduce((a,b) =>a+b))
        //await verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
        await dispatch(verifyEmailOTP({email: formState?.email, otp: password?.reduce((a,b) =>a+b)}))
+       next()
   }else {
-       await verifynumberFunc("request_id", password.reduce((a,b) =>a+b))
+    let request_id = localStorage.getItem("requestId") != "undefined" ? JSON.parse(localStorage.getItem("requestId")) : "{}";
+    console.log("request_id", request_id);
+    if(request_id != undefined || request_id != "{}"){
+       await dispatch(verifynumber(request_id, password.reduce((a,b) =>a+b)))
+       next()
+    }else{
+      
+    }
+
   }
-  next()
+ 
   }
 
   const handleResendOtp = async () => {
