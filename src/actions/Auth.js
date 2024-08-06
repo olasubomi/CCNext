@@ -13,6 +13,7 @@ import {
   OPEN_LOGIN,
   IS_VERIFIED,
   OPEN_VERIFICATION,
+  LOGIN_ON_VERIFICATION,
 } from "../constants/ActionTypes";
 import axios from "../util/Api";
 import Alert from "@mui/material/Alert";
@@ -31,14 +32,17 @@ export const setOpenLogin = (login) => {
   };
 };
 
-export const userSignUp = (form) => {
-  return (dispatch) => {
+export const userSignUp = (form) => 
+  async (dispatch) => {
+    let userData 
     dispatch({ type: FETCH_START });
-    axios
+    await axios
       .post("/user/signup", {
         ...form,
       })
       .then(({ data }) => {
+         userData = data.data.user;
+         
         console.log("__ SignUp api res __ : ", data);
         // axios.defaults.headers.common["Authorization"] =
         //   "Bearer " + data.data.token;
@@ -55,6 +59,7 @@ export const userSignUp = (form) => {
         //dispatch({ type: USER_ROLE, payload: data.data.role });
         // dispatch({ type: IS_AUTHENTICATED, payload: true });
         dispatch({ type: IS_VERIFIED, payload: false });
+
         // dispatch({ type: USER_DATA, payload: data.user });
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
         //console.log("verified email action creator", data)
@@ -65,6 +70,7 @@ export const userSignUp = (form) => {
         //   toast.success("A verifiation link was sent to your mail")
         // }
         //toast.success("Congratulation!!!!! You have Successfully Signed Up, Kindly Verify your account");
+        
       })
       .catch((err) => {
         console.error("xxx userSignUp Request ERROR xxx");
@@ -79,14 +85,24 @@ export const userSignUp = (form) => {
           });
         }
       });
-  };
+     
+  
+      if(userData) {
+        console.log("__ SignUp userData __ : ", userData);
+        return true
+       }else{
+        return false
+       }
 };
 
 export const userSignIn = (email, password, remember, callback, withAuth) => {
   const customId = "custom-id-yes";
+
+  console.log("withAuth", withAuth)
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     dispatch({ type: OPEN_VERIFICATION, payload: false });
+    dispatch({ type: LOGIN_ON_VERIFICATION, payload: false });
     dispatch({ type: USER_TOKEN_SET, payload: null });
     dispatch({ type: USER_DATA, payload: null });
     const withAuth_ = {
@@ -97,7 +113,7 @@ export const userSignIn = (email, password, remember, callback, withAuth) => {
       withAuth: false,
       email: email,
     }
-
+    
     axios
       .post("/user/signin",
         withAuth ? withAuth_ : no_withAuth_
@@ -125,6 +141,7 @@ export const userSignIn = (email, password, remember, callback, withAuth) => {
         dispatch({ type: USER_DATA, payload: data.data.user });
         dispatch({ type: IS_AUTHENTICATED, payload: true });
         dispatch({ type: OPEN_VERIFICATION, payload: false });
+        dispatch({ type: LOGIN_ON_VERIFICATION, payload: false });
         
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
         const customId = "custom-id-no";
@@ -562,8 +579,9 @@ export const requestnumber = ({ number }) => {
     axios
       .post("/user/requestnumber", { number })
       .then(({ data }) => {
-        console.log(" resend email api success: ", data.message);
+        console.log(" resend email api success: ", data);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
+        localStorage.setItem("requestId", JSON.stringify(data.request_id));
       })
       .catch((err) => {
         dispatch({
@@ -582,12 +600,13 @@ export const requestnumber = ({ number }) => {
 };
 
 
-export const verifynumber =  ({request_id,code}) => {
+export const verifynumber =  (request_id, code) => {
   return  (dispatch) => {
     dispatch({ type: OPEN_VERIFICATION, payload: true });
     dispatch({ type: FETCH_START });
-    dispatch({ type: IS_AUTHENTICATED, payload: true });
-    dispatch({ type: IS_VERIFIED, payload: true });
+    // dispatch({ type: IS_AUTHENTICATED, payload: true });
+    // dispatch({ type: IS_VERIFIED, payload: true });
+    console.log("request_id",request_id)
      axios
       .post("/user/verifynumber",{request_id,code})
       .then(({ data }) => {
@@ -597,6 +616,7 @@ export const verifynumber =  ({request_id,code}) => {
         dispatch({ type: PHONE_NUMBER_VERIFIED, payload: true });
         dispatch({ type: USER_DATA, payload: data.data.user });
         dispatch({ type: IS_AUTHENTICATED, payload: true });
+        
         return data;
       })
       .catch((err) => {
@@ -649,6 +669,74 @@ export const resetPassword = (password, token) => {
   };
 }
 
+
+export const confirmAccount = (email) => 
+  async (dispatch) => {
+    let userData 
+    dispatch({ type: OPEN_VERIFICATION, payload: false });
+    dispatch({ type: FETCH_START });
+    await axios
+      .post("/user/confirmaccount", {
+        email
+      })
+      .then(({ data }) => {
+         userData = data.data.user;
+         
+        console.log("__ confirmUser api res __ : ", userData);
+        if(userData){
+          dispatch({ type: LOGIN_ON_VERIFICATION, payload: true });
+          dispatch({ type: OPEN_VERIFICATION, payload: false });
+          
+        }else{
+          dispatch({ type: LOGIN_ON_VERIFICATION, payload: false });
+          dispatch({ type: OPEN_VERIFICATION, payload: false });
+          
+        }
+        
+        
+        
+      })
+      .catch((err) => {
+        dispatch({
+          type: FETCH_ERROR,
+          payload: "error retrieving account by email - email not found",
+        });
+      });
+     
+  
+    
+};
+
+
+
+// export const confirmAccount = (email, cb) => 
+//   async (dispatch) => {
+//     try {
+//       dispatch({ type: OPEN_VERIFICATION, payload: false });
+//       dispatch({ type: FETCH_START });
+      
+//       const response = await axios.post("/user/confirmaccount", { email });
+//       const userData = response.data.data.user;
+      
+//       console.log("__ confirmUser api res __ : ", userData);
+      
+//       if (userData) {
+//         dispatch({ type: LOGIN_ON_VERIFICATION, payload: true });
+//         dispatch({ type: OPEN_VERIFICATION, payload: false });
+//         cb(true); // Return true if the user data exists
+//       } else {
+//         dispatch({ type: LOGIN_ON_VERIFICATION, payload: false });
+//         dispatch({ type: OPEN_VERIFICATION, payload: false });
+//         cb(false); // Return false if user data doesn't exist
+//       }
+//     } catch (err) {
+//       dispatch({
+//         type: FETCH_ERROR,
+//         payload: "Error retrieving account by email - email not found",
+//       });
+//       return false; // Return false if there is an error
+//     }
+//   }
 
 // dispatch({
 //   type: TRIGGER_SNACK,
