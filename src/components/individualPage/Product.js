@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./product.module.css";
-
+import { FaReddit } from "react-icons/fa";
 import Head from "next/head";
 import img_logo from "../../../public/assets/logos/sezzle.png";
 import Image from "next/image";
@@ -13,7 +13,6 @@ import {
   StarIcon,
   TwitterEIcon,
   WhatsappEIcon,
-  
 } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
@@ -24,7 +23,7 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
   RedditShareButton,
-  RedditIcon
+  RedditIcon,
 } from "react-share";
 import InstagramShareButton from "../SocialShare/InstagramShare";
 import { useSearchParams } from "next/navigation";
@@ -34,8 +33,9 @@ function Product(props) {
   //const url = 'http://localhost:3000/'
   const url = "https://www.chopchow.app/";
   const productName = props?.product?.item_name;
-  const productNameWithoutSpaces = productName?.replaceAll(' ', '%20') 
-  const productURL = 'https://www.chopchow.app/product/' + productNameWithoutSpaces;
+  const productNameWithoutSpaces = productName?.replaceAll(" ", "%20");
+  const productURL =
+    "https://www.chopchow.app/product/" + productNameWithoutSpaces;
   const params = useSearchParams();
   // console.log(props.product.item_data.product_size, 'item_data')
   // console.log(props.product.item_data.product_size?.map((elem, id) => (
@@ -52,7 +52,6 @@ function Product(props) {
   }, [props.product.formatted_ingredients]);
   console.log(props.product.item_images, "image");
 
-  
   return (
     <>
       <Head>
@@ -76,30 +75,22 @@ function Product(props) {
       <div className={styles.product_sections}>
         <div className={styles.product_section_2}>
           <div className={styles.product_section_2_col_1}>
-            {props.product.item_images?.length > 0 ? (
-              <Image
-                src={props.product.item_images[0]}
+            <div className={styles.product_section_2_main_img}>
+              <img
+                src={props.product.itemImage0}
                 alt={props.product.item_name}
-                className={styles.product_section_2_main_img}
-                height={500}
-                width={500}
+                style={{ width: "100%", height: "100%" }}
               />
-            ) : (
-              <span></span>
-            )}
+            </div>
+
             <div className={styles.product_section_2_images}>
               {props.product.item_images?.length > 1 && (
                 <>
-                  {props.product.item_images.slice(1).map((image, index) => {
-                    <Image
-                      key={index}
-                      alt={props.product.item_name}
-                      src={image}
-                      height={200}
-                      width={200}
-                      className={styles.product_section_2_image}
-                    />;
-                  })}
+                  {props.product.item_images.map((image, index) => (
+                    <div className={styles.product_section_2_image}>
+                      <img key={index} src={image} />
+                    </div>
+                  ))}
                 </>
               )}
             </div>
@@ -159,13 +150,9 @@ function Product(props) {
                     Product size
                   </h3>
                   <p className={styles.product_section_2_category}>
-                    {props.product.product_size &&
-                      Array.isArray(props.product.product_size) &&
-                      props.product.product_size.map((elem, id) => (
-                        <div key={id}>
-                          <p>{elem}</p>
-                        </div>
-                      ))}
+                    {props.product.product_size && (
+                      <p>{props.product.product_size}</p>
+                    )}
                   </p>
                 </div>
               </div>
@@ -187,39 +174,47 @@ function Product(props) {
               <ShareIcon />
               Share this product:
             </p>
-            <FacebookShareButton>
-              <FacebookEIcon
-                quote={props.product.product_name}
+            <div className={styles.footerdiv}>
+              <FacebookShareButton>
+                <FacebookEIcon
+                  quote={props.product.product_name}
+                  url={productURL}
+                />
+              </FacebookShareButton>
+              <TwitterShareButton
+                title={props.product.product_name}
+                via="ChopChowMarket"
                 url={productURL}
-              />
-            </FacebookShareButton>
-            <TwitterShareButton
-              title={props.product.product_name}
-              via="ChopChowMarket"
-              url={productURL}
-            >
-              <TwitterEIcon />
-            </TwitterShareButton>
+              >
+                <TwitterEIcon />
+              </TwitterShareButton>
+              <WhatsappShareButton
+                title={props.product.product_name}
+                url={productURL}
+              >
+                <WhatsappEIcon />
+              </WhatsappShareButton>
+                <RedditShareButton
+                  title={props.product.product_name}
+                  url={productURL}
+                >
+                  <div className={styles.redditicon}>
+                    <FaReddit color="#FF4500" size={20} />
+                  </div>
+                </RedditShareButton>
+              <div
+                style={{ display: "flex", gap: ".4rem", alignItems: "center" }}
+              >
+                <p>Print Preview</p>
+                <PrintEIcon />
+              </div>
+            </div>
+
             {/* <InstagramShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>
                             <InstaEIcon />
                         </InstagramShareButton> */}
-            <WhatsappShareButton
-              title={props.product.product_name}
-              url={productURL}
-            >
-              <WhatsappEIcon />
-            </WhatsappShareButton>
-            <RedditShareButton
-              title={props.product.product_name}
-              url={productURL}
-            >
-              <RedditIcon />
-            </RedditShareButton>
           </div>
-          <div>
-            <p>Print Preview</p>
-            <PrintEIcon />
-          </div>
+
           {props.product.publicly_available === "Public" && (
             <div className={styles.btnGroup}>
               <div className={styles.btnoutline}>Add to Grocery List</div>
@@ -282,14 +277,14 @@ function Product(props) {
 
         <div className={styles.product_section_8}>
           <h3>Product Ingredients</h3>
-          {formatted_ingredients.length &&
-            formatted_ingredients.map((ele, idx) => {
-              if (idx !== formatted_ingredients.length - 1) {
-                return ele.concat(", ");
-              } else {
-                return ele;
-              }
-            })}
+          <p>
+            {props.product.ingredeints_in_item
+              ?.map(
+                (elem) =>
+                  `${elem.item_name} (${elem.item_quantity}${elem.item_measurement})`
+              )
+              .join(", ")}
+          </p>
         </div>
         <div className={styles.product_section_8}>
           <h3>Product Description</h3>

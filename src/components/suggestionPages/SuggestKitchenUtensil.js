@@ -550,7 +550,17 @@ class SuggestKitchenUtensilForm extends Component {
     }
     if (utensilImage4) {
       suggestProductForm.append("item_images", utensilImage4);
+
     }
+
+    if(!utensilImage1 && !utensilImage2 && !utensilImage3 && !utensilImage4){
+      const img = await fetch(
+        "/assets/store_pics/no-image-utensil.png"
+      );
+      const blob = await img.blob()
+      suggestProductForm.append("item_images", blob);
+    }
+
     // descriptionGroupList.map((individualDescriptions) => {
     //   console.log(individualDescriptions);
     //   suggestProductForm.append('product_descriptions', JSON.stringify(individualDescriptions));

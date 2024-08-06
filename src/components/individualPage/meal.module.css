@@ -5,6 +5,14 @@
   justify-items: center;
   margin-top: 155px;
 }
+.popup2_step_img{
+  width: 238px;
+  height: 174px;
+}
+.popup2_step_img video{
+  width: 100%;
+  height: 100%;
+}
 .public {
   background-color: #deede5;
   color: #5ca37b;
@@ -101,6 +109,7 @@
 .meals_steps {
   display: flex;
   gap: 3rem;
+  width: 100%;
   align-items: flex-start;
   justify-content: flex-start;
 }
@@ -113,6 +122,13 @@
   margin-top: -0.7rem;
   font-weight: 500;
   text-transform: capitalize;
+}
+.carouselText{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: -92px;
 }
 .carouselText p {
   margin-top: -0.5rem;
@@ -1040,7 +1056,6 @@
   display: grid;
   grid-gap: 3rem;
   justify-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   padding: 1rem 0 3rem;
 }
 
@@ -1256,6 +1271,11 @@
   .meal_section_2 {
     width: 100%;
     /* grid-template-columns: 1fr 1fr; */
+  }
+  .meals_steps {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   }
 
   .meal_section_2_main_img {

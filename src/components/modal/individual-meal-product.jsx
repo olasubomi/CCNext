@@ -539,7 +539,7 @@ export const ProductModal = ({
             <div className={styles.border} />
             <div className={styles.buttons}>
               <button className={styles.outlinebtn}>
-                <Link href={`/meal/${selectedItem.item_name}`}>View More</Link>
+                <Link href={`/product/${selectedItem.item_name}`}>View More</Link>
               </button>
               <button
                 className={styles.outlinebtn}
@@ -837,7 +837,7 @@ export const UtensilModal = ({
               <div className={styles.border} />
               <div className={styles.buttons}>
                 <button className={styles.outlinebtn}>
-                  <Link href={`/meal/${selectedItem.item_name}`}>
+                  <Link href={`/product/${selectedItem.item_name}`}>
                     View More
                   </Link>
                 </button>
