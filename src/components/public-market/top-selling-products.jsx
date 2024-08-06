@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import { ProductModal } from "../modal/individual-meal-product";
 import { Element } from "react-scroll";
 import productImg from "../../../public/assets/store_pics/no-image-product.png";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../actions";
 
 export const TopSellingProducts = () => {
   const [products, setProducts] = useState([]);
@@ -19,6 +21,9 @@ export const TopSellingProducts = () => {
   const router = useRouter();
   const [quantity, setQuantity] = useState(0);
 
+  const dispatch = useDispatch();
+
+  console.log(products, "line 22 top-selling-product")
   //items to add
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -53,6 +58,51 @@ export const TopSellingProducts = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+
+
+
+// Generate a random integer between a specified range
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Example usage to generate an ID between 1 and 1000
+let randomId = getRandomInt(1, 1000);
+
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    if(qty == 0 ){
+      toast.error("Pls add a quantity");
+    }else{
+       const payload = {
+        userId: (user && user._id) ? user._id : "",
+        storeId :  "" ,
+        store_name: "",
+        itemId : item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: "$",
+        item_image: item.item_images[0],
+        itemName: item.item_name,
+        item_type: item.item_type? item.item_type : "Product",
+    } 
+    console.log(payload, "Cart payload line 76 top-selling-product");
+    try {
+      dispatch(addToCart(payload))
+      setOpenList(false);
+      setShow(false);
+      setOpenModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+    };
+
+  
   };
   const [details, setDetails] = useState({
     listName: "",
@@ -188,6 +238,7 @@ export const TopSellingProducts = () => {
           setShow={setShow}
           quantity={quantity}
           setQuantity={setQuantity}
+          addToCart={addItemToCart}
         />
       </div>
       <p className={styles.view2} onClick={() => loadMore()}>
