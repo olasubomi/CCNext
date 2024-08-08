@@ -87,7 +87,7 @@ let randomId = getRandomInt(1, 1000);
         quantity: qty,
         item_price: item.item_price,
         currency: "$",
-        item_image: item.item_images[0],
+        item_image: item.itemImage0,
         itemName: item.item_name,
         item_type: item.item_type? item.item_type : "Product",
     } 

@@ -36,7 +36,7 @@ console.log("line 18 cartitems",props)
       </div>
       <div className={cartStyles.mobileCardRight}>
       <div className={cartStyles.priceDiv}> 
-        <label>${props.price}</label>
+        <label>${props.price == "NAN" ? 0 : props.price}</label>
         <img onClick={() => props.onDelete(props)} src="/assets/grocery_list/closeIconOrange.svg" />
       </div>
       <div className={cartStyles.cardQuantity}>
@@ -67,7 +67,7 @@ console.log("line 18 cartitems",props)
       </div>
       <div className={cartStyles.cartValues}>
         <label>{props.store}</label>
-        <label>${props.price}</label>
+        <label>${props.price == "NAN" ? 0 : props.price}</label>
         <label>${itemTotal}</label>
         <img
           src="/assets/grocery_list/closeIcon.svg"

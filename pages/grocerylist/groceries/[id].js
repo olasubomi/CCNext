@@ -769,9 +769,9 @@ const GroceryPage = () => {
                             <input
                               name={element?.item?.item_name}
                               value={element?.item?.item_name}
-                              checked={cartHasItem(element.item)}
+                              
                               onChange={(e) => {
-                                addItemsToCart(element.item, true);
+                                addItemsToCart();
                               }}
                               type="checkbox"
                               style={{
@@ -918,7 +918,7 @@ const GroceryPage = () => {
               <button className={styles.cartbtn1}>Add Selection to Cart</button>
               <button
                 className={styles.cartbtn2}
-                onClick={() => router.push("/cart/cart")}
+                onClick={() => router.push("/cart")}
               >
                 Go to Cart
                 <BsArrowRight size={18} />

@@ -29,7 +29,7 @@ const responsive = {
     breakpoint: { max: 1024, min: 464 },
     items: 3,
   },
-  
+
   mobile: {
     breakpoint: { max: 464, min: 0 },
     items: 1,
@@ -43,8 +43,8 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
   const [openList, setOpenList] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
   const [quantity, setQuantity] = useState(0);
-  const [serve, setServe] = useState(0);
   const [show, setShow] = useState(false);
+  const [serve, setServe] = useState(0);
   const router = useRouter();
   const dispatch = useDispatch()
 
@@ -65,6 +65,8 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
     };
 
     console.log(payload, "payload");
+    console.log(storeInfo, "storeInfo");
+  
     try {
       const response = await axios(`/groceries`, {
         method: "post",
@@ -84,20 +86,36 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
     status: "",
   });
 
+  const fetchGroceryList = async () => {
+    try {
+      const response = await axios(`/groceries/list`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data.data.data, "groceries");
+      setSelectGrocery(response.data.data.data);
+    } catch (error) {}
+  };
+  useEffect(() => {
+    fetchGroceryList();
+  }, []);
+
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
-    
+    console.log(storeInfo, "storeInfo");
     if(qty == 0 ){
       toast.error("Pls add a quantity");
     }else{
        const payload = {
         userId: (user && user._id) ? user._id : "",
-        storeId : id,
-        store_name: selectedStore.supplier.store_name,
+        storeId : storeInfo.id,
+        store_name: storeInfo.name,//selectedStore.supplier.store_name,
         itemId : item._id,
         quantity: qty,
         item_price: item.item_price,
-        currency: selectedStore.supplier.currency.symbol,
+        currency: storeInfo.currency,
         item_image: item.item_images[0],
         itemName: item.item_name,
         item_type: item.item_type? item.item_type : "",
@@ -115,21 +133,6 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
 
   
   };
-  const fetchGroceryList = async () => {
-    try {
-      const response = await axios(`/groceries/list`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log( "groceries line 91", response.data.data.data);
-      setSelectGrocery(response.data.data.data);
-    } catch (error) {}
-  };
-  useEffect(() => {
-    fetchGroceryList();
-  }, []);
 
   const CustomRightArrow = ({ onClick, ...rest }) => {
     const {
@@ -189,13 +192,17 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
         </div>
         <div className={styles.store_flex}>
           <div className={styles.profile_picture}>
-            <img src={selectedStore.supplier?.profile_picture} />
+            <img
+              src={
+                storeInfo?.image
+                  ? storeInfo?.image
+                  : "/assets/store_pics/no-image-store.png"
+              }
+            />
           </div>
           <div className={styles.rightside}>
             <div>
-              <h4 className={styles.storeName2}>
-                {selectedStore.supplier?.store_name}
-              </h4>
+              <h4 className={styles.storeName2}>{storeInfo?.name}</h4>
               <div className={styles.rating}>
                 {Array(5)
                   .fill("_")
@@ -203,7 +210,7 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
                     <GrStar
                       key={idx + _}
                       color={
-                        selectedStore.supplier?.average_rating > idx
+                        storeInfo?.average_rating > idx
                           ? "#04D505"
                           : "rgba(0,0,0,0.5)"
                       }
@@ -219,15 +226,13 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
                 marginTop: "1rem",
               }}
             >
-              <FaLocationDot fill="#F47900" size={20}/>
+              <FaLocationDot fill="#F47900" size={20} />
               <p className={styles.text} style={{ marginLeft: ".4rem" }}>
-                {selectedStore?.supplier?.supplier_address?.address}
+                {storeInfo?.address}
               </p>
             </div>
             <h6 className={styles.title2}>About Store</h6>
-            <p className={styles.text}>
-             {selectedStore?.supplier?.description}
-            </p>
+            <p className={styles.text}>{storeInfo?.description}</p>
           </div>
         </div>
         <Carousel
@@ -236,21 +241,40 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
           customRightArrow={<CustomRightArrow />}
           customLeftArrow={<CustomLeftArrow />}
         >
-          {selectedStore?.items.map((meal, idx) => {
+          {selectedStore?.inventory?.map((meal, idx) => {
             return (
               <div
                 className={styles.mealCard}
                 onClick={() => {
-                  setSelectedItem(meal);
+                  setSelectedItem(meal.item);
                   setOpenModal(true);
                 }}
               >
-                <img src={meal?.itemImage0} alt="" className={styles.img} />
+                <img
+                  src={
+                    meal?.item?.itemImage0
+                      ? meal.item.itemImage0
+                      : !meal?.item?.itemImage0 &&
+                        meal?.item?.item_type === "Meal"
+                      ? "/assets/store_pics/no-image-meal.png"
+                      :!meal?.item?.itemImage0 && meal?.item?.item_type === "Product"
+                      ? "/assets/store_pics/no-image-product.png"
+                      : !meal?.item?.itemImage0 && meal?.item?.item_type === "Utensil"
+                      ? "/assets/store_pics/no-image-utensil.png"
+                      : ""
+                  }
+                  alt=""
+                  className={styles.img}
+                />
+
                 <div className={styles.flex}>
-                  <p className={styles.name}>{meal?.item_name}</p>
+                  <p className={styles.name}>{meal?.item?.item_name}</p>
                   <p className={styles.name2}>
                     {" "}
-                    {meal.item?.price ? "$" + `${meal?.item_price}` : "N/A"}
+                    {meal?.item?.item_price
+                      ? meal?.storeId?.currency?.symbol +
+                        `${meal?.item?.item_price}`
+                      : "N/A"}
                   </p>
                 </div>
               </div>
@@ -266,7 +290,7 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
             View Store
           </button>
         </div>
-        {openModal && selectedItem.item_type === "Meal" && (
+        {openModal && selectedItem?.item_type === "Meal" && (
           <div>
             {!matches ? (
               <Mealmodal

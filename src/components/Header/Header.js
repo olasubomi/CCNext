@@ -69,7 +69,7 @@ function Header(props) {
   return state.Cart});
 
   const goToCart = () => {
-    router.push('/cart/cart');
+    router.push('/cart');
   }
   console.log(notifications, "notific0ppjations");
   // useEffect(() => {

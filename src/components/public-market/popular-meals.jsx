@@ -87,7 +87,7 @@ const addItemToCart = (item, qty) => {
       quantity: qty,
       item_price: item.item_price,
       currency: "$",
-      item_image: item.item_images[0],
+      item_image: item.itemImage0,
       itemName: item.item_name,
       item_type:  item.item_type? item.item_type : "Meal",
   } 
