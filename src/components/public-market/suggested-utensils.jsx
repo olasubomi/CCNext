@@ -138,10 +138,10 @@ const addItemToCart = (item, qty) => {
     }
   };
 
-  const loadMore = async () => {
-    setCurrentPage(currentPage + 1);
-    await fetchProducts();
+  const loadMore = () => {
+    setVisibleMeals(visibleMeals + 4);
   };
+  
   useEffect(() => {
     fetchProducts();
   }, [currentPage]);
