@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./meal.module.css";
-
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Head from "next/head";
 import Image from "next/image";
 import {
@@ -41,6 +42,7 @@ import { HiLocationMarker } from "react-icons/hi";
 import { RejectionModal } from "../modal/rejection-modal";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
+import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 
 function Meal(props) {
   //const url = 'http://localhost:3000/'
@@ -531,52 +533,173 @@ function Meal(props) {
           </div>
           <div>
             <h3>Steps</h3>
-            {props.meal.meal_formatted_instructions?.length > 0 && (
-              <div className={styles.all_steps}>
-                {props.meal?.meal_formatted_instructions?.map((elem, index) => {
-                  return (
-                    <div key={index} className={styles.meals_steps}>
-                      <>
-                        {elem.dataName.includes("mp4") ? (
-                          <video
-                            controls
-                            className={styles.popup2_step_img}
-                            height={150}
-                          >
-                            <source
-                              src={
-                                props?.meal[
-                                  `meal_image_or_video_content${index + 1}`
-                                ]
-                              }
-                              type="video/mp4"
-                            />
-                            Your browser does not support the video tag.
-                          </video>
-                        ) : (
-                          <img
-                            height={150}
-                            src={
-                              props?.meal[
-                                `meal_image_or_video_content${index + 1}`
-                              ]
-                            }
-                            className={styles.instruction_img}
-                          />
-                        )}
-                      </>
+            {matches ? (
+              props.meal.meal_formatted_instructions?.length > 0 && (
+                <div className={styles.all_steps}>
+                  {props.meal?.meal_formatted_instructions?.map(
+                    (elem, index) => {
+                      return (
+                        <div key={index} className={styles.meals_steps}>
+                          <>
+                            {elem.dataName.includes("mp4") ? (
+                              <div className={styles.popup2_step_img}>
+                                <video
+                                  controls
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                  }}
+                                >
+                                  <source
+                                    src={
+                                      props?.meal[
+                                        `meal_image_or_video_content${
+                                          index + 1
+                                        }`
+                                      ]
+                                    }
+                                    type="video/mp4"
+                                  />
+                                  Your browser does not support the video tag.
+                                </video>
+                              </div>
+                            ) : (
+                              <div className={styles.popup2_step_img}>
+                                <img
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                  }}
+                                  src={
+                                    props?.meal[
+                                      `meal_image_or_video_content${index + 1}`
+                                    ]
+                                  }
+                                />
+                              </div>
+                            )}
+                          </>
 
-                      <span className={styles.carouselText}>
-                        <h6 className={styles.instructionTitle}>
-                          {elem.title}
-                        </h6>
-                        {elem.instructionSteps.map((ele) => (
-                          <p className={styles.instructionStep}>{ele}</p>
-                        ))}
-                      </span>
+                          <span className={styles.carouselText}>
+                            <h6 className={styles.instructionTitle}>
+                              {elem.title}
+                            </h6>
+                            {elem.instructionSteps.map((ele) => (
+                              <p className={styles.instructionStep}>{ele}</p>
+                            ))}
+                          </span>
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
+              )
+            ) : (
+              <div>
+                <Carousel
+                  showStatus={false}
+                  showIndicators={false}
+                  axis="horizontal"
+                  showThumbs={false}
+                  className={styles.recipe}
+                  renderArrowPrev={(clickHandler, hasPrev) => (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10%",
+                        bottom: 0,
+                        left: "2%",
+                        display: hasPrev ? "flex" : "none",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "3px",
+                        opacity: 0.3,
+                        zIndex: 1000,
+                      }}
+                      onClick={clickHandler}
+                    >
+                      <BsArrowLeftCircleFill size={30} className={styles.arr} />
                     </div>
-                  );
-                })}
+                  )}
+                  renderArrowNext={(clickHandler, hasNext) => (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10%",
+                        bottom: 0,
+                        right: 10,
+                        display: hasNext ? "flex" : "none",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "3px",
+                        opacity: 0.3,
+                        cursor: "pointer",
+                        zIndex: 20,
+                      }}
+                      onClick={clickHandler}
+                    >
+                      <BsArrowRightCircleFill
+                        size={30}
+                        className={styles.arr}
+                      />
+                    </div>
+                  )}
+                >
+                  {props.meal.meal_formatted_instructions?.length > 0 &&
+                    props.meal?.meal_formatted_instructions?.map(
+                      (elem, index) => {
+                        return (
+                          <div key={index} className={styles.meals_steps}>
+                            {elem.dataName.includes("mp4") ? (
+                              <video
+                                controls
+                                style={{
+                                  width: "70%",
+                                  height: "196px",
+                                  objectFit: "cover",
+                                }}
+                              >
+                                <source
+                                  src={
+                                    props?.meal[
+                                      `meal_image_or_video_content${index + 1}`
+                                    ]
+                                  }
+                                  type="video/mp4"
+                                />
+                                Your browser does not support the video tag.
+                              </video>
+                            ) : (
+                              <img
+                                style={{
+                                  width: "70%",
+                                  height: "196px",
+                                  objectFit: "cover",
+                                }}
+                                src={
+                                  props?.meal[
+                                    `meal_image_or_video_content${index + 1}`
+                                  ]
+                                }
+                              />
+                            )}
+                            <span className={styles.carouselText}>
+                              <h6 className={styles.instructionTitle}>
+                                {elem.title}
+                              </h6>
+                              {elem.instructionSteps.map((ele) => (
+                                <p key={ele} className={styles.instructionStep}>
+                                  {ele}
+                                </p>
+                              ))}
+                            </span>
+                          </div>
+                        );
+                      }
+                    )}
+                </Carousel>
               </div>
             )}
           </div>

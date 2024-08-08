@@ -150,62 +150,60 @@ const SuggestedMeals = (props) => {
 
       let num = 0;
 
+      const params_ = {};
+
       for (let entry in filteredItems) {
-        url = url.concat(
-          `${
-            num === 0
-              ? `?${entry}=${filteredItems[entry]}`
-              : `&${entry}=${filteredItems[entry]}`
-          }`
-        );
+        params_[entry] = filteredItems[entry];
+
         num = num += 1;
       }
       console.log(props.auth.authUser, "props.auth.authUser");
       if (props.auth.authUser.user_type !== "admin") {
         // url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
-        url = url.concat(
-          `${Object.keys(filteredItems).length ? "&" : "?"}user=` +
-            props.auth.authUser._id
-        );
+        params_.user = props.auth.authUser._id;
       }
       console.log(item_name, "leo");
       if (item_name) {
-        url = url.concat(
-          `${Object.keys(filteredItems).length ? "&" : "?"}name=${item_name}`
-        );
+        params_.name = item_name;
       }
 
-      axios.get(url).then((data) => {
-        if (data.data.data) {
-          console.log("data", data.data.data);
-          setSuggestedCountState(data.data.data.count);
-          setPagesState(Math.ceil(data.data.data.count / 10));
-          console.log("data.data.data.count", data.data.data.count);
-          console.log("data.data", data.data.data.items);
-          const products = data.data.data.items?.filter(
-            (ele) => ele.item_type === "Product" || ele.item_type === "Products"
-          );
-          const utensils = data.data.data.items?.filter(
-            (ele) => ele.item_type === "Utensil" || ele.item_type === "Utensils"
-          );
-          const meals = data.data.data.items?.filter(
-            (ele) => ele.item_type === "Meal" || ele.item_type === "Meals"
-          );
-          const item = data.data.data.items?.filter(
-            (ele) =>
-              ele.item_type === "Product" ||
-              ele.item_type === "Meal" ||
-              ele.item_type === "Utensil" ||
-              ele.item_type === "Utensils" ||
-              ele.item_type === "Meals" ||
-              ele.item_type === "Products"
-          );
-          console.log(products, utensils, meals, "products");
-          setData({ products, meals, item, utensils });
-          setFilteredSuggestionsState(data.data.data);
-          setSuggestionsState(data.data.data);
-        }
-      });
+      axios
+        .get(url, {
+          params: params_,
+        })
+        .then((data) => {
+          if (data.data.data) {
+            console.log("data", data.data.data);
+            setSuggestedCountState(data.data.data.count);
+            setPagesState(Math.ceil(data.data.data.count / 10));
+            console.log("data.data.data.count", data.data.data.count);
+            console.log("data.data", data.data.data.items);
+            const products = data.data.data.items?.filter(
+              (ele) =>
+                ele.item_type === "Product" || ele.item_type === "Products"
+            );
+            const utensils = data.data.data.items?.filter(
+              (ele) =>
+                ele.item_type === "Utensil" || ele.item_type === "Utensils"
+            );
+            const meals = data.data.data.items?.filter(
+              (ele) => ele.item_type === "Meal" || ele.item_type === "Meals"
+            );
+            const item = data.data.data.items?.filter(
+              (ele) =>
+                ele.item_type === "Product" ||
+                ele.item_type === "Meal" ||
+                ele.item_type === "Utensil" ||
+                ele.item_type === "Utensils" ||
+                ele.item_type === "Meals" ||
+                ele.item_type === "Products"
+            );
+            console.log(products, utensils, meals, "products");
+            setData({ products, meals, item, utensils });
+            setFilteredSuggestionsState(data.data.data);
+            setSuggestionsState(data.data.data);
+          }
+        });
     }
   };
   console.log(data, "datass");
@@ -1413,7 +1411,7 @@ const SuggestedMeals = (props) => {
                         type="text"
                         name="search"
                         onChange={handleSearch}
-                        onKeyUp={searchSuggested}
+                        // onKeyUp={searchSuggested}
                         className={styles.search_input}
                         placeholder="Search for products"
                       />
