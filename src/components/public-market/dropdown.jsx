@@ -12,6 +12,8 @@ import { IndividualModal } from "../modal/individual-meal-product";
 import { Mealmodal } from "../mobile/meal-modal";
 import axios from "../../util/Api";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../actions";
 
 const responsive = {
   superLargeDesktop: {
@@ -42,7 +44,9 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
   const [selectedItem, setSelectedItem] = useState({});
   const [quantity, setQuantity] = useState(0);
   const [show, setShow] = useState(false);
+  const [serve, setServe] = useState(0);
   const router = useRouter();
+  const dispatch = useDispatch()
 
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -61,6 +65,8 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
     };
 
     console.log(payload, "payload");
+    console.log(storeInfo, "storeInfo");
+  
     try {
       const response = await axios(`/groceries`, {
         method: "post",
@@ -95,6 +101,38 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
   useEffect(() => {
     fetchGroceryList();
   }, []);
+
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log(storeInfo, "storeInfo");
+    if(qty == 0 ){
+      toast.error("Pls add a quantity");
+    }else{
+       const payload = {
+        userId: (user && user._id) ? user._id : "",
+        storeId : storeInfo.id,
+        store_name: storeInfo.name,//selectedStore.supplier.store_name,
+        itemId : item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: storeInfo.currency,
+        item_image: item.item_images[0],
+        itemName: item.item_name,
+        item_type: item.item_type? item.item_type : "",
+    } 
+    console.log(payload, "Cart payload");
+    try {
+      dispatch(addToCart(payload))
+      setOpenList(false);
+      setShow(false);
+      setOpenModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+    };
+
+  
+  };
 
   const CustomRightArrow = ({ onClick, ...rest }) => {
     const {
@@ -270,6 +308,9 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
                 setQuantity={setQuantity}
                 quantity={quantity}
                 setShow={setShow}
+                addToCart={addItemToCart}
+                serve= {serve}
+                setServe={setServe}
               />
             ) : (
               <IndividualModal
@@ -287,6 +328,9 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
                 setQuantity={setQuantity}
                 quantity={quantity}
                 setShow={setShow}
+                addToCart={addItemToCart}
+                serve= {serve}
+                setServe={setServe}
               />
             )}
           </div>
