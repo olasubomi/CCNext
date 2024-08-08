@@ -23,9 +23,6 @@ export const SuggestedUtensils = () => {
 
   const dispatch = useDispatch();
 
-  const loadMore = () => {
-    setVisibleMeals(visibleMeals + 4);
-  };
 
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
