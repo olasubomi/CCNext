@@ -216,6 +216,10 @@ class Popup2 extends Component {
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.handleClickOutside);
   }
+  shouldShowRightArrow = () => {
+  const { curIn, length, instructionChunk } = this.props;
+  return curIn < length && (instructionChunk[curIn] || instructionChunk[curIn + 1]);
+};
   render() {
     const {
       popupType,
@@ -365,12 +369,12 @@ class Popup2 extends Component {
                                 key={index}
                               >
                                 <td className={styles.td}>
-                                  {elem.item_quantity}
+                                  {elem.item_name}
                                 </td>
                                 <td className={styles.td}>
-                                  {elem.item_measurement}
+                                  {elem.item_quantity}
                                 </td>
-                                <td className={styles.td}>{elem.item_name}</td>
+                                <td className={styles.td}>{elem.item_measurement}</td>
                               </tr>
                             ))}
                           </>
@@ -395,63 +399,61 @@ class Popup2 extends Component {
                 <div className={styles.popup2_col_3}>
                   <h2>Recipe Steps</h2>
                   <div className={styles.popup2_steps}>
-                    {this.props["instructionChunk" + curIn] !== "" && (
-                      <>
-                        {allowedImageExtensions.exec(
-                          this.props[`instructionChunk${curIn}DataName`]
-                        ) && (
-                          <Image
-                            src={this.props["chunk" + curIn + "Content"]}
-                            alt={this.props["instructionChunk" + curIn]?.title}
-                            className={styles.popup2_step_img}
-                            height={150}
-                            width={70}
-                            objectFit="cover"
-                            objectPosition="center"
-                          />
-                        )}
+                    <>
+                      {allowedImageExtensions.exec(
+                        this.props[`instructionChunk${curIn}DataName`]
+                      ) && (
+                        <Image
+                          src={this.props["chunk" + curIn + "Content"]}
+                          alt={this.props["instructionChunk" + curIn]?.title}
+                          className={styles.popup2_step_img}
+                          height={150}
+                          width={70}
+                          objectFit="cover"
+                          objectPosition="center"
+                        />
+                      )}
 
-                        {allowedVideoExtensions.exec(
-                          this.props[`instructionChunk${curIn}DataName`]
-                        ) && (
-                          <video
-                            controls
-                            className={styles.popup2_step_img}
-                            height={150}
-                            width={70}
-                          >
-                            <source
-                              src={this.props["chunk" + curIn + "Content"]}
-                              type="video/mp4"
-                            />
-                            Your browser does not support the video tag.
-                          </video>
-                        )}
-                        <div className={styles.del}>
-                          <h2 className={styles.popup2_step_name}>
-                            {this.props["instructionChunk" + curIn]}
-                          </h2>
-                          <p className={styles.popup2_instructions}>
-                            {this.props[
-                              "instructionChunk" + curIn + "Step"
-                            ]?.map((step, index) => (
+                      {allowedVideoExtensions.exec(
+                        this.props[`instructionChunk${curIn}DataName`]
+                      ) && (
+                        <video
+                          controls
+                          className={styles.popup2_step_img}
+                          height={150}
+                          width={70}
+                        >
+                          <source
+                            src={this.props["chunk" + curIn + "Content"]}
+                            type="video/mp4"
+                          />
+                          Your browser does not support the video tag.
+                        </video>
+                      )}
+                      <div className={styles.del}>
+                        <h2 className={styles.popup2_step_name}>
+                          {this.props["instructionChunk" + curIn]}
+                        </h2>
+                        <p className={styles.popup2_instructions}>
+                          {this.props["instructionChunk" + curIn + "Step"]?.map(
+                            (step, index) => (
                               <div key={index}>
                                 {index + 1}. {step}
                                 <br />
                               </div>
-                            ))}
-                          </p>
-                        </div>
-                      </>
-                    )}
-                    {this.props["instructionChunk" + (curIn + 1)] !==
-                      undefined &&
-                      curIn <= length && (
+                            )
+                          )}
+                        </p>
+                      </div>
+                    </>
+
+                    {this.props["instructionChunk" + (curIn + 1)] &&
+                     
                         <ArrowCircleRightIcon
                           onClick={this.incIn}
                           className={styles.popup2_inc_con}
                         />
-                      )}
+                      }
                     {curIn > 1 && (
                       <ArrowCircleLeftIcon
                         onClick={this.decIn}

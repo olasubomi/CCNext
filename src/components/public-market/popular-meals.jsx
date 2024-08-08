@@ -22,9 +22,9 @@ export const PopularMeals = () => {
   const [quantity, setQuantity] = useState(0);
   const ref = useRef(null);
 
-  const loadMore = () => {
-    setVisibleMeals(visibleMeals + 4);
-  };
+  // const loadMore = () => {
+  //   setVisibleMeals(visibleMeals + 4);
+  // };
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -62,27 +62,46 @@ export const PopularMeals = () => {
     id: "",
     status: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMoreData, setHasMoreData] = useState(true); // Initially assume there's more data
 
-  const fetchMeals = async () => {
-    try {
-      const response = await axios(
-        `/items/1?type=Meal&status=Public&limit=1000`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(response.data.data.items, "ressw");
-      setMeals(response.data.data.items);
-    } catch (error) {
-      console.log(error);
-    }
+  const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
+
+const fetchMeals = async () => {
+  try {
+    const response = await axios(
+      `/items/${currentPage}?type=Meal&status=Public&limit=8`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const totalItems = response.data.data.count;
+    const allItems = response.data.data.items;
+    console.log(response.data.data.items, 'hello')
+
+    const filteredItems = allItems.filter((meal) => meal.average_rating);
+
+    const newItems = filteredItems.filter((item) => !uniqueItemIds.has(item._id));
+
+    setMeals([...meals, ...newItems]);
+    setUniqueItemIds(new Set([...uniqueItemIds, ...newItems.map((item) => item._id)]));
+
+    setHasMoreData(totalItems > currentPage * 8);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+  const loadMore = async () => {
+    setCurrentPage(currentPage + 1);
+    await fetchMeals();
   };
   useEffect(() => {
     fetchMeals();
-  }, []);
+  }, [currentPage]);
   const fetchGroceryList = async () => {
     try {
       const response = await axios(`/groceries/list`, {
@@ -98,9 +117,7 @@ export const PopularMeals = () => {
   useEffect(() => {
     fetchGroceryList();
   }, []);
-  const filteredMeals = meals.filter(
-    (meal) => meal.item_type === "Meal" && meal.average_rating
-  );
+  const filteredMeals = meals.filter((meal) => meal.average_rating);
   console.log(filteredMeals, "fill");
 
   useEffect(() => {
@@ -127,57 +144,54 @@ export const PopularMeals = () => {
         Popular Meals
       </Element>
       <div className={styles.stores2}>
-        {filteredMeals
-          .slice(0, visibleMeals)
-          .filter((meal) => Boolean(meal.total_rating))
-          .map((meal, idx) => {
-            return (
-              <div
-                className={styles.card1}
-                key={idx}
-                onClick={() => {
-                  setSelectedItem(meal);
-                  setOpenModal(true);
-                }}
-              >
-                {
-                  <div className={styles.box}>
-                    <img
-                      src={
-                        meal?.itemImage0
-                          ? meal?.itemImage0
-                          : "/assets/store_pics/no-image-meal.png"
-                      }
-                      className={styles.storeImg1}
-                    />
-                    <div className={styles.flex}>
-                      <p className={styles.name2}>{meal.item_name}</p>
-                      <p>${meal.item_price ? meal.item_price : "0"}</p>
-                    </div>
-                    <p className={styles.storeName}>Chop Chow Official Store</p>
-                    <div className={styles.flex}>
-                      <div>
-                        {Array(5)
-                          .fill("_")
-                          .map((_, idx) => (
-                            <GoStarFill
-                              key={idx + _}
-                              color={
-                                meal.average_rating > idx
-                                  ? "#04D505"
-                                  : "rgba(0,0,0,0.5)"
-                              }
-                              style={{ marginLeft: ".2rem" }}
-                            />
-                          ))}
-                      </div>
-                      <p className={styles.prep}> 0 mins </p>
-                    </div>
+        {meals.map((meal, idx) => {
+          return (
+            <div
+              className={styles.card1}
+              key={idx}
+              onClick={() => {
+                setSelectedItem(meal);
+                setOpenModal(true);
+              }}
+            >
+              {
+                <div className={styles.box}>
+                  <img
+                    src={
+                      meal?.itemImage0
+                        ? meal?.itemImage0
+                        : "/assets/store_pics/no-image-meal.png"
+                    }
+                    className={styles.storeImg1}
+                  />
+                  <div className={styles.flex}>
+                    <p className={styles.name2}>{meal.item_name}</p>
+                    <p>${meal.item_price ? meal.item_price : "0"}</p>
                   </div>
-                }
-              </div>
-            );
-          })}
+                  <p className={styles.storeName}>Chop Chow Official Store</p>
+                  <div className={styles.flex}>
+                    <div>
+                      {Array(5)
+                        .fill("_")
+                        .map((_, idx) => (
+                          <GoStarFill
+                            key={idx + _}
+                            color={
+                              meal.average_rating > idx
+                                ? "#04D505"
+                                : "rgba(0,0,0,0.5)"
+                            }
+                            style={{ marginLeft: ".2rem" }}
+                          />
+                        ))}
+                    </div>
+                    <p className={styles.prep}> 0 mins </p>
+                  </div>
+                </div>
+              }
+            </div>
+          );
+        })}
         {!matches ? (
           <Mealmodal
             openList={openList}
@@ -214,7 +228,10 @@ export const PopularMeals = () => {
           />
         )}
       </div>
-      <p className={styles.view} onClick={() => loadMore()}>
+      <p
+        className={styles.view}
+        onClick={hasMoreData ? loadMore : () => {}} 
+      >
         View More
       </p>
       <div className={styles.border} />
