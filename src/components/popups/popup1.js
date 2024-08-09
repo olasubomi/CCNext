@@ -134,7 +134,7 @@ class Popup1 extends Component {
       item_description,
     } = this.props;
     console.log(imageData, "imageData");
-    console.log(this.props, "DISPLAY");
+    console.log(this.props.ingredientList, "DISPLAY");
     console.log("item_description", item_description);
 
     return (
