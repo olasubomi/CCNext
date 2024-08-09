@@ -2,19 +2,22 @@ import { createContext, useState, useContext, useMemo } from "react";
 
 
 export const CartContext = createContext({
-    cartItems: [],
+    cartItems: [{}],
     addItemsToCart: () => { },
     clearCartItem: () => { },
     removeCartItem: () => { },
     setCartItems: () => { },
-    cartHasItem: () => { }
+    cartHasItem: () => { },
+    AddSelectionToCart: () => {}
 })
 
 
 export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([])
 
+    const [cartItems, setCartItems] = useState([])
+    console.log("context", cartItems)
     const addItemsToCart = (item, toggle) => {
+        console.log("context", {item1: item, toggle1: toggle})
         if (toggle) {
             const itemIndex = cartItems.findIndex(ele => ele?.item_name === item.item_name)
             if (itemIndex !== -1) {
@@ -35,6 +38,12 @@ export const CartProvider = ({ children }) => {
                 }
             })
             setCartItems(data)
+        }
+    }
+
+   const AddSelectionToCart = () => {
+        if(cartItems.length > 0) {
+            
         }
     }
 
@@ -68,10 +77,47 @@ export const CartProvider = ({ children }) => {
         return cartItems.some(element => element.item_name === item.item_name)
     }
 
-    const value = { addItemsToCart, cartItems, removeCartItem, clearCartItem, cartHasItem }
+
+    const value = { addItemsToCart, cartItems, removeCartItem, clearCartItem, cartHasItem, AddSelectionToCart }
     return (
         <CartContext.Provider value={value}>{children}</CartContext.Provider>
     )
 }
 
 export const useCart = () => useContext(CartContext)
+
+
+
+
+
+const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    if(qty == 0 ){
+      toast.error("Pls add a quantity");
+    }else{
+       const payload = {
+        userId: (user && user._id) ? user._id : "{}",
+        storeId : "",
+        store_name: "",
+        itemId : item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: "$",
+        item_image: item.itemImage0,
+        itemName: item.item_name,
+        item_type:  item.item_type? item.item_type : "Meal",
+    } 
+    console.log(payload, "Cart payload line 76 top-selling-product");
+    try {
+      dispatch(addToCart(payload))
+      setOpenList(false);
+      setShow(false);
+      setOpenModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+    };
+  
+  
+  };

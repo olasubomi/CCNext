@@ -120,7 +120,7 @@ export const userSignIn = (email, password, remember, callback, withAuth) => {
       )
       .then(({ data }) => {
         console.log(" ___ userSignIn RESPONSE ___ ", data);
-
+        console.log(" ___ userSignIn RESPONSE ___ ", data.data.token);
         axios.defaults.headers.common["Authorization"] =
           "Bearer " + data.data.token;
 
@@ -390,6 +390,7 @@ export const userSignOut = () => {
     localStorage.removeItem("x-auth-refresh-token");
     localStorage.removeItem("in");
     localStorage.removeItem("user");
+    localStorage.removeItem('cartItems');
     dispatch({ type: FETCH_SUCCESS });
     dispatch({ type: SIGNOUT_USER_SUCCESS });
   };

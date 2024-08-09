@@ -628,8 +628,8 @@ function SignUp(props){
         {openOTP && <OTP formState={formState} setFormState={setFormState} verifynumberFunc={props.verifynumberFunc} type={type} setType={setType}
          verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} sendEmailOTPFunc={props.sendEmailOTPFunc} requestnumberFunc={props.requestnumberFunc} setOpenUserVerificationSuccess={setOpenUserVerificationSuccess} />}
        
-        {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/login")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} isSuccess= {isSuccess} />}
-        
+        {/* {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/login")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} isSuccess= {isSuccess} />}
+         */}
        
       </>
     )

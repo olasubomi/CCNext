@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { useRouter } from 'next/router';
 import { verifyEmailOTP, verifynumber } from '../../actions';
+import { toast } from "react-toastify";
+
 
 const style = {
   position: 'absolute',
@@ -39,7 +41,7 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
   //const [open, setOpen] = useState(true);
  const dispatch = useDispatch()
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false)
+  const handleClose = () => setOpen(true)
 //   const handleOption = (title) => {
 // console.log(title)
 //   }
@@ -98,24 +100,51 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
                                   
   }
   console.log(type);
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-  if(type =='Email Address'){
-    //     console.log(formState.email, password.reduce((a,b) =>a+b))
-       //await verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
-       await dispatch(verifyEmailOTP({email: formState?.email, otp: password?.reduce((a,b) =>a+b)}))
-       next()
-  }else {
-    let request_id = localStorage.getItem("requestId") != "undefined" ? JSON.parse(localStorage.getItem("requestId")) : "{}";
-    console.log("request_id", request_id);
-    if(request_id != undefined || request_id != "{}"){
-       await dispatch(verifynumber(request_id, password.reduce((a,b) =>a+b)))
-       next()
-    }else{
+    let result;
+    try{
+      
+      if(type =='Email Address'){
+        //     console.log(formState.email, password.reduce((a,b) =>a+b))
+           //await verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
+            result =  dispatch(verifyEmailOTP({email: formState?.email, otp: password?.reduce((a,b) =>a+b)}))
+           
+          
+      }else {
+        let request_id = localStorage.getItem("requestId") != "undefined" ? JSON.parse(localStorage.getItem("requestId")) : "{}";
+        console.log("request_id", request_id);
+        if(request_id != undefined || request_id != "{}"){
+            result = dispatch(verifynumber(request_id, password.reduce((a,b) =>a+b)))
+          
+        }else{
+          
+        }
+    
+      }
+    }
+    catch(err){
+      console.log(err)
+    }
+    finally{
+      console.log("result line 107",result)
+      setTimeout(()=> {
+        if(result == undefined) return toast.error("Incorrect PIN. Try again")
+        
+      }, 4000)
+       // Reset the password state
+       setPassword(Array(MaxLength).fill(-1));
+       // Optionally blur the inputs
+      //  inpRefs.current.forEach(input => input && input.blur());
+      //  // Optionally refocus the first input
+      //  if (inpRefs.current[0]) {
+      //    inpRefs.current[0].focus();
+      //  }
+
+
       
     }
-
-  }
+   
  
   }
 

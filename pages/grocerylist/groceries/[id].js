@@ -35,7 +35,7 @@ import {
 } from "../../../src/util";
 import { LoginPrompt } from "../../../src/components/modal/login-prompt";
 import { UserIcon } from "../../../src/components/icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const GroceryPage = () => {
   const customStyles = {
@@ -94,6 +94,8 @@ const GroceryPage = () => {
   const [isUserOnline, setIsUserOnline] = useState(true);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
+
+  const dispatch = useDispatch();
 
   console.log(itemList, "itemListitemList");
 
@@ -325,6 +327,7 @@ const GroceryPage = () => {
       console.log(error);
     }
   };
+
 
   const handleEdit = async (status) => {
     try {
@@ -693,8 +696,10 @@ const GroceryPage = () => {
                   {itemList?.groceryItems?.map((element, idx) => (
                     <>
                       {element.hasOwnProperty("itemData") ? (
+                      
                         <tr key={element?.itemData?._id} className={styles.tr}>
                           <td className={styles.td}>
+                            
                             <input
                               type="checkbox"
                               style={{
@@ -770,8 +775,8 @@ const GroceryPage = () => {
                               name={element?.item?.item_name}
                               value={element?.item?.item_name}
                               
-                              onChange={(e) => {
-                                addItemsToCart();
+                              onClick={(e) => {
+                                addItemsToCart({item: element?.item, qty: element?.quantity}, true);
                               }}
                               type="checkbox"
                               style={{
@@ -915,7 +920,7 @@ const GroceryPage = () => {
               />
             )}
             <div className={styles.cartBtns}>
-              <button className={styles.cartbtn1}>Add Selection to Cart</button>
+              <button className={styles.cartbtn1} onClick={() => addItemToCart(itemList, 1)} >Add Selection to Cart</button>
               <button
                 className={styles.cartbtn2}
                 onClick={() => router.push("/cart")}

@@ -100,7 +100,7 @@ function Meal(props) {
     const user = JSON.parse(localStorage.getItem("user"));
     
     if(qty == 0 ){
-      toast.error("Pls add a quantity");
+      toast.error("Add a quantity");
     }else{
        const payload = {
         userId: (user && user._id) ? user._id : "",
