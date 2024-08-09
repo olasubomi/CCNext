@@ -63,41 +63,41 @@ export const PopularMeals = () => {
     status: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const [hasMoreData, setHasMoreData] = useState(true); // Initially assume there's more data
+  const [hasMoreData, setHasMoreData] = useState(true);
 
   const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
 
-const fetchMeals = async () => {
-  try {
-    const response = await axios(
-      `/items/${currentPage}?type=Meal&status=Public&limit=8`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const totalItems = response.data.data.count;
-    const allItems = response.data.data.items;
-    console.log(response.data.data.items, 'hello')
+  const fetchMeals = async (page) => {
+    try {
+      const response = await axios(
+        `/items/${page ? page : currentPage}?type=Meal&status=Public&limit=4&average_rating=1`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const totalItems = response.data.data.count;
+      const allItems = response.data.data.items;
+      console.log(response.data.data.items, 'hello')
 
-    const filteredItems = allItems.filter((meal) => meal.average_rating);
+      // const filteredItems = allItems.filter((meal) => meal.average_rating);
 
-    const newItems = filteredItems.filter((item) => !uniqueItemIds.has(item._id));
+      const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
 
-    setMeals([...meals, ...newItems]);
-    setUniqueItemIds(new Set([...uniqueItemIds, ...newItems.map((item) => item._id)]));
+      setMeals(prev => [...prev, ...allItems]);
+      setUniqueItemIds(new Set([...uniqueItemIds, ...newItems.map((item) => item._id)]));
 
-    setHasMoreData(totalItems > currentPage * 8);
-  } catch (error) {
-    console.log(error);
-  }
-};
+      setHasMoreData(totalItems > currentPage * 8);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const loadMore = async () => {
     setCurrentPage(currentPage + 1);
-    await fetchMeals();
+    await fetchMeals(currentPage + 1);
   };
   useEffect(() => {
     fetchMeals();
@@ -112,7 +112,7 @@ const fetchMeals = async () => {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -230,7 +230,7 @@ const fetchMeals = async () => {
       </div>
       <p
         className={styles.view}
-        onClick={hasMoreData ? loadMore : () => {}} 
+        onClick={hasMoreData ? loadMore : () => { }}
       >
         View More
       </p>

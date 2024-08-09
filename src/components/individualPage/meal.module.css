@@ -64,6 +64,9 @@
   font-size: 12px;
   border: none;
 }
+.recipe{
+  overflow-x: hidden;
+}
 .post {
   color: #6d6d6d;
   font-size: 13px;
@@ -94,11 +97,9 @@
 .modalContainer {
   width: 100%;
   position: fixed;
-  /* Use 'fixed' instead of 'absolute' for the modal container */
   top: 0;
   left: 0;
   right: 0;
-  /* Use 'right' instead of 'bottom' to cover the bottom */
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.45);
   z-index: 1000;
@@ -120,16 +121,35 @@
 }
 .instructionTitle {
   margin-top: -0.7rem;
+  overflow-x: hidden !important; /* Hide overflowing content */
+  box-sizing: border-box;
+  max-width: 80% !important;
+  font-size: 16px;
+  text-align: left;
   font-weight: 500;
-  text-transform: capitalize;
+}
+
+.instructionStep{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+ 
+}
+.instructionStep p{
+  text-align: start;
+  font-size: 14px;
+ 
 }
 .carouselText{
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-left: -92px;
+  width: 90%;
+
 }
+
 .carouselText p {
   margin-top: -0.5rem;
   font-size: 14px;
@@ -1276,6 +1296,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  overflow-x: hidden;
   }
 
   .meal_section_2_main_img {
@@ -1365,6 +1386,16 @@
     display: flex;
     flex-direction: row-reverse;
     width: 100%;
+  }
+  .instructionTitle {
+    margin-top: -0.7rem;
+    overflow-x: hidden !important; /* Hide overflowing content */
+    box-sizing: border-box;
+    font-size: 14px;
+    text-align: left;
+  }
+  .instructionStep p{
+    font-size: 14px;
   }
 }
 
@@ -1540,5 +1571,27 @@
   .meal_section_2_main_img {
     width: 100%;
     height: 150px;
+  }
+  .instructionTitle {
+    margin-top: -0.7rem;
+    overflow-x: hidden !important; /* Hide overflowing content */
+    box-sizing: border-box;
+    font-size: 12px;
+    text-align: left;
+  }
+  .instructionStep p{
+    font-size: 12px;
+  }
+}
+@media screen and (max-width: 330px) {
+  .instructionTitle {
+    margin-top: -0.7rem;
+    overflow-x: hidden !important; /* Hide overflowing content */
+    box-sizing: border-box;
+    font-size: 11px;
+    text-align: left;
+  }
+  .instructionStep p{
+    font-size: 11px;
   }
 }
