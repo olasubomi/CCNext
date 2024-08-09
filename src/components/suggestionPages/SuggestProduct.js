@@ -738,7 +738,7 @@ class SuggestProductForm extends Component {
     );
     event.preventDefault();
     var properIngredientStringSyntax;
-    var ingredientValue = document.getElementById(id).value;
+    var ingredientValue = document.getElementById(id).value.split(' ').map((ele) => ele.slice(0, 1).toUpperCase().concat(ele.slice(1))).join(' ');
     var quantityValue = Number(this.state.currentIngredientQuantity) // document.getElementById(qty).value;
     // best to get the measurement from the state
     // perhaps becuse inner html is defined before state is updated
@@ -793,7 +793,7 @@ class SuggestProductForm extends Component {
     console.log("COMES IN addIngredientToProduct");
     event.preventDefault();
     var properIngredientStringSyntax;
-    var ingredientValue = document.getElementById("currentIngredient").value;
+    var ingredientValue = document.getElementById("currentIngredient").value.split(' ').map((ele) => ele.slice(0, 1).toUpperCase().concat(ele.slice(1))).join(' ')
     var quantityValue = document.getElementById(
       "currentIngredientQuantity"
     ).value;
@@ -1501,6 +1501,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                 <Chip
                   key={index}
                   label={data}
+                  
                   className={styles.chip}
                   onClick={() => this.handleDeleteIngredientChip(data)}
                   onDelete={() => this.handleDeleteIngredientChip(data)}

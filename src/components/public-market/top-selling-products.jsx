@@ -29,9 +29,9 @@ export const TopSellingProducts = () => {
     listName: "",
   });
 
-  const loadMore = () => {
-    setVisibleProducts(visibleProducts + 5);
-  };
+  // const loadMore = () => {
+  //   setVisibleProducts(visibleProducts + 5);
+  // };
 
   const addItemToGrocery = async (listName) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -110,10 +110,15 @@ let randomId = getRandomInt(1, 1000);
     id: "",
     status: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMoreData, setHasMoreData] = useState(true); // Initially assume there's more data
+
+  const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
+
   const fetchProducts = async () => {
     try {
       const response = await axios(
-        `/items/1?type=Product&status=Public&limit=1000`,
+        `/items/${currentPage}?type=Product&status=Public&limit=8`,
         {
           method: "GET",
           headers: {
@@ -121,18 +126,34 @@ let randomId = getRandomInt(1, 1000);
           },
         }
       );
-      console.log(response.data.data.items, "ressee");
-      const filteredProducts = response.data.data.items.filter(
-        (item) => item.item_type === "Product" && item.average_rating
+      const totalItems = response.data.data.count;
+      const allItems = response.data.data.items;
+      console.log(response.data.data.items, "hello");
+
+      const filteredItems = allItems.filter((meal) => meal.average_rating);
+
+      const newItems = filteredItems.filter(
+        (item) => !uniqueItemIds.has(item._id)
       );
-      setProducts(filteredProducts);
+
+      setProducts([...products, ...newItems]);
+      setUniqueItemIds(
+        new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
+      );
+
+      setHasMoreData(totalItems > currentPage * 8);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const loadMore = async () => {
+    setCurrentPage(currentPage + 1);
+    await fetchProducts();
+  };
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [currentPage]);
 
   const fetchGroceryList = async () => {
     try {
@@ -175,9 +196,7 @@ let randomId = getRandomInt(1, 1000);
         Top Selling Products
       </Element>
       <div className={styles.stores3}>
-        {products
-        ?.slice(0, visibleProducts)
-        ?.map((product, idx) => {
+        {products?.map((product, idx) => {
           return (
             <div
               className={styles.card1}
@@ -241,7 +260,10 @@ let randomId = getRandomInt(1, 1000);
           addToCart={addItemToCart}
         />
       </div>
-      <p className={styles.view2} onClick={() => loadMore()}>
+      <p
+        className={styles.view}
+        onClick={hasMoreData ? loadMore : () => {}}
+      >
         View More
       </p>
       <div className={styles.border} />

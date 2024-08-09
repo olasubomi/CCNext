@@ -1478,10 +1478,8 @@ class SuggestMealForm extends Component {
         suggestMealForm.append("item_images", ele);
       });
     } else {
-      const img = await fetch(
-        "/assets/store_pics/no-image-meal.png"
-      );
-      const blob = await img.blob()
+      const img = await fetch("/assets/store_pics/no-image-meal.png");
+      const blob = await img.blob();
       suggestMealForm.append("item_images", blob);
     }
 
@@ -2086,7 +2084,16 @@ class SuggestMealForm extends Component {
             </div>
           </div>
           <h3>Add Ingredients</h3>
-          <div className={styles.suggestion_form}>
+          <div
+            className={styles.suggestion_form}
+            onKeyDown={(event) => {
+              // Check if the pressed key is Enter
+              if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default form submission
+                this.addIngredientToMeal(event);
+              }
+            }}
+          >
             <div className={styles.suggestion_form_group}>
               <label
                 htmlFor="currentIngredient"
@@ -2168,6 +2175,12 @@ class SuggestMealForm extends Component {
                 onClick={this.addIngredientToMeal}
                 className={styles.ingredient_button}
                 style={{ width: "max-content" }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent default form submission
+                    this.addIngredientToMeal(event);
+                  }
+                }}
               >
                 {" "}
                 Add Ingredient
