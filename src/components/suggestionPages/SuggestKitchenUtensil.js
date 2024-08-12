@@ -354,7 +354,7 @@ class SuggestKitchenUtensilForm extends Component {
         searchResult.indexOf(true);
       console.log(
         "Curr Product Index If Exists In Products List is: \n" +
-          tmpcurrMeasurementIndexInDBsMeasurementList
+        tmpcurrMeasurementIndexInDBsMeasurementList
       );
 
       // check if product name is an existing product
@@ -553,7 +553,7 @@ class SuggestKitchenUtensilForm extends Component {
 
     }
 
-    if(!utensilImage1 && !utensilImage2 && !utensilImage3 && !utensilImage4){
+    if (!utensilImage1 && !utensilImage2 && !utensilImage3 && !utensilImage4) {
       const img = await fetch(
         "/assets/store_pics/no-image-utensil.png"
       );
@@ -577,9 +577,8 @@ class SuggestKitchenUtensilForm extends Component {
         object_name: ele.description_name,
         object_quantity: ele.quantity,
         object_measurement: ele.measurement,
-        formatted_string: `${this.capitalizeWords(ele.description_name)} : ${
-          ele.quantity
-        }${ele.measurement}`,
+        formatted_string: `${this.capitalizeWords(ele.description_name)} : ${ele.quantity
+          }${ele.measurement}`,
       };
     });
 
@@ -788,7 +787,12 @@ class SuggestKitchenUtensilForm extends Component {
             </div>
           </div>
           <h3>Utensil Descriptions</h3>
-          <div className={styles.suggestion_form}>
+          <div className={styles.suggestion_form} onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              this.addDescription(event)
+            }
+          }}>
             <div className={styles.suggestion_form_group}>
               <label
                 htmlFor="descriptionName"
