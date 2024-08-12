@@ -146,7 +146,7 @@ function Meal(props) {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -203,7 +203,7 @@ function Meal(props) {
               {props.meal.item_images?.length > 0 && (
                 <>
                   {props.meal.itemImage0?.length > 0 &&
-                  props.meal.itemImage0 !== "[object HTMLImageElement]" ? (
+                    props.meal.itemImage0 !== "[object HTMLImageElement]" ? (
                     <Image
                       src={props.meal.itemImage0}
                       alt={props.meal.item_name}
@@ -554,9 +554,8 @@ function Meal(props) {
                                   <source
                                     src={
                                       props?.meal[
-                                        `meal_image_or_video_content${
-                                          index + 1
-                                        }`
+                                      `meal_image_or_video_content${index + 1
+                                      }`
                                       ]
                                     }
                                     type="video/mp4"
@@ -574,7 +573,7 @@ function Meal(props) {
                                   }}
                                   src={
                                     props?.meal[
-                                      `meal_image_or_video_content${index + 1}`
+                                    `meal_image_or_video_content${index + 1}`
                                     ]
                                   }
                                 />
@@ -603,7 +602,6 @@ function Meal(props) {
                   showIndicators={false}
                   axis="horizontal"
                   showThumbs={false}
-                  className={styles.recipe}
                   renderArrowPrev={(clickHandler, hasPrev) => (
                     <div
                       style={{
@@ -664,7 +662,7 @@ function Meal(props) {
                                 <source
                                   src={
                                     props?.meal[
-                                      `meal_image_or_video_content${index + 1}`
+                                    `meal_image_or_video_content${index + 1}`
                                     ]
                                   }
                                   type="video/mp4"
@@ -680,21 +678,23 @@ function Meal(props) {
                                 }}
                                 src={
                                   props?.meal[
-                                    `meal_image_or_video_content${index + 1}`
+                                  `meal_image_or_video_content${index + 1}`
                                   ]
                                 }
                               />
                             )}
-                            <span className={styles.carouselText}>
-                              <h6 className={styles.instructionTitle}>
-                                {elem.title}
-                              </h6>
+                           
+                            <div className={styles.instructionStep}>
+                            <h6 className={styles.instructionTitle}>
+                              {elem.title}
+                            </h6>
                               {elem.instructionSteps.map((ele) => (
-                                <p key={ele} className={styles.instructionStep}>
+                                <p key={ele}>
                                   {ele}
                                 </p>
                               ))}
-                            </span>
+
+                            </div>
                           </div>
                         );
                       }
@@ -789,10 +789,10 @@ function Meal(props) {
                     props?.meal?.item_status?.[0]?.status === "Public"
                       ? styles.public
                       : props?.meal?.item_status?.[0]?.status === "Pending"
-                      ? styles.pending
-                      : props?.meal?.item_status?.[0]?.status === "Rejected"
-                      ? styles.rejected
-                      : styles.pending
+                        ? styles.pending
+                        : props?.meal?.item_status?.[0]?.status === "Rejected"
+                          ? styles.rejected
+                          : styles.pending
                   }
                 >
                   <p>{props?.meal?.item_status?.[0]?.status}</p>

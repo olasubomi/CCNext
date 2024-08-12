@@ -139,7 +139,10 @@ body{
 .modal-content {
   background-color: #f6f0f0;
 }
-
+h6{
+  padding: 0;
+  margin: 0;
+}
 /* @media screen and (max-width: 770px) {
   .modal-content {
     border-radius: 0px;
