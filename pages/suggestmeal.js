@@ -125,7 +125,7 @@ class SuggestMeal extends Component {
     console.log(this.props.router, 'this.props.router.query')
 
     setTimeout(() => {
-      this.setState({...this.state, suggestionType: this.props.router?.query?.item_type ?? "Meal" })
+      this.setState({ ...this.state, suggestionType: this.props.router?.query?.item_type ?? "Meal" })
     }, 1000);
     // get all Meal Names***
     console.log(this.categories, "categories");
@@ -247,7 +247,7 @@ class SuggestMeal extends Component {
   openSuggestionModal() {
     setTimeout(() => {
       if (!localStorage.getItem("x-auth-token")) {
-        this.setState({...this.state, suggestionModal: true });
+        this.setState({ ...this.state, suggestionModal: true });
       }
     }, 3000);
   }
@@ -382,7 +382,7 @@ class SuggestMeal extends Component {
             )}
             {suggestionType === "Product" && (
               <SuggestProductForm
-allMealNames={this.allMealNames}
+                allMealNames={this.allMealNames}
                 productNames={this.productNames}
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}

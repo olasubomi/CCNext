@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
 *,
 *::after,
 *::before {
@@ -13,7 +14,8 @@ html {
   font-family: "Inter";
   scroll-behavior: smooth;
 }
-body{
+
+body {
   font-family: 'Inter', sans-serif;
 }
 
@@ -61,6 +63,7 @@ body{
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -364,7 +367,7 @@ a {
   font-size: 13px;
 }
 
-.MuiAutocomplete-popper > * {
+.MuiAutocomplete-popper>* {
   font-size: 13px !important;
 }
 
@@ -378,9 +381,11 @@ input[type="radio"] {
   background-color: transparent;
   border-radius: 50%;
 }
+
 input[type="radio"]:checked {
   background-color: #f47900;
 }
+
 input[type="checkbox"]:checked {
   accent-color: #f47900 !important;
   color: #fff;
@@ -397,41 +402,51 @@ input[type="checkbox"]:checked {
   .custom div[class*="placeholder"] {
     font-size: 11px !important;
   }
+
   .css-13849sg-control {
     font-size: 11px;
     height: 47px;
   }
+
   .css-1dimb5e-singleValue {
     font-size: 11px;
   }
+
   [role="tooltip"].popup-content {
     width: 130px !important;
   }
 }
+
 .eye {
   font-size: 30px;
 }
+
 .dYrfwz {
   min-height: 52px;
 }
+
 .searchbar .wrapper {
   border-radius: 4px 0px 0px 4px;
   border: 0px solid rgba(148, 148, 148, 0.6);
   background: #fff;
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.05);
 }
+
 .css-1aquho2-MuiTabs-indicator {
   background-color: #f47900;
 }
+
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
   color: #000;
   font-size: 14px;
 }
+
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
   font-size: 14px;
   color: #6d6d6d;
   text-transform: capitalize;
 }
+
 .css-13cymwt-control {
   border-color: #f47900;
   border-width: 1px;
@@ -441,6 +456,7 @@ input[type="checkbox"]:checked {
   outline-color: #f47900;
   outline-style: solid;
 }
+
 .css-t3ipsp-control {
   border-color: #f47900;
   border-width: 2px;
@@ -450,25 +466,30 @@ input[type="checkbox"]:checked {
   outline-color: #f47900;
   outline-style: solid;
 }
+
 .option {
   background-color: red;
 }
+
 @media only screen and (max-width: 600px) {
   .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
     color: #000;
     font-size: 10px;
   }
+
   .css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
     font-size: 10px;
     color: #6d6d6d;
     text-transform: capitalize;
   }
+
   .nsm7Bb-HzV7m-LgbsSe {
     font-size: 12px;
     padding: 0 1rem;
     height: 3.9rem;
   }
 }
+
 @media only screen and (max-width: 600px) {
   .nsm7Bb-HzV7m-LgbsSe {
     font-size: 12px;
@@ -477,6 +498,7 @@ input[type="checkbox"]:checked {
     margin-top: 0.5rem;
   }
 }
+
 @media only screen and (max-width: 480px) {
   a {
     text-decoration: none;
@@ -491,6 +513,7 @@ input[type="checkbox"]:checked {
   display: flex;
   justify-content: center;
 }
+
 .verification .otp-inputs input {
   box-sizing: border-box;
   width: 43px;
@@ -500,15 +523,18 @@ input[type="checkbox"]:checked {
   margin: 20px 10px;
   text-align: center;
 }
+
 .verification .otp-options {
   display: flex;
   margin-top: 30px;
   justify-content: center;
 }
+
 .verification .otp-options button {
   margin: 0 10px;
   width: 150px;
 }
+
 .verification small {
   font-family: "Inter";
   font-style: normal;
@@ -531,16 +557,19 @@ input[type="checkbox"]:checked {
   padding: 24px;
   padding-bottom: 50p;
 }
+
 .verification img {
   /* tabler:mail-filled */
 
   width: 62px;
   height: 62px;
 }
+
 .verification img.success-img {
   width: 100px;
   height: 100px;
 }
+
 .verification .withbg {
   /* Ellipse 72 */
 
@@ -552,6 +581,7 @@ input[type="checkbox"]:checked {
   margin: 20px auto;
   margin-bottom: 50px;
 }
+
 .verification .withbg.withcolor {
   width: 120px;
   height: 120px;
@@ -569,6 +599,7 @@ input[type="checkbox"]:checked {
   color: #000000;
   text-align: center;
 }
+
 .verification p {
   font-family: "Inter";
   font-style: normal;
@@ -580,6 +611,7 @@ input[type="checkbox"]:checked {
 
   color: #353535;
 }
+
 .verification .options h4 {
   /* text-align: center; */
   font-family: "Inter";
@@ -591,9 +623,11 @@ input[type="checkbox"]:checked {
   color: #000000;
   margin-bottom: 0;
 }
+
 .verification .options h4 span {
   color: #f47900;
 }
+
 .verification .options {
   margin-top: 50px;
 }
@@ -606,13 +640,16 @@ input[type="checkbox"]:checked {
 .verification .option .img {
   padding: 10px;
 }
+
 .verification .option .img svg {
   width: 24px;
   height: 24px;
 }
+
 .verification .option .title {
   width: 65%;
 }
+
 .verification .option .title h6 {
   /* Email Address */
 
@@ -624,6 +661,7 @@ input[type="checkbox"]:checked {
   width: 70%;
   color: #000000;
 }
+
 .verification .option .title small {
   font-family: "Inter";
   font-style: normal;
@@ -637,11 +675,13 @@ input[type="checkbox"]:checked {
   text-align: left;
   margin: 0;
 }
+
 .verification .option .button {
   display: flex;
   align-items: center;
   width: 223px;
 }
+
 .verification-button {
   cursor: pointer;
   margin-left: auto;
@@ -669,17 +709,21 @@ input[type="checkbox"]:checked {
   order: 0;
   flex-grow: 0;
 }
+
 .verification-button.alt {
   border: 2px solid #f47900;
   background-color: #fff;
   color: #f47900;
 }
+
 .verification-button.bigger {
   width: 223px !important;
 }
+
 .verification-button:hover {
   opacity: 0.9;
 }
+
 @media (max-width: 768px) {
   .verification .option {
     display: flex;
@@ -687,6 +731,7 @@ input[type="checkbox"]:checked {
     gap: 15px;
     align-items: center;
   }
+
   .verification .options h4 {
     margin-left: 0;
     text-align: center;
@@ -721,12 +766,14 @@ input[type="checkbox"]:checked {
   .verification .otp-inputs input {
     margin: 7px;
   }
+
   .verification-button {
     margin: auto;
     padding: 8px 12px;
     font-size: 12px;
     margin-top: 5px;
   }
+
   .verification p,
   .verification .option .title h6,
   .verification small {
@@ -737,23 +784,69 @@ input[type="checkbox"]:checked {
   .verification .options h4 {
     font-size: 10px;
   }
+
   .verification h3 {
     font-size: 18px;
     line-height: 22px;
   }
+
   .verification .otp-inputs input {
     width: 30px;
     height: 32px;
   }
+
   .verification img {
     width: 52px;
     height: 52px;
   }
+
   .verification .withbg.withcolor {
     width: 100px;
     height: 100px;
   }
+
   .verification .withbg {
     margin-bottom: 10px;
   }
+}
+
+
+._video_embed h2 {
+  font-family: Inter;
+  font-size: 17px;
+  color: #000;
+  font-weight: 500;
+}
+
+._video_embed p {
+  color: rgba(109, 109, 109, 1);
+  font-family: Inter;
+  font-size: 14px;
+  color: #000;
+  font-weight: 300;
+  margin-top: -10px;
+}
+
+._video_embed input {
+  width: 660px;
+  height: 51px;
+  padding-left: 16px;
+  border-radius: 4px;
+  margin-top: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+._video_embed button {
+  width: 209px;
+  height: 51px;
+  padding: 14px 17px 14px 17px;
+  border-radius: 4px;
+  color: #fff;
+  font-family: Inter;
+  font-weight: 400;
+  background-color: rgba(244, 121, 0, 1);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin-top: 20px;
 }

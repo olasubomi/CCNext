@@ -14,7 +14,8 @@ let axios = Axios.create({
     baseURL: base_url,
     headers: {
         'Content-Type': 'application/json',
-    }
+    },
+    // timeout: 2000000
 });
 
 // Move the interceptors setup into a separate function
