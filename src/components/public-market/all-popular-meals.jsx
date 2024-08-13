@@ -13,6 +13,7 @@ import { ScrollableElement } from "../smooth-scroll-link";
 import mealImg from "../../../public/assets/store_pics/no-image-meal.png";
 import { BiSolidDownArrow } from "react-icons/bi";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
 
 export const AllPopularMeals = () => {
   const alphabets = [
@@ -60,6 +61,8 @@ export const AllPopularMeals = () => {
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const ref = useRef(null);
+  const [serve, setServe] = useState(0);
+  const dispatch = useDispatch();
 
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
@@ -98,6 +101,39 @@ export const AllPopularMeals = () => {
     id: "",
     status: "",
   });
+
+
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    if(qty == 0 ){
+      toast.error("Pls add a quantity");
+    }else{
+       const payload = {
+        userId: (user && user._id) ? user._id : "",
+        storeId : "",
+        store_name: "",
+        itemId : item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: "$",
+        item_image: item.itemImage0,
+        itemName: item.item_name,
+        item_type:  item.item_type? item.item_type : "Meal",
+    } 
+    console.log(payload, "Cart payload line 76 top-selling-product");
+    try {
+      dispatch(addToCart(payload))
+      setOpenList(false);
+      setShow(false);
+      setOpenModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+    };
+  
+  
+  };
 
   const fetchMeals = async (page) => {
     setIsLoading(true);
@@ -307,6 +343,9 @@ export const AllPopularMeals = () => {
               setQuantity={setQuantity}
               quantity={quantity}
               setShow={setShow}
+              addToCart={addItemToCart}
+              serve={serve}
+            setServe={setServe}
             />
           ) : (
             <IndividualModal
@@ -324,6 +363,9 @@ export const AllPopularMeals = () => {
               setQuantity={setQuantity}
               quantity={quantity}
               setShow={setShow}
+              addToCart={addItemToCart}
+              serve={serve}
+            setServe={setServe}
             />
           )}
         </div>

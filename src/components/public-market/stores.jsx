@@ -17,6 +17,7 @@ export const Stores = () => {
     image: "",
     description: "",
     address: "",
+    currency: "",
     rating: 0,
   });
   const [loadMore, setLoadMore] = useState(6);
@@ -113,6 +114,7 @@ export const Stores = () => {
                           name: store?.store_name,
                           image: store?.profile_picture,
                           description: store?.description,
+                          currency:store?.currency.symbol,
                           address:
                             store?.supplier_address?.address +
                             ", " +
