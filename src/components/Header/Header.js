@@ -4,7 +4,6 @@ import styles from "./header.module.css";
 import Link from "next/link";
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { MobileHeader } from "../mobile/header-mobile";
-import { animateScroll as scroll, scrollSpy, Events } from "react-scroll";
 import { FaCheck } from "react-icons/fa6";
 import { RiMessage2Fill } from "react-icons/ri";
 import { IoSearchCircle, IoSearchOutline } from "react-icons/io5";
@@ -12,38 +11,29 @@ import Image from "next/image";
 import {
   ArrowDownIcon,
   ArrowLeftFillIcon,
-  BasketIcon,
   BasketIcon2,
   CartIcon,
   CartIcon2,
   DashBoardIcon,
   FaqIcon,
-  HomeIcon,
   HomeIcon2,
   NotificationIcon,
-  Order2Icon,
   Order3Icon,
   UserIcon,
-  fastFoodIcon,
 } from "../icons";
-import { Auth } from "../auth";
 import { connect, useSelector } from "react-redux";
 import { getPath } from "../../actions/Common";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { userSignOut, verifyToken, setOpenLogin } from "../../actions";
-import { SimpleSnackbar } from "../../common";
 import { triggerAlert } from "../../actions/";
 import CartContext from "../../../pages/store/cart-context";
-import Login from "../Login";
 import { useAuth } from "../../context/auth.context";
-import signup from "../signup";
 // import profile_pic from "../assets/icons/user-icon.jpg"
-import profile_pic from "../../../public/assets/icons/user.png";
 import moment from "moment";
 import { useMediaQuery } from "../../hooks/usemediaquery";
-import { SearchDropdown } from "../dropdown/search-dropdown";
 import { MobileSearch } from "../dropdown/mobile-search";
 import axios from "../../util/Api";
+import { matches } from "lodash";
 
 function Header(props) {
   // const [isAuthenticated, setIsAuthenticatedState] = useState(false);
@@ -739,75 +729,188 @@ function mapStateToProp(state) {
 
 export default connect(mapStateToProp, mapDispatchToProps)(Header);
 
-export function Header2() {
+export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
   const router = useRouter();
-  const matches = useMediaQuery("(min-width: 900px)");
-  const isLandscape = useMediaQuery("(orientation: landscape)");
-  const [activeLink, setActiveLink] = useState(0);
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const handleSetActive = (id, path) => {
-    setActiveLink(id);
-    router.push(path);
+  const handleActiveSubLink = (id) => {
+    setActiveSubLink(id);
   };
 
-  const menuItems = [
-    { name: "Marketplace", path: "/publicMarket" },
-    { name: "Chefs", path: "/chef" },
-    { name: "Blog", path: "#" },
-  ];
+  const handleMarketplaceClick = () => {
+    if (pathname === "/marketplace") {
+      setOpenDropdown((prev) => !prev);
+      setActiveSubLink(0);
+    } else {
+      setOpenDropdown(false);
+      router.push("/marketplace");
+    }
+  };
 
+  const handleClickOutside = (event) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      !event.target.closest(".marketplace-button")
+    ) {
+      setOpenDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    if (openDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openDropdown]);
+
+  const matches = useMediaQuery("(min-width: 900px)");
+
+  useEffect(() => {
+    if (pathname === "/marketplace") {
+      setOpenDropdown(true);
+    } else {
+      setOpenDropdown(false);
+    }
+  }, [pathname]);
   return (
-    <>
-      {matches ? (
-        <div className={styles.navbar2}>
-          <div className={styles.navbar_main_container}>
-            <div className={styles.navbar_main}>
-              <ul className={styles.navbar_main_links}>
-                {menuItems?.map((elem, id) => (
-                  <li
-                    className={styles.navbar_main_link}
-                    key={id}
-                    onClick={() => handleSetActive(id, elem.path)}
-                  >
+    <div className={styles.navbar2}>
+      <div className={styles.navbar_main_container}>
+        <div className={styles.navbar_main}>
+          <ul className={styles.navbar_main_links}>
+            <li className={styles.navbar_main_link}>
+              <span
+                className={
+                  pathname === "/marketplace"
+                    ? "marketplace-button"
+                    : "marketplace-button2"
+                }
+                onClick={handleMarketplaceClick}
+              >
+                Marketplace
+              </span>
+            </li>
+            <li className={styles.navbar_main_link}>
+              <Link href="#">
+                <span
+                  className={
+                    pathname === "#" ? styles.activelink : styles.inactivelink
+                  }
+                >
+                  Chefs
+                </span>
+              </Link>
+            </li>
+            <li className={styles.navbar_main_link}>
+              <Link href="#">
+                <span
+                  className={
+                    pathname === "#" ? styles.activelink : styles.inactivelink
+                  }
+                >
+                  Blog
+                </span>
+              </Link>
+            </li>
+          </ul>
+
+          <div className={styles.navbar_main_grocery}>
+            <Link href="/suggestmeal">
+              <span
+                className={
+                  pathname === "/suggestmeal"
+                    ? styles.activelink
+                    : styles.inactivelink
+                }
+              >
+                Suggest a Meal
+              </span>
+            </Link>
+            <Link href="/grocery">
+              <span
+                className={
+                  pathname === "/grocery"
+                    ? styles.activelink
+                    : styles.inactivelink
+                }
+              >
+                Grocery List
+              </span>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {matches
+        ? openDropdown &&
+          pathname === "/marketplace" && (
+            <div className={styles.subheader}>
+              <div className={styles.subrow}>
+                {[
+                  "",
+                  "Stores",
+                  "Meals",
+                  "Products",
+                  "Utensils",
+                  "Categories",
+                  "Collection",
+                ].map((elem, index, array) => (
+                  <span key={index} style={{ display: "flex", gap: "1.4rem" }}>
                     <p
                       className={
-                        activeLink === id
-                          ? styles.activelink
-                          : styles.inactivelink
+                        activeSubLink === index
+                          ? styles.activesubrowText
+                          : styles.subrowText
                       }
+                      onClick={() => handleActiveSubLink(index)}
                     >
-                      {elem.name}
+                      {elem}
                     </p>
-                  </li>
+                    {index > 0 && index !== array.length - 1 && (
+                      <p className={styles.subrowText}>|</p>
+                    )}
+                  </span>
                 ))}
-              </ul>
-
-              <div className={styles.navbar_main_grocery}>
-                {/* <div
-                  style={{ cursor: "pointer" }}
-                  className={styles.flex}
-                  onClick={() => setShowDropdown(!showDropdown)}
-                >
-                  <IoSearchOutline size={19} color="#F47900" />
-                  <p>Search</p>
-                </div> */}
-                <Link className={styles.link} href="/suggestmeal">
-                  Suggest a Meal
-                </Link>
-                <Link className={styles.link} href="/grocery">
-                  Grocery List
-                </Link>
               </div>
             </div>
-          </div>
-          {/* {showDropdown && <SearchDropdown setShowDropdown={setShowDropdown} />} */}
-        </div>
-      ) : isLandscape ? (
-        <MobileHeader />
-      ) : (
-        <MobileHeader />
-      )}
-    </>
+          )
+        : openDropdown &&
+          pathname === "/marketplace" && (
+            <div className={styles.subheader} ref={dropdownRef}>
+              <div className={styles.subrow}>
+                {[
+                  "",
+                  "Stores",
+                  "Meals",
+                  "Products",
+                  "Utensils",
+                  "Categories",
+                  "Collection",
+                ].map((elem, index, array) => (
+                  <>
+                    <span key={index}>
+                      <p
+                        className={styles.subrowText}
+                        onClick={() => handleActiveSubLink(index)}
+                      >
+                        {elem}
+                      </p>
+                    </span>
+                    {index > 0 && index !== array.length - 1 && (
+                      <div className={styles.dropdownborder} />
+                    )}
+                  </>
+                ))}
+              </div>
+            </div>
+          )}
+    </div>
   );
 }
 

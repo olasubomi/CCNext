@@ -3,14 +3,34 @@
   grid-auto-flow: row;
   position: fixed;
   top: 0;
-
   width: 100%;
   height: 88px;
-  z-index: 200;
   align-content: center;
   grid-template-rows: 88px;
+  z-index: 200;
   grid-template-columns: 100%;
+  pointer-events: auto;
   /* border-bottom: 1px solid #e7e7e7; */
+}
+.subrow {
+  display: flex;
+  padding: 1rem 2rem;
+  justify-content: space-between;
+  align-items: center;
+  width: 42%;
+}
+.subrowText {
+  font-size: 13px;
+  color: #000000;
+  font-weight: 300;
+  cursor: pointer;
+}
+.activesubrowText {
+  font-size: 13px;
+  color: #f47900;
+  font-weight: 300;
+  cursor: pointer;
+  text-decoration: underline;
 }
 .readDot {
   width: 1rem;
@@ -46,6 +66,15 @@
   z-index: 199;
   top: 88px;
   grid-template-columns: 100%;
+}
+.subheader {
+  position: fixed;
+  width: 100%;
+  z-index: 199;
+  top: 135px;
+  height: 45px;
+  background-color: #ffffff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .flex {
   display: flex;
@@ -220,7 +249,6 @@
   display: flex;
   flex-wrap: wrap;
   grid-auto-flow: column;
-  color: #8bb9d2;
   text-transform: uppercase;
   align-items: center;
   font-style: normal;
@@ -338,7 +366,7 @@
 
 .navbar_down_col_icon {
   color: red;
-  fill: red
+  fill: red;
 }
 
 .navbar_down_col > a > p {
@@ -546,6 +574,8 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   top: 36px;
   right: 0;
+  z-index: 2000;
+  pointer-events: auto; /* Allow interactions with .userdetails */
 }
 .navbar_user_signedin_link {
   display: flex;
@@ -834,12 +864,14 @@
 
 @media only screen and (max-width: 900px) {
   .navbar {
+    grid-template-rows: 88px;
     display: grid;
   }
 
   .navbar2 {
     top: 58px;
-    z-index: 1000;
+    padding-top: 13px;
+    background-color: white;
   }
   .show {
     display: none;
@@ -982,6 +1014,29 @@
     top: 40px;
     right: -32px;
     overflow-y: scroll !important;
+  }
+  .subheader {
+    width: 120px;
+    top: 119px;
+    height: auto;
+    left: 15px;
+  }
+  .subrow {
+    flex-direction: column;
+    padding: 1rem 1rem;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .subrowText {
+    font-size: 12px;
+    padding-left: .3rem;
+  }
+  .dropdownborder{
+    border-bottom: .5px solid rgba(0, 0, 0, 0.5);
+    height: 1px;
+    width: 100%;
+    margin-top: .7rem;
+    margin-bottom: .7rem;
   }
 }
 

@@ -21,33 +21,33 @@ import Head from "next/head";
 import { withRouter } from "next/router";
 class SuggestMeal extends Component {
   allMealNames = [];
-  productNames = [
-    "Spinach",
-    "Brown Beans",
-    "Ijebu Garri",
-    "Honey Beans",
-    "Kale",
-    "Water",
-    "Squash Potatoes",
-    "Oregano",
-    "Cashews",
-    "Palm Oil",
-    "Pineapple",
-    "Onions",
-    "Flour",
-    "Butter",
-    "Sugar",
-    "Hawaiian Bread",
-    "Avocados",
-    "Tomatoes",
-    "Beef",
-    "Green Pepper",
-    "Garlic",
-    "Ginger",
-    "Vegetable Oil",
-    "Lemon",
-    "Rosemary Powder",
-  ];
+  // productNames = [
+  //   "Spinach",
+  //   "Brown Beans",
+  //   "Ijebu Garri",
+  //   "Honey Beans",
+  //   "Kale",
+  //   "Water",
+  //   "Squash Potatoes",
+  //   "Oregano",
+  //   "Cashews",
+  //   "Palm Oil",
+  //   "Pineapple",
+  //   "Onions",
+  //   "Flour",
+  //   "Butter",
+  //   "Sugar",
+  //   "Hawaiian Bread",
+  //   "Avocados",
+  //   "Tomatoes",
+  //   "Beef",
+  //   "Green Pepper",
+  //   "Garlic",
+  //   "Ginger",
+  //   "Vegetable Oil",
+  //   "Lemon",
+  //   "Rosemary Powder",
+  // ];
   productImageLink = [];
   categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
   measurements = [
@@ -92,6 +92,7 @@ class SuggestMeal extends Component {
     super(props);
     this.state = {
       currentStore: "",
+      productNames: [],
 
       // we need to update how we create image paths
       productImg_path: "",
@@ -117,15 +118,40 @@ class SuggestMeal extends Component {
 
     // this.getProductIndex = this.getProductIndex.bind(this);
   }
+  async getIngredients() {
+    try {
+      const response = await axios(
+        `/items/1?type=Product&item_status=Public&limit=1000`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = Array.isArray(response.data.data.items)
+        ? response.data.data.items.map((elem) => elem.item_name)
+        : [];
+      this.setState({
+        ...this.state,
+        productNames: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
     this.openSuggestionModal();
     console.log("suggestionType---", this.state.suggestionType);
-    console.log(this.props.router, 'this.props.router.query')
-
+    console.log(this.props.router, "this.props.router.query");
+    this.getIngredients();
     setTimeout(() => {
-      this.setState({ ...this.state, suggestionType: this.props.router?.query?.item_type ?? "Meal" })
+      this.setState({
+        ...this.state,
+        suggestionType: this.props.router?.query?.item_type ?? "Meal",
+      });
     }, 1000);
     // get all Meal Names***
     console.log(this.categories, "categories");
@@ -159,7 +185,6 @@ class SuggestMeal extends Component {
     // } catch (error) {
     //   console.log(error);
     // }
-
 
     console.log("all meals", this.allMealNames);
     // get all store names*, if NEW products section exists.
@@ -294,8 +319,11 @@ class SuggestMeal extends Component {
               name="viewport"
               content="initial-scale=1.0, width=device-width"
             />
-            <meta name="description" content="Share your go to meals and 
-            everyday cooking ingredients and utensils here on Chop Chow" />
+            <meta
+              name="description"
+              content="Share your go to meals and 
+            everyday cooking ingredients and utensils here on Chop Chow"
+            />
           </Head>
           <div className={styles.suggestion_sections}>
             <div className={styles.suggestion_section_1}>
@@ -373,7 +401,7 @@ class SuggestMeal extends Component {
             {suggestionType === "Meal" && (
               <SuggestMealForm
                 allMealNames={this.allMealNames}
-                productNames={this.productNames}
+                productNames={this.state.productNames}
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}
                 categories={this.categories}
@@ -383,7 +411,7 @@ class SuggestMeal extends Component {
             {suggestionType === "Product" && (
               <SuggestProductForm
                 allMealNames={this.allMealNames}
-                productNames={this.productNames}
+                productNames={this.state.productNames}
                 measurements={this.measurements}
                 kitchenUtensils={this.kitchenUtensils}
                 categories={this.categories}

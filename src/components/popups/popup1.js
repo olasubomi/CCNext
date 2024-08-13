@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import styles from "./popup.module.css";
 import Image from "next/image";
@@ -9,8 +9,24 @@ class Popup1 extends Component {
     this.state = {
       product_fetched: false,
     };
+    this.modalRef = createRef();
+  }
+  componentDidMount() {
+    document.addEventListener("mousedown", this.handleClickOutside);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClickOutside);
+  }
+
+  handleClickOutside = (event) => {
+    if (
+      this.modalRef.current &&
+      !this.modalRef.current.contains(event.target)
+    ) {
+      this.props.closeModal();
+    }
+  };
   edit = () => {
     const {
       name,
@@ -118,14 +134,14 @@ class Popup1 extends Component {
       item_description,
     } = this.props;
     console.log(imageData, "imageData");
-    console.log(this.props, "DISPLAY");
+    console.log(this.props.ingredientList, "DISPLAY");
     console.log("item_description", item_description);
 
     return (
       <>
         {this.props.openModal && (
           <div className={styles.popup_container}>
-            <div className={styles.popup}>
+            <div className={styles.popup} ref={this.modalRef}>
               <div className={styles.popup_col_1}>
                 <div>
                   <Image
