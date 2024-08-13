@@ -25,8 +25,9 @@ export const PopularMeals = () => {
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [serve, setServe] = useState(0);
-  const ref = useRef(null);
   const dispatch = useDispatch();
+  const ref = useRef(null);
+ 
 
   // const loadMore = () => {
   //   setVisibleMeals(visibleMeals + 4);
