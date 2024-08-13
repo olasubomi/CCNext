@@ -2,7 +2,7 @@ import React, { Component, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 // import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete"; // createFilterOptions,
-// import axios from 'axios';
+import _axios from 'axios';
 import axios from "../../util/Api";
 import { Row, Col } from "react-bootstrap";
 import Button from "@mui/material/Button";
@@ -20,6 +20,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { base_url } from "../../util/Api";
 import { withRouter } from "next/router";
+import JSZip from 'jszip';
 import mealImage1 from "../../../public/assets/store_pics/no-image-meal.png";
 
 class SuggestMealForm extends Component {
@@ -27,6 +28,7 @@ class SuggestMealForm extends Component {
 
   constructor(props) {
     super(props);
+    this.inputRef = React.createRef();
     this.state = {
       username: "",
       mealName: "",
@@ -151,8 +153,17 @@ class SuggestMealForm extends Component {
       openModal: false,
       stepInputs: [],
       itemIntro: "",
+      action: "Embed Link",
+      videoData: {
+        socialUrl: "",
+        video: {},
+        videoUrl: "",
+        "transcription": {},
+        data: {}
+      },
+      isLoading: false,
       measurements: [],
-      utensils: [],
+      utensils: []
     };
 
     this.handleIngredientMeasurement =
@@ -191,6 +202,7 @@ class SuggestMealForm extends Component {
     //   .catch((err) => {
     //     console.log(err);
 
+    
     console.log("all meals", this.props.allMealNames);
     const currentUser = JSON.parse(localStorage.getItem("user")) || {};
 
@@ -716,7 +728,7 @@ class SuggestMealForm extends Component {
       const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
       console.log(
         "Curr Product Index If Exists In Products List is: \n" +
-          tmpcurrProductIndexInDBsProductsList
+        tmpcurrProductIndexInDBsProductsList
       );
 
       // check if product name is an existing product
@@ -1203,7 +1215,7 @@ class SuggestMealForm extends Component {
 
     console.log(
       "current state of product index at Add Ingredient To Meal is : \n" +
-        this.state.currProductIndexInDBsProductsList
+      this.state.currProductIndexInDBsProductsList
     );
 
     const searchResult = this.props.productNames.map(function callback(
@@ -1858,6 +1870,190 @@ class SuggestMealForm extends Component {
     // this.setState({ ...this.state, instructionChunk1: delImage })
   }
 
+  async processZipFile(buffer) {
+    const zip = await JSZip.loadAsync(buffer);
+
+    const response = {
+      transcription: {},
+      data: {},
+      videos: []
+    }
+    const jsonFile = zip.file('transcription.json');
+    if (jsonFile) {
+      const jsonData = await jsonFile.async('text');
+      const parsedData = JSON.parse(jsonData);
+      response.transcription = parsedData
+    }
+    const jsonFile_ = zip.file('extract.json');
+    if (jsonFile_) {
+      const jsonData = await jsonFile_.async('text');
+      const parsedData = JSON.parse(jsonData);
+      response.data = parsedData
+    }
+
+    const videoFiles = [];
+    zip.forEach((relativePath, file) => {
+      if (relativePath.endsWith('.mp4') || relativePath.endsWith('.mkv') || relativePath.endsWith('.webm')) {
+        videoFiles.push(file);
+      }
+    });
+    const new_steps = await Promise.all(
+      videoFiles?.map(async (element, idx) => {
+        const stepIndex = Number(element?.name?.split('-')[1]?.split('.')[0]);
+        const step = response.data?.meal_preparation_steps?.find(
+          (ele) => Number(ele?.step) === stepIndex
+        );
+
+        if (step) {
+          const videoBlob = await element.async('blob');
+          const videoURL = URL.createObjectURL(videoBlob);
+          return {
+            ...step,
+            step_video: {
+              videoBlob,
+              videoURL
+            }
+          };
+        } else {
+          return step;
+        }
+      })
+    );
+
+    response.data = {
+      ...response.data,
+      meal_preparation_steps : new_steps
+    }
+
+    videoFiles.forEach(async (videoFile) => {
+      const videoBlob = await videoFile.async('blob');
+      const videoURL = URL.createObjectURL(videoBlob);
+      response.videos.push({
+        videoBlob,
+        videoURL
+      })
+    });
+    return response
+  }
+
+  async processVideo(video, socialUrl) {
+    try {
+      const form = new FormData();
+      if (video) {
+        form.append('video', video)
+      } else if (socialUrl) {
+        form.append('url', socialUrl)
+      } else {
+        return alert('Add a video or url')
+      }
+      this.setState({
+        ...this.state,
+        isLoading: true
+      })
+      const source = _axios.CancelToken.source();
+      const timeout = setTimeout(() => {
+        source.cancel();
+        console.log('Request timed out.');
+      }, 420000);
+      console.log('sending')
+
+      _axios(`${base_url}/items/transcription`, {
+        method: 'put',
+        data: form,
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        cancelToken: source.token,
+        responseType: "arraybuffer"
+      })
+        .then(async (result) => {
+          clearTimeout(timeout);
+
+          console.log(result, 'resss_1');
+         const response =  await this.processZipFile(result.data)
+          this.setState({
+            ...this.state,
+            isLoading: false,
+            videoData: {
+              ...this.state.videoData,
+              transcription: response.transcription,
+              data: response.data
+            }
+          })
+        })
+        .catch((error) => {
+          if (_axios.isCancel(error)) {
+            console.log('Request canceled:', error.message);
+          } else {
+            console.log('An error occurred:', error.message);
+          }
+        });
+    } catch (e) {
+      console.log(e, 'error')
+    }
+  }
+
+  async saveVideo(video) {
+    this.setState({
+      ...this.state,
+      videoData: {
+        video,
+        videoUrl: URL.createObjectURL(video)
+      }
+    })
+  }
+
+  async prefileForm() {
+    const ingredientGroupList = this.state.videoData.data?.ingredients?.map((ele, idx) => {
+      const quantity = ele?.ingredient_quantity ? "" : ele?.ingredient_quantity;
+      const measurement = ele?.ingredient_measurement === 'N/A' ? "" : ele?.ingredient_measurement;
+      return {
+        measurement,
+        productImgPath: null,
+        productIndex: idx,
+        productName: ele?.ingredient_name,
+        properIngredientStringSyntax: (quantity && measurement ? `${quantity} ${measurement} of` : "") + `${ele?.ingredient_name}`,
+        quantity: quantity ? "" : ele?.ingredient_quantity
+      }
+    })
+
+    const ingredientStrings = this.state.videoData.data?.ingredients?.map((ele) => {
+      const quantity = ele?.ingredient_quantity ? "" : ele?.ingredient_quantity;
+      const measurement = ele?.ingredient_measurement === 'N/A' ? "" : ele?.ingredient_measurement;
+      return (quantity && measurement ? `${quantity} ${measurement} of` : "") + `${ele?.ingredient_name}`
+    })
+
+    const obj = {};
+
+    this.state.videoData.data?.meal_preparation_steps?.map((ele, idx) => {
+      obj[`instructionChunk${idx + 1}`] = {
+        title: ele?.step_title,
+        instructionSteps: ele?.step_instruction ?? [],
+        dataName: ""
+      }
+      obj[`chunk${idx+1}Content`] = ele?.step_video?.videoURL
+      const doc = document.getElementById(`chunk${idx + 1}Video`);
+      if(doc){
+        console.log(ele?.step_video?.videoURL, 'ele?.step_video?.videoURL')
+        doc.setAttribute('src', ele?.step_video?.videoURL)
+        doc.style.display = 'block'
+      }
+    })
+
+    this.setState({
+      ...this.state,
+      mealName: this.state.videoData.data?.meal_name ?? "",
+      intro: this.state.videoData.data?.meal_preparation_summary ?? "",
+      ingredientGroupList,
+      ingredientStrings,
+      itemMealName: this.state.videoData.data?.meal_name ?? "",
+      suggestedCategories: this.state.videoData.data?.meal_categories ?? [],
+      suggestedUtensils: this.state.videoData.data?.kitchen_utensils ?? [],
+      stepInputs: (this.state.videoData.data?.meal_preparation_steps ?? [])?.map((_, idx) => idx + 1)?.slice(1),
+      ...obj
+    })
+  }
+
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
     // const [ingredientInput, setIngredientInput] = useState('');
@@ -1866,12 +2062,19 @@ class SuggestMealForm extends Component {
     //   palette: { primary: green },
     // });
 
+
+
+
     // console.log(this.props.categories);
     const { ingredientStrings, stepInputs } = this.state;
-    console.log(stepInputs, "steps");
+    console.log(this.state.videoData, "steps");
 
-    console.log(this.state, "ingredientStrings");
-    console.log(this.state.instructionChunk1?.title, "render");
+    console.log(this.state.ingredientStrings, "ingredientStrings");
+    console.log(this.state.videoData.data, "render");
+
+    console.log(
+      this.state.stepInputs, 'stepInputs'
+    )
     return (
       <div className={styles.suggestion_section_2}>
         <form
@@ -1883,6 +2086,145 @@ class SuggestMealForm extends Component {
           method="post"
         >
           <h3>Begin Suggesting Meal</h3>
+
+          <div className={styles.link_embeb}>
+            <div>
+              <ul>
+                {
+                  ['Embed Link', 'Upload video locally'].map((element) => (
+                    <li
+                      style={{
+                        borderBottom: this.state.action === element ? "2px solid #F47900" : ""
+                      }}
+                      onClick={() => this.setState({
+                        ...this.state,
+                        action: element
+                      })}
+                    >
+                      {element}
+                    </li>
+                  ))
+                }
+              </ul>
+              <div className={styles.box_container}>
+                {
+                  this.state.action === 'Embed Link' && <div>
+                    <p className={styles.paste_url}>Paste the URL link of the video you want to upload</p>
+                    <div className={styles.upload_box}>
+                      <input
+                        onChange={(event) => this.setState({
+                          ...this.state,
+                          videoData: {
+                            ...this.state.videoData,
+                            socialUrl: event.target.value
+                          }
+                        })}
+                        placeholder="Paste the video url here" />
+                      <div style={{
+                        opacity: this.state.videoData.socialUrl ? 1 : 0.6,
+                        cursor: this.state.videoData.socialUrl ? "pointer" : "not-allowed"
+                      }}
+                        onClick={() => this.processVideo(null, this.state.videoData.socialUrl)}
+                      >
+                        <p>
+                          {
+                            this.state.isLoading ? "Loading..." : "UPLOAD"
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                }
+                {
+                  this.state.action === 'Upload video locally' && <>
+                    {
+                      this.state.videoData.videoUrl ? <div className={styles.videoCtn}>
+                        <video
+                          className={styles.video_url}
+                          controls
+                          src={this.state.videoData.videoUrl}
+                        >
+                          Your browser does not support the video tag.
+                        </video>
+                        <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center", }}>
+                          <div className={styles.transcribeBtn_parent}>
+                            <div style={{
+                              backgroundColor: "#fff",
+                              borderRadius: '4px'
+                            }}>
+                              <div
+                                onClick={() => this.processVideo(this.state.videoData.video)}
+                                className={styles.transcribeBtn}>
+                                <p>
+                                  {
+                                    this.state.isLoading ? "Loading..." : "Transcribe Video"
+                                  }
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          onClick={() => this.setState({
+                            ...this.state,
+                            videoData: {
+                              video: {},
+                              videoUrl: ""
+                            }
+                          })}
+                          className={styles.closeBtn}>
+                          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 3.1875C9.38387 3.1875 3.1875 9.38387 3.1875 17C3.1875 24.6161 9.38387 30.8125 17 30.8125C24.6161 30.8125 30.8125 24.6161 30.8125 17C30.8125 9.38387 24.6161 3.1875 17 3.1875ZM22.7528 21.25L21.25 22.7528L17 18.5028L12.75 22.7528L11.2472 21.25L15.4972 17L11.2472 12.75L12.75 11.2472L17 15.4972L21.25 11.2472L22.7528 12.75L18.5028 17L22.7528 21.25Z" fill="#949494" />
+                          </svg>
+                        </div>
+                      </div> :
+                        <div className={styles.local_upload}>
+
+                          <p>Drag and drop your videos here to upload</p>
+                          <p>Or</p>
+                          <div
+                            onClick={() => this.inputRef.current?.click()}
+                          ><p>BROWSE FILES</p></div>
+                          <input
+                            type="file"
+                            onChange={(event) => this.saveVideo(event.target.files[0])}
+                            ref={this.inputRef}
+                            style={{
+                              display: 'none'
+                            }}
+                          />
+
+                        </div>
+                    }
+                  </>
+
+                }
+
+              </div>
+              {
+                Boolean(Object.keys(this.state.videoData?.transcription ?? {}).length) && <div className={styles.transcriptionData}>
+                  <p>Transcription </p>
+                  <div className={styles.transcritionBox}>
+                    {
+                      Object.keys(this.state.videoData.transcription).map((element) => (
+                        <p key={element}>
+                          [{element}]: <span>{this.state.videoData.transcription[element]}</span>
+                        </p>
+                      ))
+                    }
+                  </div>
+                  {
+                    this.state.videoData.data && <div
+                      onClick={() => this.prefileForm()}
+                      className={styles.autofill_btn}>
+                      <p>AUTOFILL FIELDS</p>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
           <div className={styles.suggestion_form}>
             <div className={styles.suggestion_form_group}>
               <label
@@ -1917,8 +2259,8 @@ class SuggestMealForm extends Component {
                   <TextField {...params} variant="outlined" />
                 )}
                 fullWidth
-                // value={this.state.mealName}
-                // value={this.state.itemMealName}
+              // value={this.state.mealName}
+              // value={this.state.itemMealName}
               />
             </div>
             <div className={styles.suggestion_form_2_col}>
@@ -2263,7 +2605,9 @@ class SuggestMealForm extends Component {
           {/* add kitchen slider template here? */}
 
           <h3>Add Recipe Steps</h3>
+
           <div className={styles.suggestion_form}>
+
             {/* <Row>
                     <Col md={12}>
                       <ChipInput label="Instructions"  className={styles.mb-2} fullWidth  value={this.state.instructionsChip} onAdd={(chip) => this.handleAddInstructionStep(chip)} onDelete={(chip, index) =>this.handleDeleteInstructionsStep(chip, index)}   variant="outlined" />
@@ -2422,7 +2766,7 @@ class SuggestMealForm extends Component {
                           onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, id)} variant="outlined" /> */}
                     </div>
                     <Stack direction="row" spacing={1} className={styles.stack}>
-                      {this.state["instructionChunk" + id].instructionSteps.map(
+                      {this.state["instructionChunk" + id]?.instructionSteps?.map(
                         (chip, index) => (
                           <Chip
                             key={index}

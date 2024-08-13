@@ -655,6 +655,7 @@ function Meal(props) {
                                 controls
                                 style={{
                                   width: "70%",
+                                  margin: 'auto',
                                   height: "196px",
                                   objectFit: "cover",
                                 }}
@@ -673,6 +674,7 @@ function Meal(props) {
                               <img
                                 style={{
                                   width: "70%",
+                                  margin: 'auto',
                                   height: "196px",
                                   objectFit: "cover",
                                 }}
@@ -683,11 +685,11 @@ function Meal(props) {
                                 }
                               />
                             )}
-                           
+
                             <div className={styles.instructionStep}>
-                            <h6 className={styles.instructionTitle}>
-                              {elem.title}
-                            </h6>
+                              <h6 className={styles.instructionTitle}>
+                                {elem.title}
+                              </h6>
                               {elem.instructionSteps.map((ele) => (
                                 <p key={ele}>
                                   {ele}
