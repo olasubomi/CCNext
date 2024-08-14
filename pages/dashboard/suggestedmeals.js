@@ -119,6 +119,10 @@ const SuggestedMeals = (props) => {
     first_letter: false,
   });
   const [filteredItems, setFilteredItems] = useState({});
+  const [filteredStores, setFilteredStores] = useState({});
+  const [filteredDescription, setFilteredDescription] = useState({});
+  const [filteredMesr, setFilteredMesr] = useState({});
+  const [filteredCat, setFilteredCat] = useState({});
   console.log(suggestion, "sugessss");
 
   useEffect(() => {
@@ -128,19 +132,21 @@ const SuggestedMeals = (props) => {
   console.log(suggestion, "ooo");
   useEffect(() => {
     getAllDescriptions();
-  }, [status, props.auth]);
+
+  }, [status, props.auth, filteredDescription]);
+
 
   useEffect(() => {
     getAllMeasurement();
-  }, [mealStatus, props.auth]);
+  }, [mealStatus, props.auth, filteredMesr]);
 
   useEffect(() => {
     getAllCategories();
-  }, [props.Auth]);
+  }, [props.Auth, filteredCat]);
 
   useEffect(() => {
     getAllStores();
-  }, [props.Auth]);
+  }, [props.Auth, filteredStores]);
 
   const getUserItems = (newPage, item_name = "") => {
     if (props.auth.authUser) {
@@ -148,14 +154,12 @@ const SuggestedMeals = (props) => {
       let url;
       url = `/items/${newPage ? newPage : page}`;
 
-      let num = 0;
 
       const params_ = {};
 
       for (let entry in filteredItems) {
         params_[entry] = filteredItems[entry];
 
-        num = num += 1;
       }
       console.log(props.auth.authUser, "props.auth.authUser");
       if (props.auth.authUser.user_type !== "admin") {
@@ -215,6 +219,34 @@ const SuggestedMeals = (props) => {
       [key]: value,
     });
   };
+  const handleCatFilter = (key, value) => {
+    setCatPage(1);
+    setFilteredCat({
+      ...filteredCat,
+      [key]: value,
+    });
+  };
+  const handleFilterStores = (key, value) => {
+    setStorePage(1);
+    setFilteredStores({
+      ...filteredStores,
+      [key]: value,
+    });
+  };
+  const handleFilteredDescription = (key, value) => {
+    setDescpage(1);
+    setFilteredDescription({
+      ...filteredDescription,
+      [key]: value,
+    });
+  };
+  const handleFilteredMesr = (key, value) => {
+    setMesrpage(1);
+    setFilteredMesr({
+      ...filteredMesr,
+      [key]: value,
+    });
+  };
   const filterItemByDate = () => {
     let item = [];
     if (!dateFilter) {
@@ -237,17 +269,27 @@ const SuggestedMeals = (props) => {
     });
   };
 
-  const getAllDescriptions = async (newPage) => {
+  const getAllDescriptions = async (newPage, name) => {
     try {
+      const params_ = {};
+      for (let entry in filteredDescription) {
+        params_[entry] = filteredDescription[entry];
+
+      }
+      if (name) {
+        params_.description_name = name
+      }
       console.log(
         `/description/${newPage ? newPage : descPage}?status=${status}`
       );
       const resp = await axios.get(
-        `/description/${newPage ? newPage : descPage}?status=${status}`
+        `/description/${newPage ? newPage : descPage}?status=${status}`, {
+        params: params_
+      }
       );
       if (
-        Array.isArray(resp?.data?.data.description) &&
-        resp?.data?.data?.description?.length
+        Array.isArray(resp?.data?.data.description)
+
       ) {
         setAllDescriptions(resp.data.data.description);
         console.log("description--", resp.data.data);
@@ -282,14 +324,24 @@ const SuggestedMeals = (props) => {
     }
   };
 
-  const getAllMeasurement = async (newPage) => {
+  const getAllMeasurement = async (newPage, name) => {
     try {
+      const params_ = {};
+
+      for (let entry in filteredMesr) {
+        params_[entry] = filteredMesr[entry];
+
+      }
+      if (name) {
+        params_.measurement_key = name
+      }
       const resp = await axios.get(
-        `/measurement/${newPage ? newPage : mesrPage}?status=${mealStatus}`
+        `/measurement/${newPage ? newPage : mesrPage}?status=${mealStatus}`, {
+        params: params_
+      }
       );
       if (
-        Array.isArray(resp?.data?.data?.measurement) &&
-        resp?.data?.data?.measurement?.length
+        Array.isArray(resp?.data?.data?.measurement)
       ) {
         setAllMeasurement(resp.data.data?.measurement);
         setMesrpages(Math.ceil(resp.data.data.count / 10));
@@ -322,18 +374,24 @@ const SuggestedMeals = (props) => {
       console.log(e);
     }
   };
-  const getAllCategories = async (newPage) => {
+  const getAllCategories = async (newPage, name) => {
     try {
+
+      const params = { ...filteredCat }
+      if (name) {
+        params.category_name = name
+      }
       const resp = await axios.get(
-        `/categories/get-all-categories/${newPage ? newPage : catPage}`
+        `/categories/get-all-categories/${newPage ? newPage : catPage}`, {
+        params: params
+      }
       );
       if (
-        Array.isArray(resp?.data?.data.categories) &&
-        resp?.data?.data?.categories?.length
+        Array.isArray(resp?.data?.data.categories)
       ) {
         setAllCategories(resp.data.data.categories);
         console.log("categories--", resp.data.data.categories);
-        setDescpages(Math.ceil(data.data.data.count / 10));
+        setCatPages(Math.ceil(data.data.data.count / 10));
       }
     } catch (e) {
       console.log("err", e);
@@ -379,14 +437,23 @@ const SuggestedMeals = (props) => {
       console.log(e);
     }
   };
-  const getAllStores = async (newPage) => {
+  const getAllStores = async (newPage, name) => {
     try {
+      const params_ = {};
+
+      for (let entry in filteredStores) {
+        params_[entry] = filteredStores[entry];
+      }
+      if (name) {
+        params_.store_key = name
+      }
       const resp = await axios.get(
-        `/stores/getallstores/${newPage ? newPage : storePage}`
+        `/stores/getallstores/${newPage ? newPage : storePage}`, {
+        params: params_
+      }
       );
       if (
-        Array.isArray(resp?.data?.data.products) &&
-        resp?.data?.data?.products?.length
+        Array.isArray(resp?.data?.data.products)
       ) {
         setAllStores(resp?.data?.data.products);
         console.log("storess--", resp?.data?.data?.products);
@@ -490,7 +557,19 @@ const SuggestedMeals = (props) => {
   }
   const searchSuggested = async (name) => {
     const user = localStorage.getItem("user") ?? {};
-    getUserItems(0, searchSuggestedSuggestion);
+
+    if (searchType === 'Item') {
+      getUserItems(0, searchSuggestedSuggestion);
+
+    } else if (searchType === 'Store') {
+      getAllStores(0, searchSuggestedSuggestion)
+    } else if (searchType === 'Category') {
+      getAllCategories(0, searchSuggestedSuggestion)
+    } else if (searchType === "Description") {
+      getAllDescriptions(0, searchSuggestedSuggestion)
+    } else if (searchType === "Measurement") {
+      getAllMeasurement(0, searchSuggestedSuggestion)
+    }
     try {
     } catch (error) {
       console.log(error);
@@ -1400,7 +1479,7 @@ const SuggestedMeals = (props) => {
               <div className={styles.suggestedmeal_container}>
                 <div className={styles.suggestedmeal_search_con}>
                   {
-                    searchType === 'Item' ? <div className={styles.search_con}>
+                    searchType === 'Item' && <div className={styles.search_con}>
                       <div className={styles.search_box}>
                         <p
                           onClick={searchSuggested}
@@ -1423,99 +1502,105 @@ const SuggestedMeals = (props) => {
                       >
                         Search
                       </div>
-                    </div> : searchType === 'Category' ? <div className={styles.search_con}>
-                      <div className={styles.search_box}>
-                        <p
-                          // onClick={searchSuggested}
-                          className={styles.search_icon}
-                        >
-                          <SearchIcon className={styles.search_icon} />
-                        </p>
-                        <input
-                          type="text"
-                          name="search"
-                          // onChange={handleSearch}
-                          // onKeyUp={searchSuggested}
-                          className={styles.search_input}
-                          placeholder="Search for category"
-                        />
-                      </div>
-                      <div
-                        className={styles.search_button}
-                      // onClick={searchSuggested}
-                      >
-                        Search
-                      </div>
-                    </div> : searchType === 'Store' ? <div className={styles.search_con}>
-                      <div className={styles.search_box}>
-                        <p
-                          // onClick={searchSuggested}
-                          className={styles.search_icon}
-                        >
-                          <SearchIcon className={styles.search_icon} />
-                        </p>
-                        <input
-                          type="text"
-                          name="search"
-                          // onChange={handleSearch}
-                          // onKeyUp={searchSuggested}
-                          className={styles.search_input}
-                          placeholder="Search for store"
-                        />
-                      </div>
-                      <div
-                        className={styles.search_button}
-                      // onClick={searchSuggested}
-                      >
-                        Search
-                      </div>
-                    </div> : searchType === 'Description' ? <div className={styles.search_con}>
-                      <div className={styles.search_box}>
-                        <p
-                          // onClick={searchSuggested}
-                          className={styles.search_icon}
-                        >
-                          <SearchIcon className={styles.search_icon} />
-                        </p>
-                        <input
-                          type="text"
-                          name="search"
-                          // onChange={handleSearch}
-                          // onKeyUp={searchSuggested}
-                          className={styles.search_input}
-                          placeholder="Search for description"
-                        />
-                      </div>
-                      <div
-                        className={styles.search_button}
+                    </div>
+                  }
+                  {searchType === 'Category' && <div className={styles.search_con}>
+                    <div className={styles.search_box}>
+                      <p
                         // onClick={searchSuggested}
+                        className={styles.search_icon}
                       >
-                        Search
-                      </div>
-                    </div> : searchType === 'Measurement' ? <div className={styles.search_con}>
-                      <div className={styles.search_box}>
-                        <p
-                          // onClick={searchSuggested}
-                          className={styles.search_icon}
-                        >
-                          <SearchIcon className={styles.search_icon} />
-                        </p>
-                        <input
-                          type="text"
-                          name="search"
-                          // onChange={handleSearch}
-                          // onKeyUp={searchSuggested}
-                          className={styles.search_input}
-                          placeholder="Search for measurement"
-                        />
-                      </div>
-                      <div
-                        className={styles.search_button}
-                      // onClick={searchSuggested}
+                        <SearchIcon className={styles.search_icon} />
+                      </p>
+                      <input
+                        type="text"
+                        name="search"
+                        onChange={handleSearch}
+                        // onKeyUp={searchSuggested}
+                        className={styles.search_input}
+                        placeholder="Search for category"
+                      />
+                    </div>
+                    <div
+                      className={styles.search_button}
+                      onClick={searchSuggested}
+                    >
+                      Search
+                    </div>
+                  </div>
+                  }
+                  {searchType === 'Store' && <div className={styles.search_con}>
+                    <div className={styles.search_box}>
+                      <p
+                        // onClick={searchSuggested}
+                        className={styles.search_icon}
                       >
-                        Search
-                      </div>
-                    </div> : ''
+                        <SearchIcon className={styles.search_icon} />
+                      </p>
+                      <input
+                        type="text"
+                        name="search"
+                        onChange={handleSearch}
+                        // onKeyUp={searchSuggested}
+                        className={styles.search_input}
+                        placeholder="Search for store"
+                      />
+                    </div>
+                    <div
+                      className={styles.search_button}
+                      onClick={searchSuggested}
+                    >
+                      Search
+                    </div>
+                  </div>}
+                  {searchType === 'Description' && <div className={styles.search_con}>
+                    <div className={styles.search_box}>
+                      <p
+                        // onClick={searchSuggested}
+                        className={styles.search_icon}
+                      >
+                        <SearchIcon className={styles.search_icon} />
+                      </p>
+                      <input
+                        type="text"
+                        name="search"
+                        onChange={handleSearch}
+                        // onKeyUp={searchSuggested}
+                        className={styles.search_input}
+                        placeholder="Search for description"
+                      />
+                    </div>
+                    <div
+                      className={styles.search_button}
+                      onClick={searchSuggested}
+                    >
+                      Search
+                    </div>
+                  </div>}
+                  {searchType === 'Measurement' && <div className={styles.search_con}>
+                    <div className={styles.search_box}>
+                      <p
+                        // onClick={searchSuggested}
+                        className={styles.search_icon}
+                      >
+                        <SearchIcon className={styles.search_icon} />
+                      </p>
+                      <input
+                        type="text"
+                        name="search"
+                        onChange={handleSearch}
+                        // onKeyUp={searchSuggested}
+                        className={styles.search_input}
+                        placeholder="Search for measurement"
+                      />
+                    </div>
+                    <div
+                      className={styles.search_button}
+                      onClick={searchSuggested}
+                    >
+                      Search
+                    </div>
+                  </div>
                   }
                   {props.auth.authUser.user_type === "customer" && (
                     <Link href="/dashboard/createstore">Create Store</Link>
@@ -1790,6 +1875,9 @@ const SuggestedMeals = (props) => {
                               deleteDescription={deleteDescription}
                               descriptions={allDescriptions}
                               status={status}
+                              filteredDescription={filteredDescription}
+                              setFilteredDescription={setFilteredDescription}
+                              handleFilteredDescription={handleFilteredDescription}
                               setStatus={setStatus}
                             />
                           )}
@@ -1799,6 +1887,9 @@ const SuggestedMeals = (props) => {
                               updateMeasurement={updateMeasurement}
                               measurements={allMeasurement}
                               status={mealStatus}
+                              filteredMesr={filteredMesr}
+                              setFilteredMesr={setFilteredMesr}
+                              handleFilteredMesr={handleFilteredMesr}
                               setStatus={setMealStatus}
                             />
                           )}
@@ -1809,6 +1900,8 @@ const SuggestedMeals = (props) => {
                               setStatus={setCategoryStatus}
                               updateCategory={updateCategory}
                               deleteCategory={deleteCategory}
+                              filteredCat={filteredCat}
+                              handleCatFilter={handleCatFilter}
                             />
                           )}
                           {searchType === "Store" && (
@@ -1818,6 +1911,9 @@ const SuggestedMeals = (props) => {
                               changeStoreStatus={changeStoreStatus}
                               toggleChangeStoreStatus={toggleChangeStoreStatus}
                               allstores={allStores}
+                              filteredStores={filteredStores}
+                              setFilteredStores={setFilteredStores}
+                              handleFilterStores={handleFilterStores}
                               deleteStore={deleteStore}
                               updateStoreStatus={updateStoreStatus}
                               openStoreSuggestion={openStoreSuggestion}
