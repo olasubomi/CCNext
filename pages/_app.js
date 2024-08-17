@@ -1,4 +1,6 @@
 import "react-bootstrap-typeahead/css/Typeahead.css";
+import '../src/styles/home.styles.css'
+import '../src/styles/carousel.styles.css'
 import "../src/App.css";
 import { wrapper, } from "../src/store/index";
 import { persistor, store } from '../src/store/index'
@@ -17,7 +19,7 @@ function MyApp({ Component, pageProps }) {
   useInactivityLogout(1200000)
   return (
     <>
-      <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
+      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <AuthProvider>

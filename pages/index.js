@@ -30,6 +30,7 @@ import { connect } from "react-redux";
 import axios from "../src/util/Api";
 import productsObj from "../src/custom_data/products.json";
 import SideNav from "../src/components/Header/sidenav";
+import HomePage from "./home";
 // import { createMuiTheme, ThemeProvider } from '@mui/material';
 
 class App extends Component {
@@ -133,8 +134,9 @@ class App extends Component {
         <Header />
         <Header2 />
         <SideNav />
+        <HomePage />
 
-        <LandingPage />
+        {/* <LandingPage /> */}
         <Footer />
       </CartProvider>
     );

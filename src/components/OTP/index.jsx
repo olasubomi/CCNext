@@ -7,7 +7,12 @@ import Modal from '@mui/material/Modal';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Router } from 'react-router-dom';
+import { useRouter } from 'next/router';
+import { verifyEmailOTP, verifynumber } from '../../actions';
+import { toast } from "react-toastify";
+
 
 const style = {
   position: 'absolute',
@@ -19,7 +24,8 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTPFunc, verifynumberFunc, formState, setFormState, sendEmailOTPFunc}) {
+export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTPFunc, verifynumberFunc, formState, setFormState, sendEmailOTPFunc,requestnumberFunc}) {
+  
   
   //const {}= useSelector( state => state.Auth);
   //const {isVerified}= useSelector( state => state.Common)
@@ -27,11 +33,15 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
   let MaxLength = 6;
   const  [password, setPassword] = useState(Array(MaxLength).fill(-1))
   const inpRefs = useRef(null);
+  //const [close, setClose] = useState(false)
   const [activeInput, setActiveInput] = useState(-1);
+  const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
+  const [submissionFailed, setSubmissionFailed] = useState(false);
   //const [open, setOpen] = useState(true);
- 
+ const dispatch = useDispatch()
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => setOpen(true)
 //   const handleOption = (title) => {
 // console.log(title)
 //   }
@@ -89,24 +99,62 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
       }
                                   
   }
-  
-  const handleSubmit = () => {
-
-    if(type =='Email Address'){
-      console.log(formState.email, password.reduce((a,b) =>a+b))
-      verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
+  console.log(type);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let result;
+    try{
       
-    }else {
-      verifynumberFunc(request_id,password.reduce((a,b) =>a+b))
-    }
-    setTimeout(() => {
-      next();
-    }, 1000);
+      if(type =='Email Address'){
+        //     console.log(formState.email, password.reduce((a,b) =>a+b))
+           //await verifyEmailOTPFunc({email: formState?.email, otp: password?.reduce((a,b) =>a+b)})
+            result =  dispatch(verifyEmailOTP({email: formState?.email, otp: password?.reduce((a,b) =>a+b)}))
+           
+          
+      }else {
+        let request_id = localStorage.getItem("requestId") != "undefined" ? JSON.parse(localStorage.getItem("requestId")) : "{}";
+        console.log("request_id", request_id);
+        if(request_id != undefined || request_id != "{}"){
+            result = dispatch(verifynumber(request_id, password.reduce((a,b) =>a+b)))
+          
+        }else{
+          
+        }
     
+      }
+    }
+    catch(err){
+      console.log(err)
+    }
+    finally{
+      console.log("result line 107",result)
+      setTimeout(()=> {
+        if(result == undefined) return toast.error("Incorrect PIN. Try again")
+        
+      }, 4000)
+       // Reset the password state
+       setPassword(Array(MaxLength).fill(-1));
+       // Optionally blur the inputs
+      //  inpRefs.current.forEach(input => input && input.blur());
+      //  // Optionally refocus the first input
+      //  if (inpRefs.current[0]) {
+      //    inpRefs.current[0].focus();
+      //  }
+
+
+      
+    }
+   
+ 
   }
 
-  const handleResendOtp = () => {
-    sendEmailOTPFunc({email: form?.email})
+  const handleResendOtp = async () => {
+    if(type == 'Email Address'){
+      await sendEmailOTPFunc({email: formState?.email})
+    }else{
+      await requestnumberFunc({number: formState?.phone_number})
+    }
+    
   }
 
   return (
@@ -121,8 +169,8 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
           <div className='verification'>
             <div className='withbg withcolor' >
           <img    src="/assets/signup/tabler_mail-filled.svg" alt="Signup" /></div>
-            <h3>Verify email address to create a<br />new account</h3>
-            <small>An email with the verification code has been sent<br />to {formState?.email}</small>
+            <h3>Verify {type == "Email Address" ? "email address" : "your phone number"} to create a<br />new account</h3>
+            <small>{type == "Email Address" ? "An email" : "A message"} with the verification code has been sent<br />to {type == "Email Address" ? formState?.email : formState?.phone_number}</small>
            
 
 
@@ -150,7 +198,8 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
   ))}
   <div className='otp-options'>
 
-  <button className='verification-button' onClick={handleSubmit} >Verify {type}</button>
+  {/* <button className='verification-button' onClick={handleSubmit} >{submitting ? "submitting" : `Verify ${type}`}</button> */}
+  <button className='verification-button' onClick={() => handleSubmit(event)} >Verify {type}</button>
    <button className='verification-button alt' onClick={handleClose}>Cancel</button>
 </div>
 
@@ -158,7 +207,7 @@ export default function OTP({next,  open, setOpen, type, setType, verifyEmailOTP
  </div>
 
  
-<h4 style={{ marginLeft: 0, textAlign: 'center'} }>Didn’t receive code? <span onClick={handleResendOtp}>Resend</span> </h4>
+<h4 style={{ marginLeft: 0, textAlign: 'center',  cursor:"pointer"} }>Didn’t receive code? <span onClick={handleResendOtp}>Resend</span> </h4>
 
 
 
