@@ -126,7 +126,7 @@ export default function OTP({ next, open, setOpen, type, setType, verifyEmailOTP
         toast.error("Incorrect PIN. Try again");
       } else {
         toast.success("Verification successful!");
-        console.log("Verification succeeded");
+        console.log("Verification success");
       }
     } catch (err) {
       console.error("Verification error:", err);
