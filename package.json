@@ -96,7 +96,6 @@
     "source-map-explorer": "^2.5.2",
     "styled-components": "^5.3.6",
     "uuid": "^10.0.0",
-    "yarn": "^1.22.19"
     "yarn": "^1.22.19",
     "youtube-dl-exec": "^3.0.7"
   },
