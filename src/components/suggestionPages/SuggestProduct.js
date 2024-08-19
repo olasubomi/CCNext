@@ -143,6 +143,7 @@ class SuggestProductForm extends Component {
       //productsModal controller
       openModal: false,
       stepInputs: [],
+      measurements: []
     };
 
     this.closeModal = this.closeModal.bind(this);
@@ -216,6 +217,28 @@ class SuggestProductForm extends Component {
     //   .catch((err) => {
     //     console.log(err);
     //   });
+    const getAllMeasurement = async (newPage) => {
+      try {
+        const resp = await axios.get(
+          `/measurement/1?withPaginate=false&status=Public`
+        );
+        if (
+          Array.isArray(resp?.data?.data?.measurement) &&
+          resp?.data?.data?.measurement?.length
+        ) {
+          const mesr_names = resp.data.data?.measurement.map(
+            (ele) => ele.measurement_name
+          );
+          this.setState({
+            ...this.state,
+            measurements: mesr_names,
+          });
+        }
+      } catch (e) {
+        console.log("err-", e);
+      }
+    };
+    getAllMeasurement();
     this.categories = this.categories;
     if (typeof window !== "undefined") {
       let doc = document.querySelector("#formproduct");
@@ -711,17 +734,16 @@ class SuggestProductForm extends Component {
   ) => {
     console.log(
       "COMES IN addIngredientToProduct",
-      this.state.nutritionalStrings
+      this.state.currentIngredientQuantity
     );
     event.preventDefault();
     var properIngredientStringSyntax;
-    var ingredientValue = document.getElementById(id).value;
-    var quantityValue = document.getElementById(qty).value;
+    var ingredientValue = document.getElementById(id).value.split(' ').map((ele) => ele.slice(0, 1).toUpperCase().concat(ele.slice(1))).join(' ');
+    var quantityValue = Number(this.state.currentIngredientQuantity) // document.getElementById(qty).value;
     // best to get the measurement from the state
     // perhaps becuse inner html is defined before state is updated
     // var measurementValue = this.state.currentIngredientMeasurement;
     var measurementValue = document.getElementById(msr).value;
-
     if (ingredientValue === "") {
       window.alert("Enter an ingredient to add to product@@");
       return;
@@ -771,7 +793,7 @@ class SuggestProductForm extends Component {
     console.log("COMES IN addIngredientToProduct");
     event.preventDefault();
     var properIngredientStringSyntax;
-    var ingredientValue = document.getElementById("currentIngredient").value;
+    var ingredientValue = document.getElementById("currentIngredient").value.split(' ').map((ele) => ele.slice(0, 1).toUpperCase().concat(ele.slice(1))).join(' ')
     var quantityValue = document.getElementById(
       "currentIngredientQuantity"
     ).value;
@@ -1023,6 +1045,14 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
       suggestProductForm.append("item_images", productImage4);
     }
 
+    if(!productImage1 && !productImage2 && !productImage3 && !productImage4){
+      const img = await fetch(
+        "/assets/store_pics/no-image-product.png"
+      );
+      const blob = await img.blob()
+      suggestProductForm.append("item_images", blob);
+    }
+
     // suggestProductForm.append('product_images', productImage2);
     // suggestProductForm.append('product_images', productImage3);
     // suggestProductForm.append('product_images', productImage4);
@@ -1078,6 +1108,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
     };
 
     for (let ele of Object.keys(description)) {
+      console.log(description[ele],description, 'description_')
       arr2.push({
         object_name: ele,
         object_quantity: description[ele].match(/\d+/)[0],
@@ -1192,7 +1223,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
     const { ingredientStrings, sizeStrings, nutritionalStrings } = this.state;
-    console.log(this.state.productImagesData, 'this.state.productImagesData')
+    console.log(this.state.nutritionalStrings, 'tthis.state.nutritionalStrings')
 
     return (
       <div className={styles.suggestion_section_2}>
@@ -1335,7 +1366,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                   </label>
                   <Autocomplete
                     id="sizeMeasurement"
-                    options={this.measurements.map((option) => option)}
+                    options={this.state.measurements.map((option) => option)}
                     value={this.state.sizeMeasurement}
                     x
                     onChange={this.handleSizeMeasurement}
@@ -1387,7 +1418,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
               </label>
               <Autocomplete
                 id="currentIngredient"
-                options={this.productNames.map((option) => option)}
+                options={this.props.productNames.map((option) => option)}
                 // onChange={(ev)=>this.onTextFieldChange(ev)}
                 value={this.state.currentIngredient}
                 onChange={(ev, val) => this.handleProductNameInput(ev, val)}
@@ -1470,6 +1501,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                 <Chip
                   key={index}
                   label={data}
+                  
                   className={styles.chip}
                   onClick={() => this.handleDeleteIngredientChip(data)}
                   onDelete={() => this.handleDeleteIngredientChip(data)}
@@ -1524,7 +1556,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                     onChange={this.onTextFieldChange}
                     variant="outlined"
                     placeholder="1.."
-                    // value={this.state.currentIngredientQuantity}
+                    value={this.state.currentIngredientQuantity}
                   />
                 </div>
               </div>
@@ -1539,7 +1571,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                   </label>
                   <Autocomplete
                     id="currentIngredientMeasurement1"
-                    options={this.measurements.map((option) => option)}
+                    options={this.state.measurements.map((option) => option)}
                     // value={this.state.currentIngredientMeasurement}
                     onChange={this.handleIngredientMeasurement}
                     freeSolo

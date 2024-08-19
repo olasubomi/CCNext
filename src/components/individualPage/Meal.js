@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./meal.module.css";
-
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Head from "next/head";
 import Image from "next/image";
 import {
@@ -39,6 +40,7 @@ import { FaEnvelope } from "react-icons/fa";
 import { IoMdCall } from "react-icons/io";
 import { HiLocationMarker } from "react-icons/hi";
 import { RejectionModal } from "../modal/rejection-modal";
+import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 
 function Meal(props) {
   //const url = 'http://localhost:3000/'
@@ -108,7 +110,7 @@ function Meal(props) {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -121,19 +123,16 @@ function Meal(props) {
   // useEffect(() => {
   //     setServes(parseInt(props.props.meal.servings))
   // })
-  console.log(props, "line 24");
   function addServe(val) {
     let s = serves + val;
     if (s >= props.meal.servings) {
       setServes(s);
     }
   }
-  console.log(props, "props.props.auth.authUser.user_type");
   // console.log(props.props.props.props.meal, "meal props.props")
   let num = 0;
 
   console.log("meald callback", props.callback);
-  console.log(props, "serve me");
 
   console.log(props, "propsssmeal");
 
@@ -168,7 +167,7 @@ function Meal(props) {
               {props.meal.item_images?.length > 0 && (
                 <>
                   {props.meal.itemImage0?.length > 0 &&
-                  props.meal.itemImage0 !== "[object HTMLImageElement]" ? (
+                    props.meal.itemImage0 !== "[object HTMLImageElement]" ? (
                     <Image
                       src={props.meal.itemImage0}
                       alt={props.meal.item_name}
@@ -497,52 +496,173 @@ function Meal(props) {
           </div>
           <div>
             <h3>Steps</h3>
-            {props.meal.meal_formatted_instructions?.length > 0 && (
-              <div className={styles.all_steps}>
-                {props.meal?.meal_formatted_instructions?.map((elem, index) => {
-                  return (
-                    <div key={index} className={styles.meals_steps}>
-                      <>
-                        {elem.dataName.includes("mp4") ? (
-                          <video
-                            controls
-                            className={styles.popup2_step_img}
-                            height={150}
-                          >
-                            <source
-                              src={
-                                props?.meal[
-                                  `meal_image_or_video_content${index + 1}`
-                                ]
-                              }
-                              type="video/mp4"
-                            />
-                            Your browser does not support the video tag.
-                          </video>
-                        ) : (
-                          <img
-                            height={150}
-                            src={
-                              props?.meal[
-                                `meal_image_or_video_content${index + 1}`
-                              ]
-                            }
-                            className={styles.instruction_img}
-                          />
-                        )}
-                      </>
+            {matches ? (
+              props.meal.meal_formatted_instructions?.length > 0 && (
+                <div className={styles.all_steps}>
+                  {props.meal?.meal_formatted_instructions?.map(
+                    (elem, index) => {
+                      return (
+                        <div key={index} className={styles.meals_steps}>
+                          <>
+                            {elem.dataName.includes("mp4") ? (
+                              <div className={styles.popup2_step_img}>
+                                <video
+                                  controls
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                  }}
+                                >
+                                  <source
+                                    src={
+                                      props?.meal[
+                                      `meal_image_or_video_content${index + 1
+                                      }`
+                                      ]
+                                    }
+                                    type="video/mp4"
+                                  />
+                                  Your browser does not support the video tag.
+                                </video>
+                              </div>
+                            ) : (
+                              <div className={styles.popup2_step_img}>
+                                <img
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                  }}
+                                  src={
+                                    props?.meal[
+                                    `meal_image_or_video_content${index + 1}`
+                                    ]
+                                  }
+                                />
+                              </div>
+                            )}
+                          </>
 
-                      <span className={styles.carouselText}>
-                        <h6 className={styles.instructionTitle}>
-                          {elem.title}
-                        </h6>
-                        {elem.instructionSteps.map((ele) => (
-                          <p className={styles.instructionStep}>{ele}</p>
-                        ))}
-                      </span>
+                          <span className={styles.carouselText}>
+                            <h6 className={styles.instructionTitle}>
+                              {elem.title}
+                            </h6>
+                            {elem.instructionSteps.map((ele) => (
+                              <p className={styles.instructionStep}>{ele}</p>
+                            ))}
+                          </span>
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
+              )
+            ) : (
+              <div>
+                <Carousel
+                  showStatus={false}
+                  showIndicators={false}
+                  axis="horizontal"
+                  showThumbs={false}
+                  renderArrowPrev={(clickHandler, hasPrev) => (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10%",
+                        bottom: 0,
+                        left: "2%",
+                        display: hasPrev ? "flex" : "none",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "3px",
+                        opacity: 0.3,
+                        zIndex: 1000,
+                      }}
+                      onClick={clickHandler}
+                    >
+                      <BsArrowLeftCircleFill size={30} className={styles.arr} />
                     </div>
-                  );
-                })}
+                  )}
+                  renderArrowNext={(clickHandler, hasNext) => (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10%",
+                        bottom: 0,
+                        right: 10,
+                        display: hasNext ? "flex" : "none",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "3px",
+                        opacity: 0.3,
+                        cursor: "pointer",
+                        zIndex: 20,
+                      }}
+                      onClick={clickHandler}
+                    >
+                      <BsArrowRightCircleFill
+                        size={30}
+                        className={styles.arr}
+                      />
+                    </div>
+                  )}
+                >
+                  {props.meal.meal_formatted_instructions?.length > 0 &&
+                    props.meal?.meal_formatted_instructions?.map(
+                      (elem, index) => {
+                        return (
+                          <div key={index} className={styles.meals_steps}>
+                            {elem.dataName.includes("mp4") ? (
+                              <video
+                                controls
+                                style={{
+                                  width: "70%",
+                                  height: "196px",
+                                  objectFit: "cover",
+                                }}
+                              >
+                                <source
+                                  src={
+                                    props?.meal[
+                                    `meal_image_or_video_content${index + 1}`
+                                    ]
+                                  }
+                                  type="video/mp4"
+                                />
+                                Your browser does not support the video tag.
+                              </video>
+                            ) : (
+                              <img
+                                style={{
+                                  width: "70%",
+                                  height: "196px",
+                                  objectFit: "cover",
+                                }}
+                                src={
+                                  props?.meal[
+                                  `meal_image_or_video_content${index + 1}`
+                                  ]
+                                }
+                              />
+                            )}
+                           
+                            <div className={styles.instructionStep}>
+                            <h6 className={styles.instructionTitle}>
+                              {elem.title}
+                            </h6>
+                              {elem.instructionSteps.map((ele) => (
+                                <p key={ele}>
+                                  {ele}
+                                </p>
+                              ))}
+
+                            </div>
+                          </div>
+                        );
+                      }
+                    )}
+                </Carousel>
               </div>
             )}
           </div>
@@ -629,16 +749,16 @@ function Meal(props) {
                 </button>
                 <div
                   className={
-                    props?.meal?.item_status[0].status === "Public"
+                    props?.meal?.item_status?.[0]?.status === "Public"
                       ? styles.public
-                      : props?.meal?.item_status[0].status === "Pending"
-                      ? styles.pending
-                      : props?.meal?.item_status[0].status === "Rejected"
-                      ? styles.rejected
-                      : styles.pending
+                      : props?.meal?.item_status?.[0]?.status === "Pending"
+                        ? styles.pending
+                        : props?.meal?.item_status?.[0]?.status === "Rejected"
+                          ? styles.rejected
+                          : styles.pending
                   }
                 >
-                  <p>{props?.meal?.item_status[0].status}</p>
+                  <p>{props?.meal?.item_status?.[0]?.status}</p>
                 </div>
               </div>
             </div>

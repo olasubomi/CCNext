@@ -24,9 +24,9 @@ export const TopSellingProducts = () => {
     listName: "",
   });
 
-  const loadMore = () => {
-    setVisibleProducts(visibleProducts + 5);
-  };
+  // const loadMore = () => {
+  //   setVisibleProducts(visibleProducts + 5);
+  // };
 
   const addItemToGrocery = async (listName) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -60,10 +60,15 @@ export const TopSellingProducts = () => {
     id: "",
     status: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMoreData, setHasMoreData] = useState(true); // Initially assume there's more data
+
+  const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
+
   const fetchProducts = async () => {
     try {
       const response = await axios(
-        `/items/1?type=Product&status=all&limit=50`,
+        `/items/${currentPage}?type=Product&status=Public&limit=8`,
         {
           method: "GET",
           headers: {
@@ -71,15 +76,34 @@ export const TopSellingProducts = () => {
           },
         }
       );
-      console.log(response.data.data.items, "ressee");
-      setProducts(response.data.data.items);
+      const totalItems = response.data.data.count;
+      const allItems = response.data.data.items;
+      console.log(response.data.data.items, "hello");
+
+      const filteredItems = allItems.filter((meal) => meal.average_rating);
+
+      const newItems = filteredItems.filter(
+        (item) => !uniqueItemIds.has(item._id)
+      );
+
+      setProducts([...products, ...newItems]);
+      setUniqueItemIds(
+        new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
+      );
+
+      setHasMoreData(totalItems > currentPage * 8);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const loadMore = async () => {
+    setCurrentPage(currentPage + 1);
+    await fetchProducts();
+  };
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [currentPage]);
 
   const fetchGroceryList = async () => {
     try {
@@ -112,9 +136,7 @@ export const TopSellingProducts = () => {
     }
   }, []);
 
-  const filteredProducts = products.filter(
-    (product) => product.item_type === "Product" && product.average_rating
-  );
+  console.log(products, "products");
   return (
     <div className={styles.mealContainer1}>
       <Element
@@ -124,9 +146,7 @@ export const TopSellingProducts = () => {
         Top Selling Products
       </Element>
       <div className={styles.stores3}>
-        {filteredProducts.slice(0, visibleProducts).map((product, idx) => {
-          console.log(product.item_name, product?.itemImage0, "pp");
-
+        {products?.map((product, idx) => {
           return (
             <div
               className={styles.card1}
@@ -136,41 +156,39 @@ export const TopSellingProducts = () => {
                 setOpenModal(true);
               }}
             >
-              {product?.itemImage0 && (
-                <div className={styles.box}>
-                  <img
-                    src={
-                      product?.itemImage0
-                        ?   product?.itemImage0
-                        : "/assets/store_pics/no-image-product.png"
-                    }
-                    className={styles.storeImg2}
-                  />
-                  <div className={styles.flex}>
-                    <p className={styles.name2}>{product.item_name}</p>
-                    <p>$8.43</p>
-                  </div>
-                  <p className={styles.storeName}>Chop Chow Official Store</p>
-                  <div className={styles.flex}>
-                    <div>
-                      {Array(5)
-                        .fill("_")
-                        .map((_, idx) => (
-                          <GoStarFill
-                            key={idx + _}
-                            color={
-                              product.average_rating > idx
-                                ? "#04D505"
-                                : "rgba(0,0,0,0.5)"
-                            }
-                            style={{ marginLeft: ".2rem" }}
-                          />
-                        ))}
-                    </div>
-                    <p className={styles.prep}> 23 mins </p>
-                  </div>
+              <div className={styles.box}>
+                <img
+                  src={
+                    product?.itemImage0
+                      ? product?.itemImage0
+                      : "assets/store_pics/no-image-product.png"
+                  }
+                  className={styles.storeImg2}
+                />
+                <div className={styles.flex}>
+                  <p className={styles.name2}>{product.item_name}</p>
+                  <p>{product?.item_price ? product.item_price : "$0.00"}</p>
                 </div>
-              )}
+                <p className={styles.storeName}>Chop Chow Official Store</p>
+                <div className={styles.flex}>
+                  <div>
+                    {Array(5)
+                      .fill("_")
+                      .map((_, idx) => (
+                        <GoStarFill
+                          key={idx + _}
+                          color={
+                            product.average_rating > idx
+                              ? "#04D505"
+                              : "rgba(0,0,0,0.5)"
+                          }
+                          style={{ marginLeft: ".2rem" }}
+                        />
+                      ))}
+                  </div>
+                  <p className={styles.prep}> 23 mins </p>
+                </div>
+              </div>
             </div>
           );
         })}
@@ -191,7 +209,10 @@ export const TopSellingProducts = () => {
           setQuantity={setQuantity}
         />
       </div>
-      <p className={styles.view2} onClick={() => loadMore()}>
+      <p
+        className={styles.view}
+        onClick={hasMoreData ? loadMore : () => {}}
+      >
         View More
       </p>
       <div className={styles.border} />

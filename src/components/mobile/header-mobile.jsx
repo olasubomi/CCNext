@@ -4,7 +4,7 @@ import styles from "../../components/Header/header.module.css";
 import { useRouter } from "next/router";
 
 export const MobileHeader = () => {
-  const [activeLink, setActiveLink] = useState(0);
+  const [activeLink, setActiveLink] = useState(null);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const router = useRouter();
@@ -16,9 +16,9 @@ export const MobileHeader = () => {
   };
 
   const menuItems = [
-    { name: "Marketplace", path: "/publicMarket" },
-    { name: "Chef", path: "/chef" },
-    { name: "Blog", path: "/blog" },
+    { name: "Marketplace", path: "/marketplace" },
+    { name: "Chef", path: "#" },
+    { name: "Blog", path: "#" },
   ];
 
   useEffect(() => {
@@ -36,7 +36,6 @@ export const MobileHeader = () => {
   }, [prevScrollPos]);
 
   return (
-    <div>
       <div className={visible ? styles.navbar2 : styles.navbar_down_2}>
         <div className={styles.navbar_main_container}>
           <div className={styles.navbar_main}>
@@ -66,6 +65,5 @@ export const MobileHeader = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };

@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { base_url } from "../../util/Api";
 import { withRouter } from "next/router";
 import JSZip from 'jszip';
+import mealImage1 from "../../../public/assets/store_pics/no-image-meal.png";
 
 class SuggestMealForm extends Component {
   ingredientsQuantityMeasurements = [];
@@ -142,7 +143,7 @@ class SuggestMealForm extends Component {
 
       chef: "",
       suggestedCategories: [],
-      servings: 0,
+      servings: 1,
       tip: "",
       tips: [],
 
@@ -160,7 +161,9 @@ class SuggestMealForm extends Component {
         "transcription": {},
         data: {}
       },
-      isLoading: false
+      isLoading: false,
+      measurements: [],
+      utensils: []
     };
 
     this.handleIngredientMeasurement =
@@ -198,7 +201,6 @@ class SuggestMealForm extends Component {
     // })
     //   .catch((err) => {
     //     console.log(err);
-    //   });   
 
 
     console.log("all meals", this.props.allMealNames);
@@ -219,6 +221,53 @@ class SuggestMealForm extends Component {
     //----get category meals-------------------------
     // url = "/get-all-categories";
 
+    const getAllMeasurement = async (newPage) => {
+      try {
+        const resp = await axios.get(
+          `/measurement/1?withPaginate=false&status=Public`
+        );
+        if (
+          Array.isArray(resp?.data?.data?.measurement) &&
+          resp?.data?.data?.measurement?.length
+        ) {
+          const mesr_names = resp.data.data?.measurement.map(
+            (ele) => ele.measurement_name
+          );
+          this.setState({
+            ...this.state,
+            measurements: mesr_names,
+          });
+        }
+      } catch (e) {
+        console.log("err-", e);
+      }
+    };
+    getAllMeasurement();
+
+    const fetchMeals = async (page) => {
+      try {
+        const response = await axios(
+          `/items/1?type=Utensil&withPaginate=false&status=Public`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response.data.data.items, "response from data");
+        const allUtensils = response.data.data.items.map(
+          (ele) => ele.item_name
+        );
+        this.setState({
+          ...this.state,
+          utensils: allUtensils,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchMeals();
     this.categories = this.categories;
     if (typeof window !== "undefined") {
       // let doc = document.querySelector("#formmeal");
@@ -1436,9 +1485,15 @@ class SuggestMealForm extends Component {
     //   // suggestMealForm.append(`meal_images${i}`, file);
     //   suggestMealForm.append(`item_images${i}`, file);
     // });
-    itemMealImages.map((ele) => {
-      suggestMealForm.append("item_images", ele);
-    });
+    if (itemMealImages.length) {
+      itemMealImages.map((ele) => {
+        suggestMealForm.append("item_images", ele);
+      });
+    } else {
+      const img = await fetch("/assets/store_pics/no-image-meal.png");
+      const blob = await img.blob();
+      suggestMealForm.append("item_images", blob);
+    }
 
     let instructionTitles = [];
     let instructions = [];
@@ -2337,7 +2392,7 @@ class SuggestMealForm extends Component {
                     People to serve
                   </label>
                   <TextField
-                    inputProps={{ min: 0 }}
+                    inputProps={{ min: 1 }}
                     value={this.state.servings}
                     id="servings"
                     fullWidth
@@ -2370,7 +2425,16 @@ class SuggestMealForm extends Component {
             </div>
           </div>
           <h3>Add Ingredients</h3>
-          <div className={styles.suggestion_form}>
+          <div
+            className={styles.suggestion_form}
+            onKeyDown={(event) => {
+              // Check if the pressed key is Enter
+              if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default form submission
+                this.addIngredientToMeal(event);
+              }
+            }}
+          >
             <div className={styles.suggestion_form_group}>
               <label
                 htmlFor="currentIngredient"
@@ -2429,7 +2493,7 @@ class SuggestMealForm extends Component {
                   </label>
                   <Autocomplete
                     id="currentIngredientMeasurement"
-                    options={this.props.measurements.map((option) => option)}
+                    options={this.state.measurements.map((option) => option)}
                     value={this.state.currentIngredientMeasurement}
                     onChange={this.handleIngredientMeasurement}
                     freeSolo
@@ -2452,6 +2516,12 @@ class SuggestMealForm extends Component {
                 onClick={this.addIngredientToMeal}
                 className={styles.ingredient_button}
                 style={{ width: "max-content" }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent default form submission
+                    this.addIngredientToMeal(event);
+                  }
+                }}
               >
                 {" "}
                 Add Ingredient
@@ -2491,7 +2561,7 @@ class SuggestMealForm extends Component {
                   freeSolo
                   clearOnBlur
                   onBlur={this.kitBlur}
-                  options={this.props.kitchenUtensils?.map((option) => option)}
+                  options={this.state.utensils?.map((option) => option)}
                   // onChange={(ev,val)=>this.handleUtensilsDropdownChange(ev,val)}
                   onChange={(e, val) => this.handleKitchenUtensilInputName(val)}
                   renderInput={(params) => (
@@ -2918,8 +2988,6 @@ class SuggestMealForm extends Component {
           </Button>
           {/* </ThemeProvider> */}
           {/* </Col>
-          
-                
               </Row> */}
           <u>View privacy policy</u>
           <div id="ProductAdditionalDataDisplayed">

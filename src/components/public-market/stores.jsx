@@ -5,6 +5,7 @@ import { MealDropDown } from "./dropdown";
 import stored from "../../../public/assets/store_pics/no-image-store.png";
 import Image from "next/image";
 import { Element } from "react-scroll";
+import { BiSolidDownArrow } from "react-icons/bi";
 
 export const Stores = () => {
   const [stores, setStores] = useState([]);
@@ -18,7 +19,7 @@ export const Stores = () => {
     address: "",
     rating: 0,
   });
-  const [loadMore, setLoadMore] = useState(5);
+  const [loadMore, setLoadMore] = useState(6);
   const ref = useRef();
 
   const [selectedStore, setSelectedStore] = useState({
@@ -26,7 +27,7 @@ export const Stores = () => {
     supplier: {},
   });
   const handleLoadMore = () => {
-    setLoadMore(loadMore + 5);
+    setLoadMore(loadMore + 6);
   };
 
   const fetchOneStore = async (storeId) => {
@@ -40,7 +41,7 @@ export const Stores = () => {
           },
         }
       );
-      console.log(response.data.data, "one store");
+      console.log(response.data.data, "one storey");
       setSelectedStore(response.data.data);
       setIsShow(true);
     } catch (error) {
@@ -50,7 +51,7 @@ export const Stores = () => {
   console.log(stores, "one store");
   const fetchStores = async () => {
     try {
-      const response = await axios(`/stores/getallstores/1?limit=25`, {
+      const response = await axios(`/stores/getallstores/1?limit=2000`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +66,7 @@ export const Stores = () => {
   useEffect(() => {
     fetchStores();
   }, []);
-  console.log(stores, "stores");
+  console.log(selectedStore, "storess");
   useEffect(() => {
     // Get the hash value from the URL
     const hash = window.location.hash;
@@ -83,10 +84,16 @@ export const Stores = () => {
   }, []);
 
   return (
-    <div className={styles.storeContainer}>
-      <Element id="store" style={{ fontSize: "2rem", marginBottom: "1rem" }}>
-        Stores
-      </Element>
+    <div className={styles.storeContainer1}>
+      <div className={styles.topcontainer1}>
+        <Element id="store" style={{ fontSize: "2rem", marginBottom: "1rem" }}>
+          Stores
+        </Element>
+        <div className={styles.filter}>
+          <p>Filter by: Distance</p>
+          <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
+        </div>
+      </div>
       <div className={styles.stores}>
         {stores
           .slice(0, loadMore)
@@ -108,10 +115,11 @@ export const Stores = () => {
                           description: store?.description,
                           address:
                             store?.supplier_address?.address +
-                            ", " + store?.supplier_address?.city +
+                            ", " +
+                            store?.supplier_address?.city +
                             " - " +
                             store?.supplier_address?.country,
-                            rating: store?.average_rating
+                          rating: store?.average_rating,
                         });
                       }}
                     >
@@ -146,10 +154,11 @@ export const Stores = () => {
                   </div>
                   {isShow && selected === id && (
                     <MealDropDown
+                    isShow={isShow}
                       storeInfo={storeInfo}
                       setIsShow={setIsShow}
                       selectedStore={selectedStore}
-                      id={selectedStore?.supplier?._id}
+                      id={storeInfo?.id}
                     />
                   )}
                 </div>

@@ -19,9 +19,9 @@ export const SuggestedUtensils = () => {
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
 
-  const loadMore = () => {
-    setVisibleMeals(visibleMeals + 4);
-  };
+  // const loadMore = () => {
+  //   setVisibleMeals(visibleMeals + 4);
+  // };
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -59,11 +59,14 @@ export const SuggestedUtensils = () => {
     id: "",
     status: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMoreData, setHasMoreData] = useState(true); 
 
-  const fetchMeals = async () => {
+  const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
+  const fetchProducts = async () => {
     try {
       const response = await axios(
-        `/items/1?type=Utensil&status=all&limit=50`,
+        `/items/${currentPage}?type=Utensil&status=Public&limit=8`,
         {
           method: "GET",
           headers: {
@@ -71,15 +74,34 @@ export const SuggestedUtensils = () => {
           },
         }
       );
-      console.log(response.data.data.items, "ee");
-      setMeals(response.data.data.items);
+      const totalItems = response.data.data.count;
+      const allItems = response.data.data.items;
+      console.log(response.data.data.items, "hello");
+
+      const filteredItems = allItems.filter((meal) => meal.average_rating);
+
+      const newItems = filteredItems.filter(
+        (item) => !uniqueItemIds.has(item._id)
+      );
+
+      setMeals([...meals, ...newItems]);
+      setUniqueItemIds(
+        new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
+      );
+
+      setHasMoreData(totalItems > currentPage * 8);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const loadMore = async () => {
+    setCurrentPage(currentPage + 1);
+    await fetchProducts();
+  };
   useEffect(() => {
-    fetchMeals();
-  }, []);
+    fetchProducts();
+  }, [currentPage]);
   const fetchGroceryList = async () => {
     try {
       const response = await axios(`/groceries/list`, {
@@ -96,10 +118,7 @@ export const SuggestedUtensils = () => {
     fetchGroceryList();
   }, []);
   console.log(meals, "meals");
-  const filteredMeals = meals.filter(
-    (meal) =>
-      meal.item_type === "Utensil" && meal.item_status[0]?.status === "Public"
-  );
+
   useEffect(() => {
     // Get the hash value from the URL
     const hash = window.location.hash;
@@ -126,63 +145,60 @@ export const SuggestedUtensils = () => {
         Suggested Utensils for you
       </Element>
       <div className={styles.stores2}>
-        {filteredMeals
-          .slice(0, visibleMeals)
-          .filter((utensil) => utensil)
-          .map((utensil, idx) => {
-            return (
-              <div
-                className={styles.card1}
-                key={idx}
-                onClick={() => {
-                  setSelectedItem(utensil);
-                  setOpenModal(true);
-                }}
-              >
-                {
-                  <div className={styles.box}>
-                    <img
-                      src={
-                        utensil?.itemImage0
-                          ? utensil?.itemImage0
-                          : "/assets/store_pics/no-image-utensil.png"
-                      }
-                      className={styles.storeImg1}
-                    />
-                    <div className={styles.flex}>
-                      <p className={styles.name2}>{utensil.item_name}</p>
-                      <p>$8.43</p>
-                    </div>
-                    <p className={styles.storeName}>Chop Chow Official Store</p>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        marginTop: ".7rem",
-                        alignItems: "flex-start",
-                      }}
-                    >
-                      <div>
-                        {Array(5)
-                          .fill("_")
-                          .map((_, idx) => (
-                            <GoStarFill
-                              key={idx + _}
-                              color={
-                                utensil.average_rating > idx
-                                  ? "#04D505"
-                                  : "rgba(0,0,0,0.5)"
-                              }
-                              style={{ marginLeft: ".2rem" }}
-                            />
-                          ))}
-                      </div>
+        {meals.map((utensil, idx) => {
+          return (
+            <div
+              className={styles.card1}
+              key={idx}
+              onClick={() => {
+                setSelectedItem(utensil);
+                setOpenModal(true);
+              }}
+            >
+              {
+                <div className={styles.box}>
+                  <img
+                    src={
+                      utensil?.itemImage0
+                        ? utensil?.itemImage0
+                        : "/assets/store_pics/no-image-utensil.png"
+                    }
+                    className={styles.storeImg1}
+                  />
+                  <div className={styles.flex}>
+                    <p className={styles.name2}>{utensil.item_name}</p>
+                    <p>$8.43</p>
+                  </div>
+                  <p className={styles.storeName}>Chop Chow Official Store</p>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      marginTop: ".7rem",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <div>
+                      {Array(5)
+                        .fill("_")
+                        .map((_, idx) => (
+                          <GoStarFill
+                            key={idx + _}
+                            color={
+                              utensil.average_rating > idx
+                                ? "#04D505"
+                                : "rgba(0,0,0,0.5)"
+                            }
+                            style={{ marginLeft: ".2rem" }}
+                          />
+                        ))}
                     </div>
                   </div>
-                }
-              </div>
-            );
-          })}
+                </div>
+              }
+            </div>
+          );
+        })}
         <UtensilModal
           openList={openList}
           openModal={openModal}
@@ -200,7 +216,10 @@ export const SuggestedUtensils = () => {
           setShow={setShow}
         />
       </div>
-      <p className={styles.view} onClick={() => loadMore()}>
+      <p
+        className={styles.view}
+        onClick={hasMoreData ? loadMore : () => {}}
+      >
         View More
       </p>
     </div>
