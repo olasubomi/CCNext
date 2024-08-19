@@ -143,7 +143,7 @@ class SuggestMealForm extends Component {
 
       chef: "",
       suggestedCategories: [],
-      servings: 1,
+      servings: "1",
       tip: "",
       tips: [],
 
