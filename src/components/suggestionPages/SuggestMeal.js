@@ -143,7 +143,7 @@ class SuggestMealForm extends Component {
 
       chef: "",
       suggestedCategories: [],
-      servings: 1,
+      servings: "1",
       tip: "",
       tips: [],
 
@@ -202,7 +202,7 @@ class SuggestMealForm extends Component {
     //   .catch((err) => {
     //     console.log(err);
 
-    
+
     console.log("all meals", this.props.allMealNames);
     const currentUser = JSON.parse(localStorage.getItem("user")) || {};
 
@@ -1616,7 +1616,7 @@ class SuggestMealForm extends Component {
         obj.item_name = element.productName;
       }
       if (element.quantity) {
-        obj.item_quantity = element.quantity;
+        obj.item_quantity = !Number.isNaN(Number(element.quantity)) ? element.quantity : 1;
       }
       if (element.measurement) {
         obj.item_measurement = element.measurement;
@@ -1922,7 +1922,7 @@ class SuggestMealForm extends Component {
 
     response.data = {
       ...response.data,
-      meal_preparation_steps : new_steps
+      meal_preparation_steps: new_steps
     }
 
     videoFiles.forEach(async (videoFile) => {
@@ -1964,20 +1964,19 @@ class SuggestMealForm extends Component {
           "Content-Type": "multipart/form-data"
         },
         cancelToken: source.token,
-        responseType: "arraybuffer"
       })
         .then(async (result) => {
+          console.log(result, 'resss_1');
           clearTimeout(timeout);
 
-          console.log(result, 'resss_1');
-         const response =  await this.processZipFile(result.data)
+          //  const response =  await this.processZipFile(result.data)
           this.setState({
             ...this.state,
             isLoading: false,
             videoData: {
               ...this.state.videoData,
-              transcription: response.transcription,
-              data: response.data
+              transcription: result.data.data?.transcription,
+              data: result.data.data?.data
             }
           })
         })
@@ -2031,13 +2030,13 @@ class SuggestMealForm extends Component {
         instructionSteps: ele?.step_instruction ?? [],
         dataName: ""
       }
-      obj[`chunk${idx+1}Content`] = ele?.step_video?.videoURL
-      const doc = document.getElementById(`chunk${idx + 1}Video`);
-      if(doc){
-        console.log(ele?.step_video?.videoURL, 'ele?.step_video?.videoURL')
-        doc.setAttribute('src', ele?.step_video?.videoURL)
-        doc.style.display = 'block'
-      }
+      // obj[`chunk${idx+1}Content`] = ele?.step_video?.videoURL
+      // const doc = document.getElementById(`chunk${idx + 1}Video`);
+      // if(doc){
+      //   console.log(ele?.step_video?.videoURL, 'ele?.step_video?.videoURL')
+      //   doc.setAttribute('src', ele?.step_video?.videoURL)
+      //   doc.style.display = 'block'
+      // }
     })
 
     this.setState({
