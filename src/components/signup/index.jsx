@@ -204,7 +204,6 @@ function SignUp(props) {
     console.log("result", result)
     if (result) {
       localStorage.setItem("formState", JSON.stringify(formState));
-      toast.success("Account created successfully");
       setOpenUserVerification(true)
     }
 

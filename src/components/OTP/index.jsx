@@ -108,28 +108,32 @@ export default function OTP({ next, open, setOpen, type, setType, verifyEmailOTP
       if (type === 'Email Address') {
         result = await dispatch(verifyEmailOTP({
           email: formState?.email,
-          otp: password?.reduce((a, b) => a + b),
+          otp: password.reduce((a, b) => a + b, ""),
         }));
       } else {
         const requestId = localStorage.getItem("requestId");
-        const parsedRequestId = requestId !== "undefined" ? JSON.parse(requestId) : "{}";
+        const parsedRequestId = requestId !== "undefined" ? JSON.parse(requestId) : null;
 
-        if (parsedRequestId !== "{}" && parsedRequestId !== undefined) {
-          result = await dispatch(verifynumber(parsedRequestId, password.reduce((a, b) => a + b)));
+        if (parsedRequestId) {
+          result = await dispatch(verifynumber({
+            requestId: parsedRequestId,
+            otp: password.reduce((a, b) => a + b, ""),
+          }));
         } else {
           console.error("Request ID is missing or invalid.");
           return toast.error("Request ID is missing. Please try again.");
+          return;
         }
       }
 
-      if (result?.error) {
-        toast.error("Incorrect PIN. Try again");
+      if (result?.success) {
+        console.log("Verification successful!");
       } else {
-        toast.success("Verification successful!");
-        console.log("Verification success");
+        toast.error(result?.message || "Incorrect PIN. Try again");
       }
     } catch (err) {
-      console.error("Verification error:", err);
+      console.error("Verification error:", err.message);
+      toast.error("An error occurred during verification. Please try again.");
     } finally {
       setPassword(Array(MaxLength).fill(-1));
     }
