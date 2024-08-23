@@ -114,11 +114,8 @@ export default function OTP({ next, open, setOpen, type, setType, verifyEmailOTP
         const requestId = localStorage.getItem("requestId");
         const parsedRequestId = requestId !== "undefined" ? JSON.parse(requestId) : null;
 
-        if (parsedRequestId) {
-          result = await dispatch(verifynumber({
-            requestId: parsedRequestId,
-            otp: password.reduce((a, b) => a + b, ""),
-          }));
+        if (parsedRequestId !== "{}" && parsedRequestId !== undefined) {
+          result = await dispatch(verifynumber(parsedRequestId, password.reduce((a, b) => a + b)));
         } else {
           console.error("Request ID is missing or invalid.");
           return toast.error("Request ID is missing. Please try again.");
