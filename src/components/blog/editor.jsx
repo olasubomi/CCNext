@@ -1,0 +1,221 @@
+import {
+  ToolbarPlugin,
+  ImagePlugin,
+  ParagraphPlugin,
+  FontSizePlugin,
+  TextFormatPlugin,
+  ListTypePlugin,
+  AlignPlugin,
+  TabPlugin,
+  CreateLinkPlugin,
+  RedoPlugin,
+} from "./plugins";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { LinkNode } from "@lexical/link";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import { ListItemNode, ListNode } from "@lexical/list";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
+import { toast } from "react-toastify";
+import { ImageNode } from "./plugins/image-node";
+import { BsPlus } from "react-icons/bs";
+import axios from "../../util/Api";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
+import { useRouter } from "next/router";
+import { $getRoot } from "lexical";
+
+export const editorConfig = {
+  namespace: "ChopChowEditor",
+  onError: (error) => {
+    console.error("Editor error:", error);
+  },
+  theme: {
+    text: {
+      underline: "underline",
+      strikethrough: "line-through",
+    },
+    list: {
+      nested: {
+        listitem: "editor-nested-listitem",
+      },
+      ol: "editor-list-ol",
+      ul: "editor-list-ul",
+      listitem: "editor-listItem",
+      listitemChecked: "editor-listItemChecked",
+      listitemUnchecked: "editor-listItemUnchecked",
+    },
+    link: "link",
+  },
+  nodes: [ListItemNode, ListNode, LinkNode, ImageNode],
+};
+
+export const Editor = forwardRef((props, ref) => {
+  const [editorState, setEditorState] = useState(null);
+  const params = useRouter();
+  const pageRef = useRef(true);
+
+  const inputRef = useRef();
+  const [editor] = useLexicalComposerContext();
+  const [form, setForm] = useState({
+    title: "",
+    feature_image: {},
+  });
+
+  const onChange = (state) => {
+    setEditorState(state);
+  };
+
+  const handleCreateBlogPost = useCallback(
+    async (status) => {
+      try {
+        editor.update(async () => {
+          const htmlString = $generateHtmlFromNodes(editor, null);
+          const formData = new FormData();
+          const parser = new DOMParser();
+
+          const n = parser.parseFromString(htmlString, "text/html");
+          const plainText = n.body.textContent?.toString();
+          formData.append("title", form.title);
+          formData.append("featured_image", form.feature_image);
+          formData.append("html_template", htmlString);
+          formData.append("body_content_text", plainText.toString());
+          formData.append("word_count", plainText.toString().split(" ").length);
+          if (status) {
+            formData.append("status", status);
+          }
+          let url = params.query.action === 'edit' ? `/blog/update/${params.query.id}` : "/blog/create"
+          const response = await axios(url, {
+            method: "post",
+            data: formData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          toast.success("The post is published successfully");
+        });
+      } catch (e) {
+        toast.error("An Error occured");
+        console.log(e);
+      }
+    },
+    [form, editor, params]
+  );
+  const handleGetOneBlogPost = useCallback(async (id) => {
+    try {
+      const response = await axios.get(`/blog/getBlog/${id}`);
+      const data = response.data.data.data;
+      setForm({
+        title: data.title,
+        feature_image: data.featured_image,
+      });
+      editor.update(() => {
+        const parser = new DOMParser();
+        const dom = parser.parseFromString(data.html_template, "text/html");
+        const nodes = $generateNodesFromDOM(editor, dom);
+        const root = $getRoot();
+        root.clear();
+        root.append(...nodes);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (
+      params.query?.action === "edit" &&
+      params.query?.id &&
+      pageRef.current
+    ) {
+      handleGetOneBlogPost(params.query?.id);
+      pageRef.current = false
+    }
+  }, [params, pageRef]);
+
+  useImperativeHandle(ref, () => {
+    return {
+      async handleSubmit(status) {
+        await handleCreateBlogPost(status);
+      },
+    };
+  });
+
+  return (
+    <>
+      <div className="editor-container ">
+        <div className="editor-toolbar">
+          <ToolbarPlugin>
+            <ImagePlugin />
+            <ParagraphPlugin />
+            <FontSizePlugin />
+            <TextFormatPlugin />
+            <ListTypePlugin />
+            <AlignPlugin />
+            <TabPlugin />
+            <CreateLinkPlugin />
+            <RedoPlugin />
+          </ToolbarPlugin>
+          <ListPlugin />
+          <TabIndentationPlugin />
+          <LinkPlugin />
+          <HistoryPlugin />
+        </div>
+        <div></div>
+        <OnChangePlugin onChange={onChange} />
+      </div>
+      <div className="editor-header-section">
+        <h2>Add Post Title</h2>
+        <input
+          onChange={(event) =>
+            setForm({
+              ...form,
+              title: event.target.value,
+            })
+          }
+          value={form.title}
+          className="input-box"
+        />
+      </div>
+      <div className="editor-image">
+        <h2>Featured Image</h2>
+        <div onClick={() => inputRef.current?.click()} className="pick-image">
+          <BsPlus />
+          <p>Add Image</p>
+        </div>
+        <input
+          onChange={(event) =>
+            setForm({
+              ...form,
+              feature_image: event.target.files[0],
+            })
+          }
+          ref={inputRef}
+          style={{
+            display: "none",
+          }}
+          type="file"
+          accept=".png, .jpeg, .jpg"
+        />
+      </div>
+      <div className="blog-editor-content">
+        <RichTextPlugin
+          contentEditable={<ContentEditable className="editor-content" />}
+          ErrorBoundary={() => null}
+          placeholder={<div></div>}
+        />
+      </div>
+    </>
+  );
+});
