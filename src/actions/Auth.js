@@ -601,7 +601,7 @@ export const requestnumber = ({ number }) => {
 };
 
 
-export const verifynumber =  (request_id, code) => {
+export const verifynumber =  (request_id, code, email) => {
   return  (dispatch) => {
     dispatch({ type: OPEN_VERIFICATION, payload: true });
     dispatch({ type: FETCH_START });
@@ -609,19 +609,18 @@ export const verifynumber =  (request_id, code) => {
     // dispatch({ type: IS_VERIFIED, payload: true });
     console.log("request_id",request_id)
      axios
-      .post("/user/verifynumber",{request_id,code})
+      .post("/user/verifynumber",{request_id,code, email})
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         if(data?.data?.success){
-          dispatch({ type: FETCH_SUCCESS, payload: data.message });
-          dispatch({ type: IS_VERIFIED, payload: true });
-          dispatch({ type: PHONE_NUMBER_VERIFIED, payload: true });
+          // dispatch({ type: FETCH_SUCCESS, payload: data.message });
+          // dispatch({ type: IS_VERIFIED, payload: true });
+          // dispatch({ type: PHONE_NUMBER_VERIFIED, payload: true });
           dispatch({ type: USER_DATA, payload: data.data.user });
           dispatch({ type: IS_AUTHENTICATED, payload: true });
           toast.success("Phone number verification successful")
           return { success: true, data };
         }
-      
       })
       .catch((err) => {
         dispatch({
