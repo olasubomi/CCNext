@@ -24,7 +24,7 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function OTP({ next, open, setOpen, type, setType, verifyEmailOTPFunc, verifynumberFunc, formState, setFormState, sendEmailOTPFunc, requestnumberFunc }) {
+export default function OTP({ next, open, setOpen, type, setType, verifyEmailOTPFunc, verifynumberFunc, formState, setFormState, sendEmailOTPFunc, requestnumberFunc, setOpenOTP }) {
 
 
   //const {}= useSelector( state => state.Auth);
@@ -115,18 +115,14 @@ export default function OTP({ next, open, setOpen, type, setType, verifyEmailOTP
         const parsedRequestId = requestId !== "undefined" ? JSON.parse(requestId) : null;
 
         if (parsedRequestId !== "{}" && parsedRequestId !== undefined) {
-          result = await dispatch(verifynumber(parsedRequestId, password.reduce((a, b) => a + b)));
+          result = await dispatch(verifynumber(parsedRequestId, password.reduce((a, b) => a + b), formState?.email));
+          // setOpenOTP(false)
+          // router.push("/dashboard")
         } else {
           console.error("Request ID is missing or invalid.");
           return toast.error("Request ID is missing. Please try again.");
           return;
         }
-      }
-
-      if (result?.success) {
-        console.log("Verification successful!");
-      } else {
-        toast.error(result?.message || "Incorrect PIN. Please try again");
       }
     } catch (err) {
       console.error("Verification error:", err.message);
