@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import styles from "../Login/style.module.css";
+import React, { useState, useEffect } from 'react';
+import styles from '../Login/style.module.css';
 // import { Form, Button, Container, Modal, Row, Col, ButtonToolbar } from 'react-bootstrap';
 import { EyeSIcon } from "../icons";
-import Link from "next/link";
-import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
+import Link from 'next/link';
+import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import Image from "next/image";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { toast } from "react-toastify";
 import { connect, useSelector } from "react-redux";
 import {
   userSignUp,
@@ -14,21 +15,29 @@ import {
   verifyEmailOTP,
   requestnumber,
   verifynumber,
+  confirmAccount,
 } from "../../actions";
-import { base_url } from "../../util/Api";
+import { GoogleLogin } from "@react-oauth/google";
+import FacebookLogin from "react-facebook-login";
+import axios, { base_url } from "../../util/Api";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import UserVerification from "../UserVerification";
 import UserVerificationSuccess from "../UserVerificationSuccess";
 import OTP from "../OTP";
+import { jwtDecode } from "jwt-decode";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { useMobileMedia } from '../../customhooks/useResponsive';
+
+
 
 function SignUp(props) {
   const [openUserVerification, setOpenUserVerification] = React.useState(false);
-  const [openUserVerificationSuccess, setOpenUserVerificationSuccess] =
-    React.useState(false);
+  const [openUserVerificationSuccess, setOpenUserVerificationSuccess] = React.useState(false);
   const [openOTP, setOpenOTP] = React.useState(false);
-  const [type, setType] = React.useState("");
-  const { authUser, isAuthenticated } = useSelector((state) => state.Auth);
+  const [type, setType] = React.useState('');
+  const [isSuccess, SetIsSuccess] = React.useState(false);
+  const { authUser, isAuthenticated } = useSelector(state => state.Auth)
   const router = useRouter();
   const [message, setMessageState] = useState(null);
   const [status, setStatusState] = useState(null);
@@ -45,38 +54,67 @@ function SignUp(props) {
     confirm_password: "",
   });
   const [error, setError] = useState({
-    username: "",
-    password: "",
-    confirm_password: "",
-    isAgreed: "",
-  });
-
+    username: '',
+    password: '',
+    confirm_password: '',
+    isAgreed: '',
+  })
+  const mobileScreen = useMobileMedia();
+  const isverified = useSelector((state) => state.Auth.isVerified);
+  const openVerified = useSelector((state) => state.Common.openVerification);
   const handleOpenOtp = () => {
-    setOpenUserVerification(false);
-    setOpenUserVerificationSuccess(false);
-    setOpenOTP(true);
-  };
+    setOpenUserVerification(false)
+    setOpenUserVerificationSuccess(false)
+    setOpenOTP(true)
+  }
   const handleOpenSuccess = () => {
-    setOpenUserVerification(false);
-    setOpenUserVerificationSuccess(true);
-    setOpenOTP(false);
-  };
+    setOpenUserVerification(false)
+    setOpenOTP(false)
 
+  }
+  console.log("openVerified", openVerified)
+  // useEffect(()=>{
+  //   if(isverified){
+  //     //setOpenUserVerificationSuccess(true)
+  //   }
+  // }, [isverified])
   useEffect(() => {
     if (isAuthenticated && authUser) {
       router.push("/dashboard");
     }
-  }, [authUser, isAuthenticated]);
+  }, [authUser, isAuthenticated])
 
-  const {
-    username,
-    email,
-    phone_number,
-    first_name,
-    last_name,
-    password,
-    confirm_password,
-  } = formState;
+
+  useEffect(() => {
+    if (openVerified) {
+      const userLogin = JSON.parse(localStorage.getItem("formState"));
+      console.log("line 87", userLogin.email)
+      try {
+        let result = ConfirmAccount(userLogin)
+        console.log("result", result)
+        if (result) {
+          SetIsSuccess(true)
+          setOpenUserVerificationSuccess(true);
+        } else {
+          SetIsSuccess(false)
+          setOpenUserVerificationSuccess(true);
+        }
+      } catch (err) {
+        SetIsSuccess(false)
+        setOpenUserVerificationSuccess(false);
+      }
+
+
+    }
+  }
+    , [openVerified])
+
+  const ConfirmAccount = async (userLogin) => {
+    await props.confirmAccount(userLogin.email);
+  }
+
+  const { username, email, phone_number, first_name, last_name, password, confirm_password, } = formState;
+
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -88,12 +126,12 @@ function SignUp(props) {
   }
 
   function handlePhoneChange(e) {
-    setFormState({ ...formState, ["phone_number"]: e });
+    setFormState({ ...formState, ['phone_number']: e });
   }
 
-  const validateInput = (e) => {
+  const validateInput = e => {
     let { name, value } = e.target;
-    setError((prev) => {
+    setError(prev => {
       const stateObj = { ...prev, [name]: "" };
 
       switch (name) {
@@ -107,12 +145,9 @@ function SignUp(props) {
           if (!value) {
             stateObj[name] = "Please enter Password";
           } else if (password && value !== confirm_password) {
-            stateObj["confirm_password"] =
-              "Password and Confirm Password does not match.";
+            stateObj["confirm_password"] = "Password and Confirm Password does not match.";
           } else {
-            stateObj["confirm_password"] = confirm_password
-              ? ""
-              : error.confirm_password;
+            stateObj["confirm_password"] = confirm_password ? "" : error.confirm_password;
           }
           break;
 
@@ -132,49 +167,56 @@ function SignUp(props) {
     });
   };
 
-  console.log("redux", props.redux);
 
-  function formSubmit(e) {
+
+  console.log('redux', props.redux)
+
+
+  async function formSubmit(e) {
     e.preventDefault();
+
 
     // Run validation logic
     const validationErrors = validateInput(e) ?? {};
 
     // Check if there are any validation errors
-    if (Object.values(validationErrors).some((error) => error !== "")) {
+    if (Object.values(validationErrors).some((error) => error !== '')) {
       setError(validationErrors);
-      console.error("Form validation failed:", validationErrors);
+      console.error('Form validation failed:', validationErrors);
       return;
     }
 
     // Check if the user has agreed to terms and conditions
     if (!isAgreed) {
-      setError((prev) => ({
-        ...prev,
-        isAgreed: "Please agree to terms and conditions",
-      }));
-      console.error("Please agree to the terms and conditions.");
+      setError((prev) => ({ ...prev, isAgreed: 'Please agree to terms and conditions' }));
+      console.error('Please agree to the terms and conditions.');
       return;
     }
 
-    props.signup({
+    let result = await props.signup({
       username,
       email,
       phone_number,
       first_name,
       last_name,
       password,
-    });
-    setTimeout(() => {
-      setOpenUserVerification(true);
-    }, 1000);
-
-    if (isAuthenticated && authUser) {
-      //   router.push("/dashboard");
-
+    })
+    console.log("result", result)
+    if (result) {
+      localStorage.setItem("formState", JSON.stringify(formState));
+      setOpenUserVerification(true)
     }
+
+
+
+
+    // if(isAuthenticated && authUser){
+
+    // //   router.push("/dashboard");
+    // }
   }
 
+  console.log("openUserVerificationSuccess", openUserVerificationSuccess)
   return (
     <>
       <div className={styles.login}>
@@ -215,45 +257,34 @@ function SignUp(props) {
               Get your African Delicacies delievered to your Door
             </h4>
           </div>
-          <div>
+          <div >
             <h3 className={styles.login_col_h3}>Sign Up</h3>
 
-            <div
-              className={styles.signup_form}
-              style={{ paddingLeft: 10, paddingRight: 10 }}
-            >
+
+            <div className={styles.signup_form} style={{ paddingLeft: 10, paddingRight: 10 }}>
+
               <div className={styles.login_form_col_2}>
                 <div className={styles.login_form_group}>
-                  <label
-                    htmlFor="first_name"
-                    className={styles.login_form_label}
-                  >
-                    First Name
-                  </label>
+                  <label htmlFor="first_name" className={styles.login_form_label}>First Name</label>
                   <input
                     type="text"
                     name="first_name"
                     value={first_name}
                     placeholder="First Name"
                     onChange={handleChange}
-                    className={styles.login_form_input}
-                  />
+                    className={styles.login_form_input} />
+
                 </div>
                 <div className={styles.login_form_group}>
-                  <label
-                    htmlFor="last_name"
-                    className={styles.login_form_label}
-                  >
-                    Last Name
-                  </label>
+                  <label htmlFor="last_name" className={styles.login_form_label}>Last Name</label>
                   <input
                     type="text"
                     name="last_name"
                     value={last_name}
                     placeholder="Last Name"
                     onChange={handleChange}
-                    className={styles.login_form_input}
-                  />
+                    className={styles.login_form_input} />
+
                 </div>
               </div>
               <div className={styles.login_form_group}>
@@ -269,11 +300,7 @@ function SignUp(props) {
                   onBlur={validateInput}
                   className={styles.login_form_input}
                 />
-                {error.username && (
-                  <span style={{ color: "#FF0000", fontSize: 14 }}>
-                    {error.username}
-                  </span>
-                )}
+                {error.username && <span style={{ color: "#FF0000", fontSize: 14 }}>{error.username}</span>}
               </div>
               <div className={styles.login_form_group}>
                 <label htmlFor="email" className={styles.login_form_label}>
@@ -290,48 +317,31 @@ function SignUp(props) {
               </div>
               <div className={styles.login_form_col_2}>
                 <div className={styles.login_form_group}>
-                  <label htmlFor="city" className={styles.login_form_label}>
-                    City
-                  </label>
-                  <input
-                    name="city"
-                    type="text"
-                    className={styles.login_form_input}
-                  />
+                  <label htmlFor="city" className={styles.login_form_label}>City</label>
+                  <input name="city" type="text" className={styles.login_form_input} />
+
                 </div>
                 <div className={styles.login_form_group}>
-                  <label htmlFor="country" className={styles.login_form_label}>
-                    Country
-                  </label>
-                  <input
-                    name="country"
-                    type="text"
-                    className={styles.login_form_input}
-                  />
+                  <label htmlFor="country" className={styles.login_form_label}>Country</label>
+                  <input name="country" type="text" className={styles.login_form_input} />
+
                 </div>
               </div>
               <div className={styles.login_form_group}>
-                <label
-                  htmlFor="phone_number"
-                  className={styles.login_form_label}
-                >
+                <label htmlFor="phone_number" className={styles.login_form_label}>
                   Phone Number
                 </label>
 
                 <PhoneInput
                   inputClass={styles.login_form_input}
-                  country={"us"}
+                  country={'us'}
                   name="phone_number"
                   value={phone_number}
-                  onChange={(phone) => handlePhoneChange(phone)}
+                  onChange={phone => handlePhoneChange(phone)}
                 />
               </div>
               <div className={styles.login_form_group}>
-                <label
-                  htmlFor="password"
-                  id="password"
-                  className={styles.login_form_label}
-                >
+                <label htmlFor="password" id='password' className={styles.login_form_label}>
                   Password
                 </label>
                 <input
@@ -346,20 +356,16 @@ function SignUp(props) {
                 />
 
                 <div onClick={togglePass} className={styles.secureEye}>
-                  {showPass ? <VisibilityOff /> : <Visibility />}
+                  {showPass ?
+                    <VisibilityOff />
+                    :
+                    <Visibility />
+                  }
                 </div>
-                {error.password && (
-                  <span style={{ color: "#FF0000", fontSize: 14 }}>
-                    {error.password}
-                  </span>
-                )}
+                {error.password && <span style={{ color: "#FF0000", fontSize: 14 }}>{error.password}</span>}
               </div>
               <div className={styles.login_form_group}>
-                <label
-                  htmlFor="password"
-                  id="confirm_password"
-                  className={styles.login_form_label}
-                >
+                <label htmlFor="password" id="confirm_password" className={styles.login_form_label}>
                   Confirm Password
                 </label>
                 <input
@@ -374,14 +380,32 @@ function SignUp(props) {
                 />
 
                 <div onClick={togglePass} className={styles.secureEye}>
-                  {showPass ? <VisibilityOff /> : <Visibility />}
+                  {showPass ?
+                    <VisibilityOff />
+                    :
+                    <Visibility />
+                  }
                 </div>
-                {error.confirm_password && (
-                  <span style={{ color: "#FF0000", fontSize: 14 }}>
-                    {error.confirm_password}
-                  </span>
-                )}
+                {error.confirm_password && <span style={{ color: "#FF0000", fontSize: 14 }} >{error.confirm_password}</span>}
               </div>
+
+              {/* <div className={styles.signup_form_option}>
+                <input
+                    className={styles.signup_form_radioInput}
+                    type="checkbox"
+                    id="agreement"
+                    name="isAgreed"
+                    required
+                    value={isAgreed}
+                    onChange={() => setIsAgreed(!isAgreed)}
+                    />
+                    
+                    <label htmlFor="agreement" className={styles.signup_form_radio_label}>
+                    I accept the Terms & Conditions and <Link legacyBehavior href="/privacypolicy"><a style={{textDecoration: "underline"}}>Privacy and Cookie Notice</a></Link>
+  
+                    </label>
+                    {!isAgreed && <span style={{color: "#FF0000", fontSize: 14}} >{error.isAgreed}</span>}
+                </div> */}
 
               <div className={styles.signup_form_option}>
                 <input
@@ -440,6 +464,112 @@ function SignUp(props) {
               <button onClick={formSubmit} className={styles.login_button}>
                 Register
               </button>
+              <div className={styles.login_options}>
+                <h3>Sign up with social media</h3>
+
+                <div className={styles.flex}>
+                  <div>
+                    {
+                      <FacebookLogin
+                        appId={process.env.FB_APP_ID}
+                        autoLoad={true}
+                        fields="name,email,picture"
+                        cssClass={styles.blue}
+                        // callback={responseFacebook}
+                        render={(renderProps) => (
+                          <button
+                            className={styles.blue}
+                            onClick={() => {
+                              renderProps.onClick();
+                            }}
+                          >
+                            This is my custom FB button
+                          </button>
+                        )}
+                      />
+                    }
+                  </div>
+                  <div>
+                    <GoogleLogin
+                      onSuccess={async (credentialResponse) => {
+                        try {
+                          const decoded = jwtDecode(
+                            credentialResponse.credential
+                          );
+                          // const s3Client = new S3Client({
+                          //   region: process.env.NEXT_PUBLIC_S3_REGION,
+                          //   credentials: {
+                          //     accessKeyId:
+                          //       process.env
+                          //         .NEXT_PUBLIC_CHOPCHOWAPP_USER_AWS_KEY,
+                          //     secretAccessKey:
+                          //       process.env
+                          //         .NEXT_PUBLIC_CHOPCHOWAPP_USER_AWS_SECRET,
+                          //   },
+                          // });
+                          // console.log(decoded, "decoded");
+                          // const resp = await fetch(decoded.picture);
+                          // const blob = await resp.blob();
+                          // const fileName = `images/${Date.now()}-${decoded.picture
+                          //   .split("/")
+                          //   .pop()}`;
+
+                          // const params = {
+                          //   Bucket: process.env.NEXT_PUBLIC_S3_BUCKET,
+                          //   Key: fileName,
+                          //   Body: blob,
+                          //   ContentType: blob.type,
+                          //   ACL: "public-read",
+                          // };
+                          // console.log(params, 'params')
+
+                          // const command = new PutObjectCommand(params);
+                          // const uploadResult = await s3Client.send(command);
+                          // console.log("Upload successful:", uploadResult);
+
+                          // const s3Url = `https://${process.env.NEXT_PUBLIC_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_S3_REGION}.amazonaws.com/${fileName}`;
+                          // console.log(s3Url, 's3Url')
+                          const payload = {
+                            first_name: decoded?.given_name,
+                            last_name: decoded?.family_name,
+                            email: decoded?.email,
+                            username: decoded?.given_name,
+                            password: Math.floor(
+                              Math.random() * 100000000
+                            ).toString(),
+                            email_notifications: false,
+                            profile_picture: decoded.picture
+
+                          };
+                          const form = new FormData();
+                          for (let entry in payload) {
+                            form.append(entry, payload[entry]);
+                          }
+                          // form.append("profile_picture", blob);
+                          const response = await axios("/user/signup", {
+                            method: "post",
+                            // headers: {
+                            //   "Content-Type": "multipart/form-data",
+                            // },
+                            data: payload,
+                          });
+                          toast.success("Registration was successful");
+                          router.push("/login");
+                        } catch (error) {
+                          toast.error(
+                            error?.response?.data?.message?.message ||
+                            "An error occured"
+                          );
+                          console.log(error, "error");
+                        }
+                      }}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
               <h3 className={styles.login_new}>
                 Already have an account?{" "}
                 {props.closeSignUp ? (
@@ -454,63 +584,60 @@ function SignUp(props) {
           </div>
         </div>
 
-        <div className={styles.login_col_1}>
+
+        {!mobileScreen ? <div className={styles.login_col_1}>
+
           <div className={styles.login_col_1_img_2}>
-            <img
+
+
+            <img width="100%" height="100%" src="/assets/signup/signup_mobile.jpeg" alt="Signup" />
+          </div>
+          <img width="100%" height="100%" className={styles.login_col_1_img} src="/assets/signup/signup_bg.jpg" alt="Signup" />
+        </div> :
+          <div className={styles.login_col_1}>
+            <div className={styles.login_col_1_img_2}>
+              <div
+                style={{
+                  backgroundImage: "url('/assets/signup/signup_mobile.jpeg')",
+                  width: "100%",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              >
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                  }}
+                />
+              </div>
+              {/* <img
               width="100%"
               height="100%"
               src="/assets/signup/signup_mobile.jpeg"
               alt="Signup"
-            />
-          </div>
+            /> */}
+            </div>
+          </div>}
 
-          <img
-            width="100%"
-            height="100%"
-            className={styles.login_col_1_img}
-            src="/assets/signup/signup_bg.jpg"
-            alt="Signup"
-          />
-        </div>
       </div>
-      <UserVerification
-        formState={formState}
-        setFormState={setFormState}
-        requestnumberFunc={props.requestnumberFunc}
-        type={type}
-        setType={setType}
-        sendEmailOTPFunc={props.sendEmailOTPFunc}
-        next={handleOpenOtp}
-        open={openUserVerification}
-        setOpen={setOpenUserVerification}
-      />
-      <UserVerificationSuccess
-        formState={formState}
-        setFormState={setFormState}
-        next={() => router.push("/dashboard")}
-        type={type}
-        setType={setType}
-        open={openUserVerificationSuccess}
-        setOpen={setOpenUserVerificationSuccess}
-      />
-      <OTP
-        formState={formState}
-        setFormState={setFormState}
-        verifynumberFunc={props.verifynumberFunc}
-        type={type}
-        setType={setType}
-        verifyEmailOTPFunc={props.verifyEmailOTPFunc}
-        next={handleOpenSuccess}
-        open={openOTP}
-        setOpen={setOpenOTP}
-      />
+      {openUserVerification && <UserVerification formState={formState} setFormState={setFormState} requestnumberFunc={props.requestnumberFunc} type={type} setType={setType} sendEmailOTPFunc={props.sendEmailOTPFunc} next={handleOpenOtp} open={openUserVerification} setOpen={setOpenUserVerification} />}
+
+      {openOTP && <OTP formState={formState} setFormState={setFormState} verifynumberFunc={props.verifynumberFunc} type={type} setType={setType}
+        verifyEmailOTPFunc={props.verifyEmailOTPFunc} next={handleOpenSuccess} open={openOTP} setOpen={setOpenOTP} sendEmailOTPFunc={props.sendEmailOTPFunc} requestnumberFunc={props.requestnumberFunc} setOpenUserVerificationSuccess={setOpenUserVerificationSuccess} />}
+
+      {/* {openUserVerificationSuccess && <UserVerificationSuccess formState={formState} setFormState={setFormState}  next={()=>router.push("/login")} type={type} setType={setType} open={openUserVerificationSuccess} setOpen={setOpenUserVerificationSuccess} isSuccess= {isSuccess} />}
+         */}
+
     </>
-  );
+  )
 }
 function mapStateToProp(state) {
   return {
     auth: state.Auth,
-    redux: state,
+    redux: state
   };
 }
 
@@ -521,7 +648,12 @@ function mapDispatchToProps(dispatch) {
     requestnumberFunc: (form) => dispatch(requestnumber(form)),
     verifyEmailOTPFunc: (form) => dispatch(verifyEmailOTP(form)),
     sendEmailOTPFunc: (form) => dispatch(sendEmailOTP(form)),
+    confirmAccount: (email) => dispatch(confirmAccount(email)),
+
   };
 }
 
-export default connect(mapStateToProp, mapDispatchToProps)(SignUp);
+export default connect(
+  mapStateToProp,
+  mapDispatchToProps,
+)(SignUp);
