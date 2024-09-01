@@ -113,7 +113,7 @@ export const userSignIn = (email, password, remember, callback, withAuth) => {
       withAuth: false,
       email: email,
     }
-    
+
     axios
       .post("/user/signin",
         withAuth ? withAuth_ : no_withAuth_
@@ -496,33 +496,6 @@ export const sendEmailOTP = ({ email }) => {
 };
 
 
-// export const OpenVerification = () => {
-//   return (dispatch) => {
-//     dispatch({ type: FETCH_START });
-//     axios
-//       .post("/user/sendemailotp",{email})
-//       .then(({ data }) => {
-//         console.log(" resend email api success ----: ", data.message);
-//         dispatch({ type: FETCH_SUCCESS, payload: data.message });
-//         dispatch({ type: OPEN_VERIFICATION, payload: true });
-//       })
-//       .catch((err) => { 
-//         dispatch({
-//           type: FETCH_ERROR,
-//           payload: "error resending email",
-//         });
-//         dispatch({
-//           type: TRIGGER_SNACK,
-//           payload: {
-//             showSnack: true,
-//             snackMessage: "error resending email",
-//           },
-//         });
-//       });
-//   };
-// };
-
-
 export const verifyEmailOTP = ({ email, otp }) => {
   return async (dispatch) => {
     try {
@@ -573,7 +546,6 @@ export const verifyEmailOTP = ({ email, otp }) => {
 };
 
 
-
 export const requestnumber = ({ number }) => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
@@ -605,11 +577,10 @@ export const verifynumber =  (request_id, code, email) => {
   return  (dispatch) => {
     dispatch({ type: OPEN_VERIFICATION, payload: true });
     dispatch({ type: FETCH_START });
-    // dispatch({ type: IS_AUTHENTICATED, payload: true });
-    // dispatch({ type: IS_VERIFIED, payload: true });
     console.log("request_id",request_id)
      axios
       .post("/user/verifynumber",{request_id,code, email})
+
       .then(({ data }) => {
         console.log(" resend email api success: ", data.message);
         if(data?.data?.success){

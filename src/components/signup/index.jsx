@@ -29,8 +29,6 @@ import { jwtDecode } from "jwt-decode";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { useMobileMedia } from '../../customhooks/useResponsive';
 
-
-
 function SignUp(props) {
   const [openUserVerification, setOpenUserVerification] = React.useState(false);
   const [openUserVerificationSuccess, setOpenUserVerificationSuccess] = React.useState(false);
@@ -206,14 +204,6 @@ function SignUp(props) {
       localStorage.setItem("formState", JSON.stringify(formState));
       setOpenUserVerification(true)
     }
-
-
-
-
-    // if(isAuthenticated && authUser){
-
-    // //   router.push("/dashboard");
-    // }
   }
 
   console.log("openUserVerificationSuccess", openUserVerificationSuccess)
@@ -588,8 +578,6 @@ function SignUp(props) {
         {!mobileScreen ? <div className={styles.login_col_1}>
 
           <div className={styles.login_col_1_img_2}>
-
-
             <img width="100%" height="100%" src="/assets/signup/signup_mobile.jpeg" alt="Signup" />
           </div>
           <img width="100%" height="100%" className={styles.login_col_1_img} src="/assets/signup/signup_bg.jpg" alt="Signup" />

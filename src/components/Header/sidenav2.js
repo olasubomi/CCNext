@@ -12,6 +12,7 @@ import {
   ChatIcon,
   AdminMgtIcon,
   MealRequestIcon,
+  BlogSettingsIcon
 } from "../icons";
 import Link from "next/link";
 import styles from "./header.module.css";
@@ -200,6 +201,20 @@ function SideNav2(props) {
                 >
                   <ChatIcon style={styles.sidenav_link_icon} />
                   Chat
+                </div>
+              </Link>
+            )}
+            {props.auth.authUser.user_type === "admin" && (
+              <Link href="/dashboard/blog/create">
+                <div
+                  className={
+                    styles.sidenav_link +
+                    " " +
+                    (props.path === "/dashboard/blog/create" && styles.active)
+                  }
+                >
+                  <BlogSettingsIcon style={styles.sidenav_link_icon} />
+                  Blog Settings
                 </div>
               </Link>
             )}
