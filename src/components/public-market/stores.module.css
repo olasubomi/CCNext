@@ -8,7 +8,7 @@
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
 .marketplace {
-  margin-top: 4rem;
+  margin-top: 6rem;
 }
 .marketplace h1 {
   font-size: 30px;
@@ -275,7 +275,7 @@
 }
 
 .storeContainer1 {
-  padding: 2.6rem 5rem;
+  padding: 14rem 5rem;
   /* position: relative; */
 }
 
@@ -323,7 +323,7 @@
 }
 .top {
   width: 100%;
-  padding: 6rem 5rem 0rem 5rem;
+  padding: 15rem 5rem 0rem 5rem;
 }
 
 .mealContainer1 {
@@ -854,7 +854,7 @@
     gap: 56px;
   }
   .storeContainer1 {
-    padding: 0rem 3rem;
+    padding: 7rem 3rem;
     position: relative;
   }
   .mealContainer {
@@ -978,7 +978,7 @@
 }
 @media only screen and (max-width: 840px){
 .storeContainer1{
-  padding: 3rem 3rem;
+  padding: 9rem 3rem;
 }
 }
 @media only screen and (max-width: 520px) {
@@ -1063,7 +1063,7 @@
     padding: 1.5rem 2.5rem 2rem 2.5rem;
   }
   .storeContainer1 {
-    padding: 10rem 2rem;
+    padding: 8rem 2rem;
     /* position: relative; */
   }
   .mealContainer {
@@ -1076,7 +1076,7 @@
     padding: 2rem 2rem;
   }
   .top {
-    padding: 10rem 2rem 0rem 2rem;
+    padding: 8rem 2rem 0rem 2rem;
   }
 }
 @media only screen and (max-width: 400px) {

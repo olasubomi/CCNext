@@ -191,11 +191,11 @@ const PublicMarket = () => {
             </p>
           </div>
 
-          <>
+          {/* <>
             {categories.find((ele) => ele.label === "Stores")?.value && (
               <Stores />
             )}
-          </>
+          </> */}
 
           <>
             {categories.find((ele) => ele.label === "Meals")?.value && (
@@ -221,7 +221,7 @@ const PublicMarket = () => {
           </>
         </>
       )}
-      {activeSubLink === 1 && (
+      {/* {activeSubLink === 1 && (
         <>
           {categories.find((ele) => ele.label === "Stores")?.value && (
             <AllStores />
@@ -247,7 +247,7 @@ const PublicMarket = () => {
             </div>
           )}
         </>
-      )}
+      )} */}
       {activeSubLink === 4 && (
         <>
           {categories.find((ele) => ele.label === "Kitchen Utensils")
