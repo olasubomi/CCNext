@@ -32,6 +32,12 @@
   cursor: pointer;
   text-decoration: underline;
 }
+.activesubrowText2 {
+  font-size: 13px;
+  color: #f47900;
+  font-weight: 300;
+  cursor: pointer;
+}
 .readDot {
   width: 1rem;
   height: 1rem;

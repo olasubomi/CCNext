@@ -192,8 +192,7 @@ function Header(props) {
       console.log(response.data);
       if (data?.item_name) {
         router.push(
-          `/${data?.item_type === "Meal" ? "meal" : "product"}/${
-            data?.item_name
+          `/${data?.item_type === "Meal" ? "meal" : "product"}/${data?.item_name
           }?id=${commentId}`
         );
       }
@@ -336,7 +335,7 @@ function Header(props) {
               ) : (
                 <div className={styles.navbar_user_info} ref={dropdownRef}>
                   {authUser?.profile_picture !== "" &&
-                  authUser?.profile_picture !== undefined ? (
+                    authUser?.profile_picture !== undefined ? (
                     <div onClick={toggleUserDetails}>
                       {" "}
                       <Image
@@ -616,7 +615,7 @@ function Header(props) {
                                 </h3>
                                 <p className={styles.summary_notification_link}>
                                   {elem.message.includes("Suggested Meal") ? (
-                                    <p onClick={() => {}}>View Item</p>
+                                    <p onClick={() => { }}>View Item</p>
                                   ) : (
                                     <p>View Comment</p>
                                   )}
@@ -732,16 +731,32 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
+  const currentPathname = pathname || '';
+
+  useEffect(() => {
+    const sublinkPaths = ["/marketplace/stores", "/marketplace/meals", "/marketplace/products", "/marketplace/utensils", "/marketplace/categories", "/marketplace/collections"];
+    const index = sublinkPaths.indexOf(currentPathname);
+    if (index !== -1) {
+      setActiveSubLink(index + 1);
+    }
+  }, [currentPathname, setActiveSubLink]);
+
   const handleActiveSubLink = (id) => {
     setActiveSubLink(id);
+    setOpenDropdown(true);
+    if (id > 0) {
+      const sublinkPaths = ["/marketplace/stores", "/marketplace/meals", "/marketplace/products", "/marketplace/utensils"];
+      router.push(sublinkPaths[id - 1]);
+    }
   };
 
+
   const handleMarketplaceClick = () => {
-    if (pathname === "/marketplace") {
+    if (currentPathname === "/marketplace") {
       setOpenDropdown((prev) => !prev);
       setActiveSubLink(0);
     } else {
-      setOpenDropdown(false);
+      setOpenDropdown(true);
       router.push("/marketplace");
     }
   };
@@ -771,12 +786,13 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
   const matches = useMediaQuery("(min-width: 900px)");
 
   useEffect(() => {
-    if (pathname === "/marketplace") {
+    if (currentPathname.startsWith("/marketplace")) {
       setOpenDropdown(true);
     } else {
       setOpenDropdown(false);
     }
-  }, [pathname]);
+  }, [currentPathname, activeSubLink]);
+
   return (
     <div className={styles.navbar2}>
       <div className={styles.navbar_main_container}>
@@ -785,7 +801,7 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
             <li className={styles.navbar_main_link}>
               <span
                 className={
-                  pathname === "/marketplace"
+                  currentPathname.startsWith("/marketplace")
                     ? "marketplace-button"
                     : "marketplace-button2"
                 }
@@ -798,7 +814,7 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
               <Link href="#">
                 <span
                   className={
-                    pathname === "#" ? styles.activelink : styles.inactivelink
+                    currentPathname === "#" ? styles.activelink : styles.inactivelink
                   }
                 >
                   Chefs
@@ -809,7 +825,7 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
               <Link href="#">
                 <span
                   className={
-                    pathname === "#" ? styles.activelink : styles.inactivelink
+                    currentPathname === "#" ? styles.activelink : styles.inactivelink
                   }
                 >
                   Blog
@@ -822,7 +838,7 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
             <Link href="/suggestmeal">
               <span
                 className={
-                  pathname === "/suggestmeal"
+                  currentPathname === "/suggestmeal"
                     ? styles.activelink
                     : styles.inactivelink
                 }
@@ -833,7 +849,7 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
             <Link href="/grocery">
               <span
                 className={
-                  pathname === "/grocery"
+                  currentPathname === "/grocery"
                     ? styles.activelink
                     : styles.inactivelink
                 }
@@ -846,70 +862,70 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
       </div>
 
       {matches
-        ? openDropdown &&
-          pathname === "/marketplace" && (
-            <div className={styles.subheader}>
-              <div className={styles.subrow}>
-                {[
-                  "",
-                  "Stores",
-                  "Meals",
-                  "Products",
-                  "Utensils",
-                  "Categories",
-                  "Collection",
-                ].map((elem, index, array) => (
-                  <span key={index} style={{ display: "flex", gap: "1.4rem" }}>
+        ? openDropdown && currentPathname.startsWith("/marketplace") && (
+          <div className={styles.subheader}>
+            <div className={styles.subrow}>
+              {[
+                "",
+                "Stores",
+                "Meals",
+                "Products",
+                "Utensils",
+                "Categories",
+                "Collection",
+              ].map((elem, index, array) => (
+                <span key={index} style={{ display: "flex", gap: "1.4rem" }}>
+                  <p
+                    className={
+                      activeSubLink === index
+                        ? styles.activesubrowText
+                        : styles.subrowText
+                    }
+                    onClick={() => handleActiveSubLink(index)}
+                  >
+                    {elem}
+                  </p>
+                  {index > 0 && index !== array.length - 1 && (
+                    <p className={styles.subrowText}>|</p>
+                  )}
+                </span>
+              ))}
+            </div>
+          </div>
+        )
+        : openDropdown && currentPathname.startsWith("/marketplace") && (
+          <div className={styles.subheader} ref={dropdownRef}>
+            <div className={styles.subrow}>
+              {[
+                "",
+                "Stores",
+                "Meals",
+                "Products",
+                "Utensils",
+                "Categories",
+                "Collection",
+              ].map((elem, index, array) => (
+                <>
+                  <span key={index}>
                     <p
                       className={
                         activeSubLink === index
-                          ? styles.activesubrowText
+                          ? styles.activesubrowText2
                           : styles.subrowText
                       }
                       onClick={() => handleActiveSubLink(index)}
                     >
                       {elem}
                     </p>
-                    {index > 0 && index !== array.length - 1 && (
-                      <p className={styles.subrowText}>|</p>
-                    )}
                   </span>
-                ))}
-              </div>
+                  {index > 0 && index !== array.length - 1 && (
+                    <div className={styles.dropdownborder} />
+                  )}
+                </>
+              ))}
             </div>
-          )
-        : openDropdown &&
-          pathname === "/marketplace" && (
-            <div className={styles.subheader} ref={dropdownRef}>
-              <div className={styles.subrow}>
-                {[
-                  "",
-                  "Stores",
-                  "Meals",
-                  "Products",
-                  "Utensils",
-                  "Categories",
-                  "Collection",
-                ].map((elem, index, array) => (
-                  <>
-                    <span key={index}>
-                      <p
-                        className={styles.subrowText}
-                        onClick={() => handleActiveSubLink(index)}
-                      >
-                        {elem}
-                      </p>
-                    </span>
-                    {index > 0 && index !== array.length - 1 && (
-                      <div className={styles.dropdownborder} />
-                    )}
-                  </>
-                ))}
-              </div>
-            </div>
-          )}
+          </div>
+        )}
     </div>
   );
 }
-
-// className={styles.navbar_user_signedin}
