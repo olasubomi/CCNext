@@ -42,8 +42,9 @@ export const AllStores = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleActiveLetter = (id) => {
+  const handleActiveLetter = (elem, id) => {
     setActiveLetter(id);
+    fetchStores(currentPage, elem)
   };
   const [stores, setStores] = useState([]);
   const [isShow, setIsShow] = useState(false);
@@ -82,14 +83,21 @@ export const AllStores = () => {
     }
   };
   console.log(stores, "one store");
-  const fetchStores = async (page = 1) => {
+  const fetchStores = async (page = 1, activeLetter = '') => {
     setIsLoading(true);
+    const params = {};
+    if(activeLetter){
+      params.startsWith = activeLetter
+    }
     try {
       const response = await axios(`/stores/getallstores/${page}?limit=10`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
+        params: {
+          ...params
+        }
       });
       console.log(response.data.data.products, "resp");
       const allItems = response.data.data.products;
@@ -175,7 +183,7 @@ export const AllStores = () => {
       <div className={styles.alphabetContainer}>
         {alphabets.map((elem, index) => (
           <span
-            onClick={() => handleActiveLetter(index)}
+            onClick={() => handleActiveLetter(elem, index)}
             className={
               activeLetter === index ? styles.activespan : styles.inactivespan
             }
