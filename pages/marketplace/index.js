@@ -191,11 +191,11 @@ const PublicMarket = () => {
             </p>
           </div>
 
-          {/* <>
+          <>
             {categories.find((ele) => ele.label === "Stores")?.value && (
               <Stores />
             )}
-          </> */}
+          </>
 
           <>
             {categories.find((ele) => ele.label === "Meals")?.value && (
