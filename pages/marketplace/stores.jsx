@@ -4,6 +4,7 @@ import { AllStores } from "../../src/components/public-market/all-stores"
 import { useState } from "react";
 import Sidenav from "../../src/components/Header/sidenav";
 import Head from "next/head";
+import Footer from "../../src/components/Footer/Footer";
 
 const AllStoresPage = () => {
     const router = useRouter();
@@ -34,6 +35,7 @@ const AllStoresPage = () => {
             <Sidenav />
      
          <AllStores />
+         <Footer />
         </div>
     )
 }

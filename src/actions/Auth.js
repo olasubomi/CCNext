@@ -573,47 +573,43 @@ export const requestnumber = ({ number }) => {
 };
 
 
-export const verifynumber =  (request_id, code, email) => {
-  return  (dispatch) => {
+export const verifynumber = (request_id, code, email) => {
+  return (dispatch) => {
     dispatch({ type: OPEN_VERIFICATION, payload: true });
     dispatch({ type: FETCH_START });
-    console.log("request_id",request_id)
-     axios
-      .post("/user/verifynumber",{request_id,code, email})
+    console.log("request_id", request_id);
 
+    axios
+      .post("/user/verifynumber", { request_id, code, email })
       .then(({ data }) => {
-        console.log(" resend email api success: ", data.message);
-        if(data?.data?.success){
-          // dispatch({ type: FETCH_SUCCESS, payload: data.message });
-          // dispatch({ type: IS_VERIFIED, payload: true });
-          // dispatch({ type: PHONE_NUMBER_VERIFIED, payload: true });
+        console.log("Verification API success: ", data.message);
+        if (data?.data?.success) {
           dispatch({ type: USER_DATA, payload: data.data.user });
           dispatch({ type: IS_AUTHENTICATED, payload: true });
-          toast.success("Phone number verification successful")
+          toast.success("Phone number verification successful");
           return { success: true, data };
         }
       })
       .catch((err) => {
         dispatch({
           type: FETCH_ERROR,
-          payload: "error resending email",
+          payload: "Error resending email",
         });
         dispatch({
           type: TRIGGER_SNACK,
           payload: {
             showSnack: true,
-            snackMessage: "error resending email",
+            snackMessage: "Error resending email",
           },
         });
-        if (err.response?.data?.message?.message === "Incorrect OTP") {
-          return { success: false, message: err.response?.data?.message?.message };
-        }
-  
-        return { success: false, message: err.response?.data?.message || "Error resending email" };
-      
+        
+        const errorMessage = err.response?.data?.message || "Error resending email";
+        toast.error(errorMessage); // Use toast.error for errors
+        return { success: false, message: errorMessage };
       });
   };
 };
+
 
 export const resetPassword = (password, token) => {
   return (dispatch) => {

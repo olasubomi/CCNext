@@ -4,6 +4,7 @@ import { useState } from "react";
 import Sidenav from "../../src/components/Header/sidenav";
 import Head from "next/head";
 import { AllUtensils } from "../../src/components/public-market/all-utensils";
+import Footer from "../../src/components/Footer/Footer";
 
 const AllStoresPage = () => {
     const router = useRouter();
@@ -32,8 +33,9 @@ const AllStoresPage = () => {
                 setActiveSubLink={setActiveSubLink}
             />
             <Sidenav />
-     
-         <AllUtensils />
+
+            <AllUtensils />
+            <Footer />
         </div>
     )
 }
