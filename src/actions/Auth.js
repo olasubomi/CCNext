@@ -604,7 +604,7 @@ export const verifynumber = (request_id, code, email) => {
         });
         
         const errorMessage = err.response?.data?.message || "Error resending email";
-        toast.error(errorMessage); // Use toast.error for errors
+        toast.error(errorMessage);
         return { success: false, message: errorMessage };
       });
   };
