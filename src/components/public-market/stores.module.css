@@ -10,6 +10,27 @@
 .marketplace {
   margin-top: 6rem;
 }
+.disabledspan {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.disabledLetter {
+  color: grey;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  width: 42px;
+  height: 31px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 15px;
+  font-weight: 300;
+  font-family: Inter;
+}
+
 .marketplace h1 {
   font-size: 30px;
   font-weight: 600;
@@ -37,6 +58,15 @@
   width: 100%;
   gap: 0.5rem;
 }
+.alphabetContainer2 {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px 0;
+  margin: 20px 0;
+  width: 100%;
+justify-content: space-between;
+}
 
 .inactivespan {
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -52,6 +82,7 @@
   font-weight: 300;
   font-family: Inter;
 }
+
 .activespan {
   background-color: #f47900;
   width: 42px;

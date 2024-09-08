@@ -44,8 +44,12 @@ export const AllProducts = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleActiveLetter = (id) => {
+  const [availableLetters, setAvailableLetters] = useState([]);
+
+
+  const handleActiveLetter = (elem, id) => {
     setActiveLetter(id);
+    fetchProducts(currentPage, elem)
   };
   const [products, setProducts] = useState([]);
   const [visibleProducts, setVisibleProducts] = useState(5);
@@ -96,13 +100,20 @@ export const AllProducts = () => {
     status: "",
   });
 
-  const fetchProducts = async (page) => {
+  const fetchProducts = async (page, activeLetter) => {
     setIsLoading(true);
+    const params = {};
+    if (activeLetter) {
+      params.startsWith = activeLetter
+    }
     try {
       const response = await axios(
         `/items/${page}?type=Product&status=Public&limit=10`,
         {
           method: "GET",
+          params: {
+            ...params
+          },
           headers: {
             "Content-Type": "application/json",
           },
@@ -115,11 +126,12 @@ export const AllProducts = () => {
         (product) => product.average_rating
       );
 
-      // Update totalPages based on actual number of items received
       const totalPages = Math.ceil(totalItems / 20);
 
       setProducts(filteredProducts);
       setTotalPages(totalPages);
+      const lettersWithStores = filteredProducts.map(item => item.item_name[0].toUpperCase());
+      setAvailableLetters([...new Set(lettersWithStores)]);
     } catch (error) {
       console.log(error);
     } finally {
@@ -204,24 +216,33 @@ export const AllProducts = () => {
           </div>
         </div>
         <div className={styles.alphabetContainer}>
-          {alphabets.map((elem, index) => (
+         <div className={styles.alphabetContainer2}>
+         {alphabets.map((elem, index) => (
             <span
-              onClick={() => handleActiveLetter(index)}
+            key={index}
+            onClick={() => handleActiveLetter(elem, index)}
+            className={
+              availableLetters.includes(elem)
+                ? activeLetter === index
+                  ? styles.activespan
+                  : styles.inactivespan
+                : styles.disabledspan
+            }
+          >
+            <p
               className={
-                activeLetter === index ? styles.activespan : styles.inactivespan
-              }
-            >
-              <p
-                className={
-                  activeLetter === index
+                availableLetters.includes(elem)
+                  ? activeLetter === index
                     ? styles.activeLetter
                     : styles.inactiveletter
-                }
-              >
-                {elem}
-              </p>
-            </span>
+                  : styles.disabledLetter
+              }
+            >
+              {elem}
+            </p>
+          </span>
           ))}
+         </div>
         </div>
         <div className={styles.storeImgContainer}>
           <div className={styles.storeFlex}>

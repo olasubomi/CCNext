@@ -38,6 +38,7 @@ export const AllStores = () => {
   ];
 
   const [activeLetter, setActiveLetter] = useState(null);
+  const [availableLetters, setAvailableLetters] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -83,10 +84,11 @@ export const AllStores = () => {
     }
   };
   console.log(stores, "one store");
+
   const fetchStores = async (page = 1, activeLetter = '') => {
     setIsLoading(true);
     const params = {};
-    if(activeLetter){
+    if (activeLetter) {
       params.startsWith = activeLetter
     }
     try {
@@ -112,6 +114,9 @@ export const AllStores = () => {
       } else {
         setStores(filteredStores);
       }
+      const lettersWithStores = filteredStores.map(store => store.store_name[0].toUpperCase());
+      setAvailableLetters([...new Set(lettersWithStores)]);
+
     } catch (error) {
       console.log(error);
     } finally {
@@ -122,15 +127,14 @@ export const AllStores = () => {
   useEffect(() => {
     fetchStores(currentPage);
   }, [currentPage]);
+  
   console.log(selectedStore, "storess");
+
   useEffect(() => {
-    // Get the hash value from the URL
     const hash = window.location.hash;
 
-    // Use the hash value as the target ID for scrolling
     const targetId = hash ? hash.substring(1) : "store";
 
-    // Scroll to the target section
     if (targetId) {
       const element = document.getElementById(targetId);
       if (element) {
@@ -181,24 +185,34 @@ export const AllStores = () => {
         </div>
       </div>
       <div className={styles.alphabetContainer}>
-        {alphabets.map((elem, index) => (
-          <span
-            onClick={() => handleActiveLetter(elem, index)}
-            className={
-              activeLetter === index ? styles.activespan : styles.inactivespan
-            }
-          >
-            <p
+        <div className={styles.alphabetContainer}>
+          {alphabets.map((elem, index) => (
+            <span
+              key={index}
+              onClick={() => handleActiveLetter(elem, index)}
               className={
-                activeLetter === index
-                  ? styles.activeLetter
-                  : styles.inactiveletter
+                availableLetters.includes(elem)
+                  ? activeLetter === index
+                    ? styles.activespan
+                    : styles.inactivespan
+                  : styles.disabledspan
               }
             >
-              {elem}
-            </p>
-          </span>
-        ))}
+              <p
+                className={
+                  availableLetters.includes(elem)
+                    ? activeLetter === index
+                      ? styles.activeLetter
+                      : styles.inactiveletter
+                    : styles.disabledLetter
+                }
+              >
+                {elem}
+              </p>
+            </span>
+          ))}
+        </div>
+
       </div>
       <div className={styles.storeImgContainer}>
         <div className={styles.storeFlex}>
@@ -265,8 +279,8 @@ export const AllStores = () => {
                           >
                             {store?.supplier_address
                               ? store?.supplier_address?.city +
-                                " - " +
-                                store?.supplier_address?.country
+                              " - " +
+                              store?.supplier_address?.country
                               : ""}
                           </p>
                         </div>

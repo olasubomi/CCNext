@@ -45,8 +45,12 @@ export const AllUtensils = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleActiveLetter = (id) => {
+  const [availableLetters, setAvailableLetters] = useState([]);
+
+
+  const handleActiveLetter = (elem, id) => {
     setActiveLetter(id);
+    fetchUtensils(currentPage, elem)
   };
   const [utensils, setUtensils] = useState([]);
   const [visibleMeals, setVisibleMeals] = useState(8);
@@ -95,13 +99,20 @@ export const AllUtensils = () => {
     status: "",
   });
 
-  const fetchUtensils = async (page) => {
+  const fetchUtensils = async (page, activeLetter) => {
     setIsLoading(true);
+    const params = {};
+    if (activeLetter) {
+      params.startsWith = activeLetter
+    }
     try {
       const response = await axios(
         `/items/${page}?type=Utensil&status=Public&limit=10`,
         {
           method: "GET",
+          params: {
+            ...params
+          },
           headers: {
             "Content-Type": "application/json",
           },
@@ -119,6 +130,9 @@ export const AllUtensils = () => {
       } else {
         setUtensils(filteredProducts);
       }
+      const lettersWithStores = filteredProducts.map(item => item.item_name[0].toUpperCase());
+      setAvailableLetters([...new Set(lettersWithStores)]);
+
     } catch (error) {
       console.log(error);
     } finally {
@@ -138,7 +152,7 @@ export const AllUtensils = () => {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -202,24 +216,33 @@ export const AllUtensils = () => {
           </div>
         </div>
         <div className={styles.alphabetContainer}>
-          {alphabets.map((elem, index) => (
-            <span
-              onClick={() => handleActiveLetter(index)}
-              className={
-                activeLetter === index ? styles.activespan : styles.inactivespan
-              }
-            >
-              <p
+          <div className={styles.alphabetContainer2}>
+            {alphabets.map((elem, index) => (
+              <span
+                key={index}
+                onClick={() => handleActiveLetter(elem, index)}
                 className={
-                  activeLetter === index
-                    ? styles.activeLetter
-                    : styles.inactiveletter
+                  availableLetters.includes(elem)
+                    ? activeLetter === index
+                      ? styles.activespan
+                      : styles.inactivespan
+                    : styles.disabledspan
                 }
               >
-                {elem}
-              </p>
-            </span>
-          ))}
+                <p
+                  className={
+                    availableLetters.includes(elem)
+                      ? activeLetter === index
+                        ? styles.activeLetter
+                        : styles.inactiveletter
+                      : styles.disabledLetter
+                  }
+                >
+                  {elem}
+                </p>
+              </span>
+            ))}
+          </div>
         </div>
         <div className={styles.storeImgContainer}>
           <div className={styles.storeFlex}>

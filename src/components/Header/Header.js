@@ -813,10 +813,11 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
               </span>
             </li>
             <li className={styles.navbar_main_link}>
-              <Link href="#">
+              <Link href="/chef">
                 <span
                   className={
-                    currentPathname === "#" ? styles.activelink : styles.inactivelink
+                    currentPathname === '/chef'
+                      ? styles.activelink : styles.inactivelink
                   }
                 >
                   Chefs
