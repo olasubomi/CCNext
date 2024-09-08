@@ -38,7 +38,6 @@ export const AllStores = () => {
   ];
 
   const [activeLetter, setActiveLetter] = useState(null);
-  const [availableLetters, setAvailableLetters] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,15 +83,14 @@ export const AllStores = () => {
     }
   };
   console.log(stores, "one store");
-
   const fetchStores = async (page = 1, activeLetter = '') => {
     setIsLoading(true);
     const params = {};
-    if (activeLetter) {
+    if(activeLetter){
       params.startsWith = activeLetter
     }
     try {
-      const response = await axios(`/stores/getallstores/${page}?limit=10`, {
+      const response = await axios(`/stores/getallstores/${page}?limit=10&status=PUBLIC`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -103,20 +101,13 @@ export const AllStores = () => {
       });
       console.log(response.data.data.products, "resp");
       const allItems = response.data.data.products;
+      const totalItems = response.data.data.count;
 
-      const filteredStores = allItems.filter(
-        (store) => store.status === "PUBLIC"
-      );
+      const filteredStores = allItems
 
-      if (filteredStores.length === 0) {
-        const lastPageWithItems = page - 1;
-        setTotalPages(lastPageWithItems);
-      } else {
-        setStores(filteredStores);
-      }
-      const lettersWithStores = filteredStores.map(store => store.store_name[0].toUpperCase());
-      setAvailableLetters([...new Set(lettersWithStores)]);
-
+      const totalPages = Math.ceil(totalItems / 20);
+      setTotalPages(totalPages);
+      setStores(filteredStores)
     } catch (error) {
       console.log(error);
     } finally {
@@ -127,14 +118,15 @@ export const AllStores = () => {
   useEffect(() => {
     fetchStores(currentPage);
   }, [currentPage]);
-  
   console.log(selectedStore, "storess");
-
   useEffect(() => {
+    // Get the hash value from the URL
     const hash = window.location.hash;
 
+    // Use the hash value as the target ID for scrolling
     const targetId = hash ? hash.substring(1) : "store";
 
+    // Scroll to the target section
     if (targetId) {
       const element = document.getElementById(targetId);
       if (element) {
@@ -148,17 +140,14 @@ export const AllStores = () => {
   };
 
   const handleNextPage = () => {
-    if (currentPage === totalPages) {
+    if (currentPage <= totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
 
   const handlePreviousPage = () => {
-    if (currentPage !== totalPages) {
-      setCurrentPage(currentPage - 1);
-    }
-    if (currentPage === 1) {
-      setCurrentPage(currentPage);
+    if (currentPage !== 0) {
+      setCurrentPage(currentPage -1);
     }
   };
 
@@ -185,34 +174,24 @@ export const AllStores = () => {
         </div>
       </div>
       <div className={styles.alphabetContainer}>
-        <div className={styles.alphabetContainer}>
-          {alphabets.map((elem, index) => (
-            <span
-              key={index}
-              onClick={() => handleActiveLetter(elem, index)}
+        {alphabets.map((elem, index) => (
+          <span
+            onClick={() => handleActiveLetter(elem, index)}
+            className={
+              activeLetter === index ? styles.activespan : styles.inactivespan
+            }
+          >
+            <p
               className={
-                availableLetters.includes(elem)
-                  ? activeLetter === index
-                    ? styles.activespan
-                    : styles.inactivespan
-                  : styles.disabledspan
+                activeLetter === index
+                  ? styles.activeLetter
+                  : styles.inactiveletter
               }
             >
-              <p
-                className={
-                  availableLetters.includes(elem)
-                    ? activeLetter === index
-                      ? styles.activeLetter
-                      : styles.inactiveletter
-                    : styles.disabledLetter
-                }
-              >
-                {elem}
-              </p>
-            </span>
-          ))}
-        </div>
-
+              {elem}
+            </p>
+          </span>
+        ))}
       </div>
       <div className={styles.storeImgContainer}>
         <div className={styles.storeFlex}>
@@ -279,8 +258,8 @@ export const AllStores = () => {
                           >
                             {store?.supplier_address
                               ? store?.supplier_address?.city +
-                              " - " +
-                              store?.supplier_address?.country
+                                " - " +
+                                store?.supplier_address?.country
                               : ""}
                           </p>
                         </div>

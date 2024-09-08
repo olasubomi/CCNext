@@ -2,15 +2,16 @@ import { useState, useEffect, useRef } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { MealDropDown } from "./dropdown";
-import stored from "../../../public/assets/store_pics/no-image-store.png";
 import Image from "next/image";
 import { Element } from "react-scroll";
 import { BiSolidDownArrow } from "react-icons/bi";
 
 export const Stores = () => {
   const [stores, setStores] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isShow, setIsShow] = useState(false);
-  const [selected, SetSelected] = useState(null);
+  const [selected, setSelected] = useState(null);
   const [storeInfo, setStoreInfo] = useState({
     id: 0,
     name: "",
@@ -19,67 +20,60 @@ export const Stores = () => {
     address: "",
     rating: 0,
   });
-  const [loadMore, setLoadMore] = useState(6);
-  const ref = useRef();
-
+  const [uniqueItemIds, setUniqueItemIds] = useState(new Set()); // To store unique item IDs
   const [selectedStore, setSelectedStore] = useState({
     items: [],
     supplier: {},
   });
+  const [hasMoreData, setHasMoreData] = useState(true);
+
   const handleLoadMore = () => {
-    setLoadMore(loadMore + 6);
+    setCurrentPage((prev) => prev + 1);
   };
 
   const fetchOneStore = async (storeId) => {
     try {
-      const response = await axios(
-        `/inventory/get-store-inventory/${storeId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(response.data.data, "one storey");
+      const response = await axios.get(`/inventory/get-store-inventory/${storeId}`);
       setSelectedStore(response.data.data);
       setIsShow(true);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching store inventory:", error);
     }
   };
-  console.log(stores, "one store");
-  const fetchStores = async () => {
-    try {
-      const response = await axios(`/stores/getallstores/1?limit=2000`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response.data.data.products, "resp");
-      setStores(response.data.data.products);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchStores();
-  }, []);
-  console.log(selectedStore, "storess");
-  useEffect(() => {
-    // Get the hash value from the URL
-    const hash = window.location.hash;
 
-    // Use the hash value as the target ID for scrolling
+  const fetchStores = async (page) => {
+    try {
+      const response = await axios.get(`/stores/getallstores/${page}?limit=10&status=PUBLIC`);
+      const allItems = response.data.data.products;
+      const totalItems = response.data.data.count;
+
+      const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
+
+      if (newItems.length > 0) {
+        setStores((prev) => [...prev, ...newItems]);
+        setUniqueItemIds((prev) => new Set([...prev, ...newItems.map((item) => item._id)]));
+      }
+
+      const totalPages = Math.ceil(totalItems / 10);
+      setTotalPages(totalPages);
+
+      setHasMoreData(page < totalPages);
+    } catch (error) {
+      console.error("Error fetching stores:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStores(currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    const hash = window.location.hash;
     const targetId = hash ? hash.substring(1) : "store";
 
-    // Scroll to the target section
-    if (targetId) {
-      const element = document.getElementById(targetId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
     }
   }, []);
 
@@ -95,80 +89,58 @@ export const Stores = () => {
         </div>
       </div>
       <div className={styles.stores}>
-        {stores
-          .slice(0, loadMore)
-          .filter((elem) => elem.status === "PUBLIC")
-          .map((store, id) => {
-            return (
-              <>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <div key={id} className={`${styles.cardWrapper}`}>
-                    <div
-                      className={styles.card}
-                      onClick={() => {
-                        fetchOneStore(store._id);
-                        SetSelected(id);
-                        setStoreInfo({
-                          id: store._id,
-                          name: store?.store_name,
-                          image: store?.profile_picture,
-                          description: store?.description,
-                          address:
-                            store?.supplier_address?.address +
-                            ", " +
-                            store?.supplier_address?.city +
-                            " - " +
-                            store?.supplier_address?.country,
-                          rating: store?.average_rating,
-                        });
-                      }}
-                    >
-                      {
-                        <div>
-                          <Image
-                            src={
-                              store?.profile_picture
-                                ? store?.profile_picture
-                                : "/assets/store_pics/no-image-store.png"
-                            }
-                            className={styles.storeImg}
-                            width={200}
-                            height={200}
-                            objectFit="cover"
-                            objectPosition="center"
-                          />
-                          <p className={styles.name}>{store?.store_name}</p>
-                          <p
-                            className={styles.storeName}
-                            style={{ marginTop: ".4rem" }}
-                          >
-                            {store?.supplier_address
-                              ? store?.supplier_address?.city +
-                                " - " +
-                                store?.supplier_address?.country
-                              : ""}
-                          </p>
-                        </div>
-                      }
-                    </div>
-                  </div>
-                  {isShow && selected === id && (
-                    <MealDropDown
-                    isShow={isShow}
-                      storeInfo={storeInfo}
-                      setIsShow={setIsShow}
-                      selectedStore={selectedStore}
-                      id={storeInfo?.id}
-                    />
-                  )}
-                </div>
-              </>
-            );
-          })}
+        {stores.map((store, id) => (
+          <div key={id} style={{ display: "flex", flexDirection: "column" }}>
+            <div className={`${styles.cardWrapper}`}>
+              <div
+                className={styles.card}
+                onClick={() => {
+                  fetchOneStore(store._id);
+                  setSelected(id);
+                  setStoreInfo({
+                    id: store._id,
+                    name: store?.store_name,
+                    image: store?.profile_picture,
+                    description: store?.description,
+                    address: `${store?.supplier_address?.address}, ${store?.supplier_address?.city} - ${store?.supplier_address?.country}`,
+                    rating: store?.average_rating,
+                  });
+                }}
+              >
+                <Image
+                  src={store?.profile_picture || "/assets/store_pics/no-image-store.png"}
+                  className={styles.storeImg}
+                  width={200}
+                  height={200}
+                  objectFit="cover"
+                  objectPosition="center"
+                />
+                <p className={styles.name}>{store?.store_name}</p>
+                <p className={styles.storeName} style={{ marginTop: ".4rem" }}>
+                  {store?.supplier_address
+                    ? `${store?.supplier_address?.city} - ${store?.supplier_address?.country}`
+                    : ""}
+                </p>
+              </div>
+            </div>
+            {isShow && selected === id && (
+              <MealDropDown
+                isShow={isShow}
+                storeInfo={storeInfo}
+                setIsShow={setIsShow}
+                selectedStore={selectedStore}
+                id={storeInfo?.id}
+              />
+            )}
+          </div>
+        ))}
       </div>
 
-      <p className={styles.view} onClick={() => handleLoadMore()}>
-        View More
+      <p
+        className={styles.view}
+        onClick={hasMoreData ? handleLoadMore : null}
+      >
+        {hasMoreData ? "View More" : "View More"}
       </p>
       <div className={styles.border} />
     </div>
