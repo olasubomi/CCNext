@@ -1,6 +1,11 @@
 import heroImage1 from "../public/assets/home/hero-image.png";
-import heroImage2 from "../public/assets/home/hero-2.png";
-import heroImage3 from "../public/assets/home/hero03.png";
+import heroImage2 from "../public/assets/home/page-2.png";
+import heroImage3 from "../public/assets/home/page-3.png";
+import heroImage4 from "../public/assets/home/page-4.png";
+import heroImage4Sug from "../public/assets/home/page-4-suggest.png";
+import heroImage5 from "../public/assets/home/page-5.png";
+import heroImage5Sug from "../public/assets/home/page-5-suggest.png";
+
 import arrow from "../public/assets/home/arrow.svg";
 import meal from "../public/assets/home/meal.svg";
 import plus from "../public/assets/home/plus.svg";
@@ -54,7 +59,7 @@ export default function HomePage() {
           const mapped = response.data.data.map((ele) => ele?.supplier_address?.city);
           const arr = []
           for (let entry of mapped) {
-            if(!arr.includes(mapped[mapped.lastIndexOf(entry)])){
+            if (!arr.includes(mapped[mapped.lastIndexOf(entry)])) {
               arr.push(mapped[mapped.lastIndexOf(entry)])
             }
           }
@@ -116,17 +121,84 @@ export default function HomePage() {
               <button>Subscribe now</button>
             </div>
           </div>
-          <div className="hero-box">
-            <div className="hero-content">
-              <div>
+
+          <div
+            className="hero"
+            style={{
+              backgroundImage: `url(${heroImage3.src})`,
+            }}
+          >
+            <div className="overlay">
+              <h1>Share your go to meals with friends on Chop Chow</h1>
+              <button>Suggest a meal</button>
+            </div>
+          </div>
+
+          <div
+            className="hero"
+            style={{
+              backgroundImage: `url(${heroImage4.src})`,
+            }}
+          >
+            <div className="overlay overlay_flex">
+              <div className="overlay_flex_1">
                 <h1>Share your go to meals with friends on Chop Chow</h1>
                 <button>Suggest a meal</button>
               </div>
-              <div className="hero-content-image" />
+              <div
+                className="overlay_flex_2"
+                style={{
+                  backgroundImage: `url(${heroImage4Sug.src})`,
+                }}
+              >
+
+              </div>
             </div>
-            <div className="box-child-one">
-            </div>
-            <div className="box-child-two">
+          </div>
+
+          <div
+            className="hero"
+            style={{
+              backgroundImage: `url(${heroImage5.src})`,
+            }}
+          >
+            <div className="overlay overlay_flex">
+              <div className="overlay_flex_1">
+                <h1>AI-Powered
+                  Label Scanner</h1>
+                <div className="section-list">
+                  {
+                    [
+                      {
+                        title: "Time Saving",
+                        image: icon1
+                      },
+                      {
+                        title: "Accurate",
+                        image: icon2
+                      },
+                      {
+                        title: "Ease of Use",
+                        image: icon3
+                      },
+                    ].map((element) => (
+                      <div key={element.title} className="section-list-box">
+                        <Image src={element.image} />
+                        <p>{element.title}</p>
+                      </div>
+                    ))
+                  }
+                </div>
+                <button>Suggest a meal</button>
+              </div>
+              <div
+                style={{
+                  backgroundImage: `url(${heroImage5Sug.src})`,
+                }}
+                className="overlay_flex_2"
+              >
+
+              </div>
             </div>
           </div>
         </Carousel>
@@ -181,9 +253,16 @@ export default function HomePage() {
         <div className="box-4 box" />
         <div className="section-content">
           <div className="section-box">
-            <h1>Plan your meal prep with Chop Chow’s Grocery List</h1>
-            <div className="section-image" />
-            <div className="section-footer">
+            <h1>Connect with food lovers and chefs from all over the world</h1>
+            <div className="section_box_container">
+              <div className="section_box_container_cont">
+                <input placeholder="Enter the name" className="section_box_container_input" />
+              </div>
+              <button className="section_box_container_button">Find Now</button>
+            </div>
+            <div className="section_box_image_cont" />
+            {/* <div className="section-image" /> */}
+            {/* <div className="section-footer">
               {[
                 {
                   title:
@@ -201,7 +280,7 @@ export default function HomePage() {
                   <p>{element.title}</p>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -255,7 +334,29 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      <Carousel
+
+      <section className="section_cities">
+        <div className="section_cities_box" />
+        <h1>We Are  In These Cities</h1>
+        <div className="section-eight-container">
+          {
+            locations.map((element, idx) => <p className="section-name" key={element + idx}>{element}</p>)
+          }
+        </div>
+      </section>
+
+      <section className="section_sub">
+        <h1>Subscribe to our Newsletter Today</h1>
+        <p>Dont miss anything! Be  the first to get our exclusive offers and latest news</p>
+        <div className="section_box_container">
+          <div className="section_box_container_cont">
+            <input placeholder="Enter the name" className="section_box_container_input" />
+          </div>
+          <button className="section_box_container_button">Find Now</button>
+        </div>
+      </section>
+
+      {/* <Carousel
         showDots
         containerClass="footer-carousel"
         responsive={responsive}
@@ -310,17 +411,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-      </Carousel>
-      <secion className="section-eight">
-        <div className="section-eight-box">
-          <h1>Our Locations</h1>
-          <div className="section-eight-container">
-            {
-              locations.map((element, idx) => <p className="section-name" key={element + idx}>{element}</p>)
-            }
-          </div>
-        </div>
-      </secion>
+      </Carousel> */}
+
     </div>
   );
 }
