@@ -70,6 +70,7 @@ export const Editor = forwardRef((props, ref) => {
   const [editor] = useLexicalComposerContext();
   const [form, setForm] = useState({
     title: "",
+    uri: "",
     feature_image: {},
   });
 
@@ -90,12 +91,16 @@ export const Editor = forwardRef((props, ref) => {
           formData.append("title", form.title);
           formData.append("featured_image", form.feature_image);
           formData.append("html_template", htmlString);
+          formData.append("category", form.category);
           formData.append("body_content_text", plainText.toString());
           formData.append("word_count", plainText.toString().split(" ").length);
           if (status) {
             formData.append("status", status);
           }
-          let url = params.query.action === 'edit' ? `/blog/update/${params.query.id}` : "/blog/create"
+          let url =
+            params.query.action === "edit"
+              ? `/blog/update/${params.query.id}`
+              : "/blog/create";
           const response = await axios(url, {
             method: "post",
             data: formData,
@@ -140,7 +145,7 @@ export const Editor = forwardRef((props, ref) => {
       pageRef.current
     ) {
       handleGetOneBlogPost(params.query?.id);
-      pageRef.current = false
+      pageRef.current = false;
     }
   }, [params, pageRef]);
 
@@ -176,29 +181,79 @@ export const Editor = forwardRef((props, ref) => {
         <OnChangePlugin onChange={onChange} />
       </div>
       <div className="editor-header-section">
-        <h2>Add Post Title</h2>
-        <input
-          onChange={(event) =>
-            setForm({
-              ...form,
-              title: event.target.value,
-            })
-          }
-          value={form.title}
-          className="input-box"
-        />
+        <div className="editor-post-title-sec">
+          <div className="ed_1">
+            <h2>Add Post Title</h2>
+            <input
+              onChange={(event) =>
+                setForm({
+                  ...form,
+                  title: event.target.value,
+                })
+              }
+              value={form.title}
+              className="input-box"
+            />
+          </div>
+          <div className="ed_2">
+            <h2>
+              Select a category <sup>*</sup>
+            </h2>
+            <select
+              onChange={(event) => {
+                setForm({
+                  ...form,
+                  category: event.target.value,
+                });
+              }}
+            >
+              <option selected disabled>
+                Select an option
+              </option>
+              <option value="MEAL">Meal</option>
+              <option value="INGREDIENTS">Ingredients</option>
+              <option value="UTENSILS">Utensils</option>
+              <option value="KITCHEN TIPS">Kitchen Tips</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div className="editor-image">
         <h2>Featured Image</h2>
-        <div onClick={() => inputRef.current?.click()} className="pick-image">
-          <BsPlus />
-          <p>Add Image</p>
-        </div>
+        {!form.uri ? (
+          <div onClick={() => inputRef.current?.click()} className="pick-image">
+            <BsPlus />
+            <p>Add Image</p>
+          </div>
+        ) : (
+          <>
+            <div className="selected_image">
+              <img className="f_image" src={form.uri} />
+            </div>
+            <div className="selected_image_options">
+              <button onClick={() => inputRef.current?.click()}>
+                Change picture
+              </button>
+              <button
+                onClick={() => {
+                  setForm({
+                    ...form,
+                    uri: "",
+                  });
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </>
+        )}
+
         <input
           onChange={(event) =>
             setForm({
               ...form,
               feature_image: event.target.files[0],
+              uri: URL.createObjectURL(event.target.files[0]),
             })
           }
           ref={inputRef}
