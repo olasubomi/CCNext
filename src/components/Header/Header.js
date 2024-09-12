@@ -34,6 +34,7 @@ import { useMediaQuery } from "../../hooks/usemediaquery";
 import { MobileSearch } from "../dropdown/mobile-search";
 import axios from "../../util/Api";
 import { matches } from "lodash";
+import NavLink from "../../hooks/navlink";
 
 function Header(props) {
   // const [isAuthenticated, setIsAuthenticatedState] = useState(false);
@@ -813,28 +814,16 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
               </span>
             </li>
             <li className={styles.navbar_main_link}>
-              <Link href="/chef">
-                <span
-                  className={
-                    currentPathname === '/chef'
-                      ? styles.activelink : styles.inactivelink
-                  }
-                >
-                  Chefs
-                </span>
-              </Link>
+              <NavLink href="/chef">
+                Chefs
+              </NavLink>
             </li>
             <li className={styles.navbar_main_link}>
-              <Link href="/blog">
-                <span
-                  className={
-                    currentPathname === "#" ? styles.activelink : styles.inactivelink
-                  }
-                >
-                  Blog
-                </span>
-              </Link>
+            <NavLink href="/blog">
+                Blog
+              </NavLink>
             </li>
+
           </ul>
 
           <div className={styles.navbar_main_grocery}>

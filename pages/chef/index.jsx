@@ -191,18 +191,20 @@ const AllChefsPage = () => {
             <div className={styles.allpicks}>
               {
                 topSuppliers.map((elem) => (
-                  <div>
+                  <div style={{textAlign: 'center'}}>
                     <div className={styles.border}>
                       <div className={styles.topPickImg}>
-                      {
-                        elem?.user?.profile_picture ?
-                          <img src={elem?.user?.profile_picture} style={{ width: '100%', height: '100%' }} />
-                          : <div>
-                            <UserIcon style={styles.topPickImg} />
-                          </div>
-                      }
+                        {
+                          elem?.profile_picture ?
+                            <img src={elem?.profile_picture} style={{ width: '100%', height: '100%' }} />
+                            : <div>
+                              <UserIcon style={styles.topPickImg} />
+                            </div>
+                        }
                       </div>
+
                     </div>
+                    <p className={styles.username}>{elem?.first_name ? `${elem?.first_name} ${elem?.last_name}` : `${elem?.username}`}</p>
                   </div>
                 ))
               }
