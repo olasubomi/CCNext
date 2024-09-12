@@ -487,7 +487,7 @@
     height: 100%;
     background-image: url('../../public/assets/home/section-4.mobile.svg');
     /* background-size: 100%; */
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     transform: scaleX(1.4);
@@ -812,6 +812,14 @@
     margin-top: 30px;
 }
 
+.hero-4 {
+    background-image: url(../../public/assets/home/mobile-4.png);
+}
+
+.hero-2 {
+    background-image: url(../../public/assets/home/mobile-3.png);
+}
+
 .section-seven {
     width: 100%;
     height: fit-content;
@@ -954,6 +962,14 @@
 
     }
 
+    .hero-4 {
+        background-image: url(../../public/assets/home/page-3.png);
+    }
+
+    .hero-2 {
+        background-image: url(../../public/assets/home/page-2.png);
+    }
+
     .section_sub h1 {
         font-family: Inter;
         font-size: 48px;
@@ -988,11 +1004,11 @@
     }
 
     .section-box {
-        padding-top: 120px;
+        padding-top: 50px;
     }
 
     .section_cities .section_cities_box {
-        transform: scaleX(1.2);
+        /* transform: scaleX(1.2); */
 
     }
 
@@ -1010,7 +1026,7 @@
 
     .section-four-container {
 
-        height: 120vh;
+        height: 50vh;
 
     }
 
@@ -1019,7 +1035,7 @@
     }
 
     .section_box_container_cont .section_box_container_input {
-        width: 572px;
+        width: 372px;
     }
 
     .overlay_flex .overlay_flex_1 h1 {
@@ -1039,7 +1055,7 @@
     }
 
     .section-four {
-        transform: scaleX(1.7);
+        /* transform: scaleX(1.7); */
     }
 
     .section-box .section-image {
@@ -1342,5 +1358,33 @@
         height: 88px !important;
         width: 88px !important;
     }
+    .section-six div:nth-child(1) {
+        margin: 100px 0px 0px 0px;
+    }
 
+}
+
+@media screen and (min-width: 1024px) {
+    .section_cities .section_cities_box {
+        transform: scaleX(1.2);
+    }
+
+    .section-six div:nth-child(1) {
+        margin: 0px;
+    }
+    .section-four {
+        transform: scaleX(1.7);
+        background-size: contain;
+
+    }
+    .section-four-container {
+        height: 150vh;
+    }
+
+    .section_box_container_cont .section_box_container_input {
+        width: 572px;
+    }
+    .section-box {
+        padding-top: 120px;
+    }
 }

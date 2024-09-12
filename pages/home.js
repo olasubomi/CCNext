@@ -111,10 +111,8 @@ export default function HomePage() {
             </div>
           </div>
           <div
-            className="hero"
-            style={{
-              backgroundImage: `url(${heroImage2.src})`,
-            }}
+            className="hero hero-2"
+
           >
             <div className="overlay">
               <h1>Decide, in advance, what to eat with Chop Chow subscriptions</h1>
@@ -123,10 +121,8 @@ export default function HomePage() {
           </div>
 
           <div
-            className="hero"
-            style={{
-              backgroundImage: `url(${heroImage3.src})`,
-            }}
+            className="hero hero-4"
+
           >
             <div className="overlay">
               <h1>Share your go to meals with friends on Chop Chow</h1>
@@ -135,14 +131,16 @@ export default function HomePage() {
           </div>
 
           <div
-            className="hero"
+            className="hero "
             style={{
               backgroundImage: `url(${heroImage4.src})`,
             }}
           >
             <div className="overlay overlay_flex">
               <div className="overlay_flex_1">
-                <h1>Share your go to meals with friends on Chop Chow</h1>
+                <h1>Suggest your
+                  meal with our
+                  new AI feature</h1>
                 <button>Suggest a meal</button>
               </div>
               <div
@@ -215,36 +213,8 @@ export default function HomePage() {
           <div className="section-image" />
         </div>
       </section>
-      <section className="home-section-two ">
-        <div className="home-section">
-          <div className="section-two-child">
-            <div className="section-two-image" />
-            <div className="text-container">
-              <h2>
-                Find local and international chefs, and food blogger recipes
-              </h2>
-              <p>Connect with Lorem Ipsum</p>
-              <div className="input-container">
-                <Image src={locationPin} />
-                <input placeholder="Enter your current address" />
-                <button>Find Now</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="home-section-one home-section">
-        <div className="section-one-child">
-          <div className="cont">
-            <h2>
-              Put your recipes on Chop Chow to show off what you’ve cooked with
-              family and friends
-            </h2>
-            <button>Ge Started</button>
-          </div>
-          <div className="section-3-image" />
-        </div>
-      </section>
+
+
       <div className="section-four-container">
         <section className="section-four" />
         <div className="box-1 box" />
@@ -340,21 +310,14 @@ export default function HomePage() {
         <h1>We Are  In These Cities</h1>
         <div className="section-eight-container">
           {
-            locations.map((element, idx) => <p className="section-name" key={element + idx}>{element}</p>)
+            locations.map((element, idx) => <p style={{
+              color: "#000"
+            }} className="section-name" key={element + idx}>{element}</p>)
           }
         </div>
       </section>
 
-      <section className="section_sub">
-        <h1>Subscribe to our Newsletter Today</h1>
-        <p>Dont miss anything! Be  the first to get our exclusive offers and latest news</p>
-        <div className="section_box_container">
-          <div className="section_box_container_cont">
-            <input placeholder="Enter the name" className="section_box_container_input" />
-          </div>
-          <button className="section_box_container_button">Find Now</button>
-        </div>
-      </section>
+
 
       {/* <Carousel
         showDots
