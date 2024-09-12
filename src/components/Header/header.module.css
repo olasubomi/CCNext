@@ -297,10 +297,13 @@
   text-transform: capitalize;
   color: #000000;
 }
+.active {
+  color: #007bff; /* Adjust the color as needed */
+}
 .activelink {
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 17px;
   /* identical to box height */
   text-transform: capitalize;
