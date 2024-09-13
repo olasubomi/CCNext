@@ -536,7 +536,7 @@ input[type="checkbox"]:checked {
 @media only screen and (max-width: 480px) {
   a {
     text-decoration: none;
-    color: #000000;
+    color: #000000 ;
     height: max-content;
     font-size: 12px;
     text-transform: capitalize;

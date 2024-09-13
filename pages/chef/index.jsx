@@ -157,7 +157,7 @@ const AllChefsPage = () => {
     fetTopSuppliers()
   }, [])
 
-  console.log(topSuppliers, 'allsup')
+  console.log(suppliers, 'allsup')
   return (
     <div className={styles.ChefContainer}>
       <Head>
@@ -191,7 +191,7 @@ const AllChefsPage = () => {
             <div className={styles.allpicks}>
               {
                 topSuppliers.map((elem) => (
-                  <div style={{textAlign: 'center'}}>
+                  <div style={{textAlign: 'center'}}  onClick={() => router.push(`/chef/${elem?.username}/${elem?._id}`)}>
                     <div className={styles.border}>
                       <div className={styles.topPickImg}>
                         {
@@ -236,7 +236,7 @@ const AllChefsPage = () => {
           <div className={styles.allpicks}>
             {
               suppliers.map((elem) => (
-                <div className={styles.card}>
+                <div className={styles.card} onClick={() => router.push(`/chef/${elem?.user?.username}/${elem?.user?._id}`)}>
                   <div className={styles.border2}>
                     <div className={styles.topPickImg}>
                       {
