@@ -45,6 +45,7 @@ function SideNav2(props) {
     const data = JSON.parse(localStorage.getItem("user") || "{}");
     setUser(data);
   }, []);
+  console.log(user, 'user')
   return (
     <div className={styles.sidenav_links_con}>
       <div className={styles.sidenav_links}>
@@ -137,7 +138,7 @@ function SideNav2(props) {
                   </div>
                 </Link>
               )}
-            <Link href={`/chef/${user?._id}`}>
+            <Link href={`/chef/${user?.username}/${user?._id}`}>
               <div
                 className={
                   styles.sidenav_link +

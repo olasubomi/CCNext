@@ -1,9 +1,8 @@
 import Head from "next/head";
-import Header, { Header2 } from "../../src/components/Header/Header";
-import GoBack from "../../src/components/CommonComponents/goBack";
-import Footer from "../../src/components/Footer/Footer";
-import styles from "../../src/components/chef/chef.module.css";
-import chef from "../../public/assets/homepage/chef.jpg";
+import Header, { Header2 } from "../../../src/components/Header/Header";
+import GoBack from "../../../src/components/CommonComponents/goBack";
+import Footer from "../../../src/components/Footer/Footer";
+import styles from "../../../src/components/chef/chef.module.css"
 import Image from "next/image";
 import { BsFillShareFill } from "react-icons/bs";
 import {
@@ -12,18 +11,16 @@ import {
   WhatsappShareButton,
 } from "react-share";
 import { useEffect, useState } from "react";
-import MyTabs from "../../src/components/tabs/tab";
+import MyTabs from "../../../src/components/tabs/tab";
 import { useRouter } from "next/router";
-
-import axios from "../../src/util/Api";
-import { IndividualModal } from "../../src/components/modal/individual-meal-product";
+import axios from "../../../src/util/Api";
 import {
   WhatsappEIcon,
   FacebookEIcon,
   TwitterEIcon,
   UserIcon,
-} from "../../src/components/icons";
-import InstagramBasicApi from "../../src/components/SocialShare/InstagramBasicApi";
+} from "../../../src/components/icons";
+import InstagramBasicApi from "../../../src/components/SocialShare/InstagramBasicApi";
 
 const ChefPage = () => {
   const [activeKey, setActiveKey] = useState("2");
@@ -34,7 +31,7 @@ const ChefPage = () => {
       const response = await axios(`/user/findUser/${id}`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", 
         },
       });
       console.log(response.data.data, "userresp");
