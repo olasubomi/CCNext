@@ -31,10 +31,11 @@ export default function Blog() {
             const response = allPosts.data.data.data || [];
             if (page === 1) {
                 if (response?.length >= 5) {
-                    setBlogPost([...response].slice(5));
+                    // setBlogPost([...response]);
                 } else {
                     setMostRecentPost([...response].slice(0, 5))
                 }
+                setBlogPost([...response]);
                 setPagination({
                     total: Math.ceil(allPosts.data.data.total / 10),
                     page
@@ -50,7 +51,7 @@ export default function Blog() {
             console.log(e);
         }
     }, []);
-
+console.log(mostRecentPost, 'mostRecentPost')
 
     useEffect(() => {
         handlegetAllBlogPost()
@@ -97,7 +98,7 @@ export default function Blog() {
                                             <p id="blog-id">By {mostRecentPost[0]?.author?.first_name} {mostRecentPost[0]?.author?.last_name}</p>
                                             <div className="feature-footer">
                                                 <p id="blog-id" >Updated on {new Date(mostRecentPost[0]?.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
-                                                <p id="blog-id" >Kitchen Tips</p>
+                                                <p id="blog-id" >{mostRecentPost[0]?.category}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -114,10 +115,12 @@ export default function Blog() {
                                                 <img src={ele?.featured_image} />
                                                 <div className="user-feature-footer-3">
                                                     <p id="blog-post-title-2">{ele?.title}</p>
-                                                    <p id="blog-id">By {ele?.first_name} {ele?.last_name}</p>
+                                                    <p id="blog-id">By {ele?.author?.first_name} {ele?.author?.last_name}</p>
                                                     <div className="feature-footer">
                                                         <p id="blog-id" >Updated on {new Date(ele?.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
-                                                        <p id="blog-id" >Kitchen Tips</p>
+                                                        <p style={{
+                                                            textTransform: "capitalize"
+                                                        }} id="blog-id" >{ele?.category}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -142,7 +145,7 @@ export default function Blog() {
                                             <p id="blog-id">By {ele?.author?.first_name} {ele?.author?.last_name}</p>
                                             <div className="feature-footer">
                                                 <p id="blog-id" >Updated on {new Date(ele?.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
-                                                <p id="blog-id" >Kitchen Tips</p>
+                                                <p id="blog-id" >{ele?.category}</p>
                                             </div>
                                         </div>
                                     </div>

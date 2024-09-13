@@ -21,6 +21,7 @@ export default function ManageBlog() {
     const [blogPost, setBlogPost] = useState([]);
     const ref = useRef();
     const [isOpen, setisOpen] = useState(false)
+    const [selected, setSelected] = useState("")
     const [title, setTitle] = useState("")
     const [pagination, setPagination] = useState({
         total: 0,
@@ -179,7 +180,7 @@ export default function ManageBlog() {
                         </thead>
                         <tbody>
                             {Array.isArray(blogPost)
-                                ? blogPost.map((data, idx) => (
+                                ? [...blogPost].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((data, idx) => (
                                     <tr key={idx}>
                                         <td>
                                             <div className="blog-list-flexer">
@@ -226,12 +227,15 @@ export default function ManageBlog() {
                                                     />
                                                 </svg>
                                                 <div style={{
-                                                    position: "relative"
+                                                    position: "relative",
                                                 }}>
                                                     <svg
                                                         width="18"
                                                         height="18"
-                                                        onClick={() => setisOpen(true)}
+                                                        onClick={() => {
+                                                            setisOpen(true)
+                                                            setSelected(data._id)
+                                                        }}
                                                         viewBox="0 0 18 18"
                                                         fill="none"
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -242,7 +246,7 @@ export default function ManageBlog() {
                                                         />
                                                     </svg>
                                                     {
-                                                        isOpen && <div ref={ref} className="blog-table-actions">
+                                                        isOpen && selected === data._id && <div ref={ref} className="blog-table-actions">
                                                             <p
                                                                 onClick={() => handleUpdateStatus(data._id, {
                                                                     status: data.status === 'PUBLISHED' ? "DRAFT" : "PUBLISHED",
