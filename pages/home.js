@@ -72,6 +72,7 @@ export default function HomePage() {
     })()
   }, [])
 
+
   return (
     <div>
       <div className="home_page_container">
@@ -304,13 +305,14 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
+     
       <section className="section_cities">
         <div className="section_cities_box" />
         <h1>We Are  In These Cities</h1>
+        
         <div className="section-eight-container">
           {
-            locations.map((element, idx) => <p style={{
+            ['Eti Osa', 'Eket', 'Dallas County', 'San Diego County', 'Irepodun/Ifelodun', 'Toronto', 'Ikorodu'].map((element, idx) => <p style={{
               color: "#000"
             }} className="section-name" key={element + idx}>{element}</p>)
           }

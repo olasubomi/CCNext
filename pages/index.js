@@ -137,7 +137,7 @@ class App extends Component {
         <HomePage />
 
         {/* <LandingPage /> */}
-        <Footer />
+        <Footer footer="shape 2" />
       </CartProvider>
     );
   }
