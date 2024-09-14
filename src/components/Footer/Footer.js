@@ -7,32 +7,39 @@ import facebookImg from "../../../public/assets/icons/Facebook+Icon+Black 1.png"
 import instagramImg from "../../../public/assets/icons/instagram-icon-free-7 1.png";
 
 
-const Footer = () => {
+const Footer = ({
+  footer = 'shape 1'
+}) => {
+
   return (
     <div className={styles.footer_container}>
-      {/* <div className={styles.footer_row_1}>
+      {
+        footer === 'shape 1' && <div className={styles.footer_row_1}>
           <div className={styles.footer_row_1_container}>
 
             <div className={styles.footer_row_1_join_us_form}>
-              
+
               <React.Fragment>
                 <input placeholder="Enter email to subscribe to our newsletter" aria-label="News Letter" type="email" name="email" className={styles.footer_row_1_join_us_input} />
-              <button className={styles.footer_row_1_button}>Subscribe</button>
+                <button className={styles.footer_row_1_button}>Subscribe</button>
               </React.Fragment>
-              
+
             </div>
           </div>
-        </div> */}
-      <section className="section_sub">
-        <h1>Subscribe to our Newsletter Today</h1>
-        <p>Dont miss anything! Be  the first to get our exclusive offers and latest news</p>
-        <div className="section_box_container">
-          <div className="section_box_container_cont">
-            <input placeholder="Enter the name" className="section_box_container_input" />
-          </div>
-          <button className="section_box_container_button">Find Now</button>
         </div>
-      </section>
+      }
+      {
+        footer === 'shape 2' && <section className="section_sub">
+          <h1>Subscribe to our Newsletter Today</h1>
+          <p>Dont miss anything! Be  the first to get our exclusive offers and latest news</p>
+          <div className="section_box_container">
+            <div className="section_box_container_cont">
+              <input placeholder="Enter the name" className="section_box_container_input" />
+            </div>
+            <button className="section_box_container_button">Find Now</button>
+          </div>
+        </section>
+      }
       <div className={styles.footer_row_2}>
         <div className={styles.footer_row_22}>
           <div className={styles.footer_row_2_navigations}>
