@@ -312,7 +312,7 @@ export default function HomePage() {
         
         <div className="section-eight-container">
           {
-            ['Eti Osa', 'Eket', 'Dallas County', 'San Diego County', 'Irepodun/Ifelodun', 'Toronto', 'Ikorodu'].map((element, idx) => <p style={{
+            locations.map((element, idx) => <p style={{
               color: "#000"
             }} className="section-name" key={element + idx}>{element}</p>)
           }

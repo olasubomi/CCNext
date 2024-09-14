@@ -957,7 +957,7 @@
     /* margin-top: -100px; */
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 560px) {
     .overlay_flex .overlay_flex_1 {
         width: 35%;
         padding: 0px;
