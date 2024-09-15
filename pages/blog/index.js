@@ -26,7 +26,7 @@ export default function Blog() {
                 params.title = title
             }
             const allPosts = await axios.get("/blog/get-all-blogs", {
-                params
+                params: {...params, status: "PUBLISHED"}
             });
             const response = allPosts.data.data.data || [];
             if (page === 1) {

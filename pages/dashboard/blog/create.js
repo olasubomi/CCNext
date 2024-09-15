@@ -254,7 +254,8 @@ export default function ManageBlog() {
                                                                     html_template: data.html_template,
                                                                     body_content_text: data.body_content_text,
                                                                     word_count: data.word_count,
-                                                                    featured_image: data.featured_image
+                                                                    featured_image: data.featured_image,
+                                                                    category: data.category
                                                                 })}
                                                             >{data.status === 'PUBLISHED' ? "Unpublish" : "Publish"}</p>
                                                             <p onClick={() => router.push(`/dashboard/blog/manage?action=edit&id=${data._id}`)}
