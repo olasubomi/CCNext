@@ -205,7 +205,6 @@
     width: 220px;
     height: 59px;
     border-radius: 8px;
-    opacity: 0px;
     border: none;
     outline: none;
     padding-left: 20px;
@@ -963,6 +962,12 @@
         padding: 0px;
 
     }
+
+.section_sub {
+    height: 420px;
+    
+}
+
     .home_page_container .hero {
       
         height: 70vh;
