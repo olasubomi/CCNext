@@ -191,7 +191,7 @@ const AllChefsPage = () => {
             <div className={styles.allpicks}>
               {
                 topSuppliers.map((elem) => (
-                  <div style={{textAlign: 'center'}}  onClick={() => router.push(`/chef/${elem?.username}/${elem?._id}`)}>
+                  <div style={{ textAlign: 'center' }} onClick={() => router.push(`/chef/${elem?.username}/${elem?._id}`)}>
                     <div className={styles.border}>
                       <div className={styles.topPickImg}>
                         {
