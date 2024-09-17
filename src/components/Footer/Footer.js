@@ -34,9 +34,9 @@ const Footer = ({
           <p>Dont miss anything! Be  the first to get our exclusive offers and latest news</p>
           <div className="section_box_container">
             <div className="section_box_container_cont">
-              <input placeholder="Enter the name" className="section_box_container_input" />
+              <input placeholder="Enter your email" className="section_box_container_input" />
             </div>
-            <button className="section_box_container_button">Find Now</button>
+            <button className="section_box_container_button">Subscribe</button>
           </div>
         </section>
       }

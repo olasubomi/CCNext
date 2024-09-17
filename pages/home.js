@@ -16,8 +16,11 @@ import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import locationPin from "../public/assets/home/location.svg";
 import "react-multi-carousel/lib/styles.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "../src/util/Api";
+import { useRouter } from "next/router";
+import { debounce } from "lodash";
+import Link from "next/link";
 
 
 const responsive = {
@@ -50,6 +53,19 @@ const responsive = {
 export default function HomePage() {
   const [active, setActive] = useState(1);
   const [locations, setLocations] = useState([])
+  const router = useRouter();
+  const ref = useRef();
+  const [isOpen, setIsOpen] = useState(false);
+  const [users, setUsers] = useState([])
+
+  const handleQuery = useCallback(async (name) => {
+    try {
+      const response = await axios.get(`/items/filterstore/${name}`)
+      setUsers(Array.isArray(response.data?.data) ? response.data.data : [])
+    } catch (e) {
+      console.log(e)
+    }
+  }, [])
 
   useEffect(() => {
     (async () => {
@@ -71,6 +87,17 @@ export default function HomePage() {
       }
     })()
   }, [])
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
+  }, []);
 
 
   return (
@@ -209,7 +236,7 @@ export default function HomePage() {
               Share your recipes <br />
               with your fans
             </h2>
-            <button>Suggest A Recipe</button>
+            <button onClick={() => router.push("/suggestmeal")}> Suggest A Recipe</button>
           </div>
           <div className="section-image" />
         </div>
@@ -227,9 +254,24 @@ export default function HomePage() {
             <h1>Connect with food lovers and chefs from all over the world</h1>
             <div className="section_box_container">
               <div className="section_box_container_cont">
-                <input placeholder="Enter the name" className="section_box_container_input" />
+                <input onClick={() => setIsOpen(true)} onChange={(event) => {
+                  let debounce_fun = debounce(function () {
+                    handleQuery(event.target.value);
+                  }, 500);
+
+                  debounce_fun();
+                }}  placeholder="Enter the name" className="section_box_container_input" />
+                {
+                  isOpen && <div ref={ref} className="chef_box_dropdown">
+                    {
+                      users.map((entry) => <Link key={entry?._id} href={`/chef/${entry._id}`}>
+                        <p>{entry?.first_name} {entry?.last_name}</p>
+                      </Link>)
+                    }
+                  </div>
+                }
               </div>
-              <button className="section_box_container_button">Find Now</button>
+              <button onClick={() => setIsOpen(true)} className="section_box_container_button">Find Now</button>
             </div>
             <div className="section_box_image_cont" />
             {/* <div className="section-image" /> */}
@@ -305,11 +347,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-     
+
       <section className="section_cities">
         <div className="section_cities_box" />
         <h1>We Are  In These Cities</h1>
-        
+
         <div className="section-eight-container">
           {
             locations.map((element, idx) => <p style={{
