@@ -123,7 +123,7 @@ function SideNav2(props) {
                 </Link>
               )}
             {props.auth.authUser.user_type?.[0] !== "driver" &&
-              props.auth.authUser.user_type?.[0] === "supplier" && (
+              props.auth.authUser.user_type?.includes("supplier") && (
                 <Link href="/dashboard/suggestedmeals">
                   <div
                     className={
