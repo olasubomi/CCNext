@@ -106,8 +106,8 @@ function SideNav2(props) {
                 </div>
               </div>
             </Link>
-            {props.auth.authUser.user_type !== "driver" &&
-              props.auth.authUser.user_type === "admin" && (
+            {props.auth.authUser.user_type?.[0] !== "driver" &&
+              props.auth.authUser.user_type?.[0] === "admin" && (
                 <Link href="/dashboard/suggestedmeals">
                   <div
                     className={
@@ -122,8 +122,8 @@ function SideNav2(props) {
                   </div>
                 </Link>
               )}
-            {props.auth.authUser.user_type !== "driver" &&
-              props.auth.authUser.user_type === "supplier" && (
+            {props.auth.authUser.user_type?.[0] !== "driver" &&
+              props.auth.authUser.user_type?.[0] === "supplier" && (
                 <Link href="/dashboard/suggestedmeals">
                   <div
                     className={
@@ -163,7 +163,7 @@ function SideNav2(props) {
               </div>
             </Link>
 
-            {props.auth.authUser.user_type === "supplier" && (
+            {props.auth.authUser.user_type?.[0] === "supplier" && (
               <Link href="/dashboard/manage-store">
                 <div
                   className={
@@ -177,7 +177,7 @@ function SideNav2(props) {
                 </div>
               </Link>
             )}
-            {props.auth.authUser.user_type === "admin" && (
+            {props.auth.authUser.user_type?.[0] === "admin" && (
               <Link href="/dashboard/management">
                 <div
                   className={
@@ -191,7 +191,7 @@ function SideNav2(props) {
                 </div>
               </Link>
             )}
-            {props.auth.authUser.user_type === "admin" && (
+            {props.auth.authUser.user_type?.[0] === "admin" && (
               <Link href="/dashboard/management">
                 <div
                   className={
@@ -205,7 +205,7 @@ function SideNav2(props) {
                 </div>
               </Link>
             )}
-            {props.auth.authUser.user_type === "admin" && (
+            {props.auth.authUser.user_type?.[0] === "admin" && (
               <Link href="/dashboard/blog/create">
                 <div
                   className={
@@ -219,7 +219,7 @@ function SideNav2(props) {
                 </div>
               </Link>
             )}
-            {props.auth.authUser.user_type !== "admin" && (
+            {props.auth.authUser.user_type?.[0] !== "admin" && (
               <Link href="/support">
                 <div
                   className={

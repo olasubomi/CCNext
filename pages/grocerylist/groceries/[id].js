@@ -209,7 +209,7 @@ const GroceryPage = () => {
   const getList = async () => {
     console.log("local grocery", getLocalGroceryList());
 
-    if (true) {
+    if (isUserOnline) {
       try {
         const response = await axios(`/groceries/list/${id}`, {
           method: "GET",

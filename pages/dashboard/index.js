@@ -174,15 +174,15 @@ const DashboardHomePage = (props) => {
     setSearchType(type);
     let url;
     if (type === "Meal") {
-      if (props.auth.authUser.user_type === "admin") {
+      if (props.auth.authUser.user_type?.[0] === "admin") {
         url = "/meals/get-meals/1";
       }
     } else if (type === "Product") {
-      if (props.auth.authUser.user_type === "admin") {
+      if (props.auth.authUser.user_type?.[0] === "admin") {
         url = "/products/get-all-products/1";
       }
     } else {
-      if (props.auth.authUser.user_type === "admin") {
+      if (props.auth.authUser.user_type?.[0] === "admin") {
         url = "/categories/get-all-categories/1";
       }
     }
@@ -203,7 +203,7 @@ const DashboardHomePage = (props) => {
   function toggleChangeType() {
     setChangeTypeState(!changeType);
   }
-
+  console.log(props.auth.authUser, 'login')
   return (
     <div
       className={
@@ -271,7 +271,7 @@ const DashboardHomePage = (props) => {
 
               <div className={styles.select_container}>
                 <div onClick={toggleChangeType} className={styles.select_box}>
-                  <p>{props.auth.authUser.user_type}</p>
+                  <p>{props.auth.authUser.user_type?.[0]}</p>
                   <ArrowDropDownIcon className={styles.select_box_icon} />
                 </div>
                 {changeType && (
@@ -280,7 +280,7 @@ const DashboardHomePage = (props) => {
                       <p onClick={() => toggleMode("admin")}>Admin</p>
                     )}
                     <p onClick={() => toggleMode("customer")}>Customer</p>
-                    {props.auth.authUser.sub_store_admin || props.auth.authUser.hasSupplierAffiliation && (
+                    {props.auth.authUser.sub_store_admin || props.auth.authUser.super_store_admin && (
                       <p onClick={() => toggleMode("supplier")}>Supplier</p>
                     )}
                     <p onClick={() => toggleMode("driver")}>Driver</p>
@@ -300,26 +300,26 @@ const DashboardHomePage = (props) => {
                   </div>
                   <div className={styles.value_con}>
                     <div className={styles.value_con2 + " " + styles.red}>
-                      {(props.auth.authUser.user_type === "customer" ||
-                        props.auth.authUser.user_type === "driver") && (
+                      {(props.auth.authUser.user_type?.[0] === "customer" ||
+                        props.auth.authUser.user_type?.[0] === "driver") && (
                         <TagIcon />
                       )}
-                      {props.auth.authUser.user_type === "admin" && (
+                      {props.auth.authUser.user_type?.[0] === "admin" && (
                         <BatteryIcon />
                       )}
-                      {props.auth.authUser.user_type === "supplier" && (
+                      {props.auth.authUser.user_type?.[0] === "supplier" && (
                         <LineChartIcon />
                       )}
                     </div>
                     <div>
                       <h3 className={styles.box_name}>
-                        {props.auth.authUser.user_type === "customer" &&
+                        {props.auth.authUser.user_type?.[0] === "customer" &&
                           "Completed Order"}
-                        {props.auth.authUser.user_type === "admin" &&
+                        {props.auth.authUser.user_type?.[0] === "admin" &&
                           "Requests"}
-                        {props.auth.authUser.user_type === "supplier" &&
+                        {props.auth.authUser.user_type?.[0] === "supplier" &&
                           "Total Sales"}
-                        {props.auth.authUser.user_type === "driver" &&
+                        {props.auth.authUser.user_type?.[0] === "driver" &&
                           "Total Revenue"}
                       </h3>
                       <p className={styles.value}>
