@@ -131,6 +131,9 @@
 .home_page_container .hero .overlay h1,
 .hero-content h1 {
     width: 70%;
+    font-size: 38px;
+    line-height: 40px;
+    padding: 0px 15px;
 }
 
 .home_page_container .hero-box {
@@ -199,6 +202,23 @@
 
 .section-four-container .section_box_container_cont {
     position: relative;
+}
+
+.chef_box_dropdown {
+    width: 100%;
+    min-height: 200px;
+    background-color: #fff;
+    position: absolute;
+    top: 70px;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 300;
+    color: #000;
+}
+
+.chef_box_dropdown p {
+    padding-bottom: 10px;
 }
 
 .section_box_container_cont .section_box_container_input {
@@ -629,7 +649,7 @@
 
 .section-four-container h1 {
     font-family: Inter;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     line-height: 28.41px;
     text-align: center;
@@ -1046,6 +1066,7 @@
 
     .section_box_container_cont .section_box_container_input {
         width: 372px;
+
     }
 
     .overlay_flex .overlay_flex_1 h1 {

@@ -160,7 +160,9 @@ export const Editor = forwardRef((props, ref) => {
   return (
     <>
       <div className="editor-container ">
-        <div className="editor-toolbar">
+        <div style={{
+          position:"static"
+        }} className="editor-toolbar">
           <ToolbarPlugin>
             <ImagePlugin />
             <ParagraphPlugin />

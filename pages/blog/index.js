@@ -26,7 +26,7 @@ export default function Blog() {
                 params.title = title
             }
             const allPosts = await axios.get("/blog/get-all-blogs", {
-                params: {...params, status: "PUBLISHED"}
+                params: {...params, status: "PUBLIC"}
             });
             const response = allPosts.data.data.data || [];
             if (page === 1) {
@@ -51,8 +51,8 @@ export default function Blog() {
             console.log(e);
         }
     }, []);
-console.log(mostRecentPost, 'mostRecentPost')
 
+    
     useEffect(() => {
         handlegetAllBlogPost()
     }, [])
