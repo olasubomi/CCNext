@@ -271,7 +271,7 @@ const DashboardHomePage = (props) => {
 
               <div className={styles.select_container}>
                 <div onClick={toggleChangeType} className={styles.select_box}>
-                  <p>{props.auth.authUser.user_type?.[0]}</p>
+                  <p>{props.auth.authUser.user_type?.includes("supplier") ? 'Supplier' : props.auth.authUser.user_type?.[0]}</p>
                   <ArrowDropDownIcon className={styles.select_box_icon} />
                 </div>
                 {changeType && (
@@ -280,7 +280,7 @@ const DashboardHomePage = (props) => {
                       <p onClick={() => toggleMode("admin")}>Admin</p>
                     )}
                     <p onClick={() => toggleMode("customer")}>Customer</p>
-                    {props.auth.authUser.sub_store_admin || props.auth.authUser.super_store_admin && (
+                    {props.auth.authUser.user_type.includes("supplier") && (
                       <p onClick={() => toggleMode("supplier")}>Supplier</p>
                     )}
                     <p onClick={() => toggleMode("driver")}>Driver</p>
@@ -302,8 +302,8 @@ const DashboardHomePage = (props) => {
                     <div className={styles.value_con2 + " " + styles.red}>
                       {(props.auth.authUser.user_type?.[0] === "customer" ||
                         props.auth.authUser.user_type?.[0] === "driver") && (
-                        <TagIcon />
-                      )}
+                          <TagIcon />
+                        )}
                       {props.auth.authUser.user_type?.[0] === "admin" && (
                         <BatteryIcon />
                       )}
@@ -329,8 +329,8 @@ const DashboardHomePage = (props) => {
                         {props.auth.authUser.user_type === "supplier" && "$0"}
                         {props.auth.authUser.user_type === "admin" &&
                           pendingMealCount +
-                            pendingProductCount +
-                            kitchenUtensilCount}
+                          pendingProductCount +
+                          kitchenUtensilCount}
                       </p>
                     </div>
                   </div>
@@ -340,15 +340,15 @@ const DashboardHomePage = (props) => {
                     <div></div>
                     {(props.auth.authUser.user_type === "driver" ||
                       props.auth.authUser.user_type === "admin") && (
-                      <p className={styles.box_duration}>Monthly</p>
-                    )}
+                        <p className={styles.box_duration}>Monthly</p>
+                      )}
                   </div>
                   <div className={styles.value_con}>
                     <div className={styles.value_con2 + " " + styles.orange}>
                       {(props.auth.authUser.user_type === "customer" ||
                         props.auth.authUser.user_type === "supplier") && (
-                        <BagIcon />
-                      )}
+                          <BagIcon />
+                        )}
                       {props.auth.authUser.user_type === "admin" && <TagIcon />}
                       {props.auth.authUser.user_type === "driver" && (
                         <ThumbsUpIcon />
@@ -446,7 +446,7 @@ const DashboardHomePage = (props) => {
                                     (publicProductCount +
                                       kitchenUtensilCount +
                                       publicMealCount)) *
-                                    100
+                                  100
                                 )}
                                 %
                               </h5>
@@ -472,7 +472,7 @@ const DashboardHomePage = (props) => {
                                     (publicProductCount +
                                       kitchenUtensilCount +
                                       publicMealCount)) *
-                                    100
+                                  100
                                 )}
                                 %
                               </h5>
@@ -498,7 +498,7 @@ const DashboardHomePage = (props) => {
                                     (publicProductCount +
                                       kitchenUtensilCount +
                                       publicMealCount)) *
-                                    100
+                                  100
                                 )}
                                 %
                               </h5>
@@ -661,8 +661,8 @@ const DashboardHomePage = (props) => {
                                 {searchType === "Meal"
                                   ? suggestion.meal_name
                                   : searchType === "Product"
-                                  ? suggestion.product_name
-                                  : suggestion.category_name}
+                                    ? suggestion.product_name
+                                    : suggestion.category_name}
                               </td>
                               <td
                                 className={
@@ -683,13 +683,13 @@ const DashboardHomePage = (props) => {
                                   styles.status +
                                   " " +
                                   (suggestion.status === "Draft" ||
-                                  suggestion.status === "Pending"
+                                    suggestion.status === "Pending"
                                     ? styles.pending
                                     : suggestion.status === "Public"
-                                    ? styles.approve
-                                    : suggestion.status === "Rejected"
-                                    ? styles.rejected
-                                    : "")
+                                      ? styles.approve
+                                      : suggestion.status === "Rejected"
+                                        ? styles.rejected
+                                        : "")
                                 }
                               >
                                 {searchType === "Category"
@@ -704,14 +704,14 @@ const DashboardHomePage = (props) => {
                               >
                                 {suggestion.createdAt &&
                                   new Date(suggestion.createdAt).getDate() +
-                                    " " +
-                                    months[
-                                      new Date(suggestion.createdAt).getMonth()
-                                    ] +
-                                    " ," +
-                                    new Date(
-                                      suggestion.createdAt
-                                    ).getFullYear()}
+                                  " " +
+                                  months[
+                                  new Date(suggestion.createdAt).getMonth()
+                                  ] +
+                                  " ," +
+                                  new Date(
+                                    suggestion.createdAt
+                                  ).getFullYear()}
                               </td>
                             </tr>
                           );
@@ -1124,7 +1124,7 @@ const DashboardHomePage = (props) => {
                                       (publicProductCount +
                                         kitchenUtensilCount +
                                         publicMealCount)) *
-                                      100
+                                    100
                                   )}
                                   %
                                 </h5>
@@ -1150,7 +1150,7 @@ const DashboardHomePage = (props) => {
                                       (publicProductCount +
                                         kitchenUtensilCount +
                                         publicMealCount)) *
-                                      100
+                                    100
                                   )}
                                   %
                                 </h5>
@@ -1176,7 +1176,7 @@ const DashboardHomePage = (props) => {
                                       (publicProductCount +
                                         kitchenUtensilCount +
                                         publicMealCount)) *
-                                      100
+                                    100
                                   )}
                                   %
                                 </h5>
