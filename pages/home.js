@@ -260,15 +260,15 @@ export default function HomePage() {
                   }, 500);
 
                   debounce_fun();
-                }}  placeholder="Enter the name" className="section_box_container_input" />
+                }} placeholder="Enter the name" className="section_box_container_input" />
                 {
-                  isOpen && <div ref={ref} className="chef_box_dropdown">
+                  isOpen && users.length ? <div ref={ref} className="chef_box_dropdown">
                     {
                       users.map((entry) => <Link key={entry?._id} href={`/chef/${entry._id}`}>
                         <p>{entry?.first_name} {entry?.last_name}</p>
                       </Link>)
                     }
-                  </div>
+                  </div> : null
                 }
               </div>
               <button onClick={() => setIsOpen(true)} className="section_box_container_button">Find Now</button>
