@@ -177,7 +177,7 @@ const AllChefsPage = () => {
       <div className={styles.container}>
         <div className={styles.title}>
           <h1>Chefs</h1>
-          <p>Savor the convenience! ChopChow simplifies your home cooking by connecting you with top-notch local and international food suppliers.</p>
+          <p>Find and connect with your favourite local and international chefs with ease.</p>
         </div>
         <div className={styles.inputContainer}>
           <input placeholder="Search for Chef" />

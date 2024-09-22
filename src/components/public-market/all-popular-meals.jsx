@@ -196,9 +196,7 @@ export const AllPopularMeals = () => {
         </div>
         <div className={styles.topcontainer}>
           <p className={styles.marketplaceText}>
-            Unlock global flavors with ease! Our app makes cooking international
-            dishes a breeze, guiding you with expert tips and step-by-step
-            instructions.
+            Find and replicate recipes of meals from all over the world.
           </p>
           <div className={styles.flexItems}>
             <div className={styles.filter}>
