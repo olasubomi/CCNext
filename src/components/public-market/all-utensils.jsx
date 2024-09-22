@@ -200,9 +200,7 @@ export const AllUtensils = () => {
         </div>
         <div className={styles.topcontainer}>
           <p className={styles.marketplaceText}>
-            Unlock global flavors with ease! Our app makes cooking international
-            dishes a breeze, guiding you with expert tips and step-by-step
-            instructions.
+            Choose from our wide collection of tools to make your job in the kitchen easier.
           </p>
           <div className={styles.flexItems}>
             <div className={styles.filter}>
