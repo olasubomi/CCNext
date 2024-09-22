@@ -1602,7 +1602,7 @@ const SuggestedMeals = (props) => {
                     </div>
                   </div>
                   }
-                  {props.auth.authUser.user_type === "customer" && (
+                  {props.auth.authUser.user_type.includes("customer") === "customer" && (
                     <Link href="/dashboard/createstore">Create Store</Link>
                   )}
                 </div>

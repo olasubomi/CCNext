@@ -28,6 +28,7 @@ import {
   USER_ROLE,
   USER_TOKEN_SET,
 } from "../../constants/ActionTypes";
+import { setSelectedUserType } from "../../reducers/userSlice";
 
 function Login(props) {
   const isverified = useSelector((state) => state.Auth.isVerified);
@@ -90,7 +91,7 @@ function Login(props) {
     if (props.auth.isAuthenticated && user) {
       props.auth.authUser.super_app_admin
         ? // user.super_app_admin
-          router.push("/admin")
+        router.push("/admin")
         : router.push("/dashboard");
       setIsOpen(false);
     } else {
@@ -111,6 +112,8 @@ function Login(props) {
     await props.login(email, password, rememberPassword, () => {
       console.log("calling callback");
       setLoginLoading(false);
+      dispatch(setSelectedUserType(Array(JSON.parse(localStorage.getItem("user") || "{}")) ? JSON.parse(localStorage.getItem("user") || "{}")?.user_type[0] : 'customer'));
+
     });
 
     // setTimeout(() => {
