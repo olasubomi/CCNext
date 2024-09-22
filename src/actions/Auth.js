@@ -134,7 +134,7 @@ export const userSignIn = (email, password, remember, callback, withAuth) => {
         localStorage.setItem("x-auth-refresh-token", data.data.refreshToken);
         localStorage.setItem("in", Date.now());
         localStorage.setItem("user", JSON.stringify(data.data.user));
-
+        callback();
         dispatch({ type: FETCH_SUCCESS });
         dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
         dispatch({ type: USER_ROLE, payload: data.data.role });

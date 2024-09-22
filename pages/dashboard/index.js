@@ -17,12 +17,13 @@ import {
 } from "../../src/components/icons";
 import Sidenav2 from "../../src/components/Header/sidenav2";
 import GoBack from "../../src/components/CommonComponents/goBack";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../src/actions";
 import axios from "../../src/util/Api";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement } from "chart.js";
+import { initializeUserType, setSelectedUserType, setUserType } from "../../src/reducers/userSlice";
 ChartJS.register(ArcElement);
 
 const DashboardHomePage = (props) => {
@@ -156,19 +157,20 @@ const DashboardHomePage = (props) => {
       },
     ],
   };
+  const dispatch = useDispatch()
+  const selectedUserType = useSelector((state) => state.userType.selectedUserType);
+  const userTypeArray = useSelector((state) => state.userType.user_type);
+  console.log(userTypeArray, 'selectedUserType_')
+  useEffect(() => {
+    if (props.auth.authUser?.user_type) {
+      // dispatch(setUserType(props.auth.authUser?.user_type));
+    }
+  }, [props.auth.authUser?.user_type, dispatch]);
 
   function toggleMode(type) {
-    axios
-      .put("/user/updateuserprofile/" + props.auth.authUser._id, {
-        user_type: type,
-      })
-      .then((res) => {
-        console.log(res.data);
-        props.getUser(props.auth.authUser._id);
-        setDriverModeState(!driverMode);
-      });
-    setChangeTypeState(!changeType);
+    dispatch(setSelectedUserType(type));
   }
+
 
   function handleSearchType(type) {
     setSearchType(type);
@@ -263,15 +265,15 @@ const DashboardHomePage = (props) => {
           <>
             <div className={styles.dashboard_header}>
               <h3>
-                Hello {props.auth.authUser.username}{" "}
-                {props.auth.authUser.user_type === "admin" && (
+                Hello {props.auth.authUser.username}
+                {props.auth.authUser.super_app_admin && (
                   <span>(Super Admin)</span>
                 )}
               </h3>
 
               <div className={styles.select_container}>
                 <div onClick={toggleChangeType} className={styles.select_box}>
-                  <p>{props.auth.authUser.user_type?.includes("supplier") ? 'Supplier' : props.auth.authUser.user_type?.[0]}</p>
+                  <p>{selectedUserType}</p> {/* This displays the currently selected type */}
                   <ArrowDropDownIcon className={styles.select_box_icon} />
                 </div>
                 {changeType && (
