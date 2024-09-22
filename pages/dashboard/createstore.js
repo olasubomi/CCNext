@@ -25,13 +25,14 @@ import Switch from "@mui/material/Switch";
 import AddIcon from "@mui/icons-material/Add";
 import GoBack from "../../src/components/CommonComponents/goBack";
 import axios from "../../src/util/Api";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import PhoneInput from "react-phone-input-2";
 import { getUser } from "../../src/actions";
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 import GooglePlacesAutocomplete from "../../src/components/dashboard/googleplacesautocomplete";
 import { getAllISOCodes } from "iso-country-currency";
+import { initializeUserType, setSelectedUserType } from "../../src/reducers/userSlice";
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 58,
@@ -166,6 +167,8 @@ const CreateStore = (props) => {
     "saturday",
   ];
 
+  const dispatch = useDispatch()
+
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   }
@@ -291,6 +294,7 @@ const CreateStore = (props) => {
           console.log("Display Meal submitted successfully");
           setStatusState("success");
           setMessageState("Store created");
+          dispatch(setSelectedUserType("supplier"));
           setTimeout(() => {
             setStatusState("");
             setMessageState("");

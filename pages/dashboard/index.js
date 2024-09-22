@@ -159,10 +159,11 @@ const DashboardHomePage = (props) => {
   };
   const dispatch = useDispatch()
   const selectedUserType = useSelector((state) => state.userType.selectedUserType);
-  console.log(selectedUserType, 'selectedUserType_')
+  const userTypeArray = useSelector((state) => state.userType.user_type);
+  console.log(userTypeArray, 'selectedUserType_')
   useEffect(() => {
     if (props.auth.authUser?.user_type) {
-      // dispatch(initializeUserType(props.auth.authUser?.user_type));
+      // dispatch(setUserType(props.auth.authUser?.user_type));
     }
   }, [props.auth.authUser?.user_type, dispatch]);
 
