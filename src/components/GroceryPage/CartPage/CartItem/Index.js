@@ -4,8 +4,19 @@ import { useMobileMedia } from "../../../../customhooks/useResponsive";
 
 function CartItem(props) {
   const mobileScreen = useMobileMedia();
+ // const[qty, setQty] = useState({})
   const itemTotal = (props.amount * props.price).toFixed(2);
-
+// const AddToCart = (props, add) => {
+// if(add){
+//   let qty = parseInt(props.amount) + 1
+//   props.onAdd(props, qty)
+// }else{
+//   let qty = parseInt(props.amount) - 1
+//   props.onAdd(props, qty)
+// }
+// }
+console.log("line 18 cartitems",itemTotal)
+console.log("line 18 cartitems",props)
   return (
 
     <div className={cartStyles.cartCard}>
@@ -25,16 +36,16 @@ function CartItem(props) {
       </div>
       <div className={cartStyles.mobileCardRight}>
       <div className={cartStyles.priceDiv}> 
-        <label>${props.price}</label>
-        <img src="/assets/grocery_list/closeIconOrange.svg" />
+        <label>${props.price == "NAN" ? 0 : props.price}</label>
+        <img onClick={() => props.onDelete(props)} src="/assets/grocery_list/closeIconOrange.svg" />
       </div>
       <div className={cartStyles.cardQuantity}>
         <div className={cartStyles.cardQty}>
-          <label onClick={props.onRemove}>-</label>
+          <label onClick={() => props.onRemove(props)}>-</label>
         </div>
         <label>{props.amount}</label>
         <div className={cartStyles.cardQty}>
-          <label onClick={props.onAdd}>+</label>
+          <label onClick={() => props.onAdd(props)}>+</label>
         </div>
       </div>
       </div>
@@ -47,20 +58,20 @@ function CartItem(props) {
       </div>
       <div className={cartStyles.cartQuantity}>
         <div className={cartStyles.qty}>
-          <label onClick={props.onRemove}>-</label>
+          <label onClick={() => props.onRemove(props)}>-</label>
         </div>
         <label>{props.amount}</label>
         <div className={cartStyles.qty}>
-          <label onClick={props.onAdd}>+</label>
+          <label onClick={() => props.onAdd(props)}>+</label>
         </div>
       </div>
       <div className={cartStyles.cartValues}>
         <label>{props.store}</label>
-        <label>${props.price}</label>
+        <label>${props.price == "NAN" ? 0 : props.price}</label>
         <label>${itemTotal}</label>
         <img
           src="/assets/grocery_list/closeIcon.svg"
-          onClick={props.onClearItem}
+          onClick={() => props.onDelete(props)}
         />
       </div>
       </React.Fragment>

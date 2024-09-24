@@ -32,73 +32,70 @@ export const setOpenLogin = (login) => {
   };
 };
 
-export const userSignUp = (form) => 
-  async (dispatch) => {
-    let userData 
-    dispatch({ type: FETCH_START });
-    await axios
-      .post("/user/signup", {
-        ...form,
-      })
-      .then(({ data }) => {
-         userData = data.data.user;
-         
-        console.log("__ SignUp api res __ : ", data);
-        // axios.defaults.headers.common["Authorization"] =
-        //   "Bearer " + data.data.token;
+export const userSignUp = (form) => async (dispatch) => {
+  let userData;
+  dispatch({ type: FETCH_START });
+  await axios
+    .post("/user/signup", {
+      ...form,
+    })
+    .then(({ data }) => {
+      userData = data.data.user;
 
-        // localStorage.setItem("x-auth-token", data.data.token);
-        // localStorage.setItem("in", Date.now());
-        console.log("auth user signup", data.data.user)
-        localStorage.setItem("user", JSON.stringify(data.data.user));
+      console.log("__ SignUp api res __ : ", data);
+      // axios.defaults.headers.common["Authorization"] =
+      //   "Bearer " + data.data.token;
 
-        dispatch({ type: FETCH_SUCCESS });
-        // dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
-        //dispatch({ type: USER_ROLE, payload: data.data.user.user_type });
-        dispatch({ type: USER_DATA, payload: data.data.user });
-        //dispatch({ type: USER_ROLE, payload: data.data.role });
-        // dispatch({ type: IS_AUTHENTICATED, payload: true });
-        dispatch({ type: IS_VERIFIED, payload: false });
+      // localStorage.setItem("x-auth-token", data.data.token);
+      // localStorage.setItem("in", Date.now());
+      console.log("auth user signup", data.data.user);
+      localStorage.setItem("user", JSON.stringify(data.data.user));
 
-        // dispatch({ type: USER_DATA, payload: data.user });
-        // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
-        //console.log("verified email action creator", data)
-        // console.log("verified email action creator", data.data.user.is_verified)
-        // if(data.data.user.is_verified === "true") {
-        //   toast.success("Registration successful")
-        // }else{
-        //   toast.success("A verifiation link was sent to your mail")
-        // }
-        //toast.success("Congratulation!!!!! You have Successfully Signed Up, Kindly Verify your account");
-        
-      })
-      .catch((err) => {
-        console.error("xxx userSignUp Request ERROR xxx");
-        console.log(err?.response);
-        toast.error(err?.response?.data?.message?.message);
-        dispatch({ type: IS_AUTHENTICATED, payload: false });
-        if (err.response.status === 422) {
-          dispatch({
-            type: FETCH_ERROR,
-            payload:
-              "Email address was already taken. If you are owner, please proceed to login with this email.",
-          });
-        }
-      });
-     
-  
-      if(userData) {
-        console.log("__ SignUp userData __ : ", userData);
-        return true
-       }else{
-        return false
-       }
+      dispatch({ type: FETCH_SUCCESS });
+      // dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+      //dispatch({ type: USER_ROLE, payload: data.data.user.user_type });
+      dispatch({ type: USER_DATA, payload: data.data.user });
+      //dispatch({ type: USER_ROLE, payload: data.data.role });
+      // dispatch({ type: IS_AUTHENTICATED, payload: true });
+      dispatch({ type: IS_VERIFIED, payload: false });
+
+      // dispatch({ type: USER_DATA, payload: data.user });
+      // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
+      //console.log("verified email action creator", data)
+      // console.log("verified email action creator", data.data.user.is_verified)
+      // if(data.data.user.is_verified === "true") {
+      //   toast.success("Registration successful")
+      // }else{
+      //   toast.success("A verifiation link was sent to your mail")
+      // }
+      //toast.success("Congratulation!!!!! You have Successfully Signed Up, Kindly Verify your account");
+    })
+    .catch((err) => {
+      console.error("xxx userSignUp Request ERROR xxx");
+      console.log(err?.response);
+      toast.error(err?.response?.data?.message?.message);
+      dispatch({ type: IS_AUTHENTICATED, payload: false });
+      if (err.response.status === 422) {
+        dispatch({
+          type: FETCH_ERROR,
+          payload:
+            "Email address was already taken. If you are owner, please proceed to login with this email.",
+        });
+      }
+    });
+
+  if (userData) {
+    console.log("__ SignUp userData __ : ", userData);
+    return true;
+  } else {
+    return false;
+  }
 };
 
 export const userSignIn = (email, password, remember, callback, withAuth) => {
   const customId = "custom-id-yes";
 
-  console.log("withAuth", withAuth)
+  console.log("withAuth", withAuth);
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     dispatch({ type: OPEN_VERIFICATION, payload: false });
@@ -108,27 +105,25 @@ export const userSignIn = (email, password, remember, callback, withAuth) => {
     const withAuth_ = {
       password,
       email: email,
-    }
+    };
     const no_withAuth_ = {
       withAuth: false,
       email: email,
-    }
+    };
 
     axios
-      .post("/user/signin",
-        withAuth ? withAuth_ : no_withAuth_
-      )
+      .post("/user/signin", withAuth ? withAuth_ : no_withAuth_)
       .then(({ data }) => {
         console.log(" ___ userSignIn RESPONSE ___ ", data);
         console.log(" ___ userSignIn RESPONSE ___ ", data.data.token);
         axios.defaults.headers.common["Authorization"] =
           "Bearer " + data.data.token;
 
-        console.log(remember, 'rememberremember')
+        console.log(remember, "rememberremember");
         if (remember) {
           hash(email, password);
         } else {
-          clear()
+          clear();
         }
         localStorage.setItem("x-auth-token", data.data.token);
         localStorage.setItem("x-auth-refresh-token", data.data.refreshToken);
@@ -142,29 +137,32 @@ export const userSignIn = (email, password, remember, callback, withAuth) => {
         dispatch({ type: IS_AUTHENTICATED, payload: true });
         dispatch({ type: OPEN_VERIFICATION, payload: false });
         dispatch({ type: LOGIN_ON_VERIFICATION, payload: false });
-        
+
         // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
         const customId = "custom-id-no";
-        if(data.data.isVerified){
+        if (data.data.isVerified) {
           dispatch({ type: IS_VERIFIED, payload: true });
           toast.success("Login Successful", { toastId: customId });
-
-        }else{
-          toast.success("Kindly Verify your account, so as to login successfully");
+        } else {
+          toast.success(
+            "Kindly Verify your account, so as to login successfully"
+          );
         }
 
         //toast.success(data.data.message);
-        
 
         return true;
       })
       .catch((err) => {
+        console.log({ err });
         const customId = "custom-id-yes";
         console.error(
           "xxx userSignIn Request ERROR xxx",
-          err.response.data.message.message
+          err?.response?.data?.message?.message
         );
-        toast.error(err.response.data.message.message, { toastId: customId });
+        toast.error(err?.response?.data?.message?.message, {
+          toastId: customId,
+        });
         callback();
         dispatch({ type: IS_AUTHENTICATED, payload: false });
         dispatch({
@@ -313,7 +311,6 @@ export const verifyEmail = (userid, token) => {
   };
 };
 
-
 export const changePassword = (payload) => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
@@ -385,12 +382,12 @@ export const cancelSubscription = () => {
 export const userSignOut = () => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
-    dispatch({ type: OPEN_VERIFICATION, payload: false});
+    dispatch({ type: OPEN_VERIFICATION, payload: false });
     localStorage.removeItem("x-auth-token");
     localStorage.removeItem("x-auth-refresh-token");
     localStorage.removeItem("in");
     localStorage.removeItem("user");
-    localStorage.removeItem('cartItems');
+    localStorage.removeItem("cartItems");
     dispatch({ type: FETCH_SUCCESS });
     dispatch({ type: SIGNOUT_USER_SUCCESS });
   };
@@ -459,7 +456,8 @@ export const socialSignIn = (token) => {
           payload: {
             showSnack: true,
             snackMessage:
-              err?.response?.data?.message?.message || "signin operation failed",
+              err?.response?.data?.message?.message ||
+              "signin operation failed",
           },
         });
 
@@ -467,7 +465,6 @@ export const socialSignIn = (token) => {
       });
   };
 };
-
 
 export const sendEmailOTP = ({ email }) => {
   return (dispatch) => {
@@ -477,7 +474,6 @@ export const sendEmailOTP = ({ email }) => {
       .then(({ data }) => {
         console.log(" resend email api success ----: ", data.message);
         dispatch({ type: FETCH_SUCCESS, payload: data.message });
-        
       })
       .catch((err) => {
         dispatch({
@@ -495,6 +491,31 @@ export const sendEmailOTP = ({ email }) => {
   };
 };
 
+// export const OpenVerification = () => {
+//   return (dispatch) => {
+//     dispatch({ type: FETCH_START });
+//     axios
+//       .post("/user/sendemailotp",{email})
+//       .then(({ data }) => {
+//         console.log(" resend email api success ----: ", data.message);
+//         dispatch({ type: FETCH_SUCCESS, payload: data.message });
+//         dispatch({ type: OPEN_VERIFICATION, payload: true });
+//       })
+//       .catch((err) => {
+//         dispatch({
+//           type: FETCH_ERROR,
+//           payload: "error resending email",
+//         });
+//         dispatch({
+//           type: TRIGGER_SNACK,
+//           payload: {
+//             showSnack: true,
+//             snackMessage: "error resending email",
+//           },
+//         });
+//       });
+//   };
+// };
 
 export const verifyEmailOTP = ({ email, otp }) => {
   return async (dispatch) => {
@@ -507,22 +528,22 @@ export const verifyEmailOTP = ({ email, otp }) => {
       console.log("resend email API success:", data.message);
       console.log("resend email API success:", data.data.user);
 
-     if(data?.data?.success){
-      localStorage.setItem("x-auth-token", data.data.token);
-      localStorage.setItem("x-auth-refresh-token", data.data.refreshToken);
-      localStorage.setItem("in", Date.now());
-      localStorage.setItem("user", JSON.stringify(data.data.user));
+      if (data?.data?.success) {
+        localStorage.setItem("x-auth-token", data.data.token);
+        localStorage.setItem("x-auth-refresh-token", data.data.refreshToken);
+        localStorage.setItem("in", Date.now());
+        localStorage.setItem("user", JSON.stringify(data.data.user));
 
-      dispatch({ type: FETCH_SUCCESS });
-      dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
-      dispatch({ type: USER_ROLE, payload: data.data.role });
-      dispatch({ type: USER_DATA, payload: data.data.user });
-      dispatch({ type: IS_AUTHENTICATED, payload: true });
-      dispatch({ type: IS_VERIFIED, payload: true });
-      // dispatch({ type: EMAIL_VERIFIED, payload: true });
-      toast.success("Email verification successful!");
-      return { success: true, data };
-     }
+        dispatch({ type: FETCH_SUCCESS });
+        dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
+        dispatch({ type: USER_ROLE, payload: data.data.role });
+        dispatch({ type: USER_DATA, payload: data.data.user });
+        dispatch({ type: IS_AUTHENTICATED, payload: true });
+        dispatch({ type: IS_VERIFIED, payload: true });
+        // dispatch({ type: EMAIL_VERIFIED, payload: true });
+        toast.success("Email verification successful!");
+        return { success: true, data };
+      }
     } catch (err) {
       dispatch({
         type: FETCH_ERROR,
@@ -536,15 +557,19 @@ export const verifyEmailOTP = ({ email, otp }) => {
         },
       });
       if (err.response?.data?.message?.message === "Incorrect OTP") {
-        return { success: false, message: err.response?.data?.message?.message };
+        return {
+          success: false,
+          message: err.response?.data?.message?.message,
+        };
       }
 
-      return { success: false, message: err.response?.data?.message || "Error resending email" };
-    
+      return {
+        success: false,
+        message: err.response?.data?.message || "Error resending email",
+      };
     }
   };
 };
-
 
 export const requestnumber = ({ number }) => {
   return (dispatch) => {
@@ -571,7 +596,6 @@ export const requestnumber = ({ number }) => {
       });
   };
 };
-
 
 export const verifynumber = (request_id, code, email) => {
   return (dispatch) => {
@@ -602,14 +626,14 @@ export const verifynumber = (request_id, code, email) => {
             snackMessage: "Error resending email",
           },
         });
-        
-        const errorMessage = err.response?.data?.message || "Error resending email";
+
+        const errorMessage =
+          err.response?.data?.message || "Error resending email";
         toast.error(errorMessage);
         return { success: false, message: errorMessage };
       });
   };
 };
-
 
 export const resetPassword = (password, token) => {
   return (dispatch) => {
@@ -622,80 +646,64 @@ export const resetPassword = (password, token) => {
       })
       .catch((err) => {
         console.error("xxx error resetting password ERROR xxx", err);
-        var message = ""
+        var message = "";
         if (err.response.status === 400 || err.response.status === 404) {
-          message = 'Bad Request , Check username or email ... !!'
+          message = "Bad Request , Check username or email ... !!";
         } else if (err.response.status === 401) {
-          message = 'you are UnAuthorized'
+          message = "you are UnAuthorized";
         } else if (err.response.status >= 500) {
-          message = 'Sorry , Internal Server ERROR'
+          message = "Sorry , Internal Server ERROR";
         } else {
-          message = 'Please check your inbox for more details! '
+          message = "Please check your inbox for more details! ";
         }
 
         dispatch({
           type: FETCH_ERROR,
           payload: message,
         });
-      })
-
-
-
-
-  };
-}
-
-
-export const confirmAccount = (email) => 
-  async (dispatch) => {
-    let userData 
-    dispatch({ type: OPEN_VERIFICATION, payload: false });
-    dispatch({ type: FETCH_START });
-    await axios
-      .post("/user/confirmaccount", {
-        email
-      })
-      .then(({ data }) => {
-         userData = data.data.user;
-         
-        console.log("__ confirmUser api res __ : ", userData);
-        if(userData){
-          dispatch({ type: LOGIN_ON_VERIFICATION, payload: true });
-          dispatch({ type: OPEN_VERIFICATION, payload: false });
-          
-        }else{
-          dispatch({ type: LOGIN_ON_VERIFICATION, payload: false });
-          dispatch({ type: OPEN_VERIFICATION, payload: false });
-          
-        }
-        
-        
-        
-      })
-      .catch((err) => {
-        dispatch({
-          type: FETCH_ERROR,
-          payload: "error retrieving account by email - email not found",
-        });
       });
-     
-  
-    
+  };
 };
 
+export const confirmAccount = (email) => async (dispatch) => {
+  let userData;
+  dispatch({ type: OPEN_VERIFICATION, payload: false });
+  dispatch({ type: FETCH_START });
+  await axios
+    .post("/user/confirmaccount", {
+      email,
+    })
+    .then(({ data }) => {
+      userData = data.data.user;
 
+      console.log("__ confirmUser api res __ : ", userData);
+      if (userData) {
+        dispatch({ type: LOGIN_ON_VERIFICATION, payload: true });
+        dispatch({ type: OPEN_VERIFICATION, payload: false });
+      } else {
+        dispatch({ type: LOGIN_ON_VERIFICATION, payload: false });
+        dispatch({ type: OPEN_VERIFICATION, payload: false });
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: FETCH_ERROR,
+        payload: "error retrieving account by email - email not found",
+      });
+    });
+};
 
-// export const confirmAccount = (email, cb) => 
+// export const confirmAccount = (email, cb) =>
 //   async (dispatch) => {
 //     try {
 //       dispatch({ type: OPEN_VERIFICATION, payload: false });
 //       dispatch({ type: FETCH_START });
-      
+
 //       const response = await axios.post("/user/confirmaccount", { email });
 //       const userData = response.data.data.user;
-      
+
 //       console.log("__ confirmUser api res __ : ", userData);
-      
+
 //       if (userData) {
 //         dispatch({ type: LOGIN_ON_VERIFICATION, payload: true });
 //         dispatch({ type: OPEN_VERIFICATION, payload: false });

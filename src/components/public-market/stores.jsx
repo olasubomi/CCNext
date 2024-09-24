@@ -18,6 +18,7 @@ export const Stores = () => {
     image: "",
     description: "",
     address: "",
+    currency: "",
     rating: 0,
   });
   const [uniqueItemIds, setUniqueItemIds] = useState(new Set()); // To store unique item IDs
@@ -89,51 +90,77 @@ export const Stores = () => {
         </div>
       </div>
       <div className={styles.stores}>
-        {stores.map((store, id) => (
-          <div key={id} style={{ display: "flex", flexDirection: "column" }}>
-            <div className={`${styles.cardWrapper}`}>
-              <div
-                className={styles.card}
-                onClick={() => {
-                  fetchOneStore(store._id);
-                  setSelected(id);
-                  setStoreInfo({
-                    id: store._id,
-                    name: store?.store_name,
-                    image: store?.profile_picture,
-                    description: store?.description,
-                    address: `${store?.supplier_address?.address}, ${store?.supplier_address?.city} - ${store?.supplier_address?.country}`,
-                    rating: store?.average_rating,
-                  });
-                }}
-              >
-                <Image
-                  src={store?.profile_picture || "/assets/store_pics/no-image-store.png"}
-                  className={styles.storeImg}
-                  width={200}
-                  height={200}
-                  objectFit="cover"
-                  objectPosition="center"
-                />
-                <p className={styles.name}>{store?.store_name}</p>
-                <p className={styles.storeName} style={{ marginTop: ".4rem" }}>
-                  {store?.supplier_address
-                    ? `${store?.supplier_address?.city} - ${store?.supplier_address?.country}`
-                    : ""}
-                </p>
-              </div>
-            </div>
-            {isShow && selected === id && (
-              <MealDropDown
-                isShow={isShow}
-                storeInfo={storeInfo}
-                setIsShow={setIsShow}
-                selectedStore={selectedStore}
-                id={storeInfo?.id}
-              />
-            )}
-          </div>
-        ))}
+        {stores
+          .slice(0, loadMore)
+          .filter((elem) => elem.status === "PUBLIC")
+          .map((store, id) => {
+            return (
+              <>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <div key={id} className={`${styles.cardWrapper}`}>
+                    <div
+                      className={styles.card}
+                      onClick={() => {
+                        fetchOneStore(store._id);
+                        SetSelected(id);
+                        setStoreInfo({
+                          id: store._id,
+                          name: store?.store_name,
+                          image: store?.profile_picture,
+                          description: store?.description,
+                          currency:store?.currency.symbol,
+                          address:
+                            store?.supplier_address?.address +
+                            ", " +
+                            store?.supplier_address?.city +
+                            " - " +
+                            store?.supplier_address?.country,
+                          rating: store?.average_rating,
+                        });
+                      }}
+                    >
+                      {
+                        <div>
+                          <Image
+                            src={
+                              store?.profile_picture
+                                ? store?.profile_picture
+                                : "/assets/store_pics/no-image-store.png"
+                            }
+                            className={styles.storeImg}
+                            width={200}
+                            height={200}
+                            objectFit="cover"
+                            objectPosition="center"
+                          />
+                          <p className={styles.name}>{store?.store_name}</p>
+                          <p
+                            className={styles.storeName}
+                            style={{ marginTop: ".4rem" }}
+                          >
+                            {store?.supplier_address
+                              ? store?.supplier_address?.city +
+                                " - " +
+                                store?.supplier_address?.country
+                              : ""}
+                          </p>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  {isShow && selected === id && (
+                    <MealDropDown
+                    isShow={isShow}
+                      storeInfo={storeInfo}
+                      setIsShow={setIsShow}
+                      selectedStore={selectedStore}
+                      id={storeInfo?.id}
+                    />
+                  )}
+                </div>
+              </>
+            );
+          })}
       </div>
 
       <p

@@ -28,7 +28,7 @@ function SideNav2(props) {
   console.log(props, "pops");
   const { isOpen, setIsOpen } = useAuth();
   const router = useRouter();
-  const selectedUserType = useSelector((state) => state.userType.selectedUserType);
+  const selectedUserType = useSelector((state) => state?.userType?.selectedUserType);
 
   function toggleLogin() {
     props.setOpenLogin(!props.openLogin);
