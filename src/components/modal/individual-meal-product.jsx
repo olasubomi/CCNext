@@ -268,7 +268,7 @@ export const IndividualModal = ({
                               <img
                                 src={
                                   selectedItem[
-                                    `meal_image_or_video_content${index + 1}`
+                                  `meal_image_or_video_content${index + 1}`
                                   ]
                                 }
                                 className={styles.instruction_img}
@@ -284,9 +284,8 @@ export const IndividualModal = ({
                                     <source
                                       src={
                                         selectedItem[
-                                          `meal_image_or_video_content${
-                                            index + 1
-                                          }`
+                                        `meal_image_or_video_content${index + 1
+                                        }`
                                         ]
                                       }
                                       type="video/mp4"
@@ -316,7 +315,7 @@ export const IndividualModal = ({
             <div className={styles.border2} />
             <div className={styles.buttons}>
               <button className={styles.outlinebtn}>
-                <Link href={`/meal/${selectedItem.item_name}`}>
+                <Link href={`/meal/${selectedItem?.meal_chef}/${selectedItem.item_name}`}>
                   See Full Recipe
                 </Link>
               </button>
@@ -539,7 +538,9 @@ export const ProductModal = ({
             <div className={styles.border} />
             <div className={styles.buttons}>
               <button className={styles.outlinebtn}>
-                <Link href={`/product/${selectedItem.item_name}`}>View More</Link>
+                <Link href={`/product/${selectedItem?.user?.first_name} ${selectedItem?.user?.last_name}/${selectedItem.item_name}`}>
+                  View More
+                </Link>
               </button>
               <button
                 className={styles.outlinebtn}
@@ -837,7 +838,7 @@ export const UtensilModal = ({
               <div className={styles.border} />
               <div className={styles.buttons}>
                 <button className={styles.outlinebtn}>
-                  <Link href={`/product/${selectedItem.item_name}`}>
+                  <Link href={`/product/${selectedItem?.user?.first_name} ${selectedItem?.user?.last_name}/${selectedItem.item_name}`}>
                     View More
                   </Link>
                 </button>

@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
-import Product from "../../src/components/individualPage/Product";
-import styles from "../../src/components/individualPage/meal.module.css";
-import GoBack from "../../src/components/CommonComponents/goBack";
-import Header, { Header2 } from "../../src/components/Header/Header";
-import Sidenav from "../../src/components/Header/sidenav";
-import axios from "../../src/util/Api";
+import Product from "../../../src/components/individualPage/Product";
+import styles from "../../../src/components/individualPage/meal.module.css";
+import GoBack from "../../../src/components/CommonComponents/goBack";
+import Header, { Header2 } from "../../../src/components/Header/Header";
+import Sidenav from "../../../src/components/Header/sidenav";
+import axios from "../../../src/util/Api";
 import { useEffect, useState } from "react";
 import moment from "moment";
 
@@ -36,7 +36,7 @@ const individualProductPage = () => {
     console.log("name", name);
     // let meal = await axios.get(`/meals/get-meal/${id}`)
     let product = await axios.get(`/items/user/${name}`);
-    console.log(product.data.data, "get props");
+    // console.log(product.data.data, "get props");
 
     setProps(product.data.data[0] || {});
   };
