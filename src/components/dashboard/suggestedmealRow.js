@@ -13,6 +13,7 @@ import Select from "react-select";
 
 import ArrowDropUp from "@mui/icons-material/ArrowDropUp";
 import { ReceivedModal } from "../modal/received-rejection";
+import { useSelector } from "react-redux";
 function SuggestedMealRow(props) {
   const [show, setShowState] = useState(false);
   const months = [
@@ -44,6 +45,7 @@ function SuggestedMealRow(props) {
   const handleClickPopup = () => {
     setShowPopup(true);
   };
+  const selectedUserType = useSelector((state) => state.userType.selectedUserType);
 
   const options = [
     { value: "default", label: "Select..." },
@@ -97,7 +99,7 @@ function SuggestedMealRow(props) {
         <tbody>
           <tr
             className={
-              props.auth.authUser.user_type === "supplier"
+              selectedUserType === "supplier"
                 ? styles.meal_tr
                 : styles.meal_tr1
             }
@@ -105,14 +107,14 @@ function SuggestedMealRow(props) {
             <td className={styles.td_name}>
               <p
                 onClick={
-                  props.auth.authUser.user_type === "admin"
+                  selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
                     : props.searchType === "Item"
                     ? () => props.openMealDetailsModal(suggestion)
                     : () => props.openDetailsModal(suggestion)
                 }
               >
-                {props.auth.authUser.user_type === "supplier" &&
+                {selectedUserType === "supplier" &&
                 props.searchType === "Item"
                   ? suggestion.item_name.length > 25
                     ? suggestion.item_name.slice(0, 25) + "..."
@@ -125,7 +127,7 @@ function SuggestedMealRow(props) {
             <td className={styles.td_name}>
               <p
                 onClick={
-                  props.auth.authUser.user_type === "admin"
+                  selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
                     : props.searchType === "Item"
                     ? () => props.openMealDetailsModal(suggestion)
@@ -147,7 +149,7 @@ function SuggestedMealRow(props) {
             >
               <p
                 onClick={
-                  props.auth.authUser.user_type === "admin"
+                  selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
                     : props.searchType === "Item"
                     ? () => props.openMealDetailsModal(suggestion)
@@ -178,7 +180,7 @@ function SuggestedMealRow(props) {
             <td className={styles.td_cat}>
               <p
                 onClick={
-                  props.auth.authUser.user_type === "admin"
+                  selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
                     : props.searchType === "Item"
                     ? () => props.openMealDetailsModal(suggestion)
@@ -199,7 +201,7 @@ function SuggestedMealRow(props) {
             <td className={styles.td_cat}>
               <p
                 onClick={
-                  props.auth.authUser.user_type === "admin"
+                  selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
                     : props.searchType === "Item"
                     ? () => props.openMealDetailsModal(suggestion)
@@ -213,7 +215,7 @@ function SuggestedMealRow(props) {
             </td>
             <td className={styles.td_name}>
               <div className={styles.actions_con}>
-                {props.auth.authUser.user_type !== "admin" && (
+                {selectedUserType !== "admin" && (
                   <div className={styles.selectContainer}>
                     <Select
                       styles={customStyles}

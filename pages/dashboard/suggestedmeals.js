@@ -19,7 +19,7 @@ import Sidenav2 from "../../src/components/Header/sidenav2";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import axios from "../../src/util/Api";
 import Meal from "../../src/components/individualPage/Meal";
@@ -146,10 +146,10 @@ const SuggestedMeals = (props) => {
 
   useEffect(() => {
     getAllStores();
-  }, [props.Auth, filteredStores]);
+  }, [props.auth, filteredStores]);
 
   const getUserItems = (newPage, item_name = "") => {
-    if (props.auth.authUser) {
+    if (selectedUserType) {
       setSearchType("Item");
       let url;
       url = `/items/${newPage ? newPage : page}`;
@@ -161,8 +161,8 @@ const SuggestedMeals = (props) => {
         params_[entry] = filteredItems[entry];
 
       }
-      console.log(props.auth.authUser, "props.auth.authUser");
-      if (props.auth.authUser.user_type !== "admin") {
+      console.log(selectedUserType, "props.auth.authUser");
+      if (selectedUserType !== "admin") {
         // url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
         params_.user = props.auth.authUser._id;
       }
@@ -1457,6 +1457,8 @@ const SuggestedMeals = (props) => {
     }
   };
   // console.log(suggestion.prepime, 'prep time not showing')
+  const selectedUserType = useSelector((state) => state.userType.selectedUserType);
+
   return (
     <div className={container + " " + col2}>
       <div className="alert">
@@ -1602,7 +1604,7 @@ const SuggestedMeals = (props) => {
                     </div>
                   </div>
                   }
-                  {props.auth.authUser.user_type.includes("customer") === "customer" && (
+                  {selectedUserType === "customer" && (
                     <Link href="/dashboard/createstore">Create Store</Link>
                   )}
                 </div>
@@ -1632,7 +1634,7 @@ const SuggestedMeals = (props) => {
                     >
                       Category
                     </div>
-                    {props.auth.authUser.user_type === "admin" && (
+                    {selectedUserType === "admin" && (
                       <>
                         <div
                           onClick={() => handleSearchType2("Description")}
@@ -1677,7 +1679,7 @@ const SuggestedMeals = (props) => {
                       </>
                     )}
                   </div>
-                  {props.auth.authUser.user_type !== "admin" && (
+                  {selectedUserType!== "admin" && (
                     <div className={styles.suggestedmeal_row2_col2}>
                       {/* <h5>Remove Sections(s)</h5> */}
                       <div>
@@ -1698,7 +1700,7 @@ const SuggestedMeals = (props) => {
                         <div>
                           <div
                             className={
-                              props.auth.authUser.user_type === "supplier"
+                              selectedUserType === "supplier"
                                 ? styles.request_tr
                                 : styles.request_tr1
                             }
@@ -1867,7 +1869,7 @@ const SuggestedMeals = (props) => {
                         </>
                       )}
 
-                      {props.auth.authUser.user_type === "admin" && (
+                      {selectedUserType && (
                         <>
                           {searchType === "Description" && (
                             <SuggestedDescription
