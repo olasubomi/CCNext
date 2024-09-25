@@ -336,7 +336,7 @@ export const Mealmodal = ({
             </div>
             <div className={styles.buttons}>
               <button className={styles.outlinebtn}>
-                <Link href={`/meal/${selectedItem.item_name}`}>
+                <Link href={`/meal/${selectedItem?.meal_chef}/${selectedItem.item_name}`}>
                   See Full Recipe
                 </Link>
               </button>

@@ -11,6 +11,7 @@ const userSlice = createSlice({
     reducers: {
         setUserType(state, action) {
             state.user_type = action.payload;
+            
         },
         setSelectedUserType(state, action) {
             return {
