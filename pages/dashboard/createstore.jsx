@@ -33,7 +33,6 @@ import { useParams } from "next/navigation";
 import GooglePlacesAutocomplete from "../../src/components/dashboard/googleplacesautocomplete";
 import { getAllISOCodes } from "iso-country-currency";
 import { initializeUserType, setSelectedUserType } from "../../src/reducers/userSlice";
-import sessionStorage from "redux-persist/es/storage/session";
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 58,
@@ -296,7 +295,6 @@ const CreateStore = (props) => {
           setStatusState("success");
           setMessageState("Store created");
           dispatch(setSelectedUserType("supplier"));
-          sessionStorage.setItem('selectedUserType', 'supplier');
           setTimeout(() => {
             setStatusState("");
             setMessageState("");
