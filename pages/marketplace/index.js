@@ -186,8 +186,7 @@ const PublicMarket = () => {
           <div className={styles.marketplace}>
             <h1>Marketplace</h1>
             <p>
-              Put your meals and product on Chop Chow to show off what you’ve
-              cooked with family and friends
+              Find stores, recipes, kitchen utensils and your favourite products.
             </p>
           </div>
 
@@ -221,7 +220,7 @@ const PublicMarket = () => {
           </>
         </>
       )}
-      {activeSubLink === 1 && (
+      {/* {activeSubLink === 1 && (
         <>
           {categories.find((ele) => ele.label === "Stores")?.value && (
             <AllStores />
@@ -247,7 +246,7 @@ const PublicMarket = () => {
             </div>
           )}
         </>
-      )}
+      )} */}
       {activeSubLink === 4 && (
         <>
           {categories.find((ele) => ele.label === "Kitchen Utensils")

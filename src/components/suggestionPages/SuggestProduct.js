@@ -478,7 +478,7 @@ class SuggestProductForm extends Component {
       const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
       console.log(
         "Curr Product Index If Exists In Products List is: \n" +
-          tmpcurrProductIndexInDBsProductsList
+        tmpcurrProductIndexInDBsProductsList
       );
 
       // check if product name is an existing product
@@ -522,7 +522,7 @@ class SuggestProductForm extends Component {
         searchResult.indexOf(true);
       console.log(
         "Curr Product Index If Exists In Products List is: \n" +
-          tmpcurrMeasurementIndexInDBsMeasurementList
+        tmpcurrMeasurementIndexInDBsMeasurementList
       );
 
       // check if product name is an existing product
@@ -564,7 +564,7 @@ class SuggestProductForm extends Component {
         searchResult.indexOf(true);
       console.log(
         "Curr Product Index If Exists In Products List is: \n" +
-          tmpcurrMeasurementIndexInDBsMeasurementList
+        tmpcurrMeasurementIndexInDBsMeasurementList
       );
 
       // check if product name is an existing product
@@ -765,7 +765,7 @@ class SuggestProductForm extends Component {
 
     console.log(
       "current state of product index at Add Ingredient To product is : \n" +
-        this.state.currProductIndexInDBsProductsList
+      this.state.currProductIndexInDBsProductsList
     );
 
     // create state for each nutritional value
@@ -834,7 +834,7 @@ class SuggestProductForm extends Component {
 
     console.log(
       "current state of product index at Add Ingredient To product is : \n" +
-        this.state.currProductIndexInDBsProductsList
+      this.state.currProductIndexInDBsProductsList
     );
 
     const searchResult = this.productNames.map(function callback(element) {
@@ -1020,7 +1020,7 @@ class SuggestProductForm extends Component {
     contentNameToContentImageOrVideoMapForS3.append(
       "productContentName",
       this.state.productName
-    );  
+    );
     console.log(contentNameToContentImageOrVideoMapForS3);
     var keyValueData = { productContentName: this.state.productName };
     // console.log("Stringified version:");
@@ -1031,7 +1031,7 @@ class SuggestProductForm extends Component {
     //-------------Submit remainder data of product to Mongo ------------------------------------------
     let suggestProductForm = new FormData();
     suggestProductForm.append("item_name", productName);
-console.log(productImage1, productImage2, productImage3, productImage4, 'product image 1SßßS')
+    console.log(productImage1, productImage2, productImage3, productImage4, 'product image 1SßßS')
     if (productImage1) {
       suggestProductForm.append("item_images", productImage1);
     }
@@ -1045,7 +1045,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
       suggestProductForm.append("item_images", productImage4);
     }
 
-    if(!productImage1 && !productImage2 && !productImage3 && !productImage4){
+    if (!productImage1 && !productImage2 && !productImage3 && !productImage4) {
       const img = await fetch(
         "/assets/store_pics/no-image-product.png"
       );
@@ -1075,9 +1075,9 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
       information =
         information?.split(" ")?.length > 1
           ? information
-              ?.split(" ")
-              .map((ele) => ele.toLowerCase())
-              .join("_")
+            ?.split(" ")
+            .map((ele) => ele.toLowerCase())
+            .join("_")
           : information;
       obj[information] = value;
       return obj;
@@ -1108,7 +1108,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
     };
 
     for (let ele of Object.keys(description)) {
-      console.log(description[ele],description, 'description_')
+      console.log(description[ele], description, 'description_')
       arr2.push({
         object_name: ele,
         object_quantity: description[ele].match(/\d+/)[0],
@@ -1344,7 +1344,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                     Quantity
                   </label>
                   <TextField
-                   inputProps={{ min: 0 }}
+                    inputProps={{ min: 0 }}
                     fullWidth
                     id="sizeQuantity"
                     type="number"
@@ -1435,7 +1435,13 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                 fullWidth
               />
             </div>
-            <div className={styles.suggestion_form_2_col}>
+            <div className={styles.suggestion_form_2_col} onKeyDown={(event) => {
+              // Check if the pressed key is Enter
+              if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default form submission
+                this.addIngredientToProduct(event);
+              }
+            }}>
               <div className={styles.suggestion_form_2_col_1}>
                 <div className={styles.suggestion_form_group}>
                   <label
@@ -1445,14 +1451,14 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                     Quantity
                   </label>
                   <TextField
-                   inputProps={{ min: 0 }}
+                    inputProps={{ min: 0 }}
                     fullWidth
                     id="currentIngredientQuantity"
                     type="number"
                     onChange={this.onTextFieldChange}
                     variant="outlined"
                     placeholder="1.."
-                    // value={this.state.currentIngredientQuantity}
+                  // value={this.state.currentIngredientQuantity}
                   />
                 </div>
               </div>
@@ -1501,7 +1507,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                 <Chip
                   key={index}
                   label={data}
-                  
+
                   className={styles.chip}
                   onClick={() => this.handleDeleteIngredientChip(data)}
                   onDelete={() => this.handleDeleteIngredientChip(data)}
@@ -1510,7 +1516,17 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
             </Stack>
           </div>
           <h3>Product Description</h3>
-          <div className={styles.suggestion_form}>
+          <div className={styles.suggestion_form} onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              this.addNutritionalFactToProduct(
+                event,
+                "currentNutritionName",
+                "currentIngredientQuantity",
+                "currentIngredientMeasurement1"
+              )
+            }
+          }}>
             <div className={styles.suggestion_form_group}>
               <label
                 htmlFor="currentIngredient"
@@ -1549,7 +1565,7 @@ console.log(productImage1, productImage2, productImage3, productImage4, 'product
                     Quantity
                   </label>
                   <TextField
-                   inputProps={{ min: 0 }}
+                    inputProps={{ min: 0 }}
                     fullWidth
                     id="currentIngredientQuantity"
                     type="number"

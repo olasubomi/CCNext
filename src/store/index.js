@@ -31,7 +31,6 @@ import { persistStore, persistReducer } from 'redux-persist'
 
 // import rootReducer from "../reducers/Common";
 
-// initial states here
 const initalState = {};
 
 const persistConfig = {

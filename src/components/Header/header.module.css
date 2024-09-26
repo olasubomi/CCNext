@@ -32,6 +32,12 @@
   cursor: pointer;
   text-decoration: underline;
 }
+.activesubrowText2 {
+  font-size: 13px;
+  color: #f47900;
+  font-weight: 300;
+  cursor: pointer;
+}
 .readDot {
   width: 1rem;
   height: 1rem;
@@ -291,10 +297,13 @@
   text-transform: capitalize;
   color: #000000;
 }
+.active {
+  color: #007bff; /* Adjust the color as needed */
+}
 .activelink {
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 17px;
   /* identical to box height */
   text-transform: capitalize;

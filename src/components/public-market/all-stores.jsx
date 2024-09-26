@@ -42,8 +42,9 @@ export const AllStores = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleActiveLetter = (id) => {
+  const handleActiveLetter = (elem, id) => {
     setActiveLetter(id);
+    fetchStores(currentPage, elem)
   };
   const [stores, setStores] = useState([]);
   const [isShow, setIsShow] = useState(false);
@@ -82,28 +83,31 @@ export const AllStores = () => {
     }
   };
   console.log(stores, "one store");
-  const fetchStores = async (page = 1) => {
+  const fetchStores = async (page = 1, activeLetter = '') => {
     setIsLoading(true);
+    const params = {};
+    if(activeLetter){
+      params.startsWith = activeLetter
+    }
     try {
-      const response = await axios(`/stores/getallstores/${page}?limit=10`, {
+      const response = await axios(`/stores/getallstores/${page}?limit=10&status=PUBLIC`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
+        params: {
+          ...params
+        }
       });
       console.log(response.data.data.products, "resp");
       const allItems = response.data.data.products;
+      const totalItems = response.data.data.count;
 
-      const filteredStores = allItems.filter(
-        (store) => store.status === "PUBLIC"
-      );
+      const filteredStores = allItems
 
-      if (filteredStores.length === 0) {
-        const lastPageWithItems = page - 1;
-        setTotalPages(lastPageWithItems);
-      } else {
-        setStores(filteredStores);
-      }
+      const totalPages = Math.ceil(totalItems / 20);
+      setTotalPages(totalPages);
+      setStores(filteredStores)
     } catch (error) {
       console.log(error);
     } finally {
@@ -136,17 +140,14 @@ export const AllStores = () => {
   };
 
   const handleNextPage = () => {
-    if (currentPage === totalPages) {
+    if (currentPage <= totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
 
   const handlePreviousPage = () => {
-    if (currentPage !== totalPages) {
-      setCurrentPage(currentPage - 1);
-    }
-    if (currentPage === 1) {
-      setCurrentPage(currentPage);
+    if (currentPage !== 0) {
+      setCurrentPage(currentPage -1);
     }
   };
 
@@ -157,9 +158,7 @@ export const AllStores = () => {
       </div>
       <div className={styles.topcontainer}>
         <p className={styles.marketplaceText}>
-          Unlock global flavors with ease! Our app makes cooking international
-          dishes a breeze, guiding you with expert tips and step-by-step
-          instructions.
+          Have a walk-in experience at your favourite stores from the comfort of your home.
         </p>
         <div className={styles.flexItems}>
           <div className={styles.filter}>
@@ -175,7 +174,7 @@ export const AllStores = () => {
       <div className={styles.alphabetContainer}>
         {alphabets.map((elem, index) => (
           <span
-            onClick={() => handleActiveLetter(index)}
+            onClick={() => handleActiveLetter(elem, index)}
             className={
               activeLetter === index ? styles.activespan : styles.inactivespan
             }

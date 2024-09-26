@@ -134,7 +134,7 @@ export default function HomePage() {
             }}
           >
             <div className="overlay">
-              <h1>Chop Chow Marketplace is your new go-to when deciding what to cook</h1>
+              <h1>Discover, Decide and Share your favourite meals with people you love</h1>
               <button>Get Started</button>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function HomePage() {
 
           >
             <div className="overlay">
-              <h1>Decide, in advance, what to eat with Chop Chow subscriptions</h1>
+              <h1>Plan your meals ahead of time with Chop Chow subscriptions</h1>
               <button>Subscribe now</button>
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function HomePage() {
 
           >
             <div className="overlay">
-              <h1>Share your go to meals with friends on Chop Chow</h1>
+              <h1>Share your favourite meals with your friends and family</h1>
               <button>Suggest a meal</button>
             </div>
           </div>
@@ -234,7 +234,7 @@ export default function HomePage() {
           <div>
             <h2>
               Share your recipes <br />
-              with your fans
+              with friends
             </h2>
             <button onClick={() => router.push("/suggestmeal")}> Suggest A Recipe</button>
           </div>
@@ -322,7 +322,7 @@ export default function HomePage() {
 
               }}
             >
-              {active === 1 ? "Become a Supplier on Chop Chow" : active === 2 ? "Join Our Esteemed Customers" : "Become A Driver"}
+              {active === 1 ? "Join our network of suppliers" : active === 2 ? "Join Our Esteemed Customers" : "Become A Driver"}
             </h2>
             <p
               style={{
@@ -332,7 +332,7 @@ export default function HomePage() {
             >
               {
                 active === 1 ?
-                  "Elevate your brand by becoming a supplier on ChowChop, the ultimate meal and grocery online destination. Showcase your finest creations, connect with a global audience, and unleash the full potential of your culinary expertise!"
+                  "Get discovered by food lovers from all over the world who trust ChowChop as the right place to go when looking for the best recipes and freshest groceries."
                   : active === 2
                     ? "Drive with purpose: Join our team as a ChowChop driver and play a vital role in connecting culinary delights with doorsteps. Enjoy flexibility, earn rewards, and be the driving force behind a seamless delivery experience for our valued customers!"
                     : "We offer a wide range of delivery options that make it easy to get your favorite products delivered to you. If you want to schedule an order for a specific time, or if you just want to get it immediately, we've got you covered."
@@ -350,7 +350,7 @@ export default function HomePage() {
 
       <section className="section_cities">
         <div className="section_cities_box" />
-        <h1>We Are  In These Cities</h1>
+        <h1>We are nearer than you think</h1>
 
         <div className="section-eight-container">
           {

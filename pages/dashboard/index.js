@@ -17,12 +17,13 @@ import {
 } from "../../src/components/icons";
 import Sidenav2 from "../../src/components/Header/sidenav2";
 import GoBack from "../../src/components/CommonComponents/goBack";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../src/actions";
 import axios from "../../src/util/Api";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement } from "chart.js";
+import { initializeUserType, setSelectedUserType, setUserType } from "../../src/reducers/userSlice";
 ChartJS.register(ArcElement);
 
 const DashboardHomePage = (props) => {
@@ -156,33 +157,34 @@ const DashboardHomePage = (props) => {
       },
     ],
   };
+  const dispatch = useDispatch()
+  const selectedUserType = useSelector((state) => state.userType.selectedUserType);
+  const userTypeArray = useSelector((state) => state.userType.user_type);
+  console.log(userTypeArray, 'selectedUserType_')
+  useEffect(() => {
+    if (props.auth.authUser?.user_type) {
+      // dispatch(setUserType(props.auth.authUser?.user_type));
+    }
+  }, [props.auth.authUser?.user_type, dispatch]);
 
   function toggleMode(type) {
-    axios
-      .put("/user/updateuserprofile/" + props.auth.authUser._id, {
-        user_type: type,
-      })
-      .then((res) => {
-        console.log(res.data);
-        props.getUser(props.auth.authUser._id);
-        setDriverModeState(!driverMode);
-      });
-    setChangeTypeState(!changeType);
+    dispatch(setSelectedUserType(type));
   }
+
 
   function handleSearchType(type) {
     setSearchType(type);
     let url;
     if (type === "Meal") {
-      if (props.auth.authUser.user_type === "admin") {
+      if (props.auth.authUser.user_type?.[0] === "admin") {
         url = "/meals/get-meals/1";
       }
     } else if (type === "Product") {
-      if (props.auth.authUser.user_type === "admin") {
+      if (props.auth.authUser.user_type?.[0] === "admin") {
         url = "/products/get-all-products/1";
       }
     } else {
-      if (props.auth.authUser.user_type === "admin") {
+      if (props.auth.authUser.user_type?.[0] === "admin") {
         url = "/categories/get-all-categories/1";
       }
     }
@@ -203,7 +205,7 @@ const DashboardHomePage = (props) => {
   function toggleChangeType() {
     setChangeTypeState(!changeType);
   }
-
+  console.log(props.auth.authUser, 'login')
   return (
     <div
       className={
@@ -263,15 +265,15 @@ const DashboardHomePage = (props) => {
           <>
             <div className={styles.dashboard_header}>
               <h3>
-                Hello {props.auth.authUser.username}{" "}
-                {props.auth.authUser.user_type === "admin" && (
+                Hello {props.auth.authUser.username}
+                {props.auth.authUser.super_app_admin && (
                   <span>(Super Admin)</span>
                 )}
               </h3>
 
               <div className={styles.select_container}>
                 <div onClick={toggleChangeType} className={styles.select_box}>
-                  <p>{props.auth.authUser.user_type}</p>
+                  <p>{selectedUserType}</p> {/* This displays the currently selected type */}
                   <ArrowDropDownIcon className={styles.select_box_icon} />
                 </div>
                 {changeType && (
@@ -280,7 +282,7 @@ const DashboardHomePage = (props) => {
                       <p onClick={() => toggleMode("admin")}>Admin</p>
                     )}
                     <p onClick={() => toggleMode("customer")}>Customer</p>
-                    {props.auth.authUser.super_store_admin && (
+                    {props.auth.authUser.user_type.includes("supplier") && (
                       <p onClick={() => toggleMode("supplier")}>Supplier</p>
                     )}
                     <p onClick={() => toggleMode("driver")}>Driver</p>
@@ -300,26 +302,26 @@ const DashboardHomePage = (props) => {
                   </div>
                   <div className={styles.value_con}>
                     <div className={styles.value_con2 + " " + styles.red}>
-                      {(props.auth.authUser.user_type === "customer" ||
-                        props.auth.authUser.user_type === "driver") && (
-                        <TagIcon />
-                      )}
-                      {props.auth.authUser.user_type === "admin" && (
+                      {(props.auth.authUser.user_type?.[0] === "customer" ||
+                        props.auth.authUser.user_type?.[0] === "driver") && (
+                          <TagIcon />
+                        )}
+                      {props.auth.authUser.user_type?.[0] === "admin" && (
                         <BatteryIcon />
                       )}
-                      {props.auth.authUser.user_type === "supplier" && (
+                      {props.auth.authUser.user_type?.[0] === "supplier" && (
                         <LineChartIcon />
                       )}
                     </div>
                     <div>
                       <h3 className={styles.box_name}>
-                        {props.auth.authUser.user_type === "customer" &&
+                        {props.auth.authUser.user_type?.[0] === "customer" &&
                           "Completed Order"}
-                        {props.auth.authUser.user_type === "admin" &&
+                        {props.auth.authUser.user_type?.[0] === "admin" &&
                           "Requests"}
-                        {props.auth.authUser.user_type === "supplier" &&
+                        {props.auth.authUser.user_type?.[0] === "supplier" &&
                           "Total Sales"}
-                        {props.auth.authUser.user_type === "driver" &&
+                        {props.auth.authUser.user_type?.[0] === "driver" &&
                           "Total Revenue"}
                       </h3>
                       <p className={styles.value}>
@@ -329,8 +331,8 @@ const DashboardHomePage = (props) => {
                         {props.auth.authUser.user_type === "supplier" && "$0"}
                         {props.auth.authUser.user_type === "admin" &&
                           pendingMealCount +
-                            pendingProductCount +
-                            kitchenUtensilCount}
+                          pendingProductCount +
+                          kitchenUtensilCount}
                       </p>
                     </div>
                   </div>
@@ -340,15 +342,15 @@ const DashboardHomePage = (props) => {
                     <div></div>
                     {(props.auth.authUser.user_type === "driver" ||
                       props.auth.authUser.user_type === "admin") && (
-                      <p className={styles.box_duration}>Monthly</p>
-                    )}
+                        <p className={styles.box_duration}>Monthly</p>
+                      )}
                   </div>
                   <div className={styles.value_con}>
                     <div className={styles.value_con2 + " " + styles.orange}>
                       {(props.auth.authUser.user_type === "customer" ||
                         props.auth.authUser.user_type === "supplier") && (
-                        <BagIcon />
-                      )}
+                          <BagIcon />
+                        )}
                       {props.auth.authUser.user_type === "admin" && <TagIcon />}
                       {props.auth.authUser.user_type === "driver" && (
                         <ThumbsUpIcon />
@@ -446,7 +448,7 @@ const DashboardHomePage = (props) => {
                                     (publicProductCount +
                                       kitchenUtensilCount +
                                       publicMealCount)) *
-                                    100
+                                  100
                                 )}
                                 %
                               </h5>
@@ -472,7 +474,7 @@ const DashboardHomePage = (props) => {
                                     (publicProductCount +
                                       kitchenUtensilCount +
                                       publicMealCount)) *
-                                    100
+                                  100
                                 )}
                                 %
                               </h5>
@@ -498,7 +500,7 @@ const DashboardHomePage = (props) => {
                                     (publicProductCount +
                                       kitchenUtensilCount +
                                       publicMealCount)) *
-                                    100
+                                  100
                                 )}
                                 %
                               </h5>
@@ -661,8 +663,8 @@ const DashboardHomePage = (props) => {
                                 {searchType === "Meal"
                                   ? suggestion.meal_name
                                   : searchType === "Product"
-                                  ? suggestion.product_name
-                                  : suggestion.category_name}
+                                    ? suggestion.product_name
+                                    : suggestion.category_name}
                               </td>
                               <td
                                 className={
@@ -683,13 +685,13 @@ const DashboardHomePage = (props) => {
                                   styles.status +
                                   " " +
                                   (suggestion.status === "Draft" ||
-                                  suggestion.status === "Pending"
+                                    suggestion.status === "Pending"
                                     ? styles.pending
                                     : suggestion.status === "Public"
-                                    ? styles.approve
-                                    : suggestion.status === "Rejected"
-                                    ? styles.rejected
-                                    : "")
+                                      ? styles.approve
+                                      : suggestion.status === "Rejected"
+                                        ? styles.rejected
+                                        : "")
                                 }
                               >
                                 {searchType === "Category"
@@ -704,14 +706,14 @@ const DashboardHomePage = (props) => {
                               >
                                 {suggestion.createdAt &&
                                   new Date(suggestion.createdAt).getDate() +
-                                    " " +
-                                    months[
-                                      new Date(suggestion.createdAt).getMonth()
-                                    ] +
-                                    " ," +
-                                    new Date(
-                                      suggestion.createdAt
-                                    ).getFullYear()}
+                                  " " +
+                                  months[
+                                  new Date(suggestion.createdAt).getMonth()
+                                  ] +
+                                  " ," +
+                                  new Date(
+                                    suggestion.createdAt
+                                  ).getFullYear()}
                               </td>
                             </tr>
                           );
@@ -1124,7 +1126,7 @@ const DashboardHomePage = (props) => {
                                       (publicProductCount +
                                         kitchenUtensilCount +
                                         publicMealCount)) *
-                                      100
+                                    100
                                   )}
                                   %
                                 </h5>
@@ -1150,7 +1152,7 @@ const DashboardHomePage = (props) => {
                                       (publicProductCount +
                                         kitchenUtensilCount +
                                         publicMealCount)) *
-                                      100
+                                    100
                                   )}
                                   %
                                 </h5>
@@ -1176,7 +1178,7 @@ const DashboardHomePage = (props) => {
                                       (publicProductCount +
                                         kitchenUtensilCount +
                                         publicMealCount)) *
-                                      100
+                                    100
                                   )}
                                   %
                                 </h5>

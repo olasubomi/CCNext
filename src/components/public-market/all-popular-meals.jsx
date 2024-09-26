@@ -47,9 +47,12 @@ export const AllPopularMeals = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [activeLetter, setActiveLetter] = useState(null);
+  const [availableLetters, setAvailableLetters] = useState([]);
 
-  const handleActiveLetter = (id) => {
+
+  const handleActiveLetter = (elem, id) => {
     setActiveLetter(id);
+    fetchMeals(currentPage, elem)
   };
   const matches = useMediaQuery("(min-width: 920px)");
   const [meals, setMeals] = useState([]);
@@ -99,13 +102,20 @@ export const AllPopularMeals = () => {
     status: "",
   });
 
-  const fetchMeals = async (page) => {
+  const fetchMeals = async (page, activeLetter) => {
     setIsLoading(true);
+    const params = {};
+    if (activeLetter) {
+      params.startsWith = activeLetter
+    }
     try {
       const response = await axios(
         `/items/${page}?type=Meal&status=Public&limit=20`,
         {
           method: "GET",
+          params: {
+            ...params
+          },
           headers: {
             "Content-Type": "application/json",
           },
@@ -121,12 +131,15 @@ export const AllPopularMeals = () => {
 
       setMeals(filteredItem);
       setTotalPages(totalPages);
+      const lettersWithStores = filteredItem.map(item => item.item_name[0].toUpperCase());
+      setAvailableLetters([...new Set(lettersWithStores)]);
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     fetchMeals(currentPage);
   }, [currentPage]);
@@ -140,7 +153,7 @@ export const AllPopularMeals = () => {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -183,9 +196,7 @@ export const AllPopularMeals = () => {
         </div>
         <div className={styles.topcontainer}>
           <p className={styles.marketplaceText}>
-            Unlock global flavors with ease! Our app makes cooking international
-            dishes a breeze, guiding you with expert tips and step-by-step
-            instructions.
+            Find and replicate recipes of meals from all over the world.
           </p>
           <div className={styles.flexItems}>
             <div className={styles.filter}>
@@ -199,24 +210,33 @@ export const AllPopularMeals = () => {
           </div>
         </div>
         <div className={styles.alphabetContainer}>
-          {alphabets.map((elem, index) => (
-            <span
-              onClick={() => handleActiveLetter(index)}
-              className={
-                activeLetter === index ? styles.activespan : styles.inactivespan
-              }
-            >
-              <p
+          <div className={styles.alphabetContainer2}>
+            {alphabets.map((elem, index) => (
+              <span
+                key={index}
+                onClick={() => handleActiveLetter(elem, index)}
                 className={
-                  activeLetter === index
-                    ? styles.activeLetter
-                    : styles.inactiveletter
+                  availableLetters.includes(elem)
+                    ? activeLetter === index
+                      ? styles.activespan
+                      : styles.inactivespan
+                    : styles.disabledspan
                 }
               >
-                {elem}
-              </p>
-            </span>
-          ))}
+                <p
+                  className={
+                    availableLetters.includes(elem)
+                      ? activeLetter === index
+                        ? styles.activeLetter
+                        : styles.inactiveletter
+                      : styles.disabledLetter
+                  }
+                >
+                  {elem}
+                </p>
+              </span>
+            ))}
+          </div>
         </div>
         <div className={styles.storeImgContainer}>
           <div className={styles.storeFlex}>
