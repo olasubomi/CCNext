@@ -178,12 +178,13 @@ export default function Blog() {
                             </div>
                         </div>
                         <div className="blog-footer_">
-                        <Footer />
+                        
                         </div>
                     </div>
                 </div>
 
             </div>
+            <Footer />
            
         </>
     )

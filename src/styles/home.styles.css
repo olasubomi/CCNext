@@ -240,7 +240,7 @@
 
 .chef_box_dropdown {
     width: 100%;
-    min-height: 200px;
+    height: fit-content;
     background-color: #fff;
     position: absolute;
     top: 70px;
@@ -1478,7 +1478,7 @@
 
 @media screen and (min-width: 1024px) {
     .section_cities .section_cities_box {
-        transform: scaleX(1.2);
+        /* transform: scaleX(1.2); */
     }
 
     .section-six div:nth-child(1) {
