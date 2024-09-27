@@ -264,7 +264,7 @@ export default function HomePage() {
                 {
                   isOpen && users.length ? <div ref={ref} className="chef_box_dropdown">
                     {
-                      users.map((entry) => <Link key={entry?._id} href={`/chef/${entry._id}`}>
+                      users.map((entry) => <Link key={entry?._id} href={`/chef/${entry.username}/${entry._id}`}>
                         <p>{entry?.first_name} {entry?.last_name}</p>
                       </Link>)
                     }
