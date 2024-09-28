@@ -143,8 +143,8 @@ export default function HomePage() {
 
           >
             <div className="overlay">
-              <h1>Plan your meals ahead of time with Chop Chow subscriptions</h1>
-              <button>Subscribe now</button>
+              <h1>Plan your meals ahead of time with Chop Chow's grocery list</h1>
+              <button onClick={() => router.push("/grocery")}>Use now</button>
             </div>
           </div>
 
