@@ -191,7 +191,8 @@ export default function HomePage() {
             <div className="overlay overlay_flex">
               <div className="overlay_flex_1">
                 <h1>AI-Powered
-                  Label Scanner</h1>
+                  Label Scanner 
+                  coming soon...</h1>
                 <div className="section-list">
                   {
                     [
