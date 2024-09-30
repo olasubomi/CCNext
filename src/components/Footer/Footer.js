@@ -45,19 +45,19 @@ const Footer = ({
           <div className={styles.footer_row_2_navigations}>
             <h3 className={styles.footer_row_2_navigation_h3}>Pages</h3>
             <ul className={styles.footer_row_2_navigation_lists}>
-              <Link href="/dashboard" className={styles.footer_row_2_navigation_link} >
+              <Link href="/dashboard" className={styles.footer_row_2_navigation_link} target="_blank">
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Dashboard
                 </li>
               </Link>
-              <Link href="/grocery" className={styles.footer_row_2_navigation_link} >
+              <Link href="/grocery" className={styles.footer_row_2_navigation_link} target="_blank">
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Grocery List
                 </li>
               </Link>
-              <Link href="/suggestmeal" className={styles.footer_row_2_navigation_link} >
+              <Link href="/suggestmeal" className={styles.footer_row_2_navigation_link}target="_blank" >
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Suggest A Meal
@@ -71,6 +71,7 @@ const Footer = ({
               <Link
                 href="/login"
                 className={styles.footer_row_2_navigation_link}
+                target="_blank"
               >
 
                 <li className={styles.footer_row_2_navigation_list}>
@@ -78,13 +79,14 @@ const Footer = ({
                 </li>
               </Link>
               <Link
-                href="/login"
+                href="/signup"
                 className={styles.footer_row_2_navigation_link}
+                target="_blank"
               >
 
                 <li className={styles.footer_row_2_navigation_list}>Sign Up</li>
               </Link>
-              <Link href="/signup" className={styles.footer_row_2_navigation_link} >
+              <Link href="#" className={styles.footer_row_2_navigation_link} >
 
                 <li className={styles.footer_row_2_navigation_list}>Shipping Return</li>
               </Link>
@@ -97,7 +99,7 @@ const Footer = ({
           <div className={styles.footer_row_2_navigations + " " + styles.lastnavbox}>
             <h3 className={styles.footer_row_2_navigation_h3}>Company</h3>
             <ul className={styles.footer_row_2_navigation_lists}>
-              <Link href="/" className={styles.footer_row_2_navigation_link} >
+              <Link href="#" className={styles.footer_row_2_navigation_link} >
 
                 <li className={styles.footer_row_2_navigation_list}>About Us</li>
               </Link>
@@ -107,19 +109,19 @@ const Footer = ({
                   Careers
                 </li>
               </Link>
-              <Link href="/marketplace/stores" className={styles.footer_row_2_navigation_link} >
+              <Link href="/marketplace/stores" className={styles.footer_row_2_navigation_link} target="_blank">
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Partners
                 </li>
               </Link>
-              <Link href="/termsofservice" className={styles.footer_row_2_navigation_link} >
+              <Link href="/termsofservice" className={styles.footer_row_2_navigation_link} target="_blank">
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Terms of Service
                 </li>
               </Link>
-              <Link href="/privacypolicy" className={styles.footer_row_2_navigation_link} >
+              <Link href="/privacypolicy" className={styles.footer_row_2_navigation_link} target="_blank" >
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Privacy and Policy
