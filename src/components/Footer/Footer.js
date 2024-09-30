@@ -51,7 +51,7 @@ const Footer = ({
                   Dashboard
                 </li>
               </Link>
-              <Link href="/grocerylist" className={styles.footer_row_2_navigation_link} >
+              <Link href="/grocery" className={styles.footer_row_2_navigation_link} >
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Grocery List
@@ -84,11 +84,11 @@ const Footer = ({
 
                 <li className={styles.footer_row_2_navigation_list}>Sign Up</li>
               </Link>
-              <Link href="/" className={styles.footer_row_2_navigation_link} >
+              <Link href="/signup" className={styles.footer_row_2_navigation_link} >
 
                 <li className={styles.footer_row_2_navigation_list}>Shipping Return</li>
               </Link>
-              <Link href="/" className={styles.footer_row_2_navigation_link} >
+              <Link href="#" className={styles.footer_row_2_navigation_link} >
 
                 <li className={styles.footer_row_2_navigation_list}>FAQ + Support</li>
               </Link>
@@ -101,25 +101,25 @@ const Footer = ({
 
                 <li className={styles.footer_row_2_navigation_list}>About Us</li>
               </Link>
-              <Link href="/" className={styles.footer_row_2_navigation_link} >
+              <Link href="#" className={styles.footer_row_2_navigation_link} >
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Careers
                 </li>
               </Link>
-              <Link href="/" className={styles.footer_row_2_navigation_link} >
+              <Link href="/marketplace/stores" className={styles.footer_row_2_navigation_link} >
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Partners
                 </li>
               </Link>
-              <Link href="/" className={styles.footer_row_2_navigation_link} >
+              <Link href="/termsofservice" className={styles.footer_row_2_navigation_link} >
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Terms of Service
                 </li>
               </Link>
-              <Link href="/" className={styles.footer_row_2_navigation_link} >
+              <Link href="/privacypolicy" className={styles.footer_row_2_navigation_link} >
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Privacy and Policy
