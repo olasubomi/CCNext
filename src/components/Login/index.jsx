@@ -78,8 +78,7 @@ function Login(props) {
       setSignUpState(false);
     }
   }
-  console.log("redux login", isverified);
-  console.log("redux login", isauthenticated);
+
   function onChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   }
@@ -87,67 +86,22 @@ function Login(props) {
     console.log(response);
   };
 
-  // useEffect(async () => {
-  //   const userLogin = JSON.parse(localStorage.getItem("formState"));
-  //   if(props.common.openVerification){
-  //     await props.login(userLogin.email, userLogin.password, rememberPassword, () => {
-  //       console.log("calling callback");
-  //       //setLoginLoading(false);
-  //     });
-  //   }
-
-  // })
-
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log("user local storage", user);
-    if (props.auth.isAuthenticated && user && props.auth.isVerified) {
+    if (props.auth.isAuthenticated && user) {
       props.auth.authUser.super_app_admin
         ? // user.super_app_admin
-          router.push("/admin")
+        router.push("/admin")
         : router.push("/dashboard");
-      //setIsOpen(false);
-    } else if (user && props.common.loginOnVerification) {
-      const userLogin = JSON.parse(localStorage.getItem("formState"));
-      console.log("calling callback");
-      signIn(userLogin);
-    } else if (props.auth.isAuthenticated && user && !props.auth.isVerified) {
+      setIsOpen(false);
     } else {
+      // setLoginLoading(false);
     }
-  }, [props.auth.isAuthenticated, props.auth.isVerified]);
-
-  const signIn = async (userLogin) => {
-    console.log("Calling sign in");
-    await props.login(
-      userLogin.email,
-      userLogin.password,
-      rememberPassword,
-      () => {
-        console.log("calling callback");
-      },
-      true
-    );
-  };
-  // useEffect(() => {
-  //   const user = JSON.parse(localStorage.getItem("user"));
-  //   console.log("user local storage",user);
-  //   if (props.auth.isAuthenticated && user && props.auth.isVerified) {
-  //     props.auth.authUser.super_app_admin
-  //       ? // user.super_app_admin
-  //         router.push("/admin")
-  //       : router.push("/dashboard");
-  //     //setIsOpen(false);
-  //   } else if(props.auth.isAuthenticated && user && !props.auth.isVerified){
-
-  //   }else{
-
-  //   }
-  // }, [props.auth.isAuthenticated, props.auth.isVerified]);
+  }, [props.auth.isAuthenticated]);
 
   console.log(props);
   async function Login(e) {
     e.preventDefault();
-    console.log("Calling login");
 
     // props.login(email, password);
     // check redux
@@ -158,7 +112,8 @@ function Login(props) {
     await props.login(email, password, rememberPassword, () => {
       console.log("calling callback");
       setLoginLoading(false);
-      dispatch(setSelectedUserType("customer"));
+      dispatch(setSelectedUserType(Array(JSON.parse(localStorage.getItem("user") || "{}")) ? JSON.parse(localStorage.getItem("user") || "{}")?.user_type[0] : 'customer'));
+
     });
 
     // setTimeout(() => {
@@ -181,7 +136,7 @@ function Login(props) {
     const decoded = jwtDecode(credentialResponse.credential);
     try {
       const decoded = jwtDecode(credentialResponse.credential);
-      console.log(decoded, "decoded");
+      console.log(decoded, 'decoded')
       await props.login(
         decoded?.email,
         null,
@@ -452,14 +407,13 @@ function Login(props) {
 function mapStateToProp(state) {
   return {
     auth: state.Auth,
-    common: state.Common,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     login: (email, password, rememberPassword, callback) =>
-      dispatch(userSignIn(email, password, rememberPassword, callback, true)),
+      dispatch(userSignIn(email, password, rememberPassword, callback)),
     socialLogin: (code) => dispatch(socialSignIn(code)),
     verifyEmail: (userid, token) => dispatch(verifyEmail(userid, token)),
   };

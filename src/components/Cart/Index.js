@@ -7,109 +7,74 @@ import CartItem from "../GroceryPage/CartPage/CartItem/Index";
 import Footer from "../Footer/Footer";
 import CartContext from "../../../pages/store/cart-context";
 import SideNav from "../Header/sidenav";
-import { useMobileMedia } from '../../customhooks/useResponsive';
+import { useMobileMedia } from "../../customhooks/useResponsive";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { addToCart, deleteFromCart, EmptyCart, FetchCart, removeFromCart } from "../../actions/Cart";
+import {
+  addToCart,
+  deleteFromCart,
+  EmptyCart,
+  FetchCart,
+  removeFromCart,
+} from "../../actions/Cart";
 import { useRouter } from "next/router";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { useEffect } from "react";
 
-
 function Cart(props) {
-
   const mobileScreen = useMobileMedia();
-  const {cartItems:items} = useSelector((state) => { console.log("line 21 Cart Page", state)
-  return state.Cart});
+  const { cartItems: items } = useSelector((state) => {
+    return state.Cart;
+  });
 
-  //let items = cartItems
-  console.log("line 25 Cart Page", items)
-  //const [item, setItem] = seState(null)
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // if(items.length == 0){
-  //   items = dispatch(FetchCart())
-  //   console.log("line 31 Cart fetch cart", items)
-  // }
   useEffect(() => {
-    dispatch(FetchCart())
-  },[])
-  // useEffect(() => {
-  //   const data = dispatch(FetchCart())
-  //   console.log("line 28 cart", data);
-  //   setItem(data);
-  // }, [])
-  //const cartCtx = useContext(CartContext);
-  console.log("line 22 Cart Page", props)
-  console.log("line 23 Cart Page", items)
-  //const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
+    dispatch(FetchCart());
+  }, []);
 
-  const hasItems = items?.length > 0 ;
-  
-  console.log("line 31 Cart fetch cart", items)
-const totalQuantity = `${items?.reduce((a, c) => a + c.amount, 0)} items`
-const totalPrice = items?.reduce((a, c) => a + (c.price * c.amount), 0).toFixed(2)
+  const hasItems = items?.length > 0;
 
-  // const cartItemRemoveHandler = (id) => {
-  //   cartCtx.removeItem(id);
-  // };
+  const totalQuantity = `${items?.reduce((a, c) => a + c.amount, 0)} items`;
+  const totalPrice = items
+    ?.reduce((a, c) => a + c.price * c.amount, 0)
+    .toFixed(2);
 
-  // const cartItemAddHandler = (item) => {
-  //   cartCtx.addItem({ ...item, amount: 1 });
-  // };
+  const Checkout = () => {
+    router.push(`/checkout/`);
+  };
 
-  // const cartItemClearHandler = (id) => {
-  //   cartCtx.clearItem(id);
-  // };
+  const AddToCart = (item) => {
+    const payload = {
+      itemName: item.name,
+      item_image: item.picture,
+      item_price: item.price,
+      itemId: item.id,
+      userId: item.userId || "",
+      storeName: item.store,
+      currency: item.currency,
+      quantity: item.amount,
+      storeId: item.storeId,
+      item_type: item.item_type ? item.item_type : "",
+    };
+    try {
+      dispatch(addToCart(payload));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // const cartCartClearHandler = (id) => {
-  //   cartCtx.clearCart(id);
-  // };
+  const RemoveFromCart = (product) => {
+    dispatch(removeFromCart(product.id));
+  };
 
+  const CloseCart = () => {
+    router.push("/marketplace");
+  };
 
-
-const Checkout = () => {
- 
-  
-  router.push(`/checkout/`)
-}
-
-const AddToCart = (item) => {
-  const payload = {
-    itemName: item.name,
-    item_image: item.picture,
-    item_price: item.price,
-    itemId : item.id,
-    userId: item.userId || "",
-    storeName: item.store,
-    currency: item.currency,
-    quantity: item.amount,
-    storeId : item.storeId,
-    item_type: item.item_type ? item.item_type : "",
-    
-} 
-console.log(payload, "Cart payload 65");
-try {
-  dispatch(addToCart(payload))
-  
-  
-} catch (error) {
-  console.log(error);
-}
-
-};
-
-const RemoveFromCart = (product) => {
-  dispatch(removeFromCart(product.id));
-};
-
-const CloseCart = () => {
-  router.push('/marketplace')
-}
-
-const DeleteFromCart = (product) => {
-  dispatch(deleteFromCart(product.id));
-};
+  const DeleteFromCart = (product) => {
+    dispatch(deleteFromCart(product.id));
+  };
   return (
     <div className={indexStyles.cartBackground}>
       <Head>
@@ -122,8 +87,8 @@ const DeleteFromCart = (product) => {
       </Head>
       <Header route="groceryList" />
       <Header2 />
-      <SideNav/> 
-       {/* <TimeBar />  */}
+      <SideNav />
+      {/* <TimeBar />  */}
       <div className={indexStyles.cartBody}>
         <div className={indexStyles.cartMainBody}>
           <div className={indexStyles.arrowBack}>
@@ -136,22 +101,26 @@ const DeleteFromCart = (product) => {
               />
               <label onClick={props.closeCart}>Back</label>
             </div>
-            <h2 style={{fontWeight: '1000px', fontSize: '3.5rem' }}>Cart</h2>
+            <h2 style={{ fontWeight: "1000px", fontSize: "3.5rem" }}>Cart</h2>
           </div>
-          {!mobileScreen ? <div className={indexStyles.cartHeader}>
-            <div className={indexStyles.cartHeaderRow1}>
-              <label>Product</label>
+          {!mobileScreen ? (
+            <div className={indexStyles.cartHeader}>
+              <div className={indexStyles.cartHeaderRow1}>
+                <label>Product</label>
+              </div>
+              <div className={indexStyles.cartHeaderRow2}>
+                <label>Quantity</label>
+              </div>
+              <div className={indexStyles.cartHeaderRow3}>
+                <label>Store</label>
+                <label>Price</label>
+                <label>Subtotal</label>
+                <label>Action</label>
+              </div>
             </div>
-            <div className={indexStyles.cartHeaderRow2}>
-              <label>Quantity</label>
-            </div>
-            <div className={indexStyles.cartHeaderRow3}>
-              <label>Store</label>
-              <label>Price</label>
-              <label>Subtotal</label>
-              <label>Action</label>
-            </div>
-          </div> : "Items"}
+          ) : (
+            "Items"
+          )}
           {items?.map((item) => (
             <CartItem
               key={item.itemId}
@@ -162,11 +131,11 @@ const DeleteFromCart = (product) => {
               price={item.price}
               store={item.storeName}
               totalAmount={item.totalAmount}
-              storeId = {item.storeId}
-              userId ={item.userId}             
-              onAdd= {AddToCart}
-              onRemove= {RemoveFromCart}
-              onDelete = {DeleteFromCart}
+              storeId={item.storeId}
+              userId={item.userId}
+              onAdd={AddToCart}
+              onRemove={RemoveFromCart}
+              onDelete={DeleteFromCart}
             />
           ))}
           <div className={indexStyles.couponPrice}>
@@ -182,19 +151,26 @@ const DeleteFromCart = (product) => {
             <div className={indexStyles.priceRow}>
               <div className={indexStyles.mainPrice}>
                 <label>Total Price</label>
-                
-                <label >{`${Number(totalPrice) == "NAN" ? 0 : Number(totalPrice)} `} </label>
+
+                <label>
+                  {`${Number(totalPrice) == "NAN" ? 0 : Number(totalPrice)} `}{" "}
+                </label>
               </div>
               <div className={indexStyles.checkoutButton}>
                 <div className={indexStyles.whiteButton}>
                   {hasItems ? (
-                    <label onClick={() => dispatch(EmptyCart()) }>Clear Cart</label>
+                    <label onClick={() => dispatch(EmptyCart())}>
+                      Clear Cart
+                    </label>
                   ) : (
                     <label onClick={CloseCart}>Add Items</label>
                   )}
                 </div>
                 {hasItems && (
-                  <div className={indexStyles.greenButton} onClick = {() => Checkout()}>
+                  <div
+                    className={indexStyles.greenButton}
+                    onClick={() => Checkout()}
+                  >
                     <label>Check Out</label>
                   </div>
                 )}
@@ -207,6 +183,5 @@ const DeleteFromCart = (product) => {
     </div>
   );
 }
-
 
 export default Cart;

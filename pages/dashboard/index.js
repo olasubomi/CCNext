@@ -62,7 +62,6 @@ const DashboardHomePage = (props) => {
     "Nov",
     "Dec",
   ];
-  console.log(props);
 
   useEffect(() => {
     if (props.auth.authUser !== null) {
@@ -81,24 +80,20 @@ const DashboardHomePage = (props) => {
             setPublicMealCountState(res.data.data?.docCount);
           });
         axios.get("/analytics/get-orders-count/").then((res) => {
-          console.log(res.data);
           setOrderCountState(res.data.data?.docCount);
         });
         axios
           .get("/analytics/get-products-count/?publicly_available=Pending")
           .then((res) => {
-            console.log(res.data);
             setPendingProductCountState(res.data.data?.docCount);
           });
         axios
           .get("/analytics/get-products-count/?publicly_available=Public")
           .then((res) => {
-            console.log(res.data);
             setPublicProductCountState(res.data.data?.docCount);
           });
       } else if (props.auth.authUser.user_type === "customer") {
         axios.get("/analytics/get-orders-count/").then((res) => {
-          console.log(res.data);
         });
         axios
           .get("/analytics/get-meals-count/?user=" + props.auth.authUser._id)
@@ -106,7 +101,6 @@ const DashboardHomePage = (props) => {
             setMealCountState(res.data.data?.docCount);
           });
         axios.get("/analytics/get-orders-count/").then((res) => {
-          console.log(res.data);
         });
       }
 
@@ -127,7 +121,6 @@ const DashboardHomePage = (props) => {
 
       if (props.auth.authUser.user_type === "admin") {
         axios.get(url).then((data) => {
-          console.log(data.data);
           if (data.data.data) {
             if (searchType === "Meal") {
               setSuggestionsState(data.data.data.meals);
@@ -164,12 +157,10 @@ const DashboardHomePage = (props) => {
   const dispatch = useDispatch();
 
   const reduxState = useSelector((state) => {
-    console.log(state);
   });
 
   // const selectedUserType = useSelector((state) => state.userType.selectedUserType);
   const userTypeArray = useSelector((state) => state.Auth.authUser.user_type);
-  // console.log(userTypeArray, 'selectedUserType_')
   useEffect(() => {
     if (props.auth.authUser?.user_type) {
       // dispatch(setUserType(props.auth.authUser?.user_type));
@@ -197,7 +188,6 @@ const DashboardHomePage = (props) => {
       }
     }
     axios.get(url).then((data) => {
-      console.log(data.data);
       if (data.data.data) {
         if (type === "Meal") {
           setSuggestionsState(data.data.data.meals);
@@ -213,7 +203,6 @@ const DashboardHomePage = (props) => {
   function toggleChangeType() {
     setChangeTypeState(!changeType);
   }
-  console.log(props.auth.authUser, "login");
   return (
     <div
       className={

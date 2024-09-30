@@ -66,100 +66,14 @@ function Header(props) {
   // const numberOfCartItems = items.reduce((curNumber, item) => {
   //   return curNumber + item.amount;
   // }, 0);
-  const {cartItems: items} = useSelector((state) => { console.log("line 21 Cart Page", state)
-  return state.Cart});
+  const { cartItems: items } = useSelector((state) => {
+    return state.Cart;
+  });
 
   const goToCart = () => {
-    router.push('/cart');
-  }
-  console.log(notifications, "notific0ppjations");
-  // useEffect(() => {
-  //   props.getPath(router.pathname);
-  //   let token = localStorage.getItem("x-auth-token");
-  //   let time = localStorage.getItem("in");
-  //   if (token !== null && time !== null) {
-  //     const msInMinute = 60 * 1000;
-  //     let min = Math.abs(Date.now() - time) / msInMinute;
-  //     if (min > 30) {
-  //       localStorage.removeItem("x-auth-token");
-  //       localStorage.removeItem("in");
-  //       localStorage.removeItem("user");
-  //     } else {
-  //       let user = JSON.parse(localStorage.getItem("user"));
-  //       props.verifyToken(user, token);
-  //     }
-  //   } else {
-  //     localStorage.removeItem("x-auth-token");
-  //     localStorage.removeItem("in");
-  //     localStorage.removeItem("user");
-  //   }
-  // }, []);
+    router.push("/cart");
+  };
 
-  // function updateLogInStatus(customerId, username) {
-  //   console.log("updates log in status before");
-  //   setIsAuthenticatedState(true);
-  //   setCustomerIdState(customerId);
-  //   setUsernameState(username);
-
-  //   setIsAuthenticatedState(true);
-  //   setCustomerIdState(customerId);
-  //   setUsernameState(username);
-  // }
-
-  //////////////////////////////////////////////////////////////////////
-  // CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-  //   <a href="/" ref={ref} onClick={(e) => { e.preventDefault(); onClick(e); }}>
-  //     {children}
-  //     &#x25bc;
-  //   </a>
-  // ));
-  //////////////////////////////////////////////////////////////////////
-  // function handleLogout(e) {
-  //   if (e === "6") {
-  //     //clear cookie cache
-  //     // useEffect(() => {
-  //     // You now have access to `window`
-  //     // window.localStorage.setItem("userToken", null);
-  //     // window.localStorage.setItem("userRole", null);
-  //     // }, [])
-
-  //     // var url = "/api/logout";
-  //     var url = `https://chopchowserver.vercel.app/api/logout`;
-
-  //     fetch(url, {
-  //       method: "GET",
-  //       credentials: "same-origin",
-  //       headers: {
-  //         "Content-type": "application/json",
-  //       },
-  //     })
-  //       .then((response) => {
-  //         response.json().then((res) => {
-  //           console.log("logout response is:");
-  //           console.log(res);
-  //           console.log("should print body");
-  //           console.log(res.data);
-  //           if (res.data === "success") {
-  //             console.log("comes to turn off authentication state");
-  //             setIsAuthenticatedState(false);
-  //           }
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         console.log("fails to authenticate app page");
-  //         console.log(err);
-  //       });
-
-  //     setIsAuthenticatedState(false);
-  //     window.location.reload(false);
-  //   } else if (e === "4") {
-  //     // this.props.history.push('/SuggestMeal');
-  //   }
-  // }
-
-  // function handleDashborad() {
-  //   // this.props.history.push('/admin');
-  // }
   const updateNotification = async (id) => {
     try {
       const response = await axios.patch(`/user/notification/${id}`);
@@ -190,15 +104,14 @@ function Header(props) {
 
   const getOneItemById = async (id, commentId) => {
     try {
-      console.log(id);
       const response = await axios.get(`/items/item/${id}`);
       const data = Array.isArray(response.data?.data)
         ? response.data?.data[0]
         : {};
-      console.log(response.data);
       if (data?.item_name) {
         router.push(
-          `/${data?.item_type === "Meal" ? "meal" : "product"}/${data?.item_name
+          `/${data?.item_type === "Meal" ? "meal" : "product"}/${
+            data?.item_name
           }?id=${commentId}`
         );
       }
@@ -207,27 +120,11 @@ function Header(props) {
     }
   };
 
-  // function toggleUserDetails(e) {
-  //   document.getElementById("userdetails").style.display = "grid";
-  //   document.addEventListener("click", (e) => {
-  //     if (document.getElementById("userdetails")) {
-  //       if (
-  //         e.target.id !== "userImg" &&
-  //         e.target.id !== "usericon" &&
-  //         e.target.id !== "userName"
-  //       )
-  //         document.getElementById("userdetails").style.display = "none";
-  //     }
-  //   });
-
-  //   window.event.returnValue = false;
-  // }
   const dropdownRef = useRef(null);
   const toggleUserDetails = () => {
     if (!openUserDetails || dropdownRef.current === event.target) {
       setOpenUserDetails(!openUserDetails);
     }
-    console.log("hello");
   };
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -243,7 +140,6 @@ function Header(props) {
   function toggleLogin() {
     setOpenLoginState(!openLogin);
   }
-  console.log(user, "userr");
   const menu = [
     {
       name: "Home",
@@ -274,14 +170,12 @@ function Header(props) {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user" || "{}"));
     setUser(user);
-    console.log(user, "user");
   }, []);
 
   const getAllNotifications = async () => {
     try {
       const response = await axios.get(`/user/notifications`);
       setNotifications(response.data.data);
-      console.log(response.data.data, "noti");
     } catch (err) {
       console.log(err);
     }
@@ -304,20 +198,9 @@ function Header(props) {
     };
   }, [prevScrollPos]);
 
-  console.log(authUser?.profile_picture, 'auth user')
   return (
     <>
       <div className={styles.navbar}>
-        {/* <div className="alert">
-          {props.message.length > 0 &&
-          <div className="alert-success">
-            {props.message}
-          </div>}
-        {props.error.length > 0 &&
-          <div className="alert-danger">
-            {props.error}
-          </div>}
-        </div> */}
         <div className={styles.navbar_top_container}>
           <div className={styles.navbar_top}>
             <div className={styles.navbar_top_logo_search}>
@@ -343,7 +226,7 @@ function Header(props) {
               ) : (
                 <div className={styles.navbar_user_info} ref={dropdownRef}>
                   {authUser?.profile_picture !== "" &&
-                    authUser?.profile_picture !== undefined ? (
+                  authUser?.profile_picture !== undefined ? (
                     <div onClick={toggleUserDetails}>
                       {" "}
                       <Image
@@ -507,12 +390,15 @@ function Header(props) {
                   </>
                 )}
                 <div>
-                {matches ? (
+                  {matches ? (
                     <>
                       {!props.auth.isAuthenticated && authUser === null ? (
                         ""
                       ) : (
-                        <div style={{ display: "flex" , cursor:"pointer"}} onClick={goToCart}>
+                        <div
+                          style={{ display: "flex", cursor: "pointer" }}
+                          onClick={goToCart}
+                        >
                           <div>
                             <CartIcon
                               id="notImg"
@@ -534,7 +420,7 @@ function Header(props) {
                               right: "2px",
                             }}
                           >
-                            {items?.length > 0 ?items.length: 0}
+                            {items?.length > 0 ? items.length : 0}
                           </span>
                         </div>
                       )}
@@ -544,7 +430,11 @@ function Header(props) {
                       {!props.auth.isAuthenticated && authUser === null ? (
                         ""
                       ) : (
-                        <div className={styles.show} style={{  cursor:"pointer"}} onClick={goToCart}>
+                        <div
+                          className={styles.show}
+                          style={{ cursor: "pointer" }}
+                          onClick={goToCart}
+                        >
                           <div>
                             <CartIcon
                               id="notImg"
@@ -560,7 +450,7 @@ function Header(props) {
                               right: "2px",
                             }}
                           >
-                            {items?.length > 0 ? items.length: 0}
+                            {items?.length > 0 ? items.length : 0}
                           </span>
                         </div>
                       )}
@@ -623,7 +513,7 @@ function Header(props) {
                                 </h3>
                                 <p className={styles.summary_notification_link}>
                                   {elem.message.includes("Suggested Meal") ? (
-                                    <p onClick={() => { }}>View Item</p>
+                                    <p onClick={() => {}}>View Item</p>
                                   ) : (
                                     <p>View Comment</p>
                                   )}
@@ -739,10 +629,17 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
-  const currentPathname = pathname || '';
+  const currentPathname = pathname || "";
 
   useEffect(() => {
-    const sublinkPaths = ["/marketplace/stores", "/marketplace/meals", "/marketplace/products", "/marketplace/utensils", "/marketplace/categories", "/marketplace/collections"];
+    const sublinkPaths = [
+      "/marketplace/stores",
+      "/marketplace/meals",
+      "/marketplace/products",
+      "/marketplace/utensils",
+      "/marketplace/categories",
+      "/marketplace/collections",
+    ];
     const index = sublinkPaths.indexOf(currentPathname);
     if (index !== -1) {
       setActiveSubLink(index + 1);
@@ -753,11 +650,15 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
     setActiveSubLink(id);
     setOpenDropdown(true);
     if (id > 0) {
-      const sublinkPaths = ["/marketplace/stores", "/marketplace/meals", "/marketplace/products", "/marketplace/utensils"];
+      const sublinkPaths = [
+        "/marketplace/stores",
+        "/marketplace/meals",
+        "/marketplace/products",
+        "/marketplace/utensils",
+      ];
       router.push(sublinkPaths[id - 1]);
     }
   };
-
 
   const handleMarketplaceClick = () => {
     if (currentPathname === "/marketplace") {
@@ -819,16 +720,11 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
               </span>
             </li>
             <li className={styles.navbar_main_link}>
-              <NavLink href="/chef">
-                Chefs
-              </NavLink>
+              <NavLink href="/chef">Chefs</NavLink>
             </li>
             <li className={styles.navbar_main_link}>
-            <NavLink href="/blog">
-                Blog
-              </NavLink>
+              <NavLink href="/blog">Blog</NavLink>
             </li>
-
           </ul>
 
           <div className={styles.navbar_main_grocery}>
@@ -859,70 +755,72 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
       </div>
 
       {matches
-        ? openDropdown && currentPathname.startsWith("/marketplace") && (
-          <div className={styles.subheader}>
-            <div className={styles.subrow}>
-              {[
-                "",
-                "Stores",
-                "Meals",
-                "Products",
-                "Utensils",
-                "Categories",
-                "Collection",
-              ].map((elem, index, array) => (
-                <span key={index} style={{ display: "flex", gap: "1.4rem" }}>
-                  <p
-                    className={
-                      activeSubLink === index
-                        ? styles.activesubrowText
-                        : styles.subrowText
-                    }
-                    onClick={() => handleActiveSubLink(index)}
-                  >
-                    {elem}
-                  </p>
-                  {index > 0 && index !== array.length - 1 && (
-                    <p className={styles.subrowText}>|</p>
-                  )}
-                </span>
-              ))}
-            </div>
-          </div>
-        )
-        : openDropdown && currentPathname.startsWith("/marketplace") && (
-          <div className={styles.subheader} ref={dropdownRef}>
-            <div className={styles.subrow}>
-              {[
-                "",
-                "Stores",
-                "Meals",
-                "Products",
-                "Utensils",
-                "Categories",
-                "Collection",
-              ].map((elem, index, array) => (
-                <>
-                  <span key={index}>
+        ? openDropdown &&
+          currentPathname.startsWith("/marketplace") && (
+            <div className={styles.subheader}>
+              <div className={styles.subrow}>
+                {[
+                  "",
+                  "Stores",
+                  "Meals",
+                  "Products",
+                  "Utensils",
+                  "Categories",
+                  "Collection",
+                ].map((elem, index, array) => (
+                  <span key={index} style={{ display: "flex", gap: "1.4rem" }}>
                     <p
                       className={
                         activeSubLink === index
-                          ? styles.activesubrowText2
+                          ? styles.activesubrowText
                           : styles.subrowText
                       }
                       onClick={() => handleActiveSubLink(index)}
                     >
                       {elem}
                     </p>
+                    {index > 0 && index !== array.length - 1 && (
+                      <p className={styles.subrowText}>|</p>
+                    )}
                   </span>
-                  {index > 0 && index !== array.length - 1 && (
-                    <div className={styles.dropdownborder} />
-                  )}
-                </>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )
+        : openDropdown &&
+          currentPathname.startsWith("/marketplace") && (
+            <div className={styles.subheader} ref={dropdownRef}>
+              <div className={styles.subrow}>
+                {[
+                  "",
+                  "Stores",
+                  "Meals",
+                  "Products",
+                  "Utensils",
+                  "Categories",
+                  "Collection",
+                ].map((elem, index, array) => (
+                  <>
+                    <span key={index}>
+                      <p
+                        className={
+                          activeSubLink === index
+                            ? styles.activesubrowText2
+                            : styles.subrowText
+                        }
+                        onClick={() => handleActiveSubLink(index)}
+                      >
+                        {elem}
+                      </p>
+                    </span>
+                    {index > 0 && index !== array.length - 1 && (
+                      <div className={styles.dropdownborder} />
+                    )}
+                  </>
+                ))}
+              </div>
+            </div>
+          )}
     </div>
   );
 }

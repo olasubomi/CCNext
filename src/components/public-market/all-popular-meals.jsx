@@ -50,10 +50,9 @@ export const AllPopularMeals = () => {
   const [activeLetter, setActiveLetter] = useState(null);
   const [availableLetters, setAvailableLetters] = useState([]);
 
-
   const handleActiveLetter = (elem, id) => {
     setActiveLetter(id);
-    fetchMeals(currentPage, elem)
+    fetchMeals(currentPage, elem);
   };
   const matches = useMediaQuery("(min-width: 920px)");
   const [meals, setMeals] = useState([]);
@@ -105,44 +104,40 @@ export const AllPopularMeals = () => {
     status: "",
   });
 
-
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
-    
-    if(qty == 0 ){
+
+    if (qty == 0) {
       toast.error("Pls add a quantity");
-    }else{
-       const payload = {
-        userId: (user && user._id) ? user._id : "",
-        storeId : "",
+    } else {
+      const payload = {
+        userId: user && user._id ? user._id : "",
+        storeId: "",
         store_name: "",
-        itemId : item._id,
+        itemId: item._id,
         quantity: qty,
         item_price: item.item_price,
         currency: "$",
         item_image: item.itemImage0,
         itemName: item.item_name,
-        item_type:  item.item_type? item.item_type : "Meal",
-    } 
-    console.log(payload, "Cart payload line 76 top-selling-product");
-    try {
-      dispatch(addToCart(payload))
-      setOpenList(false);
-      setShow(false);
-      setOpenModal(false);
-    } catch (error) {
-      console.log(error);
+        item_type: item.item_type ? item.item_type : "Meal",
+      };
+      try {
+        dispatch(addToCart(payload));
+        setOpenList(false);
+        setShow(false);
+        setOpenModal(false);
+      } catch (error) {
+        console.log(error);
+      }
     }
-    };
-  
-  
   };
 
   const fetchMeals = async (page) => {
     setIsLoading(true);
     const params = {};
     if (activeLetter) {
-      params.startsWith = activeLetter
+      params.startsWith = activeLetter;
     }
     try {
       const response = await axios(
@@ -150,7 +145,7 @@ export const AllPopularMeals = () => {
         {
           method: "GET",
           params: {
-            ...params
+            ...params,
           },
           headers: {
             "Content-Type": "application/json",
@@ -167,7 +162,9 @@ export const AllPopularMeals = () => {
 
       setMeals(filteredItem);
       setTotalPages(totalPages);
-      const lettersWithStores = filteredItem.map(item => item.item_name[0].toUpperCase());
+      const lettersWithStores = filteredItem.map((item) =>
+        item.item_name[0].toUpperCase()
+      );
       setAvailableLetters([...new Set(lettersWithStores)]);
     } catch (error) {
       console.log(error);
@@ -189,7 +186,7 @@ export const AllPopularMeals = () => {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchGroceryList();
@@ -365,7 +362,7 @@ export const AllPopularMeals = () => {
               setShow={setShow}
               addToCart={addItemToCart}
               serve={serve}
-            setServe={setServe}
+              setServe={setServe}
             />
           ) : (
             <IndividualModal
@@ -385,7 +382,7 @@ export const AllPopularMeals = () => {
               setShow={setShow}
               addToCart={addItemToCart}
               serve={serve}
-            setServe={setServe}
+              setServe={setServe}
             />
           )}
         </div>

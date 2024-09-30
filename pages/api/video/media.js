@@ -22,7 +22,6 @@ const downloadVideo = async (videoUrl, filename) => {
 
 export default async (req, res) => {
   try {
-    console.log(req.method, req.body, "payload");
     let buffer = "";
     if (!fs.existsSync(TEMP_DIR)) {
       fs.mkdirSync(TEMP_DIR);
@@ -42,14 +41,6 @@ export default async (req, res) => {
         if (!ytdl.validateURL(url)) {
           return res.status(400).json({ error: "Invalid YouTube URL" });
         }
-        console.log("extracting");
-        // const promise = await youtubedl(url, { dumpSingleJson: true })
-        // const _url = Array.isArray(promise?.requested_formats) && promise.requested_formats.length >= 1 && promise.requested_formats[1]?.hasOwnProperty("url") && promise.requested_formats[1]?.url;
-        // if (!_url) throw new Error("Unable to extract video from url")
-        // await downloadVideo(_url, file_name);
-        // const videoFile = fs.readFileSync(filePath)
-        // buffer = videoFile
-        // fs.unlinkSync(filePath);
       } else if (videoURL.hostname.includes("instagram.com")) {
         const dataList = await instagramDl(url);
         await downloadVideo(dataList[0]?.download_link, file_name);

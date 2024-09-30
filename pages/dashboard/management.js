@@ -183,8 +183,6 @@ const Management = () => {
       return userInventory.filter((elem) => elem.item_type === "Meal");
   };
 
-  console.log(storeId, "storeid");
-
   const filteredProduct = () => {
     return userInventory.filter((elem) => elem.item_type === "Product");
   };
@@ -195,12 +193,10 @@ const Management = () => {
   const [filteredMeals, setFilteredMeals] = useState(filteredItem());
   const [filteredProducts, setFilteredProducts] = useState(filteredProduct());
 
-  console.log(filteredMeals, "filteredMeals--");
   useEffect(() => {
     setFilteredMeals(filteredItem());
     setFilteredProducts(filteredProduct());
   }, []);
-  console.log(filteredProducts, "jjd");
 
   function handleDayAvailabiltyChange(value, day, when) {
     setTimes({ ...times, [day]: { ...times[day], [when]: value } });
@@ -262,7 +258,6 @@ const Management = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}")?._id;
       const response = await axios.get(`/inventory/user-inventory/${user}`);
-      console.log(response, "reponse");
       const resp = response.data.data.inventoryItems.map((element) => {
         return {
           label: element.item.item_name,
@@ -277,7 +272,6 @@ const Management = () => {
           item_id: element?.item?._id,
         };
       });
-      console.log(resp, "respsp");
       setUserInventory(resp);
       setFilteredMeals(
         resp.filter(
@@ -289,7 +283,6 @@ const Management = () => {
           (item) => item.item_type === "Product" && item?.store === storeId
         )
       );
-      console.log(response.data.data, "resp");
     } catch (error) {
       console.log(error);
     }
@@ -310,7 +303,6 @@ const Management = () => {
       console.log(error);
     }
   };
-  console.log(formState, "storee");
   useEffect(() => {
     const path = router.asPath.split("#");
     if (Array.isArray(path) && path.length === 2) {
@@ -399,7 +391,6 @@ const Management = () => {
     if (storeId) {
       try {
         const response = await axios.get(`/stores/getstore/${storeId}`);
-        console.log("store", response.data.data);
         const store = response?.data?.data?.supplier;
         setFormState({
           store_name: store?.store_name,
@@ -446,7 +437,6 @@ const Management = () => {
             };
           });
           setTimes(time);
-         
         }
       } catch (error) {
         console.log(error);
@@ -454,20 +444,6 @@ const Management = () => {
     }
   }, [storeId]);
 
-  // const handleClaimStore = async () => {
-  //   try {
-  //     const user = JSON.parse(localStorage.getItem("user") || "{}");
-  //     const form = new FormData();
-  //     for (let element in formState) {
-  //       if (formState[element]) {
-  //         form.append(element, formState[element]);
-  //       }
-  //     }
-  //     form.append("store_owner", user?._id);
-  //     const response = await axios.put(`/stores/updatestore/${storeId}`, form);
-  //     console.log(response.data.data, "response");
-  //   } catch (e) {}
-  // };
   const [categories, setCategories] = useState([
     {
       label: "All categories",
@@ -514,7 +490,6 @@ const Management = () => {
         }
       }
       const response = await axios.put(`/stores/updatestore/${storeId}`, form);
-      console.log(response.data.data, "responses");
       handleGetStore();
       toast.success("Store updated");
     } catch (e) {}
@@ -1445,7 +1420,11 @@ const Management = () => {
                 </div>
               )}
               {active === 5 && (
-                <SubAdmins storeId={storeId} storeData={storeData} handleGetStore={handleGetStore} />
+                <SubAdmins
+                  storeId={storeId}
+                  storeData={storeData}
+                  handleGetStore={handleGetStore}
+                />
               )}
               {active === 6 && (
                 <div>

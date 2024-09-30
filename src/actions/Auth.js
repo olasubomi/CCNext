@@ -43,32 +43,16 @@ export const userSignUp = (form) => async (dispatch) => {
       userData = data.data.user;
 
       console.log("__ SignUp api res __ : ", data);
-      // axios.defaults.headers.common["Authorization"] =
-      //   "Bearer " + data.data.token;
 
-      // localStorage.setItem("x-auth-token", data.data.token);
-      // localStorage.setItem("in", Date.now());
       console.log("auth user signup", data.data.user);
       localStorage.setItem("user", JSON.stringify(data.data.user));
 
       dispatch({ type: FETCH_SUCCESS });
-      // dispatch({ type: USER_TOKEN_SET, payload: data.data.token });
-      //dispatch({ type: USER_ROLE, payload: data.data.user.user_type });
+
       dispatch({ type: USER_DATA, payload: data.data.user });
-      //dispatch({ type: USER_ROLE, payload: data.data.role });
-      // dispatch({ type: IS_AUTHENTICATED, payload: true });
+
       dispatch({ type: IS_VERIFIED, payload: false });
 
-      // dispatch({ type: USER_DATA, payload: data.user });
-      // dispatch({ type: CUSTOMER_ID, payload: data.customerID });
-      //console.log("verified email action creator", data)
-      // console.log("verified email action creator", data.data.user.is_verified)
-      // if(data.data.user.is_verified === "true") {
-      //   toast.success("Registration successful")
-      // }else{
-      //   toast.success("A verifiation link was sent to your mail")
-      // }
-      //toast.success("Congratulation!!!!! You have Successfully Signed Up, Kindly Verify your account");
     })
     .catch((err) => {
       console.error("xxx userSignUp Request ERROR xxx");
