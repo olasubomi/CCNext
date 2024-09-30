@@ -51,7 +51,7 @@ const Footer = ({
                   Dashboard
                 </li>
               </Link>
-              <Link href="/grocerylist" className={styles.footer_row_2_navigation_link} >
+              <Link href="/grocery" className={styles.footer_row_2_navigation_link} >
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Grocery List
