@@ -254,7 +254,6 @@ const GroceryPage = () => {
       if (itemsToAdd.measurement) {
         payload.groceryList.groceryItems.measurement = itemsToAdd.measurement;
       }
-      console.log(payload, "payload");
       try {
         const response = await axios(`/groceries`, {
           method: "post",
