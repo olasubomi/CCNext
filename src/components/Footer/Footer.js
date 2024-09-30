@@ -141,7 +141,7 @@ const Footer = ({
           </div>
           <div className={styles.footer_top_social_links}>
             <Link
-              href="https://www.instagram.com/preciselighting.ng/"
+              href="https://www.instagram.com/chopchowmarket/"
               aria-label="Check out our instagram page"
               target="_blank"
             >
@@ -149,7 +149,7 @@ const Footer = ({
               <Image className={styles.footer_top_social_link_logo} src={instagramImg} alt='instagram' />
             </Link>
             <Link
-              href="https://www.facebook.com/Preciselighting"
+              href="https://www.facebook.com/profile.php?id=100063699115096"
               aria-label="Check out our facebook page"
               target="_blank"
             >
