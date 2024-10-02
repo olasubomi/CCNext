@@ -143,8 +143,8 @@ export default function HomePage() {
 
           >
             <div className="overlay">
-              <h1>Plan your meals ahead of time with Chop Chow subscriptions</h1>
-              <button>Subscribe now</button>
+              <h1>Plan your meals ahead of time with Chop Chow's grocery list</h1>
+              <button onClick={() => router.push("/grocery")}>Use now</button>
             </div>
           </div>
 
@@ -191,7 +191,8 @@ export default function HomePage() {
             <div className="overlay overlay_flex">
               <div className="overlay_flex_1">
                 <h1>AI-Powered
-                  Label Scanner</h1>
+                  Label Scanner 
+                  coming soon...</h1>
                 <div className="section-list">
                   {
                     [
