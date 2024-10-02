@@ -8,6 +8,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Image from "next/image";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useMediaQuery } from "../../hooks/usemediaquery";
+import Select from 'react-select';
+
 
 // const CustomSwitch = ({ checked, onChange }) => {
 //   return (
@@ -301,6 +303,12 @@ export default function TransferToInventory(props) {
   } else {
     console.log("not in stock");
   }
+
+  const storeOptions = allStores?.map((elem) => ({
+    value: elem?._id,
+    label: elem?.store_name,
+  }));
+
   return (
     <>
       {show && (
@@ -373,27 +381,33 @@ export default function TransferToInventory(props) {
                 >
                   Which store are you sending from?
                 </label>
-                <select
-                  className={styles.selected}
-                  onChange={(e) => {
-                    setFormState({
-                      ...formState,
-                      ["storeId"]: e.target.value,
-                    });
-                    setSelectedStore(e.target.value);
-                  }}
-                  name="storeId"
-                  value={formState.storeId}
-                >
-                  <option disabled selected>
-                    Select...
-                  </option>
-                  {allStores?.map((elem) => (
-                    <option key={elem?._id} value={elem?._id}>
-                      {elem?.store_name}
-                    </option>
-                  ))}
-                </select>
+
+                <div className={styles.dropdown}>
+                  {/* <button className={styles.dropdownButton}>Select Stores</button> */}
+                  <div>
+                    {allStores?.map((store) => (
+                      <label key={store._id} style={{ marginLeft: '1rem' }}>
+                        <input
+                          style={{ marginRight: '.5rem' }}
+                          type="checkbox"
+                          value={store._id}
+                          checked={formState.storeId?.includes(store._id) || false} // Ensure it doesn't throw an error if undefined
+                          onChange={(e) => {
+                            const storeIds = formState.storeId || []; // Initialize as an array if it's undefined
+                            const selectedValues = e.target.checked
+                              ? [...storeIds, e.target.value] // Add storeId
+                              : storeIds.filter(id => id !== e.target.value); // Remove storeId
+
+                            setFormState({ ...formState, storeId: selectedValues });
+                            setSelectedStore(selectedValues);
+                          }}
+                        />
+                        {store.store_name}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
               </div>
               <div className={styles.transToIn_meal_types}>
                 <p>Choose Meal Type</p>
