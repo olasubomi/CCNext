@@ -262,7 +262,8 @@ const Management = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}")?._id;
       const response = await axios.get(`/inventory/user-inventory/${user}`);
-      console.log(response, "reponse");
+      console.log(response, "response");
+  
       const resp = response.data.data.inventoryItems.map((element) => {
         return {
           label: element.item.item_name,
@@ -271,30 +272,34 @@ const Management = () => {
           price: element?.item.item_price
             ? `${element?.item.item_price}`
             : "No Price",
-          store: element?.storeId?._id || "No store",
+          stores: element?.storeId.map(store => store._id) || ["No store"], 
           item_type: element?.item_type,
-          currency: element.storeId?.currency?.symbol,
+          currency: element.storeId?.[0]?.currency?.symbol || "$",
           item_id: element?.item?._id,
         };
       });
-      console.log(resp, "respsp");
-      setUserInventory(resp);
+  
+      console.log(resp, "resp");
+  
       setFilteredMeals(
         resp.filter(
-          (item) => item.item_type === "Meal" && item?.store === storeId
+          (item) => item.item_type === "Meal" && item?.stores.includes(storeId)
         )
       );
       setFilteredProducts(
         resp.filter(
-          (item) => item.item_type === "Product" && item?.store === storeId
+          (item) => item.item_type === "Product" && item?.stores.includes(storeId)
         )
       );
+  
+      setUserInventory(resp);
       console.log(response.data.data, "resp");
     } catch (error) {
       console.log(error);
     }
     return name;
   };
+  
 
   const getStore = async (name) => {
     try {
