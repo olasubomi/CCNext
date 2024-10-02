@@ -1,4 +1,4 @@
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Header, { Header2 } from "../../src/components/Header/Header";
 import { ShareOutlined } from "@mui/icons-material";
 import { FBIcon, InstaIcon, ReditIcon, TwitterIcon, WhappIcon } from "../../src/components/icons";
@@ -9,6 +9,7 @@ import { FacebookShareButton, InstapaperShareButton, RedditShareButton, TwitterS
 
 
 export default function SingleBlog() {
+    const router = useRouter();
     const params = useParams();
     const [post, setPosts] = useState({
         single: {},
@@ -106,6 +107,7 @@ export default function SingleBlog() {
                                 {
                                     post.data.map((entry, idx) => (
                                         <div
+                                            onClick={() => router.push(`/blog/${entry._id}`)}
                                             className="recent-blog-2 single">
                                             <img src={entry?.featured_image} />
                                             <div className="user-feature-footer-3">

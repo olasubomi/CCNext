@@ -148,7 +148,7 @@ function Header(props) {
     },
     {
       name: "Order",
-      path: "/dashboard/orders/orders",
+      path: "#",
       icon: <Order3Icon color={activeNav === 1 ? "#F47900" : "#6D6D6D"} />,
     },
     {

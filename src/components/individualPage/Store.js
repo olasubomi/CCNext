@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./store.module.css";
 
 import Head from "next/head";
@@ -17,11 +17,13 @@ import sale from "../../../public/assets/store_pics/sale.jpg";
 import { FormModal } from "../modal/form-modal";
 import { SuccessModal } from "../suggest-store/success-modal";
 import { useRouter } from "next/navigation";
+import axios from "../../util/Api";
 
 function Store(props) {
   const [openModal, setOpenModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [selectItem, setSelectItem] = useState({});
+  const [selectedStore, setSelectedStore] = useState([])
   const router = useRouter();
 
   function handleSearch(e) {
@@ -53,6 +55,20 @@ function Store(props) {
     return props?.items?.filter((data) => data?.item_type === "Product");
   };
   console.log(filteredProducts(), "filtered");
+
+  const fetchOneStore = async (storeId) => {
+    try {
+      const response = await axios.get(`/inventory/get-store-inventory/${storeId}`);
+      setSelectedStore(response.data.data);
+    } catch (error) {
+      console.error("Error fetching store inventory:", error);
+    }
+  };
+  useEffect(() => {
+    fetchOneStore(props?.store?._id)
+  }, [])
+
+  console.log(selectedStore, 'inventory items')
   return (
     <>
       <Head>
@@ -202,57 +218,60 @@ function Store(props) {
             </div>
             <div className={styles.productcard_col_2}>
               <div className={styles.productcard_productcards}>
-                {filteredItem()
-                  ?.slice(0, 6)
-                  ?.map((data, index) => {
+                {selectedStore?.inventory
+                  ?.filter((elem) => elem.item_type === 'Meal')
+                  .map((meal, idx) => {
                     return (
-                      <div
-                        key={index}
-                        className={styles.productcard_productcard}
-                      >
-                        <div
-                          className={
-                            styles.productcard_productcard_img_container
-                          }
-                        >
+                      <div key={idx}
+                        className={styles.productcard_productcard}>
+                        <div className={
+                          styles.productcard_productcard_img_container
+                        }>
                           <img
-                            priority
-                            src={data?.itemImage0}
-                            alt="Store"
+                            src={
+                              meal?.item?.itemImage0
+                                ? meal.item.itemImage0
+                                : !meal?.item?.itemImage0 &&
+                                  meal?.item?.item_type === "Meal"
+                                  ? "/assets/store_pics/no-image-meal.png"
+                                  : !meal?.item?.itemImage0 && meal?.item?.item_type === "Product"
+                                    ? "/assets/store_pics/no-image-product.png"
+                                    : !meal?.item?.itemImage0 && meal?.item?.item_type === "Utensil"
+                                      ? "/assets/store_pics/no-image-utensil.png"
+                                      : ""
+                            }
+                            alt=""
                             className={styles.productcard_productcard_img}
                           />
                         </div>
+
                         <div className={styles.productcard_productcard_col}>
-                          <h6 className={styles.productcard_productcard_name}>
-                            {data.item_name}
-                          </h6>
-                          <p className={styles.productcard_productcard_price}>
-                            {data.item_price
-                              ? props?.store?.currency?.symbol + data.item_price
-                              : "N/A"}
-                          </p>
+                          <p className={styles.productcard_productcard_name}>{meal?.item?.item_name}</p>
+
                         </div>
                         <div className={styles.productcard_productcard_col}>
-                          <div className={styles.rate}>
-                            {Array(5)
-                              .fill("_")
-                              .map((_, idx) => (
-                                <GrStar
-                                  size={20}
-                                  key={idx + _}
-                                  color={
-                                    data.average_rating > idx
-                                      ? "#04D505"
-                                      : "rgba(0,0,0,0.5)"
-                                  }
-                                />
-                              ))}
+                          <div className={styles.store_review_rating_icons}>
+                            <div className={styles.rate}>
+                              {Array(5)
+                                .fill("_")
+                                .map((_, idx) => (
+                                  <GrStar
+                                    size={20}
+                                    key={idx + _}
+                                    color={
+                                      meal?.average_rating > idx
+                                        ? "#04D505"
+                                        : "rgba(0,0,0,0.5)"
+                                    }
+                                  />
+                                ))}
+                            </div>
                           </div>
-
-                          <p
-                            className={styles.productcard_productcard_duration}
-                          >
-                            {data.meal_cook_time ? data.meal_cook_time : 0} min
+                          <p className={styles.name2}>
+                            {meal?.item?.item_price
+                              ? meal?.storeId?.currency?.symbol +
+                              `${meal?.item?.item_price}`
+                              : "N/A"}
                           </p>
                         </div>
                       </div>
@@ -268,30 +287,36 @@ function Store(props) {
             </div>
             <div className={styles.productcard_col_2}>
               <div className={styles.productcard_productcards}>
-                {filteredProducts()
-                  ?.slice(0, 6)
-                  ?.map((data, index) => {
+                {selectedStore?.inventory
+                  ?.filter((elem) => elem.item_type === 'Product')
+                  .map((meal, idx) => {
                     return (
-                      <div
-                        key={index}
-                        className={styles.productcard_productcard}
-                      >
-                        <div
-                          className={
-                            styles.productcard_productcard_img_container
-                          }
-                        >
+                      <div key={idx}
+                        className={styles.productcard_productcard}>
+                        <div className={
+                          styles.productcard_productcard_img_container
+                        }>
                           <img
-                            priority
-                            src={data.itemImage0}
-                            alt="Store"
+                            src={
+                              meal?.item?.itemImage0
+                                ? meal.item.itemImage0
+                                : !meal?.item?.itemImage0 &&
+                                  meal?.item?.item_type === "Meal"
+                                  ? "/assets/store_pics/no-image-meal.png"
+                                  : !meal?.item?.itemImage0 && meal?.item?.item_type === "Product"
+                                    ? "/assets/store_pics/no-image-product.png"
+                                    : !meal?.item?.itemImage0 && meal?.item?.item_type === "Utensil"
+                                      ? "/assets/store_pics/no-image-utensil.png"
+                                      : ""
+                            }
+                            alt=""
                             className={styles.productcard_productcard_img}
                           />
                         </div>
+
                         <div className={styles.productcard_productcard_col}>
-                          <h6 className={styles.productcard_productcard_name}>
-                            {data.item_name}
-                          </h6>
+                          <p className={styles.productcard_productcard_name}>{meal?.item?.item_name}</p>
+
                         </div>
                         <div className={styles.productcard_productcard_col}>
                           <div className={styles.store_review_rating_icons}>
@@ -303,7 +328,7 @@ function Store(props) {
                                     size={20}
                                     key={idx + _}
                                     color={
-                                      data.average_rating > idx
+                                      meal?.average_rating > idx
                                         ? "#04D505"
                                         : "rgba(0,0,0,0.5)"
                                     }
@@ -311,9 +336,10 @@ function Store(props) {
                                 ))}
                             </div>
                           </div>
-                          <p className={styles.productcard_productcard_price}>
-                            {data.item_price
-                              ? props?.store?.currency?.symbol + data.item_price
+                          <p className={styles.name2}>
+                            {meal?.item?.item_price
+                              ? meal?.storeId?.currency?.symbol +
+                              `${meal?.item?.item_price}`
                               : "N/A"}
                           </p>
                         </div>

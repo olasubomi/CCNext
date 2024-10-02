@@ -1,11 +1,11 @@
 import Head from "next/head";
-import Meal from '../../src/components/individualPage/Meal';
-import GoBack from '../../src/components/CommonComponents/goBack';
-import styles from "../../src/components/individualPage/meal.module.css";
-import Header, { Header2 } from '../../src/components/Header/Header';
-import Sidenav from '../../src/components/Header/sidenav';
+import Meal from '../../../src/components/individualPage/Meal';
+import GoBack from '../../../src/components/CommonComponents/goBack';
+import styles from "../../../src/components/individualPage/meal.module.css";
+import Header, { Header2 } from '../../../src/components/Header/Header';
+import Sidenav from '../../../src/components/Header/sidenav';
 import { useEffect, useState } from 'react';
-import axios from '../../src/util/Api';
+import axios from '../../../src/util/Api';
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 

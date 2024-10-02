@@ -12,6 +12,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
   const router = useRouter();
   const [show, setShow] = useState(false);
   const [value, setValue] = useState("");
+  const [chef, setChef] = useState("");
   const [items, setItems] = useState([]);
   const [store, setStore] = useState([]);
   const [showCategory, setShowCategory] = useState(false);
@@ -62,6 +63,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
           price: element?.item_price ? `$${element?.item_price}` : "No Price",
           store: element?.store_available?.store_name || "No store",
           item_type: element?.item_type,
+          meal_chef: element?.meal_chef
         };
       });
       setItems(resp);
@@ -264,6 +266,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
                                   id: "",
                                 });
                                 setValue(elem.label);
+                                setChef(elem.meal_chef)
                               }}
                               style={{ cursor: "pointer" }}
                             >
@@ -373,7 +376,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
                     ele.item_type === "Meal" && ele.item_type !== "Product"
                 )
               ) {
-                router.push(`/meal/${value}`);
+                router.push(`/meal/${chef}/${value}`);
               } else if (
                 items.filter(
                   (ele) =>
