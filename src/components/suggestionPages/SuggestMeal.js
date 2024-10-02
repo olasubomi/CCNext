@@ -153,7 +153,7 @@ class SuggestMealForm extends Component {
       openModal: false,
       stepInputs: [],
       itemIntro: "",
-      action: "Embed Link",
+      action: "Upload video locally",
       videoData: {
         socialUrl: "",
         video: {},
@@ -2090,7 +2090,7 @@ class SuggestMealForm extends Component {
             <div>
               <ul>
                 {
-                  ['Embed Link', 'Upload video locally'].map((element) => (
+                  ['Upload video locally'].map((element) => (
                     <li
                       style={{
                         borderBottom: this.state.action === element ? "2px solid #F47900" : ""
