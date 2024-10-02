@@ -93,15 +93,13 @@ const DashboardHomePage = (props) => {
             setPublicProductCountState(res.data.data?.docCount);
           });
       } else if (props.auth.authUser.user_type === "customer") {
-        axios.get("/analytics/get-orders-count/").then((res) => {
-        });
+        axios.get("/analytics/get-orders-count/").then((res) => {});
         axios
           .get("/analytics/get-meals-count/?user=" + props.auth.authUser._id)
           .then((res) => {
             setMealCountState(res.data.data?.docCount);
           });
-        axios.get("/analytics/get-orders-count/").then((res) => {
-        });
+        axios.get("/analytics/get-orders-count/").then((res) => {});
       }
 
       let url;
@@ -156,19 +154,23 @@ const DashboardHomePage = (props) => {
   };
   const dispatch = useDispatch();
 
-  const reduxState = useSelector((state) => {
-  });
+  const reduxState = useSelector((state) => {});
 
-  // const selectedUserType = useSelector((state) => state.userType.selectedUserType);
-  const userTypeArray = useSelector((state) => state.Auth.authUser.user_type);
+  const selectedUserType = useSelector(
+    (state) => state.userType.selectedUserType
+  );
+  const userTypeArray = useSelector(
+    (state) => state?.Auth?.authUser?.user_type
+  );
   useEffect(() => {
     if (props.auth.authUser?.user_type) {
-      // dispatch(setUserType(props.auth.authUser?.user_type));
+      dispatch(setUserType(props.auth.authUser?.user_type));
     }
   }, [props.auth.authUser?.user_type, dispatch]);
 
   function toggleMode(type) {
-    // dispatch(setSelectedUserType(type));
+    dispatch(setSelectedUserType(type));
+    toggleChangeType();
   }
 
   function handleSearchType(type) {
@@ -270,7 +272,7 @@ const DashboardHomePage = (props) => {
 
               <div className={styles.select_container}>
                 <div onClick={toggleChangeType} className={styles.select_box}>
-                  {/* This displays the currently selected type <p>{selectedUserType}</p> */}
+                  <p>{selectedUserType || userTypeArray[0]}</p>
                   <ArrowDropDownIcon className={styles.select_box_icon} />
                 </div>
                 {changeType && (
@@ -283,8 +285,6 @@ const DashboardHomePage = (props) => {
                       <p onClick={() => toggleMode("supplier")}>Supplier</p>
                     )}
                     <p onClick={() => toggleMode("driver")}>Driver</p>
-                    {/* <p onClick={() => handleSearchType('Kitchen Utensil')}>Kitchen Utensils</p> */}
-                    {/* <p onClick={() => handleSearchType('Category')}>Category</p> */}
                   </div>
                 )}
               </div>

@@ -5,30 +5,14 @@ const initialState = {
   selectedUserType: "",
 };
 
-const userSlice = createSlice({
-    name: 'userType',
-    initialState,
-    reducers: {
-        setUserType(state, action) {
-            state.user_type = action.payload;
-            
-        },
-        setSelectedUserType(state, action) {
-            return {
-                ...state,
-                selectedUserType: action.payload
-            }
-        },
-        initializeUserType(state, action) {
-            return {
-                ...state,
-                selectedUserType: action.payload
-            }
-        },
+const userTypeSlice = createSlice({
+  name: "userType",
+  initialState,
+  reducers: {
+    setUserType(state, action) {
+      state.user_type = action.payload;
     },
     setSelectedUserType(state, action) {
-      console.log("Action fired ");
-      console.log({ action });
       return {
         ...state,
         selectedUserType: action.payload,
@@ -44,6 +28,6 @@ const userSlice = createSlice({
 });
 
 export const { setUserType, setSelectedUserType, initializeUserType } =
-  userSlice.actions;
+  userTypeSlice.actions;
 
-export default userSlice.reducer;
+export default userTypeSlice.reducer;
