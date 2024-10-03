@@ -470,7 +470,6 @@ const Management = () => {
   const deleteItem = async (id) => {
     try {
       const res = await axios.delete(`/items/delete/${id}`);
-      console.log("resss", res);
       if (res.status === 202) {
         getItem();
         toast.success("Deleted successful");
@@ -520,12 +519,10 @@ const Management = () => {
   }, [times]);
 
   const deleteInventory = async (id, item_id) => {
-    console.log(id, "idd");
     try {
       const res = await axios.delete(
         `/inventory/delete-inventory/${id}?item_id=${item_id}`
       );
-      console.log("resss", res);
       if (res.status === 202) {
         fetchOneUserInventory();
         toast.success("Deleted successful");
