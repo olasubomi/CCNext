@@ -90,7 +90,7 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -218,12 +218,12 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
                       ? meal.item.itemImage0
                       : !meal?.item?.itemImage0 &&
                         meal?.item?.item_type === "Meal"
-                      ? "/assets/store_pics/no-image-meal.png"
-                      :!meal?.item?.itemImage0 && meal?.item?.item_type === "Product"
-                      ? "/assets/store_pics/no-image-product.png"
-                      : !meal?.item?.itemImage0 && meal?.item?.item_type === "Utensil"
-                      ? "/assets/store_pics/no-image-utensil.png"
-                      : ""
+                        ? "/assets/store_pics/no-image-meal.png"
+                        : !meal?.item?.itemImage0 && meal?.item?.item_type === "Product"
+                          ? "/assets/store_pics/no-image-product.png"
+                          : !meal?.item?.itemImage0 && meal?.item?.item_type === "Utensil"
+                            ? "/assets/store_pics/no-image-utensil.png"
+                            : ""
                   }
                   alt=""
                   className={styles.img}
@@ -231,13 +231,24 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
 
                 <div className={styles.flex}>
                   <p className={styles.name}>{meal?.item?.item_name}</p>
-                  <p className={styles.name2}>
-                    {" "}
-                    {meal?.item?.item_price
-                      ? meal?.storeId?.currency?.symbol +
-                        `${meal?.item?.item_price}`
-                      : "N/A"}
-                  </p>
+
+                  {meal?.item?.item_price ? (
+                    (() => {
+                      const filteredStores = meal.storeId.filter(
+                        (elem) => elem.store_name === storeInfo?.name
+                      );
+                      if (filteredStores.length === 0) {
+                        return <p>No matching stores found.</p>;
+                      }
+                      return filteredStores.map((elem) => (
+                        <p key={elem.storeId} className={styles.name2}>
+                          {elem.currency.symbol} {meal?.item.item_price}
+                        </p>
+                      ));
+                    })()
+                  ) : (
+                    <p>N/A</p>
+                  )}
                 </div>
               </div>
             );
