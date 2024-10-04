@@ -391,12 +391,12 @@ export default function TransferToInventory(props) {
                           style={{ marginRight: '.5rem' }}
                           type="checkbox"
                           value={store._id}
-                          checked={formState.storeId?.includes(store._id) || false} // Ensure it doesn't throw an error if undefined
+                          checked={formState.storeId?.includes(store._id) || false}
                           onChange={(e) => {
-                            const storeIds = formState.storeId || []; // Initialize as an array if it's undefined
+                            const storeIds = formState.storeId || [];
                             const selectedValues = e.target.checked
-                              ? [...storeIds, e.target.value] // Add storeId
-                              : storeIds.filter(id => id !== e.target.value); // Remove storeId
+                              ? [...storeIds, e.target.value]
+                              : storeIds.filter(id => id !== e.target.value);
 
                             setFormState({ ...formState, storeId: selectedValues });
                             setSelectedStore(selectedValues);
