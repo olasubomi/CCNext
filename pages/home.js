@@ -191,7 +191,7 @@ export default function HomePage() {
             <div className="overlay overlay_flex">
               <div className="overlay_flex_1">
                 <h1>AI-Powered
-                  Label Scanner 
+                  Label Scanner
                   coming soon...</h1>
                 <div className="section-list">
                   {
@@ -230,38 +230,37 @@ export default function HomePage() {
           </div>
         </Carousel>
       </div>
-      <section className="home-section-one home-section">
-        <div className="section-one-child">
-          <div>
-            <h2>
-              Share your recipes <br />
-              with friends
-            </h2>
-            <button onClick={() => router.push("/suggestmeal")}> Suggest A Recipe</button>
+      <section className="home-section-one">
+        <div className="home-section">
+          <div className="section-one-child">
+            <div>
+              <h2>
+                Share your recipes <br />
+                with friends
+              </h2>
+              <button onClick={() => router.push("/suggestmeal")}> Suggest A Recipe</button>
+            </div>
+            <div className="section-image" />
           </div>
-          <div className="section-image" />
         </div>
       </section>
 
+      <section className="section_4_box">
+        <div className="chef_glow_box" />
+        <div className="home-section">
+          <div className="chefs_box_container">
+            <h1>Connect with food lovers and chefs<br className="br" /> from all over the world</h1>
+            <div className="chefs_box_container_div">
+              <div className="chefs_box_container_dropdown">
+                <input placeholder="Enter the name"
+                  onClick={() => setIsOpen(true)} onChange={(event) => {
+                    let debounce_fun = debounce(function () {
+                      handleQuery(event.target.value);
+                    }, 500);
 
-      <div className="section-four-container">
-        <section className="section-four" />
-        <div className="box-1 box" />
-        <div className="box-2 box" />
-        <div className="box-3 box" />
-        <div className="box-4 box" />
-        <div className="section-content">
-          <div className="section-box">
-            <h1>Connect with food lovers and chefs from all over the world</h1>
-            <div className="section_box_container">
-              <div className="section_box_container_cont">
-                <input onClick={() => setIsOpen(true)} onChange={(event) => {
-                  let debounce_fun = debounce(function () {
-                    handleQuery(event.target.value);
-                  }, 500);
-
-                  debounce_fun();
-                }} placeholder="Enter the name" className="section_box_container_input" />
+                    debounce_fun();
+                  }}
+                />
                 {
                   isOpen && users.length ? <div ref={ref} className="chef_box_dropdown">
                     {
@@ -272,85 +271,69 @@ export default function HomePage() {
                   </div> : null
                 }
               </div>
-              <button onClick={() => setIsOpen(true)} className="section_box_container_button">Find Now</button>
+              <button>Find Now</button>
             </div>
-            <div className="section_box_image_cont" />
-            {/* <div className="section-image" /> */}
-            {/* <div className="section-footer">
-              {[
-                {
-                  title:
-                    "Get meal Suggestion based on the items in your grocery list",
-                  image: meal,
-                },
-                {
-                  title:
-                    "Add Ingredients from your meals to your list in a click with our AI function",
-                  image: plus,
-                },
-              ].map((element) => (
-                <div key={element.title}>
-                  <Image src={element.image} />
-                  <p>{element.title}</p>
-                </div>
-              ))}
-            </div> */}
+            <div className="chefs_box_image" />
           </div>
         </div>
-      </div>
-      <section className="section-six">
-        <div>
-          <h1>Sign Up with Us Today</h1>
-          <div className="user-types">
-            {
-              [
-                'Supplier',
-                'Customer',
-                'Driver'
-              ].map((element, idx) => <button onClick={() => setActive(idx + 1)} key={element}>{element}</button>
-              )
-            }
+        <div className="chef_glow_box_2" />
+      </section>
 
-          </div>
-          <div className="chef-box"
-            style={{
-              backgroundColor: active === 1 ? '#1B5218' : active === 2 ? "#FF6D00" : '#A6DAE5',
-            }}
-          >
-            <h2
-              style={{
-                color: active === 3 ? '#000' : "#fff"
-
-              }}
-            >
-              {active === 1 ? "Join our network of suppliers" : active === 2 ? "Join Our Esteemed Customers" : "Become A Driver"}
-            </h2>
-            <p
-              style={{
-                color: active === 3 ? '#000' : "#fff"
-
-              }}
-            >
+      <section className="section-six_box">
+        <div className="section-six">
+          <div>
+            <h1>Sign Up with Us Today</h1>
+            <div className="user-types">
               {
-                active === 1 ?
-                  "Get discovered by food lovers from all over the world who trust ChowChop as the right place to go when looking for the best recipes and freshest groceries."
-                  : active === 2
-                    ? "Drive with purpose: Join our team as a ChowChop driver and play a vital role in connecting culinary delights with doorsteps. Enjoy flexibility, earn rewards, and be the driving force behind a seamless delivery experience for our valued customers!"
-                    : "We offer a wide range of delivery options that make it easy to get your favorite products delivered to you. If you want to schedule an order for a specific time, or if you just want to get it immediately, we've got you covered."
+                [
+                  'Supplier',
+                  'Customer',
+                  'Driver'
+                ].map((element, idx) => <button onClick={() => setActive(idx + 1)} key={element}>{element}</button>
+                )
               }
-            </p>
-            <button>Get Started</button>
-            <div className="chef-image"
+
+            </div>
+            <div className="chef-box"
               style={{
-                backgroundImage: active === 1 ? 'url(./assets/home/chef.png)' : active === 2 ? 'url(./assets/home/card-2.png)' : 'url(./assets/home/card-3.png)',
+                backgroundColor: active === 1 ? '#1B5218' : active === 2 ? "#FF6D00" : '#A6DAE5',
               }}
-            />
+            >
+              <h2
+                style={{
+                  color: active === 3 ? '#000' : "#fff"
+
+                }}
+              >
+                {active === 1 ? "Join our network of suppliers" : active === 2 ? "Join Our Esteemed Customers" : "Become A Driver"}
+              </h2>
+              <p
+                style={{
+                  color: active === 3 ? '#000' : "#fff"
+
+                }}
+              >
+                {
+                  active === 1 ?
+                    "Get discovered by food lovers from all over the world who trust ChowChop as the right place to go when looking for the best recipes and freshest groceries."
+                    : active === 2
+                      ? "Drive with purpose: Join our team as a ChowChop driver and play a vital role in connecting culinary delights with doorsteps. Enjoy flexibility, earn rewards, and be the driving force behind a seamless delivery experience for our valued customers!"
+                      : "We offer a wide range of delivery options that make it easy to get your favorite products delivered to you. If you want to schedule an order for a specific time, or if you just want to get it immediately, we've got you covered."
+                }
+              </p>
+              <button>Get Started</button>
+              <div className="chef-image"
+                style={{
+                  backgroundImage: active === 1 ? 'url(./assets/home/chef.png)' : active === 2 ? 'url(./assets/home/card-2.png)' : 'url(./assets/home/card-3.png)',
+                }}
+              />
+            </div>
           </div>
         </div>
       </section>
 
       <section className="section_cities">
-        <div className="section_cities_box" />
+        {/* <div className="section_cities_box" /> */}
         <h1>We are nearer than you think</h1>
 
         <div className="section-eight-container">
@@ -361,6 +344,7 @@ export default function HomePage() {
           }
         </div>
       </section>
+      <div className="section_footer_box" />
 
 
 
