@@ -9,6 +9,10 @@ import { IndividualModal } from "../modal/individual-meal-product";
 import { useMediaQuery } from "../../hooks/usemediaquery";
 import { Mealmodal } from "../mobile/meal-modal";
 import { Element, scroller } from "react-scroll";
+import { ScrollableElement } from "../smooth-scroll-link";
+import mealImg from "../../../public/assets/store_pics/no-image-meal.png";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
@@ -20,6 +24,8 @@ export const PopularMeals = () => {
   const [show, setShow] = useState(false);
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
+  const [serve, setServe] = useState(0);
+  const dispatch = useDispatch();
   const ref = useRef(null);
 
   // const loadMore = () => {
@@ -43,7 +49,6 @@ export const PopularMeals = () => {
       },
     };
 
-    console.log(payload, "payload");
     try {
       const response = await axios(`/groceries`, {
         method: "post",
@@ -54,6 +59,45 @@ export const PopularMeals = () => {
       setShow(false);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  // Generate a random integer between a specified range
+  // function getRandomInt(min, max) {
+  //   min = Math.ceil(min);
+  //   max = Math.floor(max);
+  //   return Math.floor(Math.random() * (max - min + 1)) + min;
+  // }
+
+  // Example usage to generate an ID between 1 and 1000
+  //let randomId = getRandomInt(1, 1000);
+
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (qty == 0) {
+      toast.error("Pls add a quantity");
+    } else {
+      const payload = {
+        userId: user && user._id ? user._id : "",
+        storeId: "",
+        store_name: "",
+        itemId: item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: "$",
+        item_image: item.itemImage0,
+        itemName: item.item_name,
+        item_type: item.item_type ? item.item_type : "Meal",
+      };
+      try {
+        dispatch(addToCart(payload));
+        setOpenList(false);
+        setShow(false);
+        setOpenModal(false);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   const [details, setDetails] = useState({
@@ -70,7 +114,9 @@ export const PopularMeals = () => {
   const fetchMeals = async (page) => {
     try {
       const response = await axios(
-        `/items/${page ? page : currentPage}?type=Meal&status=Public&limit=4&average_rating=1`,
+        `/items/${
+          page ? page : currentPage
+        }?type=Meal&status=Public&limit=4&average_rating=1`,
         {
           method: "GET",
           headers: {
@@ -80,14 +126,15 @@ export const PopularMeals = () => {
       );
       const totalItems = response.data.data.count;
       const allItems = response.data.data.items;
-      console.log(response.data.data.items, 'hello')
 
       // const filteredItems = allItems.filter((meal) => meal.average_rating);
 
       const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
 
-      setMeals(prev => [...prev, ...allItems]);
-      setUniqueItemIds(new Set([...uniqueItemIds, ...newItems.map((item) => item._id)]));
+      setMeals((prev) => [...prev, ...allItems]);
+      setUniqueItemIds(
+        new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
+      );
 
       setHasMoreData(totalItems > currentPage * 8);
     } catch (error) {
@@ -110,15 +157,13 @@ export const PopularMeals = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchGroceryList();
   }, []);
   const filteredMeals = meals.filter((meal) => meal.average_rating);
-  console.log(filteredMeals, "fill");
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -208,6 +253,9 @@ export const PopularMeals = () => {
             setQuantity={setQuantity}
             quantity={quantity}
             setShow={setShow}
+            addToCart={addItemToCart}
+            serve={serve}
+            setServe={setServe}
           />
         ) : (
           <IndividualModal
@@ -225,13 +273,13 @@ export const PopularMeals = () => {
             setQuantity={setQuantity}
             quantity={quantity}
             setShow={setShow}
+            addToCart={addItemToCart}
+            serve={serve}
+            setServe={setServe}
           />
         )}
       </div>
-      <p
-        className={styles.view}
-        onClick={hasMoreData ? loadMore : () => { }}
-      >
+      <p className={styles.view} onClick={hasMoreData ? loadMore : () => {}}>
         View More
       </p>
       <div className={styles.border} />

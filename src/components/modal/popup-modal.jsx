@@ -40,6 +40,8 @@ export const Modal = ({
       user: JSON.parse(localStorage.getItem("user") || "{}"),
       _id: localGrocery?.length + 1,
     };
+
+    console.log("handleCreate line 88 popup modal", payload)
     const chechHasAlreadyBeenAddedLocally = localGrocery.some(
       (ele) => ele?.listName === listName
     );
@@ -85,7 +87,7 @@ export const Modal = ({
 
   const handleCreate = async () => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-
+    console.log("handleCreate line 88 popup modal", user)
     if (!Boolean(Object.keys(user).length)) {
       handleCreateLocalGroceryList();
     } else {

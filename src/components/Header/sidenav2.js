@@ -12,7 +12,7 @@ import {
   ChatIcon,
   AdminMgtIcon,
   MealRequestIcon,
-  BlogSettingsIcon
+  BlogSettingsIcon,
 } from "../icons";
 import Link from "next/link";
 import styles from "./header.module.css";
@@ -25,10 +25,11 @@ import icon from "../../../public/assets/fa_shopping-basket.png";
 import Image from "next/image";
 
 function SideNav2(props) {
-  console.log(props, "pops");
   const { isOpen, setIsOpen } = useAuth();
   const router = useRouter();
-  const selectedUserType = useSelector((state) => state.userType.selectedUserType);
+  const selectedUserType = useSelector(
+    (state) => state?.userType?.selectedUserType
+  );
 
   function toggleLogin() {
     props.setOpenLogin(!props.openLogin);
@@ -46,7 +47,6 @@ function SideNav2(props) {
     const data = JSON.parse(localStorage.getItem("user") || "{}");
     setUser(data);
   }, []);
-  console.log(user, 'user')
   return (
     <div className={styles.sidenav_links_con}>
       <div className={styles.sidenav_links}>
@@ -107,13 +107,14 @@ function SideNav2(props) {
                 </div>
               </div>
             </Link>
-            {selectedUserType === 'admin' && (
+            {selectedUserType === "admin" && (
               <Link href="/dashboard/suggestedmeals">
                 <div
                   className={
                     styles.sidenav_link +
                     " " +
-                    (props.path === "/dashboard/suggestedmeals" && styles.active)
+                    (props.path === "/dashboard/suggestedmeals" &&
+                      styles.active)
                   }
                 >
                   <HotMealIcon style={styles.sidenav_link_icon} />
@@ -122,7 +123,7 @@ function SideNav2(props) {
               </Link>
             )}
 
-            {selectedUserType === 'supplier' &&(
+            {selectedUserType === "supplier" && (
               <Link href="/dashboard/suggestedmeals">
                 <div
                   className={
@@ -162,7 +163,7 @@ function SideNav2(props) {
               </div>
             </Link>
 
-            {selectedUserType === 'supplier' && (
+            {selectedUserType === "supplier" && (
               <Link href="/dashboard/manage-store">
                 <div
                   className={

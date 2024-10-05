@@ -5,15 +5,12 @@ import GoBack from "../../../src/components/CommonComponents/goBack";
 import styles from "../../../src/components/grocery/grocery.module.css";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { BsArrowRight } from "react-icons/bs";
-import girl from "../../../public/assets/icons/girl.jpg";
 import Image from "next/image";
 import noteGif from "../../../public/assets/icons/gif.gif";
 import { DropDownSelect } from "../../../src/components/select/select";
 import { useEffect, useState } from "react";
 import { Modal } from "../../../src/components/modal/popup-modal";
 import Footer from "../../../src/components/Footer/Footer";
-import yellow from "../../../public/assets/meal_pics/yellow.jpeg";
-import Frame from "../../../public/assets/logos/Frame.png";
 import { IoMdCloseCircle } from "react-icons/io";
 import axios from "../../../src/util/Api";
 import { toast } from "react-toastify";
@@ -35,7 +32,7 @@ import {
 } from "../../../src/util";
 import { LoginPrompt } from "../../../src/components/modal/login-prompt";
 import { UserIcon } from "../../../src/components/icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const GroceryPage = () => {
   const customStyles = {
@@ -90,13 +87,23 @@ const GroceryPage = () => {
   const [value, setValue] = useState("");
   const [measurement_value, setMeasurementValue] = useState("");
   const [measurement_value_1, setMeasurementValue_1] = useState("");
-  const { addItemsToCart, cartItems, cartHasItem } = useCart();
+  const { addItemsToCart, cartItems, cartHasItem, AddSelectionToCart } =
+    useCart();
   const [isUserOnline, setIsUserOnline] = useState(true);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedItem, setSelectedItem] = useState([]);
 
-  console.log(itemList, "itemListitemList");
+  const [selectList, setSelectList] = useState([]);
 
+  const dispatch = useDispatch();
+
+  //console.log(itemList, "itemListitemList");
+  console.log(selectedItem, "selectedItem");
+  console.log(selectList, "selectList");
+
+  console.log(selectAll, "selectAll");
   const [measurements, setMeasurement] = useState([
     {
       value: "",
@@ -129,6 +136,84 @@ const GroceryPage = () => {
   }
 
   const id = router?.query?.id;
+
+  // const SelectItemLogic = (payload, toggle, e) => {
+  // let item = selectedItem.map(x => x.name == payload.item_name)
+  // if(item){
+  //   setSelectedItem([...selectedItem, {
+  //     id: payload._id,
+  //     name: payload.item_name,
+  //     selected: true,
+  //   }])
+  // }
+
+  //   addItemsToCart({...element?.item, qty: element?.quantity}, true);
+  // }
+  const handleSelectAllChange = () => {
+    const newSelectAll = !selectAll;
+    setSelectAll(newSelectAll);
+    SelectAllItemLogic(selectList);
+  };
+
+  const AddSelectionToCartList = () => {
+    AddSelectionToCart();
+    const updatedItems = selectedItem.map((item) => ({
+      ...item,
+      selected: !item.selected,
+    }));
+
+    setSelectedItem(updatedItems);
+    setSelectAll(false);
+  };
+
+  const SelectAllItemLogic = (selectList) => {
+    const updatedItems = selectList.map((item) => ({
+      id: item.item._id,
+      name: item.item.item_name,
+      selected: !selectAll, // Toggle based on the current selectAll state
+    }));
+
+    setSelectedItem(updatedItems);
+
+    // Add or remove all items to/from the cart
+    selectList.forEach((item) => {
+      console.log("addItemsToCart", item);
+      addItemsToCart({ ...item.item, qty: item.quantity }, true);
+    });
+  };
+
+  const SelectItemLogic = (payload) => {
+    const itemExists = selectedItem.some((x) => x.name === payload.item_name);
+
+    if (!itemExists) {
+      setSelectedItem([
+        ...selectedItem,
+        {
+          id: payload._id,
+          name: payload.item_name,
+          selected: true,
+        },
+      ]);
+      addItemsToCart(payload, true);
+    } else {
+      const updatedItems = selectedItem.map((item) =>
+        item.name === payload.item_name
+          ? { ...item, selected: !item.selected }
+          : item
+      );
+      setSelectedItem(updatedItems);
+      addItemsToCart(payload, true);
+
+      const allSelected = updatedItems.every((item) => item.selected);
+      const allDeselected = updatedItems.every((item) => !item.selected);
+
+      if (allSelected) {
+        setSelectAll(true);
+      } else if (allDeselected) {
+        setSelectAll(false);
+      }
+    }
+  };
 
   const getAllMeasurement = async (newPage) => {
     try {
@@ -169,7 +254,6 @@ const GroceryPage = () => {
       if (itemsToAdd.measurement) {
         payload.groceryList.groceryItems.measurement = itemsToAdd.measurement;
       }
-      console.log(payload, "payload");
       try {
         const response = await axios(`/groceries`, {
           method: "post",
@@ -219,6 +303,8 @@ const GroceryPage = () => {
         });
         console.log(response.data, "yello");
         setItemList(response.data.data.data.groceryList);
+        setSelectList(response.data.data.data.groceryList.groceryItems);
+        //setItemList(response.data.data.data.groceryList.groceryItems.map(item => ({ ...item.item, selected: false })));
         setSimilar(response.data.data.data.similar[0]);
       } catch (error) {
         console.log(error);
@@ -446,12 +532,6 @@ const GroceryPage = () => {
           {itemList.description}
         </p>
         <div className={styles.top1}>
-          {/* <Image
-              src={girl}
-              width={40}
-              height={40}
-              className={styles.person}
-            /> */}
           {authUser?.profile_picture !== "" &&
           authUser?.profile_picture !== undefined ? (
             <Image
@@ -678,6 +758,9 @@ const GroceryPage = () => {
                     >
                       <input
                         type="checkbox"
+                        value="select_all"
+                        checked={selectAll}
+                        onClick={() => handleSelectAllChange()}
                         style={{ width: "2rem", height: "2rem" }}
                       />
                       <p style={{ marginLeft: "2rem" }}>Select All</p>
@@ -769,10 +852,18 @@ const GroceryPage = () => {
                             <input
                               name={element?.item?.item_name}
                               value={element?.item?.item_name}
-                              checked={cartHasItem(element.item)}
-                              onChange={(e) => {
-                                addItemsToCart(element.item, true);
-                              }}
+                              checked={
+                                !!selectedItem.find(
+                                  (item) =>
+                                    item.name === element?.item?.item_name
+                                )?.selected
+                              }
+                              onChange={(e) =>
+                                SelectItemLogic({
+                                  ...element?.item,
+                                  qty: element?.quantity,
+                                })
+                              }
                               type="checkbox"
                               style={{
                                 marginRight: "2rem",
@@ -915,10 +1006,15 @@ const GroceryPage = () => {
               />
             )}
             <div className={styles.cartBtns}>
-              <button className={styles.cartbtn1}>Add Selection to Cart</button>
+              <button
+                className={styles.cartbtn1}
+                onClick={() => AddSelectionToCartList()}
+              >
+                Add Selection to Cart
+              </button>
               <button
                 className={styles.cartbtn2}
-                onClick={() => router.push("/cart/cart")}
+                onClick={() => router.push("/cart")}
               >
                 Go to Cart
                 <BsArrowRight size={18} />

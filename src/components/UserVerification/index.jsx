@@ -1,47 +1,39 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import EmailIcon from "@mui/icons-material/Email";
-import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "90%", // Adjusted width for responsiveness
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '90%', // Adjusted width for responsiveness
   maxWidth: 800, // Maximum width for larger screens
-  bgcolor: "background.paper",
-  borderRadius: "8px",
+  bgcolor: 'background.paper',
+  borderRadius: '8px',
 };
 
-export default function UserVerification({
-  next,
-  open,
-  setOpen,
-  type,
-  setType,
-  sendEmailOTPFunc,
-  requestnumberFunc,
-  formState,
-  setFormState,
-}) {
+export default function UserVerification({ next, open, setOpen, type, setType, sendEmailOTPFunc, requestnumberFunc, formState, setFormState }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  console.log("type",type);
+  localStorage.setItem("type", type );
   const handleOption = (title) => {
     console.log(title);
-    setType(title);
-    if (title == "Email Address") {
-      sendEmailOTPFunc({ email: formState?.email });
-    } else {
-      requestnumberFunc({ number: formState?.phone_number });
+    setType(title)
+    if(title  =='Email Address') { 
+      sendEmailOTPFunc({ email: formState?.email})
+    }else {
+      requestnumberFunc({ number: formState?.phone_number})
     }
 
     return setTimeout(() => {
-      next();
-    }, 1000);
+      next();   
+      }, 1000);
   };
 
   return (
@@ -52,7 +44,7 @@ export default function UserVerification({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={style} style={{borderRadius:"8px"}}>
           <div className="verification">
             <h3>Complete your Registration</h3>
             <p>
@@ -66,22 +58,22 @@ export default function UserVerification({
               <h4>Choose Verification Option</h4>
               <VerificationOption
                 Icon={EmailIcon}
-                title={"Email Address"}
+                title={'Email Address'}
                 subtitle={
-                  "We will send a verification code to your email address, kindly open your mail to continue."
+                  'We will send a verification code to your email address, kindly open your mail to continue.'
                 }
                 action={handleOption}
-                buttonTitle={"Verify with Email"}
+                buttonTitle={'Verify with Email'}
               />
               <hr />
               <VerificationOption
                 Icon={PhoneAndroidIcon}
-                title={"Phone Number"}
+                title={'Phone Number'}
                 subtitle={
-                  "To Verify with your phone number, Enter the code that will be sent to your registered phone number "
+                  'To Verify with your phone number, Enter the code that will be sent to your registered phone number '
                 }
                 action={handleOption}
-                buttonTitle={"Verify with Phone Number"}
+                buttonTitle={'Verify with Phone Number'}
               />
             </div>
           </div>

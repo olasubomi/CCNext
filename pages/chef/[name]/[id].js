@@ -2,7 +2,7 @@ import Head from "next/head";
 import Header, { Header2 } from "../../../src/components/Header/Header";
 import GoBack from "../../../src/components/CommonComponents/goBack";
 import Footer from "../../../src/components/Footer/Footer";
-import styles from "../../../src/components/chef/chef.module.css"
+import styles from "../../../src/components/chef/chef.module.css";
 import Image from "next/image";
 import { BsFillShareFill } from "react-icons/bs";
 import {
@@ -31,10 +31,9 @@ const ChefPage = () => {
       const response = await axios(`/user/findUser/${id}`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json", 
+          "Content-Type": "application/json",
         },
       });
-      console.log(response.data.data, "userresp");
       setUser(response.data.data);
     } catch (error) {
       console.log(error);
@@ -47,20 +46,17 @@ const ChefPage = () => {
       fetchUserDetails(router.query.id);
     }
   }, [router.query.id]);
-  console.log( "hello");
 
   const handleTabChange = (key) => {
     setActiveKey(key);
   };
   const url = "https://www.chopchow.app/";
-  console.log("line 47", user);
 
   function CheckStringsEnd(str) {
     let result = "";
     if (typeof str !== "string" || str.length === 0) {
       return str; // Return unchanged if not a string or empty string
     }
-
 
     // Check if the string ends with 's'
     if (str.endsWith("s")) {
@@ -97,7 +93,7 @@ const ChefPage = () => {
                 height={200}
               />
             ) : (
-                <div>
+              <div>
                 <UserIcon style={styles.chefImg} />
               </div>
             )}
@@ -168,7 +164,6 @@ const ChefPage = () => {
               <TwitterEIcon />
             </TwitterShareButton>
           </div>
-
         </div>
       </div>
       <InstagramBasicApi />
