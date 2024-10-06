@@ -32,7 +32,7 @@ import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 import GooglePlacesAutocomplete from "../../src/components/dashboard/googleplacesautocomplete";
 import { getAllISOCodes } from "iso-country-currency";
-import { initializeUserType, setSelectedUserType } from "../../src/reducers/userSlice";
+import { setSelectedUserType } from "../../src/reducers/userSlice";
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 58,
@@ -87,7 +87,6 @@ const CreateStore = (props) => {
   const [message, setMessageState] = useState("");
   const router = useRouter();
   const params = useParams();
-  console.log(params, router);
   const [formState, setFormState] = useState({
     email: "",
     phone_number: "",
@@ -167,7 +166,7 @@ const CreateStore = (props) => {
     "saturday",
   ];
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -288,10 +287,8 @@ const CreateStore = (props) => {
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           // this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
-          console.log(response);
           getUser(props.auth.authUser?._id);
           router.push("/dashboard/suggestedmeals");
-          console.log("Display Meal submitted successfully");
           setStatusState("success");
           setMessageState("Store created");
           dispatch(setSelectedUserType("supplier"));

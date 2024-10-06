@@ -144,8 +144,7 @@ class SuggestMeal extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
     this.openSuggestionModal();
-    console.log("suggestionType---", this.state.suggestionType);
-    console.log(this.props.router, "this.props.router.query");
+
     this.getIngredients();
     setTimeout(() => {
       this.setState({
@@ -153,121 +152,25 @@ class SuggestMeal extends Component {
         suggestionType: this.props.router?.query?.item_type ?? "Meal",
       });
     }, 1000);
-    // get all Meal Names***
-    console.log(this.categories, "categories");
-    // var url = "/meals/get-meals/1";
-    // var url = "/items/getallitemnames";
 
-    // try {
-    //   const response = await fetch(`http://localhost:5000/api/items`, {
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-
-    //   const data = await response.json();
-
-    //   console.log(data.data);
-    //   if (data.data === undefined) {
-    //     // setProductErrData(data);
-    //   } else {
-    //     var mealList = data.data;
-    //     if (mealList) {
-    //       mealList.data.meals.map((meal) =>
-    //         // this.allMealNames.push(meal.meal_name)
-    //         this.allMealNames.push(meal.item_name)
-    //       );
-    //     } else {
-    //       console.log("no data.");
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
-    console.log("all meals", this.allMealNames);
-    // get all store names*, if NEW products section exists.
-
-    // can redux resolve this for us by checking if we recently called this in cache or from another page ??
-    // var url = "/get-all-products";
-    // url = "https://chopchowserver.vercel.app/api/meals/get-meals/1";
-
-    // axios.get(url).then((body) => {
-    //   this.productsList = body.data;
-    //   if (this.productsList && this.productsList.data.length !== 0) {
-    //     console.log("returns GET ALL PRODUCTS ");
-    //     for (var i = 0; i < this.productsList.data.length; i++) {
-    //       this.productNames.push(this.productsList.data[i].product_name);
-    //       this.productImageLink.push(this.productsList.data[i].product_image);
-    //     }
-    //   } else {
-    //     console.log("get all products function does not return");
-    //   }
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
-
-    //----get category meals-------------------------
-    // url = "/get-all-categories";
-    // axios.get(url).then((body) => {
-    //   var categoriesFromDBList = body.data;
-    //   if (categoriesFromDBList && categoriesFromDBList.data.length !== 0) {
-    //     console.log("returns GET of ALL Categories ");
-
-    //     for (var i = 0; i < categoriesFromDBList.data.length; i++) {
-    //       this.props.categories.push(categoriesFromDBList.data[i].category_name);
-    //     }
-    //     console.log("PRINTING UPDATED CATEGORIES LIST");
-    //   } else {
-    //     console.log("get all products function does not return");
-    //   }
-    // })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
     this.categories = this.props.categories || this.categories;
-    console.log("PROPER", this.props.categories);
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////////
   handleCloseOfMealSubmissinoDialogMessage = () => {
     this.setState({ booleanOfDisplayOfDialogBoxConfirmation: false });
-    // close out of state tracker..
-    // productDisplayBooleansOutOfState[index] = false;
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   openMealDetailsModal = (index) => {
-    // toggle products page visibility for product to be Edited.
-    // this.productDisplayBooleansOutOfState[this.state.ingredientGroupList.length] = false;
-    // this.productDisplayBooleansOutOfState[index] = true;
-
-    // var tmpIngredientGroupList = this.state.ingredientGroupList;
-    // tmpIngredientGroupList[index].display = true;
-    // tmpIngredientGroupList[currentProductDisplayIndex].display = false;
-    // this.setState({ingredientGroupList: tmpIngredientGroupList});
-    console.log("Comes in toggle product details div id. Index is : " + index);
-
     var individualProductDisplay = document.getElementById(
       "ProductAdditionalDataDisplayed"
     );
-    console.log(individualProductDisplay);
 
-    // if (individualProductDisplay.style.display === "block") {
-    //   individualProductDisplay.style.display = "none";
-    // }
-    // else {
-    //   individualProductDisplay.style.display = "block";
-    // }
     this.setState({ openModal: true });
   };
 
   closeModal() {
     this.setState({ openModal: false });
-    // this.props.openModal = false;
-    // this.props.func_removeMealFlag();
   }
   openSuggestionModal() {
     setTimeout(() => {
@@ -298,12 +201,6 @@ class SuggestMeal extends Component {
   };
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
-    // const [ingredientInput, setIngredientInput] = useState('');
-
-    // const theme = createMuiTheme({
-    //   palette: { primary: green },
-    // });
-
     const { suggestOption, suggestionType } = this.state;
 
     return (
