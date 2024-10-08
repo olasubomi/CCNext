@@ -126,6 +126,7 @@ const { password1, password2} = formState
                 </div>
                <div className={style.password_wrapper}>
                 <input 
+                className={styles.login_form_input}
                 type={passwordVisible ? 'text' : 'password'}  
                 placeholder="Password" 
                 name="password1" 
@@ -133,7 +134,7 @@ const { password1, password2} = formState
                 id="password"
                 onChange={handleChange}
                 onBlur={validateInput}
-                className={style.inputfield} />
+               />
                 <button
             type="button"
             className={style.password_toggle}
@@ -150,14 +151,14 @@ const { password1, password2} = formState
                 </div>
                 <div className={style.password_wrapper} >
                 <input 
+                className={styles.login_form_input}
                 type={confirmPasswordVisible ? 'text' : 'password'}
                 name="password2" 
                 id="confirm-password"
                 value={password2}
                 placeholder="Confirm Password"
                 onChange={handleChange}
-                onBlur={validateInput}
-                className={style.inputfield} />
+                onBlur={validateInput} />
                 <button
             type="button"
             className={style.password_toggle}
