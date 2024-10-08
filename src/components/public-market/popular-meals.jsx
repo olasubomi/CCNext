@@ -27,6 +27,8 @@ export const PopularMeals = () => {
   const [serve, setServe] = useState(0);
   const dispatch = useDispatch();
   const ref = useRef(null);
+  const [selectedItemId, setSelectedItemId] = useState(null);
+
 
   // const loadMore = () => {
   //   setVisibleMeals(visibleMeals + 4);
@@ -179,6 +181,7 @@ export const PopularMeals = () => {
       });
     }
   }, []);
+  console.log(selectedItem, 'selectedItem')
   return (
     <div className={styles.mealContainer}>
       <Element
@@ -193,10 +196,12 @@ export const PopularMeals = () => {
           return (
             <div
               className={styles.card1}
-              key={idx}
+              key={meal._id}
               onClick={() => {
                 setSelectedItem(meal);
                 setOpenModal(true);
+                setSelectedItemId(meal._id)
+                console.log(selectedItem, 'slected')
               }}
             >
               {
@@ -243,6 +248,7 @@ export const PopularMeals = () => {
             openModal={openModal}
             selectGrocery={selectGrocery}
             selectedItem={selectedItem}
+            selectedItemId={selectedItemId}
             setOpenList={setOpenList}
             setOpenModal={setOpenModal}
             show={show}
@@ -272,6 +278,7 @@ export const PopularMeals = () => {
             setItemAdd={setItemAdd}
             setQuantity={setQuantity}
             quantity={quantity}
+            selectedItemId={selectedItemId}
             setShow={setShow}
             addToCart={addItemToCart}
             serve={serve}

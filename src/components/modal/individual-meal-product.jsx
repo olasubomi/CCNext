@@ -12,6 +12,7 @@ import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 export const IndividualModal = ({
   openList,
   openModal,
@@ -29,7 +30,8 @@ export const IndividualModal = ({
   selectedItem,
   addToCart,
   serve,
-  setServe
+  setServe,
+  selectedItemId
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -52,6 +54,20 @@ export const IndividualModal = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openModal]);
+  console.log(selectedItemId, 'selectedItemId')
+  const handleNavigation = () => {
+    if (selectedItemId) {
+      const targetURL = `/meal/${selectedItem.meal_chef}/${selectedItem.item_name}?id=${selectedItemId}`;
+      console.log("Navigating to:", targetURL);
+      console.log(selectedItemId, 'selectedItemId')
+      router.push(targetURL);
+    } else {
+      toast.error("No valid item selected. Please try again.");
+
+    }
+  };
+
+
   return (
     <div>
       {openModal && (
@@ -344,10 +360,8 @@ export const IndividualModal = ({
             </div>
             <div className={styles.border2} />
             <div className={styles.buttons}>
-              <button className={styles.outlinebtn}>
-                <Link href={`/meal/${selectedItem?.meal_chef}/${selectedItem.item_name}`}>
-                  See Full Recipe
-                </Link>
+              <button className={styles.outlinebtn} onClick={() => handleNavigation()}>
+                See Full Recipe
               </button>
               <button
                 className={styles.outlinebtn}
