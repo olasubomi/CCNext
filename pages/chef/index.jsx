@@ -1,32 +1,14 @@
 import Head from "next/head";
 import Header, { Header2 } from "../../src/components/Header/Header";
-import GoBack from "../../src/components/CommonComponents/goBack";
 import Footer from "../../src/components/Footer/Footer";
 import styles from "../../src/components/chef/chefs.module.css";
-import chef from "../../public/assets/homepage/chef.jpg";
-import Image from "next/image";
-import { BsFillShareFill } from "react-icons/bs";
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-} from "react-share";
+
 import { useEffect, useState } from "react";
-import MyTabs from "../../src/components/tabs/tab";
 import { useRouter } from "next/router";
 
 import axios from "../../src/util/Api";
-import { IndividualModal } from "../../src/components/modal/individual-meal-product";
-import {
-  WhatsappEIcon,
-  FacebookEIcon,
-  TwitterEIcon,
-  UserIcon,
-} from "../../src/components/icons";
-import InstagramBasicApi from "../../src/components/SocialShare/InstagramBasicApi";
+import { UserIcon } from "../../src/components/icons";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-
-
 
 const AllChefsPage = () => {
   const alphabets = [
@@ -67,30 +49,26 @@ const AllChefsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [suppliers, setSuppliers] = useState([])
-  const [topSuppliers, setTopSuppliers] = useState([])
+  const [suppliers, setSuppliers] = useState([]);
+  const [topSuppliers, setTopSuppliers] = useState([]);
 
   const fetchSuppliers = async (page, activeLetter) => {
     setIsLoading(true);
     const params = {};
     if (activeLetter) {
-      params.startsWith = activeLetter
+      params.startsWith = activeLetter;
     }
     try {
-      const response = await axios(
-        `/stores/all-supplier/${page}`,
-        {
-          method: "GET",
-          // params: {
-          //   ...params
-          // },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios(`/stores/all-supplier/${page}`, {
+        method: "GET",
+        // params: {
+        //   ...params
+        // },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const allSuppliers = response.data.data;
-
 
       if (allSuppliers.length === 0) {
         const lastPageWithItems = page - 1;
@@ -98,9 +76,10 @@ const AllChefsPage = () => {
       } else {
         setSuppliers(allSuppliers);
       }
-      const lettersWithStores = allSuppliers.map(item => item.item_name[0].toUpperCase());
+      const lettersWithStores = allSuppliers.map((item) =>
+        item.item_name[0].toUpperCase()
+      );
       setAvailableLetters([...new Set(lettersWithStores)]);
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -111,19 +90,15 @@ const AllChefsPage = () => {
   const fetTopSuppliers = async () => {
     setIsLoading(true);
     try {
-      const response = await axios(
-        `/stores/top-supplier`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios(`/stores/top-supplier`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const allSuppliers = response.data.data;
 
       setTopSuppliers(allSuppliers);
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -154,10 +129,9 @@ const AllChefsPage = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    fetTopSuppliers()
-  }, [])
+    fetTopSuppliers();
+  }, []);
 
-  console.log(suppliers, 'allsup')
   return (
     <div className={styles.ChefContainer}>
       <Head>
@@ -177,7 +151,10 @@ const AllChefsPage = () => {
       <div className={styles.container}>
         <div className={styles.title}>
           <h1>Chefs</h1>
-          <p>Find and connect with your favourite local and international chefs with ease.</p>
+          <p>
+            Find and connect with your favourite local and international chefs
+            with ease.
+          </p>
         </div>
         <div className={styles.inputContainer}>
           <input placeholder="Search for Chef" />
@@ -189,25 +166,34 @@ const AllChefsPage = () => {
           <h2 className={styles.topPick}>Chopchow Top Pick</h2>
           <div className={styles.topPicks}>
             <div className={styles.allpicks}>
-              {
-                topSuppliers.map((elem) => (
-                  <div style={{ textAlign: 'center' }} onClick={() => router.push(`/chef/${elem?.username}/${elem?._id}`)}>
-                    <div className={styles.border}>
-                      <div className={styles.topPickImg}>
-                        {
-                          elem?.profile_picture ?
-                            <img src={elem?.profile_picture} style={{ width: '100%', height: '100%' }} />
-                            : <div>
-                              <UserIcon style={styles.topPickImg} />
-                            </div>
-                        }
-                      </div>
-
+              {topSuppliers.map((elem) => (
+                <div
+                  style={{ textAlign: "center" }}
+                  onClick={() =>
+                    router.push(`/chef/${elem?.username}/${elem?._id}`)
+                  }
+                >
+                  <div className={styles.border}>
+                    <div className={styles.topPickImg}>
+                      {elem?.profile_picture ? (
+                        <img
+                          src={elem?.profile_picture}
+                          style={{ width: "100%", height: "100%" }}
+                        />
+                      ) : (
+                        <div>
+                          <UserIcon style={styles.topPickImg} />
+                        </div>
+                      )}
                     </div>
-                    <p className={styles.username}>{elem?.first_name ? `${elem?.first_name} ${elem?.last_name}` : `${elem?.username}`}</p>
                   </div>
-                ))
-              }
+                  <p className={styles.username}>
+                    {elem?.first_name
+                      ? `${elem?.first_name} ${elem?.last_name}`
+                      : `${elem?.username}`}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -218,7 +204,9 @@ const AllChefsPage = () => {
               <span
                 onClick={() => handleActiveLetter(index)}
                 className={
-                  activeLetter === index ? styles.activespan : styles.inactivespan
+                  activeLetter === index
+                    ? styles.activespan
+                    : styles.inactivespan
                 }
               >
                 <p
@@ -234,24 +222,36 @@ const AllChefsPage = () => {
             ))}
           </div>
           <div className={styles.allpicks}>
-            {
-              suppliers.map((elem) => (
-                <div className={styles.card} onClick={() => router.push(`/chef/${elem?.user?.username}/${elem?.user?._id}`)}>
-                  <div className={styles.border2}>
-                    <div className={styles.topPickImg}>
-                      {
-                        elem?.user?.profile_picture ?
-                          <img src={elem?.user?.profile_picture} style={{ width: '100%', height: '100%' }} />
-                          : <div>
-                            <UserIcon style={styles.topPickImg} />
-                          </div>
-                      }
-                    </div>
+            {suppliers.map((elem) => (
+              <div
+                className={styles.card}
+                onClick={() =>
+                  router.push(
+                    `/chef/${elem?.user?.username}/${elem?.user?._id}`
+                  )
+                }
+              >
+                <div className={styles.border2}>
+                  <div className={styles.topPickImg}>
+                    {elem?.user?.profile_picture ? (
+                      <img
+                        src={elem?.user?.profile_picture}
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                    ) : (
+                      <div>
+                        <UserIcon style={styles.topPickImg} />
+                      </div>
+                    )}
                   </div>
-                  <p className={styles.username}>{elem?.user?.first_name ? `${elem.user?.first_name} ${elem.user?.last_name}` : `${elem.user?.username}`}</p>
                 </div>
-              ))
-            }
+                <p className={styles.username}>
+                  {elem?.user?.first_name
+                    ? `${elem.user?.first_name} ${elem.user?.last_name}`
+                    : `${elem.user?.username}`}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

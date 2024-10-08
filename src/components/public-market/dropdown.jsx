@@ -12,6 +12,8 @@ import { IndividualModal } from "../modal/individual-meal-product";
 import { Mealmodal } from "../mobile/meal-modal";
 import axios from "../../util/Api";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../actions";
 
 const responsive = {
   superLargeDesktop: {
@@ -34,7 +36,13 @@ const responsive = {
   },
 };
 
-export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }) => {
+export const MealDropDown = ({
+  selectedStore,
+  setIsShow,
+  storeInfo,
+  isShow,
+  id,
+}) => {
   const matches = useMediaQuery("(min-width: 920px)");
   const [selectGrocery, setSelectGrocery] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -42,7 +50,9 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
   const [selectedItem, setSelectedItem] = useState({});
   const [quantity, setQuantity] = useState(0);
   const [show, setShow] = useState(false);
+  const [serve, setServe] = useState(0);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -60,7 +70,6 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
       },
     };
 
-    console.log(payload, "payload");
     try {
       const response = await axios(`/groceries`, {
         method: "post",
@@ -88,20 +97,46 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchGroceryList();
   }, []);
+
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (qty == 0) {
+      toast.error("Add a quantity");
+    } else {
+      const payload = {
+        userId: user && user._id ? user._id : "",
+        storeId: storeInfo.id,
+        store_name: storeInfo.name, //selectedStore.supplier.store_name,
+        itemId: item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: storeInfo.currency,
+        item_image: item.item_images[0],
+        itemName: item.item_name,
+        item_type: item.item_type ? item.item_type : "",
+      };
+      try {
+        dispatch(addToCart(payload));
+        setOpenList(false);
+        setShow(false);
+        setOpenModal(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   const CustomRightArrow = ({ onClick, ...rest }) => {
     const {
       onMove,
       carouselState: { currentSlide, deviceType },
     } = rest;
-    console.log("CustomRightArrow clicked");
     // onMove means if dragging or swiping in progress.
     return (
       <div onClick={() => onClick()} className={styles.arrow}>
@@ -115,7 +150,6 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
       onMove,
       carouselState: { currentSlide, deviceType },
     } = rest;
-    console.log("left clicked");
     // onMove means if dragging or swiping in progress.
     return (
       <div onClick={() => onClick()} className={styles.arrow2}>
@@ -124,7 +158,6 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
     );
   };
 
-  console.log(selectedStore, "selectedItem");
   const dropdownRef = useRef();
 
   const handleClickOutside = (event) => {
@@ -218,12 +251,14 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
                       ? meal.item.itemImage0
                       : !meal?.item?.itemImage0 &&
                         meal?.item?.item_type === "Meal"
-                        ? "/assets/store_pics/no-image-meal.png"
-                        : !meal?.item?.itemImage0 && meal?.item?.item_type === "Product"
-                          ? "/assets/store_pics/no-image-product.png"
-                          : !meal?.item?.itemImage0 && meal?.item?.item_type === "Utensil"
-                            ? "/assets/store_pics/no-image-utensil.png"
-                            : ""
+                      ? "/assets/store_pics/no-image-meal.png"
+                      : !meal?.item?.itemImage0 &&
+                        meal?.item?.item_type === "Product"
+                      ? "/assets/store_pics/no-image-product.png"
+                      : !meal?.item?.itemImage0 &&
+                        meal?.item?.item_type === "Utensil"
+                      ? "/assets/store_pics/no-image-utensil.png"
+                      : ""
                   }
                   alt=""
                   className={styles.img}
@@ -281,6 +316,9 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
                 setQuantity={setQuantity}
                 quantity={quantity}
                 setShow={setShow}
+                addToCart={addItemToCart}
+                serve={serve}
+                setServe={setServe}
               />
             ) : (
               <IndividualModal
@@ -298,6 +336,9 @@ export const MealDropDown = ({ selectedStore, setIsShow, storeInfo, isShow, id }
                 setQuantity={setQuantity}
                 quantity={quantity}
                 setShow={setShow}
+                addToCart={addItemToCart}
+                serve={serve}
+                setServe={setServe}
               />
             )}
           </div>

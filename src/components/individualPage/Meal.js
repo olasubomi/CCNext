@@ -40,6 +40,8 @@ import { FaEnvelope } from "react-icons/fa";
 import { IoMdCall } from "react-icons/io";
 import { HiLocationMarker } from "react-icons/hi";
 import { RejectionModal } from "../modal/rejection-modal";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 
 function Meal(props) {
@@ -60,6 +62,7 @@ function Meal(props) {
   const [show, setShow] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
   const [openModal, setOpenModal] = useState(false);
+  const dispatch  = useDispatch()
   console.log(selectedItem, "sele");
   const [quantity, setQuantity] = useState(1);
 
@@ -92,6 +95,39 @@ function Meal(props) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    if(qty == 0 ){
+      toast.error("Add a quantity");
+    }else{
+       const payload = {
+        userId: (user && user._id) ? user._id : "",
+        storeId : "",
+        store_name: "",
+        itemId : item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: "$",
+        item_image: item.item_images[0],
+        itemName: item.item_name,
+        item_type: item.item_type? item.item_type : "Meal",
+    } 
+    console.log(payload, "Cart payload line 76 top-selling-product");
+    try {
+      dispatch(addToCart(payload))
+      setOpenList(false);
+      setShow(false);
+      setOpenModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+    };
+  
+  
   };
   const [details, setDetails] = useState({
     listName: "",
@@ -336,7 +372,8 @@ function Meal(props) {
                   >
                     Add to Grocery List
                   </div>
-                  <div className={styles.btnfill}>Add to Cart</div>
+                  <div className={styles.btnfill}  onClick={() => addItemToCart(props.meal, 1)}>Add to Cart</div>
+                  
                 </div>
               )}
           </div>
