@@ -85,7 +85,7 @@ export default function Blog() {
                         {/* Blog section */}
                         <section className="user-blog-section-1">
                             <h1>Blog</h1>
-                            <p>Lorem Ipsum with this introduction and the merry merry</p>
+                            <p>Stay up-to-date on recent posts about recipes, kitchen tips and lots more.</p>
                             <div className="user-blog-box">
                                 {
                                     Array.isArray(mostRecentPost) && mostRecentPost.length && Boolean(Object.keys(mostRecentPost[0] || {}).length) ? <div
