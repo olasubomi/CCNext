@@ -228,7 +228,7 @@ function Login(props) {
                   Email
                 </label>
                 <input
-                  type="text"
+                  type='email'
                   name="email"
                   value={email}
                   placeholder="Your Email or Username"

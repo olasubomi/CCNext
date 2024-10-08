@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 import { useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 export const IndividualModal = ({
   openList,
   openModal,
@@ -25,6 +26,7 @@ export const IndividualModal = ({
   setQuantity,
   quantity,
   selectedItem,
+  selectedItemId
 }) => {
   const router = useRouter();
   const dropdownRef = useRef();
@@ -46,6 +48,20 @@ export const IndividualModal = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openModal]);
+  console.log(selectedItemId, 'selectedItemId')
+  const handleNavigation = () => {
+    if (selectedItemId) {
+      const targetURL = `/meal/${selectedItem.meal_chef}/${selectedItem.item_name}?id=${selectedItemId}`;
+      console.log("Navigating to:", targetURL);
+      console.log(selectedItemId, 'selectedItemId')
+      router.push(targetURL);
+    } else {
+      toast.error("No valid item selected. Please try again.");
+
+    }
+  };
+
+
   return (
     <div>
       {openModal && (
@@ -314,10 +330,8 @@ export const IndividualModal = ({
             </div>
             <div className={styles.border2} />
             <div className={styles.buttons}>
-              <button className={styles.outlinebtn}>
-                <Link href={`/meal/${selectedItem?.meal_chef}/${selectedItem.item_name}`}>
-                  See Full Recipe
-                </Link>
+              <button className={styles.outlinebtn} onClick={() => handleNavigation()}>
+                See Full Recipe
               </button>
               <button
                 className={styles.outlinebtn}

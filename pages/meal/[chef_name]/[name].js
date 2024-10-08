@@ -34,10 +34,10 @@ console.log("props", props)
         "Dec",
       ]
 
-console.log(router.query.id, "this meal")
+console.log(router.query, "this meal")
 const getMeal = async (name) => {
     // let meal = await axios.get(`/meals/get-meal/${id}`)
-    let meal = await axios.get(`/items/user/${name}`)
+    let meal = await axios.get(`/items/user/${name}?_id=${router.query.id}`)
     console.log(meal, "meals")
     console.log(meal.data.data.meal, "get props")
 

@@ -55,7 +55,7 @@ export const Mealmodal = ({
     <div>
       {openModal && (
         <div className={styles.modalContainer}>
-          <div className={styles.modalCard}  ref={dropdownRef}>
+          <div className={styles.modalCard} ref={dropdownRef}>
             <div className={styles.close}>
               <div className={styles.round} onClick={() => setOpenModal(false)}>
                 <AiOutlineClose />
@@ -254,7 +254,7 @@ export const Mealmodal = ({
                           <img
                             src={
                               selectedItem[
-                                `meal_image_or_video_content${index + 1}`
+                              `meal_image_or_video_content${index + 1}`
                               ]
                             }
                             className={styles.instruction_img}
@@ -271,7 +271,7 @@ export const Mealmodal = ({
                                 <source
                                   src={
                                     selectedItem[
-                                      `meal_image_or_video_content${index + 1}`
+                                    `meal_image_or_video_content${index + 1}`
                                     ]
                                   }
                                   type="video/mp4"
@@ -336,9 +336,11 @@ export const Mealmodal = ({
             </div>
             <div className={styles.buttons}>
               <button className={styles.outlinebtn}>
-                <Link href={`/meal/${selectedItem?.meal_chef}/${selectedItem.item_name}`}>
-                  See Full Recipe
-                </Link>
+                {
+                  <Link href={`/meal/${selectedItem?.meal_chef}/${selectedItem.item_name}`}>
+                    See Full Recipe
+                  </Link>
+                }
               </button>
               <button
                 className={styles.outlinebtn}
