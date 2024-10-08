@@ -57,6 +57,7 @@ export const AllPopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
   const [meals, setMeals] = useState([]);
   const [selectedItem, setSelectedItem] = useState({});
+  const [selectedItemId, setSelectedItemId] = useState(null)
   const [selectGrocery, setSelectGrocery] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [show, setShow] = useState(false);
@@ -268,6 +269,7 @@ export const AllPopularMeals = () => {
                   key={idx}
                   onClick={() => {
                     setSelectedItem(meal);
+                    setSelectedItemId(meal._id)
                     setOpenModal(true);
                   }}
                 >
@@ -317,6 +319,7 @@ export const AllPopularMeals = () => {
               openModal={openModal}
               selectGrocery={selectGrocery}
               selectedItem={selectedItem}
+              selectedItemId={selectedItemId}
               setOpenList={setOpenList}
               setOpenModal={setOpenModal}
               show={show}
@@ -334,6 +337,7 @@ export const AllPopularMeals = () => {
               openModal={openModal}
               selectGrocery={selectGrocery}
               selectedItem={selectedItem}
+              selectedItemId={selectedItemId}
               setOpenList={setOpenList}
               setOpenModal={setOpenModal}
               show={show}
