@@ -28,6 +28,7 @@ export const Mealmodal = ({
   setQuantity,
   quantity,
   selectedItem,
+  selectedItemId
 }) => {
   const router = useRouter();
   const dropdownRef = useRef();
@@ -337,7 +338,7 @@ export const Mealmodal = ({
             <div className={styles.buttons}>
               <button className={styles.outlinebtn}>
                 {
-                  <Link href={`/meal/${selectedItem?.meal_chef}/${selectedItem.item_name}`}>
+                  <Link href={`/meal/${selectedItem?.meal_chef}/${selectedItem.item_name}?id=${selectedItemId}`}>
                     See Full Recipe
                   </Link>
                 }
