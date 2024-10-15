@@ -57,7 +57,7 @@ const GooglePlacesAutocomplete = ({
   return (
     <div>
       <PlacesAutocomplete
-        apiKey= {process.env.NEXT_GOOGLE_AUTOCOMPLETE_API_KEY}
+        apiKey= "AIzaSyCEA39jKtNripJBcp7eVisARq7PycNbLGw"
         onSelect={handleSelect}
         debounce={300}
         selectProps={{
