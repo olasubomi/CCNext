@@ -52,6 +52,17 @@ export const Mealmodal = ({
   }, [openModal]);
 
   console.log(selectedItem, "selectedItem.meal_formatted_instructions");
+
+  const handleNavigation = () => {
+    if (selectedItemId) {
+      localStorage.setItem("selectedItemId", selectedItemId);
+      const targetURL = `/meal/${selectedItem.meal_chef}/${selectedItem.item_name}`;
+      console.log("Navigating to:", targetURL);
+      router.push(targetURL);
+    } else {
+      toast.error("No valid item selected. Please try again.");
+    }
+  };
   return (
     <div>
       {openModal && (
@@ -336,12 +347,8 @@ export const Mealmodal = ({
               </div>
             </div>
             <div className={styles.buttons}>
-              <button className={styles.outlinebtn}>
-                {
-                  <Link href={`/meal/${selectedItem?.meal_chef}/${selectedItem.item_name}?id=${selectedItemId}`}>
-                    See Full Recipe
-                  </Link>
-                }
+              <button className={styles.outlinebtn} onClick={() => handleNavigation()}>
+                See Full Recipe
               </button>
               <button
                 className={styles.outlinebtn}

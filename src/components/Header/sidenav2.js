@@ -90,12 +90,12 @@ function SideNav2(props) {
                 Order
               </div>
             </Link>
-            <Link href="/grocery">
+            <Link href="/groceries">
               <div
                 className={
                   styles.sidenav_link +
                   " " +
-                  (props.path === "/grocery" && styles.active)
+                  (props.path === "/groceries" && styles.active)
                 }
               >
                 {/* <GroceryIcon style={styles.sidenav_link_icon} /> */}

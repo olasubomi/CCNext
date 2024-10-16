@@ -36,19 +36,36 @@ console.log("props", props)
 
 console.log(router.query, "this meal")
 const getMeal = async (name) => {
-    // let meal = await axios.get(`/meals/get-meal/${id}`)
-    let meal = await axios.get(`/items/user/${name}?_id=${router.query.id}`)
-    console.log(meal, "meals")
-    console.log(meal.data.data.meal, "get props")
+    try {
+        const selectedItemId = localStorage.getItem('selectedItemId');
 
-    setProps(meal.data.data[0] || {})
+        if (selectedItemId) {
+            let meal = await axios.get(`/items/user/${name}?_id=${selectedItemId}`);
+            console.log(meal, "meals");
+            console.log(meal.data.data.meal, "get props");
 
-}
-useEffect(() => {
-    if(router.query?.name){
-        getMeal(router.query?.name)
+            setProps(meal.data.data[0] || {});
+        } else {
+            console.error('No selected item ID found in localStorage');
+        }
+    } catch (error) {
+        console.error('Error fetching meal data:', error);
     }
-},[router.query?.name])
+};
+
+useEffect(() => {
+    if (router.query?.name) {
+        getMeal(router.query.name);
+    }
+}, [router.query?.name]);
+
+
+useEffect(() => {
+    const selectedItemId = localStorage.getItem("selectedItemId");
+    if (selectedItemId) {
+      console.log("Selected item ID:", selectedItemId);
+    }
+  }, []);
 console.log(props, 'meals id page')
 console.log(props, "mealsssss")
     return (

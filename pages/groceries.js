@@ -383,9 +383,9 @@ const Grocery = () => {
                 {
                   <div
                     onClick={() => {
-                      router.push(`/grocerylist/groceries/${ele._id}`);
+                      router.push(`/grocerylist/${ele._id}`);
                       // if (isUserOnline) {
-                      //   router.push(`/grocerylist/groceries/${ele._id}`);
+                      //   router.push(`/grocerylist/${ele._id}`);
                       // } else {
                       // alert('Login to add Items to Grocery List')
                       // }

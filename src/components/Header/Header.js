@@ -252,7 +252,7 @@ function Header(props) {
     },
     {
       name: "Grocery List",
-      path: "/grocery",
+      path: "/groceries",
       icon: <BasketIcon2 color={activeNav === 2 ? "#F47900" : "#6D6D6D"} />,
     },
     {
@@ -838,10 +838,10 @@ export function Header2({ pathname, activeSubLink, setActiveSubLink }) {
                 Suggest a Meal
               </span>
             </Link>
-            <Link href="/grocery">
+            <Link href="/groceries">
               <span
                 className={
-                  currentPathname === "/grocery"
+                  currentPathname === "/groceries"
                     ? styles.activelink
                     : styles.inactivelink
                 }
