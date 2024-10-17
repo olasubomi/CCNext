@@ -1,38 +1,38 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
-import Header, { Header2 } from "../../../src/components/Header/Header";
-import GoBack from "../../../src/components/CommonComponents/goBack";
-import styles from "../../../src/components/grocery/grocery.module.css";
+import Header, { Header2 } from "../../src/components/Header/Header";
+import GoBack from "../../src/components/CommonComponents/goBack";
+import styles from "../../src/components/grocery/grocery.module.css";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { BsArrowRight } from "react-icons/bs";
 import Image from "next/image";
-import noteGif from "../../../public/assets/icons/gif.gif";
-import { DropDownSelect } from "../../../src/components/select/select";
+import noteGif from "../../public/assets/icons/gif.gif";
+import { DropDownSelect } from "../../src/components/select/select";
 import { useEffect, useState } from "react";
-import { Modal } from "../../../src/components/modal/popup-modal";
-import Footer from "../../../src/components/Footer/Footer";
+import { Modal } from "../../src/components/modal/popup-modal";
+import Footer from "../../src/components/Footer/Footer";
 import { IoMdCloseCircle } from "react-icons/io";
-import axios from "../../../src/util/Api";
+import axios from "../../src/util/Api";
 import { toast } from "react-toastify";
-import { GroceryModal } from "../../../src/components/modal/grocery-modal";
-import Popup1 from "../../../src/components/popups/popup1";
-import Popup2 from "../../../src/components/popups/popup2";
-import { useCart } from "../../../src/context/cart.context";
-import { SuggestModal } from "../../../src/components/modal/suggest-modal";
-import { useMediaQuery } from "../../../src/hooks/usemediaquery";
-import { MobileTable } from "../../../src/components/mobile/table.mobile";
-import { MobileInputs } from "../../../src/components/mobile/inputs.mobile";
-import { Cards } from "../../../src/components/cards/cards";
-import { CardDropdown } from "../../../src/components/dropdown/dropdown";
+import { GroceryModal } from "../../src/components/modal/grocery-modal";
+import Popup1 from "../../src/components/popups/popup1";
+import Popup2 from "../../src/components/popups/popup2";
+import { useCart } from "../../src/context/cart.context";
+import { SuggestModal } from "../../src/components/modal/suggest-modal";
+import { useMediaQuery } from "../../src/hooks/usemediaquery";
+import { MobileTable } from "../../src/components/mobile/table.mobile";
+import { MobileInputs } from "../../src/components/mobile/inputs.mobile";
+import { Cards } from "../../src/components/cards/cards";
+import { CardDropdown } from "../../src/components/dropdown/dropdown";
 import {
   addItemToLocalGroceryList,
   getLocalGroceryList,
   getOneGroceryList,
   removeItemFromLocalGroceryList,
-} from "../../../src/util";
-import { LoginPrompt } from "../../../src/components/modal/login-prompt";
-import { UserIcon } from "../../../src/components/icons";
-import { useDispatch, useSelector } from "react-redux";
+} from "../../src/util";
+import { LoginPrompt } from "../../src/components/modal/login-prompt";
+import { UserIcon } from "../../src/components/icons";
+import { useSelector } from "react-redux";
 
 const GroceryPage = () => {
   const customStyles = {
@@ -95,7 +95,12 @@ const GroceryPage = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItem, setSelectedItem] = useState([]);
 
-  const [selectList, setSelectList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+
+
+  console.log(itemList, "itemListitemList");
 
   const dispatch = useDispatch();
 
@@ -110,6 +115,7 @@ const GroceryPage = () => {
       label: "",
     },
   ]);
+
   const [item, setItems] = useState([
     {
       value: "",
@@ -137,104 +143,40 @@ const GroceryPage = () => {
 
   const id = router?.query?.id;
 
-  // const SelectItemLogic = (payload, toggle, e) => {
-  // let item = selectedItem.map(x => x.name == payload.item_name)
-  // if(item){
-  //   setSelectedItem([...selectedItem, {
-  //     id: payload._id,
-  //     name: payload.item_name,
-  //     selected: true,
-  //   }])
-  // }
-
-  //   addItemsToCart({...element?.item, qty: element?.quantity}, true);
-  // }
-  const handleSelectAllChange = () => {
-    const newSelectAll = !selectAll;
-    setSelectAll(newSelectAll);
-    SelectAllItemLogic(selectList);
-  };
-
-  const AddSelectionToCartList = () => {
-    AddSelectionToCart();
-    const updatedItems = selectedItem.map((item) => ({
-      ...item,
-      selected: !item.selected,
-    }));
-
-    setSelectedItem(updatedItems);
-    setSelectAll(false);
-  };
-
-  const SelectAllItemLogic = (selectList) => {
-    const updatedItems = selectList.map((item) => ({
-      id: item.item._id,
-      name: item.item.item_name,
-      selected: !selectAll, // Toggle based on the current selectAll state
-    }));
-
-    setSelectedItem(updatedItems);
-
-    // Add or remove all items to/from the cart
-    selectList.forEach((item) => {
-      console.log("addItemsToCart", item);
-      addItemsToCart({ ...item.item, qty: item.quantity }, true);
-    });
-  };
-
-  const SelectItemLogic = (payload) => {
-    const itemExists = selectedItem.some((x) => x.name === payload.item_name);
-
-    if (!itemExists) {
-      setSelectedItem([
-        ...selectedItem,
-        {
-          id: payload._id,
-          name: payload.item_name,
-          selected: true,
-        },
-      ]);
-      addItemsToCart(payload, true);
-    } else {
-      const updatedItems = selectedItem.map((item) =>
-        item.name === payload.item_name
-          ? { ...item, selected: !item.selected }
-          : item
-      );
-      setSelectedItem(updatedItems);
-      addItemsToCart(payload, true);
-
-      const allSelected = updatedItems.every((item) => item.selected);
-      const allDeselected = updatedItems.every((item) => !item.selected);
-
-      if (allSelected) {
-        setSelectAll(true);
-      } else if (allDeselected) {
-        setSelectAll(false);
-      }
-    }
-  };
-
-  const getAllMeasurement = async (newPage) => {
+  const getAllMeasurement = async (newPage = 1) => {
     try {
-      const resp = await axios.get(`/measurement/1?status=Public`);
+      setLoading(true);
+      const resp = await axios.get(`/measurement/${newPage}`);
+
       if (
         Array.isArray(resp?.data?.data?.measurement) &&
         resp?.data?.data?.measurement?.length
       ) {
-        console.log("resp.data.data?.measurement");
-        const response = resp.data.data?.measurement.map((element) => {
-          return {
+        console.log(resp?.data, "resp.data.data?.measurement");
+
+        const response = resp.data.data?.measurement
+          .filter((elem) => elem.status === 'Public')
+          .map((element) => ({
             label: element.measurement_name?.split("_").join(" "),
             value: element._id,
-          };
-        });
-        setMeasurement(response);
+          }));
+
+        setMeasurement((prevMeasurements) => [
+          ...prevMeasurements,
+          ...response
+        ]);
+
+        if (response.length === 0) {
+          setHasMore(false);
+        }
       }
     } catch (e) {
-      console.log("err", e);
+      console.log("Error fetching measurements:", e);
+    } finally {
+      setLoading(false);
     }
   };
+
 
   const addItemToGrocery = async () => {
     if (isUserOnline) {
@@ -440,11 +382,19 @@ const GroceryPage = () => {
     }
   };
 
+
   useEffect(() => {
-    getAllMeasurement();
     getList();
   }, [isUserOnline, id]);
+  useEffect(() => {
+    getAllMeasurement(page);
 
+  }, [page])
+  const loadMoreMeasurements = () => {
+    if (!loading && hasMore) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     setIsUserOnline(Boolean(Object.keys(user).length));
@@ -533,7 +483,7 @@ const GroceryPage = () => {
         </p>
         <div className={styles.top1}>
           {authUser?.profile_picture !== "" &&
-          authUser?.profile_picture !== undefined ? (
+            authUser?.profile_picture !== undefined ? (
             <Image
               width={50}
               height={50}
@@ -929,7 +879,7 @@ const GroceryPage = () => {
                               {element?.item?.item_name}
                             </p>
                             {element?.item?.item_type === "Meal" &&
-                            element?.quantity ? (
+                              element?.quantity ? (
                               <div>
                                 <p
                                   className={styles.ingredients}

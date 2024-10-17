@@ -55,17 +55,18 @@ export const IndividualModal = ({
     };
   }, [openModal]);
   console.log(selectedItemId, 'selectedItemId')
+
   const handleNavigation = () => {
     if (selectedItemId) {
-      const targetURL = `/meal/${selectedItem.meal_chef}/${selectedItem.item_name}?id=${selectedItemId}`;
+      localStorage.setItem("selectedItemId", selectedItemId);
+      const targetURL = `/meal/${selectedItem.meal_chef}/${selectedItem.item_name}`;
       console.log("Navigating to:", targetURL);
-      console.log(selectedItemId, 'selectedItemId')
       router.push(targetURL);
     } else {
       toast.error("No valid item selected. Please try again.");
-
     }
   };
+  
 
 
   return (

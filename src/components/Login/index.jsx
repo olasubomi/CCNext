@@ -112,7 +112,7 @@ function Login(props) {
     await props.login(email, password, rememberPassword, () => {
       console.log("calling callback");
       setLoginLoading(false);
-      dispatch(setSelectedUserType(Array(JSON.parse(localStorage.getItem("user") || "{}")) ? JSON.parse(localStorage.getItem("user") || "{}")?.user_type[0] : 'customer'));
+      dispatch(setSelectedUserType(Array(JSON.parse(localStorage.getItem("user") || "{}")) ? JSON.parse(localStorage.getItem("user") || "{}")?.user_type?.[0] : 'customer'));
 
     });
 

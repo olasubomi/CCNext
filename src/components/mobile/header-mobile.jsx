@@ -60,7 +60,7 @@ export const MobileHeader = () => {
             </ul>
 
             <div className={styles.navbar_main_grocery}>
-              <Link href="/grocery">Grocery Lists</Link>
+              <Link href="/groceries">Grocery Lists</Link>
             </div>
           </div>
         </div>
