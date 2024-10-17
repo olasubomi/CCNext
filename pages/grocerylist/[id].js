@@ -94,21 +94,18 @@ const GroceryPage = () => {
   const { authUser } = useSelector((state) => state.Auth);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItem, setSelectedItem] = useState([]);
+  const [selectList, setSelectList] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
+  const SelectItemLogic = (data) => {
+    console.log({ selectedItem });
+    const newList = [...selectedItem, data];
+    setSelectedItem(newList);
+  };
 
-  console.log(itemList, "itemListitemList");
-
-  const dispatch = useDispatch();
-
-  //console.log(itemList, "itemListitemList");
-  console.log(selectedItem, "selectedItem");
-  console.log(selectList, "selectList");
-
-  console.log(selectAll, "selectAll");
   const [measurements, setMeasurement] = useState([
     {
       value: "",
@@ -134,8 +131,6 @@ const GroceryPage = () => {
     status: "",
   });
 
-  console.log(itemList, "itemList");
-
   function closeModal() {
     setOpenModalState(false);
     setOpenModal2State(false);
@@ -155,7 +150,7 @@ const GroceryPage = () => {
         console.log(resp?.data, "resp.data.data?.measurement");
 
         const response = resp.data.data?.measurement
-          .filter((elem) => elem.status === 'Public')
+          .filter((elem) => elem.status === "Public")
           .map((element) => ({
             label: element.measurement_name?.split("_").join(" "),
             value: element._id,
@@ -163,7 +158,7 @@ const GroceryPage = () => {
 
         setMeasurement((prevMeasurements) => [
           ...prevMeasurements,
-          ...response
+          ...response,
         ]);
 
         if (response.length === 0) {
@@ -176,7 +171,6 @@ const GroceryPage = () => {
       setLoading(false);
     }
   };
-
 
   const addItemToGrocery = async () => {
     if (isUserOnline) {
@@ -342,8 +336,6 @@ const GroceryPage = () => {
     return name;
   };
 
-  console.log();
-
   const deleteItemFromGrocery = async (id) => {
     try {
       await axios.patch(`/groceries/remove/${itemList._id}/${id}`);
@@ -382,14 +374,12 @@ const GroceryPage = () => {
     }
   };
 
-
   useEffect(() => {
     getList();
   }, [isUserOnline, id]);
   useEffect(() => {
     getAllMeasurement(page);
-
-  }, [page])
+  }, [page]);
   const loadMoreMeasurements = () => {
     if (!loading && hasMore) {
       setPage((prevPage) => prevPage + 1);
@@ -404,10 +394,7 @@ const GroceryPage = () => {
       setMeasurementValue_1(measurement_value);
     }
   }, [measurement_value]);
-  const hello = () => {
-    console.log("hello");
-  };
-  console.log(itemList, "itemList?.groceryItems");
+
   return (
     <div className={styles.container1}>
       <Head>
@@ -483,7 +470,7 @@ const GroceryPage = () => {
         </p>
         <div className={styles.top1}>
           {authUser?.profile_picture !== "" &&
-            authUser?.profile_picture !== undefined ? (
+          authUser?.profile_picture !== undefined ? (
             <Image
               width={50}
               height={50}
@@ -803,7 +790,7 @@ const GroceryPage = () => {
                               name={element?.item?.item_name}
                               value={element?.item?.item_name}
                               checked={
-                                !!selectedItem.find(
+                                selectedItem.find(
                                   (item) =>
                                     item.name === element?.item?.item_name
                                 )?.selected
@@ -879,7 +866,7 @@ const GroceryPage = () => {
                               {element?.item?.item_name}
                             </p>
                             {element?.item?.item_type === "Meal" &&
-                              element?.quantity ? (
+                            element?.quantity ? (
                               <div>
                                 <p
                                   className={styles.ingredients}
