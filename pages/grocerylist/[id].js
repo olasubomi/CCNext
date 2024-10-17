@@ -87,10 +87,13 @@ const GroceryPage = () => {
   const [value, setValue] = useState("");
   const [measurement_value, setMeasurementValue] = useState("");
   const [measurement_value_1, setMeasurementValue_1] = useState("");
-  const { addItemsToCart, cartItems, cartHasItem } = useCart();
+  const { addItemsToCart, cartItems, cartHasItem, AddSelectionToCart } =
+    useCart();
   const [isUserOnline, setIsUserOnline] = useState(true);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedItem, setSelectedItem] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -99,6 +102,13 @@ const GroceryPage = () => {
 
   console.log(itemList, "itemListitemList");
 
+  const dispatch = useDispatch();
+
+  //console.log(itemList, "itemListitemList");
+  console.log(selectedItem, "selectedItem");
+  console.log(selectList, "selectList");
+
+  console.log(selectAll, "selectAll");
   const [measurements, setMeasurement] = useState([
     {
       value: "",
@@ -186,7 +196,6 @@ const GroceryPage = () => {
       if (itemsToAdd.measurement) {
         payload.groceryList.groceryItems.measurement = itemsToAdd.measurement;
       }
-      console.log(payload, "payload");
       try {
         const response = await axios(`/groceries`, {
           method: "post",
@@ -236,6 +245,8 @@ const GroceryPage = () => {
         });
         console.log(response.data, "yello");
         setItemList(response.data.data.data.groceryList);
+        setSelectList(response.data.data.data.groceryList.groceryItems);
+        //setItemList(response.data.data.data.groceryList.groceryItems.map(item => ({ ...item.item, selected: false })));
         setSimilar(response.data.data.data.similar[0]);
       } catch (error) {
         console.log(error);
@@ -471,12 +482,6 @@ const GroceryPage = () => {
           {itemList.description}
         </p>
         <div className={styles.top1}>
-          {/* <Image
-              src={girl}
-              width={40}
-              height={40}
-              className={styles.person}
-            /> */}
           {authUser?.profile_picture !== "" &&
             authUser?.profile_picture !== undefined ? (
             <Image
@@ -703,6 +708,9 @@ const GroceryPage = () => {
                     >
                       <input
                         type="checkbox"
+                        value="select_all"
+                        checked={selectAll}
+                        onClick={() => handleSelectAllChange()}
                         style={{ width: "2rem", height: "2rem" }}
                       />
                       <p style={{ marginLeft: "2rem" }}>Select All</p>
@@ -794,10 +802,18 @@ const GroceryPage = () => {
                             <input
                               name={element?.item?.item_name}
                               value={element?.item?.item_name}
-                              checked={cartHasItem(element.item)}
-                              onChange={(e) => {
-                                addItemsToCart(element.item, true);
-                              }}
+                              checked={
+                                !!selectedItem.find(
+                                  (item) =>
+                                    item.name === element?.item?.item_name
+                                )?.selected
+                              }
+                              onChange={(e) =>
+                                SelectItemLogic({
+                                  ...element?.item,
+                                  qty: element?.quantity,
+                                })
+                              }
                               type="checkbox"
                               style={{
                                 marginRight: "2rem",
@@ -940,10 +956,15 @@ const GroceryPage = () => {
               />
             )}
             <div className={styles.cartBtns}>
-              <button className={styles.cartbtn1}>Add Selection to Cart</button>
+              <button
+                className={styles.cartbtn1}
+                onClick={() => AddSelectionToCartList()}
+              >
+                Add Selection to Cart
+              </button>
               <button
                 className={styles.cartbtn2}
-                onClick={() => router.push("/cart/cart")}
+                onClick={() => router.push("/cart")}
               >
                 Go to Cart
                 <BsArrowRight size={18} />

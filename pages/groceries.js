@@ -45,8 +45,6 @@ const Grocery = () => {
     setIsUserOnline(Boolean(Object.keys(user).length));
   }, []);
 
-  console.log("isuseronline", isUserOnline);
-
   const fetchList = async () => {
     if (isUserOnline) {
       try {
@@ -56,7 +54,6 @@ const Grocery = () => {
             "Content-Type": "application/json",
           },
         });
-        console.log(response.data.data.data, "resp");
         setGroceryList(response.data.data.data);
       } catch (error) {
         console.log(error);
@@ -66,9 +63,6 @@ const Grocery = () => {
       setLocalGroceryList(list);
     }
   };
-
-  console.log(details, "getLocalGroceryList();");
-  console.log(groceryList, "my grocery");
 
   const deleteLocalGrocery = (id) => {
     let localGrocery = getLocalGroceryList();
@@ -151,8 +145,14 @@ const Grocery = () => {
                     }}
                   >
                     {ele?.status === "Public" && (
-                      <div style={{display: 'flex', alignItems: 'center', gap: '.6rem'}}>
-                        <PiEyeFill color="#00A001"/>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: ".6rem",
+                        }}
+                      >
+                        <PiEyeFill color="#00A001" />
                         <p className={styles.public}>{ele?.status}</p>
                       </div>
                     )}

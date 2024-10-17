@@ -60,7 +60,7 @@ export const AllProducts = () => {
   const [show, setShow] = useState(false);
   const router = useRouter();
   const [quantity, setQuantity] = useState(0);
-
+  const dispatch = useDispatch();
   //items to add
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -93,6 +93,41 @@ export const AllProducts = () => {
       console.log(error);
     }
   };
+
+
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    if(qty == 0 ){
+      toast.error("Pls add a quantity");
+    }else{
+       const payload = {
+        userId: (user && user._id) ? user._id : "",
+        storeId :  "" ,
+        store_name: "",
+        itemId : item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: "$",
+        item_image: item.itemImage0,
+        itemName: item.item_name,
+        item_type: item.item_type? item.item_type : "Product",
+    } 
+    console.log(payload, "Cart payload line 76 top-selling-product");
+    try {
+      dispatch(addToCart(payload))
+      setOpenList(false);
+      setShow(false);
+      setOpenModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+    };
+
+  
+  };
+
+
   const [details, setDetails] = useState({
     listName: "",
     description: "",
@@ -200,9 +235,9 @@ export const AllProducts = () => {
         </div>
         <div className={styles.topcontainer}>
           <p className={styles.marketplaceText}>
-            Unlock global flavors with ease! Our app makes cooking international
-            dishes a breeze, guiding you with expert tips and step-by-step
-            instructions.
+            You no longer have to deal with the local stores running 
+            out of stock of your favourite products when you can 
+            find them here.
           </p>
           <div className={styles.flexItems}>
             <div className={styles.filter}>
@@ -327,6 +362,7 @@ export const AllProducts = () => {
             setShow={setShow}
             quantity={quantity}
             setQuantity={setQuantity}
+            addToCart={addItemToCart}
           />
         </div>
         <div className={styles.paginationContainer}>

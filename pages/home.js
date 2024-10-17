@@ -16,8 +16,11 @@ import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import locationPin from "../public/assets/home/location.svg";
 import "react-multi-carousel/lib/styles.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "../src/util/Api";
+import { useRouter } from "next/router";
+import { debounce } from "lodash";
+import Link from "next/link";
 
 
 const responsive = {
@@ -50,6 +53,19 @@ const responsive = {
 export default function HomePage() {
   const [active, setActive] = useState(1);
   const [locations, setLocations] = useState([])
+  const router = useRouter();
+  const ref = useRef();
+  const [isOpen, setIsOpen] = useState(false);
+  const [users, setUsers] = useState([])
+
+  const handleQuery = useCallback(async (name) => {
+    try {
+      const response = await axios.get(`/items/filterstore/${name}`)
+      setUsers(Array.isArray(response.data?.data) ? response.data.data : [])
+    } catch (e) {
+      console.log(e)
+    }
+  }, [])
 
   useEffect(() => {
     (async () => {
@@ -71,6 +87,18 @@ export default function HomePage() {
       }
     })()
   }, [])
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
+  }, []);
+
 
   return (
     <div>
@@ -106,43 +134,41 @@ export default function HomePage() {
             }}
           >
             <div className="overlay">
-              <h1>Chop Chow Marketplace is your new go-to when deciding what to cook</h1>
+              <h1>Discover, Decide and Share your favourite meals with people you love</h1>
               <button>Get Started</button>
             </div>
           </div>
           <div
-            className="hero"
-            style={{
-              backgroundImage: `url(${heroImage2.src})`,
-            }}
+            className="hero hero-2"
+
           >
             <div className="overlay">
-              <h1>Decide, in advance, what to eat with Chop Chow subscriptions</h1>
-              <button>Subscribe now</button>
+              <h1>Plan your meals ahead of time with Chop Chow's grocery list</h1>
+              <button onClick={() => router.push("/grocery")}>Use now</button>
             </div>
           </div>
 
           <div
-            className="hero"
-            style={{
-              backgroundImage: `url(${heroImage3.src})`,
-            }}
+            className="hero hero-4"
+
           >
             <div className="overlay">
-              <h1>Share your go to meals with friends on Chop Chow</h1>
+              <h1>Share your favourite meals with your friends and family</h1>
               <button>Suggest a meal</button>
             </div>
           </div>
 
           <div
-            className="hero"
+            className="hero "
             style={{
               backgroundImage: `url(${heroImage4.src})`,
             }}
           >
             <div className="overlay overlay_flex">
               <div className="overlay_flex_1">
-                <h1>Share your go to meals with friends on Chop Chow</h1>
+                <h1>Suggest your
+                  meal with our
+                  new AI feature</h1>
                 <button>Suggest a meal</button>
               </div>
               <div
@@ -165,7 +191,8 @@ export default function HomePage() {
             <div className="overlay overlay_flex">
               <div className="overlay_flex_1">
                 <h1>AI-Powered
-                  Label Scanner</h1>
+                  Label Scanner
+                  coming soon...</h1>
                 <div className="section-list">
                   {
                     [
@@ -203,158 +230,123 @@ export default function HomePage() {
           </div>
         </Carousel>
       </div>
-      <section className="home-section-one home-section">
-        <div className="section-one-child">
-          <div>
-            <h2>
-              Share your recipes <br />
-              with your fans
-            </h2>
-            <button>Suggest A Recipe</button>
-          </div>
-          <div className="section-image" />
-        </div>
-      </section>
-      <section className="home-section-two ">
+      <section className="home-section-one">
         <div className="home-section">
-          <div className="section-two-child">
-            <div className="section-two-image" />
-            <div className="text-container">
+          <div className="section-one-child">
+            <div>
               <h2>
-                Find local and international chefs, and food blogger recipes
+                Share your recipes <br />
+                with friends
               </h2>
-              <p>Connect with Lorem Ipsum</p>
-              <div className="input-container">
-                <Image src={locationPin} />
-                <input placeholder="Enter your current address" />
-                <button>Find Now</button>
-              </div>
+              <button onClick={() => router.push("/suggestmeal")}> Suggest A Recipe</button>
             </div>
+            <div className="section-image" />
           </div>
         </div>
       </section>
-      <section className="home-section-one home-section">
-        <div className="section-one-child">
-          <div className="cont">
-            <h2>
-              Put your recipes on Chop Chow to show off what you’ve cooked with
-              family and friends
-            </h2>
-            <button>Ge Started</button>
-          </div>
-          <div className="section-3-image" />
-        </div>
-      </section>
-      <div className="section-four-container">
-        <section className="section-four" />
-        <div className="box-1 box" />
-        <div className="box-2 box" />
-        <div className="box-3 box" />
-        <div className="box-4 box" />
-        <div className="section-content">
-          <div className="section-box">
-            <h1>Connect with food lovers and chefs from all over the world</h1>
-            <div className="section_box_container">
-              <div className="section_box_container_cont">
-                <input placeholder="Enter the name" className="section_box_container_input" />
+
+      <section className="section_4_box">
+        <div className="chef_glow_box" />
+        <div className="home-section">
+          <div className="chefs_box_container">
+            <h1>Connect with food lovers and chefs<br className="br" /> from all over the world</h1>
+            <div className="chefs_box_container_div">
+              <div className="chefs_box_container_dropdown">
+                <input placeholder="Enter the name"
+                  onClick={() => setIsOpen(true)} onChange={(event) => {
+                    let debounce_fun = debounce(function () {
+                      handleQuery(event.target.value);
+                    }, 500);
+
+                    debounce_fun();
+                  }}
+                />
+                {
+                  isOpen && users.length ? <div ref={ref} className="chef_box_dropdown">
+                    {
+                      users.map((entry) => <Link key={entry?._id} href={`/chef/${entry.username}/${entry._id}`}>
+                        <p>{entry?.first_name} {entry?.last_name}</p>
+                      </Link>)
+                    }
+                  </div> : null
+                }
               </div>
-              <button className="section_box_container_button">Find Now</button>
+              <button>Find Now</button>
             </div>
-            <div className="section_box_image_cont" />
-            {/* <div className="section-image" /> */}
-            {/* <div className="section-footer">
-              {[
-                {
-                  title:
-                    "Get meal Suggestion based on the items in your grocery list",
-                  image: meal,
-                },
-                {
-                  title:
-                    "Add Ingredients from your meals to your list in a click with our AI function",
-                  image: plus,
-                },
-              ].map((element) => (
-                <div key={element.title}>
-                  <Image src={element.image} />
-                  <p>{element.title}</p>
-                </div>
-              ))}
-            </div> */}
+            <div className="chefs_box_image" />
           </div>
         </div>
-      </div>
-      <section className="section-six">
-        <div>
-          <h1>Sign Up with Us Today</h1>
-          <div className="user-types">
-            {
-              [
-                'Supplier',
-                'Customer',
-                'Driver'
-              ].map((element, idx) => <button onClick={() => setActive(idx + 1)} key={element}>{element}</button>
-              )
-            }
+        <div className="chef_glow_box_2" />
+      </section>
 
-          </div>
-          <div className="chef-box"
-            style={{
-              backgroundColor: active === 1 ? '#1B5218' : active === 2 ? "#FF6D00" : '#A6DAE5',
-            }}
-          >
-            <h2
-              style={{
-                color: active === 3 ? '#000' : "#fff"
-
-              }}
-            >
-              {active === 1 ? "Become a Supplier on Chop Chow" : active === 2 ? "Join Our Esteemed Customers" : "Become A Driver"}
-            </h2>
-            <p
-              style={{
-                color: active === 3 ? '#000' : "#fff"
-
-              }}
-            >
+      <section className="section-six_box">
+        <div className="section-six">
+          <div>
+            <h1>Sign Up with Us Today</h1>
+            <div className="user-types">
               {
-                active === 1 ?
-                  "Elevate your brand by becoming a supplier on ChowChop, the ultimate meal and grocery online destination. Showcase your finest creations, connect with a global audience, and unleash the full potential of your culinary expertise!"
-                  : active === 2
-                    ? "Drive with purpose: Join our team as a ChowChop driver and play a vital role in connecting culinary delights with doorsteps. Enjoy flexibility, earn rewards, and be the driving force behind a seamless delivery experience for our valued customers!"
-                    : "We offer a wide range of delivery options that make it easy to get your favorite products delivered to you. If you want to schedule an order for a specific time, or if you just want to get it immediately, we've got you covered."
+                [
+                  'Supplier',
+                  'Customer',
+                  'Driver'
+                ].map((element, idx) => <button onClick={() => setActive(idx + 1)} key={element}>{element}</button>
+                )
               }
-            </p>
-            <button>Get Started</button>
-            <div className="chef-image"
+
+            </div>
+            <div className="chef-box"
               style={{
-                backgroundImage: active === 1 ? 'url(./assets/home/chef.png)' : active === 2 ? 'url(./assets/home/card-2.png)' : 'url(./assets/home/card-3.png)',
+                backgroundColor: active === 1 ? '#1B5218' : active === 2 ? "#FF6D00" : '#A6DAE5',
               }}
-            />
+            >
+              <h2
+                style={{
+                  color: active === 3 ? '#000' : "#fff"
+
+                }}
+              >
+                {active === 1 ? "Join our network of suppliers" : active === 2 ? "Join Our Esteemed Customers" : "Become A Driver"}
+              </h2>
+              <p
+                style={{
+                  color: active === 3 ? '#000' : "#fff"
+
+                }}
+              >
+                {
+                  active === 1 ?
+                    "Get discovered by food lovers from all over the world who trust ChowChop as the right place to go when looking for the best recipes and freshest groceries."
+                    : active === 2
+                      ? "Drive with purpose: Join our team as a ChowChop driver and play a vital role in connecting culinary delights with doorsteps. Enjoy flexibility, earn rewards, and be the driving force behind a seamless delivery experience for our valued customers!"
+                      : "We offer a wide range of delivery options that make it easy to get your favorite products delivered to you. If you want to schedule an order for a specific time, or if you just want to get it immediately, we've got you covered."
+                }
+              </p>
+              <button>Get Started</button>
+              <div className="chef-image"
+                style={{
+                  backgroundImage: active === 1 ? 'url(./assets/home/chef.png)' : active === 2 ? 'url(./assets/home/card-2.png)' : 'url(./assets/home/card-3.png)',
+                }}
+              />
+            </div>
           </div>
         </div>
       </section>
 
       <section className="section_cities">
-        <div className="section_cities_box" />
-        <h1>We Are  In These Cities</h1>
+        {/* <div className="section_cities_box" /> */}
+        <h1>We are nearer than you think</h1>
+
         <div className="section-eight-container">
           {
-            locations.map((element, idx) => <p className="section-name" key={element + idx}>{element}</p>)
+            locations.map((element, idx) => <p style={{
+              color: "#000"
+            }} className="section-name" key={element + idx}>{element}</p>)
           }
         </div>
       </section>
+      <div className="section_footer_box" />
 
-      <section className="section_sub">
-        <h1>Subscribe to our Newsletter Today</h1>
-        <p>Dont miss anything! Be  the first to get our exclusive offers and latest news</p>
-        <div className="section_box_container">
-          <div className="section_box_container_cont">
-            <input placeholder="Enter the name" className="section_box_container_input" />
-          </div>
-          <button className="section_box_container_button">Find Now</button>
-        </div>
-      </section>
+
 
       {/* <Carousel
         showDots

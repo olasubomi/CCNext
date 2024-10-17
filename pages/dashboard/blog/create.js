@@ -146,7 +146,7 @@ export default function ManageBlog() {
                             </div>
                             <h1>
                                 {Array.isArray(blogPost)
-                                    ? blogPost.filter((ele) => ele.status === "PUBLISHED").length
+                                    ? blogPost.filter((ele) => ele.status === "PUBLIC").length
                                     : 0}
                             </h1>
                         </div>
@@ -249,14 +249,15 @@ export default function ManageBlog() {
                                                         isOpen && selected === data._id && <div ref={ref} className="blog-table-actions">
                                                             <p
                                                                 onClick={() => handleUpdateStatus(data._id, {
-                                                                    status: data.status === 'PUBLISHED' ? "DRAFT" : "PUBLISHED",
+                                                                    status: data.status === 'PUBLIC' ? "DRAFT" : "PUBLIC",
                                                                     title: data.title,
                                                                     html_template: data.html_template,
                                                                     body_content_text: data.body_content_text,
                                                                     word_count: data.word_count,
-                                                                    featured_image: data.featured_image
+                                                                    featured_image: data.featured_image,
+                                                                    category: data.category
                                                                 })}
-                                                            >{data.status === 'PUBLISHED' ? "Unpublish" : "Publish"}</p>
+                                                            >{data.status === 'PUBLIC' ? "Unpublish" : "Publish"}</p>
                                                             <p onClick={() => router.push(`/dashboard/blog/manage?action=edit&id=${data._id}`)}
                                                             >Edit Post</p><br />
                                                             <p onClick={() => handleDeleteBlogPost(data._id)}

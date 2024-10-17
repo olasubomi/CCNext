@@ -160,7 +160,7 @@ export const Editor = forwardRef((props, ref) => {
   return (
     <>
       <div className="editor-container ">
-        <div className="editor-toolbar">
+        <div  className="editor-toolbar">
           <ToolbarPlugin>
             <ImagePlugin />
             <ParagraphPlugin />
