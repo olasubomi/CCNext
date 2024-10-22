@@ -70,6 +70,16 @@ export const TopSellingProducts = () => {
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
 
+    if (item.inventories.length < 1) {
+      toast.info("Product not available for sale!");
+      return;
+    }
+
+    if (!item.inventories.some((inventory) => inventory.in_stock)) {
+      toast.info("Product is out of stock!");
+      return;
+    }
+
     if (qty == 0) {
       toast.error("Pls add a quantity");
     } else {

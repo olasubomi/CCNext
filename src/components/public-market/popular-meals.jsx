@@ -9,15 +9,12 @@ import { IndividualModal } from "../modal/individual-meal-product";
 import { useMediaQuery } from "../../hooks/usemediaquery";
 import { Mealmodal } from "../mobile/meal-modal";
 import { Element, scroller } from "react-scroll";
-import { ScrollableElement } from "../smooth-scroll-link";
-import mealImg from "../../../public/assets/store_pics/no-image-meal.png";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
   const [meals, setMeals] = useState([]);
-  const [visibleMeals, setVisibleMeals] = useState(8);
   const [selectedItem, setSelectedItem] = useState({});
   const [selectGrocery, setSelectGrocery] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -29,10 +26,6 @@ export const PopularMeals = () => {
   const ref = useRef(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
-
-  // const loadMore = () => {
-  //   setVisibleMeals(visibleMeals + 4);
-  // };
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -64,18 +57,18 @@ export const PopularMeals = () => {
     }
   };
 
-  // Generate a random integer between a specified range
-  // function getRandomInt(min, max) {
-  //   min = Math.ceil(min);
-  //   max = Math.floor(max);
-  //   return Math.floor(Math.random() * (max - min + 1)) + min;
-  // }
-
-  // Example usage to generate an ID between 1 and 1000
-  //let randomId = getRandomInt(1, 1000);
-
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
+
+    if (item.inventories.length < 1) {
+      toast.info("Meal not available for sale!");
+      return;
+    }
+
+    if (!item.inventories.some((inventory) => inventory.in_stock)) {
+      toast.info("Meal is out of stock!");
+      return;
+    }
 
     if (qty == 0) {
       toast.error("Pls add a quantity");
@@ -181,7 +174,7 @@ export const PopularMeals = () => {
       });
     }
   }, []);
-  console.log(selectedItem, 'selectedItem')
+  console.log(selectedItem, "selectedItem");
   return (
     <div className={styles.mealContainer}>
       <Element
@@ -200,8 +193,8 @@ export const PopularMeals = () => {
               onClick={() => {
                 setSelectedItem(meal);
                 setOpenModal(true);
-                setSelectedItemId(meal._id)
-                console.log(selectedItem, 'slected')
+                setSelectedItemId(meal._id);
+                console.log(selectedItem, "slected");
               }}
             >
               {

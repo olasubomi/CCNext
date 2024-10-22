@@ -114,6 +114,17 @@ const GroceryPage = () => {
     }
   };
   const addMultipleIToCart = () => {
+    selectedItem.map((item) => {
+      if (item.inventories.length < 1) {
+        toast.info(`Item ${item.item_name} not available for sale!`);
+        return;
+      }
+
+      if (!item.inventories.some((inventory) => inventory.in_stock)) {
+        toast.info(`Item ${item.item_name}  is out of stock!`);
+        return;
+      }
+    });
     const payload = selectedItem.map((item) => {
       return {
         userId: item.user,
