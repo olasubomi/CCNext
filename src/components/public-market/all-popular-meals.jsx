@@ -14,6 +14,7 @@ import mealImg from "../../../public/assets/store_pics/no-image-meal.png";
 import { BiSolidDownArrow } from "react-icons/bi";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
+import { MobileSearch } from "../dropdown/mobile-search";
 
 export const AllPopularMeals = () => {
   const alphabets = [
@@ -63,6 +64,8 @@ export const AllPopularMeals = () => {
   const [show, setShow] = useState(false);
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
+  const [showDropdown, setShowDropdown] = useState(true);
+
   const ref = useRef(null);
   const [serve, setServe] = useState(0);
   const dispatch = useDispatch();
@@ -187,7 +190,7 @@ export const AllPopularMeals = () => {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -242,6 +245,9 @@ export const AllPopularMeals = () => {
               <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
             </div>
           </div>
+        </div>
+        <div className={styles.searchbar}>
+          <MobileSearch setShowDropdown={setShowDropdown} />
         </div>
         <div className={styles.alphabetContainer}>
           <div className={styles.alphabetContainer2}>

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { BiSolidDownArrow } from "react-icons/bi";
 import StorePics from "../../../public/assets/store_pics/store.jpeg";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { MobileSearch } from "../dropdown/mobile-search";
 
 export const AllStores = () => {
   const alphabets = [
@@ -49,6 +50,7 @@ export const AllStores = () => {
   const [stores, setStores] = useState([]);
   const [isShow, setIsShow] = useState(false);
   const [selected, SetSelected] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(true);
   const [storeInfo, setStoreInfo] = useState({
     id: 0,
     name: "",
@@ -75,7 +77,6 @@ export const AllStores = () => {
           },
         }
       );
-      console.log(response.data.data, "one storey");
       setSelectedStore(response.data.data);
       setIsShow(true);
     } catch (error) {
@@ -171,6 +172,9 @@ export const AllStores = () => {
           </div>
         </div>
       </div>
+      <div className={styles.searchbar}>
+          <MobileSearch setShowDropdown={setShowDropdown} />
+        </div>
       <div className={styles.alphabetContainer}>
         {alphabets.map((elem, index) => (
           <span
@@ -270,6 +274,7 @@ export const AllStores = () => {
                       setIsShow={setIsShow}
                       selectedStore={selectedStore}
                       id={storeInfo?.id}
+                      name={storeInfo?.name}
                     />
                   )}
                 </div>

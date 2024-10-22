@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
-import Store from "../../src/components/individualPage/Store";
+import Store from "../../../src/components/individualPage/Store";
 import { meal_container } from "../../src/components/individualPage/meal.module.css";
-import Header, { Header2 } from "../../src/components/Header/Header";
-import Sidenav from "../../src/components/Header/sidenav";
+import Header, { Header2 } from "../../../src/components/Header/Header";
+import Sidenav from "../../../src/components/Header/sidenav";
 import SearchIcon from "@mui/icons-material/Search";
 import styles from "../../src/components/individualPage/store.module.css";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import WestIcon from "@mui/icons-material/West";
-import axios from "../../src/util/Api";
+import axios from "../../../src/util/Api";
 import { useEffect } from "react";
 import moment from "moment";
 

@@ -20,7 +20,7 @@ export const Stores = () => {
     address: "",
     rating: 0,
   });
-  const [uniqueItemIds, setUniqueItemIds] = useState(new Set()); // To store unique item IDs
+  const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
   const [selectedStore, setSelectedStore] = useState({
     items: [],
     supplier: {},
@@ -31,10 +31,11 @@ export const Stores = () => {
     setCurrentPage((prev) => prev + 1);
   };
 
-  const fetchOneStore = async (storeId) => {
+  const fetchOneStore = async (Id) => {
     try {
-      const response = await axios.get(`/inventory/get-store-inventory/${storeId}`);
+      const response = await axios.get(`/inventory/get-store-inventory/${Id}`);
       setSelectedStore(response.data.data);
+      console.log(response.data.data, 'response.data.data')
       setIsShow(true);
     } catch (error) {
       console.error("Error fetching store inventory:", error);
@@ -45,6 +46,7 @@ export const Stores = () => {
     try {
       const response = await axios.get(`/stores/getallstores/${page}?limit=10&status=PUBLIC`);
       const allItems = response.data.data.products;
+      console.log(allItems, 'all')
       const totalItems = response.data.data.count;
 
       const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
@@ -130,6 +132,7 @@ export const Stores = () => {
                 setIsShow={setIsShow}
                 selectedStore={selectedStore}
                 id={storeInfo?.id}
+                name={storeInfo?.name}
               />
             )}
           </div>

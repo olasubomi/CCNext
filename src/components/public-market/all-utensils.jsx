@@ -10,6 +10,7 @@ import { UtensilModal } from "../modal/individual-meal-product";
 import { BiSolidDownArrow } from "react-icons/bi";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
+import { MobileSearch } from "../dropdown/mobile-search";
 
 export const AllUtensils = () => {
   const alphabets = [
@@ -47,6 +48,8 @@ export const AllUtensils = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [availableLetters, setAvailableLetters] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(true);
+
 
 
   const handleActiveLetter = (elem, id) => {
@@ -84,34 +87,34 @@ export const AllUtensils = () => {
 
     const addItemToCart = (item, qty) => {
       const user = JSON.parse(localStorage.getItem("user"));
-      
-      if(qty == 0 ){
+
+      if (qty == 0) {
         toast.error("Add a quantity");
-      }else{
-         const payload = {
+      } else {
+        const payload = {
           userId: (user && user._id) ? user._id : "",
-          storeId : "" ,
+          storeId: "",
           store_name: "",
-          itemId : item._id,
+          itemId: item._id,
           quantity: qty,
           item_price: item.item_price,
           currency: "",
           item_image: item.itemImage0,
           itemName: item.item_name,
-          item_type: item.item_type? item.item_type : "Product",
-      } 
-      console.log(payload, "Cart payload line 76 utensil");
-      try {
-        dispatch(addToCart(payload))
-        setOpenList(false);
-        setShow(false);
-        setOpenModal(false);
-      } catch (error) {
-        console.log(error);
-      }
+          item_type: item.item_type ? item.item_type : "Product",
+        }
+        console.log(payload, "Cart payload line 76 utensil");
+        try {
+          dispatch(addToCart(payload))
+          setOpenList(false);
+          setShow(false);
+          setOpenModal(false);
+        } catch (error) {
+          console.log(error);
+        }
       };
-    
-    
+
+
     };
 
 
@@ -249,6 +252,9 @@ export const AllUtensils = () => {
             </div>
           </div>
         </div>
+        <div className={styles.searchbar}>
+          <MobileSearch setShowDropdown={setShowDropdown} />
+        </div>
         <div className={styles.alphabetContainer}>
           <div className={styles.alphabetContainer2}>
             {alphabets.map((elem, index) => (
@@ -367,7 +373,7 @@ export const AllUtensils = () => {
             setQuantity={setQuantity}
             quantity={quantity}
             setShow={setShow}
-            addToCart ={addItemToCart}
+            addToCart={addItemToCart}
           />
         </div>
         <div className={styles.paginationContainer}>

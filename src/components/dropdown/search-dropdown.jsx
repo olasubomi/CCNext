@@ -49,6 +49,7 @@ export const SearchDropdown = ({ setShowDropdown }) => {
   const [oneStore, setOneStore] = useState({
     visible: false,
     id: "",
+    name: ""
   });
   const getItem = async (name) => {
     try {
@@ -211,6 +212,7 @@ export const SearchDropdown = ({ setShowDropdown }) => {
                                 setOneStore({
                                   visible: true,
                                   id: stores.value,
+                                  name: stores.label
                                 });
                                 setValue(stores.label);
                               }}
@@ -356,7 +358,8 @@ export const SearchDropdown = ({ setShowDropdown }) => {
           className={styles.searchbtn}
           onClick={() => {
             if (oneStore.visible) {
-              router.push(`/store/${oneStore.id}`);
+              localStorage.setItem("storeId", id)
+              router.push(`/store/${oneStore.name}`)
             } else {
               items.item_type === "Meal"
                 ? router.push(`/meal/${value}`)
