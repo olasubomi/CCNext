@@ -22,7 +22,6 @@ import axios from "../../util/Api";
 function Store(props) {
   const [openModal, setOpenModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
-  const [selectItem, setSelectItem] = useState({});
   const [selectedStore, setSelectedStore] = useState([])
   const router = useRouter();
 
@@ -47,28 +46,37 @@ function Store(props) {
     //   })
     // }
   }
-  console.log(props.store, "props11");
+  console.log(props?.item, "props11");
   const filteredItem = () => {
     return props?.items?.filter((data) => data?.item_type === "Meal");
   };
   const filteredProducts = () => {
     return props?.items?.filter((data) => data?.item_type === "Product");
   };
-  console.log(filteredProducts(), "filtered");
 
   const fetchOneStore = async (storeId) => {
+
     try {
       const response = await axios.get(`/inventory/get-store-inventory/${storeId}`);
       setSelectedStore(response.data.data);
-    } catch (error) {
-      console.error("Error fetching store inventory:", error);
-    }
-  };
-  useEffect(() => {
-    fetchOneStore(props?.store?._id)
-  }, [])
 
-  console.log(selectedStore, 'inventory items')
+    } catch (error) {
+      console.error(`Attempt ${i + 1}: Error fetching store inventory`, error);
+      if (i === retries - 1) {
+        console.error("All retry attempts failed");
+      }
+    }
+
+  };
+
+  useEffect(() => {
+    if (props?.store?._id) {
+      fetchOneStore(props.store._id);
+    } else {
+      console.error("Store ID is undefined");
+    }
+  }, [props?.store?._id]);
+  console.log(props.store, 'props?.store?._id')
   return (
     <>
       <Head>
@@ -269,8 +277,10 @@ function Store(props) {
                           </div>
                           <p className={styles.name2}>
                             {meal?.item?.item_price
-                              ? meal?.storeId?.currency?.symbol +
-                              `${meal?.item?.item_price}`
+                              ? meal?.storeId.filter((elem) => elem.store_name === props?.store?.store_name)
+                                .map((elem) => (
+                                  `${elem.currency?.symbol} ${meal.item.item_price}`
+                                ))
                               : "N/A"}
                           </p>
                         </div>
@@ -338,8 +348,10 @@ function Store(props) {
                           </div>
                           <p className={styles.name2}>
                             {meal?.item?.item_price
-                              ? meal?.storeId?.currency?.symbol +
-                              `${meal?.item?.item_price}`
+                              ? meal?.storeId.filter((elem) => elem.store_name === props?.store?.store_name)
+                                .map((elem) => (
+                                  `${elem.currency?.symbol} ${meal.item.item_price}`
+                                ))
                               : "N/A"}
                           </p>
                         </div>

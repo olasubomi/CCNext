@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
-import Store from "../../src/components/individualPage/Store";
-import { meal_container } from "../../src/components/individualPage/meal.module.css";
-import Header, { Header2 } from "../../src/components/Header/Header";
-import Sidenav from "../../src/components/Header/sidenav";
+import Store from "../../../src/components/individualPage/Store";
+import { meal_container } from "../../../src/components/individualPage/meal.module.css";
+import Header, { Header2 } from "../../../src/components/Header/Header";
+import Sidenav from "../../../src/components/Header/sidenav";
 import SearchIcon from "@mui/icons-material/Search";
-import styles from "../../src/components/individualPage/store.module.css";
+import styles from "../../../src/components/individualPage/store.module.css";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import WestIcon from "@mui/icons-material/West";
-import axios from "../../src/util/Api";
+import axios from "../../../src/util/Api";
 import { useEffect } from "react";
 import moment from "moment";
 
@@ -65,11 +65,10 @@ const IndividualStorePage = (props) => {
                 </div> */}
         <div
           style={{
-            background: `url(${
-              props.store.data.supplier.background_picture
+            background: `url(${props.store.data.supplier.background_picture
                 ? props.store.data.supplier.background_picture
                 : "/assets/store_pics/no-image-store.png"
-            })`,
+              })`,
             width: "100%",
             backgroundPosition: "center",
             backgroundSize: "cover",

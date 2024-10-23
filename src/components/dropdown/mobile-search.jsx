@@ -51,6 +51,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
   const [oneStore, setOneStore] = useState({
     visible: false,
     id: "",
+    name: ""
   });
   const getItem = async (name) => {
     try {
@@ -110,6 +111,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
       true
     );
   }, []);
+
   return (
     <div className={styles.two3} ref={ref}>
       <div>
@@ -223,6 +225,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
                                 setOneStore({
                                   visible: true,
                                   id: stores.value,
+                                  name: stores.label
                                 });
                                 setValue(stores.label);
                               }}
@@ -323,43 +326,43 @@ export const MobileSearch = ({ setShowDropdown }) => {
               <>
                 {categories.find((ele) => ele.label === "Kitchen Utensils")
                   ?.value && (
-                  <>
-                    <h4 className={styles.storeTitle}>
-                      Kitchen Utensils ({filteredUtensils().length})
-                    </h4>
-                    <div className={styles.bord} />
-                    <div className={styles.list}>
-                      {filteredUtensils().length === 0 ? (
-                        Boolean(value) ? (
-                          <div className={styles.result}>
-                            <p>No Result Found</p>
-                            <button onClick={() => router.push("/suggestmeal")}>
-                              Suggest Utensil
-                            </button>
-                          </div>
-                        ) : null
-                      ) : (
-                        filteredUtensils()
-                          ?.slice(0, 4)
-                          .map((elem) => (
-                            <p
-                              key={elem.value}
-                              onClick={() => {
-                                setOneStore({
-                                  visible: false,
-                                  id: "",
-                                });
-                                setValue(elem.label);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {elem.label}
-                            </p>
-                          ))
-                      )}
-                    </div>
-                  </>
-                )}
+                    <>
+                      <h4 className={styles.storeTitle}>
+                        Kitchen Utensils ({filteredUtensils().length})
+                      </h4>
+                      <div className={styles.bord} />
+                      <div className={styles.list}>
+                        {filteredUtensils().length === 0 ? (
+                          Boolean(value) ? (
+                            <div className={styles.result}>
+                              <p>No Result Found</p>
+                              <button onClick={() => router.push("/suggestmeal")}>
+                                Suggest Utensil
+                              </button>
+                            </div>
+                          ) : null
+                        ) : (
+                          filteredUtensils()
+                            ?.slice(0, 4)
+                            .map((elem) => (
+                              <p
+                                key={elem.value}
+                                onClick={() => {
+                                  setOneStore({
+                                    visible: false,
+                                    id: "",
+                                  });
+                                  setValue(elem.label);
+                                }}
+                                style={{ cursor: "pointer" }}
+                              >
+                                {elem.label}
+                              </p>
+                            ))
+                        )}
+                      </div>
+                    </>
+                  )}
               </>
             </div>
           )}
@@ -368,7 +371,8 @@ export const MobileSearch = ({ setShowDropdown }) => {
           className={styles.searchbtn}
           onClick={() => {
             if (oneStore.visible) {
-              router.push(`/store/${oneStore.id}`);
+              localStorage.setItem("storeId", oneStore.id)
+              router.push(`/store/${oneStore.name}`);
             } else {
               if (
                 items.find(
