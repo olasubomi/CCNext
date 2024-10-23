@@ -782,57 +782,6 @@ const SuggestedMeals = (props) => {
     setChangeStoreStatus(!changeStoreStatus);
   }
 
-  // function handleStatusType(type) {
-  //     setStatusTypeState(type)
-  //     let url1
-  //     if (searchType === 'Meal') {
-  //         url1 = '/meals/update/'
-  //     } else if (searchType === 'Product') {
-  //         url1 = '/products/update/'
-  //     } else {
-  //         url1 = '/categories/update/'
-  //     }
-  //     axios.post(url1 + suggestion._id, { status: type }).then(res => {
-  //         if (res.data.data) {
-  //             suggestion.publicly_available = type
-  //             let url2
-  //             if (searchType === 'Meal') {
-  //                 if (props.auth.authUser.user_type === 'admin') {
-  //                     url2 = '/meals/get-meals/1'
-  //                 } else {
-  //                     url2 = '/meals/get-meals/1?user=' + props.auth.authUser._id
-  //                 }
-  //             } else if (searchType === 'Product') {
-  //                 if (props.auth.authUser.user_type === 'admin') {
-  //                     url2 = '/products/get-all-products/1'
-  //                 } else {
-  //                     url2 = '/products/get-all-products/1?user=' + props.auth.authUser._id
-  //                 }
-  //             } else {
-  //                 if (props.auth.authUser.user_type === 'admin') {
-  //                     url2 = '/categories/get-all-categories/1'
-  //                 } else {
-  //                     url2 = '/categories/get-all-categories/1?user=' + props.auth.authUser._id
-  //                 }
-  //             }
-  //             getSuggestion(url2, searchType)
-  //         }
-  //     })
-  //     toggleChangeStatus()
-  // }
-  //  const handleStatusType = async (type) => {
-  //   try(
-  //     setStatusTypeState(type)
-  //     let url = 'items/item-control'
-  //    await axios.post(url, {
-  //         itemId: suggestion._id,
-  //         "status": type,
-  //         })
-  //         toggleChangeStatus()
-  //   )catch(e){
-  //     console.log(e)
-  //   }
-  // }
   const handleStatusType = async (type) => {
     try {
       setStatusTypeState(type);
@@ -1427,7 +1376,9 @@ const SuggestedMeals = (props) => {
     }
   };
   // console.log(suggestion.prepime, 'prep time not showing')
-  const selectedUserType = useSelector((state) => state.userType.selectedUserType);
+  const selectedUserType = useSelector(
+    (state) => state.userType.selectedUserType
+  );
 
   return (
     <div className={container + " " + col2}>
@@ -1656,7 +1607,7 @@ const SuggestedMeals = (props) => {
                       </>
                     )}
                   </div>
-                  {selectedUserType!== "admin" && (
+                  {selectedUserType !== "admin" && (
                     <div className={styles.suggestedmeal_row2_col2}>
                       {/* <h5>Remove Sections(s)</h5> */}
                       <div>

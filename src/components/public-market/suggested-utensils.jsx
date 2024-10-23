@@ -61,6 +61,16 @@ export const SuggestedUtensils = () => {
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
 
+    if (item.inventories.length < 1) {
+      toast.info("Utensil not available for sale!");
+      return;
+    }
+
+    if (!item.inventories.some((inventory) => inventory.in_stock)) {
+      toast.info("Utensil is out of stock!");
+      return;
+    }
+
     if (qty == 0) {
       toast.error("Add a quantity");
     } else {
