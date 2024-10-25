@@ -72,8 +72,6 @@ const PublicMarket = () => {
 
   const onSuccess = useCallback(async (location) => {
     if (location?.coords?.latitude && location?.coords?.longitude) {
-      console.log("Longitude:", location.coords.longitude);
-      console.log("Latitude:", location.coords.latitude);
       setIsLoading(true);
 
       try {
@@ -82,13 +80,11 @@ const PublicMarket = () => {
           latitude: location?.coords?.latitude,
         });
         // Log longitude and latitude
-        console.log(location.coords, "long");
 
         const res = await BaseAxios.get(
           `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location?.coords?.latitude},${location?.coords?.longitude}&key=AIzaSyDJ2OXLQoX_83t-DYmg-zIs3keZmNAZHzk`
         );
         const data = res.data;
-        console.log(res, "respo");
         const curr_location =
           data?.results?.find(
             (ele) =>
@@ -120,7 +116,6 @@ const PublicMarket = () => {
       true
     );
   }, []);
-  console.log(store, "store");
   const [activeSubLink, setActiveSubLink] = useState(0);
 
   return (
@@ -148,45 +143,13 @@ const PublicMarket = () => {
       />
       <Sidenav />
 
-      {/* <div className={styles.header}>
-        <p className={styles.title}>Access stores near you</p>
-        <AddressInput
-          showLocation={showLocation}
-          currentAddress={currentAddress}
-          isLoading={isLoading}
-          setShowLocation={setShowLocation}
-          showAddress={showAddress}
-          ref={addressRef}
-          setIsLoading={setIsLoading}
-          setCurrentAddress={setCurrentAddress}
-          setShowAddress={setShowAddress}
-          showCurrentLocation={showCurrentLocation}
-          setShowCurrentLocation={setShowCurrentLocation}
-        />
-        <div
-          className={styles.location}
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            navigator.geolocation.getCurrentPosition(onSuccess, onError);
-            addressRef.current?.handleGetStoreByLocation();
-            setShowLocation(!showLocation);
-            setShowCurrentLocation(true);
-            console.log(showLocation, "showLocation");
-          }}
-        >
-          <HiLocationMarker size={17} fill="#FFFFFF" />
-          <p className={styles.title} style={{ marginLeft: ".4rem" }}>
-            Use my current location
-          </p>
-        </div>
-      </div> */}
-
       {activeSubLink === 0 && (
         <>
           <div className={styles.marketplace}>
             <h1>Marketplace</h1>
             <p>
-              Find stores, recipes, kitchen utensils and your favourite products.
+              Find stores, recipes, kitchen utensils and your favourite
+              products.
             </p>
           </div>
 
@@ -220,33 +183,6 @@ const PublicMarket = () => {
           </>
         </>
       )}
-      {/* {activeSubLink === 1 && (
-        <>
-          {categories.find((ele) => ele.label === "Stores")?.value && (
-            <AllStores />
-          )}
-        </>
-      )}
-      <div>
-        {activeSubLink === 2 && (
-          <>
-            {categories.find((ele) => ele.label === "Meals")?.value && (
-              <div>
-                <AllPopularMeals />
-              </div>
-            )}
-          </>
-        )}
-      </div>
-      {activeSubLink === 3 && (
-        <>
-          {categories.find((ele) => ele.label === "Products")?.value && (
-            <div>
-              <AllProducts />
-            </div>
-          )}
-        </>
-      )} */}
       {activeSubLink === 4 && (
         <>
           {categories.find((ele) => ele.label === "Kitchen Utensils")

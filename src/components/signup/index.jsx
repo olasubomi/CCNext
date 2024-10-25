@@ -204,6 +204,14 @@ function SignUp(props) {
       localStorage.setItem("formState", JSON.stringify(formState));
       setOpenUserVerification(true)
     }
+
+
+
+
+    // if(isAuthenticated && authUser){
+
+    // //   router.push("/dashboard");
+    // }
   }
 
   console.log("openUserVerificationSuccess", openUserVerificationSuccess)

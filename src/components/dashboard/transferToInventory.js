@@ -8,6 +8,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Image from "next/image";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useMediaQuery } from "../../hooks/usemediaquery";
+import Select from "react-select";
+import { toast } from "react-toastify";
 
 // const CustomSwitch = ({ checked, onChange }) => {
 //   return (
@@ -76,7 +78,6 @@ const SwitchLabel = styled.span`
 `;
 
 export default function TransferToInventory(props) {
-  console.log(props.checked, "pppp");
   const matches = useMediaQuery("(min-width: 700px)");
   const [restockOption, setRestockOption] = useState();
   const [restockTime, setRestockTime] = useState("1 day");
@@ -97,28 +98,6 @@ export default function TransferToInventory(props) {
   const { reloadData } = props;
 
   const { ingredientsAvailable, item_type, in_stock } = formState;
-  console.log(in_stock, "in");
-  // useEffect(() => {
-  //   console.log( props.meal.ingredeints_in_item, 'propsss');
-  //   if (props.meal.item_type === "Meal" && props.meal.ingredeints_in_item) {
-  //     const ingredientsAvailable = props.meal.ingredeints_in_item;
-
-  //     const newIngredients = ingredientsAvailable?.map((ingredient) => ({
-  //       name: ingredient.item_name,
-  //       quantity: ingredient.quantity,
-  //       set_price: "",
-  //       product_available: true,
-  //     }));
-
-  //     console.log(newIngredients, 'new');
-
-  //     setFormState((prevState) => ({
-  //       ...prevState,
-  //       ingredientsAvailable: newIngredients,
-  //       item_type: props.type,
-  //     }));
-  //   }
-  // }, [props.meal.item_type, props.meal.ingredeints_in_item]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -139,18 +118,7 @@ export default function TransferToInventory(props) {
     } else {
       setFormState({ ...formState, [name]: value });
     }
-
-    console.log(formState);
   }
-
-  // useEffect(() => {
-  //   if (props?.ingredeints_in_item) {
-  //     setFormState({
-  //       ...formState,
-  //       ingredientsAvailable: props.ingredeints_in_item,
-  //     });
-  //   }
-  // }, [props?.ingredeints_in_item]);
 
   function handleInStockChange(value) {
     setFormState({ ...formState, in_stock: value });
@@ -158,28 +126,15 @@ export default function TransferToInventory(props) {
 
   function handleIngredientChange(e, id, key) {
     const { value } = e.target;
-    console.log(e, id, key);
     let ingredientsAvailable = formState.ingredientsAvailable;
     ingredientsAvailable[id][key] = value;
-    console.log(ingredientsAvailable);
     setFormState({
       ...formState,
       ["ingredientsAvailable"]: ingredientsAvailable,
     });
   }
 
-  // function handleIngredientAvailabilityChange(value, id, key) {
-  //   console.log(value);
-  //   let ingredientsAvailable = formState.ingredientsAvailable;
-  //   ingredientsAvailable[id][key] = value;
-  //   setFormState({
-  //     ...formState,
-  //     ["ingredientsAvailable"]: ingredientsAvailable,
-  //   });
-  // }
   function handleIngredientAvailabilityChange(value, id, key) {
-    console.log(value);
-
     // Create a shallow copy of the ingredientsAvailable array
     const updatedIngredientsAvailable = [...formState.ingredientsAvailable];
 
@@ -198,10 +153,11 @@ export default function TransferToInventory(props) {
 
   function sendToInventory() {
     let fields = formState;
-
+    if (!fields["meal_price"] || fields["meal_price"] == 0) {
+      toast.error(`Meal price cannot be empty!`);
+    }
     delete fields.meal_type;
     fields["item"] = props.meal._id;
-    // fields["storeId"] = "63783f54088dda05688af4df";
     fields.ingredients = formState.ingredientsAvailable;
     delete formState.ingredientsAvailable;
     fields.user = JSON.parse(localStorage.getItem("user"))?._id ?? "";
@@ -209,9 +165,6 @@ export default function TransferToInventory(props) {
       .post("/inventory/create-inventory", fields)
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
-          // this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
-          console.log(response);
-          console.log("Display Item submitted successfully");
           props.setTransferToInventoryState(false);
           setShow(true);
           setTimeout(() => {
@@ -251,7 +204,6 @@ export default function TransferToInventory(props) {
   function toggleRestockTimeOption() {
     setRestockOption(!restockOption);
   }
-  console.log(props, "ty");
 
   useEffect(() => {
     if (
@@ -286,7 +238,6 @@ export default function TransferToInventory(props) {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data.data, "one store");
       setAllStores(response.data.data);
       setCurrency(response.data.data);
     } catch (error) {
@@ -297,10 +248,14 @@ export default function TransferToInventory(props) {
     fetchOneUserStore();
   }, []);
   if (in_stock) {
-    console.log(formState.ingredientsAvailable, "avail");
   } else {
-    console.log("not in stock");
   }
+
+  const storeOptions = allStores?.map((elem) => ({
+    value: elem?._id,
+    label: elem?.store_name,
+  }));
+
   return (
     <>
       {show && (
@@ -373,27 +328,37 @@ export default function TransferToInventory(props) {
                 >
                   Which store are you sending from?
                 </label>
-                <select
-                  className={styles.selected}
-                  onChange={(e) => {
-                    setFormState({
-                      ...formState,
-                      ["storeId"]: e.target.value,
-                    });
-                    setSelectedStore(e.target.value);
-                  }}
-                  name="storeId"
-                  value={formState.storeId}
-                >
-                  <option disabled selected>
-                    Select...
-                  </option>
-                  {allStores?.map((elem) => (
-                    <option key={elem?._id} value={elem?._id}>
-                      {elem?.store_name}
-                    </option>
-                  ))}
-                </select>
+
+                <div className={styles.dropdown}>
+                  {/* <button className={styles.dropdownButton}>Select Stores</button> */}
+                  <div>
+                    {allStores?.map((store) => (
+                      <label key={store._id} style={{ marginLeft: "1rem" }}>
+                        <input
+                          style={{ marginRight: ".5rem" }}
+                          type="checkbox"
+                          value={store._id}
+                          checked={
+                            formState.storeId?.includes(store._id) || false
+                          }
+                          onChange={(e) => {
+                            const storeIds = formState.storeId || [];
+                            const selectedValues = e.target.checked
+                              ? [...storeIds, e.target.value]
+                              : storeIds.filter((id) => id !== e.target.value);
+
+                            setFormState({
+                              ...formState,
+                              storeId: selectedValues,
+                            });
+                            setSelectedStore(selectedValues);
+                          }}
+                        />
+                        {store.store_name}
+                      </label>
+                    ))}
+                  </div>
+                </div>
               </div>
               <div className={styles.transToIn_meal_types}>
                 <p>Choose Meal Type</p>

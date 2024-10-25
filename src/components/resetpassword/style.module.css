@@ -9,143 +9,138 @@ opacity: 0px;
 
 
 } */
-.reset_text h4{
-  padding : 10px 0px 0px 0px;
+
+.login_form_input {
+  width: 10%;
+  outline: none;
+  background: #FFFFFF;
+  border: 1px solid #DCDEDE;
+  box-sizing: border-box;
+  border-radius: 2px;
+  display: flex;
+  padding: 16px 15px;
+  align-items: center;
+  gap: 10px;
+  color: rgba(0, 0, 0, 0.90);
   font-family: Inter;
-font-size: 14px;
-font-weight: 400;
-line-height: 20.72px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
+.reset_text h4 {
+  padding: 10px 0px 0px 0px;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20.72px;
+}
+
 .resetpassword {
-    width: 100%;
-    height: 10vh;
-    background: #ddfF;
+  width: 100vw;
+  height: 10vh;
+  background: #F47900;
 }
+
 .ellipse {
-    width: 100px;  
-    height: 100px;
-    border-radius: 50%; 
-    background: #F479000F;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color:#F47900;
-    margin-top: 30px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #F479000F;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #F47900;
+  margin-top: 30px;
 
-  }
-  .resetpassworddiv{
-    display: flex;
-    justify-content:center;
-    align-items: center
-  }
-  .container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    
-  }
-  .container > h3{
-font-family: Inter;
-font-size: 23px;
-font-weight: 500;
-line-height: 27.84px;
-text-align: center;
-
-
-  }
-  .button {
-    justify-self: start;
-      width: 100%;
-      height: 46px;
-      display: grid;
-      justify-content: center;
-      align-items: center;
-      
-      background: #F47900;
-      border-radius: 4px;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 17px;
-      /* identical to box height */
-
-
-      color: #FFFFFF;
-      border: none;
-      margin-bottom: 1rem;
-  }
-  .inputfield {
-    //width: 400px;
-    outline: none;
-    background: #FFFFFF;
-    //border: 1px solid #DCDEDE;
-    box-sizing: border-box;
-    //border-radius: 2px;
-    display: flex;
-    padding: 16px 15px;
-    align-items: center;
-    gap: 10px;
-    color: rgba(0, 0, 0, 0.90);
-    font-family: Inter;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-
-    /* width: 200px;
-    
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px; */
-
-    width: 559px;
-height:45px;
-top: 25px;
-padding: 16px 0px 0px 0px;
-
-border-radius: 4px 0px 0px 0px;
-border: 1px 0px 0px 0px;
-opacity: 0px;
-
-  }
-  .inputlabel {
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-.resetpassword .form-group {
-    margin: auto;
 }
+
+.resetpassworddiv {
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+.container>h3 {
+  font-family: Inter;
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 27.84px;
+  text-align: center;
+
+
+}
+
+.button {
+  justify-self: start;
+  width: 100%;
+  height: 46px;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+
+  background: #F47900;
+  border-radius: 4px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+
+
+  color: #FFFFFF;
+  border: none;
+  margin-bottom: 1rem;
+}
+
+.inputlabel {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.resetpassword .form-group {
+  margin: auto;
+}
+
 .inputgroup {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  .formInput > div{
-    margin-top: 15px
-  }
-  .formInput > div > div{
-    padding-bottom: 5px
-  }
-  .formInput > button{
-    margin-top: 15px
-  }
-  
-.reset_text{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.formInput>div {
+  margin-top: 15px
+}
+
+.formInput>div>div {
+  padding-bottom: 5px
+}
+
+.formInput>button {
+  margin-top: 15px
+}
+
+.reset_text {
   margin: 0px 20px 20px 0px;
 }
 
 .password_wrapper {
-  width: 100%;
+  width: 35vw;
   position: relative;
 }
+
 .password_toggle {
   position: absolute;
   right: 10px;
@@ -156,13 +151,16 @@ opacity: 0px;
   cursor: pointer;
   outline: none;
 }
+
 .inputfield:focus::placeholder {
   color: transparent;
 }
+
 .inputfield::placeholder {
   color: #aaa;
   font-style: italic;
 }
+
 .inputfield:focus {
   border-color: #3498db;
   box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);

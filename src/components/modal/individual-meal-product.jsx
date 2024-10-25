@@ -9,7 +9,10 @@ import { Modal } from "../modal/popup-modal";
 import { useRouter } from "next/router";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
 import { useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 export const IndividualModal = ({
   openList,
   openModal,
@@ -25,8 +28,13 @@ export const IndividualModal = ({
   setQuantity,
   quantity,
   selectedItem,
+  addToCart,
+  serve,
+  setServe,
+  selectedItemId
 }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const dropdownRef = useRef();
 
   const handleClickOutside = (event) => {
@@ -46,6 +54,21 @@ export const IndividualModal = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openModal]);
+  console.log(selectedItemId, 'selectedItemId')
+
+  const handleNavigation = () => {
+    if (selectedItemId) {
+      localStorage.setItem("selectedItemId", selectedItemId);
+      const targetURL = `/meal/${selectedItem.meal_chef}/${selectedItem.item_name}`;
+      console.log("Navigating to:", targetURL);
+      router.push(targetURL);
+    } else {
+      toast.error("No valid item selected. Please try again.");
+    }
+  };
+  
+
+
   return (
     <div>
       {openModal && (
@@ -98,7 +121,7 @@ export const IndividualModal = ({
                   <div className={styles.cat} style={{ marginTop: "-.5rem" }}>
                     <p className={styles.intro}>
                       {selectedItem?.item_categories
-                        ?.map((cat) => cat.category_name)
+                        .map((cat) => cat.category_name)
                         ?.toString()}
                     </p>
                   </div>
@@ -122,6 +145,30 @@ export const IndividualModal = ({
                       >
                         <p
                           onClick={() => {
+                            if (quantity !== 0) setServe((prev) => prev - 1);
+                          }}
+                          className={styles.box2}
+                        >
+                          -
+                        </p>
+                        <p style={{ marginRight: "1rem" }}>{serve}</p>
+                        <p
+                          onClick={() => setServe((prev) => prev + 1)}
+                          className={styles.box2}
+                        >
+                          +
+                        </p>
+                      </div>
+                      
+                    </div>
+                    <div className={styles.flex1}>
+                      <h4 className={styles.prep}>Meal Quantity:</h4>
+                      <div
+                        className={styles.flex2}
+                        style={{ marginLeft: "1rem" }}
+                      >
+                        <p
+                          onClick={() => {
                             if (quantity !== 0) setQuantity((prev) => prev - 1);
                           }}
                           className={styles.box2}
@@ -136,7 +183,9 @@ export const IndividualModal = ({
                           +
                         </p>
                       </div>
+                      
                     </div>
+                    
                   </div>
                   <div>
                     <span className={styles.prepspan}>
@@ -152,15 +201,14 @@ export const IndividualModal = ({
                       <p className={styles.prep}>Chef:</p>
                       <p
                         className={styles.underline}
-                        onClick={() =>
-                          router.push(`/chef/${selectedItem.user._id}`)
-                        }
+                        onClick={() => router.push(`/chef/${selectedItem.user._id}`)}
                       >
                         {selectedItem.meal_chef}
                       </p>
                     </span>
                   </div>
                 </div>
+                
                 <div style={{ marginTop: "1rem", paddingBottom: "3rem" }}>
                   <p className={styles.prep}>Add Meal Ingredients</p>
                   <table
@@ -168,6 +216,7 @@ export const IndividualModal = ({
                       width: "100%",
                       borderCollapse: "collapse",
                       marginTop: "1rem",
+                      
                     }}
                   >
                     <thead className={styles.thead}>
@@ -176,14 +225,12 @@ export const IndividualModal = ({
                       <th className={styles.th}>Measurement</th>
                       <th className={styles.th}>Price</th>
                     </thead>
-                    <tbody>
-                      {selectedItem?.ingredeints_in_item?.map((elem, index) => (
+                    <tbody> 
+                      {selectedItem.ingredeints_in_item.map((elem, index) => (
                         <tr key={index} className={styles.tr}>
-                          <td className={styles.td}>{elem?.item_name}</td>
-                          <td className={styles.td}>{elem?.item_quantity}</td>
-                          <td className={styles.td}>
-                            {elem?.item_measurement}
-                          </td>
+                          <td className={styles.td}>{elem.item_name}</td>
+                          <td className={styles.td}>{elem.item_quantity}</td>
+                          <td className={styles.td}>{elem.item_measurement}</td>
                           <td className={styles.td}>
                             {elem?.item_price ? `$${elem?.item_price}` : "N/A"}
                           </td>{" "}
@@ -264,7 +311,7 @@ export const IndividualModal = ({
                       (elem, index) => {
                         return (
                           <div key={index}>
-                            {/\.(jpg|png|jpeg)$/i.test(elem?.dataName) ? (
+                            {/\.(jpg|png|jpeg)$/i.test(elem.dataName) ? (
                               <img
                                 src={
                                   selectedItem[
@@ -305,7 +352,7 @@ export const IndividualModal = ({
                               ))}
                             </span>
                           </div>
-                        );
+                        )
                       }
                     )}
                   </Carousel>
@@ -314,10 +361,8 @@ export const IndividualModal = ({
             </div>
             <div className={styles.border2} />
             <div className={styles.buttons}>
-              <button className={styles.outlinebtn}>
-                <Link href={`/meal/${selectedItem?.meal_chef}/${selectedItem.item_name}`}>
-                  See Full Recipe
-                </Link>
+              <button className={styles.outlinebtn} onClick={() => handleNavigation()}>
+                See Full Recipe
               </button>
               <button
                 className={styles.outlinebtn}
@@ -329,7 +374,7 @@ export const IndividualModal = ({
               >
                 Add to Grocery List
               </button>
-              <button className={styles.btn}>Add to Cart</button>
+              <button className={styles.btn} onClick={() => addToCart(selectedItem, quantity)} >Add to Cart</button>
             </div>
           </div>
         </div>
@@ -401,6 +446,7 @@ export const ProductModal = ({
   setItemAdd,
   setQuantity,
   quantity,
+  addToCart,
 }) => {
   const dropdownRef = useRef();
 
@@ -551,7 +597,7 @@ export const ProductModal = ({
               >
                 Add to Grocery List
               </button>
-              <button className={styles.btn}>Add to Cart</button>
+              <button className={styles.btn} onClick={() => addToCart(selectedItem, quantity)} >Add to Cart</button>
             </div>
           </div>
         </div>
@@ -622,6 +668,7 @@ export const UtensilModal = ({
   setItemAdd,
   setQuantity,
   quantity,
+  addToCart
 }) => {
   const dropdownRef = useRef();
 
@@ -652,7 +699,7 @@ export const UtensilModal = ({
           ></div>
           <div
             className={styles.modalContainer}
-            onClick={() => setOpenModal(false)}
+            
           >
             <div className={styles.modalCard} ref={dropdownRef}>
               <div className={styles.flexed}>
@@ -852,7 +899,7 @@ export const UtensilModal = ({
                 >
                   Add to Grocery List
                 </button>
-                <button className={styles.btn}>Add to Cart</button>
+                <button className={styles.btn } onClick={() => addToCart(selectedItem, quantity)}>Add to Cart</button>
               </div>
             </div>
           </div>

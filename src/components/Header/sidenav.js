@@ -6,7 +6,7 @@ import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png";
 import Link from "next/link";
 import Sidenav2 from "./sidenav2";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { UserIcon } from "../icons";
 
 function SideNav(props) {
@@ -25,6 +25,7 @@ function SideNav(props) {
 
     window.event.returnValue = false;
   }
+  const selectedUserType = useSelector((state) => state.userType.selectedUserType);
 
   return (
     <div className={styles.navbar_side}>
@@ -72,13 +73,15 @@ function SideNav(props) {
               </div>
             )}
             <div>
-              <h3>
+              {props?.auth?.authUser?.first_name &&
+                <h3>
                 {props?.auth?.authUser?.first_name +
                   " " +
                   props?.auth?.authUser?.last_name}
               </h3>
+              }
               <p className={styles.sidenav_top_row_2_text}>
-                {props?.auth?.authUser?.user_type}
+                {selectedUserType}
               </p>
             </div>
           </div>

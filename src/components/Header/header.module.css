@@ -954,7 +954,7 @@
   .navbar_down {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 40px;
+    grid-template-rows: 70px;
   }
   .navbar_down_2 {
     display: none;
@@ -966,6 +966,7 @@
     align-items: center;
     justify-content: center;
     color: #000;
+    margin-bottom: 15px;
   }
   .activeOne {
     font-size: 12px;
@@ -974,6 +975,8 @@
     align-items: center;
     justify-content: center;
     color: #f47900;
+    margin-bottom: 15px;
+
   }
   .navbar_user_signedin_link {
     display: flex;

@@ -293,7 +293,7 @@ const MyTabs = ({ id }) => {
                   </div>
                   <div
                     onClick={() =>
-                      router.push(`/grocerylist/groceries/${ele._id}`)
+                      router.push(`/grocerylist/${ele._id}`)
                     }
                     className={styles.two2}
                   >

@@ -6,7 +6,8 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { ProductModal } from "../modal/individual-meal-product";
 import { Element } from "react-scroll";
-import productImg from "../../../public/assets/store_pics/no-image-product.png";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../actions";
 
 export const TopSellingProducts = () => {
   const [products, setProducts] = useState([]);
@@ -18,6 +19,8 @@ export const TopSellingProducts = () => {
   const [show, setShow] = useState(false);
   const router = useRouter();
   const [quantity, setQuantity] = useState(0);
+
+  const dispatch = useDispatch();
 
   //items to add
   const [itemToAdd, setItemAdd] = useState({
@@ -41,7 +44,6 @@ export const TopSellingProducts = () => {
       },
     };
 
-    console.log(payload, "payload");
     try {
       const response = await axios(`/groceries`, {
         method: "post",
@@ -52,6 +54,55 @@ export const TopSellingProducts = () => {
       setShow(false);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  // Generate a random integer between a specified range
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // Example usage to generate an ID between 1 and 1000
+  let randomId = getRandomInt(1, 1000);
+
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (item.inventories.length < 1) {
+      toast.info("Product not available for sale!");
+      return;
+    }
+
+    if (!item.inventories.some((inventory) => inventory.in_stock)) {
+      toast.info("Product is out of stock!");
+      return;
+    }
+
+    if (qty == 0) {
+      toast.error("Pls add a quantity");
+    } else {
+      const payload = {
+        userId: user && user._id ? user._id : "",
+        storeId: "",
+        store_name: "",
+        itemId: item._id,
+        quantity: qty,
+        item_price: item.item_price,
+        currency: "$",
+        item_image: item.itemImage0,
+        itemName: item.item_name,
+        item_type: item.item_type ? item.item_type : "Product",
+      };
+      try {
+        dispatch(addToCart(payload));
+        setOpenList(false);
+        setShow(false);
+        setOpenModal(false);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   const [details, setDetails] = useState({
@@ -78,7 +129,6 @@ export const TopSellingProducts = () => {
       );
       const totalItems = response.data.data.count;
       const allItems = response.data.data.items;
-      console.log(response.data.data.items, "hello");
 
       const filteredItems = allItems.filter((meal) => meal.average_rating);
 
@@ -113,7 +163,6 @@ export const TopSellingProducts = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
     } catch (error) {}
   };
@@ -136,7 +185,6 @@ export const TopSellingProducts = () => {
     }
   }, []);
 
-  console.log(products, "products");
   return (
     <div className={styles.mealContainer1}>
       <Element
@@ -207,12 +255,10 @@ export const TopSellingProducts = () => {
           setShow={setShow}
           quantity={quantity}
           setQuantity={setQuantity}
+          addToCart={addItemToCart}
         />
       </div>
-      <p
-        className={styles.view}
-        onClick={hasMoreData ? loadMore : () => {}}
-      >
+      <p className={styles.view} onClick={hasMoreData ? loadMore : () => {}}>
         View More
       </p>
       <div className={styles.border} />

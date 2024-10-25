@@ -23,7 +23,11 @@ import axios from "../../src/util/Api";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement } from "chart.js";
-import { initializeUserType, setSelectedUserType, setUserType } from "../../src/reducers/userSlice";
+import {
+  initializeUserType,
+  setSelectedUserType,
+  setUserType,
+} from "../../src/reducers/userSlice";
 ChartJS.register(ArcElement);
 
 const DashboardHomePage = (props) => {
@@ -58,7 +62,6 @@ const DashboardHomePage = (props) => {
     "Nov",
     "Dec",
   ];
-  console.log(props);
 
   useEffect(() => {
     if (props.auth.authUser !== null) {
@@ -77,33 +80,26 @@ const DashboardHomePage = (props) => {
             setPublicMealCountState(res.data.data?.docCount);
           });
         axios.get("/analytics/get-orders-count/").then((res) => {
-          console.log(res.data);
           setOrderCountState(res.data.data?.docCount);
         });
         axios
           .get("/analytics/get-products-count/?publicly_available=Pending")
           .then((res) => {
-            console.log(res.data);
             setPendingProductCountState(res.data.data?.docCount);
           });
         axios
           .get("/analytics/get-products-count/?publicly_available=Public")
           .then((res) => {
-            console.log(res.data);
             setPublicProductCountState(res.data.data?.docCount);
           });
       } else if (props.auth.authUser.user_type === "customer") {
-        axios.get("/analytics/get-orders-count/").then((res) => {
-          console.log(res.data);
-        });
+        axios.get("/analytics/get-orders-count/").then((res) => {});
         axios
           .get("/analytics/get-meals-count/?user=" + props.auth.authUser._id)
           .then((res) => {
             setMealCountState(res.data.data?.docCount);
           });
-        axios.get("/analytics/get-orders-count/").then((res) => {
-          console.log(res.data);
-        });
+        axios.get("/analytics/get-orders-count/").then((res) => {});
       }
 
       let url;
@@ -123,7 +119,6 @@ const DashboardHomePage = (props) => {
 
       if (props.auth.authUser.user_type === "admin") {
         axios.get(url).then((data) => {
-          console.log(data.data);
           if (data.data.data) {
             if (searchType === "Meal") {
               setSuggestionsState(data.data.data.meals);
@@ -157,20 +152,26 @@ const DashboardHomePage = (props) => {
       },
     ],
   };
-  const dispatch = useDispatch()
-  const selectedUserType = useSelector((state) => state.userType.selectedUserType);
-  const userTypeArray = useSelector((state) => state.userType.user_type);
-  console.log(userTypeArray, 'selectedUserType_')
+  const dispatch = useDispatch();
+
+  const reduxState = useSelector((state) => {});
+
+  const selectedUserType = useSelector(
+    (state) => state.userType.selectedUserType
+  );
+  const userTypeArray = useSelector(
+    (state) => state?.Auth?.authUser?.user_type
+  );
   useEffect(() => {
     if (props.auth.authUser?.user_type) {
-      // dispatch(setUserType(props.auth.authUser?.user_type));
+      dispatch(setUserType(props.auth.authUser?.user_type));
     }
   }, [props.auth.authUser?.user_type, dispatch]);
 
   function toggleMode(type) {
     dispatch(setSelectedUserType(type));
+    toggleChangeType();
   }
-
 
   function handleSearchType(type) {
     setSearchType(type);
@@ -189,7 +190,6 @@ const DashboardHomePage = (props) => {
       }
     }
     axios.get(url).then((data) => {
-      console.log(data.data);
       if (data.data.data) {
         if (type === "Meal") {
           setSuggestionsState(data.data.data.meals);
@@ -205,7 +205,6 @@ const DashboardHomePage = (props) => {
   function toggleChangeType() {
     setChangeTypeState(!changeType);
   }
-  console.log(props.auth.authUser, 'login')
   return (
     <div
       className={
@@ -273,7 +272,7 @@ const DashboardHomePage = (props) => {
 
               <div className={styles.select_container}>
                 <div onClick={toggleChangeType} className={styles.select_box}>
-                  <p>{selectedUserType}</p> {/* This displays the currently selected type */}
+                  <p>{selectedUserType || userTypeArray[0]}</p>
                   <ArrowDropDownIcon className={styles.select_box_icon} />
                 </div>
                 {changeType && (
@@ -286,8 +285,6 @@ const DashboardHomePage = (props) => {
                       <p onClick={() => toggleMode("supplier")}>Supplier</p>
                     )}
                     <p onClick={() => toggleMode("driver")}>Driver</p>
-                    {/* <p onClick={() => handleSearchType('Kitchen Utensil')}>Kitchen Utensils</p> */}
-                    {/* <p onClick={() => handleSearchType('Category')}>Category</p> */}
                   </div>
                 )}
               </div>
@@ -304,8 +301,8 @@ const DashboardHomePage = (props) => {
                     <div className={styles.value_con2 + " " + styles.red}>
                       {(props.auth.authUser.user_type?.[0] === "customer" ||
                         props.auth.authUser.user_type?.[0] === "driver") && (
-                          <TagIcon />
-                        )}
+                        <TagIcon />
+                      )}
                       {props.auth.authUser.user_type?.[0] === "admin" && (
                         <BatteryIcon />
                       )}
@@ -331,8 +328,8 @@ const DashboardHomePage = (props) => {
                         {props.auth.authUser.user_type === "supplier" && "$0"}
                         {props.auth.authUser.user_type === "admin" &&
                           pendingMealCount +
-                          pendingProductCount +
-                          kitchenUtensilCount}
+                            pendingProductCount +
+                            kitchenUtensilCount}
                       </p>
                     </div>
                   </div>
@@ -342,15 +339,15 @@ const DashboardHomePage = (props) => {
                     <div></div>
                     {(props.auth.authUser.user_type === "driver" ||
                       props.auth.authUser.user_type === "admin") && (
-                        <p className={styles.box_duration}>Monthly</p>
-                      )}
+                      <p className={styles.box_duration}>Monthly</p>
+                    )}
                   </div>
                   <div className={styles.value_con}>
                     <div className={styles.value_con2 + " " + styles.orange}>
                       {(props.auth.authUser.user_type === "customer" ||
                         props.auth.authUser.user_type === "supplier") && (
-                          <BagIcon />
-                        )}
+                        <BagIcon />
+                      )}
                       {props.auth.authUser.user_type === "admin" && <TagIcon />}
                       {props.auth.authUser.user_type === "driver" && (
                         <ThumbsUpIcon />
@@ -448,7 +445,7 @@ const DashboardHomePage = (props) => {
                                     (publicProductCount +
                                       kitchenUtensilCount +
                                       publicMealCount)) *
-                                  100
+                                    100
                                 )}
                                 %
                               </h5>
@@ -474,7 +471,7 @@ const DashboardHomePage = (props) => {
                                     (publicProductCount +
                                       kitchenUtensilCount +
                                       publicMealCount)) *
-                                  100
+                                    100
                                 )}
                                 %
                               </h5>
@@ -500,7 +497,7 @@ const DashboardHomePage = (props) => {
                                     (publicProductCount +
                                       kitchenUtensilCount +
                                       publicMealCount)) *
-                                  100
+                                    100
                                 )}
                                 %
                               </h5>
@@ -663,8 +660,8 @@ const DashboardHomePage = (props) => {
                                 {searchType === "Meal"
                                   ? suggestion.meal_name
                                   : searchType === "Product"
-                                    ? suggestion.product_name
-                                    : suggestion.category_name}
+                                  ? suggestion.product_name
+                                  : suggestion.category_name}
                               </td>
                               <td
                                 className={
@@ -685,13 +682,13 @@ const DashboardHomePage = (props) => {
                                   styles.status +
                                   " " +
                                   (suggestion.status === "Draft" ||
-                                    suggestion.status === "Pending"
+                                  suggestion.status === "Pending"
                                     ? styles.pending
                                     : suggestion.status === "Public"
-                                      ? styles.approve
-                                      : suggestion.status === "Rejected"
-                                        ? styles.rejected
-                                        : "")
+                                    ? styles.approve
+                                    : suggestion.status === "Rejected"
+                                    ? styles.rejected
+                                    : "")
                                 }
                               >
                                 {searchType === "Category"
@@ -706,14 +703,14 @@ const DashboardHomePage = (props) => {
                               >
                                 {suggestion.createdAt &&
                                   new Date(suggestion.createdAt).getDate() +
-                                  " " +
-                                  months[
-                                  new Date(suggestion.createdAt).getMonth()
-                                  ] +
-                                  " ," +
-                                  new Date(
-                                    suggestion.createdAt
-                                  ).getFullYear()}
+                                    " " +
+                                    months[
+                                      new Date(suggestion.createdAt).getMonth()
+                                    ] +
+                                    " ," +
+                                    new Date(
+                                      suggestion.createdAt
+                                    ).getFullYear()}
                               </td>
                             </tr>
                           );
@@ -1126,7 +1123,7 @@ const DashboardHomePage = (props) => {
                                       (publicProductCount +
                                         kitchenUtensilCount +
                                         publicMealCount)) *
-                                    100
+                                      100
                                   )}
                                   %
                                 </h5>
@@ -1152,7 +1149,7 @@ const DashboardHomePage = (props) => {
                                       (publicProductCount +
                                         kitchenUtensilCount +
                                         publicMealCount)) *
-                                    100
+                                      100
                                   )}
                                   %
                                 </h5>
@@ -1178,7 +1175,7 @@ const DashboardHomePage = (props) => {
                                       (publicProductCount +
                                         kitchenUtensilCount +
                                         publicMealCount)) *
-                                    100
+                                      100
                                   )}
                                   %
                                 </h5>
