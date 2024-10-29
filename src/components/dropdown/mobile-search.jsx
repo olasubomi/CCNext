@@ -294,7 +294,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
                         Boolean(value) ? (
                           <div className={styles.result}>
                             <p>No Result Found</p>
-                            <button onClick={() => router.push("/suggestmeal")}>
+                            <button onClick={() => router.push("/suggestproduct")}>
                               Suggest Product
                             </button>
                           </div>
@@ -336,7 +336,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
                           Boolean(value) ? (
                             <div className={styles.result}>
                               <p>No Result Found</p>
-                              <button onClick={() => router.push("/suggestmeal")}>
+                              <button onClick={() => router.push("/suggestutensil")}>
                                 Suggest Utensil
                               </button>
                             </div>

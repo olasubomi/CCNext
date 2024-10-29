@@ -149,7 +149,8 @@ class SuggestMeal extends Component {
     setTimeout(() => {
       this.setState({
         ...this.state,
-        suggestionType: this.props.router?.query?.item_type ?? "Meal",
+        // suggestionType: this.props.router?.query?.item_type ?? "Meal",
+        suggestionType: "Meal",
       });
     }, 1000);
 
@@ -186,11 +187,33 @@ class SuggestMeal extends Component {
     });
   };
 
+  // handleSuggestionType = (type) => {
+  //   this.setState({
+  //     suggestionType: type,
+  //   });
+  //   this.suggestOption();
+  // };
   handleSuggestionType = (type) => {
-    this.setState({
-      suggestionType: type,
-    });
-    this.suggestOption();
+    const { router } = this.props;
+
+    if (type === "Meal") {
+      router.push("/suggestmeal");
+    }
+    else if (type === "Product") {
+      router.push("/suggestproduct")
+    }
+    else if (type === "Kitchen Utensil") {
+      router.push("/suggestutensil")
+    }
+    else if (type === "Category") {
+      router.push("/suggestcategory")
+    }
+    else {
+      this.setState({
+        suggestionType: type,
+        suggestOption: !this.state.suggestOption,
+      });
+    }
   };
   handleNavigation = () => {
     // Access router properties using this.props.router
@@ -305,30 +328,7 @@ class SuggestMeal extends Component {
                 suggestionType={this.state.suggestionType}
               ></SuggestMealForm>
             )}
-            {suggestionType === "Product" && (
-              <SuggestProductForm
-                allMealNames={this.allMealNames}
-                productNames={this.state.productNames}
-                measurements={this.measurements}
-                kitchenUtensils={this.kitchenUtensils}
-                categories={this.categories}
-                suggestionType={this.state.suggestionType}
-              ></SuggestProductForm>
-            )}
-            {suggestionType === "Kitchen Utensil" && (
-              <SuggestKitchenUtensilForm
-                measurements={this.measurements}
-                kitchenUtensils={this.kitchenUtensils}
-                categories={this.categories}
-                suggestionType={this.state.suggestionType}
-              ></SuggestKitchenUtensilForm>
-            )}
-            {suggestionType === "Category" && (
-              <SuggestCategoryForm
-                categories={this.categories}
-                suggestionType={this.state.suggestionType}
-              ></SuggestCategoryForm>
-            )}
+
           </div>
           <Dialog
             open={this.state.booleanOfDisplayOfDialogBoxConfirmation}
