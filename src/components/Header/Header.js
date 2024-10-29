@@ -211,9 +211,9 @@ function Header(props) {
                   alt="logo"
                 />
               </Link>
-              <div className={styles.searchbar}>
+              {/* <div className={styles.searchbar}>
                 <MobileSearch setShowDropdown={setShowDropdown} />
-              </div>
+              </div> */}
             </div>
             <div className={styles.navbar_top_details}>
               <div className={styles.searchIcon}>

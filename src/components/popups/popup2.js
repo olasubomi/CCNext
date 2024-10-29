@@ -71,106 +71,70 @@ class Popup2 extends Component {
       chunk1Content,
       ingredeints_in_item,
     } = this.props;
+  
+    // Determine step inputs based on instruction chunks
     var stepInputs = [];
-    if (instructionChunk1) {
-      stepInputs = [];
-    }
-    if (instructionChunk2) {
-      stepInputs = [2];
-    }
-
-    if (instructionChunk3) {
-      stepInputs = [2, 3];
-    }
-
-    if (instructionChunk4) {
-      stepInputs = [2, 3, 4];
-    }
-
-    if (instructionChunk5) {
-      stepInputs = [2, 3, 4, 5];
-    }
-
-    if (instructionChunk6) {
-      stepInputs = [2, 3, 4, 5, 6];
-    }
-
-    let group = ingredientGroupList.map((ingredient) => {
-      return {
-        productName: ingredient.product_name?.join(" "),
-        // productImgFile: this.state.currentProductImgSrc,
-        productImgPath: null,
-
-        // these are added to ingredient packets on submit, and not relevant in product object details
-        quantity: ingredient.quantity,
-        measurement: ingredient.measurement,
-        properIngredientStringSyntax: ingredient.properIngredientStringSyntax,
-      };
-    });
-
+    if (instructionChunk1) stepInputs = [];
+    if (instructionChunk2) stepInputs = [2];
+    if (instructionChunk3) stepInputs = [2, 3];
+    if (instructionChunk4) stepInputs = [2, 3, 4];
+    if (instructionChunk5) stepInputs = [2, 3, 4, 5];
+    if (instructionChunk6) stepInputs = [2, 3, 4, 5, 6];
+  
+    // Format ingredient group list
+    let group = ingredientGroupList.map(ingredient => ({
+      productName: ingredient.product_name?.join(" "),
+      productImgPath: null,
+      quantity: ingredient.quantity,
+      measurement: ingredient.measurement,
+      properIngredientStringSyntax: ingredient.properIngredientStringSyntax,
+    }));
+  
+    // Define meal object, including conditionally setting image_or_video_content_1
     let meal = {
       mealId: this.props.id,
       mealName: name,
       intro: description,
       mealImagesData: imagesData,
-
-      // ingredientNames,
-      // do we need product group list AND strings ?
       ingredientGroupList: group,
-      // store product names of inputted strings to compare with db products
       ingredientStrings: ingredientsList,
       ingredeintsInItem: ingredientsInItem,
-      // do we want to use current ingredient formats ? Yes.
-      // currentIngredient,
-      // currentIngredientMeasurement,
-      // currentIngredientQuantity,
-      // currentProductImgSrc,
-      // currentProductDisplayIndex,
-
-      // currentStore,
-
-      // we need to update how we create image paths
-      // productImg_path,
-      // new_product_ingredients,
-      // suggested_stores,
-      // currProductIndexInDBsProductsList,
-      // currStoreIndexIfExistsInProductsList,
       suggestedUtensils: this.props.utensilsList,
-
-      cookTime: cookTime,
-      prepTime: prepTime,
-      chunk1Content: chunk1Content,
+      cookTime,
+      prepTime,
+      chunk1Content,
       instructionChunk1Step,
       instructionChunk2Step,
       instructionChunk3Step,
       instructionChunk4Step,
       instructionChunk5Step,
       instructionChunk6Step,
-      instructionChunk6: this.props.instructionChunk6,
-      instructionChunk1: this.props.instructionChunk1,
-      instructionChunk2: this.props.instructionChunk2,
-      instructionChunk3: this.props.instructionChunk3,
-      instructionChunk4: this.props.instructionChunk4,
-      instructionChunk5: this.props.instructionChunk5,
+      instructionChunk1,
+      instructionChunk2,
+      instructionChunk3,
+      instructionChunk4,
+      instructionChunk5,
+      instructionChunk6,
       instructionWordlength: this.props.instructionWordlength,
-
-      // do we want all the instruction variables ?
-      // instructionGroupList:[],
-
-      // instructionimagesAndVideos,
-
-      // chef,
       suggestedCategories: categories,
       servings: serves,
       tips: this.props.tips,
-      stepInputs: [],
+      stepInputs,
     };
+  
+    // Add image_or_video_content_1 if imagesData exists
+    if (imagesData && imagesData.length > 0) {
+      meal.image_or_video_content_1 = imagesData[0]; // Set to the first image as an example
+    }
+  
+    // Save data to local storage and navigate
     localStorage.setItem("suggestionType", "Meal");
     localStorage.setItem("mealId", this.props.id);
     localStorage.setItem("suggestMealForm_", JSON.stringify(meal));
     console.log(this.props, "mealss");
     window.location.assign(`/suggestmeal?id=${this.props.id}&item_type=Meal`);
   };
+  
 
   handleShareClick = () => {
     const shareUrl =
