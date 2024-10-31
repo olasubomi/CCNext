@@ -200,19 +200,19 @@
 .closed {
   opacity: 0;
   color: black;
-  position: absolute;
   font-size: 16px;
-  background-color: #04d505;
   /* top: 11.85%; */
   margin-top: -13rem;
-  width: 2%;
-  height: 0.6%;
-  right: 80.5%;
+  position: absolute;
+  z-index: 2000;
+  height: 30px;
+  width: 5%;
+  right: 70%;
+  top: 5%;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.45);
   background-blend-mode: overlay;
 }
 
@@ -795,9 +795,11 @@
   .link_embeb ul {
     font-size: 14px;
   }
+
   .videoCtn {
     width: 375px !important;
   }
+
   .closeBtn {
     right: -40px;
     top: 3px;

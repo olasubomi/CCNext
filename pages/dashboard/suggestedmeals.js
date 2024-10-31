@@ -156,7 +156,7 @@ const SuggestedMeals = (props) => {
       console.log(selectedUserType, "props.auth.authUser");
       if (selectedUserType !== "admin") {
         // url = '/meals/get-meals/' + page + '?user=' + props.auth.authUser._id
-        params_.user = props.auth.authUser._id;
+        params_.user = props.auth.authUser?._id;
       }
       if (item_name) {
         params_.name = item_name;

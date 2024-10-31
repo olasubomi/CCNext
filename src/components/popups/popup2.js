@@ -32,6 +32,7 @@ class Popup2 extends Component {
 
   incIn = () => {
     this.setState({
+      ...this.state,
       curIn: this.state.curIn + 1,
     });
   };
@@ -39,6 +40,7 @@ class Popup2 extends Component {
   decIn = () => {
     if (this.state.curIn > 1) {
       this.setState({
+        ...this.state,
         curIn: this.state.curIn - 1,
       });
     }
@@ -69,6 +71,11 @@ class Popup2 extends Component {
       instructionChunk5,
       instructionChunk6,
       chunk1Content,
+      chunk2Content,
+      chunk3Content,
+      chunk4Content,
+      chunk5Content,
+      chunk6Content,
       ingredeints_in_item,
     } = this.props;
   
@@ -103,6 +110,11 @@ class Popup2 extends Component {
       cookTime,
       prepTime,
       chunk1Content,
+      chunk2Content,
+      chunk3Content,
+      chunk4Content,
+      chunk5Content,
+      chunk6Content,
       instructionChunk1Step,
       instructionChunk2Step,
       instructionChunk3Step,
@@ -123,15 +135,17 @@ class Popup2 extends Component {
     };
   
     // Add image_or_video_content_1 if imagesData exists
-    if (imagesData && imagesData.length > 0) {
-      meal.image_or_video_content_1 = imagesData[0]; // Set to the first image as an example
+    // if (imagesData && imagesData.length > 0) {
+    //   meal.image_or_video_content_1 = imagesData[0]; // Set to the first image as an example
+    // }
+    for (let i = 0; i <= imagesData.length; i++) {
+      meal[`image_or_video_content_${i + 1}`] = imagesData[i]
     }
   
     // Save data to local storage and navigate
     localStorage.setItem("suggestionType", "Meal");
     localStorage.setItem("mealId", this.props.id);
     localStorage.setItem("suggestMealForm_", JSON.stringify(meal));
-    console.log(this.props, "mealss");
     window.location.assign(`/suggestmeal?id=${this.props.id}&item_type=Meal`);
   };
   
@@ -386,12 +400,15 @@ class Popup2 extends Component {
                           className={styles.popup2_step_img}
                           height={150}
                           width={70}
+                          src={this.props[`chunk${curIn}Content`]}
+                          type="video/mp4"
+
                         >
-                          <source
-                            src={this.props["chunk" + curIn + "Content"]}
+                          {/* <source
+                            src={this.props[`chunk${curIn}Content`]}
                             type="video/mp4"
                           />
-                          Your browser does not support the video tag.
+                          Your browser does not support the video tag. */}
                         </video>
                       )}
                       <div className={styles.del}>
