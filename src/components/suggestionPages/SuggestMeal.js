@@ -1636,22 +1636,22 @@ class SuggestMealForm extends Component {
       );
     }
 
-    if (chunk1Content) {
+    if (chunk1Content && typeof chunk1Content !== "string") {
       suggestMealForm.append("image_or_video_content_1", chunk1Content);
     }
-    if (chunk2Content) {
+    if (chunk2Content && typeof chunk2Content !== "string") {
       suggestMealForm.append("image_or_video_content_2", chunk2Content);
     }
-    if (chunk3Content) {
+    if (chunk3Content && typeof chunk3Content !== "string") {
       suggestMealForm.append("image_or_video_content_3", chunk3Content);
     }
-    if (chunk4Content) {
+    if (chunk4Content && typeof chunk4Content !== "string") {
       suggestMealForm.append("image_or_video_content_4", chunk4Content);
     }
-    if (chunk5Content) {
+    if (chunk5Content && typeof chunk5Content !== "string") {
       suggestMealForm.append("image_or_video_content_5", chunk5Content);
     }
-    if (chunk6Content) {
+    if (chunk6Content && typeof chunk6Content !== "string") {
       suggestMealForm.append("image_or_video_content_6", chunk6Content);
     }
 
