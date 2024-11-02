@@ -104,7 +104,7 @@ class Popup1 extends Component {
     console.log(this.props, "orop");
     if (this.props.itemType === "Product") {
       window.location.assign(
-        `/suggestmeal?id=${this.props.id}&item_type=Product`
+        `/suggestproduct?id=${this.props.id}&item_type=Product`
       );
     }
     if (this.props.itemType === "Utensil") {
@@ -112,7 +112,7 @@ class Popup1 extends Component {
       localStorage.setItem("utensilId", this.props.id);
       localStorage.setItem("suggestUtensilForm", JSON.stringify(product));
       window.location.assign(
-        `/suggestmeal?id=${this.props.id}&item_type=Kitchen Utensil`
+        `/suggestUtensil?id=${this.props.id}&item_type=Kitchen Utensil`
       );
     }
   };
