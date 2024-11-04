@@ -5,9 +5,9 @@ import { GoStarFill } from "react-icons/go";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { ProductModal } from "../modal/individual-meal-product";
-import { Element } from "react-scroll";
 import { BiSolidDownArrow } from "react-icons/bi";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { canItemBeAddedToCart } from "../../util/canAddToCart";
 
 export const AllProducts = () => {
   const alphabets = [
@@ -46,10 +46,9 @@ export const AllProducts = () => {
 
   const [availableLetters, setAvailableLetters] = useState([]);
 
-
   const handleActiveLetter = (elem, id) => {
     setActiveLetter(id);
-    fetchProducts(currentPage, elem)
+    fetchProducts(currentPage, elem);
   };
   const [products, setProducts] = useState([]);
   const [visibleProducts, setVisibleProducts] = useState(5);
@@ -65,7 +64,6 @@ export const AllProducts = () => {
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
   });
-
 
   const addItemToGrocery = async (listName) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -94,39 +92,36 @@ export const AllProducts = () => {
     }
   };
 
-
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
-    
-    if(qty == 0 ){
+    const canAddToCart = canItemBeAddedToCart(item);
+    if (qty == 0) {
       toast.error("Pls add a quantity");
-    }else{
-       const payload = {
-        userId: (user && user._id) ? user._id : "",
-        storeId :  "" ,
-        store_name: "",
-        itemId : item._id,
-        quantity: qty,
-        item_price: item.item_price,
-        currency: "$",
-        item_image: item.itemImage0,
-        itemName: item.item_name,
-        item_type: item.item_type? item.item_type : "Product",
-    } 
-    console.log(payload, "Cart payload line 76 top-selling-product");
-    try {
-      dispatch(addToCart(payload))
-      setOpenList(false);
-      setShow(false);
-      setOpenModal(false);
-    } catch (error) {
-      console.log(error);
+    } else {
+      if (canAddToCart) {
+        const payload = {
+          userId: user && user._id ? user._id : "",
+          storeId: "",
+          store_name: "",
+          itemId: item._id,
+          quantity: qty,
+          item_price: item.item_price,
+          currency: "$",
+          item_image: item.itemImage0,
+          itemName: item.item_name,
+          item_type: item.item_type ? item.item_type : "Product",
+        };
+        try {
+          dispatch(addToCart(payload));
+          setOpenList(false);
+          setShow(false);
+          setOpenModal(false);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
-    };
-
-  
   };
-
 
   const [details, setDetails] = useState({
     listName: "",
@@ -139,7 +134,7 @@ export const AllProducts = () => {
     setIsLoading(true);
     const params = {};
     if (activeLetter) {
-      params.startsWith = activeLetter
+      params.startsWith = activeLetter;
     }
     try {
       const response = await axios(
@@ -147,7 +142,7 @@ export const AllProducts = () => {
         {
           method: "GET",
           params: {
-            ...params
+            ...params,
           },
           headers: {
             "Content-Type": "application/json",
@@ -165,7 +160,9 @@ export const AllProducts = () => {
 
       setProducts(filteredProducts);
       setTotalPages(totalPages);
-      const lettersWithStores = filteredProducts.map(item => item.item_name[0].toUpperCase());
+      const lettersWithStores = filteredProducts.map((item) =>
+        item.item_name[0].toUpperCase()
+      );
       setAvailableLetters([...new Set(lettersWithStores)]);
     } catch (error) {
       console.log(error);
@@ -235,9 +232,8 @@ export const AllProducts = () => {
         </div>
         <div className={styles.topcontainer}>
           <p className={styles.marketplaceText}>
-            You no longer have to deal with the local stores running 
-            out of stock of your favourite products when you can 
-            find them here.
+            You no longer have to deal with the local stores running out of
+            stock of your favourite products when you can find them here.
           </p>
           <div className={styles.flexItems}>
             <div className={styles.filter}>
@@ -251,33 +247,33 @@ export const AllProducts = () => {
           </div>
         </div>
         <div className={styles.alphabetContainer}>
-         <div className={styles.alphabetContainer2}>
-         {alphabets.map((elem, index) => (
-            <span
-            key={index}
-            onClick={() => handleActiveLetter(elem, index)}
-            className={
-              availableLetters.includes(elem)
-                ? activeLetter === index
-                  ? styles.activespan
-                  : styles.inactivespan
-                : styles.disabledspan
-            }
-          >
-            <p
-              className={
-                availableLetters.includes(elem)
-                  ? activeLetter === index
-                    ? styles.activeLetter
-                    : styles.inactiveletter
-                  : styles.disabledLetter
-              }
-            >
-              {elem}
-            </p>
-          </span>
-          ))}
-         </div>
+          <div className={styles.alphabetContainer2}>
+            {alphabets.map((elem, index) => (
+              <span
+                key={index}
+                onClick={() => handleActiveLetter(elem, index)}
+                className={
+                  availableLetters.includes(elem)
+                    ? activeLetter === index
+                      ? styles.activespan
+                      : styles.inactivespan
+                    : styles.disabledspan
+                }
+              >
+                <p
+                  className={
+                    availableLetters.includes(elem)
+                      ? activeLetter === index
+                        ? styles.activeLetter
+                        : styles.inactiveletter
+                      : styles.disabledLetter
+                  }
+                >
+                  {elem}
+                </p>
+              </span>
+            ))}
+          </div>
         </div>
         <div className={styles.storeImgContainer}>
           <div className={styles.storeFlex}>

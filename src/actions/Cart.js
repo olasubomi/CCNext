@@ -240,32 +240,27 @@ export const EmptyCart = () => (dispatch, getState) => {
 
 export const FetchCart = () => (dispatch, getState) => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  console.log("user cart action line 143", user._id);
+
   if (user !== undefined && user !== "{}" && user !== null) {
     axios.post("/cart/cart/", { user: user }).then(({ data }) => {
-      console.log("user cart action line 143", data);
-      if (
-        Array.isArray(data.data.data) &&
-        data.data.data[0] != null &&
-        data.data.data[0] > 0
-      ) {
+      if (Array.isArray(data.data.data) && data.data.data.length > 0) {
         let array = [];
         console.log("user cart action line 173", data);
         data.data.data.forEach((x) => {
+          if (x === null) return;
           array.push({
-            name: x.item_Name,
-            image: x.item_image,
-            price: x.item_price,
-            itemId: x.item,
-            userId: user._id,
-            storeName: x.store.store_name ? x.store_name : "",
+            name: x?.item_Name,
+            image: x?.item_image,
+            price: x?.item_price,
+            itemId: x?.item,
+            userId: user?._id,
+            storeName: x?.store?.store_name ? x?.store_name : "",
             currency: "$",
-            amount: x.quantity_of_item,
-            storeId: x.store._id ? x.store._id : "",
-            itemType: x.item_type,
+            amount: x?.quantity_of_item,
+            storeId: x?.store._id ? x?.store._id : "",
+            itemType: x?.item_type,
           });
         });
-        console.log("user cart action line 143", array);
 
         dispatch({ type: FETCH_CART, payload: { data: array } });
       } else {

@@ -21,7 +21,7 @@ import {
   Order3Icon,
   UserIcon,
 } from "../icons";
-import { connect, useSelector } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
 import { getPath } from "../../actions/Common";
 import { usePathname, useRouter } from "next/navigation";
 import { userSignOut, verifyToken, setOpenLogin } from "../../actions";
@@ -35,6 +35,7 @@ import { MobileSearch } from "../dropdown/mobile-search";
 import axios from "../../util/Api";
 import { matches } from "lodash";
 import NavLink from "../../hooks/navlink";
+import { FetchCart } from "../../actions/Cart";
 
 function Header(props) {
   // const [isAuthenticated, setIsAuthenticatedState] = useState(false);
@@ -57,18 +58,20 @@ function Header(props) {
   const [visible, setVisible] = useState(true);
   //const { items } = cartCtx;
   const [activeNav, setActiveNav] = useState(0);
+  const dispatch = useDispatch();
 
   const handleSetActiveNav = (id, path) => {
     setActiveNav(id);
     router.push(path);
   };
 
-  // const numberOfCartItems = items.reduce((curNumber, item) => {
-  //   return curNumber + item.amount;
-  // }, 0);
   const { cartItems: items } = useSelector((state) => {
     return state.Cart;
   });
+
+  useEffect(() => {
+    dispatch(FetchCart());
+  }, []);
 
   const goToCart = () => {
     router.push("/cart");
