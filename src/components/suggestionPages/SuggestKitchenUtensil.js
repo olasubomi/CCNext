@@ -417,10 +417,10 @@ class SuggestKitchenUtensilForm extends Component {
   };
 
   handleAddDescriptionChip(chip) {
-    this.setState({
-      descriptionStrings: [...this.state.descriptionStrings, chip],
-    });
-  }
+    this.setState(prevState => ({
+        descriptionStrings: [...(prevState.descriptionStrings || []), chip],
+    }));
+}
 
   handleDeleteSizeChip(chip) {
     var array = this.state.descriptionStrings; // make a separate copy of the array
@@ -840,7 +840,7 @@ class SuggestKitchenUtensilForm extends Component {
                   </label>
                   <Autocomplete
                     id="measurement"
-                    options={this.props.measurements.map((option) => option)}
+                    options={this.props.measurements?.map((option) => option)}
                     value={this.state.measurement}
                     onChange={this.handleMeasurement}
                     freeSolo
@@ -898,15 +898,9 @@ class SuggestKitchenUtensilForm extends Component {
                   freeSolo
                   clearOnBlur
                   onBlur={this.categoryBlur}
-                  // filterSelectedOptions
-                  options={this.props.categories?.map((option) => option)}
-                  // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
-                  onChange={(e, newValue) =>
-                    this.handleCategoryDropdownChange(newValue)
-                  }
-                  // getOptionLabel={option => option}
-                  // renderTags={() => {}}
-                  value={this.state.suggestedCategories}
+                  options={this.props.categories ? this.props.categories : []}
+                  onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
+                  value={Array.isArray(this.state.suggestedCategories) ? this.state.suggestedCategories : []}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -916,6 +910,7 @@ class SuggestKitchenUtensilForm extends Component {
                     />
                   )}
                 />
+
                 <Button
                   variant="contained"
                   disableRipple
@@ -929,7 +924,7 @@ class SuggestKitchenUtensilForm extends Component {
               </div>
             </div>
             <Stack direction="row" spacing={1} className={styles.stack}>
-              {this.state.suggestedCategories.map((data, index) => (
+              {this.state.suggestedCategories?.map((data, index) => (
                 <Chip
                   key={index}
                   label={data}

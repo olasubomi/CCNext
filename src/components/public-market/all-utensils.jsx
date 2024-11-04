@@ -10,6 +10,7 @@ import { BiSolidDownArrow } from "react-icons/bi";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { MobileSearch } from "../dropdown/mobile-search";
 
 export const AllUtensils = () => {
   const alphabets = [
@@ -47,6 +48,8 @@ export const AllUtensils = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [availableLetters, setAvailableLetters] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(true);
+
 
   const handleActiveLetter = (elem, id) => {
     setActiveLetter(id);
@@ -246,6 +249,9 @@ export const AllUtensils = () => {
               <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
             </div>
           </div>
+        </div>
+        <div className={styles.searchbar}>
+          <MobileSearch setShowDropdown={setShowDropdown} />
         </div>
         <div className={styles.alphabetContainer}>
           <div className={styles.alphabetContainer2}>

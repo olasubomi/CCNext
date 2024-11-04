@@ -18,7 +18,6 @@ import { canItemBeAddedToCart } from "../../util/canAddToCart";
 
 const responsive = {
   superLargeDesktop: {
-    // the naming can be any, depends on you.
     breakpoint: { max: 4000, min: 3000 },
     items: 5,
   },
@@ -43,6 +42,7 @@ export const MealDropDown = ({
   storeInfo,
   isShow,
   id,
+  name
 }) => {
   const matches = useMediaQuery("(min-width: 920px)");
   const [selectGrocery, setSelectGrocery] = useState();
@@ -99,7 +99,7 @@ export const MealDropDown = ({
         },
       });
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -255,14 +255,14 @@ export const MealDropDown = ({
                       ? meal.item.itemImage0
                       : !meal?.item?.itemImage0 &&
                         meal?.item?.item_type === "Meal"
-                      ? "/assets/store_pics/no-image-meal.png"
-                      : !meal?.item?.itemImage0 &&
-                        meal?.item?.item_type === "Product"
-                      ? "/assets/store_pics/no-image-product.png"
-                      : !meal?.item?.itemImage0 &&
-                        meal?.item?.item_type === "Utensil"
-                      ? "/assets/store_pics/no-image-utensil.png"
-                      : ""
+                        ? "/assets/store_pics/no-image-meal.png"
+                        : !meal?.item?.itemImage0 &&
+                          meal?.item?.item_type === "Product"
+                          ? "/assets/store_pics/no-image-product.png"
+                          : !meal?.item?.itemImage0 &&
+                            meal?.item?.item_type === "Utensil"
+                            ? "/assets/store_pics/no-image-utensil.png"
+                            : ""
                   }
                   alt=""
                   className={styles.img}
@@ -297,9 +297,13 @@ export const MealDropDown = ({
         <div className={styles.button_left}>
           <button
             className={styles.view}
-            onClick={() => router.push(`/store/${id}`)}
+            onClick={() => {
+              localStorage.setItem("storeId", id)
+              router.push(`/store/${name}`)
+              console.log(name, 'store name')
+            }}
           >
-            View Store
+            View Stores
           </button>
         </div>
         {openModal && selectedItem?.item_type === "Meal" && (

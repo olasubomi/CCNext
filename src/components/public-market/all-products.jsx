@@ -8,6 +8,8 @@ import { ProductModal } from "../modal/individual-meal-product";
 import { BiSolidDownArrow } from "react-icons/bi";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { useDispatch } from "react-redux";
+import { MobileSearch } from "../dropdown/mobile-search";
 
 export const AllProducts = () => {
   const alphabets = [
@@ -60,6 +62,8 @@ export const AllProducts = () => {
   const router = useRouter();
   const [quantity, setQuantity] = useState(0);
   const dispatch = useDispatch();
+  const [showDropdown, setShowDropdown] = useState(true);
+
   //items to add
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -187,7 +191,7 @@ export const AllProducts = () => {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -232,8 +236,9 @@ export const AllProducts = () => {
         </div>
         <div className={styles.topcontainer}>
           <p className={styles.marketplaceText}>
-            You no longer have to deal with the local stores running out of
-            stock of your favourite products when you can find them here.
+            You no longer have to deal with the local stores running
+            out of stock of your favorite products when you can
+            find them here.
           </p>
           <div className={styles.flexItems}>
             <div className={styles.filter}>
@@ -245,6 +250,9 @@ export const AllProducts = () => {
               <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
             </div>
           </div>
+        </div>
+        <div className={styles.searchbar}>
+          <MobileSearch setShowDropdown={setShowDropdown} />
         </div>
         <div className={styles.alphabetContainer}>
           <div className={styles.alphabetContainer2}>
