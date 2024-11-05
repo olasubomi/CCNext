@@ -11,6 +11,7 @@ import { Mealmodal } from "../mobile/meal-modal";
 import { Element, scroller } from "react-scroll";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
+import { canItemBeAddedToCart } from "../../util/canAddToCart";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
@@ -59,39 +60,32 @@ export const PopularMeals = () => {
 
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
-
-    if (item.inventories.length < 1) {
-      toast.info("Meal not available for sale!");
-      return;
-    }
-
-    if (!item.inventories.some((inventory) => inventory.in_stock)) {
-      toast.info("Meal is out of stock!");
-      return;
-    }
+    let canAddToCart = canItemBeAddedToCart(item);
 
     if (qty == 0) {
       toast.error("Pls add a quantity");
     } else {
-      const payload = {
-        userId: user && user._id ? user._id : "",
-        storeId: "",
-        store_name: "",
-        itemId: item._id,
-        quantity: qty,
-        item_price: item.item_price,
-        currency: "$",
-        item_image: item.itemImage0,
-        itemName: item.item_name,
-        item_type: item.item_type ? item.item_type : "Meal",
-      };
-      try {
-        dispatch(addToCart(payload));
-        setOpenList(false);
-        setShow(false);
-        setOpenModal(false);
-      } catch (error) {
-        console.log(error);
+      if (canAddToCart) {
+        const payload = {
+          userId: user && user._id ? user._id : "",
+          storeId: "",
+          store_name: "",
+          itemId: item._id,
+          quantity: qty,
+          item_price: item.item_price,
+          currency: "$",
+          item_image: item.itemImage0,
+          itemName: item.item_name,
+          item_type: item.item_type ? item.item_type : "Meal",
+        };
+        try {
+          dispatch(addToCart(payload));
+          setOpenList(false);
+          setShow(false);
+          setOpenModal(false);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };

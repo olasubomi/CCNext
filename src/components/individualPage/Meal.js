@@ -6,16 +6,10 @@ import Head from "next/head";
 import Image from "next/image";
 import {
   FacebookEIcon,
-  // RedditIcon,
-  InstaEIcon,
-  LocationIcon,
   PrintEIcon,
   ShareIcon,
   TwitterEIcon,
   WhatsappEIcon,
-  EmailIcon,
-  CallIcon,
-  MessageIcon,
 } from "../icons";
 import Stores from "./stores";
 import Reviews from "./Reviews";
@@ -23,13 +17,11 @@ import { UserIcon } from "../icons";
 import { GoStarFill } from "react-icons/go";
 import {
   FacebookShareButton,
-  InstapaperShareButton,
   TwitterShareButton,
   WhatsappShareButton,
   RedditShareButton,
   RedditIcon,
 } from "react-share";
-import InstagramShareButton from "../SocialShare/InstagramShare";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "../../util/Api";
 import { Modal } from "../modal/popup-modal";
@@ -38,11 +30,11 @@ import { useMediaQuery } from "../../hooks/usemediaquery";
 import moment from "moment";
 import { FaEnvelope } from "react-icons/fa";
 import { IoMdCall } from "react-icons/io";
-import { HiLocationMarker } from "react-icons/hi";
 import { RejectionModal } from "../modal/rejection-modal";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
+import { canItemBeAddedToCart } from "../../util/canAddToCart";
 
 function Meal(props) {
   //const url = 'http://localhost:3000/'
@@ -62,7 +54,7 @@ function Meal(props) {
   const [show, setShow] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
   const [openModal, setOpenModal] = useState(false);
-  const dispatch  = useDispatch()
+  const dispatch = useDispatch();
   console.log(selectedItem, "sele");
   const [quantity, setQuantity] = useState(1);
 
@@ -97,37 +89,37 @@ function Meal(props) {
     }
   };
 
-
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
-    
-    if(qty == 0 ){
+
+    let canAddToCart = canItemBeAddedToCart(item);
+
+    if (qty == 0) {
       toast.error("Add a quantity");
-    }else{
-       const payload = {
-        userId: (user && user._id) ? user._id : "",
-        storeId : "",
-        store_name: "",
-        itemId : item._id,
-        quantity: qty,
-        item_price: item.item_price,
-        currency: "$",
-        item_image: item.item_images[0],
-        itemName: item.item_name,
-        item_type: item.item_type? item.item_type : "Meal",
-    } 
-    console.log(payload, "Cart payload line 76 top-selling-product");
-    try {
-      dispatch(addToCart(payload))
-      setOpenList(false);
-      setShow(false);
-      setOpenModal(false);
-    } catch (error) {
-      console.log(error);
+    } else {
+      if (canAddToCart) {
+        const payload = {
+          userId: user && user._id ? user._id : "",
+          storeId: "",
+          store_name: "",
+          itemId: item._id,
+          quantity: qty,
+          item_price: item.item_price,
+          currency: "$",
+          item_image: item.item_images[0],
+          itemName: item.item_name,
+          item_type: item.item_type ? item.item_type : "Meal",
+        };
+        try {
+          dispatch(addToCart(payload));
+          setOpenList(false);
+          setShow(false);
+          setOpenModal(false);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
-    };
-  
-  
   };
   const [details, setDetails] = useState({
     listName: "",
@@ -146,7 +138,7 @@ function Meal(props) {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchGroceryList();
@@ -203,7 +195,7 @@ function Meal(props) {
               {props.meal.item_images?.length > 0 && (
                 <>
                   {props.meal.itemImage0?.length > 0 &&
-                    props.meal.itemImage0 !== "[object HTMLImageElement]" ? (
+                  props.meal.itemImage0 !== "[object HTMLImageElement]" ? (
                     <Image
                       src={props.meal.itemImage0}
                       alt={props.meal.item_name}
@@ -372,8 +364,12 @@ function Meal(props) {
                   >
                     Add to Grocery List
                   </div>
-                  <div className={styles.btnfill}  onClick={() => addItemToCart(props.meal, 1)}>Add to Cart</div>
-                  
+                  <div
+                    className={styles.btnfill}
+                    onClick={() => addItemToCart(props.meal, 1)}
+                  >
+                    Add to Cart
+                  </div>
                 </div>
               )}
           </div>
@@ -554,8 +550,9 @@ function Meal(props) {
                                   <source
                                     src={
                                       props?.meal[
-                                      `meal_image_or_video_content${index + 1
-                                      }`
+                                        `meal_image_or_video_content${
+                                          index + 1
+                                        }`
                                       ]
                                     }
                                     type="video/mp4"
@@ -573,7 +570,7 @@ function Meal(props) {
                                   }}
                                   src={
                                     props?.meal[
-                                    `meal_image_or_video_content${index + 1}`
+                                      `meal_image_or_video_content${index + 1}`
                                     ]
                                   }
                                 />
@@ -655,7 +652,7 @@ function Meal(props) {
                                 controls
                                 style={{
                                   width: "70%",
-                                  margin: 'auto',
+                                  margin: "auto",
                                   height: "196px",
                                   objectFit: "cover",
                                 }}
@@ -663,7 +660,7 @@ function Meal(props) {
                                 <source
                                   src={
                                     props?.meal[
-                                    `meal_image_or_video_content${index + 1}`
+                                      `meal_image_or_video_content${index + 1}`
                                     ]
                                   }
                                   type="video/mp4"
@@ -674,13 +671,13 @@ function Meal(props) {
                               <img
                                 style={{
                                   width: "70%",
-                                  margin: 'auto',
+                                  margin: "auto",
                                   height: "196px",
                                   objectFit: "cover",
                                 }}
                                 src={
                                   props?.meal[
-                                  `meal_image_or_video_content${index + 1}`
+                                    `meal_image_or_video_content${index + 1}`
                                   ]
                                 }
                               />
@@ -691,11 +688,8 @@ function Meal(props) {
                                 {elem.title}
                               </h6>
                               {elem.instructionSteps.map((ele) => (
-                                <p key={ele}>
-                                  {ele}
-                                </p>
+                                <p key={ele}>{ele}</p>
                               ))}
-
                             </div>
                           </div>
                         );
@@ -791,10 +785,10 @@ function Meal(props) {
                     props?.meal?.item_status?.[0]?.status === "Public"
                       ? styles.public
                       : props?.meal?.item_status?.[0]?.status === "Pending"
-                        ? styles.pending
-                        : props?.meal?.item_status?.[0]?.status === "Rejected"
-                          ? styles.rejected
-                          : styles.pending
+                      ? styles.pending
+                      : props?.meal?.item_status?.[0]?.status === "Rejected"
+                      ? styles.rejected
+                      : styles.pending
                   }
                 >
                   <p>{props?.meal?.item_status?.[0]?.status}</p>
