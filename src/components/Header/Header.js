@@ -35,7 +35,6 @@ import { MobileSearch } from "../dropdown/mobile-search";
 import axios from "../../util/Api";
 import { matches } from "lodash";
 import NavLink from "../../hooks/navlink";
-import { FetchCart } from "../../actions/Cart";
 
 function Header(props) {
   // const [isAuthenticated, setIsAuthenticatedState] = useState(false);
@@ -68,10 +67,6 @@ function Header(props) {
   const { cartItems: items } = useSelector((state) => {
     return state.Cart;
   });
-
-  useEffect(() => {
-    dispatch(FetchCart());
-  }, []);
 
   const goToCart = () => {
     router.push("/cart");

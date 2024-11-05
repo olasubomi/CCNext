@@ -46,36 +46,22 @@ function Cart(props) {
   };
 
   const AddToCart = (item) => {
-    let canAddToCart = true;
-    if (item.inventories.length < 1) {
-      toast.error("Product not available for sale!");
-      canAddToCart = false;
-      return;
-    }
-
-    if (!item.inventories.some((inventory) => inventory.in_stock)) {
-      toast.error("Product is out of stock!");
-      canAddToCart = false;
-      return;
-    }
-    if (canAddToCart) {
-      const payload = {
-        itemName: item.name,
-        item_image: item.picture,
-        item_price: item.price,
-        itemId: item.id,
-        userId: item.userId || "",
-        storeName: item.store,
-        currency: item.currency,
-        quantity: item.amount,
-        storeId: item.storeId,
-        item_type: item.item_type ? item.item_type : "",
-      };
-      try {
-        dispatch(addToCart(payload));
-      } catch (error) {
-        console.log(error);
-      }
+    const payload = {
+      itemName: item.name,
+      item_image: item.picture,
+      item_price: item.price,
+      itemId: item.id,
+      userId: item.userId || "",
+      storeName: item.store,
+      currency: item.currency,
+      quantity: item.amount,
+      storeId: item.storeId,
+      item_type: item.item_type ? item.item_type : "",
+    };
+    try {
+      dispatch(addToCart(payload));
+    } catch (error) {
+      console.log(error);
     }
   };
 
