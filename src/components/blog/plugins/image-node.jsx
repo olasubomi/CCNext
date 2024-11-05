@@ -27,7 +27,7 @@ export class ImageNode extends DecoratorNode {
     img.alt = this.altText;
     img.style.width = "100%";
     img.style.height = `${this.height}px`;
-    img.className = "binta-blog-image";
+    img.className = "chow-blog-image";
     return img;
   }
 
@@ -45,7 +45,7 @@ export class ImageNode extends DecoratorNode {
             width: "100%",
             height: `${this.height}px`,
           }}
-          className="binta-blog-image"
+          className="chow-blog-image"
         />
       </Suspense>
     );

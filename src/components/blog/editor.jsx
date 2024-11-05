@@ -28,7 +28,7 @@ import { ListItemNode, ListNode } from "@lexical/list";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { toast } from "react-toastify";
-import { ImageNode } from "./plugins/image-node";
+import { $createImageNode, ImageNode } from "./plugins/image-node";
 import { BsPlus } from "react-icons/bs";
 import axios from "../../util/Api";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -124,14 +124,28 @@ export const Editor = forwardRef((props, ref) => {
       setForm({
         title: data.title,
         feature_image: data.featured_image,
+        uri: data.featured_image,
       });
       editor.update(() => {
         const parser = new DOMParser();
         const dom = parser.parseFromString(data.html_template, "text/html");
-        const nodes = $generateNodesFromDOM(editor, dom);
+        let nodes = $generateNodesFromDOM(editor, dom);
+        let cp = [...nodes];
+        dom.body.childNodes.forEach((child, index) => {
+          if (child.nodeType === Node.ELEMENT_NODE) {
+            if (child.tagName.toLowerCase() === "img") {
+              const src = child.getAttribute("src");
+              const alt = child.getAttribute("alt") || "Image";
+              const height =
+                parseInt(child.style.height.replace("px", "")) || 300;
+              const imageNode = $createImageNode(src, alt, height);
+              cp = [...cp.slice(0, index - 1), imageNode, ...nodes.slice(index)];
+            }
+          }
+        });
         const root = $getRoot();
         root.clear();
-        root.append(...nodes);
+        root.append(...cp);
       });
     } catch (e) {
       console.log(e);
@@ -160,7 +174,7 @@ export const Editor = forwardRef((props, ref) => {
   return (
     <>
       <div className="editor-container ">
-        <div  className="editor-toolbar">
+        <div className="editor-toolbar">
           <ToolbarPlugin>
             <ImagePlugin />
             <ParagraphPlugin />
