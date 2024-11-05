@@ -112,7 +112,6 @@ export default function ManageBlog() {
                         <button onClick={() => handlegetAllBlogPost(1, title)}>
                             <p>SEARCH</p>
                             <SearchSharp />
-
                         </button>
                     </div>
                     <button

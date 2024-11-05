@@ -282,6 +282,9 @@
 
 
 @media only screen and (min-width: 768px) {
+    .blog-search-bar button p {
+        display: initial;
+    }
     .blog-list-container .blog-list-header {
         flex-wrap: nowrap;
     }
@@ -308,7 +311,7 @@
     }
 
     .blog-list-header .blog-search-bar {
-        width: 60%;
+        width: 40%;
         margin-top: 0px;
 
     }
