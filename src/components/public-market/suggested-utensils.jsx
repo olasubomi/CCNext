@@ -13,19 +13,22 @@ import { canItemBeAddedToCart } from "../../util/canAddToCart";
 
 export const SuggestedUtensils = () => {
   const [meals, setMeals] = useState([]);
-  const [visibleMeals, setVisibleMeals] = useState(8);
   const [selectedItem, setSelectedItem] = useState({});
   const [selectGrocery, setSelectGrocery] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [show, setShow] = useState(false);
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
+  const [quantities, setQuantities] = useState({});
+
+  const handleQuantityChange = (id, value) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
 
   const dispatch = useDispatch();
-
-  // const loadMore = () => {
-  //   setVisibleMeals(visibleMeals + 4);
-  // };
 
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
@@ -244,8 +247,10 @@ export const SuggestedUtensils = () => {
           setDetails={setDetails}
           addItemToGrocery={addItemToGrocery}
           setItemAdd={setItemAdd}
-          setQuantity={setQuantity}
-          quantity={quantity}
+          setQuantity={(qty) => {
+            handleQuantityChange(selectedItem._id, qty);
+          }}
+          quantity={quantities[selectedItem?._id] || 0}
           setShow={setShow}
           addToCart={addItemToCart}
         />
