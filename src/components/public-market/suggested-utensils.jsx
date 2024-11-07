@@ -116,6 +116,8 @@ export const SuggestedUtensils = () => {
       const totalItems = response.data.data.count;
       const allItems = response.data.data.items;
 
+      console.log({ allItems });
+
       const filteredItems = allItems.filter((meal) => meal.average_rating);
 
       const newItems = filteredItems.filter(
@@ -203,7 +205,7 @@ export const SuggestedUtensils = () => {
                   />
                   <div className={styles.flex}>
                     <p className={styles.name2}>{utensil.item_name}</p>
-                    <p>$8.43</p>
+                    <p>${utensil.item_price ? utensil.item_price : 0}</p>
                   </div>
                   <p className={styles.storeName}>Chop Chow Official Store</p>
                   <div
