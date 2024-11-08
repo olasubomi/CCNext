@@ -21,6 +21,7 @@ import axios from "../src/util/Api";
 import { useRouter } from "next/router";
 import { debounce } from "lodash";
 import Link from "next/link";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 
 const responsive = {
