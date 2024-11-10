@@ -27,7 +27,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import Sidenav2 from "../../src/components/Header/sidenav2";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { UserIcon } from "../../src/components/icons";
 import axios from "../../src/util/Api";
@@ -214,6 +214,8 @@ const UserProfile = (props) => {
     "friday",
     "saturday",
   ];
+  const { authUser } = useSelector((state) => state.Auth);
+  console.log(authUser, 'authuser')
   function uploadImage(picture) {
     if (picture === "profile") {
       const input = document.createElement("input");
@@ -270,27 +272,26 @@ const UserProfile = (props) => {
   }
 
   useEffect(() => {
-    if (props.auth.authUser) {
-      setFormState({
-        ...formState,
-        ["email"]: props.auth.authUser.email,
-        ["first_name"]: props.auth.authUser.first_name,
-        ["last_name"]: props.auth.authUser.last_name,
-        ["phone_number"]: props.auth.authUser.phone_number,
-        ["driver_car_color"]: props.auth.authUser.driver_car_color,
-        ["driver_car_model"]: props.auth.authUser.driver_car_model,
-        ["driver_car_plate_number"]:
-          props.auth.authUser.driver_car_plate_number,
-        ["driver_car_picture"]: {
-          carContentURL: props.auth.authUser.driver_car_picture,
-        },
-      });
+    if (authUser) {
+      setFormState((prevState) => ({
+        ...prevState,
+        email: authUser.email,
 
-      if (props.auth.authUser.driver_hours.length > 0) {
-        setTimes(props.auth.authUser.driver_hours[0]);
+        phone_number: authUser.phone_number,
+        driver_car_color: authUser.driver_car_color,
+        driver_car_model: authUser.driver_car_model,
+        driver_car_plate_number: authUser.driver_car_plate_number,
+        driver_car_picture: {
+          carContentURL: authUser.driver_car_picture,
+        },
+      }));
+  
+      if (authUser.driver_hours.length > 0) {
+        setTimes(authUser.driver_hours[0]);
       }
     }
-  }, [props.auth.authUser]);
+  }, [authUser]);
+  
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -396,7 +397,7 @@ const UserProfile = (props) => {
     // formData.append('delivery_addresses', delivery_addresses);
 
     axios
-      .put("/user/updateuserprofile/" + props.auth.authUser._id, formData)
+      .put("/user/updateuserprofile/" + authUser._id, formData)
       .then((res) => {
         console.log(res.data);
         setStatusState("success");
@@ -405,7 +406,7 @@ const UserProfile = (props) => {
           setStatusState("");
           setMessageState("");
         }, 5000);
-        props.getUser(props.auth.authUser._id);
+        props.getUser(authUser._id);
       })
       .catch(() => {
         setStatusState("error");
@@ -454,7 +455,7 @@ const UserProfile = (props) => {
 
     var url =
       `https://chopchowserver.vercel.app/user/deleteuserprofile/` +
-      props.auth.authUser._id;
+     authUser._id;
     // var url = `http://localhost:5000/user/deleteuserprofile/` + props.auth.authUser._id;
     // var url = `./api/closeaccount/${customerId}`;
 
@@ -539,6 +540,7 @@ const UserProfile = (props) => {
   useEffect(() => {
     getStoreInformation();
   }, []);
+
 
     return (
         <div className={container + " " + col2}>
@@ -662,7 +664,7 @@ const UserProfile = (props) => {
                                                     <input
                                                         type="text"
                                                         name="first_name"
-                                                        value={first_name}
+                                                        value={authUser?.first_name}
                                                         placeholder="First Name"
                                                         onChange={handleChange}
                                                         className={styles.profile_form_input} />
@@ -673,7 +675,7 @@ const UserProfile = (props) => {
                                                     <input
                                                         type="text"
                                                         name="last_name"
-                                                        value={last_name}
+                                                        value={authUser?.last_name}
                                                         placeholder="Last Name"
                                                         onChange={handleChange}
                                                         className={styles.profile_form_input} />
@@ -687,7 +689,7 @@ const UserProfile = (props) => {
                                                 <input
                                                     type="text"
                                                     name="email"
-                                                    value={email}
+                                                    value={authUser?.email}
                                                     placeholder="Email"
                                                     onChange={handleChange}
                                                     className={styles.profile_form_input}
@@ -701,7 +703,7 @@ const UserProfile = (props) => {
                                                     inputClass={styles.login_form_input}
 
                                                     name="phone_number"
-                                                    value={phone_number}
+                                                    value={authUser?.phone_number}
                                                     onChange={phone => handlePhoneChange(phone)}
                                                 />
                                             </div>
@@ -767,7 +769,6 @@ const UserProfile = (props) => {
                         <input
                           type="text"
                           name="old_password"
-                          value={password}
                           placeholder="Password"
                           onChange={handleChange}
                           className={styles.profile_form_input}

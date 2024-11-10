@@ -538,13 +538,15 @@ export default function TransferToInventory(props) {
               </div>
 
               <div className={styles.transToIn_details_col3}>
-                <div>
-                  <h3>Are the ingredients available in your store</h3>
-                  <CustomSwitch
-                    checked={in_stock}
-                    onChange={handleInStockChange}
-                  />
-                </div>
+                {props?.meal?.item_type === "Meal" &&
+                  <div>
+                    <h3>Are the ingredients available in your store</h3>
+                    <CustomSwitch
+                      checked={in_stock}
+                      onChange={handleInStockChange}
+                    />
+                  </div>
+                }
                 <div>
                   <h3>Out of Stock? How long before restock</h3>
                   <div className={styles.select_container}>
