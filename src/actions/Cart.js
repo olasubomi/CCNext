@@ -13,8 +13,7 @@ import axios from "../util/Api";
 export const addToCart = (product) => async (dispatch, getState) => {
   try {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log("adding to cart");
-    if (user !== undefined && user !== "{}" && user !== null) {
+    if (user !== undefined && Object.keys(user).length !== 0 && user !== null) {
       axios
         .post("/cart/addtocart", {
           user: product.userId || user,

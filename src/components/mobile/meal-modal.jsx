@@ -7,11 +7,9 @@ import { BsCurrencyDollar } from "react-icons/bs";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import axios from "../../util/Api";
 import { toast } from "react-toastify";
 import { Modal } from "../modal/popup-modal";
 import { addToCart } from "../../actions";
-import { useDispatch } from "react-redux";
 import { useEffect, useRef } from "react";
 
 export const Mealmodal = ({
@@ -26,7 +24,6 @@ export const Mealmodal = ({
   details,
   setDetails,
   setItemAdd,
-  itemToAdd,
   setQuantity,
   quantity,
   selectedItem,
@@ -378,7 +375,10 @@ export const Mealmodal = ({
               </div>
             </div>
             <div className={styles.buttons}>
-              <button className={styles.outlinebtn} onClick={() => handleNavigation()}>
+              <button
+                className={styles.outlinebtn}
+                onClick={() => handleNavigation()}
+              >
                 See Full Recipe
               </button>
               <button
@@ -452,84 +452,3 @@ export const Mealmodal = ({
     </div>
   );
 };
-{
-  /* <>
-  <div>
-                    <span className={styles.prepspan}>
-                      <p className={styles.prep}>PrepTime: </p>
-                      {/* <p
-                        className={styles.preptext}
-                      >
-                        {selectedItem.meal_cook_time} Minutes
-                      </p> */
-}
-//   </span>
-//   <div className={styles.prepspan}>
-//     <h4 className={styles.prep}>Serves:</h4>
-//     {/* <p className={styles.preptext}>
-//       {selectedItem.meal_servings} People
-//     </p> */}
-//   </div>
-// </div>
-// <div>
-//   <span className={styles.prepspan}>
-//     <p className={styles.prep}>CookTime: </p>
-//     {/* <p
-
-//       className={styles.preptext}
-//     >
-//       {selectedItem.meal_prep_time} Minutes
-//     </p> */}
-//   </span>
-//   <span className={styles.prepspan}>
-//     <p className={styles.prep}>Chef:</p>
-//     {/* <p
-//       className={styles.underline}
-//       onClick={() =>
-//         router.push(`/chef/${selectedItem.user}`)
-//       }
-//     >
-//       {selectedItem.meal_chef}
-//     </p> */}
-//   </span>
-
-// </div>
-// <div>
-//   <span className={styles.prepspan}>
-//     <p className={styles.prep}>PrepTime: </p>
-//     {/* <p
-//       className={styles.preptext}
-//     >
-//       {selectedItem.meal_cook_time} Minutes
-//     </p> */}
-//   </span>
-//   <div className={styles.prepspan}>
-//     <h4 className={styles.prep}>Serves:</h4>
-//     {/* <p className={styles.preptext}>
-//       {selectedItem.meal_servings} People
-//     </p> */}
-//   </div>
-// </div>
-// <div>
-//   <span className={styles.prepspan}>
-//     <p className={styles.prep}>CookTime: </p>
-//     {/* <p
-
-//       className={styles.preptext}
-//     >
-//       {selectedItem.meal_prep_time} Minutes
-//     </p> */}
-//   </span>
-//   <span className={styles.prepspan}>
-//     <p className={styles.prep}>Chef:</p>
-//     {/* <p
-//       className={styles.underline}
-//       onClick={() =>
-//         router.push(`/chef/${selectedItem.user}`)
-//       }
-//     >
-//       {selectedItem.meal_chef}
-//     </p> */}
-//   </span>
-
-// </div>

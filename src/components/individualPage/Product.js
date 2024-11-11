@@ -2,15 +2,11 @@ import React, { useEffect, useState } from "react";
 import styles from "./product.module.css";
 import { FaReddit } from "react-icons/fa";
 import Head from "next/head";
-import img_logo from "../../../public/assets/logos/sezzle.png";
 import Image from "next/image";
 import {
   FacebookEIcon,
-  InstaEIcon,
-  LocationIcon,
   PrintEIcon,
   ShareIcon,
-  StarIcon,
   TwitterEIcon,
   WhatsappEIcon,
 } from "../icons";
@@ -19,16 +15,15 @@ import Reviews from "./Reviews";
 import { GoStarFill } from "react-icons/go";
 import {
   FacebookShareButton,
-  InstapaperShareButton,
   TwitterShareButton,
   WhatsappShareButton,
   RedditShareButton,
-  RedditIcon,
 } from "react-share";
-import InstagramShareButton from "../SocialShare/InstagramShare";
 import { useSearchParams } from "next/navigation";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { canItemBeAddedToCart } from "../../util/canAddToCart";
 
 function Product(props) {
   const [formatted_ingredients, set_formatted_ingredients] = useState([""]);
@@ -45,7 +40,7 @@ function Product(props) {
   //         <p>{elem}</p>
   //     </div>
   // )), 'hellooo')
-  const dispatch  = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     console.log("props", props.product);
     if (props.product.formatted_ingredients) {
@@ -56,36 +51,36 @@ function Product(props) {
 
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
-    
-    if(qty == 0 ){
+    const canAddToCart = canItemBeAddedToCart(item);
+
+    if (qty == 0) {
       toast.error("Pls add a quantity");
-    }else{
-       const payload = {
-        userId: (user && user._id) ? user._id : "",
-        storeId : "",
-        store_name: "",
-        itemId : item._id,
-        quantity: qty,
-        item_price: item.item_price,
-        currency: "$",
-        item_image: item.itemImage0,
-        itemName: item.item_name,
-        item_type: item.item_type? item.item_type : "Product",
-    } 
-    console.log(payload, "Cart payload line 76 top-selling-product");
-    try {
-      dispatch(addToCart(payload))
-      setOpenList(false);
-      setShow(false);
-      setOpenModal(false);
-    } catch (error) {
-      console.log(error);
+    } else {
+      if (canAddToCart) {
+        const payload = {
+          userId: user && user._id ? user._id : "",
+          storeId: "",
+          store_name: "",
+          itemId: item._id,
+          quantity: qty,
+          item_price: item.item_price,
+          currency: "$",
+          item_image: item.itemImage0,
+          itemName: item.item_name,
+          item_type: item.item_type ? item.item_type : "Product",
+        };
+        try {
+          dispatch(addToCart(payload));
+          setOpenList(false);
+          setShow(false);
+          setOpenModal(false);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
-    };
-  
-  
   };
-  
+
   return (
     <>
       <Head>
@@ -228,14 +223,14 @@ function Product(props) {
               >
                 <WhatsappEIcon />
               </WhatsappShareButton>
-                <RedditShareButton
-                  title={props.product.product_name}
-                  url={productURL}
-                >
-                  <div className={styles.redditicon}>
-                    <FaReddit color="#FF4500" size={20} />
-                  </div>
-                </RedditShareButton>
+              <RedditShareButton
+                title={props.product.product_name}
+                url={productURL}
+              >
+                <div className={styles.redditicon}>
+                  <FaReddit color="#FF4500" size={20} />
+                </div>
+              </RedditShareButton>
               <div
                 style={{ display: "flex", gap: ".4rem", alignItems: "center" }}
               >
@@ -252,7 +247,12 @@ function Product(props) {
           {props.product.publicly_available === "Public" && (
             <div className={styles.btnGroup}>
               <div className={styles.btnoutline}>Add to Grocery List</div>
-              <div className={styles.btnfill} onClick={() => addItemToCart(props.product, 1)}>Add to Cart</div>
+              <div
+                className={styles.btnfill}
+                onClick={() => addItemToCart(props.product, 1)}
+              >
+                Add to Cart
+              </div>
             </div>
           )}
         </div>

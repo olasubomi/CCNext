@@ -305,6 +305,12 @@ class SuggestMealForm extends Component {
           instructionChunk4Step,
           instructionChunk5Step,
           chunk1Content,
+          chunk2Content,
+          chunk3Content,
+          chunk4Content,
+          chunk5Content,
+          chunk6Content,
+
           instructionChunk6Step,
           currentStore,
 
@@ -340,12 +346,21 @@ class SuggestMealForm extends Component {
 
           booleanOfDisplayOfDialogBoxConfirmation,
           stepInputs,
+          image_or_video_content_1,
+          image_or_video_content_2,
+          image_or_video_content_3,
+          image_or_video_content_4,
+          image_or_video_content_5,
+          image_or_video_content_6,
+
         } = JSON.parse(localStorage.getItem("suggestMealForm_"));
         console.log(mealName, "malnames");
         console.log(instructionChunk1, "instructionChunk1instructionChunk1");
 
         // let stepInpu ts_ =
-
+        console.log(image_or_video_content_1,
+          image_or_video_content_2,
+          image_or_video_content_3, "images")
         this.setState({
           mealName,
           itemMealName: mealName,
@@ -353,6 +368,11 @@ class SuggestMealForm extends Component {
           ItemIntro,
           ingredientNames,
           chunk1Content,
+          chunk2Content,
+          chunk3Content,
+          chunk4Content,
+          chunk5Content,
+          chunk6Content,
           ingredeintsInItem,
           mealImagesData,
           // do we need product group list AND strings ?
@@ -441,6 +461,102 @@ class SuggestMealForm extends Component {
 
         var imageElementId = "chunk1Image";
         var videoElementId = "chunk1Video";
+        if (chunk1Content) {
+          const chunk1Video = document.querySelector('#chunk1Video');
+          const chunk1Image = document.querySelector('#chunk1Image');
+          if (chunk1Video) {
+            chunk1Video.setAttribute('src', chunk1Content);
+            chunk1Video.style.display = "block"
+            chunk1Image.style.display = 'none'
+          }
+          else {
+            chunk1Image.setAttribute('src', chunk1Content);
+            chunk1Video.style.display = "none"
+            chunk1Image.style.display = 'block'
+          }
+        }
+        setTimeout(() => {
+          if (chunk2Content) {
+            const chunk2Video = document.querySelector('#chunk2Video');
+            const chunk2Image = document.querySelector('#chunk2Image');
+            if (chunk2Video) {
+              chunk2Video.setAttribute('src', chunk2Content);
+              chunk2Video.style.display = "block"
+              chunk2Image.style.display = 'none'
+            }
+            else {
+              chunk2Image.setAttribute('src', chunk2Content);
+              chunk2Video.style.display = "none"
+              chunk2Image.style.display = 'block'
+            }
+          }
+        }, 500);
+        setTimeout(() => {
+          if (chunk3Content) {
+            const chunk3Video = document.querySelector('#chunk3Video');
+            const chunk3Image = document.querySelector('#chunk3Image');
+            if (chunk3Video) {
+              chunk3Video.setAttribute('src', chunk3Content);
+              chunk3Video.style.display = "block"
+              chunk3Image.style.display = 'none'
+            }
+            else {
+              chunk3Image.setAttribute('src', chunk3Content);
+              chunk3Video.style.display = "none"
+              chunk3Image.style.display = 'block'
+            }
+          }
+        }, 500);
+        setTimeout(() => {
+          if (chunk4Content) {
+            const chunk4Video = document.querySelector('#chunk4Video');
+            const chunk4Image = document.querySelector('#chunk4Image');
+            if (chunk4Video) {
+              chunk4Video.setAttribute('src', chunk4Content);
+              chunk4Video.style.display = "block"
+              chunk4Image.style.display = 'none'
+            }
+            else {
+              chunk4Image.setAttribute('src', chunk4Content);
+              chunk4Video.style.display = "none"
+              chunk4Image.style.display = 'block'
+            }
+          }
+        }, 500);
+        setTimeout(() => {
+          if (chunk5Content) {
+            const chunk5Video = document.querySelector('#chunk4Video');
+            const chunk5Image = document.querySelector('#chunk4Image');
+            if (chunk5Video) {
+              chunk5Video.setAttribute('src', chunk5Content);
+              chunk5Video.style.display = "block"
+              chunk5Image.style.display = 'none'
+            }
+            else {
+              chunk5Image.setAttribute('src', chunk5Content);
+              chunk5Video.style.display = "none"
+              chunk5Image.style.display = 'block'
+            }
+          }
+        }, 500);
+        setTimeout(() => {
+          if (chunk6Content) {
+            const chunk6Video = document.querySelector('#chunk4Video');
+            const chunk6Image = document.querySelector('#chunk4Image');
+            if (chunk6Video) {
+              chunk6Video.setAttribute('src', chunk6Content);
+              chunk6Video.style.display = "block"
+              chunk6Image.style.display = 'none'
+            }
+            else {
+              chunk6Image.setAttribute('src', chunk6Content);
+              chunk6Video.style.display = "none"
+              chunk6Image.style.display = 'block'
+            }
+          }
+        }, 500);
+        console.log(chunk2Content, "image_or_video_content_2")
+
       }
     }
     console.log(this.state, "dd");
@@ -2068,7 +2184,7 @@ class SuggestMealForm extends Component {
     const { ingredientStrings, stepInputs } = this.state;
     console.log(this.state.videoData, "steps");
 
-    console.log(this.state.ingredientStrings, "ingredientStrings");
+    console.log(this.state.chunk2Content, "ingredientStrings");
     console.log(this.state.videoData.data, "render");
 
     console.log(
@@ -2700,7 +2816,7 @@ class SuggestMealForm extends Component {
                   </div>
                 </div>
 
-                <p>
+                <div>
                   <img
                     id="chunk1Image"
                     className={styles.suggestion_image}
@@ -2713,26 +2829,34 @@ class SuggestMealForm extends Component {
                       objectPosition: "center",
                     }}
                   />
+                  <div
+                    className={styles.closed}
+                    onClick={() => this.deleteImg("chunk1Image")}
+                  >
+                    <AiOutlineClose className={styles.closeIcon} />
+                  </div>
+                </div>
+                <div style={{ position: 'relative' }}>
                   <video
                     className={styles.suggestion_image}
                     id="chunk1Video"
                     style={{ display: "none" }}
                     controls
                   >
-                    Your browser does not support the video tag.
+                    <p> Your browser does not support the video tag.</p>
                   </video>
                   <div
                     className={styles.closed}
-                    onClick={() => this.deleteImg("chunk" + 1 + "Image")}
+                    onClick={() => this.deleteImg("chunk1Image")}
                   >
                     <AiOutlineClose className={styles.closeIcon} />
                   </div>
-                </p>
+                </div>
               </div>
 
               {stepInputs?.map((id, index) => {
                 return (
-                  <div key={index} className={styles.suggestion_recipe_step}>
+                  <div key={index} className={styles.suggestion_recipe_step} style={{ marginTop: '2rem' }}>
                     <div className={styles.suggestion_form_group}>
                       <label className={styles.suggestion_form_label}>
                         Step {id} Title
@@ -2820,11 +2944,16 @@ class SuggestMealForm extends Component {
                       <video
                         className={styles.suggestion_image}
                         id={"chunk" + id + "Video"}
+                        width="100%"
+                        height='100%'
                         style={{ display: "none" }}
+                        alt={"recipe_step" + id + "_image_or_video"}
                         controls
+
                       >
                         Your browser does not support the video tag.
                       </video>
+
                       <div
                         className={styles.closed}
                         onClick={() => this.deleteImg("chunk" + id + "Image")}
