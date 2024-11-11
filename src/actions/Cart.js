@@ -13,8 +13,7 @@ import axios from "../util/Api";
 export const addToCart = (product) => async (dispatch, getState) => {
   try {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log("adding to cart");
-    if (user !== undefined && user !== "{}" && user !== null) {
+    if (user !== undefined && Object.keys(user).length !== 0 && user !== null) {
       axios
         .post("/cart/addtocart", {
           user: product.userId || user,
@@ -78,6 +77,83 @@ export const addToCart = (product) => async (dispatch, getState) => {
     );
   }
 };
+
+export const addMultipleItemsToCart =
+  (products) => async (dispatch, getState) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      console.log("adding multiple items to cart");
+
+      if (user !== undefined && user !== "{}" && user !== null) {
+        // Post request to add multiple items to cart
+        axios
+          .post("/cart/addMultipleItemsToCart", {
+            user: products[0].userId || user,
+            items: products.map((product) => ({
+              item: product.itemId,
+              item_type: product.item_type,
+              storeId: product.storeId,
+              quantity: product.quantity,
+              item_price: product.item_price,
+              item_Name: product.itemName,
+              item_image: product.item_image,
+            })),
+          })
+          .then(({ data }) => {
+            if (data.data.message === "Items processed successfully") {
+              products.forEach((product) => {
+                dispatch({
+                  type: CART_ADD_ITEM,
+                  payload: {
+                    name: product.itemName,
+                    image: product.item_image,
+                    price: product.item_price,
+                    itemId: product.itemId,
+                    userId: product.userId,
+                    storeName: product.store_name,
+                    currency: product.currency,
+                    amount: product.quantity,
+                    storeId: product.storeId,
+                    itemType: product.item_type,
+                  },
+                });
+              });
+              toast.success("Items added successfully");
+            } else {
+              toast.success(data.data.message);
+            }
+          });
+      } else {
+        products.forEach((product) => {
+          dispatch({
+            type: CART_ADD_ITEM,
+            payload: {
+              name: product.itemName,
+              image: product.item_image,
+              price: product.item_price,
+              itemId: product.itemId,
+              userId: product.userId,
+              storeName: product.store_name,
+              currency: product.currency,
+              amount: product.quantity,
+              storeId: product.storeId,
+              itemType: product.item_type,
+            },
+          });
+        });
+        toast.success("Items added successfully");
+      }
+    } catch (error) {
+      console.log(error.message, "cart error");
+    }
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        "cartItems",
+        JSON.stringify(getState().Cart.cartItems)
+      );
+    }
+  };
 
 export const removeFromCart = (productId) => async (dispatch, getState) => {
   console.log("line 90 ", productId);

@@ -5,9 +5,7 @@ import { LocalActivity } from '@mui/icons-material';
 const Delivery = ({data, setData, handleChange, deliveryType,setDeliveryType}) => {
 
     const changeDeliveryType = (type) => {
-        setDeliveryType(type)
-        console.log(type)
-       
+        setDeliveryType(type)       
         
     }
 

@@ -12,10 +12,19 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 40px;
+    position: sticky;
+    top: 90px;
+    background-color: #fff;
+    z-index: 100;
+
 }
 .editor-container {
     position: relative;
+    position: sticky;
+    top: 130px;
 }
+
+
 
 
 .flexer-box {

@@ -183,33 +183,6 @@ const PublicMarket = () => {
           </>
         </>
       )}
-      {/* {activeSubLink === 1 && (
-        <>
-          {categories.find((ele) => ele.label === "Stores")?.value && (
-            <AllStores />
-          )}
-        </>
-      )}
-      <div>
-        {activeSubLink === 2 && (
-          <>
-            {categories.find((ele) => ele.label === "Meals")?.value && (
-              <div>
-                <AllPopularMeals />
-              </div>
-            )}
-          </>
-        )}
-      </div>
-      {activeSubLink === 3 && (
-        <>
-          {categories.find((ele) => ele.label === "Products")?.value && (
-            <div>
-              <AllProducts />
-            </div>
-          )}
-        </>
-      )} */}
       {activeSubLink === 4 && (
         <>
           {categories.find((ele) => ele.label === "Kitchen Utensils")

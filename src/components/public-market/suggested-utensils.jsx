@@ -7,25 +7,28 @@ import { Element } from "react-scroll";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { toast } from "react-toastify";
 import { UtensilModal } from "../modal/individual-meal-product";
-import utensilImg from "../../../public/assets/store_pics/no-image-utensil.png";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
+import { canItemBeAddedToCart } from "../../util/canAddToCart";
 
 export const SuggestedUtensils = () => {
   const [meals, setMeals] = useState([]);
-  const [visibleMeals, setVisibleMeals] = useState(8);
   const [selectedItem, setSelectedItem] = useState({});
   const [selectGrocery, setSelectGrocery] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [show, setShow] = useState(false);
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
+  const [quantities, setQuantities] = useState({});
+
+  const handleQuantityChange = (id, value) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
 
   const dispatch = useDispatch();
-
-  // const loadMore = () => {
-  //   setVisibleMeals(visibleMeals + 4);
-  // };
 
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
@@ -60,29 +63,32 @@ export const SuggestedUtensils = () => {
 
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
+    let canAddToCart = canItemBeAddedToCart(item);
 
     if (qty == 0) {
       toast.error("Add a quantity");
     } else {
-      const payload = {
-        userId: user && user._id ? user._id : "",
-        storeId: "",
-        store_name: "",
-        itemId: item._id,
-        quantity: qty,
-        item_price: item.item_price,
-        currency: "",
-        item_image: item.itemImage0,
-        itemName: item.item_name,
-        item_type: item.item_type ? item.item_type : "Product",
-      };
-      try {
-        dispatch(addToCart(payload));
-        setOpenList(false);
-        setShow(false);
-        setOpenModal(false);
-      } catch (error) {
-        console.log(error);
+      if (canAddToCart) {
+        const payload = {
+          userId: user && user._id ? user._id : "",
+          storeId: "",
+          store_name: "",
+          itemId: item._id,
+          quantity: qty,
+          item_price: item.item_price,
+          currency: "",
+          item_image: item.itemImage0,
+          itemName: item.item_name,
+          item_type: item.item_type ? item.item_type : "Product",
+        };
+        try {
+          dispatch(addToCart(payload));
+          setOpenList(false);
+          setShow(false);
+          setOpenModal(false);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };
@@ -241,8 +247,10 @@ export const SuggestedUtensils = () => {
           setDetails={setDetails}
           addItemToGrocery={addItemToGrocery}
           setItemAdd={setItemAdd}
-          setQuantity={setQuantity}
-          quantity={quantity}
+          setQuantity={(qty) => {
+            handleQuantityChange(selectedItem._id, qty);
+          }}
+          quantity={quantities[selectedItem?._id] || 0}
           setShow={setShow}
           addToCart={addItemToCart}
         />

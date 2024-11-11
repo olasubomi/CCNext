@@ -14,6 +14,7 @@ import axios from "../../util/Api";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../actions";
+import { canItemBeAddedToCart } from "../../util/canAddToCart";
 
 const responsive = {
   superLargeDesktop: {
@@ -106,28 +107,31 @@ export const MealDropDown = ({
 
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
+    const canAddToCart = canItemBeAddedToCart(item);
     if (qty == 0) {
       toast.error("Add a quantity");
     } else {
-      const payload = {
-        userId: user && user._id ? user._id : "",
-        storeId: storeInfo.id,
-        store_name: storeInfo.name,
-        itemId: item._id,
-        quantity: qty,
-        item_price: item.item_price,
-        currency: storeInfo.currency,
-        item_image: item.item_images[0],
-        itemName: item.item_name,
-        item_type: item.item_type ? item.item_type : "",
-      };
-      try {
-        dispatch(addToCart(payload));
-        setOpenList(false);
-        setShow(false);
-        setOpenModal(false);
-      } catch (error) {
-        console.log(error);
+      if (canAddToCart) {
+        const payload = {
+          userId: user && user._id ? user._id : "",
+          storeId: storeInfo.id,
+          store_name: storeInfo.name, //selectedStore.supplier.store_name,
+          itemId: item._id,
+          quantity: qty,
+          item_price: item.item_price,
+          currency: storeInfo.currency,
+          item_image: item.item_images[0],
+          itemName: item.item_name,
+          item_type: item.item_type ? item.item_type : "",
+        };
+        try {
+          dispatch(addToCart(payload));
+          setOpenList(false);
+          setShow(false);
+          setOpenModal(false);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };
