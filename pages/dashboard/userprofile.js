@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert } from "react-bootstrap";
 
 import Head from "next/head";
@@ -34,6 +34,7 @@ import axios from "../../src/util/Api";
 import PhoneInput from "react-phone-input-2";
 import { getUser } from "../../src/actions";
 import AddIcon from "@mui/icons-material/Add";
+import _Switch from "react-switch";
 import {
   suggestion_form_image,
   suggestion_form_image_col_1,
@@ -96,6 +97,7 @@ const UserProfile = (props) => {
   const router = useRouter();
   const [status, setStatusState] = useState("");
   const [message, setMessageState] = useState("");
+  const [toggleSwitch, setToggleSwitch] = useState(true);
   const [formState, setFormState] = useState({
     email: "",
     phone_number: "",
@@ -319,6 +321,23 @@ const UserProfile = (props) => {
     }
   }
 
+  const handleUpdateNotification = useCallback(async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}")
+      const response = await axios.put(`/user/updateuserprofile/${user?._id}`, {
+        newsletter_subscription: !toggleSwitch
+      });
+      localStorage.setItem("user", JSON.parse({
+        ...user,
+        newsletter_subscription: !toggleSwitch
+      }))
+    } catch (e) {
+      console.log(e, "Error")
+    }
+  }, [toggleSwitch])
+
+
+
   function uploadProfileImage() {
     // <input accept="image/*,video/mp4,video/mov,video/x-m4v,video/*" id="ProfileImage" name="ProfileImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onUpdateProfileImage(ev)} />
     const input = document.createElement("input");
@@ -537,198 +556,202 @@ const UserProfile = (props) => {
   };
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user && typeof user?.newsletter_subscription === "boolean") {
+      setToggleSwitch(user.newsletter_subscription)
+    }
     getStoreInformation();
   }, []);
 
-    return (
-        <div className={container + " " + col2}>
-            <div className="alert">
-                {status === "error" && <div className="alert-danger">{message}</div>}
-                {status === "success" && <div className="alert-success">{message}</div>}
-            </div>
-            <Alert show={showAlert} key={1} variant={variant}>
-                {messageAlert}
-            </Alert>
-            <Head>
-                <title>User Profile</title>
-                <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
-                <meta name="description" content="View Your Chop Chow User Profile as a logged in user." />
-            </Head>
-            <Header />
-            <SideNav />
-            <div className={left}>
-                <Sidenav2 showBottom={false} />
-            </div>
-            <div className={empty}></div>
-            <div className={center}>
-                <h3 className={styles.center_h3}>My Profile</h3>
-                <div className={styles.profile_con}>
-                    <div className={styles.empty}></div>
-                    <div className={styles.profile_summary_con}>
-                        <h3>Summary</h3>
-                        {props.auth.authUser &&
-                            <div className={styles.profile_summary}>
-                                <div className={styles.profile_summary_link}>
-                                    <Link href='#basic-information' >
-                                        Basic Information
-                                    </Link>
-                                </div>
-                                <div className={styles.profile_summary_link}>
-                                    <Link href='#change-password' >
-                                        Change Password
-                                    </Link>
-                                </div>
-                                <div className={styles.profile_summary_link}>
-                                    <Link href='#billing-address' >
-                                        Billing Address
-                                    </Link>
-                                </div>
-                                {props.auth.authUser.user_type === 'driver' &&
-                                    <div className={styles.profile_summary_link}>
-                                        <Link href='#car-details' >
-                                            Car Details
-                                        </Link>
-                                    </div>
-                                }
-                                <div className={styles.profile_summary_link}>
-                                    <Link href='#payment-method' >
-                                        Payment Method
-                                    </Link>
-                                </div>
-                                <div className={styles.profile_summary_link}>
-                                    <Link href='#notification' >
-                                        Notification
-                                    </Link>
-                                </div>
-                                {(props.auth.authUser.user_type === 'supplier' || props.auth.authUser.user_type === 'customer') &&
-                                    <div className={styles.profile_summary_link}>
-                                        <Link href='#food-preference' >
-                                            Food Preference
-                                        </Link>
-                                    </div>
-                                }
-                                {(props.auth.authUser.user_type === 'driver' || props.auth.authUser.user_type === 'customer') &&
-                                    <div className={styles.profile_summary_link}>
-                                        <Link href='#upgrade-chopChow-plan'>
-                                            Upgrade ChopChow Plan
-                                        </Link>
-                                    </div>
-                                }
-                                {props.auth.authUser.user_type === 'driver' &&
-                                    <div className={styles.profile_summary_link}>
-                                        <Link href='#working-hours'>
-                                            Working Hours
-                                        </Link>
-                                    </div>
-                                }
-                                <div className={styles.profile_summary_link}>
-                                    <Link href='#account-type'>
-                                        Account Type
-                                    </Link>
-                                </div>
-                                {props.auth.authUser.user_type !== 'admin' &&
-                                    <div className={styles.profile_summary_link}>
-                                        <Link href='#close-account' >
-                                            Close Account
-                                        </Link>
-                                    </div>}
-                            </div>
+  return (
+    <div className={container + " " + col2}>
+      <div className="alert">
+        {status === "error" && <div className="alert-danger">{message}</div>}
+        {status === "success" && <div className="alert-success">{message}</div>}
+      </div>
+      <Alert show={showAlert} key={1} variant={variant}>
+        {messageAlert}
+      </Alert>
+      <Head>
+        <title>User Profile</title>
+        <meta key="title" name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="description" content="View Your Chop Chow User Profile as a logged in user." />
+      </Head>
+      <Header />
+      <SideNav />
+      <div className={left}>
+        <Sidenav2 showBottom={false} />
+      </div>
+      <div className={empty}></div>
+      <div className={center}>
+        <h3 className={styles.center_h3}>My Profile</h3>
+        <div className={styles.profile_con}>
+          <div className={styles.empty}></div>
+          <div className={styles.profile_summary_con}>
+            <h3>Summary</h3>
+            {props.auth.authUser &&
+              <div className={styles.profile_summary}>
+                <div className={styles.profile_summary_link}>
+                  <Link href='#basic-information' >
+                    Basic Information
+                  </Link>
+                </div>
+                <div className={styles.profile_summary_link}>
+                  <Link href='#change-password' >
+                    Change Password
+                  </Link>
+                </div>
+                <div className={styles.profile_summary_link}>
+                  <Link href='#billing-address' >
+                    Billing Address
+                  </Link>
+                </div>
+                {props.auth.authUser.user_type === 'driver' &&
+                  <div className={styles.profile_summary_link}>
+                    <Link href='#car-details' >
+                      Car Details
+                    </Link>
+                  </div>
+                }
+                <div className={styles.profile_summary_link}>
+                  <Link href='#payment-method' >
+                    Payment Method
+                  </Link>
+                </div>
+                <div className={styles.profile_summary_link}>
+                  <Link href='#notification' >
+                    Notification
+                  </Link>
+                </div>
+                {(props.auth.authUser.user_type === 'supplier' || props.auth.authUser.user_type === 'customer') &&
+                  <div className={styles.profile_summary_link}>
+                    <Link href='#food-preference' >
+                      Food Preference
+                    </Link>
+                  </div>
+                }
+                {(props.auth.authUser.user_type === 'driver' || props.auth.authUser.user_type === 'customer') &&
+                  <div className={styles.profile_summary_link}>
+                    <Link href='#upgrade-chopChow-plan'>
+                      Upgrade ChopChow Plan
+                    </Link>
+                  </div>
+                }
+                {props.auth.authUser.user_type === 'driver' &&
+                  <div className={styles.profile_summary_link}>
+                    <Link href='#working-hours'>
+                      Working Hours
+                    </Link>
+                  </div>
+                }
+                <div className={styles.profile_summary_link}>
+                  <Link href='#account-type'>
+                    Account Type
+                  </Link>
+                </div>
+                {props.auth.authUser.user_type !== 'admin' &&
+                  <div className={styles.profile_summary_link}>
+                    <Link href='#close-account' >
+                      Close Account
+                    </Link>
+                  </div>}
+              </div>
+            }
+          </div>
+          <div className={styles.profile_details}>
+            {props.auth.authUser && (
+              <>
+                <div id='basic-information' className={styles.profile_basic_info_con}>
+                  <h3>Basic Information</h3>
+                  <div className={styles.profile_basic_info}>
+                    <div className={styles.profile_image_con}>
+                      <div className={styles.profile_image}>
+
+                        {(profileImageData === '' && props.auth.authUser?.profile_picture === undefined) && <UserIcon />}
+                        {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) &&
+                          <Image width={200} height={200} src={props.auth.authUser.profile_picture}
+                            className={styles.profile_image}
+                            alt="profile_picture" />
                         }
+                        <img id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
+                      </div>
+                      <p onClick={uploadProfileImage}>Change Picture</p>
                     </div>
-                    <div className={styles.profile_details}>
-                        {props.auth.authUser && (
-                            <>
-                                <div id='basic-information' className={styles.profile_basic_info_con}>
-                                    <h3>Basic Information</h3>
-                                    <div className={styles.profile_basic_info}>
-                                        <div className={styles.profile_image_con}>
-                                            <div className={styles.profile_image}>
+                    <div className={styles.profile_form}>
+                      <h3>Contact Information</h3>
+                      <div className={styles.profile_form_col_2}>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="first_name" className={styles.profile_form_label}>First Name</label>
+                          <input
+                            type="text"
+                            name="first_name"
+                            value={first_name}
+                            placeholder="First Name"
+                            onChange={handleChange}
+                            className={styles.profile_form_input} />
+                          {/* {this.props.errors.accountname && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
+                        </div>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="last_name" className={styles.profile_form_label}>Last Name</label>
+                          <input
+                            type="text"
+                            name="last_name"
+                            value={last_name}
+                            placeholder="Last Name"
+                            onChange={handleChange}
+                            className={styles.profile_form_input} />
+                          {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
+                        </div>
+                      </div>
+                      <div className={styles.profile_form_group}>
+                        <label htmlFor="email" className={styles.profile_form_label}>
+                          Email
+                        </label>
+                        <input
+                          type="text"
+                          name="email"
+                          value={email}
+                          placeholder="Email"
+                          onChange={handleChange}
+                          className={styles.profile_form_input}
+                        />
+                      </div>
+                      <div className={styles.profile_form_group}>
+                        <label htmlFor="phone_number" className={styles.profile_form_label}>
+                          Phone Number
+                        </label>
+                        <PhoneInput
+                          inputClass={styles.login_form_input}
 
-                                                {(profileImageData === '' && props.auth.authUser?.profile_picture === undefined) && <UserIcon />}
-                                                {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) &&
-                                                    <Image width={200} height={200} src={props.auth.authUser.profile_picture} 
-                                                    className={styles.profile_image}
-                                                    alt="profile_picture" />
-                                                }
-                                                <img id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
-                                            </div>
-                                            <p onClick={uploadProfileImage}>Change Picture</p>
-                                        </div>
-                                        <div className={styles.profile_form}>
-                                            <h3>Contact Information</h3>
-                                            <div className={styles.profile_form_col_2}>
-                                                <div className={styles.profile_form_group}>
-                                                    <label htmlFor="first_name" className={styles.profile_form_label}>First Name</label>
-                                                    <input
-                                                        type="text"
-                                                        name="first_name"
-                                                        value={first_name}
-                                                        placeholder="First Name"
-                                                        onChange={handleChange}
-                                                        className={styles.profile_form_input} />
-                                                    {/* {this.props.errors.accountname && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
-                                                </div>
-                                                <div className={styles.profile_form_group}>
-                                                    <label htmlFor="last_name" className={styles.profile_form_label}>Last Name</label>
-                                                    <input
-                                                        type="text"
-                                                        name="last_name"
-                                                        value={last_name}
-                                                        placeholder="Last Name"
-                                                        onChange={handleChange}
-                                                        className={styles.profile_form_input} />
-                                                    {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
-                                                </div>
-                                            </div>
-                                            <div className={styles.profile_form_group}>
-                                                <label htmlFor="email" className={styles.profile_form_label}>
-                                                    Email
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="email"
-                                                    value={email}
-                                                    placeholder="Email"
-                                                    onChange={handleChange}
-                                                    className={styles.profile_form_input}
-                                                />
-                                            </div>
-                                            <div className={styles.profile_form_group}>
-                                                <label htmlFor="phone_number" className={styles.profile_form_label}>
-                                                    Phone Number
-                                                </label>
-                                                <PhoneInput
-                                                    inputClass={styles.login_form_input}
-
-                                                    name="phone_number"
-                                                    value={phone_number}
-                                                    onChange={phone => handlePhoneChange(phone)}
-                                                />
-                                            </div>
-                                            <div className={styles.profile_form_col_2}>
-                                                <div className={styles.profile_form_group}>
-                                                    <label htmlFor="city" className={styles.profile_form_label}>City</label>
-                                                    <input name="city" value={city} onChange={handleChange} type="text" className={styles.profile_form_input} />
-                                                    {/* {this.props.errors.city && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
-                                                </div>
-                                                <div className={styles.profile_form_group}>
-                                                    <label htmlFor="state" className={styles.profile_form_label}>State</label>
-                                                    <input name="state" value={state} onChange={handleChange} type="text" className={styles.profile_form_input} />
-                                                    {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
-                                                </div>
-                                            </div>
-                                            <div className={styles.profile_form_col_2}>
-                                                <div className={styles.profile_form_group}>
-                                                    <label htmlFor="zip_code" className={styles.profile_form_label}>Zip Code</label>
-                                                    <input name="zip_code" value={zip_code} onChange={handleChange} type="text" className={styles.profile_form_input} />
-                                                    {/* {this.props.errors.zip_code && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
-                                                </div>
-                                                <div className={styles.profile_form_group}>
-                                                    <label htmlFor="country" className={styles.profile_form_label}>Country</label>
-                                                    <input name="country" value={country} onChange={handleChange} type="text" className={styles.profile_form_input} />
-                                                    {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
-                                                </div>
-                                            </div>
+                          name="phone_number"
+                          value={phone_number}
+                          onChange={phone => handlePhoneChange(phone)}
+                        />
+                      </div>
+                      <div className={styles.profile_form_col_2}>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="city" className={styles.profile_form_label}>City</label>
+                          <input name="city" value={city} onChange={handleChange} type="text" className={styles.profile_form_input} />
+                          {/* {this.props.errors.city && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
+                        </div>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="state" className={styles.profile_form_label}>State</label>
+                          <input name="state" value={state} onChange={handleChange} type="text" className={styles.profile_form_input} />
+                          {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
+                        </div>
+                      </div>
+                      <div className={styles.profile_form_col_2}>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="zip_code" className={styles.profile_form_label}>Zip Code</label>
+                          <input name="zip_code" value={zip_code} onChange={handleChange} type="text" className={styles.profile_form_input} />
+                          {/* {this.props.errors.zip_code && <div className={styles.errorMsg}>{this.props.errors.accountname}</div>} */}
+                        </div>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="country" className={styles.profile_form_label}>Country</label>
+                          <input name="country" value={country} onChange={handleChange} type="text" className={styles.profile_form_input} />
+                          {/* {this.props.errors.lastname && <div className={styles.errorMsg}>{this.props.errors.lastname}</div>} */}
+                        </div>
+                      </div>
 
                       <div className={styles.profile_form_group}>
                         <label
@@ -1194,6 +1217,20 @@ const UserProfile = (props) => {
                       <div className={styles.profile_notifications}>
                         <div className={styles.profile_notification}>
                           <h3>Get notification for our product updates </h3>
+                          <_Switch onChange={() => {
+                            setToggleSwitch(prev => !prev)
+                            handleUpdateNotification()
+                          }} checked={toggleSwitch} checkedIcon={<p style={{
+                            color: "#fff",
+                            fontSize: 11,
+                            padding: "6px"
+                          }}>Yes</p>}
+                            uncheckedIcon={<p style={{
+                              color: "#000",
+                              fontSize: 11,
+                              padding: "6px"
+                            }}>No</p>}
+                          />
                         </div>
                       </div>
                     </div>
@@ -1202,253 +1239,253 @@ const UserProfile = (props) => {
 
                 {(props.auth.authUser.user_type === "supplier" ||
                   props.auth.authUser.user_type === "customer") && (
-                  <div
-                    id="food-preference"
-                    className={styles.profile_basic_info_con}
-                  >
-                    <h3>Food Preference</h3>
-                    <div className={styles.profile_basic_info}>
-                      <div className={styles.profile_food_pref}>
-                        <h3>Diets</h3>
-                        <p>
-                          Select from the diets below and we will only show you
-                          recipes that match
-                        </p>
-                        <div className={styles.chip}>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="tee"
-                              name="tee"
-                              value="tee"
-                            />
-                            <label
-                              htmlFor="tee"
-                              className={styles.chip_radio_button}
-                            >
-                              tea
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="rice"
-                              name="rice"
-                              value="rice"
-                            />
-                            <label
-                              htmlFor="rice"
-                              className={styles.chip_radio_button}
-                            >
-                              rice
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="tesa"
-                              name="tesa"
-                              value="tesa"
-                            />
-                            <label
-                              htmlFor="tesa"
-                              className={styles.chip_radio_button}
-                            >
-                              yam
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="time"
-                              name="time"
-                              value="time"
-                            />
-                            <label
-                              htmlFor="time"
-                              className={styles.chip_radio_button}
-                            >
-                              time
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className={styles.profile_food_pref_allergies}>
-                        <h3>Allergies</h3>
-                        <p>
-                          Select from the diets below and we will only show you
-                          recipes that match
-                        </p>
-                        <div className={styles.chip}>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="kiwi"
-                              name="kiwi"
-                              value="kiwi"
-                            />
-                            <label
-                              htmlFor="kiwi"
-                              className={styles.chip_radio_button2}
-                            >
-                              tea
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="Corn"
-                              name="Corn"
-                              value="Corn"
-                            />
-                            <label
-                              htmlFor="Corn"
-                              className={styles.chip_radio_button2}
-                            >
-                              Corn
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="Meat"
-                              name="Meat"
-                              value="Meat"
-                            />
-                            <label
-                              htmlFor="Meat"
-                              className={styles.chip_radio_button2}
-                            >
-                              yam
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="flower"
-                              name="flower"
-                              value="flower"
-                            />
-                            <label
-                              htmlFor="flower"
-                              className={styles.chip_radio_button2}
-                            >
-                              flower
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="rat"
-                              name="rat"
-                              value="rat"
-                            />
-                            <label
-                              htmlFor="rat"
-                              className={styles.chip_radio_button2}
-                            >
-                              rat
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="sugar"
-                              name="sugar"
-                              value="sugar"
-                            />
-                            <label
-                              htmlFor="sugar"
-                              className={styles.chip_radio_button2}
-                            >
-                              sugar
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="weed"
-                              name="weed"
-                              value="weed"
-                            />
-                            <label
-                              htmlFor="weed"
-                              className={styles.chip_radio_button2}
-                            >
-                              weed
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="rice"
-                              name="rice"
-                              value="rice"
-                            />
-                            <label
-                              htmlFor="rice"
-                              className={styles.chip_radio_button2}
-                            >
-                              rice
-                            </label>
-                          </div>
-                          <div className={styles.chip_option}>
-                            <input
-                              className={styles.chip_radioInput}
-                              type="radio"
-                              id="yam"
-                              name="yam"
-                              value="yam"
-                            />
-                            <label
-                              htmlFor="yam"
-                              className={styles.chip_radio_button2}
-                            >
-                              yam
-                            </label>
+                    <div
+                      id="food-preference"
+                      className={styles.profile_basic_info_con}
+                    >
+                      <h3>Food Preference</h3>
+                      <div className={styles.profile_basic_info}>
+                        <div className={styles.profile_food_pref}>
+                          <h3>Diets</h3>
+                          <p>
+                            Select from the diets below and we will only show you
+                            recipes that match
+                          </p>
+                          <div className={styles.chip}>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="tee"
+                                name="tee"
+                                value="tee"
+                              />
+                              <label
+                                htmlFor="tee"
+                                className={styles.chip_radio_button}
+                              >
+                                tea
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="rice"
+                                name="rice"
+                                value="rice"
+                              />
+                              <label
+                                htmlFor="rice"
+                                className={styles.chip_radio_button}
+                              >
+                                rice
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="tesa"
+                                name="tesa"
+                                value="tesa"
+                              />
+                              <label
+                                htmlFor="tesa"
+                                className={styles.chip_radio_button}
+                              >
+                                yam
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="time"
+                                name="time"
+                                value="time"
+                              />
+                              <label
+                                htmlFor="time"
+                                className={styles.chip_radio_button}
+                              >
+                                time
+                              </label>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className={styles.input_button}>
-                        <div className={styles.profile_form_group}>
-                          <label
-                            htmlFor="billing_address"
-                            className={styles.profile_form_label}
+                        <div className={styles.profile_food_pref_allergies}>
+                          <h3>Allergies</h3>
+                          <p>
+                            Select from the diets below and we will only show you
+                            recipes that match
+                          </p>
+                          <div className={styles.chip}>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="kiwi"
+                                name="kiwi"
+                                value="kiwi"
+                              />
+                              <label
+                                htmlFor="kiwi"
+                                className={styles.chip_radio_button2}
+                              >
+                                tea
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="Corn"
+                                name="Corn"
+                                value="Corn"
+                              />
+                              <label
+                                htmlFor="Corn"
+                                className={styles.chip_radio_button2}
+                              >
+                                Corn
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="Meat"
+                                name="Meat"
+                                value="Meat"
+                              />
+                              <label
+                                htmlFor="Meat"
+                                className={styles.chip_radio_button2}
+                              >
+                                yam
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="flower"
+                                name="flower"
+                                value="flower"
+                              />
+                              <label
+                                htmlFor="flower"
+                                className={styles.chip_radio_button2}
+                              >
+                                flower
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="rat"
+                                name="rat"
+                                value="rat"
+                              />
+                              <label
+                                htmlFor="rat"
+                                className={styles.chip_radio_button2}
+                              >
+                                rat
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="sugar"
+                                name="sugar"
+                                value="sugar"
+                              />
+                              <label
+                                htmlFor="sugar"
+                                className={styles.chip_radio_button2}
+                              >
+                                sugar
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="weed"
+                                name="weed"
+                                value="weed"
+                              />
+                              <label
+                                htmlFor="weed"
+                                className={styles.chip_radio_button2}
+                              >
+                                weed
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="rice"
+                                name="rice"
+                                value="rice"
+                              />
+                              <label
+                                htmlFor="rice"
+                                className={styles.chip_radio_button2}
+                              >
+                                rice
+                              </label>
+                            </div>
+                            <div className={styles.chip_option}>
+                              <input
+                                className={styles.chip_radioInput}
+                                type="radio"
+                                id="yam"
+                                name="yam"
+                                value="yam"
+                              />
+                              <label
+                                htmlFor="yam"
+                                className={styles.chip_radio_button2}
+                              >
+                                yam
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className={styles.input_button}>
+                          <div className={styles.profile_form_group}>
+                            <label
+                              htmlFor="billing_address"
+                              className={styles.profile_form_label}
+                            >
+                              Street Address
+                            </label>
+                            <input
+                              type="text"
+                              name="billing_address"
+                              placeholder="Street Address"
+                              onChange={handleChange}
+                              className={styles.profile_form_input}
+                            />
+                          </div>
+                          <button
+                            className={styles.profile_button}
+                            style={{ width: "max-content" }}
                           >
-                            Street Address
-                          </label>
-                          <input
-                            type="text"
-                            name="billing_address"
-                            placeholder="Street Address"
-                            onChange={handleChange}
-                            className={styles.profile_form_input}
-                          />
+                            Add
+                          </button>
                         </div>
-                        <button
-                          className={styles.profile_button}
-                          style={{ width: "max-content" }}
-                        >
-                          Add
-                        </button>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 <div
                   id="account-type"
@@ -1462,22 +1499,22 @@ const UserProfile = (props) => {
 
                 {(props.auth.authUser.user_type === "driver" ||
                   props.auth.authUser.user_type === "customer") && (
-                  <div
-                    id="upgrade-chopChow-plan"
-                    className={styles.profile_basic_info_con}
-                  >
-                    <h3>Upgrade ChopChow Plan</h3>
-                    <div className={styles.profile_basic_info}>
-                      <p>Upgrade plan for unlimited ......</p>
-                      <button
-                        className={styles.profile_button}
-                        style={{ width: "max-content", justifySelf: "start" }}
-                      >
-                        View Plan
-                      </button>
+                    <div
+                      id="upgrade-chopChow-plan"
+                      className={styles.profile_basic_info_con}
+                    >
+                      <h3>Upgrade ChopChow Plan</h3>
+                      <div className={styles.profile_basic_info}>
+                        <p>Upgrade plan for unlimited ......</p>
+                        <button
+                          className={styles.profile_button}
+                          style={{ width: "max-content", justifySelf: "start" }}
+                        >
+                          View Plan
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {props.auth.authUser.user_type === "driver" && (
                   <div
