@@ -30,6 +30,7 @@ function Cart(props) {
   const router = useRouter();
 
   useEffect(() => {
+    console.log("getting cart");
     dispatch(FetchCart());
   }, []);
 

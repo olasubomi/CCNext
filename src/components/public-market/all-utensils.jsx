@@ -3,13 +3,13 @@ import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
 import { useRouter } from "next/router";
-import { Element } from "react-scroll";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { toast } from "react-toastify";
 import { UtensilModal } from "../modal/individual-meal-product";
 import { BiSolidDownArrow } from "react-icons/bi";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
+import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { MobileSearch } from "../dropdown/mobile-search";
 
 export const AllUtensils = () => {
@@ -51,10 +51,9 @@ export const AllUtensils = () => {
   const [showDropdown, setShowDropdown] = useState(true);
 
 
-
   const handleActiveLetter = (elem, id) => {
     setActiveLetter(id);
-    fetchUtensils(currentPage, elem)
+    fetchUtensils(currentPage, elem);
   };
   const [utensils, setUtensils] = useState([]);
   const [visibleMeals, setVisibleMeals] = useState(8);
@@ -85,10 +84,38 @@ export const AllUtensils = () => {
     };
 
 
+    const addItemToCart = (item, qty) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      let canAddToCart = canItemBeAddedToCart(item);
 
+      if (qty == 0) {
+        toast.error("Add a quantity");
+      } else {
+        if (canAddToCart) {
+          const payload = {
+            userId: user && user._id ? user._id : "",
+            storeId: "",
+            store_name: "",
+            itemId: item._id,
+            quantity: qty,
+            item_price: item.item_price,
+            currency: "",
+            item_image: item.itemImage0,
+            itemName: item.item_name,
+            item_type: item.item_type ? item.item_type : "Product",
+          };
+          try {
+            dispatch(addToCart(payload));
+            setOpenList(false);
+            setShow(false);
+            setOpenModal(false);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+    };
 
-
-    console.log(payload, "payload");
     try {
       const response = await axios(`/groceries`, {
         method: "post",
@@ -112,7 +139,7 @@ export const AllUtensils = () => {
     setIsLoading(true);
     const params = {};
     if (activeLetter) {
-      params.startsWith = activeLetter
+      params.startsWith = activeLetter;
     }
     try {
       const response = await axios(
@@ -120,7 +147,7 @@ export const AllUtensils = () => {
         {
           method: "GET",
           params: {
-            ...params
+            ...params,
           },
           headers: {
             "Content-Type": "application/json",
@@ -139,9 +166,10 @@ export const AllUtensils = () => {
       } else {
         setUtensils(filteredProducts);
       }
-      const lettersWithStores = filteredProducts.map(item => item.item_name[0].toUpperCase());
+      const lettersWithStores = filteredProducts.map((item) =>
+        item.item_name[0].toUpperCase()
+      );
       setAvailableLetters([...new Set(lettersWithStores)]);
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -161,7 +189,7 @@ export const AllUtensils = () => {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchGroceryList();
@@ -241,7 +269,8 @@ export const AllUtensils = () => {
         </div>
         <div className={styles.topcontainer}>
           <p className={styles.marketplaceText}>
-            Choose from our wide collection of tools to make your job in the kitchen easier.
+            Choose from our wide collection of tools to make your job in the
+            kitchen easier.
           </p>
           <div className={styles.flexItems}>
             <div className={styles.filter}>

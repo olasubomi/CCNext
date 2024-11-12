@@ -14,6 +14,27 @@ import DeliveryAddress from "../../src/components/Checkout/DeliveryAddress";
 import PlaceOrderBtn from "../../src/components/Checkout/PlaceOrderBtn";
 import OrderSummary from "../../src/components/Checkout/OrderSummary";
 import { useDispatch, useSelector } from "react-redux";
+import cardValidator from "card-validator";
+import axios from "../../src/util/Api";
+import { toast } from "react-toastify";
+
+const validationMessages = {
+  firstname: "Please enter your first name.",
+  lastname: "Please enter your last name.",
+  email: "Please enter your email address.",
+  phone: "Please enter your phone number.",
+  address: "Please enter your home address.",
+  address1: "Please enter other address.",
+  address2: "Please enter other address.",
+  state: "Please enter your state.",
+  city: "Please enter your city.",
+  postalcode: "Please enter your postal code.",
+  country: "Please enter your country.",
+  delivery_note: "Kindly enter a Delivery Note.",
+  subscription: "Kindly select a subscription plan.",
+  dateOfDelivery: "Select a date for your delivery.",
+};
+
 const Checkout = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -22,12 +43,13 @@ const Checkout = () => {
   });
   const [deliveryType, setDeliveryType] = useState();
   const [tax, setTax] = useState(40);
+  const [creatingOrder, setCreatingOrder] = useState(false);
 
   const dispatch = useDispatch();
 
-  const SubTotal = items.reduce((a, c) => a + c.price * c.amount, 0).toFixed(2);
+  const SubTotal = items.reduce((a, c) => a + c.price * c.amount, 0);
 
-  const TotalPrice = SubTotal + tax;
+  const TotalPrice = (SubTotal + tax).toFixed(2);
 
   const [error, setError] = useState({
     subscription: "",
@@ -65,108 +87,115 @@ const Checkout = () => {
     delivery_note: "",
     timetodeliver: "",
   };
+  const [data, setData] = useState(payload);
+  const [cardErrors, setCardErrors] = useState({});
 
-  const PlaceOrder = () => {
-    dispatch();
+  const formatOrderPayload = (data, items) => {
+    return {
+      order_items: items.map((item) => item.itemId),
+
+      user: data.userId,
+
+      pickup_details: `${data.firstname} ${data.lastname}, ${data.phone}, ${data.address}, ${data.city}, ${data.state}, ${data.country}, ${data.postalcode}`,
+
+      delivery_details: {
+        address: data.address,
+        address1: data.address1,
+        state: data.state,
+        city: data.city,
+        postalcode: data.postalcode,
+        country: data.country,
+        delivery_note: data.delivery_note,
+        timetodeliver: data.timetodeliver,
+      },
+
+      payment_details: {
+        subscription: data.subscription,
+        dateOfDelivery: data.dateOfDelivery,
+        Delivery: data.Delivery,
+      },
+
+      total: TotalPrice,
+
+      pickup_or_delivery: data?.pickupOrDelivery || "",
+
+      frequency_to_deliver: data?.frequency_to_deliver || "",
+
+      subtotal: data.SubTotal,
+    };
   };
 
-  const [data, setData] = useState(payload);
+  const placeOrder = () => {
+    if (
+      Object.keys(cardErrors).length === 0 &&
+      Object.values(error).every((message) => message === "")
+    ) {
+      const formattedData = formatOrderPayload({ ...data, SubTotal }, items);
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (Object.keys(user).length !== 0) {
+        setCreatingOrder(true);
+        axios
+          .post("/order/createOrder", { ...formattedData, userId: user._id })
+          .then((data) => {
+            toast.success(data?.data?.data?.message);
+            setCreatingOrder(false);
+          })
+          .catch((error) => {
+            setCreatingOrder(false);
+
+            toast.error(
+              error?.message || "Something went wrong creating order"
+            );
+          });
+      }
+    }
+  };
+
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
     validateInput(e);
+    validateCardInfo();
+  };
+
+  const validateCardInfo = () => {
+    const { fullname, card_number, expiry_month, expiry_year, cvv } = data;
+    const errors = {};
+    // Validate Full Name
+    if (!fullname || fullname.trim().length === 0) {
+      errors.fullname = "Full name is required";
+    }
+
+    // Validate Card Number
+    const cardValidation = cardValidator.number(card_number);
+    if (!cardValidation.isValid) {
+      errors.card_number = "Invalid card number";
+    }
+
+    // Validate Expiration Date
+    const expirationValidation = cardValidator.expirationDate(
+      `${expiry_month}/${expiry_year}`
+    );
+    if (!expirationValidation.isValid) {
+      errors.expiry_date = "Invalid expiration date";
+    }
+
+    // Validate CVV
+    const cvvValidation = cardValidator.cvv(cvv);
+    if (!cvvValidation.isValid) {
+      errors.cvv = "Invalid CVV";
+    }
+
+    setCardErrors(errors);
   };
 
   const validateInput = (e) => {
-    let { name, value } = e.target;
+    const { name, value } = e.target;
+
     setError((prev) => {
       const stateObj = { ...prev, [name]: "" };
 
-      switch (name) {
-        case "firstname":
-          if (!value) {
-            stateObj[name] = "Please enter your first name.";
-          }
-          break;
-
-        case "lastname":
-          if (!value) {
-            stateObj[name] = "Please enter your last name.";
-          }
-          break;
-
-        case "email":
-          if (!value) {
-            stateObj[name] = "Please enter your email address.";
-          }
-          break;
-
-        case "phone":
-          if (!value) {
-            stateObj[name] = "Please enter your phone number.";
-          }
-          break;
-
-        case "address":
-          if (!value) {
-            stateObj[name] = "Please enter your home address.";
-          }
-          break;
-
-        case "address1":
-          if (!value) {
-            stateObj[name] = "Please enter other address.";
-          }
-          break;
-
-        case "address2":
-          if (!value) {
-            stateObj[name] = "Please enter other address.";
-          }
-          break;
-
-        case "state":
-          if (!value) {
-            stateObj[name] = "Please enter your state.";
-          }
-          break;
-
-        case "city":
-          if (!value) {
-            stateObj[name] = "Please enter your city.";
-          }
-          break;
-
-        case "postalcode":
-          if (!value) {
-            stateObj[name] = "Please enter your postal code.";
-          }
-          break;
-
-        case "country":
-          if (!value) {
-            stateObj[name] = "Please enter your country.";
-          }
-          break;
-
-        case "delivery_note":
-          if (!value) {
-            stateObj[name] = "Kindly enter a Delivery Note.";
-          }
-          break;
-        case "subscription":
-          if (!value) {
-            stateObj[name] = "Kindly select a subscription plan.";
-          }
-          break;
-
-        case "dateOfDelivery":
-          if (!value) {
-            stateObj[name] = "Select a date for your delivery.";
-          }
-          break;
-
-        default:
-          break;
+      if (!value && validationMessages[name]) {
+        stateObj[name] = validationMessages[name];
       }
 
       return stateObj;
@@ -226,9 +255,17 @@ const Checkout = () => {
                 handleChange={handleChange}
               />
 
-              <PaymentMethod />
+              <PaymentMethod
+                data={data}
+                setData={setData}
+                handleChange={handleChange}
+                cardErrors={cardErrors}
+              />
               <div className={styles.show_on_mobile}>
-                <PlaceOrderBtn />
+                <PlaceOrderBtn
+                  loading={creatingOrder}
+                  placeOrder={placeOrder}
+                />
               </div>
             </div>
             <div className={styles.checkout_right}>
@@ -239,7 +276,10 @@ const Checkout = () => {
                   SubTotal={SubTotal}
                 />
                 <div className={styles.hide_on_mobile}>
-                  <PlaceOrderBtn />
+                  <PlaceOrderBtn
+                    loading={creatingOrder}
+                    placeOrder={placeOrder}
+                  />
                 </div>
               </div>
             </div>

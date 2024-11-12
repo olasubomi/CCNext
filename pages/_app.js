@@ -13,7 +13,12 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { CartProvider } from "../src/context/cart.context";
 import { AuthProvider } from "../src/context/auth.context";
 import useInactivityLogout from "../src/util/useinactivity";
+import Hotjar from '@hotjar/browser';
 
+const siteId = process.env.NEXT_PUBLIC_siteId;
+const hotjarVersion = 6;
+
+Hotjar.init(siteId, hotjarVersion);
 
 function MyApp({ Component, pageProps }) {
   useInactivityLogout(1200000)

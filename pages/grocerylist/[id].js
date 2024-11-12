@@ -24,15 +24,17 @@ import { MobileTable } from "../../src/components/mobile/table.mobile";
 import { MobileInputs } from "../../src/components/mobile/inputs.mobile";
 import { Cards } from "../../src/components/cards/cards";
 import { CardDropdown } from "../../src/components/dropdown/dropdown";
+import { useDispatch } from "react-redux";
+
 import {
   addItemToLocalGroceryList,
-  getLocalGroceryList,
   getOneGroceryList,
   removeItemFromLocalGroceryList,
 } from "../../src/util";
 import { LoginPrompt } from "../../src/components/modal/login-prompt";
 import { UserIcon } from "../../src/components/icons";
 import { useSelector } from "react-redux";
+import { addMultipleItemsToCart } from "../../src/actions/Cart";
 
 const GroceryPage = () => {
   const customStyles = {
@@ -94,21 +96,53 @@ const GroceryPage = () => {
   const { authUser } = useSelector((state) => state.Auth);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItem, setSelectedItem] = useState([]);
+  const [selectList, setSelectList] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
-
-  console.log(itemList, "itemListitemList");
-
   const dispatch = useDispatch();
 
-  //console.log(itemList, "itemListitemList");
-  console.log(selectedItem, "selectedItem");
-  console.log(selectList, "selectList");
+  const SelectItemLogic = (data, checked) => {
+    if (checked) {
+      const newList = [...selectedItem, data];
+      setSelectedItem(newList);
+    } else {
+      const newList = selectedItem.filter((item) => item.id !== data.id);
+      setSelectedItem(newList);
+    }
+  };
+  const addMultipleIToCart = () => {
+    selectedItem.map((item) => {
+      if (item.inventories.length < 1) {
+        toast.info(`Item ${item.item_name} not available for sale!`);
+        return;
+      }
 
-  console.log(selectAll, "selectAll");
+      if (!item.inventories.some((inventory) => inventory.in_stock)) {
+        toast.info(`Item ${item.item_name}  is out of stock!`);
+        return;
+      }
+    });
+    const payload = selectedItem.map((item) => {
+      return {
+        userId: item.user,
+        storeId: "",
+        store_name: "",
+        itemId: item._id,
+        quantity: item.qty,
+        item_price: item.item_price,
+        currency: "$",
+        item_image: item.itemImage0,
+        itemName: item.item_name,
+        item_type: item.item_type ? item.item_type : "Meal",
+      };
+    });
+
+    dispatch(addMultipleItemsToCart(payload));
+  };
+
   const [measurements, setMeasurement] = useState([
     {
       value: "",
@@ -134,8 +168,6 @@ const GroceryPage = () => {
     status: "",
   });
 
-  console.log(itemList, "itemList");
-
   function closeModal() {
     setOpenModalState(false);
     setOpenModal2State(false);
@@ -152,10 +184,8 @@ const GroceryPage = () => {
         Array.isArray(resp?.data?.data?.measurement) &&
         resp?.data?.data?.measurement?.length
       ) {
-        console.log(resp?.data, "resp.data.data?.measurement");
-
         const response = resp.data.data?.measurement
-          .filter((elem) => elem.status === 'Public')
+          .filter((elem) => elem.status === "Public")
           .map((element) => ({
             label: element.measurement_name?.split("_").join(" "),
             value: element._id,
@@ -163,7 +193,7 @@ const GroceryPage = () => {
 
         setMeasurement((prevMeasurements) => [
           ...prevMeasurements,
-          ...response
+          ...response,
         ]);
 
         if (response.length === 0) {
@@ -176,7 +206,6 @@ const GroceryPage = () => {
       setLoading(false);
     }
   };
-
 
   const addItemToGrocery = async () => {
     if (isUserOnline) {
@@ -206,7 +235,6 @@ const GroceryPage = () => {
           quantity: "",
           measurement: "",
         });
-        console.log(response.data.data);
         getList();
         toast.success("Item added successfully");
       } catch (error) {
@@ -233,8 +261,6 @@ const GroceryPage = () => {
   };
 
   const getList = async () => {
-    console.log("local grocery", getLocalGroceryList());
-
     if (isUserOnline) {
       try {
         const response = await axios(`/groceries/list/${id}`, {
@@ -243,7 +269,6 @@ const GroceryPage = () => {
             "Content-Type": "application/json",
           },
         });
-        console.log(response.data, "yello");
         setItemList(response.data.data.data.groceryList);
         setSelectList(response.data.data.data.groceryList.groceryItems);
         //setItemList(response.data.data.data.groceryList.groceryItems.map(item => ({ ...item.item, selected: false })));
@@ -286,7 +311,6 @@ const GroceryPage = () => {
       });
       getList();
       toast.success("Item added successfully");
-      console.log(response.data, "yello");
     } catch (error) {
       console.log(error);
     }
@@ -301,7 +325,6 @@ const GroceryPage = () => {
       if (measurement_value_1) {
         data.measurement = measurement_value_1;
       }
-      console.log("data", data);
       const response = await axios(`/groceries/grocery-measurement`, {
         method: "POST",
         headers: {
@@ -316,7 +339,6 @@ const GroceryPage = () => {
       });
       getList();
       toast.success("Measurement added successfully");
-      console.log(response.data, "yello");
     } catch (error) {
       console.log(error);
     }
@@ -335,14 +357,11 @@ const GroceryPage = () => {
         };
       });
       setItems(resp);
-      console.log(resp, "resp");
     } catch (error) {
       console.log(error);
     }
     return name;
   };
-
-  console.log();
 
   const deleteItemFromGrocery = async (id) => {
     try {
@@ -373,7 +392,6 @@ const GroceryPage = () => {
   };
 
   const toggle = (selection) => {
-    console.log("selection", selection?.item);
     setSuggestionState(selection?.item);
     if (selection?.item?.item_type === "Meal") {
       setOpenModalState(true);
@@ -382,14 +400,12 @@ const GroceryPage = () => {
     }
   };
 
-
   useEffect(() => {
     getList();
   }, [isUserOnline, id]);
   useEffect(() => {
     getAllMeasurement(page);
-
-  }, [page])
+  }, [page]);
   const loadMoreMeasurements = () => {
     if (!loading && hasMore) {
       setPage((prevPage) => prevPage + 1);
@@ -404,10 +420,7 @@ const GroceryPage = () => {
       setMeasurementValue_1(measurement_value);
     }
   }, [measurement_value]);
-  const hello = () => {
-    console.log("hello");
-  };
-  console.log(itemList, "itemList?.groceryItems");
+
   return (
     <div className={styles.container1}>
       <Head>
@@ -483,7 +496,7 @@ const GroceryPage = () => {
         </p>
         <div className={styles.top1}>
           {authUser?.profile_picture !== "" &&
-            authUser?.profile_picture !== undefined ? (
+          authUser?.profile_picture !== undefined ? (
             <Image
               width={50}
               height={50}
@@ -629,7 +642,6 @@ const GroceryPage = () => {
               <button
                 className={styles.btn}
                 onClick={() => {
-                  console.log(measurement_value_1, "item to add");
                   if (
                     itemsToAdd.itemId ||
                     itemsToAdd.quantity ||
@@ -803,17 +815,21 @@ const GroceryPage = () => {
                               name={element?.item?.item_name}
                               value={element?.item?.item_name}
                               checked={
-                                !!selectedItem.find(
+                                selectedItem.find(
                                   (item) =>
                                     item.name === element?.item?.item_name
                                 )?.selected
                               }
-                              onChange={(e) =>
-                                SelectItemLogic({
-                                  ...element?.item,
-                                  qty: element?.quantity,
-                                })
-                              }
+                              onChange={(e) => {
+                                SelectItemLogic(
+                                  {
+                                    ...element?.item,
+                                    qty: element?.quantity,
+                                    element: element,
+                                  },
+                                  e.target.checked
+                                );
+                              }}
                               type="checkbox"
                               style={{
                                 marginRight: "2rem",
@@ -872,14 +888,13 @@ const GroceryPage = () => {
                           >
                             <p
                               onClick={() => {
-                                console.log(element, "elements");
                                 toggle(element);
                               }}
                             >
                               {element?.item?.item_name}
                             </p>
                             {element?.item?.item_type === "Meal" &&
-                              element?.quantity ? (
+                            element?.quantity ? (
                               <div>
                                 <p
                                   className={styles.ingredients}
@@ -956,10 +971,7 @@ const GroceryPage = () => {
               />
             )}
             <div className={styles.cartBtns}>
-              <button
-                className={styles.cartbtn1}
-                onClick={() => AddSelectionToCartList()}
-              >
+              <button className={styles.cartbtn1} onClick={addMultipleIToCart}>
                 Add Selection to Cart
               </button>
               <button
