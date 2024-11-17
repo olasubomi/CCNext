@@ -420,7 +420,7 @@ class SuggestMealForm extends Component {
             title: instructionChunk1?.title,
             instructionSteps: instructionChunk1Step || [], //[],
             dataName: instructionChunk1DataName,
-          
+
           },
           instructionChunk2: {
             title: instructionChunk2?.title,
@@ -471,20 +471,22 @@ class SuggestMealForm extends Component {
 
         var imageElementId = "chunk1Image";
         var videoElementId = "chunk1Video";
-        if (chunk1Content) {
-          const chunk1Video = document.querySelector('#chunk1Video');
-          const chunk1Image = document.querySelector('#chunk1Image');
-          if (chunk1Video) {
-            chunk1Video.setAttribute('src', chunk1Content);
-            chunk1Video.style.display = "block"
-            chunk1Image.style.display = 'none'
+        setTimeout(() => {
+          if (chunk1Content) {
+            const chunk1Video = document.querySelector('#chunk1Video');
+            const chunk1Image = document.querySelector('#chunk1Image');
+            if (chunk1Video) {
+              chunk1Video.setAttribute('src', chunk1Content);
+              chunk1Video.style.display = "block"
+              chunk1Image.style.display = 'none'
+            }
+            else {
+              chunk1Image.setAttribute('src', chunk1Content);
+              chunk1Video.style.display = "none"
+              chunk1Image.style.display = 'block'
+            }
           }
-          else {
-            chunk1Image.setAttribute('src', chunk1Content);
-            chunk1Video.style.display = "none"
-            chunk1Image.style.display = 'block'
-          }
-        }
+        }, 500)
         setTimeout(() => {
           if (chunk2Content) {
             const chunk2Video = document.querySelector('#chunk2Video');
