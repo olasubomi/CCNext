@@ -365,8 +365,8 @@ const UserProfile = (props) => {
       console.log("dddd");
       formData.append("profile_picture", profileImage);
     }
-    formData.append("first_name", first_name);
-    formData.append("last_name", last_name);
+    // formData.append("first_name", first_name);
+    // formData.append("last_name", last_name);
     driver_car_picture;
     formData.append("driver_car_model", driver_car_model);
     formData.append("driver_car_color", driver_car_color);
