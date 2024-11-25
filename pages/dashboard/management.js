@@ -180,15 +180,15 @@ const Management = () => {
 
   const filteredItem = () => {
     if (storeId)
-      return userInventory.filter((elem) => elem.item_type === "Meal");
+      return userInventory?.filter((elem) => elem.item_type === "Meal");
   };
 
   const filteredProduct = () => {
-    return userInventory.filter((elem) => elem.item_type === "Product");
+    return userInventory?.filter((elem) => elem.item_type === "Product");
   };
 
   const filteredUtensils = () => {
-    return userInventory.filter((elem) => elem.item_type === "Utensils");
+    return userInventory?.filter((elem) => elem.item_type === "Utensils");
   };
   const [filteredMeals, setFilteredMeals] = useState(filteredItem());
   const [filteredProducts, setFilteredProducts] = useState(filteredProduct());
@@ -204,14 +204,14 @@ const Management = () => {
   const handleSearch = () => {
     const filteredMeals = value
       ? filteredItem().filter((meal) =>
-          meal.label.toLowerCase().includes(value.toLowerCase())
-        )
+        meal.label.toLowerCase().includes(value.toLowerCase())
+      )
       : filteredItem();
 
     const filteredProducts = value
       ? filteredProduct().filter((product) =>
-          product.label.toLowerCase().includes(value.toLowerCase())
-        )
+        product.label.toLowerCase().includes(value.toLowerCase())
+      )
       : filteredProduct();
 
     setFilteredMeals(filteredMeals);
@@ -258,21 +258,25 @@ const Management = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}")?._id;
       const response = await axios.get(`/inventory/user-inventory/${user}`);
-      const resp = response.data.data.inventoryItems.map((element) => {
+      console.log(response.data?.data, "Full API Response");
+
+      const resp = response.data.data.inventoryItems.map((element, index) => {
+        console.log(`Mapping element at index ${index}:`, element);
         return {
-          label: element.item.item_name,
+          label: element.item?.item_name,
           value: element._id,
-          image: element?.item.itemImage0,
-          price: element?.item.item_price
-            ? `${element?.item.item_price}`
+          image: element?.item?.itemImage0,
+          price: element?.item?.item_price
+            ? `${element?.item?.item_price}`
             : "No Price",
-          stores: element?.storeId.map(store => store._id) || ["No store"], 
+          stores: element?.storeId?.map((store) => store._id) || ["No store"],
           item_type: element?.item_type,
           currency: element.storeId?.[0]?.currency?.symbol || "$",
           item_id: element?.item?._id,
         };
       });
       
+      console.log(resp, 'rep')
       setUserInventory(resp);
       setFilteredMeals(
         resp.filter(
@@ -285,13 +289,13 @@ const Management = () => {
         )
       );
 
-      
+
     } catch (error) {
       console.log(error);
     }
     return name;
   };
-  
+
 
   const getStore = async (name) => {
     try {
@@ -495,7 +499,7 @@ const Management = () => {
       const response = await axios.put(`/stores/updatestore/${storeId}`, form);
       handleGetStore();
       toast.success("Store updated");
-    } catch (e) {}
+    } catch (e) { }
   }, [formState, storeId]);
 
   const handleChangeTime = useCallback(async () => {
@@ -515,7 +519,7 @@ const Management = () => {
     try {
       const response = await axios.put(`/stores/updatestore/${storeId}`, form);
       toast.success("Store updated");
-    } catch (e) {}
+    } catch (e) { }
   }, [times]);
 
   const deleteInventory = async (id, item_id) => {
@@ -536,6 +540,7 @@ const Management = () => {
   useEffect(() => {
     fetchOneUserInventory();
   }, []);
+  console.log(userInventory, "respp")
   return (
     <div className={container + " " + col2}>
       <Head>
@@ -605,12 +610,12 @@ const Management = () => {
                       <h6
                         className={
                           active === elem.id &&
-                          formState.store_owner !== undefined
+                            formState.store_owner !== undefined
                             ? styles.activeText
                             : formState.store_owner === "" &&
                               [3, 4, 5, 6].includes(elem.id)
-                            ? styles.undefinedOwnerText
-                            : styles.name
+                              ? styles.undefinedOwnerText
+                              : styles.name
                         }
                       >
                         {elem.name}
@@ -644,19 +649,19 @@ const Management = () => {
                         ? styles.active2
                         : formState.store_owner === "" &&
                           [3, 4, 5, 6].includes(elem.id)
-                        ? styles.undefinedOwnerText
-                        : styles.inactive
+                          ? styles.undefinedOwnerText
+                          : styles.inactive
                     }
                   >
                     <h6
                       className={
                         active === elem.id &&
-                        formState.store_owner !== undefined
+                          formState.store_owner !== undefined
                           ? styles.activeText2
                           : formState.store_owner === "" &&
                             [3, 4, 5, 6].includes(elem.id)
-                          ? styles.undefinedOwnerText
-                          : styles.name
+                            ? styles.undefinedOwnerText
+                            : styles.name
                       }
                     >
                       {elem.name}
@@ -849,7 +854,7 @@ const Management = () => {
                       <div className={styles.column}>
                         <label>Address</label>
 
-                        <GooglePlacesAutocomplete
+                        {/* <GooglePlacesAutocomplete
                           defaultInputValue={formState.supplier_address.address}
                           handleValueChange={(
                             address,
@@ -882,7 +887,7 @@ const Management = () => {
                               },
                             });
                           }}
-                        />
+                        /> */}
                       </div>
                     </div>
                     <div className={styles.borderBottom} />
@@ -938,6 +943,7 @@ const Management = () => {
                           onFocus={() => setShow(true)}
                           value={value}
                           onChange={(e) => {
+
                             setValue(e.target.value);
                             fetchOneUserInventory(e.target.value);
                           }}
@@ -949,128 +955,128 @@ const Management = () => {
                             <>
                               {categories.find((ele) => ele.label === "Meals")
                                 ?.value && (
-                                <>
-                                  <h4 className={styles.storeTitle}>
-                                    Meals ({filteredItem().length})
-                                  </h4>
-                                  <div className={styles.bord} />
-                                  <div className={styles.list}>
-                                    {filteredItem().length === 0 ? (
-                                      Boolean(value) ? (
-                                        <div className={styles.result}>
-                                          <p>No Result Found</p>
-                                        </div>
-                                      ) : null
-                                    ) : (
-                                      filteredItem()
-                                        ?.slice(0, 4)
-                                        .map((elem) => (
-                                          <p
-                                            key={elem.value}
-                                            onClick={() => {
-                                              setOneStore({
-                                                visible: false,
-                                                id: "",
-                                              });
-                                              setValue(elem.label);
-                                            }}
-                                            style={{ cursor: "pointer" }}
-                                          >
-                                            {elem.label}
-                                          </p>
-                                        ))
-                                    )}
-                                  </div>
-                                </>
-                              )}
+                                  <>
+                                    <h4 className={styles.storeTitle}>
+                                      Meals ({filteredItem().length})
+                                    </h4>
+                                    <div className={styles.bord} />
+                                    <div className={styles.list}>
+                                      {filteredItem().length === 0 ? (
+                                        Boolean(value) ? (
+                                          <div className={styles.result}>
+                                            <p>No Result Found</p>
+                                          </div>
+                                        ) : null
+                                      ) : (
+                                        filteredItem()
+                                          ?.slice(0, 4)
+                                          .map((elem) => (
+                                            <p
+                                              key={elem.value}
+                                              onClick={() => {
+                                                setOneStore({
+                                                  visible: false,
+                                                  id: "",
+                                                });
+                                                setValue(elem.label);
+                                              }}
+                                              style={{ cursor: "pointer" }}
+                                            >
+                                              {elem.label}
+                                            </p>
+                                          ))
+                                      )}
+                                    </div>
+                                  </>
+                                )}
                             </>
                             <>
                               {categories.find(
                                 (ele) => ele.label === "Products"
                               )?.value && (
-                                <>
-                                  <h4 className={styles.storeTitle}>
-                                    Products ({filteredProduct().length})
-                                  </h4>
-                                  <div className={styles.bord} />
-                                  <div className={styles.list}>
-                                    {filteredProduct().length === 0 ? (
-                                      Boolean(value) ? (
-                                        <div className={styles.result}>
-                                          <p>No Result Found</p>
-                                        </div>
-                                      ) : null
-                                    ) : (
-                                      filteredProduct()
-                                        ?.slice(0, 4)
-                                        .map(
-                                          (elem) =>
-                                            value &&
-                                            elem.label
-                                              .toLowerCase()
-                                              .includes(
-                                                value.toLowerCase()
-                                              ) && (
-                                              <p
-                                                key={elem.value}
-                                                onClick={() => {
-                                                  setOneStore({
-                                                    visible: false,
-                                                    id: "",
-                                                  });
-                                                  setValue(elem.label);
-                                                }}
-                                                style={{ cursor: "pointer" }}
-                                              >
-                                                {elem.label}
-                                              </p>
-                                            )
-                                        )
-                                    )}
-                                  </div>
-                                </>
-                              )}
+                                  <>
+                                    <h4 className={styles.storeTitle}>
+                                      Products ({filteredProduct().length})
+                                    </h4>
+                                    <div className={styles.bord} />
+                                    <div className={styles.list}>
+                                      {filteredProduct().length === 0 ? (
+                                        Boolean(value) ? (
+                                          <div className={styles.result}>
+                                            <p>No Result Found</p>
+                                          </div>
+                                        ) : null
+                                      ) : (
+                                        filteredProduct()
+                                          ?.slice(0, 4)
+                                          .map(
+                                            (elem) =>
+                                              value &&
+                                              elem.label
+                                                .toLowerCase()
+                                                .includes(
+                                                  value.toLowerCase()
+                                                ) && (
+                                                <p
+                                                  key={elem.value}
+                                                  onClick={() => {
+                                                    setOneStore({
+                                                      visible: false,
+                                                      id: "",
+                                                    });
+                                                    setValue(elem.label);
+                                                  }}
+                                                  style={{ cursor: "pointer" }}
+                                                >
+                                                  {elem.label}
+                                                </p>
+                                              )
+                                          )
+                                      )}
+                                    </div>
+                                  </>
+                                )}
                             </>
 
                             <>
                               {categories.find(
                                 (ele) => ele.label === "Kitchen Utensils"
                               )?.value && (
-                                <>
-                                  <h4 className={styles.storeTitle}>
-                                    Kitchen Utensils (
-                                    {filteredUtensils().length})
-                                  </h4>
-                                  <div className={styles.bord} />
-                                  <div className={styles.list}>
-                                    {filteredUtensils().length === 0 ? (
-                                      Boolean(value) ? (
-                                        <div className={styles.result}>
-                                          <p>No Result Found</p>
-                                        </div>
-                                      ) : null
-                                    ) : (
-                                      filteredUtensils()
-                                        ?.slice(0, 4)
-                                        .map((elem) => (
-                                          <p
-                                            key={elem.value}
-                                            onClick={() => {
-                                              setOneStore({
-                                                visible: false,
-                                                id: "",
-                                              });
-                                              setValue(elem.label);
-                                            }}
-                                            style={{ cursor: "pointer" }}
-                                          >
-                                            {elem.label}
-                                          </p>
-                                        ))
-                                    )}
-                                  </div>
-                                </>
-                              )}
+                                  <>
+                                    <h4 className={styles.storeTitle}>
+                                      Kitchen Utensils (
+                                      {filteredUtensils().length})
+                                    </h4>
+                                    <div className={styles.bord} />
+                                    <div className={styles.list}>
+                                      {filteredUtensils().length === 0 ? (
+                                        Boolean(value) ? (
+                                          <div className={styles.result}>
+                                            <p>No Result Found</p>
+                                          </div>
+                                        ) : null
+                                      ) : (
+                                        filteredUtensils()
+                                          ?.slice(0, 4)
+                                          .map((elem) => (
+                                            <p
+                                              key={elem.value}
+                                              onClick={() => {
+                                                setOneStore({
+                                                  visible: false,
+                                                  id: "",
+                                                });
+                                                setValue(elem.label);
+                                              }}
+                                              style={{ cursor: "pointer" }}
+                                            >
+                                              {elem.label}
+                                            </p>
+                                          ))
+                                      )}
+                                    </div>
+                                  </>
+                                )}
                             </>
                           </div>
                         )}
@@ -1092,7 +1098,7 @@ const Management = () => {
                         onClick={() => setShowCategory(!showCategory)}
                       >
                         {categories[0].value &&
-                        categories.some((ele) => !ele.value)
+                          categories.some((ele) => !ele.value)
                           ? "All categories"
                           : categories.find((ele) => ele.value).label}
                         <GoTriangleUp
@@ -1210,65 +1216,65 @@ const Management = () => {
                   )}
                   {categories.find((ele) => ele.label === "Products")
                     ?.value && (
-                    <div className={styles.top}>
-                      <div className={styles.span}>
-                        <p>Product</p>
-                        <p className={styles.red}>Remove selection(s)</p>
+                      <div className={styles.top}>
+                        <div className={styles.span}>
+                          <p>Product</p>
+                          <p className={styles.red}>Remove selection(s)</p>
+                        </div>
+                        <table className={styles.table}>
+                          <thead className={styles.thead}>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th style={{ textAlign: "center" }}>Action</th>
+                          </thead>
+                          <tbody style={{ width: "100%" }}>
+                            {filteredProducts?.map((ele) => (
+                              <>
+                                <tr className={styles.tr}>
+                                  <td
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <input type="checkbox" />
+                                    <Image
+                                      src={ele.image}
+                                      width={40}
+                                      height={40}
+                                      objectFit="contain"
+                                      objectPosition="center"
+                                      style={{ marginLeft: "1rem" }}
+                                    />
+                                    <p className={styles.label}>{ele?.label}</p>
+                                  </td>
+                                  <td
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <p className={styles.label2}>
+                                      {ele.currency}
+                                      {ele?.price}
+                                    </p>
+                                  </td>
+                                  <td
+                                    style={{ textAlign: "center" }}
+                                    onClick={() =>
+                                      deleteInventory(ele.value, ele.item_id)
+                                    }
+                                    className={styles.close2}
+                                  >
+                                    <IoIosCloseCircle color="#949494" size={20} />
+                                  </td>
+                                </tr>
+                              </>
+                            ))}
+                          </tbody>
+                        </table>
                       </div>
-                      <table className={styles.table}>
-                        <thead className={styles.thead}>
-                          <th>Name</th>
-                          <th>Price</th>
-                          <th style={{ textAlign: "center" }}>Action</th>
-                        </thead>
-                        <tbody style={{ width: "100%" }}>
-                          {filteredProducts?.map((ele) => (
-                            <>
-                              <tr className={styles.tr}>
-                                <td
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <input type="checkbox" />
-                                  <Image
-                                    src={ele.image}
-                                    width={40}
-                                    height={40}
-                                    objectFit="contain"
-                                    objectPosition="center"
-                                    style={{ marginLeft: "1rem" }}
-                                  />
-                                  <p className={styles.label}>{ele?.label}</p>
-                                </td>
-                                <td
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <p className={styles.label2}>
-                                    {ele.currency}
-                                    {ele?.price}
-                                  </p>
-                                </td>
-                                <td
-                                  style={{ textAlign: "center" }}
-                                  onClick={() =>
-                                    deleteInventory(ele.value, ele.item_id)
-                                  }
-                                  className={styles.close2}
-                                >
-                                  <IoIosCloseCircle color="#949494" size={20} />
-                                </td>
-                              </tr>
-                            </>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
+                    )}
 
                   {/* <div className={styles.top}>
                   <div className={styles.flex}>

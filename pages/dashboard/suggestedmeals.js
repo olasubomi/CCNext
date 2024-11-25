@@ -51,6 +51,7 @@ import { SuggestedCategories } from "../../src/components/dashboard/suggestedCat
 import SuggestedStores from "../../src/components/dashboard/suggestedStores";
 import Store from "../../src/components/individualPage/Store";
 import { RejectionModal } from "../../src/components/modal/rejection-modal";
+import { debounce } from "lodash";
 
 const SuggestedMeals = (props) => {
   const router = useRouter();
@@ -782,7 +783,7 @@ const SuggestedMeals = (props) => {
     setChangeStoreStatus(!changeStoreStatus);
   }
 
-  const handleStatusType = async (type) => {
+  const handleStatusType = debounce(async (type) => {
     try {
       setStatusTypeState(type);
 
@@ -791,18 +792,16 @@ const SuggestedMeals = (props) => {
         status: type,
       });
 
-      toggleChangeStatus();
-      console.log("resss", res);
       if (res.status === 200) {
-        getUserItems();
+        getUserItems(); // Fetch updated data
         toast.success("Item status successfully updated");
-      } else {
-        toast.error("");
       }
     } catch (e) {
-      console.log(e, "errr");
+      console.error("Error updating status:", e);
+      toast.error("Something went wrong");
     }
-  };
+  }, 300);
+
   const handleSendForReview = async (id, type) => {
     try {
       setStatusTypeState(type);
@@ -972,10 +971,10 @@ const SuggestedMeals = (props) => {
       axios
         .get(
           url +
-            "1?publicly_available=Public&" +
-            (searchType === "Meal" ? "meal_name" : "product_name") +
-            "=" +
-            e.target.value
+          "1?publicly_available=Public&" +
+          (searchType === "Meal" ? "meal_name" : "product_name") +
+          "=" +
+          e.target.value
         )
         .then((data) => {
           console.log(data.data);
@@ -1533,8 +1532,8 @@ const SuggestedMeals = (props) => {
                   )}
                   {props.auth.authUser.user_type.includes("customer") ===
                     "customer" && (
-                    <Link href="/dashboard/createstore">Create Store</Link>
-                  )}
+                      <Link href="/dashboard/createstore">Create Store</Link>
+                    )}
                 </div>
                 <div className={styles.suggestedmeal_row2}>
                   <div className={styles.mode_con}>
@@ -1765,6 +1764,7 @@ const SuggestedMeals = (props) => {
                                   toggleOpenMeal={toggleOpenMeal}
                                   deleteItem={deleteItem}
                                   handleSendForReview={handleSendForReview}
+                                  handleStatusType={() => handleStatusType("Draft")}
                                 />
                               );
                             })}
@@ -2006,13 +2006,13 @@ const SuggestedMeals = (props) => {
                     status +
                     " " +
                     (suggestion.publicly_available === "Draft" ||
-                    suggestion.publicly_available === "Pending"
+                      suggestion.publicly_available === "Pending"
                       ? pending
                       : suggestion.publicly_available === "Public"
-                      ? approve
-                      : suggestion.publicly_available === "Rejected"
-                      ? rejected
-                      : "")
+                        ? approve
+                        : suggestion.publicly_available === "Rejected"
+                          ? rejected
+                          : "")
                   }
                 >
                   {suggestion.publicly_available}
@@ -2025,10 +2025,10 @@ const SuggestedMeals = (props) => {
                         elem.status === "Public"
                           ? styles.statusText
                           : elem.status === "Pending"
-                          ? styles.statusText2
-                          : elem.status === "Rejected"
-                          ? styles.rejected
-                          : styles.statusText2
+                            ? styles.statusText2
+                            : elem.status === "Rejected"
+                              ? styles.rejected
+                              : styles.statusText2
                       }
                     >
                       {elem.status}
