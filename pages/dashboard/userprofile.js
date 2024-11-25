@@ -402,8 +402,8 @@ const UserProfile = (props) => {
       console.log("dddd");
       formData.append("profile_picture", profileImage);
     }
-    formData.append("first_name", first_name);
-    formData.append("last_name", last_name);
+    // formData.append("first_name", first_name);
+    // formData.append("last_name", last_name);
     driver_car_picture;
     formData.append("driver_car_model", driver_car_model);
     formData.append("driver_car_color", driver_car_color);
@@ -413,10 +413,9 @@ const UserProfile = (props) => {
       formData.append("driver_car_picture", driver_car_picture.carContent);
     }
     // formData.append('delivery_addresses', delivery_addresses);
-
     axios
-      .put("/user/updateuserprofile/" + props.auth.authUser._id, formData)
-      .then((res) => {
+      .put("/user/updateuserprofile/" + authUser._id, formData)
+      .then(async (res) => {
         console.log(res.data);
         setStatusState("success");
         setMessageState("User updated");
@@ -424,7 +423,8 @@ const UserProfile = (props) => {
           setStatusState("");
           setMessageState("");
         }, 5000);
-        props.getUser(props.auth.authUser._id);
+        const updatedUser = await props.getUser(authUser._id);
+        console.log("Updated user data:", updatedUser);
       })
       .catch(() => {
         setStatusState("error");
@@ -473,7 +473,7 @@ const UserProfile = (props) => {
 
     var url =
       `https://chopchowserver.vercel.app/user/deleteuserprofile/` +
-      props.auth.authUser._id;
+      authUser._id;
     // var url = `http://localhost:5000/user/deleteuserprofile/` + props.auth.authUser._id;
     // var url = `./api/closeaccount/${customerId}`;
 
@@ -562,6 +562,27 @@ const UserProfile = (props) => {
     }
     getStoreInformation();
   }, []);
+
+  useEffect(() => {
+    if (authUser) {
+      setFormState((prevState) => ({
+        ...prevState,
+        email: authUser.email,
+
+        phone_number: authUser.phone_number,
+        driver_car_color: authUser.driver_car_color,
+        driver_car_model: authUser.driver_car_model,
+        driver_car_plate_number: authUser.driver_car_plate_number,
+        driver_car_picture: {
+          carContentURL: authUser.driver_car_picture,
+        },
+      }));
+
+      if (authUser.driver_hours.length > 0) {
+        setTimes(authUser.driver_hours[0]);
+      }
+    }
+  }, [authUser]);
 
   return (
     <div className={container + " " + col2}>
@@ -685,7 +706,7 @@ const UserProfile = (props) => {
                           <input
                             type="text"
                             name="first_name"
-                            value={first_name}
+                            value={authUser?.first_name}
                             placeholder="First Name"
                             onChange={handleChange}
                             className={styles.profile_form_input} />
@@ -696,7 +717,7 @@ const UserProfile = (props) => {
                           <input
                             type="text"
                             name="last_name"
-                            value={last_name}
+                            value={authUser?.last_name}
                             placeholder="Last Name"
                             onChange={handleChange}
                             className={styles.profile_form_input} />
@@ -710,7 +731,7 @@ const UserProfile = (props) => {
                         <input
                           type="text"
                           name="email"
-                          value={email}
+                          value={authUser?.email}
                           placeholder="Email"
                           onChange={handleChange}
                           className={styles.profile_form_input}
@@ -724,7 +745,7 @@ const UserProfile = (props) => {
                           inputClass={styles.login_form_input}
 
                           name="phone_number"
-                          value={phone_number}
+                          value={authUser?.phone_number}
                           onChange={phone => handlePhoneChange(phone)}
                         />
                       </div>

@@ -310,7 +310,12 @@ class SuggestMealForm extends Component {
           chunk4Content,
           chunk5Content,
           chunk6Content,
-
+          instructionChunk1DataName,
+          instructionChunk2DataName,
+          instructionChunk3DataName,
+          instructionChunk4DataName,
+          instructionChunk5DataName,
+          instructionChunk6DataName,
           instructionChunk6Step,
           currentStore,
 
@@ -404,41 +409,46 @@ class SuggestMealForm extends Component {
           instructionChunk4Step,
           instructionChunk5Step,
           instructionChunk6Step,
+          instructionChunk1DataName,
+          instructionChunk2DataName,
+          instructionChunk3DataName,
+          instructionChunk4DataName,
+          instructionChunk5DataName,
+          instructionChunk6DataName,
           stepInputs,
           instructionChunk1: {
             title: instructionChunk1?.title,
             instructionSteps: instructionChunk1Step || [], //[],
-            dataName: "",
+            dataName: instructionChunk1DataName,
+
           },
           instructionChunk2: {
             title: instructionChunk2?.title,
             instructionSteps: instructionChunk2Step || [],
 
-            dataName: "",
+            dataName: instructionChunk2DataName,
           },
           instructionChunk3: {
             title: instructionChunk3?.title,
             instructionSteps: instructionChunk3Step || [],
 
-            dataName: "",
+            dataName: instructionChunk3DataName,
           },
           instructionChunk4: {
             title: instructionChunk4?.title,
             instructionSteps: instructionChunk4Step || [],
-
-            dataName: "",
+            dataName: instructionChunk4DataName,
           },
           instructionChunk5: {
             title: instructionChunk5?.title,
             instructionSteps: instructionChunk5Step || [],
 
-            dataName: "",
+            dataName: instructionChunk5DataName,
           },
           instructionChunk6: {
             title: instructionChunk6?.title,
             instructionSteps: instructionChunk6Step || [],
-
-            dataName: "",
+            dataName: instructionChunk6DataName,
           },
           instructionWordlength,
 
@@ -461,20 +471,22 @@ class SuggestMealForm extends Component {
 
         var imageElementId = "chunk1Image";
         var videoElementId = "chunk1Video";
-        if (chunk1Content) {
-          const chunk1Video = document.querySelector('#chunk1Video');
-          const chunk1Image = document.querySelector('#chunk1Image');
-          if (chunk1Video) {
-            chunk1Video.setAttribute('src', chunk1Content);
-            chunk1Video.style.display = "block"
-            chunk1Image.style.display = 'none'
+        setTimeout(() => {
+          if (chunk1Content) {
+            const chunk1Video = document.querySelector('#chunk1Video');
+            const chunk1Image = document.querySelector('#chunk1Image');
+            if (chunk1Video) {
+              chunk1Video.setAttribute('src', chunk1Content);
+              chunk1Video.style.display = "block"
+              chunk1Image.style.display = 'none'
+            }
+            else {
+              chunk1Image.setAttribute('src', chunk1Content);
+              chunk1Video.style.display = "none"
+              chunk1Image.style.display = 'block'
+            }
           }
-          else {
-            chunk1Image.setAttribute('src', chunk1Content);
-            chunk1Video.style.display = "none"
-            chunk1Image.style.display = 'block'
-          }
-        }
+        }, 500)
         setTimeout(() => {
           if (chunk2Content) {
             const chunk2Video = document.querySelector('#chunk2Video');
@@ -1721,7 +1733,7 @@ class SuggestMealForm extends Component {
 
     // new suggested products
     // suggestMealForm.append("meal_categories", JSON.stringify(suggestedCategories))
-    console.log(suggestedCategories, "suggests");
+    console.log(chunk2Content, "suggests");
     console.log(suggestedUtensils, "utensils");
     // RecipeSteps
 
@@ -2188,7 +2200,7 @@ class SuggestMealForm extends Component {
     console.log(this.state.videoData.data, "render");
 
     console.log(
-      this.state.stepInputs, 'stepInputs'
+      this.state, 'stepInputs'
     )
     return (
       <div className={styles.suggestion_section_2}>
@@ -3163,12 +3175,12 @@ class SuggestMealForm extends Component {
               instructionChunk6Step={
                 this.state.instructionChunk6?.instructionSteps
               }
-              instructionChunk1DataName={this.state.instructionChunk1?.dataName}
-              instructionChunk2DataName={this.state.instructionChunk2?.dataName}
-              instructionChunk3DataName={this.state.instructionChunk3?.dataName}
-              instructionChunk4DataName={this.state.instructionChunk4?.dataName}
-              instructionChunk5DataName={this.state.instructionChunk5?.dataName}
-              instructionChunk6DataName={this.state.instructionChunk6?.dataName}
+              instructionChunk1DataName={this.state.instructionChunk1?.dataName || this.state.instructionChunk1DataName}
+              instructionChunk2DataName={this.state.instructionChunk2?.dataName || this.state.instructionChunk2DataName}
+              instructionChunk3DataName={this.state.instructionChunk3?.dataName || this.state.instructionChunk3DataName}
+              instructionChunk4DataName={this.state.instructionChunk4?.dataName || this.state.instructionChunk4DataName}
+              instructionChunk5DataName={this.state.instructionChunk5?.dataName || this.state.instructionChunk5DataName}
+              instructionChunk6DataName={this.state.instructionChunk6?.dataName || this.state.instructionChunk6DataName}
               chunk1Content={this.state.chunk1ContentURL}
               chunk2Content={this.state.chunk2ContentURL}
               chunk3Content={this.state.chunk3ContentURL}

@@ -112,6 +112,7 @@ function SuggestedMealRow(props) {
                     : props.searchType === "Item"
                     ? () => props.openMealDetailsModal(suggestion)
                     : () => props.openDetailsModal(suggestion)
+                    
                 }
               >
                 {selectedUserType === "supplier" &&
