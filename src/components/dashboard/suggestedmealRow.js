@@ -162,7 +162,7 @@ function SuggestedMealRow(props) {
               onMouseEnter={() => setShowRejection(true)}
               onMouseLeave={() => setShowRejection(false)}
             >
-              {/* <p
+              <p
                 onClick={
                   selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
@@ -187,7 +187,8 @@ function SuggestedMealRow(props) {
                   ? suggestion.item_status[0]?.status
                   : suggestion.publicly_available}
                 {/* {suggestion.item_status[0].status} */}
-              
+              </p>
+
               {suggestion.item_status[0]?.status === "Rejected" &&
                 suggestion._id &&
                 showRejection && <ReceivedModal suggestion={suggestion} />}
