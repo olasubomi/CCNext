@@ -783,12 +783,12 @@ const SuggestedMeals = (props) => {
     setChangeStoreStatus(!changeStoreStatus);
   }
 
-  const handleStatusType = debounce(async (type) => {
+  const handleStatusType = async (type, id) => {
     try {
       setStatusTypeState(type);
 
       const res = await axios.post(`/items/item-control`, {
-        itemId: suggestion._id,
+        itemId: id,
         status: type,
       });
 
@@ -800,7 +800,7 @@ const SuggestedMeals = (props) => {
       console.error("Error updating status:", e);
       toast.error("Something went wrong");
     }
-  }, 300);
+  };
 
   const handleSendForReview = async (id, type) => {
     try {
@@ -1764,7 +1764,7 @@ const SuggestedMeals = (props) => {
                                   toggleOpenMeal={toggleOpenMeal}
                                   deleteItem={deleteItem}
                                   handleSendForReview={handleSendForReview}
-                                  handleStatusType={() => handleStatusType("Draft")}
+                                  handleStatusType={(type) => handleStatusType(type, suggestion)}
                                 />
                               );
                             })}
@@ -1993,8 +1993,8 @@ const SuggestedMeals = (props) => {
                   </div>
                   {changeStatus && (
                     <div className={styles.select_options2}>
-                      <p onClick={() => handleStatusType("Public")}>Public</p>
-                      <p onClick={() => handleStatusType("Pending")}>Pending</p>
+                      <p onClick={() => handleStatusType("Public", suggestion._id)}>Public</p>
+                      <p onClick={() => handleStatusType("Pending", suggestion._id)}>Pending</p>
                       <p onClick={() => setOpenRejectionModal(true)}>
                         Rejected
                       </p>

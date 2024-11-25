@@ -83,7 +83,7 @@ function SuggestedMealRow(props) {
     if (selectedOption.value === "sendForReview") {
       props.handleSendForReview(suggestion._id, "Pending");
     } else if (selectedOption.value === "Draft") {
-      props.handleStatusType()
+      props.handleStatusType("Draft", suggestion._id)
       console.log(suggestion, 'idd')
 
     } else if (
@@ -186,7 +186,6 @@ function SuggestedMealRow(props) {
                 {props.searchType !== "Category"
                   ? suggestion.item_status[0]?.status
                   : suggestion.publicly_available}
-                {/* {suggestion.item_status[0].status} */}
               </p>
 
               {suggestion.item_status[0]?.status === "Rejected" &&
