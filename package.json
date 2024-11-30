@@ -115,6 +115,11 @@
     "build": "next build",
     "start": "HTTPS=true next start"
   },
+  "overrides": {
+    "@mui/styles": {
+      "react": "^18.2.0"
+    }
+  },
   "browserslist": [
     ">0.2%",
     "not dead",
