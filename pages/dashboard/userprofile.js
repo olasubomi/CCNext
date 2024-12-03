@@ -1229,7 +1229,8 @@ const UserProfile = (props) => {
                           <div className={styles.profile_notification}>
                             <h3>When someone comment on your product</h3>
                           </div>
-                        )}
+                        )} 
+                        
                       </div>
                     </div>
                     <div className={styles.line}></div>
