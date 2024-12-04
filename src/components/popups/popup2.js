@@ -405,25 +405,16 @@ class Popup2 extends Component {
                           />
                         )}
 
-                      {allowedVideoExtensions.exec(
-                        this.props[`instructionChunk${curIn}DataName`]
-                      ) && (
-                          <video
-                            controls
-                            className={styles.popup2_step_img}
-                            height={150}
-                            width={70}
-                            src={this.props[`chunk${curIn}Content`]}
-                            type="video/mp4"
-
-                          >
-                            {/* <source
-                            src={this.props[`chunk${curIn}Content`]}
-                            type="video/mp4"
-                          />
-                          Your browser does not support the video tag. */}
-                          </video>
-                        )}
+                      {allowedVideoExtensions.exec(this.props[`instructionChunk${curIn}DataName`]) && (
+                        <video
+                          controls
+                          className={styles.popup2_step_img}
+                          height={150}
+                          width={70}
+                          src={this.props[`chunk${curIn}Content`]}
+                          type="video/mp4"
+                        />
+                      )}
                       <div className={styles.del}>
                         <h2 className={styles.popup2_step_name}>
                           {this.props["instructionChunk" + curIn]}
