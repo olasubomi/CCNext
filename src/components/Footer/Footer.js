@@ -1,16 +1,38 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import styles from './Footer.module.css'
 import facebookImg from "../../../public/assets/icons/Facebook+Icon+Black 1.png";
 import instagramImg from "../../../public/assets/icons/instagram-icon-free-7 1.png";
+import axios from "../../util/Api";
+import { toast } from "react-toastify";
 
 
 const Footer = ({
   footer = 'shape 1'
 }) => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const subscribeToOurNewsLetter = useCallback(async () => {
+    setLoading(true)
+    try {
+      const response = await axios("/user/news-letter", {
+        method: "post",
+        data: { email }
+      })
+      toast.success(
+        response.data?.data || "Successfully subscribed to our newsletter"
+      );
 
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message?.message || "An Error occured, try again"
+      );
+    }
+    setLoading(false)
+    setEmail("")
+  }, [email])
   return (
     <div className={styles.footer_container}>
       {
