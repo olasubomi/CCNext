@@ -1,16 +1,38 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png"
 import styles from './Footer.module.css'
 import facebookImg from "../../../public/assets/icons/Facebook+Icon+Black 1.png";
 import instagramImg from "../../../public/assets/icons/instagram-icon-free-7 1.png";
+import axios from "../../util/Api";
+import { toast } from "react-toastify";
 
 
 const Footer = ({
   footer = 'shape 1'
 }) => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const subscribeToOurNewsLetter = useCallback(async () => {
+    setLoading(true)
+    try {
+      const response = await axios("/user/news-letter", {
+        method: "post",
+        data: { email }
+      })
+      toast.success(
+        response.data?.data || "Successfully subscribed to our newsletter"
+      );
 
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message?.message || "An Error occured, try again"
+      );
+    }
+    setLoading(false)
+    setEmail("")
+  }, [email])
   return (
     <div className={styles.footer_container}>
       {
@@ -20,8 +42,8 @@ const Footer = ({
             <div className={styles.footer_row_1_join_us_form}>
 
               <React.Fragment>
-                <input placeholder="Enter email to subscribe to our newsletter" aria-label="News Letter" type="email" name="email" className={styles.footer_row_1_join_us_input} />
-                <button className={styles.footer_row_1_button}>Subscribe</button>
+                <input value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Enter email to subscribe to our newsletter" aria-label="News Letter" type="email" name="email" className={styles.footer_row_1_join_us_input} />
+                <button onClick={subscribeToOurNewsLetter} className={styles.footer_row_1_button}>{loading ? "Loading..." : "Subscribe"}</button>
               </React.Fragment>
 
             </div>
@@ -34,9 +56,9 @@ const Footer = ({
           <p>Dont miss anything! Be  the first to get our exclusive offers and latest news</p>
           <div className="section_box_container">
             <div className="section_box_container_cont">
-              <input placeholder="Enter your email" className="section_box_container_input" />
+              <input value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Enter your email" className="section_box_container_input" />
             </div>
-            <button className="section_box_container_button">Subscribe</button>
+            <button onClick={subscribeToOurNewsLetter} className="section_box_container_button">{loading ? "Loading..." : "Subscribe"}</button>
           </div>
         </section>
       }
@@ -57,7 +79,7 @@ const Footer = ({
                   Grocery List
                 </li>
               </Link>
-              <Link href="/suggestmeal" className={styles.footer_row_2_navigation_link}target="_blank" >
+              <Link href="/suggestmeal" className={styles.footer_row_2_navigation_link} target="_blank" >
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Suggest A Meal
