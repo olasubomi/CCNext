@@ -52,28 +52,40 @@ function SuggestedMealRow(props) {
     {
       value: "sendForReview",
       label: "Send for review",
-      isDisabled:
-        suggestion.item_status[0]?.status !== "Draft" &&
-        suggestion.item_status[0]?.status !== "Rejected",
+      // isDisabled:
+      //   suggestion.item_status[0]?.status !== "Draft" &&
+      //   suggestion.item_status[0]?.status !== "Rejected",
     },
     {
       value: "availableInInventory",
       label: "Available in Inventory",
-      isDisabled:
-        suggestion.item_available === false ||
-        suggestion.item_available === undefined,
+      // isDisabled:
+      //   suggestion.item_available === false ||
+      //   suggestion.item_available === undefined,
     },
     {
       value: "sendToInventory",
       label: "Send to Inventory",
-      isDisabled: !(suggestion.item_status[0]?.status === "Public"),
+      // isDisabled: !(suggestion.item_status[0]?.status === "Public"),
     },
+    {
+      value: "Draft",
+      label: "Draft",
+      // isDisabled:
+      //   suggestion.item_status[0]?.status === "Draft",
+    }
+
   ];
-  const handleSelectChange = (selectedOption) => {
+  const handleSelectChange = async (selectedOption) => {
+    console.log("Selected option:", selectedOption);
     setSelectedAction(selectedOption);
 
     if (selectedOption.value === "sendForReview") {
       props.handleSendForReview(suggestion._id, "Pending");
+    } else if (selectedOption.value === "Draft") {
+      props.handleStatusType("Draft", suggestion._id)
+      console.log(suggestion, 'idd')
+
     } else if (
       selectedOption.value === "sendToInventory" &&
       suggestion.item_status[0]?.status === "Public"
@@ -81,6 +93,8 @@ function SuggestedMealRow(props) {
       props.toggleTransferToInventory(suggestion);
     }
   };
+
+
   const customStyles = {
     control: (provided) => ({
       ...provided,
@@ -110,19 +124,19 @@ function SuggestedMealRow(props) {
                   selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
                     : props.searchType === "Item"
-                    ? () => props.openMealDetailsModal(suggestion)
-                    : () => props.openDetailsModal(suggestion)
-                    
+                      ? () => props.openMealDetailsModal(suggestion)
+                      : () => props.openDetailsModal(suggestion)
+
                 }
               >
                 {selectedUserType === "supplier" &&
-                props.searchType === "Item"
+                  props.searchType === "Item"
                   ? suggestion.item_name.length > 25
                     ? suggestion.item_name.slice(0, 25) + "..."
                     : suggestion.item_name
                   : props.searchType === "Item"
-                  ? suggestion.item_name
-                  : suggestion?.category_name}
+                    ? suggestion.item_name
+                    : suggestion?.category_name}
               </p>
             </td>
             <td className={styles.td_name}>
@@ -131,16 +145,16 @@ function SuggestedMealRow(props) {
                   selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
                     : props.searchType === "Item"
-                    ? () => props.openMealDetailsModal(suggestion)
-                    : () => props.openDetailsModal(suggestion)
+                      ? () => props.openMealDetailsModal(suggestion)
+                      : () => props.openDetailsModal(suggestion)
                 }
                 className={styles.hide}
               >
                 {props.searchType === "Item"
                   ? suggestion.item_type
                   : props.searchType === "Product"
-                  ? suggestion.item_type
-                  : suggestion?.category_name}
+                    ? suggestion.item_type
+                    : suggestion?.category_name}
               </p>
             </td>
             <td
@@ -153,27 +167,27 @@ function SuggestedMealRow(props) {
                   selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
                     : props.searchType === "Item"
-                    ? () => props.openMealDetailsModal(suggestion)
-                    : () => props.openDetailsModal(suggestion)
+                      ? () => props.openMealDetailsModal(suggestion)
+                      : () => props.openDetailsModal(suggestion)
                 }
                 className={
                   status +
                   " " +
                   (suggestion.item_status[0]?.status === "Draft" ||
-                  suggestion.item_status[0]?.status === "Pending"
+                    suggestion.item_status[0]?.status === "Pending"
                     ? pending
                     : suggestion.item_status[0]?.status === "Public"
-                    ? approve
-                    : suggestion.item_status[0]?.status === "Rejected"
-                    ? rejected
-                    : "")
+                      ? approve
+                      : suggestion.item_status[0]?.status === "Rejected"
+                        ? rejected
+                        : "")
                 }
               >
                 {props.searchType !== "Category"
                   ? suggestion.item_status[0]?.status
                   : suggestion.publicly_available}
-                {/* {suggestion.item_status[0].status} */}
               </p>
+
               {suggestion.item_status[0]?.status === "Rejected" &&
                 suggestion._id &&
                 showRejection && <ReceivedModal suggestion={suggestion} />}
@@ -184,19 +198,19 @@ function SuggestedMealRow(props) {
                   selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
                     : props.searchType === "Item"
-                    ? () => props.openMealDetailsModal(suggestion)
-                    : () => props.openDetailsModal(suggestion)
+                      ? () => props.openMealDetailsModal(suggestion)
+                      : () => props.openDetailsModal(suggestion)
                 }
                 className={styles.hideData}
               >
                 {props.searchType === "Item"
                   ? suggestion.item_categories.length > 0 &&
-                    suggestion.item_categories
-                      .map((ele) => ele?.category_name)
-                      .join(", ")
+                  suggestion.item_categories
+                    .map((ele) => ele?.category_name)
+                    .join(", ")
                   : suggestion.product_categories &&
-                    suggestion.product_categories.length > 0 &&
-                    suggestion.product_categories[0]}
+                  suggestion.product_categories.length > 0 &&
+                  suggestion.product_categories[0]}
               </p>
             </td>
             <td className={styles.td_cat}>
@@ -205,8 +219,8 @@ function SuggestedMealRow(props) {
                   selectedUserType === "admin"
                     ? () => props.toggleOpenMeal(suggestion)
                     : props.searchType === "Item"
-                    ? () => props.openMealDetailsModal(suggestion)
-                    : () => props.openDetailsModal(suggestion)
+                      ? () => props.openMealDetailsModal(suggestion)
+                      : () => props.openDetailsModal(suggestion)
                 }
                 className={styles.hideData}
               >
@@ -223,16 +237,19 @@ function SuggestedMealRow(props) {
                       defaultValue={selectedAction}
                       onChange={handleSelectChange}
                       options={options.filter((option) => {
-                        if (suggestion.item_status[0]?.status === "Draft") {
+                        const status = suggestion.item_status[0]?.status;
+                        const hasPrice = !!suggestion.item_price;
+                        if (status === "Draft") {
                           return option.value === "sendForReview";
-                        } else if (
-                          suggestion.item_status[0]?.status === "Public" &&
-                          suggestion.item_price
-                        ) {
-                          return option.value === "availableInInventory";
                         }
-                        return true;
+                        if (status === "Public") {
+                          if (option.value === "Draft") return true;
+                          if (option.value === "availableInInventory") return hasPrice;
+                          if (option.value === "sendToInventory") return !hasPrice;
+                        }
+                        return false;
                       })}
+
                     />
                   </div>
                 )}
