@@ -42,8 +42,8 @@ const Footer = ({
             <div className={styles.footer_row_1_join_us_form}>
 
               <React.Fragment>
-                <input placeholder="Enter email to subscribe to our newsletter" aria-label="News Letter" type="email" name="email" className={styles.footer_row_1_join_us_input} />
-                <button className={styles.footer_row_1_button}>Subscribe</button>
+                <input value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Enter email to subscribe to our newsletter" aria-label="News Letter" type="email" name="email" className={styles.footer_row_1_join_us_input} />
+                <button onClick={subscribeToOurNewsLetter} className={styles.footer_row_1_button}>{loading ? "Loading..." : "Subscribe"}</button>
               </React.Fragment>
 
             </div>
@@ -56,9 +56,9 @@ const Footer = ({
           <p>Dont miss anything! Be  the first to get our exclusive offers and latest news</p>
           <div className="section_box_container">
             <div className="section_box_container_cont">
-              <input placeholder="Enter your email" className="section_box_container_input" />
+              <input value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Enter your email" className="section_box_container_input" />
             </div>
-            <button className="section_box_container_button">Subscribe</button>
+            <button onClick={subscribeToOurNewsLetter} className="section_box_container_button">{loading ? "Loading..." : "Subscribe"}</button>
           </div>
         </section>
       }
@@ -79,7 +79,7 @@ const Footer = ({
                   Grocery List
                 </li>
               </Link>
-              <Link href="/suggestmeal" className={styles.footer_row_2_navigation_link}target="_blank" >
+              <Link href="/suggestmeal" className={styles.footer_row_2_navigation_link} target="_blank" >
 
                 <li className={styles.footer_row_2_navigation_list}>
                   Suggest A Meal
