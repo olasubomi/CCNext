@@ -96,6 +96,8 @@ const UserProfile = (props) => {
   const router = useRouter();
   const [status, setStatusState] = useState("");
   const [message, setMessageState] = useState("");
+  const { authUser } = useSelector((state) => state.Auth);
+  console.log(authUser, 'authuser')
   const [formState, setFormState] = useState({
     email: "",
     phone_number: "",
@@ -214,8 +216,7 @@ const UserProfile = (props) => {
     "friday",
     "saturday",
   ];
-  const { authUser } = useSelector((state) => state.Auth);
-  console.log(authUser, 'authuser')
+
   function uploadImage(picture) {
     if (picture === "profile") {
       const input = document.createElement("input");

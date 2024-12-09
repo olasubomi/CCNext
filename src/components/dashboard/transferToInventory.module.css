@@ -340,6 +340,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 500px;
 }
 
 .transToIn_details_col3 > div > h3 {
@@ -593,6 +594,10 @@
 
   .transToIn_details_col3 {
     grid-template-columns: 1fr;
+  }
+  .transToIn_details_col3 > div {
+   
+    width: 300px;
   }
 }
 
