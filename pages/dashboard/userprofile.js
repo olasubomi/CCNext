@@ -44,6 +44,7 @@ import {
   suggestion_form_group,
   suggestion_form_label,
 } from "../../src/components/suggestionPages/suggestion.module.css";
+import { toast } from "react-toastify";
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 58,
@@ -98,6 +99,7 @@ const UserProfile = (props) => {
   const [status, setStatusState] = useState("");
   const [message, setMessageState] = useState("");
   const [toggleSwitch, setToggleSwitch] = useState(true);
+  const [authUser, setAuthUser] = useState({})
   const [formState, setFormState] = useState({
     email: "",
     phone_number: "",
@@ -327,6 +329,7 @@ const UserProfile = (props) => {
       const response = await axios.put(`/user/updateuserprofile/${user?._id}`, {
         newsletter_subscription: !toggleSwitch
       });
+      toast.success(`Notification ${!toggleSwitch ? "enabled" : "disabled"} successfully`);
       localStorage.setItem("user", JSON.parse({
         ...user,
         newsletter_subscription: !toggleSwitch
@@ -564,25 +567,25 @@ const UserProfile = (props) => {
   }, []);
 
   useEffect(() => {
-    if (authUser) {
+    if (props.auth.authUser) {
       setFormState((prevState) => ({
         ...prevState,
-        email: authUser.email,
+        email: props.auth.authUser.email,
 
-        phone_number: authUser.phone_number,
-        driver_car_color: authUser.driver_car_color,
-        driver_car_model: authUser.driver_car_model,
-        driver_car_plate_number: authUser.driver_car_plate_number,
+        phone_number: props.auth.authUser.phone_number,
+        driver_car_color: props.auth.authUser.driver_car_color,
+        driver_car_model: props.auth.authUser.driver_car_model,
+        driver_car_plate_number: props.auth.authUser.driver_car_plate_number,
         driver_car_picture: {
-          carContentURL: authUser.driver_car_picture,
+          carContentURL: props.auth.authUser.driver_car_picture,
         },
       }));
 
-      if (authUser.driver_hours.length > 0) {
-        setTimes(authUser.driver_hours[0]);
+      if (authUser.driver_hours?.length > 0) {
+        setTimes(authUser.driver_hours?.[0]);
       }
     }
-  }, [authUser]);
+  }, [props.auth.authUser]);
 
   return (
     <div className={container + " " + col2}>
