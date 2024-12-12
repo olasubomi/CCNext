@@ -27,7 +27,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import Sidenav2 from "../../src/components/Header/sidenav2";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { UserIcon } from "../../src/components/icons";
 import axios from "../../src/util/Api";
@@ -98,8 +98,12 @@ const UserProfile = (props) => {
   const router = useRouter();
   const [status, setStatusState] = useState("");
   const [message, setMessageState] = useState("");
+  const { authUser } = useSelector((state) => state.Auth);
+  console.log(authUser, 'authuser')
+  const selectedUserType = useSelector(
+    (state) => state.userType.selectedUserType
+  );
   const [toggleSwitch, setToggleSwitch] = useState(true);
-  const [authUser, setAuthUser] = useState({})
   const [formState, setFormState] = useState({
     email: "",
     phone_number: "",
@@ -1518,7 +1522,7 @@ const UserProfile = (props) => {
                 >
                   <h3>Account Type</h3>
                   <div className={styles.profile_basic_info}>
-                    <h3>{props.auth.authUser.user_type}</h3>
+                    <h3>{selectedUserType}</h3>
                   </div>
                 </div>
 

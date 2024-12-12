@@ -485,18 +485,18 @@ class SuggestMealForm extends Component {
             if (chunk.content) {
               const videoElement = document.querySelector(`#${chunk.videoId}`);
               const imageElement = document.querySelector(`#${chunk.imageId}`);
-        
+
               // Prioritize image display
               if (imageElement) {
                 imageElement.setAttribute('src', chunk.content);
                 imageElement.style.display = 'block';
               }
-        
+
               // If video element exists, display it and hide the image
               if (videoElement) {
                 videoElement.setAttribute('src', chunk.content);
                 videoElement.style.display = 'block';
-              
+
               }
             }
           }, 500 * (index + 1));
@@ -505,7 +505,7 @@ class SuggestMealForm extends Component {
         function displayMedia(chunk) {
           const imageElement = document.getElementById(chunk.imageId);
           const videoElement = document.getElementById(chunk.videoId);
-        
+
           if (chunk.content) {
             if (/\.(gif|jpe?g|png|svg|webp)$/i.test(chunk.content)) {
               // It's an image
@@ -522,7 +522,7 @@ class SuggestMealForm extends Component {
             }
           }
         }
-        
+
         chunks.forEach(displayMedia);
       }
     }
@@ -2576,6 +2576,7 @@ class SuggestMealForm extends Component {
 
                     <>
                       <img
+                      src={this.chunk2Content}
                         id={"chunk" + id + "Image"}
                         height="100%"
                         width="100%"
@@ -2587,6 +2588,7 @@ class SuggestMealForm extends Component {
                           objectPosition: "center",
                         }}
                       />
+
                       <video
                         className={styles.suggestion_image}
                         id={"chunk" + id + "Video"}
@@ -2600,12 +2602,8 @@ class SuggestMealForm extends Component {
                         Your browser does not support the video tag.
                       </video>
 
-                      <div
-                        className={styles.closed}
-                        onClick={() => this.deleteImg("chunk" + id + "Image")}
-                      >
-                        <AiOutlineClose className={styles.closeIcon} />
-                      </div>
+
+
                     </>
                   </div>
                 );

@@ -361,7 +361,7 @@ export default function TransferToInventory(props) {
                 </div>
               </div>
               <div className={styles.transToIn_meal_types}>
-                <p>Choose Meal Type</p>
+                <p>Choose {props?.meal?.item_type} Type</p>
                 {props?.meal?.item_type === "Meal" ? (
                   <div className={styles.transToIn_meal_type}>
                     <div className={styles.transToIn_meal_type_option}>
@@ -466,9 +466,9 @@ export default function TransferToInventory(props) {
 
               <div className={styles.transToIn_details_col2}>
                 <div>
-                  <h3>Set {" " + item_type + " "} Price</h3>
+                  <h3>Set {" " + props?.meal?.item_type + " "} Price</h3>
                   <div>
-                    <p>Enter {" " + item_type + " "} Price</p>
+                    <p>Enter {props?.meal?.item_type}  Price</p>
                     <h4>{getSelectedStoreCurrencySymbol()}</h4>
 
                     <input onChange={handleChange} name="meal_price" />
