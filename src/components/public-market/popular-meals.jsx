@@ -116,8 +116,6 @@ export const PopularMeals = () => {
       const totalItems = response.data.data.count;
       const allItems = response.data.data.items;
 
-      // const filteredItems = allItems.filter((meal) => meal.average_rating);
-
       const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
 
       setMeals((prev) => [...prev, ...allItems]);
@@ -152,7 +150,6 @@ export const PopularMeals = () => {
   useEffect(() => {
     fetchGroceryList();
   }, []);
-  const filteredMeals = meals.filter((meal) => meal.average_rating);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -168,7 +165,6 @@ export const PopularMeals = () => {
       });
     }
   }, []);
-  console.log(selectedItem, "selectedItem");
   return (
     <div className={styles.mealContainer}>
       <Element
@@ -188,7 +184,6 @@ export const PopularMeals = () => {
                 setSelectedItem(meal);
                 setOpenModal(true);
                 setSelectedItemId(meal._id);
-                console.log(selectedItem, "slected");
               }}
             >
               {

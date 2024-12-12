@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert } from "react-bootstrap";
 
 import Head from "next/head";
@@ -34,6 +34,7 @@ import axios from "../../src/util/Api";
 import PhoneInput from "react-phone-input-2";
 import { getUser } from "../../src/actions";
 import AddIcon from "@mui/icons-material/Add";
+import _Switch from "react-switch";
 import {
   suggestion_form_image,
   suggestion_form_image_col_1,
@@ -43,6 +44,7 @@ import {
   suggestion_form_group,
   suggestion_form_label,
 } from "../../src/components/suggestionPages/suggestion.module.css";
+import { toast } from "react-toastify";
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 58,
@@ -98,6 +100,10 @@ const UserProfile = (props) => {
   const [message, setMessageState] = useState("");
   const { authUser } = useSelector((state) => state.Auth);
   console.log(authUser, 'authuser')
+  const selectedUserType = useSelector(
+    (state) => state.userType.selectedUserType
+  );
+  const [toggleSwitch, setToggleSwitch] = useState(true);
   const [formState, setFormState] = useState({
     email: "",
     phone_number: "",
@@ -216,7 +222,6 @@ const UserProfile = (props) => {
     "friday",
     "saturday",
   ];
-
   function uploadImage(picture) {
     if (picture === "profile") {
       const input = document.createElement("input");
@@ -272,8 +277,28 @@ const UserProfile = (props) => {
     }
   }
 
+  useEffect(() => {
+    if (props.auth.authUser) {
+      setFormState({
+        ...formState,
+        ["email"]: props.auth.authUser.email,
+        ["first_name"]: props.auth.authUser.first_name,
+        ["last_name"]: props.auth.authUser.last_name,
+        ["phone_number"]: props.auth.authUser.phone_number,
+        ["driver_car_color"]: props.auth.authUser.driver_car_color,
+        ["driver_car_model"]: props.auth.authUser.driver_car_model,
+        ["driver_car_plate_number"]:
+          props.auth.authUser.driver_car_plate_number,
+        ["driver_car_picture"]: {
+          carContentURL: props.auth.authUser.driver_car_picture,
+        },
+      });
 
-
+      if (props.auth.authUser.driver_hours.length > 0) {
+        setTimes(props.auth.authUser.driver_hours[0]);
+      }
+    }
+  }, [props.auth.authUser]);
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -301,6 +326,24 @@ const UserProfile = (props) => {
       alert("Invalid image type");
     }
   }
+
+  const handleUpdateNotification = useCallback(async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}")
+      const response = await axios.put(`/user/updateuserprofile/${user?._id}`, {
+        newsletter_subscription: !toggleSwitch
+      });
+      toast.success(`Notification ${!toggleSwitch ? "enabled" : "disabled"} successfully`);
+      localStorage.setItem("user", JSON.parse({
+        ...user,
+        newsletter_subscription: !toggleSwitch
+      }))
+    } catch (e) {
+      console.log(e, "Error")
+    }
+  }, [toggleSwitch])
+
+
 
   function uploadProfileImage() {
     // <input accept="image/*,video/mp4,video/mov,video/x-m4v,video/*" id="ProfileImage" name="ProfileImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onUpdateProfileImage(ev)} />
@@ -520,29 +563,33 @@ const UserProfile = (props) => {
   };
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user && typeof user?.newsletter_subscription === "boolean") {
+      setToggleSwitch(user.newsletter_subscription)
+    }
     getStoreInformation();
   }, []);
 
   useEffect(() => {
-    if (authUser) {
+    if (props.auth.authUser) {
       setFormState((prevState) => ({
         ...prevState,
-        email: authUser.email,
+        email: props.auth.authUser.email,
 
-        phone_number: authUser.phone_number,
-        driver_car_color: authUser.driver_car_color,
-        driver_car_model: authUser.driver_car_model,
-        driver_car_plate_number: authUser.driver_car_plate_number,
+        phone_number: props.auth.authUser.phone_number,
+        driver_car_color: props.auth.authUser.driver_car_color,
+        driver_car_model: props.auth.authUser.driver_car_model,
+        driver_car_plate_number: props.auth.authUser.driver_car_plate_number,
         driver_car_picture: {
-          carContentURL: authUser.driver_car_picture,
+          carContentURL: props.auth.authUser.driver_car_picture,
         },
       }));
 
-      if (authUser.driver_hours.length > 0) {
-        setTimes(authUser.driver_hours[0]);
+      if (authUser.driver_hours?.length > 0) {
+        setTimes(authUser.driver_hours?.[0]);
       }
     }
-  }, [authUser]);
+  }, [props.auth.authUser]);
 
   return (
     <div className={container + " " + col2}>
@@ -771,6 +818,7 @@ const UserProfile = (props) => {
                         <input
                           type="text"
                           name="old_password"
+                          value={password}
                           placeholder="Password"
                           onChange={handleChange}
                           className={styles.profile_form_input}
@@ -1188,7 +1236,8 @@ const UserProfile = (props) => {
                           <div className={styles.profile_notification}>
                             <h3>When someone comment on your product</h3>
                           </div>
-                        )}
+                        )} 
+                        
                       </div>
                     </div>
                     <div className={styles.line}></div>
@@ -1197,6 +1246,20 @@ const UserProfile = (props) => {
                       <div className={styles.profile_notifications}>
                         <div className={styles.profile_notification}>
                           <h3>Get notification for our product updates </h3>
+                          <_Switch onChange={() => {
+                            setToggleSwitch(prev => !prev)
+                            handleUpdateNotification()
+                          }} checked={toggleSwitch} checkedIcon={<p style={{
+                            color: "#fff",
+                            fontSize: 11,
+                            padding: "6px"
+                          }}>Yes</p>}
+                            uncheckedIcon={<p style={{
+                              color: "#000",
+                              fontSize: 11,
+                              padding: "6px"
+                            }}>No</p>}
+                          />
                         </div>
                       </div>
                     </div>
@@ -1459,7 +1522,7 @@ const UserProfile = (props) => {
                 >
                   <h3>Account Type</h3>
                   <div className={styles.profile_basic_info}>
-                    <h3>{props.auth.authUser.user_type}</h3>
+                    <h3>{selectedUserType}</h3>
                   </div>
                 </div>
 

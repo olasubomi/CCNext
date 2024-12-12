@@ -14,6 +14,9 @@ import { CartProvider } from "../src/context/cart.context";
 import { AuthProvider } from "../src/context/auth.context";
 import useInactivityLogout from "../src/util/useinactivity";
 import Hotjar from '@hotjar/browser';
+import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
+import Script from "next/script";
+
 
 const siteId = process.env.NEXT_PUBLIC_siteId;
 const hotjarVersion = 6;
@@ -24,6 +27,22 @@ function MyApp({ Component, pageProps }) {
   useInactivityLogout(1200000)
   return (
     <>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-937TLLF4H3"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {
+          `
+          window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-937TLLF4H3');
+
+          `
+        }
+      </Script>
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
