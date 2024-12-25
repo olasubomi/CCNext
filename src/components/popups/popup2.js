@@ -393,7 +393,7 @@ class Popup2 extends Component {
                     <>
                       {allowedImageExtensions.exec(
                         this.props[`instructionChunk${curIn}DataName`]
-                      ) && (
+                      ) && this.props["chunk" + curIn + "Content"] ? (
                           <Image
                             src={this.props["chunk" + curIn + "Content"]}
                             alt={this.props["instructionChunk" + curIn]?.title}
@@ -403,9 +403,9 @@ class Popup2 extends Component {
                             objectFit="cover"
                             objectPosition="center"
                           />
-                        )}
+                        ) : null}
 
-                      {allowedVideoExtensions.exec(this.props[`instructionChunk${curIn}DataName`]) && (
+                      {allowedVideoExtensions.exec(this.props[`instructionChunk${curIn}DataName`]) && this.props[`chunk${curIn}Content`]? (
                         <video
                           controls
                           className={styles.popup2_step_img}
@@ -414,7 +414,7 @@ class Popup2 extends Component {
                           src={this.props[`chunk${curIn}Content`]}
                           type="video/mp4"
                         />
-                      )}
+                      ): null}
                       <div className={styles.del}>
                         <h2 className={styles.popup2_step_name}>
                           {this.props["instructionChunk" + curIn]}
