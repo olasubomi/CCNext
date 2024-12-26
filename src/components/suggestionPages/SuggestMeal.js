@@ -2506,6 +2506,7 @@ class SuggestMealForm extends Component {
               </div>
 
               {stepInputs?.map((id, index) => {
+                console.log(stepInputs, )
                 return (
                   <div key={index} className={styles.suggestion_recipe_step} style={{ marginTop: '2rem' }}>
                     <div className={styles.suggestion_form_group}>
@@ -2576,9 +2577,9 @@ class SuggestMealForm extends Component {
 
                     <>
                       <img
-                      src={this.chunk2Content}
+                        src={"chunk" + id + "Content"}
                         id={"chunk" + id + "Image"}
-                        height="100%"
+                      height="100%"
                         width="100%"
                         className={styles.suggestion_image}
                         alt={"recipe_step" + id + "_image_or_video"}

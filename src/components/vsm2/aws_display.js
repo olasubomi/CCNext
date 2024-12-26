@@ -14,4 +14,3 @@ const s3 = new S3Client({
     identityPoolId: "IDENTITY_POOL_ID", // IDENTITY_POOL_ID e.g., eu-west-1:xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx
   }),
 });
-
