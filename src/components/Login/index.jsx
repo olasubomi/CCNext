@@ -15,7 +15,6 @@ import { Loader, SimpleSnackbar } from "../../common";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import FacebookLogin from "react-facebook-login";
 import { useAuth } from "../../context/auth.context";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as Crypto from "crypto-hash";
@@ -91,7 +90,7 @@ function Login(props) {
     if (props.auth.isAuthenticated && user) {
       props.auth.authUser.super_app_admin
         ? // user.super_app_admin
-        router.push("/admin")
+          router.push("/admin")
         : router.push("/dashboard");
       setIsOpen(false);
     } else {
@@ -112,8 +111,13 @@ function Login(props) {
     await props.login(email, password, rememberPassword, () => {
       console.log("calling callback");
       setLoginLoading(false);
-      dispatch(setSelectedUserType(Array(JSON.parse(localStorage.getItem("user") || "{}")) ? JSON.parse(localStorage.getItem("user") || "{}")?.user_type?.[0] : 'customer'));
-
+      dispatch(
+        setSelectedUserType(
+          Array(JSON.parse(localStorage.getItem("user") || "{}"))
+            ? JSON.parse(localStorage.getItem("user") || "{}")?.user_type?.[0]
+            : "customer"
+        )
+      );
     });
 
     // setTimeout(() => {
@@ -136,7 +140,7 @@ function Login(props) {
     const decoded = jwtDecode(credentialResponse.credential);
     try {
       const decoded = jwtDecode(credentialResponse.credential);
-      console.log(decoded, 'decoded')
+      console.log(decoded, "decoded");
       await props.login(
         decoded?.email,
         null,
@@ -228,7 +232,7 @@ function Login(props) {
                   Email
                 </label>
                 <input
-                  type='email'
+                  type="email"
                   name="email"
                   value={email}
                   placeholder="Your Email or Username"
@@ -304,26 +308,7 @@ function Login(props) {
 
               <div className={styles.flex}>
                 <div>
-                  {showFacebook && (
-                    <FacebookLogin
-                      appId={process.env.FB_APP_ID}
-                      autoLoad={true}
-                      fields="name,email,picture"
-                      cssClass={styles.blue}
-                      callback={responseFacebook}
-                      render={(renderProps) => (
-                        <button
-                          className={styles.blue}
-                          onClick={() => {
-                            renderProps.onClick();
-                            setShowFacebook(false);
-                          }}
-                        >
-                          This is my custom FB button
-                        </button>
-                      )}
-                    />
-                  )}
+                  {showFacebook && null}
                   {!showFacebook && (
                     <button
                       className={styles.blue}

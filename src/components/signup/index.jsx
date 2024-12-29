@@ -18,7 +18,6 @@ import {
   confirmAccount,
 } from "../../actions";
 import { GoogleLogin } from "@react-oauth/google";
-import FacebookLogin from "react-facebook-login";
 import axios, { base_url } from "../../util/Api";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -467,25 +466,7 @@ function SignUp(props) {
 
                 <div className={styles.flex}>
                   <div>
-                    {
-                      <FacebookLogin
-                        appId={process.env.FB_APP_ID}
-                        autoLoad={true}
-                        fields="name,email,picture"
-                        cssClass={styles.blue}
-                        // callback={responseFacebook}
-                        render={(renderProps) => (
-                          <button
-                            className={styles.blue}
-                            onClick={() => {
-                              renderProps.onClick();
-                            }}
-                          >
-                            This is my custom FB button
-                          </button>
-                        )}
-                      />
-                    }
+                    
                   </div>
                   <div>
                     <GoogleLogin
