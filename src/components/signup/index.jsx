@@ -39,7 +39,7 @@ function SignUp(props) {
   const [message, setMessageState] = useState(null);
   const [status, setStatusState] = useState(null);
   const [isAgreed, setIsAgreed] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(true);
   const [showPass, setShowPassState] = useState(null);
   const [formState, setFormState] = useState({
     username: "",
@@ -69,7 +69,6 @@ function SignUp(props) {
     setOpenOTP(false)
 
   }
-  console.log("openVerified", openVerified)
   // useEffect(()=>{
   //   if(isverified){
   //     //setOpenUserVerificationSuccess(true)
@@ -166,8 +165,6 @@ function SignUp(props) {
 
 
 
-  console.log('redux', props.redux)
-
 
   async function formSubmit(e) {
     e.preventDefault();
@@ -197,6 +194,7 @@ function SignUp(props) {
       first_name,
       last_name,
       password,
+      isSubscribed
     })
     console.log("result", result)
     if (result) {
@@ -213,7 +211,6 @@ function SignUp(props) {
     // }
   }
 
-  console.log("openUserVerificationSuccess", openUserVerificationSuccess)
   return (
     <>
       <div className={styles.login}>
@@ -439,8 +436,8 @@ function SignUp(props) {
                   type="checkbox"
                   id="newsletter"
                   name="newsletter"
-                  value="isSubscribed"
-                  onChange={(e) => setIsSubscribed(e.target.value)}
+                  checked={isSubscribed}
+                  onChange={(e) => setIsSubscribed(prev => !prev)}
                 />
 
                 <label
