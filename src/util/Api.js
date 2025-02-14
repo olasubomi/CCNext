@@ -2,7 +2,7 @@ import Axios from "axios";
 import { BASE_URL_LIVE, BASE_URL_DEV } from "../../api";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 
-let base_url = `http://localhost:3000/api/`;
+let base_url = `http://localhost:5000/api`;
 
 if (process.env.NODE_ENV !== "development") {
   base_url = BASE_URL_LIVE;

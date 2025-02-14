@@ -15,6 +15,7 @@ import { BiSolidDownArrow } from "react-icons/bi";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { MobileSearch } from "../dropdown/mobile-search";
+import { MealSearch } from "../dropdown/meal-search";
 
 export const AllPopularMeals = () => {
   const alphabets = [
@@ -247,7 +248,7 @@ export const AllPopularMeals = () => {
           </div>
         </div>
         <div className={styles.searchbar}>
-          <MobileSearch setShowDropdown={setShowDropdown} />
+          <MealSearch setShowDropdown={setShowDropdown} />
         </div>
         <div className={styles.alphabetContainer}>
           <div className={styles.alphabetContainer2}>

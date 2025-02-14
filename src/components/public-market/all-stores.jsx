@@ -7,6 +7,7 @@ import { BiSolidDownArrow } from "react-icons/bi";
 import StorePics from "../../../public/assets/store_pics/store.jpeg";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { MobileSearch } from "../dropdown/mobile-search";
+import { StoreSearch } from "../dropdown/store-dropdown";
 
 export const AllStores = () => {
   const alphabets = [
@@ -173,7 +174,7 @@ export const AllStores = () => {
         </div>
       </div>
       <div className={styles.searchbar}>
-          <MobileSearch setShowDropdown={setShowDropdown} />
+          <StoreSearch setShowDropdown={setShowDropdown} />
         </div>
       <div className={styles.alphabetContainer}>
         {alphabets.map((elem, index) => (
