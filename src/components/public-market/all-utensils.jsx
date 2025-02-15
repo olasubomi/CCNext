@@ -10,7 +10,7 @@ import { BiSolidDownArrow } from "react-icons/bi";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
-import { MobileSearch } from "../dropdown/mobile-search";
+import { UtensilSearchs } from "../dropdown/utensil-search";
 
 export const AllUtensils = () => {
   const alphabets = [
@@ -284,7 +284,7 @@ export const AllUtensils = () => {
           </div>
         </div>
         <div className={styles.searchbar}>
-          <MobileSearch setShowDropdown={setShowDropdown} />
+          <UtensilSearchs setShowDropdown={setShowDropdown} />
         </div>
         <div className={styles.alphabetContainer}>
           <div className={styles.alphabetContainer2}>

@@ -8,14 +8,12 @@ import { useMediaQuery } from "../../hooks/usemediaquery";
 import { IoIosSearch } from "react-icons/io";
 import { GoSearch } from "react-icons/go";
 
-export const UtensilSearch = ({ setShowDropdown }) => {
+export const UtensilSearchs = ({ setShowDropdown }) => {
   const router = useRouter();
   const [show, setShow] = useState(false);
   const [value, setValue] = useState("");
   const [chef, setChef] = useState("");
   const [items, setItems] = useState([]);
-  const [store, setStore] = useState([]);
-  const [showCategory, setShowCategory] = useState(false);
   const [categories, setCategories] = useState([
     {
       label: "All",
@@ -41,7 +39,7 @@ export const UtensilSearch = ({ setShowDropdown }) => {
   const ref = useRef();
 
   const filteredUtensils = () => {
-    return items.filter((elem) => elem.item_type === "Utensils");
+    return items.filter((elem) => elem.item_type === "Utensil");
   };
 
   const getItem = async (name) => {
@@ -55,7 +53,8 @@ export const UtensilSearch = ({ setShowDropdown }) => {
           price: element?.item_price ? `$${element?.item_price}` : "No Price",
           store: element?.store_available?.store_name || "No store",
           item_type: element?.item_type,
-          meal_chef: element?.meal_chef
+          meal_chef: element?.meal_chef,
+          user: `${element.user?.first_name} ${element?.user?.last_name}`
         };
       });
       setItems(resp);
@@ -97,14 +96,13 @@ export const UtensilSearch = ({ setShowDropdown }) => {
         <div className={styles.searchboxfield}>
           <GoSearch size={12} color="rgba(148, 148, 148, 1)" />
           <input
-            placeholder="Search Marketplace"
+            placeholder="Search for utensil"
             autoComplete="off"
             onFocus={() => setShow(true)}
             value={value}
             onChange={(e) => {
               setValue(e.target.value);
               getItem(e.target.value);
-              getStore(e.target.value);
             }}
             type="search"
             name="search"
@@ -136,10 +134,7 @@ export const UtensilSearch = ({ setShowDropdown }) => {
                               <p
                                 key={elem.value}
                                 onClick={() => {
-                                  setOneStore({
-                                    visible: false,
-                                    id: "",
-                                  });
+                                  setChef(elem.user)
                                   setValue(elem.label);
                                 }}
                                 style={{ cursor: "pointer" }}
@@ -161,10 +156,10 @@ export const UtensilSearch = ({ setShowDropdown }) => {
             if (
               items.filter(
                 (ele) =>
-                  ele.item_type === "Utensils" && ele.item_type !== "Meal"
+                  ele.item_type === "Utensil" && ele.item_type !== "Meal"
               )
             ) {
-              router.push(`/product/${value}`);
+              router.push(`/product/${chef}/${value}`);
             } else {
               // router.push(`/meal/${value}`);
             }

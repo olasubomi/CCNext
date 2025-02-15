@@ -12,10 +12,7 @@ export const StoreSearch = ({ setShowDropdown }) => {
     const router = useRouter();
     const [show, setShow] = useState(false);
     const [value, setValue] = useState("");
-    const [chef, setChef] = useState("");
-    const [items, setItems] = useState([]);
     const [store, setStore] = useState([]);
-    const [showCategory, setShowCategory] = useState(false);
     const [categories, setCategories] = useState([
         {
             label: "All",

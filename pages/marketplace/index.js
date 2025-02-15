@@ -22,6 +22,7 @@ import { AllStores } from "../../src/components/public-market/all-stores";
 import { AllPopularMeals } from "../../src/components/public-market/all-popular-meals";
 import { AllProducts } from "../../src/components/public-market/all-products";
 import { AllUtensils } from "../../src/components/public-market/all-utensils";
+import { MobileSearch } from "../../src/components/dropdown/mobile-search";
 
 const PublicMarket = () => {
   const router = useRouter();
@@ -34,6 +35,8 @@ const PublicMarket = () => {
   const [showCategory, setShowCategory] = useState(false);
   const [currentAddress, setCurrentAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(true);
+
   const [longLat, setLongLat] = useState({
     longitude: "",
     latitude: "",
@@ -151,8 +154,11 @@ const PublicMarket = () => {
               Find stores, recipes, kitchen utensils and your favourite
               products.
             </p>
+            <div className={styles.searchbar2}>
+            <MobileSearch setShowDropdown={setShowDropdown} />
           </div>
-
+          </div>
+          
           <>
             {categories.find((ele) => ele.label === "Stores")?.value && (
               <Stores />
@@ -176,10 +182,10 @@ const PublicMarket = () => {
           <>
             {categories.find((ele) => ele.label === "Kitchen Utensils")
               ?.value && (
-              <div>
-                <SuggestedUtensils />
-              </div>
-            )}
+                <div>
+                  <SuggestedUtensils />
+                </div>
+              )}
           </>
         </>
       )}
@@ -187,10 +193,10 @@ const PublicMarket = () => {
         <>
           {categories.find((ele) => ele.label === "Kitchen Utensils")
             ?.value && (
-            <div>
-              <AllUtensils />
-            </div>
-          )}
+              <div>
+                <AllUtensils />
+              </div>
+            )}
         </>
       )}
       <Footer />

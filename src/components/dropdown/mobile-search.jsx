@@ -46,7 +46,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
     return items.filter((elem) => elem.item_type === "Product");
   };
   const filteredUtensils = () => {
-    return items.filter((elem) => elem.item_type === "Utensils");
+    return items.filter((elem) => elem.item_type === "Utensil");
   };
   const [oneStore, setOneStore] = useState({
     visible: false,
@@ -64,7 +64,8 @@ export const MobileSearch = ({ setShowDropdown }) => {
           price: element?.item_price ? `$${element?.item_price}` : "No Price",
           store: element?.store_available?.store_name || "No store",
           item_type: element?.item_type,
-          meal_chef: element?.meal_chef
+          meal_chef: element?.meal_chef,
+          user: `${element.user?.first_name} ${element?.user?.last_name}`
         };
       });
       setItems(resp);
@@ -101,16 +102,17 @@ export const MobileSearch = ({ setShowDropdown }) => {
     );
   }, []);
   useEffect(() => {
-    document.addEventListener(
-      "click",
-      (e) => {
-        if (ref.current && !ref.current.contains(e.target)) {
-          setShowDropdown(false);
-        }
-      },
-      true
-    );
+    const handleClickOutside = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+  
+    document.addEventListener("click", handleClickOutside, true);
+    
+    return () => document.removeEventListener("click", handleClickOutside, true);
   }, []);
+  
 
   return (
     <div className={styles.two3} ref={ref}>
@@ -270,6 +272,8 @@ export const MobileSearch = ({ setShowDropdown }) => {
                                 });
                                 setValue(elem.label);
                                 setChef(elem.meal_chef)
+                                localStorage.setItem("selectedItemId", elem.value);
+
                               }}
                               style={{ cursor: "pointer" }}
                             >
@@ -311,6 +315,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
                                   id: "",
                                 });
                                 setValue(elem.label);
+                                setChef(elem.user)
                               }}
                               style={{ cursor: "pointer" }}
                             >
@@ -353,6 +358,7 @@ export const MobileSearch = ({ setShowDropdown }) => {
                                     id: "",
                                   });
                                   setValue(elem.label);
+                                  setChef(elem.user)
                                 }}
                                 style={{ cursor: "pointer" }}
                               >
@@ -374,20 +380,20 @@ export const MobileSearch = ({ setShowDropdown }) => {
               localStorage.setItem("storeId", oneStore.id)
               router.push(`/store/${oneStore.name}`);
             } else {
-              if (
-                items.find(
-                  (ele) =>
-                    ele.item_type === "Meal" && ele.item_type !== "Product"
-                )
-              ) {
-                router.push(`/meal/${chef}/${value}`);
+              const selectedMeal = items.find(
+                (ele) => ele.label === value && ele.item_type === "Meal"
+              );
+
+              if (selectedMeal) {
+                setChef(selectedMeal.meal_chef);
+                router.push(`/meal/${selectedMeal.meal_chef}/${selectedMeal.label}`);
+
               } else if (
                 items.filter(
                   (ele) =>
-                    ele.item_type === "Product" && ele.item_type !== "Meal"
-                )
+                    router.push(`/product/${chef}/${value}`))
               ) {
-                router.push(`/product/${value}`);
+                router.push(`/product/${chef}/${value}`)
               } else {
                 // router.push(`/meal/${value}`);
               }
