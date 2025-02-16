@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $getRoot } from "lexical";
+import { $getRoot, $getSelection, $isRangeSelection } from "lexical";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BsPlus } from "react-icons/bs";
 import { $createImageNode } from "./image-node";
@@ -19,13 +19,15 @@ export const ImagePlugin = () => {
       return;
     }
     editor.update(() => {
-      const root = $getRoot();
-      const imageNode = $createImageNode(
-        image.url,
-        image.altText,
-        image.height
-      );
-      root.append(imageNode);
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        const imageNode = $createImageNode(
+          image.url,
+          image.altText,
+          image.height
+        );
+        selection.insertNodes([imageNode]);
+      }
       setIsOpen(false);
     });
     setImage({
