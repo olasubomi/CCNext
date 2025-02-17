@@ -18,7 +18,6 @@ import {
   confirmAccount,
 } from "../../actions";
 import { GoogleLogin } from "@react-oauth/google";
-import FacebookLogin from "react-facebook-login";
 import axios, { base_url } from "../../util/Api";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -40,7 +39,7 @@ function SignUp(props) {
   const [message, setMessageState] = useState(null);
   const [status, setStatusState] = useState(null);
   const [isAgreed, setIsAgreed] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(true);
   const [showPass, setShowPassState] = useState(null);
   const [formState, setFormState] = useState({
     username: "",
@@ -70,7 +69,6 @@ function SignUp(props) {
     setOpenOTP(false)
 
   }
-  console.log("openVerified", openVerified)
   // useEffect(()=>{
   //   if(isverified){
   //     //setOpenUserVerificationSuccess(true)
@@ -167,8 +165,6 @@ function SignUp(props) {
 
 
 
-  console.log('redux', props.redux)
-
 
   async function formSubmit(e) {
     e.preventDefault();
@@ -198,6 +194,7 @@ function SignUp(props) {
       first_name,
       last_name,
       password,
+      isSubscribed
     })
     console.log("result", result)
     if (result) {
@@ -214,7 +211,6 @@ function SignUp(props) {
     // }
   }
 
-  console.log("openUserVerificationSuccess", openUserVerificationSuccess)
   return (
     <>
       <div className={styles.login}>
@@ -440,8 +436,8 @@ function SignUp(props) {
                   type="checkbox"
                   id="newsletter"
                   name="newsletter"
-                  value="isSubscribed"
-                  onChange={(e) => setIsSubscribed(e.target.value)}
+                  checked={isSubscribed}
+                  onChange={(e) => setIsSubscribed(prev => !prev)}
                 />
 
                 <label
@@ -467,25 +463,7 @@ function SignUp(props) {
 
                 <div className={styles.flex}>
                   <div>
-                    {
-                      <FacebookLogin
-                        appId={process.env.FB_APP_ID}
-                        autoLoad={true}
-                        fields="name,email,picture"
-                        cssClass={styles.blue}
-                        // callback={responseFacebook}
-                        render={(renderProps) => (
-                          <button
-                            className={styles.blue}
-                            onClick={() => {
-                              renderProps.onClick();
-                            }}
-                          >
-                            This is my custom FB button
-                          </button>
-                        )}
-                      />
-                    }
+                    
                   </div>
                   <div>
                     <GoogleLogin
