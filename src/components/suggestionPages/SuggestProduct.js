@@ -1201,11 +1201,7 @@ class SuggestProductForm extends Component {
       data: suggestProductForm,
       url: url,
       headers: {
-        // 'application/json' is the modern content-type for JSON, but some
-        // older servers may use 'text/json'.
-        // See: http://bit.ly/text-json
-        // application/x-www-form-urlencoded
-        // 'content-type': 'multipart/form-data'
+        "Content-Type": "multipart/formdata"
       },
     };
     axios(config)
