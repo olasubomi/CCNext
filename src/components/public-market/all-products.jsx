@@ -10,6 +10,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { useDispatch } from "react-redux";
 import { MobileSearch } from "../dropdown/mobile-search";
+import { ProductSearch } from "../dropdown/product-search";
 
 export const AllProducts = () => {
   const alphabets = [
@@ -252,7 +253,7 @@ export const AllProducts = () => {
           </div>
         </div>
         <div className={styles.searchbar}>
-          <MobileSearch setShowDropdown={setShowDropdown} />
+          <ProductSearch setShowDropdown={setShowDropdown} />
         </div>
         <div className={styles.alphabetContainer}>
           <div className={styles.alphabetContainer2}>

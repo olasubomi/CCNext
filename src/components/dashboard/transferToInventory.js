@@ -306,7 +306,7 @@ export default function TransferToInventory(props) {
         <div className={styles.transToIn_container}>
           <div className={styles.transToIn}>
             <div className={styles.transToIn_top}>
-              <h2>Transfer {" " + item_type + " "} to Inventory</h2>
+              <h2>Transfer {" " + props?.meal?.item_type + " "} to Inventory</h2>
 
               <div onClick={props.toggleTransferToInventory}>
                 <CancelIcon className={styles.transToIn_cancel_con} />

@@ -37,27 +37,28 @@ console.log("props", props)
 console.log(router.query, "this meal")
 const getMeal = async (name) => {
     try {
+
         const selectedItemId = localStorage.getItem('selectedItemId');
 
-        if (selectedItemId) {
-            let meal = await axios.get(`/items/user/${name}?_id=${selectedItemId}`);
-            console.log(meal, "meals");
-            console.log(meal.data.data.meal, "get props");
+        let meal = await axios.get(`/items/user/${name}`, {
+            params: selectedItemId ? { _id: selectedItemId } : {}
+        });
 
-            setProps(meal.data.data[0] || {});
-        } else {
-            console.error('No selected item ID found in localStorage');
-        }
+
+        setProps(meal.data.data?.[0] || {});
     } catch (error) {
-        console.error('Error fetching meal data:', error);
+        console.error("Error fetching meal:", error);
     }
 };
 
+
 useEffect(() => {
     if (router.query?.name) {
+        console.log("Fetching meal:", router.query.name);
         getMeal(router.query.name);
     }
 }, [router.query?.name]);
+
 
 
 useEffect(() => {

@@ -218,9 +218,9 @@ function Header(props) {
               </div> */}
             </div>
             <div className={styles.navbar_top_details}>
-              <div className={styles.searchIcon}>
+              {/* <div className={styles.searchIcon}>
                 <IoSearchOutline color="rgba(244, 121, 0, 1)" size={20} />
-              </div>
+              </div> */}
               {!props.auth.isAuthenticated && authUser === null ? (
                 <Link legacyBehavior href="/login">
                   <a className={styles.navbar_user_loginbtn}>Log In/Register</a>
