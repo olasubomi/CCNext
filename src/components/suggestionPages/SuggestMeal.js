@@ -533,9 +533,9 @@ class SuggestMealForm extends Component {
     let doc = document.querySelector("#formmeal");
     console.log(doc, "doc", this.state);
     if (doc) {
-      localStorage.removeItem("suggestMealForm_");
+      localStorage.removeItem("suggestMealFormx_");
 
-      localStorage.setItem("suggestMealForm_", JSON.stringify(this.state));
+      localStorage.setItem("suggestMealFormx_", JSON.stringify(this.state));
     }
   }
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -1375,22 +1375,19 @@ class SuggestMealForm extends Component {
       );
     }
 
-    if (chunk1Content && typeof chunk1Content !== "string") {
-      suggestMealForm.append("image_or_video_content_1", chunk1Content);
-    }
-    if (chunk2Content && typeof chunk2Content !== "string") {
+    if (chunk2Content && typeof chunk2Content !== "") {
       suggestMealForm.append("image_or_video_content_2", chunk2Content);
     }
-    if (chunk3Content && typeof chunk3Content !== "string") {
+    if (chunk3Content && typeof chunk3Content !== "") {
       suggestMealForm.append("image_or_video_content_3", chunk3Content);
     }
-    if (chunk4Content && typeof chunk4Content !== "string") {
+    if (chunk4Content && typeof chunk4Content !== "") {
       suggestMealForm.append("image_or_video_content_4", chunk4Content);
     }
-    if (chunk5Content && typeof chunk5Content !== "string") {
+    if (chunk5Content && typeof chunk5Content !== "") {
       suggestMealForm.append("image_or_video_content_5", chunk5Content);
     }
-    if (chunk6Content && typeof chunk6Content !== "string") {
+    if (chunk6Content && typeof chunk6Content !== "") {
       suggestMealForm.append("image_or_video_content_6", chunk6Content);
     }
 
@@ -1481,16 +1478,10 @@ class SuggestMealForm extends Component {
       },
     };
 
-
-    const config = {
-      method: "POST",
-      data: suggestMealForm,
-      url: url,
-      headers: {
-
-      },
-    };
-
+    console.log(chunk1Content, 'chunk1Contentchunk1Content')
+    if (chunk1Content && typeof chunk1Content !== "") {
+      suggestMealForm.append("image_or_video_content_1", chunk1Content);
+    }
     const capitalizedSuggestedCategories = suggestedCategories?.map((ele) =>
       this.capitalizeWords(ele)
     );
@@ -1498,6 +1489,17 @@ class SuggestMealForm extends Component {
       "item_categories",
       JSON.stringify(capitalizedSuggestedCategories)
     );
+    const config = {
+      method: "POST",
+      data: suggestMealForm,
+      url: url,
+      headers: {
+        "Content-Type": "multipart/formdata"
+      },
+    };
+
+
+
 
     await axios(config)
       .then((response) => {
@@ -2506,7 +2508,7 @@ class SuggestMealForm extends Component {
               </div>
 
               {stepInputs?.map((id, index) => {
-                console.log(stepInputs, )
+                console.log(stepInputs,)
                 return (
                   <div key={index} className={styles.suggestion_recipe_step} style={{ marginTop: '2rem' }}>
                     <div className={styles.suggestion_form_group}>
@@ -2579,7 +2581,7 @@ class SuggestMealForm extends Component {
                       <img
                         src={"chunk" + id + "Content"}
                         id={"chunk" + id + "Image"}
-                      height="100%"
+                        height="100%"
                         width="100%"
                         className={styles.suggestion_image}
                         alt={"recipe_step" + id + "_image_or_video"}
