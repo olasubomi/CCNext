@@ -19,7 +19,7 @@ const Footer = ({
     try {
       const response = await axios("/user/news-letter", {
         method: "post",
-        data: { email }
+        data: { email: email.toLowerCase() }
       })
       toast.success(
         response.data?.data || "Successfully subscribed to our newsletter"
