@@ -165,6 +165,7 @@ class SuggestProductForm extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
+    console.log("State file_", this.state.image)
     console.log("nutritional-strings=-=-=-", this.state);
     console.log(this.state.ingredientGroupList, "ingredientGroupList");
     // get all product Names***
@@ -1043,18 +1044,21 @@ class SuggestProductForm extends Component {
     let suggestProductForm = new FormData();
     suggestProductForm.append("item_name", productName);
     console.log(productImage1, productImage2, productImage3, productImage4, 'product image 1SßßS')
-    if (productImage1) {
-      suggestProductForm.append("item_images", productImage1);
-    }
-    if (productImage2) {
-      suggestProductForm.append("item_images", productImage2);
-    }
-    if (productImage3) {
-      suggestProductForm.append("item_images", productImage3);
-    }
-    if (productImage4) {
-      suggestProductForm.append("item_images", productImage4);
-    }
+    // if (productImage1) {
+    //   suggestProductForm.append("item_images", productImage1);
+    // }
+    // if (productImage2) {
+    //   suggestProductForm.append("item_images", productImage2);
+    // }
+    // if (productImage3) {
+    //   suggestProductForm.append("item_images", productImage3);
+    // }
+    // if (productImage4) {
+    //   suggestProductForm.append("item_images", productImage4);
+    // }
+    this.state.image.file.map((image) => {
+      suggestProductForm.append("item_images", image);
+    })
 
     if (!productImage1 && !productImage2 && !productImage3 && !productImage4) {
       const img = await fetch(
