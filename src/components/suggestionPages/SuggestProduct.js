@@ -1167,6 +1167,9 @@ class SuggestProductForm extends Component {
       method: "POST",
       data: suggestProductForm,
       url: url,
+      headers: {
+        "Content-Type": "multipart/formdata"
+      },
     };
 
     axios(config)

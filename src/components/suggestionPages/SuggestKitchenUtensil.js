@@ -655,7 +655,7 @@ class SuggestKitchenUtensilForm extends Component {
         // older servers may use 'text/json'.
         // See: http://bit.ly/text-json
         // application/x-www-form-urlencoded
-        // 'content-type': 'multipart/form-data'
+        "Content-Type": "multipart/formdata"
       },
     };
 
