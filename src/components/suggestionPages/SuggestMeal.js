@@ -1487,7 +1487,7 @@ class SuggestMealForm extends Component {
       data: suggestMealForm,
       url: url,
       headers: {
-
+        "Content-Type": "multipart/formdata"
       },
     };
 

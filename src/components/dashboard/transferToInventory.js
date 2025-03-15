@@ -94,6 +94,8 @@ export default function TransferToInventory(props) {
     estimated_preparation_time: 0,
     item_type: "Meal",
     in_stock: true,
+    meal_type: "non packaged",
+    storeId: [],
   });
   const { reloadData } = props;
 
@@ -222,13 +224,36 @@ export default function TransferToInventory(props) {
     }
   }, [props]);
   const [allStores, setAllStores] = useState([]);
-  const getSelectedStoreCurrencySymbol = () => {
-    const selectedStoreObj = allStores.find(
-      (store) => store._id === formState.storeId
-    );
-
-    return selectedStoreObj?.currency?.symbol || "$"; // Default to '$' if not found
+  const getSelectedStore = () => {
+    return allStores.find((store) => store._id === formState.storeId) || null;
   };
+
+  const getSelectedStoreCurrencySymbol = () => {
+    if (!formState.storeId?.length || !allStores.length) return "$";
+  
+    const selectedStoreObj = allStores.find((store) =>
+      formState.storeId.includes(store._id)
+    );
+  
+    return selectedStoreObj?.currency?.symbol || "$";
+  };
+  // const getSelectedStoreCurrencySymbol = () => {
+  //   if (!formState.storeId?.length || !allStores.length) return ["$"]; // Default
+  
+  //   const selectedStores = allStores.filter((store) =>
+  //     formState.storeId.includes(store._id)
+  //   );
+  
+  //   // Extract unique currency symbols
+  //   const uniqueCurrencies = [
+  //     ...new Set(selectedStores.map((store) => store.currency.symbol)),
+  //   ];
+  
+  //   return uniqueCurrencies;
+  // };
+  
+  
+
   const fetchOneUserStore = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"))?._id;
@@ -238,23 +263,28 @@ export default function TransferToInventory(props) {
           "Content-Type": "application/json",
         },
       });
+      console.log(response.data.data, 'store pe')
       setAllStores(response.data.data);
       setCurrency(response.data.data);
     } catch (error) {
       console.log(error);
     }
   };
+  // useEffect(() => {
+  //   fetchOneUserStore();
+  // }, []);
+  // if (in_stock) {
+  // } else {
+  // }
   useEffect(() => {
     fetchOneUserStore();
   }, []);
-  if (in_stock) {
-  } else {
-  }
 
   const storeOptions = allStores?.map((elem) => ({
     value: elem?._id,
     label: elem?.store_name,
   }));
+  console.log(allStores, 'alll')
 
   return (
     <>
@@ -306,7 +336,7 @@ export default function TransferToInventory(props) {
         <div className={styles.transToIn_container}>
           <div className={styles.transToIn}>
             <div className={styles.transToIn_top}>
-              <h2>Transfer {" " + props?.meal?.item_type + " "} to Inventory</h2>
+              <h2>Transfer {" " + props?.meal?.item_name + " "} to Inventory</h2>
 
               <div onClick={props.toggleTransferToInventory}>
                 <CancelIcon className={styles.transToIn_cancel_con} />
@@ -332,31 +362,31 @@ export default function TransferToInventory(props) {
                 <div className={styles.dropdown}>
                   {/* <button className={styles.dropdownButton}>Select Stores</button> */}
                   <div>
-                    {allStores?.map((store) => (
+                    {allStores.map((store) => (
                       <label key={store._id} style={{ marginLeft: "1rem" }}>
                         <input
                           style={{ marginRight: ".5rem" }}
                           type="checkbox"
                           value={store._id}
-                          checked={
-                            formState.storeId?.includes(store._id) || false
-                          }
+                          checked={formState.storeId?.includes(store._id) || false}
                           onChange={(e) => {
                             const storeIds = formState.storeId || [];
                             const selectedValues = e.target.checked
-                              ? [...storeIds, e.target.value]
-                              : storeIds.filter((id) => id !== e.target.value);
+                              ? [...storeIds, e.target.value] // Add store
+                              : storeIds.filter((id) => id !== e.target.value); // Remove store
 
-                            setFormState({
-                              ...formState,
+                            console.log(selectedValues, "selected stores");
+
+                            setFormState((prev) => ({
+                              ...prev,
                               storeId: selectedValues,
-                            });
-                            setSelectedStore(selectedValues);
+                            }));
                           }}
                         />
                         {store.store_name}
                       </label>
                     ))}
+
                   </div>
                 </div>
               </div>
@@ -366,6 +396,7 @@ export default function TransferToInventory(props) {
                   <div className={styles.transToIn_meal_type}>
                     <div className={styles.transToIn_meal_type_option}>
                       <input
+                        defaultChecked
                         onChange={handleChange}
                         className={styles.transToIn_meal_type_radioInput}
                         type="radio"
