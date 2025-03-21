@@ -35,7 +35,7 @@ export const Stores = () => {
     try {
       const response = await axios.get(`/inventory/get-store-inventory/${Id}`);
       setSelectedStore(response.data.data);
-      console.log(response.data.data, 'response.data.data')
+      console.log(response.data.data, "response.data.data");
       setIsShow(true);
     } catch (error) {
       console.error("Error fetching store inventory:", error);
@@ -44,16 +44,20 @@ export const Stores = () => {
 
   const fetchStores = async (page) => {
     try {
-      const response = await axios.get(`/stores/getallstores/${page}?limit=10&status=PUBLIC`);
+      const response = await axios.get(
+        `/stores/getallstores/${page}?limit=10&status=PUBLIC`
+      );
       const allItems = response.data.data.products;
-      console.log(allItems, 'all')
+      console.log(allItems, "all");
       const totalItems = response.data.data.count;
 
       const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
 
       if (newItems.length > 0) {
         setStores((prev) => [...prev, ...newItems]);
-        setUniqueItemIds((prev) => new Set([...prev, ...newItems.map((item) => item._id)]));
+        setUniqueItemIds(
+          (prev) => new Set([...prev, ...newItems.map((item) => item._id)])
+        );
       }
 
       const totalPages = Math.ceil(totalItems / 10);
@@ -65,8 +69,18 @@ export const Stores = () => {
     }
   };
 
+  const fetchInventories = async () => {
+    try {
+      const response = await axios.get("/inventory/get-all-inentories/1");
+      setStores(response.data.data.inventory);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    fetchStores(currentPage);
+    fetchInventories();
+    // fetchStores(currentPage);
   }, [currentPage]);
 
   useEffect(() => {
@@ -110,7 +124,10 @@ export const Stores = () => {
                 }}
               >
                 <Image
-                  src={store?.profile_picture || "/assets/store_pics/no-image-store.png"}
+                  src={
+                    store?.profile_picture ||
+                    "/assets/store_pics/no-image-store.png"
+                  }
                   className={styles.storeImg}
                   width={200}
                   height={200}
@@ -139,10 +156,7 @@ export const Stores = () => {
         ))}
       </div>
 
-      <p
-        className={styles.view}
-        onClick={hasMoreData ? handleLoadMore : null}
-      >
+      <p className={styles.view} onClick={hasMoreData ? handleLoadMore : null}>
         {hasMoreData ? "View More" : "View More"}
       </p>
       <div className={styles.border} />
