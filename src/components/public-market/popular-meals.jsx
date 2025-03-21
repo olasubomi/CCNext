@@ -133,6 +133,7 @@ export const PopularMeals = () => {
     setCurrentPage(currentPage + 1);
     await fetchMeals(currentPage + 1);
   };
+  console.log(meals, "Meals")
   useEffect(() => {
     fetchMeals();
   }, [currentPage]);
