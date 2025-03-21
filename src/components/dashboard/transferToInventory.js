@@ -96,31 +96,76 @@ export default function TransferToInventory(props) {
     in_stock: true,
     meal_type: "non packaged",
     storeId: [],
+    meal_prices: {},
+    meal_price: ""
   });
   const { reloadData } = props;
 
   const { ingredientsAvailable, item_type, in_stock } = formState;
 
+  // function handleChange(e) {
+  //   const { name, value } = e.target;
+  //   if (name === "meal_type") {
+  //     if (value === "packaged") {
+  //       setFormState({
+  //         ...formState,
+  //         [name]: value,
+  //         ["prepackagedMeal"]: true,
+  //       });
+  //     } else {
+  //       setFormState({
+  //         ...formState,
+  //         [name]: value,
+  //         ["prepackagedMeal"]: false,
+  //       });
+  //     }
+  //   } else {
+  //     setFormState({ ...formState, [name]: value });
+  //   }
+  // }
   function handleChange(e) {
     const { name, value } = e.target;
+
     if (name === "meal_type") {
-      if (value === "packaged") {
-        setFormState({
-          ...formState,
-          [name]: value,
-          ["prepackagedMeal"]: true,
-        });
-      } else {
-        setFormState({
-          ...formState,
-          [name]: value,
-          ["prepackagedMeal"]: false,
-        });
-      }
-    } else {
-      setFormState({ ...formState, [name]: value });
+      setFormState((prev) => ({
+        ...prev,
+        [name]: value,
+        prepackagedMeal: value === "packaged",
+      }));
+      return;
     }
+
+    if (name.startsWith("price_")) {
+      const currencySymbol = name.split("price_")[1];
+      const parsed = parseFloat(value);
+
+      setFormState((prev) => {
+        const updatedPrices = {
+          ...prev.meal_prices,
+          [currencySymbol]: isNaN(parsed) ? "" : parsed,
+        };
+
+        const firstStore = allStores.find((s) => s._id === prev.storeId[0]);
+        const defaultCurrency = firstStore?.currency?.symbol || "$";
+        const defaultPrice = updatedPrices[defaultCurrency] ?? "";
+
+        return {
+          ...prev,
+          meal_prices: updatedPrices,
+          meal_price: defaultPrice,
+        };
+      });
+
+      return;
+    }
+
+    // Default handler
+    setFormState((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   }
+
 
   function handleInStockChange(value) {
     setFormState({ ...formState, in_stock: value });
@@ -154,31 +199,54 @@ export default function TransferToInventory(props) {
   }
 
   function sendToInventory() {
-    let fields = formState;
-    if (!fields["meal_price"] || fields["meal_price"] == 0) {
+    const fields = { ...formState };
+
+    if (!prices || Object.keys(prices).length === 0) {
       toast.error(`Meal price cannot be empty!`);
+      return;
     }
+
+    const selectedStores = allStores.filter((store) =>
+      formState.storeId.includes(store._id)
+    );
+
+    const meal_price = selectedStores.map((store) => {
+      const symbol = store.currency?.symbol;
+      return {
+        store_id: store._id,
+        currency: symbol,
+        price: Number(prices[symbol]) || 0,
+      };
+    });
+
+    const hasEmptyPrice = meal_price.some((item) => item.price === 0);
+    if (hasEmptyPrice) {
+      toast.error("Meal price cannot be empty for selected stores!");
+      return;
+    }
+
     delete fields.meal_type;
     fields["item"] = props.meal._id;
     fields.ingredients = formState.ingredientsAvailable;
-    delete formState.ingredientsAvailable;
+    delete fields.ingredientsAvailable;
     fields.user = JSON.parse(localStorage.getItem("user"))?._id ?? "";
+
+    // Replace with structured meal_price array
+    fields["meal_price"] = meal_price;
+
     axios
       .post("/inventory/create-inventory", fields)
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           props.setTransferToInventoryState(false);
           setShow(true);
-          setTimeout(() => {
-            setShow(false);
-          }, 4000);
+          setTimeout(() => setShow(false), 4000);
           setMessage({
             response:
-              "Your request has been sent to the administrator; you will be notified when it is approved or rejected. It might take up to 2-3 hours, so please be patient.",
+              "Your request has been sent to the administrator; you will be notified when it is approved or rejected. It might take up to 2–3 hours, so please be patient.",
             success: true,
           });
           reloadData();
-          // window.location.href = "/SuggestMeal"
         } else {
           setMessage("Something wrong happened");
         }
@@ -186,9 +254,7 @@ export default function TransferToInventory(props) {
       .catch((error) => {
         props.setTransferToInventoryState(false);
         setShow(true);
-        setTimeout(() => {
-          setShow(false);
-        }, 4000);
+        setTimeout(() => setShow(false), 4000);
         setMessage({
           response:
             "Your request cannot be completed as Item is already in Inventory",
@@ -197,6 +263,7 @@ export default function TransferToInventory(props) {
         console.log(error);
       });
   }
+
 
   function handleRestockTimeChange(type) {
     setRestockTime(type);
@@ -230,29 +297,51 @@ export default function TransferToInventory(props) {
 
   const getSelectedStoreCurrencySymbol = () => {
     if (!formState.storeId?.length || !allStores.length) return "$";
-  
+
     const selectedStoreObj = allStores.find((store) =>
       formState.storeId.includes(store._id)
     );
-  
+
     return selectedStoreObj?.currency?.symbol || "$";
   };
   // const getSelectedStoreCurrencySymbol = () => {
   //   if (!formState.storeId?.length || !allStores.length) return ["$"]; // Default
-  
+
   //   const selectedStores = allStores.filter((store) =>
   //     formState.storeId.includes(store._id)
   //   );
-  
+
   //   // Extract unique currency symbols
   //   const uniqueCurrencies = [
   //     ...new Set(selectedStores.map((store) => store.currency.symbol)),
   //   ];
-  
+
   //   return uniqueCurrencies;
   // };
-  
-  
+
+  const getUniqueCurrencies = () => {
+    if (!allStores.length || !formState.storeId.length) {
+      return [{ symbol: "$", name: "USD" }];
+    }
+
+    const selectedStores = allStores.filter((store) =>
+      formState.storeId.includes(store._id)
+    );
+    const currencyMap = new Map();
+
+    selectedStores.forEach((store) => {
+      if (store.currency?.symbol) {
+        currencyMap.set(store.currency.symbol, store.currency);
+      }
+    });
+
+    const uniqueCurrencies = Array.from(currencyMap.values());
+
+    return uniqueCurrencies.length ? uniqueCurrencies : [{ symbol: "$", name: "USD" }];
+  };
+
+
+  const [prices, setPrices] = useState({});
 
   const fetchOneUserStore = async () => {
     try {
@@ -285,7 +374,17 @@ export default function TransferToInventory(props) {
     label: elem?.store_name,
   }));
   console.log(allStores, 'alll')
-
+  // useEffect(() => {
+  //   const defaultCurrencies = getUniqueCurrencies();
+  //   const initialPrices = {};
+  
+  //   defaultCurrencies.forEach((currency) => {
+  //     initialPrices[currency.symbol] = "";
+  //   });
+  
+  //   setPrices(initialPrices);
+  // }, [formState.storeId]);
+  
   return (
     <>
       {show && (
@@ -497,13 +596,24 @@ export default function TransferToInventory(props) {
 
               <div className={styles.transToIn_details_col2}>
                 <div>
-                  <h3>Set {" " + props?.meal?.item_type + " "} Price</h3>
-                  <div>
-                    <p>Enter {props?.meal?.item_type}  Price</p>
-                    <h4>{getSelectedStoreCurrencySymbol()}</h4>
+                  <h3>Set {props?.meal?.item_type} Price</h3>
+                  {getUniqueCurrencies().map((currency) => (
+                    <div key={currency.symbol} style={{ marginBottom: "1rem" }}>
+                      <label>
+                        Enter Price {currency.symbol}
+                      </label>
+                      <input
+                        value={prices[currency.symbol] || ""}
+                        onChange={(e) =>
+                          setPrices((prev) => ({
+                            ...prev,
+                            [currency.symbol]: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  ))}
 
-                    <input onChange={handleChange} name="meal_price" />
-                  </div>
                 </div>
                 <div>
                   <h3>Set Estimated preparation time</h3>

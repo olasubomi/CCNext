@@ -111,6 +111,8 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 const Management = () => {
   const router = useRouter();
   const { id, storeId } = router.query;
+  console.log('Store ID from query:', storeId);
+
   const [active, setActive] = useState(1);
   const [user, setUser] = useState({});
   const [showCategory, setShowCategory] = useState(false);
@@ -266,16 +268,17 @@ const Management = () => {
           label: element.item?.item_name,
           value: element._id,
           image: element?.item?.itemImage0,
-          price: element?.item?.item_price
-            ? `${element?.item?.item_price}`
-            : "No Price",
+          price: element?.meal_price?.find(
+            (priceObj) => priceObj?.store_id?.toString() === storeId?.toString()
+          )?.price || 0,
           stores: element?.storeId?.map((store) => store._id) || ["No store"],
           item_type: element?.item_type,
-          currency: element.storeId?.[0]?.currency?.symbol || "$",
+          currency: element?.meal_price?.find(
+            (priceObj) => priceObj?.store_id?.toString() === storeId?.toString()
+          )?.currency,
           item_id: element?.item?._id,
         };
       });
-      
       console.log(resp, 'rep')
       setUserInventory(resp);
       setFilteredMeals(
