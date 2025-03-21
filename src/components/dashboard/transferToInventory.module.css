@@ -76,7 +76,7 @@
 }
 
 .transToIn {
-  width: 70%;
+  width: 80%;
   height: 90%;
   margin: auto;
   background: #ffffff;
@@ -116,25 +116,22 @@
   padding-top: 2rem;
 }
 .transToIn_top {
-  display: grid;
-  grid-auto-flow: column;
-  /* width: max-content; */
+  display: flex;
   justify-content: space-between;
-  /* grid-template-rows: 3rem; */
-  grid-template-columns: 1fr 4rem;
-  grid-template-columns: max-content max-content;
-  align-items: center;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 12px 3rem;
+ height: 55px;
+ padding-left: 2rem;
+ padding-right: 2rem;
 }
 
 .transToIn_top > h2 {
   margin: 0;
   font-style: normal;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 22px;
+  font-family: 'Inter';
 
   color: #000000;
 }
@@ -151,9 +148,9 @@
   display: grid;
   grid-gap: 1rem;
   /* border-bottom: 1px solid rgba(0, 0, 0, 0.2); */
-  align-content: start;
-  width: 80%;
-  margin: auto;
+  width: auto;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 .transToIn_meal_types > p {
@@ -329,27 +326,27 @@
 }
 
 .transToIn_details_col3 {
-  display: grid;
-  grid-gap: 4rem;
-  grid-template-columns: 1fr 1fr;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   padding: 2rem 0;
+  display: flex;
+  justify-content: space-between;
 }
 
 .transToIn_details_col3 > div {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 500px;
+  width: 47%;
 }
 
 .transToIn_details_col3 > div > h3 {
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14.5px;
   line-height: 19px;
+  font-family: 'Inter';
 
-  color: #6d6d6d;
+  color: #000000;
   margin: 0;
 }
 
@@ -471,7 +468,7 @@
   display: flex;
   gap: 1.5rem;
   justify-content: flex-end;
-  padding: 0 2rem;
+  padding: 2rem 2rem;
 }
 
 .transToIn_footer_button {

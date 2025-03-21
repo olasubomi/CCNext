@@ -966,14 +966,7 @@ class SuggestProductForm extends Component {
       return;
     }
 
-    // Handle instruction/product images to create url for product images on server
-    /*Loop through Ingredients product data
-    Check if all products listed exist in the database.
-    If not, let server create placeholder before submitting to db.
-    Get list of new products and new Categories
-    This for loop is making sure we are building a product_slider.
-    we could probably merge this in the above for loop easily, but we want to call this path function,
-    so lets figure out what its even doing!*/
+    console.log("Debugging ingredientGroupList:", ingredientGroupList);
 
     const all_ingredients_formatted = [];
     const product_slider = [];
@@ -981,6 +974,8 @@ class SuggestProductForm extends Component {
 
     let new_measurements = [];
     for (i = 0; i < ingredientGroupList.length; i++) {
+      console.log(`Processing ingredientGroupList[${i}]:`, ingredientGroupList[i]);
+
       const productString = ingredientGroupList[i].productName;
       const productWords = productString?.split(" ");
 
@@ -990,10 +985,7 @@ class SuggestProductForm extends Component {
         })
         .join(" ");
 
-      // store ingredient format to submit ingredient product objects
       var tmp_ingredient = {
-        // name and optional image added to new product,
-        // we can add remainder products data after testing current
         productName: productWords,
         quantity: ingredientGroupList[i].quantity,
         measurement: ingredientGroupList[i].measurement,
@@ -1003,17 +995,15 @@ class SuggestProductForm extends Component {
       };
 
       all_ingredients_formatted.push(tmp_ingredient);
-      console.log(tmp_ingredient);
+      console.log("Formatted Ingredient:", tmp_ingredient);
 
       const tmp_slider_data = {
         ingredient: ingredientGroupList[i].product,
         image: ingredientGroupList[i].productImgPath,
         display: ingredientGroupList[i].display,
       };
-      // store product slider format to submit slider object to product
       product_slider.push(tmp_slider_data);
 
-      // get new_Measurements from inputted ingredient packets
       if (ingredientGroupList[i].measurement !== "") {
         let index = this.measurements.indexOf(
           ingredientGroupList[i].measurement
@@ -1023,24 +1013,15 @@ class SuggestProductForm extends Component {
       }
     }
 
-    //prepare product data to Mongo and Recipe Steps Images and Video content to s3
     const instructionGroupData = [];
     const contentNameToContentImageOrVideoMapForS3 = new FormData();
-    console.log("product name:");
-    console.log(this.state.productName);
-
-    contentNameToContentImageOrVideoMapForS3.append(
-      "productContentName",
-      this.state.productName
-    );
+    console.log("product name:", this.state.productName);
     console.log(contentNameToContentImageOrVideoMapForS3);
+
     var keyValueData = { productContentName: this.state.productName };
-    // console.log("Stringified version:");
-    // console.log(keyValueData);
     var singleTitleTest = JSON.stringify(keyValueData);
     console.log(singleTitleTest);
 
-    //-------------Submit remainder data of product to Mongo ------------------------------------------
     let suggestProductForm = new FormData();
     suggestProductForm.append("item_name", productName);
     console.log(productImage1, productImage2, productImage3, productImage4, 'product image 1SßßS')
@@ -1068,14 +1049,9 @@ class SuggestProductForm extends Component {
       suggestProductForm.append("item_images", blob);
     }
 
-    // suggestProductForm.append('product_images', productImage2);
-    // suggestProductForm.append('product_images', productImage3);
-    // suggestProductForm.append('product_images', productImage4);
-    // suggestProductForm.append('productImageName', productImageName);
     suggestProductForm.append("item_intro", productDescription);
     descriptionGroupList.map((individualDescriptions) => {
       console.log(individualDescriptions);
-      // suggestProductForm.append('product_descriptions', individualDescriptions);
     });
     console.log(
       nutritionalStrings,
@@ -1083,6 +1059,7 @@ class SuggestProductForm extends Component {
       ingredientStrings,
       "pppr"
     );
+
     const arr = nutritionalStrings.map((ele) => {
       let obj = {};
       let information = ele.split(":")[0]?.trim()?.toLowerCase();
@@ -1098,6 +1075,8 @@ class SuggestProductForm extends Component {
       return obj;
     });
 
+    console.log("Parsed nutritional data:", arr);
+
     const productObject = {
       product_size: sizeStrings,
       product_name: productName,
@@ -1108,7 +1087,6 @@ class SuggestProductForm extends Component {
     if (arr.length) {
       for (let ele of arr) {
         for (let val in ele) {
-          // productObject[val] = ele[val];
           description[val] = ele[val];
         }
       }
@@ -1122,12 +1100,28 @@ class SuggestProductForm extends Component {
       return str.replace(/\b\w/g, (match) => match.toUpperCase());
     };
 
+    console.log("Description object before processing:", description);
+
     for (let ele of Object.keys(description)) {
-      console.log(description[ele], description, 'description_')
+      console.log(`Processing description[${ele}]:`, description[ele]);
+
+      let matchedNumbers = description[ele]?.match(/\d+/);
+      let matchedText = description[ele]?.match(/[a-zA-Z]+/);
+
+      console.log("Matched Numbers:", matchedNumbers);
+      console.log("Matched Text:", matchedText);
+
+      if (!matchedNumbers) {
+        console.error(`Error: description[${ele}] does not contain numbers`);
+      }
+      if (!matchedText) {
+        console.error(`Error: description[${ele}] does not contain text`);
+      }
+
       arr2.push({
         object_name: ele,
-        object_quantity: description[ele].match(/\d+/)[0],
-        object_measurement: description[ele].match(/[a-zA-Z]+/)[0],
+        object_quantity: matchedNumbers ? matchedNumbers[0] : "N/A",
+        object_measurement: matchedText ? matchedText[0] : "N/A",
         formatted_string: `${ele
           .split("_")
           .map(capitalizeFirstLetter)
@@ -1136,7 +1130,6 @@ class SuggestProductForm extends Component {
     }
 
     suggestProductForm.append("item_data", JSON.stringify(productObject));
-
     suggestProductForm.append("description", JSON.stringify(arr2));
 
     let arr_1 = [];
@@ -1155,47 +1148,21 @@ class SuggestProductForm extends Component {
     suggestProductForm.append("formatted_ingredients", JSON.stringify(arr_1));
     console.log(ingredientStrings, "nfnn");
 
-    // suggestProductForm.append("store_available", '63d426b416b83177aaeaed96');
     suggestProductForm.append("item_type", this.props.suggestionType);
     suggestProductForm.append(
       "user",
       JSON.parse(localStorage.getItem("user"))?._id
     );
-    // list of products quantity measurements (created on submit Product)
-    // suggestProductForm.append('ingredientsQuantityMeasurements', JSON.stringify(this.ingredientsQuantityMeasurements));
-    // suggestProductForm.append('new_measurements', JSON.stringify(new_measurements));
-
-    // suggestProductForm.append('product_slider', JSON.stringify(product_slider));
-    // suggestProductForm.append('formatted_ingredient', JSON.stringify(all_ingredients_formatted));
-    all_ingredients_formatted.map((individualIngredients) => {
-      console.log(individualIngredients);
-      // suggestProductForm.append('hidden_ingredients_in_product', JSON.stringify(individualIngredients));
-    });
-    // new suggested products
-    // suggestProductForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
 
     suggestProductForm.append(
       "item_categories",
       JSON.stringify(suggestedCategories)
     );
 
-    // suggestedCategories.map(data => {
-    //   suggestProductForm.append("item_categories", JSON.stringify(suggestedCategories));
-    // })
-
-    // suggestProductForm.append('product_type', JSON.stringify("Ingredient"));
-    // suggestProductForm.append('publicly_available', JSON.stringify("Draft"));
-
-    //---------------------------------------------Submit Product to Mongo---------------------------------------------------
-    // var url = "/createProduct/";
-    // var url = "http://localhost:5000/api/products/create/";
     var url = `${base_url}/items/`;
 
     console.log("Printing Chunk Contents");
 
-    var instructionData = JSON.parse(JSON.stringify(instructionGroupData));
-
-    console.log(this.props.router, "this.props.router");
     if (this.props.router?.query?.id) {
       url = url + `?action=update&_id=${this.props.router.query.id}`;
     }
@@ -1208,23 +1175,23 @@ class SuggestProductForm extends Component {
         "Content-Type": "multipart/formdata"
       },
     };
+
     axios(config)
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
-          console.log(response);
-          console.log("Display Product submitted successfully");
-          // window.location.href = "/SuggestProduct"
-          toast.success("Product submitted sucessfully");
+          console.log("Product submitted successfully", response);
+          toast.success("Product submitted successfully");
         } else {
-          console.log("Something wrong happened ");
+          console.log("Something wrong happened");
         }
       })
       .catch((error) => {
         toast.error(error.message);
-        console.log(error.message);
+        console.log("Error submitting product:", error.message);
       });
   };
+
 
   async preprocessImage() {
     try {
