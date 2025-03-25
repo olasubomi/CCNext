@@ -12,6 +12,7 @@ import { Element, scroller } from "react-scroll";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { BiSolidDownArrow } from "react-icons/bi";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
@@ -24,7 +25,9 @@ export const PopularMeals = () => {
   const [quantity, setQuantity] = useState(0);
   const [serve, setServe] = useState(0);
   const dispatch = useDispatch();
+  const [saleType, setSaleType] = useState(["For sale"]);
   const ref = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
   const router = useRouter();
@@ -100,30 +103,31 @@ export const PopularMeals = () => {
 
   const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
 
-  const fetchMeals = async (page) => {
+  const fetchMeals = async (page = 1, other) => {
     try {
-      const response = await axios(
-        `/items/${
-          page ? page : currentPage
-        }?type=Meal&status=Public&limit=4&average_rating=1`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios(`/items/${page ? page : currentPage}`, {
+        method: "GET",
+        params: {
+          type: "Meal",
+          state: "Public",
+          limit: 4,
+          average_rating: 1,
+          ...other,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const totalItems = response.data.data.count;
       const allItems = response.data.data.items;
 
       const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
 
-      setMeals((prev) => [...prev, ...allItems]);
+      setMeals((prev) => [...allItems]);
       setUniqueItemIds(
         new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
       );
-
-      setHasMoreData(totalItems > currentPage * 8);
+      setHasMoreData(totalItems > page * 4);
     } catch (error) {
       console.log(error);
     }
@@ -133,7 +137,6 @@ export const PopularMeals = () => {
     setCurrentPage(currentPage + 1);
     await fetchMeals(currentPage + 1);
   };
-  console.log(meals, "Meals")
   useEffect(() => {
     fetchMeals();
   }, [currentPage]);
@@ -166,15 +169,99 @@ export const PopularMeals = () => {
       });
     }
   }, []);
+
+  const handleAdd = (type) => {
+    if (saleType.includes(type)) {
+      const cp = [...saleType];
+      cp.splice(cp.indexOf(type), 1);
+      setSaleType(cp);
+    } else {
+      setSaleType((prev) => [...prev, type]);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
+  }, []);
+
   return (
     <div className={styles.mealContainer}>
-      <Element
-        id="meal"
-        name="meal"
-        style={{ fontSize: "2rem", marginBottom: "1rem" }}
-      >
-        Popular Meals
-      </Element>
+      <div className={styles.topcontainer1}>
+        <Element
+          id="store"
+          name="store"
+          style={{ fontSize: "2rem", marginBottom: "1rem" }}
+        >
+          Popular Meals
+        </Element>
+        <div className={styles.filter}>
+          <p>Filter by: {saleType.toString()}</p>
+          <BiSolidDownArrow
+            onClick={() => setIsOpen(true)}
+            color="rgba(109, 109, 109, 0.5)"
+            size={15}
+          />
+          {isOpen && (
+            <div ref={ref} className={styles.saleType}>
+              <div
+                onClick={() => handleAdd("For sale")}
+                className={styles.flexer}
+              >
+                <input
+                  checked={saleType.includes("For sale")}
+                  type="checkbox"
+                  id="for_sale"
+                />
+                <label htmlFor="for_sale">For sale</label>
+              </div>
+              <div
+                onClick={() => handleAdd("Not for sale")}
+                className={styles.flexer}
+                style={{ paddingTop: "15px" }}
+              >
+                <input
+                  type="checkbox"
+                  checked={saleType.includes("Not for sale")}
+                  id="not_for_sale"
+                />
+                <label htmlFor="not_for_sale">Not for sale</label>
+              </div>
+              <div
+                onClick={() => {
+                  setSaleType(["Show all"]);
+                }}
+                className={styles.flexer}
+                style={{ paddingTop: "15px" }}
+              >
+                <input type="checkbox" id="show_all" />
+                <label htmlFor="show_all">Show all</label>
+              </div>
+              <button
+                onClick={() => {
+                  const keys = {
+                    item_price: saleType.includes("For sale") ? 1 : 0,
+                  };
+                  if (saleType.includes("Show all")) {
+                    delete keys.item_price;
+                  }
+                  fetchMeals(1, keys);
+                }}
+                className={styles.saleBtn}
+              >
+                Apply filter
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
       <div className={styles.stores2}>
         {meals.map((meal, idx) => {
           return (
@@ -269,9 +356,11 @@ export const PopularMeals = () => {
           />
         )}
       </div>
-      <p className={styles.view} onClick={hasMoreData ? loadMore : () => {}}>
-        View More
-      </p>
+      {hasMoreData && (
+        <p className={styles.view} onClick={loadMore}>
+          View More
+        </p>
+      )}
       <div className={styles.border} />
     </div>
   );

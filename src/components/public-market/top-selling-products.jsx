@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -9,6 +9,7 @@ import { Element } from "react-scroll";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../actions";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { BiSolidDownArrow } from "react-icons/bi";
 
 export const TopSellingProducts = () => {
   const [products, setProducts] = useState([]);
@@ -20,7 +21,9 @@ export const TopSellingProducts = () => {
   const [show, setShow] = useState(false);
   const router = useRouter();
   const [quantity, setQuantity] = useState(0);
-
+  const [saleType, setSaleType] = useState(["For sale"]);
+  const ref = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
 
   //items to add
@@ -111,17 +114,20 @@ export const TopSellingProducts = () => {
 
   const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (other) => {
     try {
-      const response = await axios(
-        `/items/${currentPage}?type=Product&status=Public&limit=8`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios(`/items/${currentPage}`, {
+        method: "GET",
+        params: {
+          type: "Product",
+          status: "Public",
+          limit: 8,
+          ...other,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const totalItems = response.data.data.count;
       const allItems = response.data.data.items;
 
@@ -131,7 +137,7 @@ export const TopSellingProducts = () => {
         (item) => !uniqueItemIds.has(item._id)
       );
 
-      setProducts([...products, ...newItems]);
+      setProducts([...allItems]);
       setUniqueItemIds(
         new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
       );
@@ -180,14 +186,98 @@ export const TopSellingProducts = () => {
     }
   }, []);
 
+  const handleAdd = (type) => {
+    if (saleType.includes(type)) {
+      const cp = [...saleType];
+      cp.splice(cp.indexOf(type), 1);
+      setSaleType(cp);
+    } else {
+      setSaleType((prev) => [...prev, type]);
+    }
+
+  };
+
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
+  }, []);
+
   return (
     <div className={styles.mealContainer1}>
-      <Element
-        name="product"
-        style={{ fontSize: "2rem", marginBottom: "1rem" }}
-      >
-        Top Selling Products
-      </Element>
+      <div className={styles.topcontainer1}>
+        <Element
+          name="product"
+          style={{ fontSize: "2rem", marginBottom: "1rem" }}
+        >
+          Top Selling Products
+        </Element>
+        <div className={styles.filter}>
+          <p>Filter by: {saleType.toString()}</p>
+          <BiSolidDownArrow
+            onClick={() => setIsOpen(true)}
+            color="rgba(109, 109, 109, 0.5)"
+            size={15}
+          />
+          {isOpen && (
+            <div ref={ref} className={styles.saleType}>
+              <div
+                onClick={() => handleAdd("For sale")}
+                className={styles.flexer}
+              >
+                <input
+                  checked={saleType.includes("For sale")}
+                  type="checkbox"
+                  id="for_sale"
+                />
+                <label htmlFor="for_sale">For sale</label>
+              </div>
+              <div
+                onClick={() => handleAdd("Not for sale")}
+                className={styles.flexer}
+                style={{ paddingTop: "15px" }}
+              >
+                <input
+                  type="checkbox"
+                  checked={saleType.includes("Not for sale")}
+                  id="not_for_sale"
+                />
+                <label htmlFor="not_for_sale">Not for sale</label>
+              </div>
+              <div
+                onClick={() => {
+                  handleAdd("Show all")
+                }}
+                className={styles.flexer}
+                style={{ paddingTop: "15px" }}
+              >
+                <input type="checkbox" id="show_all" />
+                <label htmlFor="show_all">Show all</label>
+              </div>
+              <button
+                onClick={() => {
+                  const keys = {
+                    item_price: saleType.includes("For sale") ? 1 : 0,
+                  };
+                  if (saleType === "Show all") {
+                    delete keys.item_price;
+                  }
+                  fetchProducts(keys);
+                }}
+                className={styles.saleBtn}
+              >
+                Apply filter
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
       <div className={styles.stores3}>
         {products?.map((product, idx) => {
           return (

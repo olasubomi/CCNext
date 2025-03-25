@@ -7,17 +7,54 @@
   position: relative;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
+
 .marketplace {
   margin-top: 6rem;
 }
+
 .disabledspan {
   cursor: not-allowed;
   opacity: 0.4;
 }
-.searchbar{
+
+.saleType {
+  position: absolute;
+  width: 200px;
+  background-color: #fff;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  top: 50px;
+  border-radius: 10px;
+  padding: 25px;
+}
+
+.flexer {
+  display: flex;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 10px;
+  cursor: pointer;
+}
+#for_sale {
+  width: 20px;
+}
+
+.saleBtn {
+  width: 100%;
+  height: 40px;
+  margin-top: 20px;
+  background-color: #f47900;
+  color: #fff;
+  border-width: 0px;
+  outline: none;
+  border-radius: 5px;
+}
+
+.searchbar {
   width: 45%;
   margin: 5rem auto 0 auto;
 }
+
 .disabledLetter {
   color: grey;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -39,6 +76,7 @@
   font-weight: 600;
   font-family: Inter;
 }
+
 .marketplaceText {
   font-size: 14px;
   font-weight: 300;
@@ -47,11 +85,13 @@
   margin-top: 0.8rem;
   width: 60%;
 }
+
 .flexItems {
   display: flex;
   justify-content: space-between;
   gap: 0.7rem;
 }
+
 .alphabetContainer {
   display: flex;
   overflow-x: auto;
@@ -61,6 +101,7 @@
   width: 100%;
   gap: 0.5rem;
 }
+
 .alphabetContainer2 {
   display: flex;
   overflow-x: auto;
@@ -68,7 +109,7 @@
   padding: 10px 0;
   margin: 20px 0;
   width: 100%;
-justify-content: space-between;
+  justify-content: space-between;
 }
 
 .inactivespan {
@@ -99,6 +140,7 @@ justify-content: space-between;
   font-weight: 300;
   color: #ffffff;
 }
+
 .paginationContainer {
   display: flex;
   justify-content: center;
@@ -106,6 +148,7 @@ justify-content: space-between;
   margin-top: 6rem;
   gap: 1rem;
 }
+
 .activepaginationButton {
   width: 40px;
   height: 40px;
@@ -116,6 +159,7 @@ justify-content: space-between;
   justify-content: center;
   align-items: center;
 }
+
 .paginationButton2 {
   width: 40px;
   height: 40px;
@@ -125,6 +169,7 @@ justify-content: space-between;
   justify-content: center;
   align-items: center;
 }
+
 .disableButn {
   opacity: 70%;
   width: 40px;
@@ -135,23 +180,28 @@ justify-content: space-between;
   justify-content: center;
   align-items: center;
 }
+
 .storeImgContainer {
   width: 100%;
   padding: 0rem 0 4.5rem 0;
 }
+
 .storeFlex {
   display: flex;
   justify-content: center;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
+
 .storediv {
   width: 50%;
   height: 320px;
 }
+
 .storediv img {
   width: 100%;
   height: 100%;
 }
+
 .storeDetails {
   width: 50%;
   background-color: #1b5218;
@@ -159,6 +209,7 @@ justify-content: space-between;
   display: flex;
   flex-direction: column;
 }
+
 .storeDetails h3 {
   font-size: 28px;
   font-weight: 500;
@@ -166,15 +217,18 @@ justify-content: space-between;
   letter-spacing: 0.2px;
   font-family: Inter;
 }
+
 .storeDetails p {
   font-size: 15px;
   font-weight: 300;
   color: #ffffff;
   font-family: Inter;
 }
+
 .storeLocation {
   margin-top: 4rem;
 }
+
 .storeImg1 {
   width: 100%;
   height: 220px;
@@ -185,18 +239,21 @@ justify-content: space-between;
   border-radius: 8px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
+
 .topcontainer {
   display: flex;
   justify-content: space-between;
   margin-bottom: 2rem;
   align-items: center;
 }
+
 .topcontainer1 {
   display: flex;
   justify-content: space-between;
   margin-bottom: 2rem;
   align-items: center;
 }
+
 .filter {
   display: flex;
   justify-content: center;
@@ -205,12 +262,15 @@ justify-content: space-between;
   padding: 10px 10px 10px 10px;
   border-radius: 4px;
   gap: 1rem;
+  position: relative;
 }
+
 .filter p {
   font-size: 13px;
   font-family: Inter;
   font-weight: 300;
 }
+
 .card {
   width: 100%;
 }
@@ -226,6 +286,7 @@ justify-content: space-between;
 .imageContainer {
   width: 100%;
 }
+
 .storeImg2 {
   width: 100%;
   height: 174px;
@@ -258,8 +319,7 @@ justify-content: space-between;
   row-gap: 56px;
 }
 
-.card1 {
-}
+.card1 {}
 
 .box {
   width: 100%;
@@ -333,15 +393,18 @@ justify-content: space-between;
   cursor: pointer;
   margin-top: 6rem;
 }
+
 .view2 {
   text-align: center;
   font-size: 14px;
   cursor: pointer;
 }
+
 .border {
   width: 100%;
   border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
+
 .border2 {
   width: 100%;
   border-top: 1px solid rgba(0, 0, 0, 0.2);
@@ -351,10 +414,12 @@ justify-content: space-between;
   width: 100%;
   padding: 3rem 5rem;
 }
+
 .mealContain {
   width: 100%;
   padding: 0 5rem;
 }
+
 .top {
   width: 100%;
   padding: 15rem 5rem 0rem 5rem;
@@ -414,6 +479,7 @@ justify-content: space-between;
   border-radius: 8px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 }
+
 .instruction_img {
   width: 100% !important;
   object-fit: cover;
@@ -487,9 +553,11 @@ justify-content: space-between;
   padding-top: 3rem;
   border-right: 1px solid rgba(0, 0, 0, 0.2);
 }
+
 .third .adjust {
   width: 90%;
 }
+
 .right .storeName {
   color: #f47900;
   font-size: 13px;
@@ -511,10 +579,12 @@ justify-content: space-between;
   padding-right: 2rem;
   text-align: justify;
 }
+
 .recipe {
   width: 80%;
   margin: auto;
 }
+
 .arr {
   background-color: #f0efef;
 }
@@ -526,12 +596,14 @@ justify-content: space-between;
   line-height: 22.4px;
   text-align: left;
 }
+
 .carouselText {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 }
+
 .recipeImg {
   width: 100%;
   height: 200px;
@@ -543,6 +615,7 @@ justify-content: space-between;
   width: 25%;
   margin-top: 0.7rem;
 }
+
 .rate {
   font-size: 30px;
 }
@@ -731,6 +804,7 @@ justify-content: space-between;
   border-radius: 50%;
   cursor: pointer;
 }
+
 .left2 {
   display: flex;
   justify-content: flex-end;
@@ -828,6 +902,7 @@ justify-content: space-between;
   width: 100%;
   height: 100%;
 }
+
 .end2 {
   display: flex;
   flex-direction: column;
@@ -837,6 +912,7 @@ justify-content: space-between;
   position: relative;
   margin-top: -5rem;
 }
+
 .des {
   width: 50%;
 }
@@ -846,6 +922,7 @@ justify-content: space-between;
     grid-template-columns: repeat(3, 1fr);
     gap: 3rem;
   }
+
   .stores2 {
     grid-template-columns: repeat(3, 1fr);
     gap: 70px;
@@ -856,41 +933,51 @@ justify-content: space-between;
     grid-template-columns: repeat(3, 1fr);
     gap: 56px;
   }
+
   .modalCard2 {
     width: 90%;
   }
+
   .recipe {
     width: 100%;
   }
+
   .rates {
     width: 32%;
   }
+
   .end2 {
     margin-left: 70%;
     margin-top: -4rem;
   }
+
   .top {
     padding: 8rem 2rem 0rem 2rem;
   }
 }
+
 @media only screen and (max-width: 920px) {
   .stores {
     grid-template-columns: repeat(2, 1fr);
     gap: 3rem;
   }
+
   .stores2 {
     grid-template-columns: repeat(2, 1fr);
     gap: 70px;
   }
+
   .stores3 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 56px;
   }
+
   .storeContainer1 {
     padding: 7rem 3rem;
     position: relative;
   }
+
   .mealContainer {
     width: 100%;
     padding: 1rem 3rem;
@@ -900,6 +987,7 @@ justify-content: space-between;
     width: 100%;
     padding: 1rem 3rem;
   }
+
   .modalCard2 {
     background: #fff;
     width: 95%;
@@ -907,30 +995,38 @@ justify-content: space-between;
     border-radius: 8px;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
   }
+
   .images {
     width: 100%;
   }
+
   .flexed2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+
   .modalCard {
     width: 94%;
   }
+
   .img1 {
     width: 70px;
     height: 70px;
   }
+
   .end {
     margin-left: 96%;
   }
+
   .modalImg {
     height: 160px;
   }
+
   .right .modalTitle2 {
     font-size: 13px;
     margin-top: 1.6rem;
   }
+
   .buttons .outlinebtn {
     display: flex;
     height: 30px;
@@ -944,82 +1040,104 @@ justify-content: space-between;
     padding: 11.4px 15px;
     font-size: 12px;
   }
+
   .des {
     width: 60%;
   }
+
   .inactivespan {
     padding: 0 15px;
     font-size: 14px;
   }
+
   .activespan {
     font-size: 14px;
     padding: 0 15px;
   }
+
   .storeDetails {
     flex-direction: column;
     width: 100%;
   }
+
   .storeFlex {
     flex-direction: column;
   }
+
   .storediv {
     width: 100%;
   }
+
   .storeDetails h3 {
     font-size: 24px;
   }
+
   .storeDetails p {
     font-size: 14px;
   }
+
   .storeLocation {
     margin-top: 3rem;
   }
+
   .topcontainer {
     flex-direction: column;
     align-items: flex-end;
   }
+
   .topcontainer1 {
     align-items: center;
   }
+
   .marketplace {
     width: 100%;
   }
+
   .marketplaceText {
     width: 100%;
     font-size: 13px;
   }
+
   .flexItems {
     justify-content: flex-end;
   }
+
   .filter {
     margin-top: 2rem;
   }
+
   .filter p {
     font-size: 11px;
   }
+
   .marketplace h1 {
     font-size: 20px;
     font-weight: 500;
     font-family: Inter;
   }
+
   .top {
     padding: 8rem 2rem 0rem 2rem;
   }
+
   .mealContain {
     width: 100%;
     padding: 0 2rem;
   }
 }
-@media only screen and (max-width: 840px){
-.storeContainer1{
-  padding: 9rem 3rem;
+
+@media only screen and (max-width: 840px) {
+  .storeContainer1 {
+    padding: 9rem 3rem;
+  }
 }
-}
+
 @media only screen and (max-width: 520px) {
   .stores {
     grid-template-columns: repeat(1, 1fr);
     gap: 3rem;
   }
+
   .stores2 {
     grid-template-columns: repeat(1, 1fr);
     gap: 70px;
@@ -1030,27 +1148,34 @@ justify-content: space-between;
     grid-template-columns: repeat(1, 1fr);
     gap: 56px;
   }
+
   .flexed2 {
     display: grid;
     grid-template-columns: 0.2fr 0.5fr;
   }
+
   .modalImg {
     height: 130px;
   }
+
   .itemName {
     font-size: 16px;
   }
+
   .round {
     width: 22px;
     height: 22px;
     font-size: 16px;
   }
+
   .rates {
     width: 50%;
   }
+
   .right .modalTitle {
     font-size: 13px;
   }
+
   .flexed {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1061,21 +1186,26 @@ justify-content: space-between;
   .end {
     margin-left: 96%;
   }
+
   .images1 {
     column-gap: 1rem;
     margin-top: 1rem;
   }
+
   .img1 {
     height: 50px;
     width: 50px;
   }
+
   .end2 {
     margin-left: 0%;
     margin-top: 1.2rem;
   }
+
   .right .modalTitle2 {
     font-size: 13px;
   }
+
   .buttons .outlinebtn {
     display: flex;
     height: 25px;
@@ -1089,6 +1219,7 @@ justify-content: space-between;
     padding: 7.4px 10px;
     font-size: 10px;
   }
+
   .buttons {
     display: flex;
     align-items: flex-end;
@@ -1096,10 +1227,12 @@ justify-content: space-between;
     gap: 7px;
     padding: 1.5rem 2.5rem 2rem 2.5rem;
   }
+
   .storeContainer1 {
     padding: 8rem 2rem;
     /* position: relative; */
   }
+
   .mealContainer {
     width: 100%;
     padding: 2rem 2rem;
@@ -1109,10 +1242,12 @@ justify-content: space-between;
     width: 100%;
     padding: 2rem 2rem;
   }
+
   .top {
     padding: 8rem 2rem 0rem 2rem;
   }
 }
+
 @media only screen and (max-width: 400px) {
   .des {
     width: 90%;
