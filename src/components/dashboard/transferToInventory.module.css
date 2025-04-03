@@ -409,7 +409,7 @@
   margin: 0;
   align-items: center;
   padding: 0.6rem;
-  height: 70px;
+  height: auto;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 .request_tr1 {

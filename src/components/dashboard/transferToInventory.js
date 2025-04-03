@@ -171,15 +171,43 @@ export default function TransferToInventory(props) {
     setFormState({ ...formState, in_stock: value });
   }
 
-  function handleIngredientChange(e, id, key) {
-    const { value } = e.target;
-    let ingredientsAvailable = formState.ingredientsAvailable;
-    ingredientsAvailable[id][key] = value;
-    setFormState({
-      ...formState,
-      ["ingredientsAvailable"]: ingredientsAvailable,
+  const handleIngredientChange = (index, field, value) => {
+    console.log(`Updating index ${index}, field: ${field}, value: "${value}"`);
+
+    setFormState((prevState) => {
+      const updatedIngredients = [...prevState.ingredientsAvailable];
+      const ingredient = { ...updatedIngredients[index] };
+
+      if (field.startsWith("set_price_")) {
+        const currency = field.replace("set_price_", "");
+        const updatedSetPrices = ingredient.set_prices ? [...ingredient.set_prices] : [];
+
+        const priceIndex = updatedSetPrices.findIndex(p => p.currency === currency);
+
+        if (priceIndex > -1) {
+          updatedSetPrices[priceIndex].price = value !== "" ? Number(value) : 0;
+        } else {
+          updatedSetPrices.push({
+            store_id: prevState.storeId[0] ?? "", // Ensure correct store_id
+            currency,
+            price: value !== "" ? Number(value) : 0,
+          });
+        }
+
+        ingredient.set_prices = updatedSetPrices;
+        console.log("Updated set_prices:", updatedSetPrices); // Debugging
+      } else {
+        ingredient[field] = value;
+      }
+
+      updatedIngredients[index] = ingredient;
+      return { ...prevState, ingredientsAvailable: updatedIngredients };
     });
-  }
+  };
+
+
+
+
 
   function handleIngredientAvailabilityChange(value, id, key) {
     // Create a shallow copy of the ingredientsAvailable array
@@ -225,13 +253,31 @@ export default function TransferToInventory(props) {
       return;
     }
 
+    const updatedIngredients = formState.ingredientsAvailable.map((ingredient) => {
+      const existingPrices = ingredient.set_prices || [];
+    
+      const updatedSetPrices = selectedStores.map((store) => {
+        const currency = store.currency?.symbol;
+        const existingPrice = existingPrices.find((p) => p.currency === currency);
+    
+        return {
+          store_id: store._id,
+          currency,
+          price: existingPrice ? existingPrice.price : 0, 
+        };
+      });
+    
+      return { ...ingredient, set_prices: updatedSetPrices };
+    });
+    
+    console.log("Set Prices Before Submitting:", updatedIngredients);
+
     delete fields.meal_type;
     fields["item"] = props.meal._id;
-    fields.ingredients = formState.ingredientsAvailable;
+    fields.ingredients = updatedIngredients;
     delete fields.ingredientsAvailable;
     fields.user = JSON.parse(localStorage.getItem("user"))?._id ?? "";
 
-    // Replace with structured meal_price array
     fields["meal_price"] = meal_price;
 
     axios
@@ -263,8 +309,6 @@ export default function TransferToInventory(props) {
         console.log(error);
       });
   }
-
-
   function handleRestockTimeChange(type) {
     setRestockTime(type);
     toggleRestockTimeOption();
@@ -283,7 +327,7 @@ export default function TransferToInventory(props) {
         return {
           item_name: element.item_name,
           item_quantity: element.item_quantity,
-          set_price: "",
+          set_prices: [],
           product_available: true,
         };
       });
@@ -294,7 +338,9 @@ export default function TransferToInventory(props) {
   const getSelectedStore = () => {
     return allStores.find((store) => store._id === formState.storeId) || null;
   };
-
+  const selectedStores = allStores.filter((store) =>
+    formState.storeId.includes(store._id)
+  );
   const getSelectedStoreCurrencySymbol = () => {
     if (!formState.storeId?.length || !allStores.length) return "$";
 
@@ -377,14 +423,14 @@ export default function TransferToInventory(props) {
   // useEffect(() => {
   //   const defaultCurrencies = getUniqueCurrencies();
   //   const initialPrices = {};
-  
+
   //   defaultCurrencies.forEach((currency) => {
   //     initialPrices[currency.symbol] = "";
   //   });
-  
+
   //   setPrices(initialPrices);
   // }, [formState.storeId]);
-  
+
   return (
     <>
       {show && (
@@ -731,76 +777,66 @@ export default function TransferToInventory(props) {
                           )}
                         </thead>
                         <tbody className={styles.tbody}>
-                          {formState.ingredientsAvailable?.map(
-                            (ingredient, index) => {
-                              return (
-                                <div
-                                  className={
-                                    styles.refId + " " + styles.request_tr
-                                  }
-                                >
-                                  <div className={styles.request_td}>
-                                    {ingredient.item_name}
-                                  </div>
-                                  <div
-                                    className={
-                                      styles.request_td + " " + styles.hideData
-                                    }
-                                  >
-                                    <input
-                                      value={
-                                        formState.ingredientsAvailable[index]
-                                          ?.item_quantity
-                                      }
-                                      onChange={(e) =>
-                                        handleIngredientChange(
-                                          e,
-                                          index,
-                                          "item_quantity"
-                                        )
-                                      }
-                                      name="meal_price"
-                                    />
-                                  </div>
-                                  <div className={styles.request_td}>
-                                    {getSelectedStoreCurrencySymbol()}
-                                    <input
-                                      value={
-                                        formState.ingredientsAvailable[index]
-                                          ?.set_price
-                                      }
-                                      onChange={(e) =>
-                                        handleIngredientChange(
-                                          e,
-                                          index,
-                                          "set_price"
-                                        )
-                                      }
-                                      name="meal_price"
-                                    />
-                                  </div>
-                                  <div className={styles.request_td}>
-                                    <CustomSwitch
-                                      checked={
-                                        formState.ingredientsAvailable[index]
-                                          ?.product_available
-                                      }
-                                      onChange={(e) =>
-                                        handleIngredientAvailabilityChange(
-                                          !ingredient.product_available,
-                                          index,
-                                          "product_available"
-                                        )
-                                      }
-                                      inputProps={{
-                                        "aria-label": "ant design",
-                                      }}
-                                    />
-                                  </div>
+                          {formState.ingredientsAvailable?.map((ingredient, index) => {
+                            const currencyGroups = {};
+                            selectedStores.forEach((store) => {
+                              const currency = store.currency?.symbol;
+
+                              if (!currencyGroups[currency]) {
+                                currencyGroups[currency] = {
+                                  store_ids: [],
+                                  price: ingredient.set_prices?.find((p) => p.currency === currency)?.price || "",
+                                };
+                              }
+
+                              currencyGroups[currency].store_ids.push(store._id);
+                            });
+
+                            return (
+                              <div key={index} className={styles.refId + " " + styles.request_tr}>
+                                <div className={styles.request_td}>{ingredient.item_name}</div>
+
+                                <div className={styles.request_td + " " + styles.hideData}>
+                                  <input
+                                    value={ingredient.item_quantity || ""}
+                                    onChange={(e) => handleIngredientChange(index, "item_quantity", e.target.value)}
+                                    name="item_quantity"
+                                  />
                                 </div>
-                              );
-                            }
-                          )}
+
+                                <div className={styles.request_td}>
+                                  {Object.entries(currencyGroups).map(([currency, data], priceIndex) => (
+                                    <div key={priceIndex} style={{ display: 'flex', gap: "0.5rem", marginBottom: "0.5rem", alignItems: 'center' }}>
+                                      {currency}
+                                      <div className={styles.request_td}>
+                                        <input
+                                          value={data.price || ""}
+                                          onChange={(e) => {
+                                            console.log(`Input change for ${currency}: ${e.target.value}`); // Debugging
+                                            handleIngredientChange(index, `set_price_${currency}`, e.target.value);
+                                          }}
+                                          name={`set_price_${currency}`}
+                                        />
+                                      </div>
+                                      <input type="hidden" name={`store_ids_${currency}`} value={data.store_ids.join(",")} />
+                                    </div>
+                                  ))}
+
+                                </div>
+
+                                <div className={styles.request_td}>
+                                  <CustomSwitch
+                                    checked={ingredient.product_available || false}
+                                    onChange={() =>
+                                      handleIngredientAvailabilityChange(!ingredient.product_available, index, "product_available")
+                                    }
+                                    inputProps={{ "aria-label": "ant design" }}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+
                         </tbody>
                       </table>
                     </div>
