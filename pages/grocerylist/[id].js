@@ -737,7 +737,7 @@ const GroceryPage = () => {
                 <tbody style={{ height: "100%" }}>
                   {itemList?.groceryItems
                     ?.slice()
-                    ?.sort((a, b) => new Date(b?.dateAdded) - new Date(a?.dateAdded))
+                    ?.reverse()
                     ?.map((element, idx) => (
                       <>
                         {element.hasOwnProperty("itemData") ? (
