@@ -178,14 +178,9 @@ export const SuggestedUtensils = () => {
       }
     }
   }, []);
+  
   const handleAdd = (type) => {
-    if (saleType.includes(type)) {
-      const cp = [...saleType];
-      cp.splice(cp.indexOf(type), 1);
-      setSaleType(cp);
-    } else {
-      setSaleType((prev) => [...prev, type]);
-    }
+    setSaleType(type);
   };
 
   useEffect(() => {
@@ -219,37 +214,35 @@ export const SuggestedUtensils = () => {
           />
           {isOpen && (
             <div ref={ref} className={styles.saleType}>
-              <div
-                onClick={() => handleAdd("For sale")}
-                className={styles.flexer}
-              >
+              <div className={styles.flexer}>
                 <input
                   checked={saleType.includes("For sale")}
-                  type="checkbox"
+                  onChange={() => handleAdd("For sale")}
                   id="for_sale"
+                  name="sale"
+                  type="radio"
                 />
                 <label htmlFor="for_sale">For sale</label>
               </div>
-              <div
-                onClick={() => handleAdd("Not for sale")}
-                className={styles.flexer}
-                style={{ paddingTop: "15px" }}
-              >
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
                 <input
-                  type="checkbox"
+                  onChange={() => handleAdd("Not for sale")}
                   checked={saleType.includes("Not for sale")}
                   id="not_for_sale"
+                  name="sale"
+                  type="radio"
                 />
                 <label htmlFor="not_for_sale">Not for sale</label>
               </div>
-              <div
-                onClick={() => {
-                  handleAdd("Show all");
-                }}
-                className={styles.flexer}
-                style={{ paddingTop: "15px" }}
-              >
-                <input type="checkbox" id="show_all" />
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  onChange={() => {
+                    handleAdd("Show all");
+                  }}
+                  id="show_all"
+                  name="sale"
+                  type="radio"
+                />
                 <label htmlFor="show_all">Show all</label>
               </div>
               <button

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -25,8 +25,9 @@ export const PopularMeals = () => {
   const [quantity, setQuantity] = useState(0);
   const [serve, setServe] = useState(0);
   const dispatch = useDispatch();
-  const [saleType, setSaleType] = useState(["For sale"]);
+  const [saleType, setSaleType] = useState("For sale");
   const ref = useRef(null);
+  const saleTypeRef = useRef("For sale");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
@@ -122,8 +123,23 @@ export const PopularMeals = () => {
       const allItems = response.data.data.items;
 
       const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
+      const forSaleItem = allItems?.filter(
+        (item) => Boolean(item?.item_price) || Boolean(item?.meal_price)
+      );
+      const NotSaleItem = allItems?.filter(
+        (item) => !Boolean(item?.item_price) || !Boolean(item?.meal_price)
+      );
 
-      setMeals((prev) => [...allItems]);
+      setMeals((prev) => {
+        if (saleType === "For sale") {
+          return forSaleItem;
+        } else if (saleType === "Not for sale") {
+          return NotSaleItem;
+        } else {
+          [...forSaleItem, ...forSaleItem];
+        }
+      });
+      ref.current = saleTypeRef.current;
       setUniqueItemIds(
         new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
       );
@@ -171,25 +187,25 @@ export const PopularMeals = () => {
   }, []);
 
   const handleAdd = (type) => {
-    if (saleType.includes(type)) {
-      const cp = [...saleType];
-      cp.splice(cp.indexOf(type), 1);
-      setSaleType(cp);
-    } else {
-      setSaleType((prev) => [...prev, type]);
-    }
+    setSaleType(type);
   };
 
   useEffect(() => {
-    document.addEventListener(
-      "click",
-      (e) => {
-        if (ref.current && !ref.current.contains(e.target)) {
-          setIsOpen(false);
-        }
-      },
-      true
-    );
+    const handleClickOutside = (e) => {
+      if (
+        ref.current &&
+        typeof ref.current?.contains === "function" &&
+        !ref.current?.contains(e.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside, true);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
   }, []);
 
   return (
@@ -211,45 +227,41 @@ export const PopularMeals = () => {
           />
           {isOpen && (
             <div ref={ref} className={styles.saleType}>
-              <div
-                onClick={() => handleAdd("For sale")}
-                className={styles.flexer}
-              >
+              <div className={styles.flexer}>
                 <input
                   checked={saleType.includes("For sale")}
-                  type="checkbox"
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("For sale")}
                   id="for_sale"
                 />
                 <label htmlFor="for_sale">For sale</label>
               </div>
-              <div
-                onClick={() => handleAdd("Not for sale")}
-                className={styles.flexer}
-                style={{ paddingTop: "15px" }}
-              >
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
                 <input
-                  type="checkbox"
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("Not for sale")}
                   checked={saleType.includes("Not for sale")}
                   id="not_for_sale"
                 />
                 <label htmlFor="not_for_sale">Not for sale</label>
               </div>
-              <div
-                onClick={() => {
-                  setSaleType(["Show all"]);
-                }}
-                className={styles.flexer}
-                style={{ paddingTop: "15px" }}
-              >
-                <input type="checkbox" id="show_all" />
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  onChange={() => handleAdd("Show all")}
+                  type="radio"
+                  name="sale"
+                  id="show_all"
+                />
                 <label htmlFor="show_all">Show all</label>
               </div>
               <button
                 onClick={() => {
                   const keys = {
-                    item_price: saleType.includes("For sale") ? 1 : 0,
+                    item_price: saleType === "For sale" ? 1 : 0,
                   };
-                  if (saleType.includes("Show all")) {
+                  if (saleType === "Show all") {
                     delete keys.item_price;
                   }
                   fetchMeals(1, keys);
