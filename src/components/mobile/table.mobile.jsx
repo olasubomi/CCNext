@@ -19,7 +19,10 @@ export const MobileTable = ({
   return (
     <table className={styles.table2}>
       <tbody style={{ height: "100%", width: "100%" }}>
-        {itemList?.groceryItems?.map((element, idx) => (
+        {itemList?.groceryItems
+         ?.slice()
+         ?.reverse()
+        .map((element, idx) => (
           <>
             {element.hasOwnProperty("itemData") ? (
               <tr key={element?.itemData?._id} className={styles.tr2}>
