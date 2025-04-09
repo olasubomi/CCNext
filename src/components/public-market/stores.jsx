@@ -100,7 +100,7 @@ export const Stores = () => {
           Stores
         </Element>
         <div className={styles.filter}>
-          <p>Filter by: Distance!</p>
+          <p>Filter by: Distance</p>
           <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
         </div>
       </div>

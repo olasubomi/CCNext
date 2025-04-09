@@ -21,7 +21,7 @@ export const TopSellingProducts = () => {
   const [show, setShow] = useState(false);
   const router = useRouter();
   const [quantity, setQuantity] = useState(0);
-  const [saleType, setSaleType] = useState(["For sale"]);
+  const [saleType, setSaleType] = useState("For sale");
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
@@ -137,7 +137,23 @@ export const TopSellingProducts = () => {
         (item) => !uniqueItemIds.has(item._id)
       );
 
-      setProducts([...allItems]);
+      const forSaleItem = allItems?.filter(
+        (item) => Boolean(item?.item_price) || Boolean(item?.meal_price)
+      );
+      const NotSaleItem = allItems?.filter(
+        (item) => !Boolean(item?.item_price) || !Boolean(item?.meal_price)
+      );
+      // setProducts([...allItems]);
+
+      setProducts((prev) => {
+        if (saleType === "For sale") {
+          return forSaleItem;
+        } else if (saleType === "Not for sale") {
+          return NotSaleItem;
+        } else {
+          [...forSaleItem, ...forSaleItem];
+        }
+      });
       setUniqueItemIds(
         new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
       );
@@ -187,14 +203,7 @@ export const TopSellingProducts = () => {
   }, []);
 
   const handleAdd = (type) => {
-    if (saleType.includes(type)) {
-      const cp = [...saleType];
-      cp.splice(cp.indexOf(type), 1);
-      setSaleType(cp);
-    } else {
-      setSaleType((prev) => [...prev, type]);
-    }
-
+    setSaleType(type);
   };
 
   useEffect(() => {
@@ -227,37 +236,33 @@ export const TopSellingProducts = () => {
           />
           {isOpen && (
             <div ref={ref} className={styles.saleType}>
-              <div
-                onClick={() => handleAdd("For sale")}
-                className={styles.flexer}
-              >
+              <div className={styles.flexer}>
                 <input
                   checked={saleType.includes("For sale")}
-                  type="checkbox"
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("For sale")}
                   id="for_sale"
                 />
                 <label htmlFor="for_sale">For sale</label>
               </div>
-              <div
-                onClick={() => handleAdd("Not for sale")}
-                className={styles.flexer}
-                style={{ paddingTop: "15px" }}
-              >
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
                 <input
-                  type="checkbox"
                   checked={saleType.includes("Not for sale")}
                   id="not_for_sale"
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("Not for sale")}
                 />
                 <label htmlFor="not_for_sale">Not for sale</label>
               </div>
-              <div
-                onClick={() => {
-                  handleAdd("Show all")
-                }}
-                className={styles.flexer}
-                style={{ paddingTop: "15px" }}
-              >
-                <input type="checkbox" id="show_all" />
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  id="show_all"
+                  onChange={() => handleAdd("Show all")}
+                  type="radio"
+                  name="sale"
+                />
                 <label htmlFor="show_all">Show all</label>
               </div>
               <button
