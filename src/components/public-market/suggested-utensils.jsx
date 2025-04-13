@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -105,9 +105,9 @@ export const SuggestedUtensils = () => {
   const [hasMoreData, setHasMoreData] = useState(true);
 
   const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
-  const fetchProducts = async (other) => {
+  const fetchProducts = async (page, other) => {
     try {
-      const response = await axios(`/items/${currentPage}`, {
+      const response = await axios(`/items/${page ? page : currentPage}`, {
         method: "GET",
         params: {
           type: "Utensil",
@@ -130,7 +130,20 @@ export const SuggestedUtensils = () => {
         (item) => !uniqueItemIds.has(item._id)
       );
 
-      setMeals([...allItems]);
+      setMeals((prev) => {
+        if (page === 1) {
+          return allItems;
+        } else {
+          return [...prev, ...allItems];
+        }
+      });
+      setCurrentPage((prev) => {
+        if (page === 1) {
+          return 1;
+        } else {
+          return prev + 1;
+        }
+      });
       setUniqueItemIds(
         new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
       );
@@ -141,13 +154,18 @@ export const SuggestedUtensils = () => {
     }
   };
 
-  const loadMore = async () => {
-    setCurrentPage(currentPage + 1);
-    await fetchProducts();
-  };
+  const loadMore = useCallback(async () => {
+    const keys = {
+      item_price: saleType.includes("For sale") ? 1 : 0,
+    };
+    if (saleType === "Show all") {
+      delete keys.item_price;
+    }
+    await fetchProducts(currentPage + 1, keys);
+  }, [currentPage, saleType]);
   useEffect(() => {
     fetchProducts();
-  }, [currentPage]);
+  }, []);
   const fetchGroceryList = async () => {
     try {
       const response = await axios(`/groceries/list`, {
@@ -178,7 +196,7 @@ export const SuggestedUtensils = () => {
       }
     }
   }, []);
-  
+
   const handleAdd = (type) => {
     setSaleType(type);
   };
@@ -253,7 +271,7 @@ export const SuggestedUtensils = () => {
                   if (saleType === "Show all") {
                     delete keys.item_price;
                   }
-                  fetchProducts(keys);
+                  fetchProducts(1, keys);
                 }}
                 className={styles.saleBtn}
               >
