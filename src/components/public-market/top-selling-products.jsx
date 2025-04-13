@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -25,6 +25,7 @@ export const TopSellingProducts = () => {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
+  const [previousSaleType, setPreviousSaleType] = useState("");
 
   //items to add
   const [itemToAdd, setItemAdd] = useState({
@@ -110,13 +111,11 @@ export const TopSellingProducts = () => {
     status: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const [hasMoreData, setHasMoreData] = useState(true); // Initially assume there's more data
+  const [hasMoreData, setHasMoreData] = useState(true);
 
-  const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
-
-  const fetchProducts = async (other) => {
+  const fetchProducts = async (page, other) => {
     try {
-      const response = await axios(`/items/${currentPage}`, {
+      const response = await axios(`/items/${page ? page : currentPage}`, {
         method: "GET",
         params: {
           type: "Product",
@@ -129,34 +128,23 @@ export const TopSellingProducts = () => {
         },
       });
       const totalItems = response.data.data.count;
+
       const allItems = response.data.data.items;
 
-      const filteredItems = allItems.filter((meal) => meal.average_rating);
-
-      const newItems = filteredItems.filter(
-        (item) => !uniqueItemIds.has(item._id)
-      );
-
-      const forSaleItem = allItems?.filter(
-        (item) => Boolean(item?.item_price) || Boolean(item?.meal_price)
-      );
-      const NotSaleItem = allItems?.filter(
-        (item) => !Boolean(item?.item_price) || !Boolean(item?.meal_price)
-      );
-      // setProducts([...allItems]);
-
       setProducts((prev) => {
-        if (saleType === "For sale") {
-          return forSaleItem;
-        } else if (saleType === "Not for sale") {
-          return NotSaleItem;
+        if (page === 1) {
+          return allItems;
         } else {
-          [...forSaleItem, ...forSaleItem];
+          return [...prev, ...allItems];
         }
       });
-      setUniqueItemIds(
-        new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
-      );
+      setCurrentPage((prev) => {
+        if (page === 1) {
+          return 1;
+        } else {
+          return prev + 1;
+        }
+      });
 
       setHasMoreData(totalItems > currentPage * 8);
     } catch (error) {
@@ -164,13 +152,19 @@ export const TopSellingProducts = () => {
     }
   };
 
-  const loadMore = async () => {
-    setCurrentPage(currentPage + 1);
-    await fetchProducts();
-  };
+  const loadMore = useCallback(async () => {
+    const keys = {
+      item_price: saleType.includes("For sale") ? 1 : 0,
+    };
+    if (saleType === "Show all") {
+      delete keys.item_price;
+    }
+    await fetchProducts(currentPage + 1, keys);
+  }, [currentPage, saleType]);
+
   useEffect(() => {
     fetchProducts();
-  }, [currentPage]);
+  }, []);
 
   const fetchGroceryList = async () => {
     try {
@@ -240,30 +234,30 @@ export const TopSellingProducts = () => {
                 <input
                   checked={saleType.includes("For sale")}
                   type="radio"
-                  name="sale"
+                  name="for_sale_product"
                   onChange={() => handleAdd("For sale")}
-                  id="for_sale"
+                  id="for_sale_product"
                 />
-                <label htmlFor="for_sale">For sale</label>
+                <label htmlFor="for_sale_product">For sale</label>
               </div>
               <div className={styles.flexer} style={{ paddingTop: "15px" }}>
                 <input
                   checked={saleType.includes("Not for sale")}
-                  id="not_for_sale"
+                  id="not_for_sale_product"
                   type="radio"
-                  name="sale"
+                  name="for_sale_product"
                   onChange={() => handleAdd("Not for sale")}
                 />
-                <label htmlFor="not_for_sale">Not for sale</label>
+                <label htmlFor="not_for_sale_product">Not for sale</label>
               </div>
               <div className={styles.flexer} style={{ paddingTop: "15px" }}>
                 <input
-                  id="show_all"
+                  id="for_sale_product"
                   onChange={() => handleAdd("Show all")}
                   type="radio"
-                  name="sale"
+                  name="for_sale_product"
                 />
-                <label htmlFor="show_all">Show all</label>
+                <label htmlFor="for_sale_product">Show all</label>
               </div>
               <button
                 onClick={() => {
@@ -273,7 +267,7 @@ export const TopSellingProducts = () => {
                   if (saleType === "Show all") {
                     delete keys.item_price;
                   }
-                  fetchProducts(keys);
+                  fetchProducts(1, keys);
                 }}
                 className={styles.saleBtn}
               >

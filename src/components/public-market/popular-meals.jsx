@@ -30,6 +30,7 @@ export const PopularMeals = () => {
   const saleTypeRef = useRef("For sale");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const [previousSaleType, setPreviousSaleType] = useState("");
 
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
@@ -121,24 +122,24 @@ export const PopularMeals = () => {
       });
       const totalItems = response.data.data.count;
       const allItems = response.data.data.items;
-
       const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
-      const forSaleItem = allItems?.filter(
-        (item) => Boolean(item?.item_price) || Boolean(item?.meal_price)
-      );
-      const NotSaleItem = allItems?.filter(
-        (item) => !Boolean(item?.item_price) || !Boolean(item?.meal_price)
-      );
 
+     
       setMeals((prev) => {
-        if (saleType === "For sale") {
-          return forSaleItem;
-        } else if (saleType === "Not for sale") {
-          return NotSaleItem;
+        if (page === 1) {
+          return allItems;
         } else {
-          [...forSaleItem, ...forSaleItem];
+          return [...prev, ...allItems];
         }
       });
+      setCurrentPage((prev) => {
+        if (page === 1) {
+          return 1;
+        } else {
+          return prev + 1;
+        }
+      });
+
       ref.current = saleTypeRef.current;
       setUniqueItemIds(
         new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
@@ -149,13 +150,19 @@ export const PopularMeals = () => {
     }
   };
 
-  const loadMore = async () => {
-    setCurrentPage(currentPage + 1);
-    await fetchMeals(currentPage + 1);
-  };
+  const loadMore = useCallback(async () => {
+    const keys = {
+      item_price: saleType === "For sale" ? 1 : 0,
+    };
+    if (saleType === "Show all") {
+      delete keys.item_price;
+    }
+    await fetchMeals(currentPage + 1, keys);
+  }, [currentPage, saleType]);
+
   useEffect(() => {
     fetchMeals();
-  }, [currentPage]);
+  }, []);
   const fetchGroceryList = async () => {
     try {
       const response = await axios(`/groceries/list`, {
@@ -275,7 +282,7 @@ export const PopularMeals = () => {
         </div>
       </div>
       <div className={styles.stores2}>
-        {meals.map((meal, idx) => {
+        {meals?.map((meal, idx) => {
           return (
             <div
               className={styles.card1}
