@@ -9,6 +9,7 @@ import { Element } from "react-scroll";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../actions";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { convertCurrency } from "../../actions/utils";
 
 export const TopSellingProducts = () => {
   const [products, setProducts] = useState([]);
@@ -159,7 +160,7 @@ export const TopSellingProducts = () => {
         },
       });
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -210,7 +211,7 @@ export const TopSellingProducts = () => {
                 />
                 <div className={styles.flex}>
                   <p className={styles.name2}>{product.item_name}</p>
-                  <p>{product?.item_price ? product.item_price : "$0.00"}</p>
+                  <p>{convertCurrency(product?.item_price ? product.item_price : "0.00")}</p>
                 </div>
                 <p className={styles.storeName}>Chop Chow Official Store</p>
                 <div className={styles.flex}>
@@ -253,7 +254,7 @@ export const TopSellingProducts = () => {
           addToCart={addItemToCart}
         />
       </div>
-      <p className={styles.view} onClick={hasMoreData ? loadMore : () => {}}>
+      <p className={styles.view} onClick={hasMoreData ? loadMore : () => { }}>
         View More
       </p>
       <div className={styles.border} />

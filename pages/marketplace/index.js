@@ -23,6 +23,7 @@ import { AllPopularMeals } from "../../src/components/public-market/all-popular-
 import { AllProducts } from "../../src/components/public-market/all-products";
 import { AllUtensils } from "../../src/components/public-market/all-utensils";
 import { MobileSearch } from "../../src/components/dropdown/mobile-search";
+import { convertCurrency } from "../../src/actions/utils";
 
 const PublicMarket = () => {
   const router = useRouter();
@@ -108,6 +109,8 @@ const PublicMarket = () => {
     window.alert(error?.message || "Unable to get location");
   }, []);
 
+
+
   useEffect(() => {
     document.addEventListener(
       "click",
@@ -149,7 +152,7 @@ const PublicMarket = () => {
       {activeSubLink === 0 && (
         <>
           <div className={styles.marketplace}>
-            <h1>Marketplace</h1>
+            <h1>Marketplace!</h1>
             <p>
               Find stores, recipes, kitchen utensils and your favourite
               products.

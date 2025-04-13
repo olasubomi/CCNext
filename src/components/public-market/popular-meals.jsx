@@ -12,6 +12,7 @@ import { Element, scroller } from "react-scroll";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { convertCurrency } from "../../actions/utils";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
@@ -103,8 +104,7 @@ export const PopularMeals = () => {
   const fetchMeals = async (page) => {
     try {
       const response = await axios(
-        `/items/${
-          page ? page : currentPage
+        `/items/${page ? page : currentPage
         }?type=Meal&status=Public&limit=4&average_rating=1`,
         {
           method: "GET",
@@ -145,7 +145,7 @@ export const PopularMeals = () => {
         },
       });
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -198,7 +198,7 @@ export const PopularMeals = () => {
                   />
                   <div className={styles.flex}>
                     <p className={styles.name2}>{meal.item_name}</p>
-                    <p>${meal.item_price ? meal.item_price : "0"}</p>
+                    <p>{convertCurrency(meal.item_price ? meal.item_price : 0)}</p>
                   </div>
                   <p className={styles.storeName}>Chop Chow Official Store</p>
                   <div className={styles.flex}>
@@ -268,7 +268,7 @@ export const PopularMeals = () => {
           />
         )}
       </div>
-      <p className={styles.view} onClick={hasMoreData ? loadMore : () => {}}>
+      <p className={styles.view} onClick={hasMoreData ? loadMore : () => { }}>
         View More
       </p>
       <div className={styles.border} />
