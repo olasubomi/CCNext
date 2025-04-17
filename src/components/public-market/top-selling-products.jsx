@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../actions";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { convertCurrency } from "../../actions/utils";
+import { BiSolidDownArrow } from "react-icons/bi";
 
 export const TopSellingProducts = () => {
   const [products, setProducts] = useState([]);
@@ -21,8 +22,11 @@ export const TopSellingProducts = () => {
   const [show, setShow] = useState(false);
   const router = useRouter();
   const [quantity, setQuantity] = useState(0);
-
+  const [saleType, setSaleType] = useState("For sale");
+  const ref = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
+  const [previousSaleType, setPreviousSaleType] = useState("");
 
   //items to add
   const [itemToAdd, setItemAdd] = useState({
@@ -108,34 +112,40 @@ export const TopSellingProducts = () => {
     status: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const [hasMoreData, setHasMoreData] = useState(true); // Initially assume there's more data
+  const [hasMoreData, setHasMoreData] = useState(true);
 
-  const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
-
-  const fetchProducts = async () => {
+  const fetchProducts = async (page, other) => {
     try {
-      const response = await axios(
-        `/items/${currentPage}?type=Product&status=Public&limit=8`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios(`/items/${page ? page : currentPage}`, {
+        method: "GET",
+        params: {
+          type: "Product",
+          status: "Public",
+          limit: 8,
+          ...other,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const totalItems = response.data.data.count;
+
       const allItems = response.data.data.items;
 
-      const filteredItems = allItems.filter((meal) => meal.average_rating);
-
-      const newItems = filteredItems.filter(
-        (item) => !uniqueItemIds.has(item._id)
-      );
-
-      setProducts([...products, ...newItems]);
-      setUniqueItemIds(
-        new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
-      );
+      setProducts((prev) => {
+        if (page === 1) {
+          return allItems;
+        } else {
+          return [...prev, ...allItems];
+        }
+      });
+      setCurrentPage((prev) => {
+        if (page === 1) {
+          return 1;
+        } else {
+          return prev + 1;
+        }
+      });
 
       setHasMoreData(totalItems > currentPage * 8);
     } catch (error) {
@@ -143,13 +153,19 @@ export const TopSellingProducts = () => {
     }
   };
 
-  const loadMore = async () => {
-    setCurrentPage(currentPage + 1);
-    await fetchProducts();
-  };
+  const loadMore = useCallback(async () => {
+    const keys = {
+      item_price: saleType.includes("For sale") ? 1 : 0,
+    };
+    if (saleType === "Show all") {
+      delete keys.item_price;
+    }
+    await fetchProducts(currentPage + 1, keys);
+  }, [currentPage, saleType]);
+
   useEffect(() => {
     fetchProducts();
-  }, [currentPage]);
+  }, []);
 
   const fetchGroceryList = async () => {
     try {
@@ -181,14 +197,87 @@ export const TopSellingProducts = () => {
     }
   }, []);
 
+  const handleAdd = (type) => {
+    setSaleType(type);
+  };
+
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
+  }, []);
+
   return (
     <div className={styles.mealContainer1}>
-      <Element
-        name="product"
-        style={{ fontSize: "2rem", marginBottom: "1rem" }}
-      >
-        Top Selling Products
-      </Element>
+      <div className={styles.topcontainer1}>
+        <Element
+          name="product"
+          style={{ fontSize: "2rem", marginBottom: "1rem" }}
+        >
+          Top Selling Products
+        </Element>
+        <div className={styles.filter}>
+          <p>Filter by: {saleType.toString()}</p>
+          <BiSolidDownArrow
+            onClick={() => setIsOpen(true)}
+            color="rgba(109, 109, 109, 0.5)"
+            size={15}
+          />
+          {isOpen && (
+            <div ref={ref} className={styles.saleType}>
+              <div className={styles.flexer}>
+                <input
+                  checked={saleType.includes("For sale")}
+                  type="radio"
+                  name="for_sale_product"
+                  onChange={() => handleAdd("For sale")}
+                  id="for_sale_product"
+                />
+                <label htmlFor="for_sale_product">For sale</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  checked={saleType.includes("Not for sale")}
+                  id="not_for_sale_product"
+                  type="radio"
+                  name="for_sale_product"
+                  onChange={() => handleAdd("Not for sale")}
+                />
+                <label htmlFor="not_for_sale_product">Not for sale</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  id="for_sale_product"
+                  onChange={() => handleAdd("Show all")}
+                  type="radio"
+                  name="for_sale_product"
+                />
+                <label htmlFor="for_sale_product">Show all</label>
+              </div>
+              <button
+                onClick={() => {
+                  const keys = {
+                    item_price: saleType.includes("For sale") ? 1 : 0,
+                  };
+                  if (saleType === "Show all") {
+                    delete keys.item_price;
+                  }
+                  fetchProducts(1, keys);
+                }}
+                className={styles.saleBtn}
+              >
+                Apply filter
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
       <div className={styles.stores3}>
         {products?.map((product, idx) => {
           return (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -11,6 +11,7 @@ import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { convertCurrency } from "../../actions/utils";
+import { BiSolidDownArrow } from "react-icons/bi";
 
 export const SuggestedUtensils = () => {
   const [meals, setMeals] = useState([]);
@@ -21,7 +22,9 @@ export const SuggestedUtensils = () => {
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [quantities, setQuantities] = useState({});
-
+  const [saleType, setSaleType] = useState(["For sale"]);
+  const ref = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
   const handleQuantityChange = (id, value) => {
     setQuantities((prev) => ({
       ...prev,
@@ -103,17 +106,20 @@ export const SuggestedUtensils = () => {
   const [hasMoreData, setHasMoreData] = useState(true);
 
   const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
-  const fetchProducts = async () => {
+  const fetchProducts = async (page, other) => {
     try {
-      const response = await axios(
-        `/items/${currentPage}?type=Utensil&status=Public&limit=8`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios(`/items/${page ? page : currentPage}`, {
+        method: "GET",
+        params: {
+          type: "Utensil",
+          status: "Public",
+          limit: 8,
+          ...other,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const totalItems = response.data.data.count;
       const allItems = response.data.data.items;
 
@@ -125,7 +131,20 @@ export const SuggestedUtensils = () => {
         (item) => !uniqueItemIds.has(item._id)
       );
 
-      setMeals([...meals, ...newItems]);
+      setMeals((prev) => {
+        if (page === 1) {
+          return allItems;
+        } else {
+          return [...prev, ...allItems];
+        }
+      });
+      setCurrentPage((prev) => {
+        if (page === 1) {
+          return 1;
+        } else {
+          return prev + 1;
+        }
+      });
       setUniqueItemIds(
         new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
       );
@@ -136,13 +155,18 @@ export const SuggestedUtensils = () => {
     }
   };
 
-  const loadMore = async () => {
-    setCurrentPage(currentPage + 1);
-    await fetchProducts();
-  };
+  const loadMore = useCallback(async () => {
+    const keys = {
+      item_price: saleType.includes("For sale") ? 1 : 0,
+    };
+    if (saleType === "Show all") {
+      delete keys.item_price;
+    }
+    await fetchProducts(currentPage + 1, keys);
+  }, [currentPage, saleType]);
   useEffect(() => {
     fetchProducts();
-  }, [currentPage]);
+  }, []);
   const fetchGroceryList = async () => {
     try {
       const response = await axios(`/groceries/list`, {
@@ -174,15 +198,90 @@ export const SuggestedUtensils = () => {
     }
   }, []);
 
+  const handleAdd = (type) => {
+    setSaleType(type);
+  };
+
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
+  }, []);
+
   return (
     <div className={styles.mealContainer}>
-      <Element
-        name="utensils"
-        id="utensils"
-        style={{ fontSize: "2rem", marginBottom: "1rem" }}
-      >
-        Suggested Utensils for you
-      </Element>
+      <div className={styles.topcontainer1}>
+        <Element
+          name="utensils"
+          id="utensils"
+          style={{ fontSize: "2rem", marginBottom: "1rem" }}
+        >
+          Suggested Utensils for you
+        </Element>
+        <div className={styles.filter}>
+          <p>Filter by: {saleType.toString()}</p>
+          <BiSolidDownArrow
+            onClick={() => setIsOpen(true)}
+            color="rgba(109, 109, 109, 0.5)"
+            size={15}
+          />
+          {isOpen && (
+            <div ref={ref} className={styles.saleType}>
+              <div className={styles.flexer}>
+                <input
+                  checked={saleType.includes("For sale")}
+                  onChange={() => handleAdd("For sale")}
+                  id="for_sale"
+                  name="sale"
+                  type="radio"
+                />
+                <label htmlFor="for_sale">For sale</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  onChange={() => handleAdd("Not for sale")}
+                  checked={saleType.includes("Not for sale")}
+                  id="not_for_sale"
+                  name="sale"
+                  type="radio"
+                />
+                <label htmlFor="not_for_sale">Not for sale</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  onChange={() => {
+                    handleAdd("Show all");
+                  }}
+                  id="show_all"
+                  name="sale"
+                  type="radio"
+                />
+                <label htmlFor="show_all">Show all</label>
+              </div>
+              <button
+                onClick={() => {
+                  const keys = {
+                    item_price: saleType.includes("For sale") ? 1 : 0,
+                  };
+                  if (saleType === "Show all") {
+                    delete keys.item_price;
+                  }
+                  fetchProducts(1, keys);
+                }}
+                className={styles.saleBtn}
+              >
+                Apply filter
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
       <div className={styles.stores2}>
         {meals.map((utensil, idx) => {
           return (

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -13,6 +13,7 @@ import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { convertCurrency } from "../../actions/utils";
+import { BiSolidDownArrow } from "react-icons/bi";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
@@ -25,8 +26,12 @@ export const PopularMeals = () => {
   const [quantity, setQuantity] = useState(0);
   const [serve, setServe] = useState(0);
   const dispatch = useDispatch();
+  const [saleType, setSaleType] = useState("For sale");
   const ref = useRef(null);
+  const saleTypeRef = useRef("For sale");
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const [previousSaleType, setPreviousSaleType] = useState("");
 
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
@@ -101,8 +106,9 @@ export const PopularMeals = () => {
 
   const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
 
-  const fetchMeals = async (page) => {
+  const fetchMeals = async (page = 1, other) => {
     try {
+<<<<<<< HEAD
       const response = await axios(
         `/items/${page ? page : currentPage
         }?type=Meal&status=Public&limit=4&average_rating=1`,
@@ -113,29 +119,64 @@ export const PopularMeals = () => {
           },
         }
       );
+=======
+      const response = await axios(`/items/${page ? page : currentPage}`, {
+        method: "GET",
+        params: {
+          type: "Meal",
+          state: "Public",
+          limit: 4,
+          average_rating: 1,
+          ...other,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+>>>>>>> 69e7f80d24039fbfad569cae17e6ec6b59381aba
       const totalItems = response.data.data.count;
       const allItems = response.data.data.items;
-
       const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
 
-      setMeals((prev) => [...prev, ...allItems]);
+     
+      setMeals((prev) => {
+        if (page === 1) {
+          return allItems;
+        } else {
+          return [...prev, ...allItems];
+        }
+      });
+      setCurrentPage((prev) => {
+        if (page === 1) {
+          return 1;
+        } else {
+          return prev + 1;
+        }
+      });
+
+      ref.current = saleTypeRef.current;
       setUniqueItemIds(
         new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
       );
-
-      setHasMoreData(totalItems > currentPage * 8);
+      setHasMoreData(totalItems > page * 4);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const loadMore = async () => {
-    setCurrentPage(currentPage + 1);
-    await fetchMeals(currentPage + 1);
-  };
+  const loadMore = useCallback(async () => {
+    const keys = {
+      item_price: saleType === "For sale" ? 1 : 0,
+    };
+    if (saleType === "Show all") {
+      delete keys.item_price;
+    }
+    await fetchMeals(currentPage + 1, keys);
+  }, [currentPage, saleType]);
+
   useEffect(() => {
     fetchMeals();
-  }, [currentPage]);
+  }, []);
   const fetchGroceryList = async () => {
     try {
       const response = await axios(`/groceries/list`, {
@@ -165,17 +206,97 @@ export const PopularMeals = () => {
       });
     }
   }, []);
+
+  const handleAdd = (type) => {
+    setSaleType(type);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        ref.current &&
+        typeof ref.current?.contains === "function" &&
+        !ref.current?.contains(e.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside, true);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, []);
+
   return (
     <div className={styles.mealContainer}>
-      <Element
-        id="meal"
-        name="meal"
-        style={{ fontSize: "2rem", marginBottom: "1rem" }}
-      >
-        Popular Meals
-      </Element>
+      <div className={styles.topcontainer1}>
+        <Element
+          id="store"
+          name="store"
+          style={{ fontSize: "2rem", marginBottom: "1rem" }}
+        >
+          Popular Meals
+        </Element>
+        <div className={styles.filter}>
+          <p>Filter by: {saleType.toString()}</p>
+          <BiSolidDownArrow
+            onClick={() => setIsOpen(true)}
+            color="rgba(109, 109, 109, 0.5)"
+            size={15}
+          />
+          {isOpen && (
+            <div ref={ref} className={styles.saleType}>
+              <div className={styles.flexer}>
+                <input
+                  checked={saleType.includes("For sale")}
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("For sale")}
+                  id="for_sale"
+                />
+                <label htmlFor="for_sale">For sale</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("Not for sale")}
+                  checked={saleType.includes("Not for sale")}
+                  id="not_for_sale"
+                />
+                <label htmlFor="not_for_sale">Not for sale</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  onChange={() => handleAdd("Show all")}
+                  type="radio"
+                  name="sale"
+                  id="show_all"
+                />
+                <label htmlFor="show_all">Show all</label>
+              </div>
+              <button
+                onClick={() => {
+                  const keys = {
+                    item_price: saleType === "For sale" ? 1 : 0,
+                  };
+                  if (saleType === "Show all") {
+                    delete keys.item_price;
+                  }
+                  fetchMeals(1, keys);
+                }}
+                className={styles.saleBtn}
+              >
+                Apply filter
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
       <div className={styles.stores2}>
-        {meals.map((meal, idx) => {
+        {meals?.map((meal, idx) => {
           return (
             <div
               className={styles.card1}
@@ -268,9 +389,17 @@ export const PopularMeals = () => {
           />
         )}
       </div>
+<<<<<<< HEAD
       <p className={styles.view} onClick={hasMoreData ? loadMore : () => { }}>
         View More
       </p>
+=======
+      {hasMoreData && (
+        <p className={styles.view} onClick={loadMore}>
+          View More
+        </p>
+      )}
+>>>>>>> 69e7f80d24039fbfad569cae17e6ec6b59381aba
       <div className={styles.border} />
     </div>
   );
