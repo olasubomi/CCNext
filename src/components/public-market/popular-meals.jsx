@@ -108,18 +108,6 @@ export const PopularMeals = () => {
 
   const fetchMeals = async (page = 1, other) => {
     try {
-<<<<<<< HEAD
-      const response = await axios(
-        `/items/${page ? page : currentPage
-        }?type=Meal&status=Public&limit=4&average_rating=1`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-=======
       const response = await axios(`/items/${page ? page : currentPage}`, {
         method: "GET",
         params: {
@@ -133,7 +121,6 @@ export const PopularMeals = () => {
           "Content-Type": "application/json",
         },
       });
->>>>>>> 69e7f80d24039fbfad569cae17e6ec6b59381aba
       const totalItems = response.data.data.count;
       const allItems = response.data.data.items;
       const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
@@ -389,17 +376,11 @@ export const PopularMeals = () => {
           />
         )}
       </div>
-<<<<<<< HEAD
-      <p className={styles.view} onClick={hasMoreData ? loadMore : () => { }}>
-        View More
-      </p>
-=======
       {hasMoreData && (
         <p className={styles.view} onClick={loadMore}>
           View More
         </p>
       )}
->>>>>>> 69e7f80d24039fbfad569cae17e6ec6b59381aba
       <div className={styles.border} />
     </div>
   );
