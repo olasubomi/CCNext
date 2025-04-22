@@ -12,6 +12,7 @@ import { Element, scroller } from "react-scroll";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { convertCurrency } from "../../actions/utils";
 import { BiSolidDownArrow } from "react-icons/bi";
 
 export const PopularMeals = () => {
@@ -172,7 +173,7 @@ export const PopularMeals = () => {
         },
       });
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -305,7 +306,7 @@ export const PopularMeals = () => {
                   />
                   <div className={styles.flex}>
                     <p className={styles.name2}>{meal.item_name}</p>
-                    <p>${meal.item_price ? meal.item_price : "0"}</p>
+                    <p>{convertCurrency(meal.item_price ? meal.item_price : 0)}</p>
                   </div>
                   <p className={styles.storeName}>Chop Chow Official Store</p>
                   <div className={styles.flex}>

@@ -16,6 +16,9 @@ import useInactivityLogout from "../src/util/useinactivity";
 import Hotjar from '@hotjar/browser';
 import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
 import Script from "next/script";
+import { useCallback, useEffect } from "react";
+import axios from "axios";
+import { getAllISOCodes } from "iso-country-currency";
 
 
 const siteId = process.env.NEXT_PUBLIC_siteId;
@@ -24,6 +27,30 @@ const hotjarVersion = 6;
 Hotjar.init(siteId, hotjarVersion);
 
 function MyApp({ Component, pageProps }) {
+
+  const get_currency = useCallback(async () => {
+    try {
+      const exchange_rates = await axios.get("https://api.currencyapi.com/v3/latest", {
+        headers: {
+          "apikey": "cur_live_QIzWoYONnBsFHsyitbrF0OoQX9GTGhBGN8awyTZX"
+        }
+      })
+      const res = await axios.get("http://ip-api.com/json");
+      const country =  res.data?.country
+      const countries = getAllISOCodes().find(
+        (ele) => ele?.countryName === country
+      );
+      localStorage.setItem("userCurrencySymbol", countries.symbol)
+      localStorage.setItem("userCurrency", countries?.currency || "USD")
+      localStorage.setItem("exchangeRates", JSON.stringify(Object.values(exchange_rates.data.data)))
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
+  useEffect(() => {
+    get_currency()
+  }, [])
   useInactivityLogout(1200000)
   return (
     <>

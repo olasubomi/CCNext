@@ -10,6 +10,7 @@ import { UtensilModal } from "../modal/individual-meal-product";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { convertCurrency } from "../../actions/utils";
 import { BiSolidDownArrow } from "react-icons/bi";
 
 export const SuggestedUtensils = () => {
@@ -304,7 +305,7 @@ export const SuggestedUtensils = () => {
                   />
                   <div className={styles.flex}>
                     <p className={styles.name2}>{utensil.item_name}</p>
-                    <p>${utensil.item_price ? utensil.item_price : 0}</p>
+                    <p>{convertCurrency(utensil.item_price ? utensil.item_price : 0)}</p>
                   </div>
                   <p className={styles.storeName}>Chop Chow Official Store</p>
                   <div
