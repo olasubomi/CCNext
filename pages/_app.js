@@ -35,8 +35,8 @@ function MyApp({ Component, pageProps }) {
           "apikey": "cur_live_QIzWoYONnBsFHsyitbrF0OoQX9GTGhBGN8awyTZX"
         }
       })
-      const res = await axios.get("http://ip-api.com/json");
-      const country =  res.data?.country
+      const res = await axios.get("https://ipapi.co/json/");
+      const country =  res.data?.country_name
       const countries = getAllISOCodes().find(
         (ele) => ele?.countryName === country
       );

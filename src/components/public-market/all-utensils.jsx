@@ -239,8 +239,6 @@ export const AllUtensils = () => {
         console.log(error);
       }
     };
-
-
   };
 
   const handlePageClick = (pageNumber) => {
