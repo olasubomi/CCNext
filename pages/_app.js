@@ -37,9 +37,11 @@ function MyApp({ Component, pageProps }) {
       })
       const res = await axios.get("https://ipapi.co/json/");
       const country =  res.data?.country_name
+      console.log(country, 'allcounry')
       const countries = getAllISOCodes().find(
         (ele) => ele?.countryName === country
       );
+      console.log(countries, 'all')
       localStorage.setItem("userCurrencySymbol", countries.symbol)
       localStorage.setItem("userCurrency", countries?.currency || "USD")
       localStorage.setItem("exchangeRates", JSON.stringify(Object.values(exchange_rates.data.data)))

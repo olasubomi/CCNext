@@ -78,17 +78,26 @@ export function convertCurrency(amount) {
   return formatCurrency(convertedAmount);
 }
 
-function formatCurrency(amount, ) {
-  const code = localStorage.getItem("userCurrencySymbol") || "$"
-  const fromCurrency = localStorage.getItem("userCurrency");
+function formatCurrency(amount) {
+  const defaultCurrency = "USD";
+  const fromCurrency = localStorage.getItem("userCurrency") || defaultCurrency;
+  const customSymbol = localStorage.getItem("userCurrencySymbol");
 
-  const val =  new Intl.NumberFormat("en-NG", {
+  const formatter = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: fromCurrency,
-  }).format(amount).slice(1)
-  return `${code}${val}`
-}
+    currencyDisplay: "narrowSymbol",
+  });
 
+  const formatted = formatter.format(amount);
+
+  if (customSymbol) {
+    const symbol = formatted.replace(/\d|[.,\s]/g, "").trim();
+    return formatted.replace(symbol, customSymbol);
+  }
+
+  return formatted;
+}
 
 export const clear = () => {
   localStorage.setItem("_user", "_");
