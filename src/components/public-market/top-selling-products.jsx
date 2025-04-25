@@ -21,7 +21,7 @@ export const TopSellingProducts = () => {
   const [show, setShow] = useState(false);
   const router = useRouter();
   const [quantity, setQuantity] = useState(0);
-  const [saleType, setSaleType] = useState("For sale");
+  const [saleType, setSaleType] = useState("Show all");
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
@@ -222,12 +222,19 @@ export const TopSellingProducts = () => {
           Top Selling Products
         </Element>
         <div className={styles.filter}>
-          <p>Filter by: {saleType.toString()}</p>
-          <BiSolidDownArrow
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              cursor: "pointer",
+            }}
             onClick={() => setIsOpen(true)}
-            color="rgba(109, 109, 109, 0.5)"
-            size={15}
-          />
+          >
+            <p>Filter by: {saleType.toString()}</p>
+            <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
+          </div>
           {isOpen && (
             <div ref={ref} className={styles.saleType}>
               <div className={styles.flexer}>
@@ -243,21 +250,22 @@ export const TopSellingProducts = () => {
               <div className={styles.flexer} style={{ paddingTop: "15px" }}>
                 <input
                   checked={saleType.includes("Not for sale")}
-                  id="not_for_sale_product"
+                  id="for_not_sale_product"
                   type="radio"
-                  name="for_sale_product"
+                  name="for_not_sale_product"
                   onChange={() => handleAdd("Not for sale")}
                 />
-                <label htmlFor="not_for_sale_product">Not for sale</label>
+                <label htmlFor="for_not_sale_product">Not for sale</label>
               </div>
               <div className={styles.flexer} style={{ paddingTop: "15px" }}>
                 <input
-                  id="for_sale_product"
+                  id="for_show_all_sale_product"
                   onChange={() => handleAdd("Show all")}
                   type="radio"
-                  name="for_sale_product"
+                  name="for_show_all_sale_product"
+                  checked={saleType.includes("Show all")}
                 />
-                <label htmlFor="for_sale_product">Show all</label>
+                <label htmlFor="for_show_all_sale_product">Show all</label>
               </div>
               <button
                 onClick={() => {
