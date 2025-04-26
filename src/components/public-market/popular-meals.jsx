@@ -26,7 +26,7 @@ export const PopularMeals = () => {
   const [quantity, setQuantity] = useState(0);
   const [serve, setServe] = useState(0);
   const dispatch = useDispatch();
-  const [saleType, setSaleType] = useState("For sale");
+  const [saleType, setSaleType] = useState("Show all");
   const ref = useRef(null);
   const saleTypeRef = useRef("For sale");
   const [isOpen, setIsOpen] = useState(false);
@@ -114,7 +114,7 @@ export const PopularMeals = () => {
           type: "Meal",
           state: "Public",
           limit: 4,
-          average_rating: 1,
+          // average_rating: 1,
           ...other,
         },
         headers: {
@@ -125,7 +125,6 @@ export const PopularMeals = () => {
       const allItems = response.data.data.items;
       const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
 
-     
       setMeals((prev) => {
         if (page === 1) {
           return allItems;
@@ -141,7 +140,6 @@ export const PopularMeals = () => {
         }
       });
 
-      ref.current = saleTypeRef.current;
       setUniqueItemIds(
         new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
       );
@@ -199,21 +197,15 @@ export const PopularMeals = () => {
   };
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (
-        ref.current &&
-        typeof ref.current?.contains === "function" &&
-        !ref.current?.contains(e.target)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside, true);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside, true);
-    };
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
   }, []);
 
   return (
@@ -227,12 +219,19 @@ export const PopularMeals = () => {
           Popular Meals
         </Element>
         <div className={styles.filter}>
-          <p>Filter by: {saleType.toString()}</p>
-          <BiSolidDownArrow
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              cursor: "pointer"
+            }}
             onClick={() => setIsOpen(true)}
-            color="rgba(109, 109, 109, 0.5)"
-            size={15}
-          />
+          >
+            <p>Filter by: {saleType.toString()}</p>
+            <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
+          </div>
           {isOpen && (
             <div ref={ref} className={styles.saleType}>
               <div className={styles.flexer}>
@@ -261,6 +260,7 @@ export const PopularMeals = () => {
                   type="radio"
                   name="sale"
                   id="show_all"
+                  checked={saleType.includes("Show all")}
                 />
                 <label htmlFor="show_all">Show all</label>
               </div>
