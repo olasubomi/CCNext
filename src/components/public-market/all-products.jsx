@@ -11,6 +11,7 @@ import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { useDispatch } from "react-redux";
 import { MobileSearch } from "../dropdown/mobile-search";
 import { ProductSearch } from "../dropdown/product-search";
+import { convertCurrency } from "../../actions/utils";
 
 export const AllProducts = () => {
   const alphabets = [
@@ -327,7 +328,7 @@ export const AllProducts = () => {
                   />
                   <div className={styles.flex}>
                     <p className={styles.name2}>{product.item_name}</p>
-                    <p>$8.43</p>
+                    <p>{convertCurrency(product.item_price ? product.item_price : 0)}</p>
                   </div>
                   <p className={styles.storeName}>Chop Chow Official Store</p>
                   <div className={styles.flex}>

@@ -35,6 +35,7 @@
   gap: 10px;
   cursor: pointer;
 }
+
 #for_sale {
   width: 20px;
 }
@@ -699,7 +700,7 @@
 
 .span .price {
   color: #000;
-  font-size: 34px;
+  font-size: 32px;
   font-weight: 500;
 }
 
@@ -911,6 +912,11 @@
   margin-left: 80%;
   position: relative;
   margin-top: -5rem;
+}
+
+.flexend2 {
+  display: flex;
+  justify-content: space-between;
 }
 
 .des {
@@ -1136,6 +1142,15 @@
   .stores {
     grid-template-columns: repeat(1, 1fr);
     gap: 3rem;
+  }
+
+  .flexend2 {
+    flex-direction: column;
+    row-gap: 10px;
+  }
+
+  .span .price {
+    font-size: 26px;
   }
 
   .stores2 {

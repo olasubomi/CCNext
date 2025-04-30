@@ -16,6 +16,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { MobileSearch } from "../dropdown/mobile-search";
 import { MealSearch } from "../dropdown/meal-search";
+import { convertCurrency } from "../../actions/utils";
 
 export const AllPopularMeals = () => {
   const alphabets = [
@@ -325,7 +326,7 @@ export const AllPopularMeals = () => {
                       />
                       <div className={styles.flex}>
                         <p className={styles.name2}>{meal.item_name}</p>
-                        <p>${meal.item_price ? meal.item_price : "0"}</p>
+                        <p>{convertCurrency(meal.item_price ? meal.item_price : 0)}</p>
                       </div>
                       <p className={styles.storeName}>
                         Chop Chow Official Store

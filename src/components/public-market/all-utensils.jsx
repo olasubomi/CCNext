@@ -11,6 +11,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { UtensilSearchs } from "../dropdown/utensil-search";
+import { convertCurrency } from "../../actions/utils";
 
 export const AllUtensils = () => {
   const alphabets = [
@@ -189,7 +190,7 @@ export const AllUtensils = () => {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
@@ -210,7 +211,7 @@ export const AllUtensils = () => {
       }
     }
   }, []);
-  
+
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -355,7 +356,8 @@ export const AllUtensils = () => {
                     />
                     <div className={styles.flex}>
                       <p className={styles.name2}>{utensil.item_name}</p>
-                      <p>$8.43</p>
+                      <p>{convertCurrency(utensil?.item_price ? utensil?.item_price : 0)}</p>
+
                     </div>
                     <p className={styles.storeName}>Chop Chow Official Store</p>
                     <div
