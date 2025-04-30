@@ -164,9 +164,11 @@ export const SuggestedUtensils = () => {
     }
     await fetchProducts(currentPage + 1, keys);
   }, [currentPage, saleType]);
+
   useEffect(() => {
     fetchProducts();
   }, []);
+
   const fetchGroceryList = async () => {
     try {
       const response = await axios(`/groceries/list`, {
@@ -225,12 +227,19 @@ export const SuggestedUtensils = () => {
           Suggested Utensils for you
         </Element>
         <div className={styles.filter}>
-          <p>Filter by: {saleType.toString()}</p>
-          <BiSolidDownArrow
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              cursor: "pointer",
+            }}
             onClick={() => setIsOpen(true)}
-            color="rgba(109, 109, 109, 0.5)"
-            size={15}
-          />
+          >
+            <p>Filter by: {saleType.toString()}</p>
+            <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
+          </div>
           {isOpen && (
             <div ref={ref} className={styles.saleType}>
               <div className={styles.flexer}>
