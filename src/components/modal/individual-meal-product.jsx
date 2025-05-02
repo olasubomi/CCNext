@@ -13,6 +13,7 @@ import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
+import { convertCurrency } from "../../actions/utils";
 export const IndividualModal = ({
   openList,
   openModal,
@@ -226,7 +227,8 @@ export const IndividualModal = ({
                           <td className={styles.td}>{elem.item_quantity}</td>
                           <td className={styles.td}>{elem.item_measurement}</td>
                           <td className={styles.td}>
-                            {elem?.item_price ? `$${elem?.item_price}` : "N/A"}
+                            <p>{convertCurrency(elem.item_price ? elem.item_price : "N/A")}</p>
+
                           </td>{" "}
                           {/* Use the correct property for the price */}
                         </tr>
@@ -309,7 +311,7 @@ export const IndividualModal = ({
                               <img
                                 src={
                                   selectedItem[
-                                    `meal_image_or_video_content${index + 1}`
+                                  `meal_image_or_video_content${index + 1}`
                                   ]
                                 }
                                 className={styles.instruction_img}
@@ -325,9 +327,8 @@ export const IndividualModal = ({
                                     <source
                                       src={
                                         selectedItem[
-                                          `meal_image_or_video_content${
-                                            index + 1
-                                          }`
+                                        `meal_image_or_video_content${index + 1
+                                        }`
                                         ]
                                       }
                                       type="video/mp4"
@@ -858,7 +859,7 @@ export const UtensilModal = ({
                       </p>
                     </div>
                   </div>
-                  <div>
+                  <div className={styles.flexend2}>
                     <div>
                       <h4 className={styles.modalTitle2}>Available Quantity</h4>
                       <p
@@ -868,7 +869,7 @@ export const UtensilModal = ({
                         43 left
                       </p>
                     </div>
-                    <div className={styles.end2}>
+                    <div>
                       <h4
                         className={styles.modalTitle}
                         style={{ marginRight: "6.3rem" }}
@@ -881,7 +882,8 @@ export const UtensilModal = ({
                           style={{ display: "flex", alignItems: "center" }}
                           className={styles.price}
                         >
-                          <BsCurrencyDollar /> {selectedItem.item_price}
+                          <p>{convertCurrency(selectedItem.item_price ? selectedItem.item_price : 0)}</p>
+
                         </h2>
                         <p className={styles.piece}> /piece</p>
                       </span>

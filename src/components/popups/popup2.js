@@ -578,6 +578,8 @@ class Popup2 extends Component {
                     instructionChunk2Step={this.props.instructionChunk2Step}
                     instructionChunk3Step={this.props.instructionChunk3Step}
                     instructionChunk4Step={this.props.instructionChunk4Step}
+                    instructionChunk5Step={this.props.instructionChunk5Step}
+                    instructionChunk6Step={this.props.instructionChunk6Step}
                     chunk1Content={this.props.chunk1Content}
                     chunk2Content={this.props.chunk2Content}
                     chunk3Content={this.props.chunk3Content}

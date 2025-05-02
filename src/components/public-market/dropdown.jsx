@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../actions";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { convertCurrency } from "../../actions/utils";
 
 const responsive = {
   superLargeDesktop: {
@@ -281,7 +282,7 @@ export const MealDropDown = ({
                       }
                       return filteredStores.map((elem) => (
                         <p key={elem.storeId} className={styles.name2}>
-                          {elem.currency.symbol} {meal?.item.item_price}
+                          {convertCurrency(meal?.item.item_price ? meal?.item.item_price : 0)}
                         </p>
                       ));
                     })()
@@ -303,7 +304,7 @@ export const MealDropDown = ({
               console.log(name, 'store name')
             }}
           >
-            View Stores
+            View Store
           </button>
         </div>
         {openModal && selectedItem?.item_type === "Meal" && (

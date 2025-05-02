@@ -427,6 +427,7 @@
 .mealCard {
   width: 92%;
   height: 158px;
+  margin-bottom: 30px;
 }
 
 .mealCard .img {
