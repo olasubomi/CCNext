@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { MealDropDown } from "./dropdown";
 import Image from "next/image";
 import { Element } from "react-scroll";
+import baseAxios from "axios";
 import { BiSolidDownArrow } from "react-icons/bi";
 
 export const Stores = () => {
@@ -12,6 +13,10 @@ export const Stores = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isShow, setIsShow] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef(null);
+  const [country, setCountry] = useState("");
+  const [saleType, setSaleType] = useState("My Location");
   const [storeInfo, setStoreInfo] = useState({
     id: 0,
     name: "",
@@ -69,17 +74,29 @@ export const Stores = () => {
     }
   };
 
-  const fetchInventories = async () => {
-    try {
-      const response = await axios.get("/inventory/get-all-inentories/1");
-      setStores(response.data.data.inventory);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const fetchInventories = useCallback(
+    async (saleType) => {
+      try {
+        let params = {};
+        if (saleType === "My Location") {
+          const res = await baseAxios.get("https://ipapi.co/json/");
+          setCountry(res.data?.country_name);
+          console.log(res.data?.country_name, "res.data?.country_name");
+          params.country = res.data?.country_name;
+        }
+        const response = await axios.get("/inventory/get-all-inentories/1", {
+          params,
+        });
+        setStores(response.data.data.inventory);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [country]
+  );
 
   useEffect(() => {
-    fetchInventories();
+    fetchInventories("My Location");
     // fetchStores(currentPage);
   }, [currentPage]);
 
@@ -93,6 +110,21 @@ export const Stores = () => {
     }
   }, []);
 
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
+  }, []);
+  const handleAdd = (type) => {
+    setSaleType(type);
+  };
+
   return (
     <div className={styles.storeContainer1}>
       <div className={styles.topcontainer1}>
@@ -100,8 +132,52 @@ export const Stores = () => {
           Stores
         </Element>
         <div className={styles.filter}>
-          <p>Filter by: Distance</p>
-          <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              cursor: "pointer",
+            }}
+            onClick={() => setIsOpen(true)}
+          >
+            <p>Filter by: {saleType.toString()}</p>
+            <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
+          </div>
+          {isOpen && (
+            <div ref={ref} className={styles.saleType}>
+              <div className={styles.flexer}>
+                <input
+                  checked={saleType.includes("My Location")}
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("My Location")}
+                  id="My_Location"
+                />
+                <label htmlFor="My_Location">My Location</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("Show all")}
+                  checked={saleType.includes("Show all")}
+                  id="Show_all"
+                />
+                <label htmlFor="Show_all">Show all</label>
+              </div>
+
+              <button
+                onClick={() => {
+                  fetchInventories(saleType);
+                }}
+                className={styles.saleBtn}
+              >
+                Apply filter
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div className={styles.stores}>
