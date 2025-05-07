@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -9,23 +9,30 @@ import { IndividualModal } from "../modal/individual-meal-product";
 import { useMediaQuery } from "../../hooks/usemediaquery";
 import { Mealmodal } from "../mobile/meal-modal";
 import { Element, scroller } from "react-scroll";
-import { ScrollableElement } from "../smooth-scroll-link";
+import { addToCart } from "../../actions";
+import { useDispatch } from "react-redux";
+import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { convertCurrency } from "../../actions/utils";
+import { BiSolidDownArrow } from "react-icons/bi";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
   const [meals, setMeals] = useState([]);
-  const [visibleMeals, setVisibleMeals] = useState(8);
   const [selectedItem, setSelectedItem] = useState({});
   const [selectGrocery, setSelectGrocery] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [show, setShow] = useState(false);
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
+  const [serve, setServe] = useState(0);
+  const dispatch = useDispatch();
+  const [saleType, setSaleType] = useState("Show all");
   const ref = useRef(null);
+  const saleTypeRef = useRef("For sale");
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [previousSaleType, setPreviousSaleType] = useState("");
 
-  const loadMore = () => {
-    setVisibleMeals(visibleMeals + 4);
-  };
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -44,7 +51,6 @@ export const PopularMeals = () => {
       },
     };
 
-    console.log(payload, "payload");
     try {
       const response = await axios(`/groceries`, {
         method: "post",
@@ -57,27 +63,102 @@ export const PopularMeals = () => {
       console.log(error);
     }
   };
+
+  const addItemToCart = (item, qty) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    let canAddToCart = canItemBeAddedToCart(item);
+
+    if (qty == 0) {
+      toast.error("Pls add a quantity");
+    } else {
+      if (canAddToCart) {
+        const payload = {
+          userId: user && user._id ? user._id : "",
+          storeId: "",
+          store_name: "",
+          itemId: item._id,
+          quantity: qty,
+          item_price: item.item_price,
+          currency: "$",
+          item_image: item.itemImage0,
+          itemName: item.item_name,
+          item_type: item.item_type ? item.item_type : "Meal",
+        };
+        try {
+          dispatch(addToCart(payload));
+          setOpenList(false);
+          setShow(false);
+          setOpenModal(false);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+  };
   const [details, setDetails] = useState({
     listName: "",
     description: "",
     id: "",
     status: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMoreData, setHasMoreData] = useState(true);
 
-  const fetchMeals = async () => {
+  const [uniqueItemIds, setUniqueItemIds] = useState(new Set());
+
+  const fetchMeals = async (page = 1, other) => {
     try {
-      const response = await axios(`/items/1?type=Meal&status=all&limit=50`, {
+      const response = await axios(`/items/${page ? page : currentPage}`, {
         method: "GET",
+        params: {
+          type: "Meal",
+          state: "Public",
+          limit: 4,
+          // average_rating: 1,
+          ...other,
+        },
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data.data.items, "ressw");
-      setMeals(response.data.data.items);
+      const totalItems = response.data.data.count;
+      const allItems = response.data.data.items;
+      const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
+
+      setMeals((prev) => {
+        if (page === 1) {
+          return allItems;
+        } else {
+          return [...prev, ...allItems];
+        }
+      });
+      setCurrentPage((prev) => {
+        if (page === 1) {
+          return 1;
+        } else {
+          return prev + 1;
+        }
+      });
+
+      setUniqueItemIds(
+        new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
+      );
+      setHasMoreData(totalItems > page * 4);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const loadMore = useCallback(async () => {
+    const keys = {
+      item_price: saleType === "For sale" ? 1 : 0,
+    };
+    if (saleType === "Show all") {
+      delete keys.item_price;
+    }
+    await fetchMeals(currentPage + 1, keys);
+  }, [currentPage, saleType]);
+
   useEffect(() => {
     fetchMeals();
   }, []);
@@ -89,95 +170,175 @@ export const PopularMeals = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     fetchGroceryList();
   }, []);
-  const filteredMeals = meals.filter(
-    (meal) => meal.item_type === "Meal" && meal.average_rating
-  );
-  console.log(filteredMeals, "fill");
 
   useEffect(() => {
-    // Get the hash value from the URL
     const hash = window.location.hash;
 
-    // Use the hash value as the target ID for scrolling
-    const targetId = hash ? hash.substring(1) : 'store';
+    const targetId = hash ? hash.substring(1) : "store";
 
-    // Scroll to the target section
     if (targetId) {
       scroller.scrollTo(targetId, {
         duration: 1000,
         delay: 0,
-        smooth: 'easeInOutQuart',
+        smooth: "easeInOutQuart",
         offset: -1000,
       });
     }
   }, []);
+
+  const handleAdd = (type) => {
+    setSaleType(type);
+  };
+
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
+  }, []);
+
   return (
     <div className={styles.mealContainer}>
-      <Element
-        id="meal"
-        name="meal"
-        style={{ fontSize: "2rem", marginBottom: "1rem" }}
-      >
-        Popular Meals
-      </Element>
-      <div className={styles.stores2}>
-        {filteredMeals
-          .slice(0, visibleMeals)
-          .filter((meal) => Boolean(meal.total_rating))
-          .map((meal, idx) => {
-            return (
-              <div
-                className={styles.card1}
-                key={idx}
-                onClick={() => {
-                  setSelectedItem(meal);
-                  setOpenModal(true);
-                }}
-              >
-                {
-                  <div className={styles.box}>
-                    <img src={meal?.itemImage0} className={styles.storeImg1} />
-                    <div className={styles.flex}>
-                      <p className={styles.name2}>{meal.item_name}</p>
-                      <p>${meal.item_price ? meal.item_price : "0"}</p>
-                    </div>
-                    <p className={styles.storeName}>Chop Chow Official Store</p>
-                    <div className={styles.flex}>
-                      <div>
-                        {Array(5)
-                          .fill("_")
-                          .map((_, idx) => (
-                            <GoStarFill
-                              key={idx + _}
-                              color={
-                                meal.average_rating > idx
-                                  ? "#04D505"
-                                  : "rgba(0,0,0,0.5)"
-                              }
-                              style={{ marginLeft: ".2rem" }}
-                            />
-                          ))}
-                      </div>
-                      <p className={styles.prep}> 0 mins </p>
-                    </div>
-                  </div>
-                }
+      <div className={styles.topcontainer1}>
+        <Element
+          id="store"
+          name="store"
+          style={{ fontSize: "2rem", marginBottom: "1rem" }}
+        >
+          Popular Meals
+        </Element>
+        <div className={styles.filter}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              cursor: "pointer"
+            }}
+            onClick={() => setIsOpen(true)}
+          >
+            <p>Filter by: {saleType.toString()}</p>
+            <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
+          </div>
+          {isOpen && (
+            <div ref={ref} className={styles.saleType}>
+              <div className={styles.flexer}>
+                <input
+                  checked={saleType.includes("For sale")}
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("For sale")}
+                  id="for_sale"
+                />
+                <label htmlFor="for_sale">For sale</label>
               </div>
-            );
-          })}
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("Not for sale")}
+                  checked={saleType.includes("Not for sale")}
+                  id="not_for_sale"
+                />
+                <label htmlFor="not_for_sale">Not for sale</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  onChange={() => handleAdd("Show all")}
+                  type="radio"
+                  name="sale"
+                  id="show_all"
+                  checked={saleType.includes("Show all")}
+                />
+                <label htmlFor="show_all">Show all</label>
+              </div>
+              <button
+                onClick={() => {
+                  const keys = {
+                    item_price: saleType === "For sale" ? 1 : 0,
+                  };
+                  if (saleType === "Show all") {
+                    delete keys.item_price;
+                  }
+                  fetchMeals(1, keys);
+                }}
+                className={styles.saleBtn}
+              >
+                Apply filter
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className={styles.stores2}>
+        {meals?.map((meal, idx) => {
+          return (
+            <div
+              className={styles.card1}
+              key={meal._id}
+              onClick={() => {
+                setSelectedItem(meal);
+                setOpenModal(true);
+                setSelectedItemId(meal._id);
+              }}
+            >
+              {
+                <div className={styles.box}>
+                  <img
+                    src={
+                      meal?.itemImage0
+                        ? meal?.itemImage0
+                        : "/assets/store_pics/no-image-meal.png"
+                    }
+                    className={styles.storeImg1}
+                  />
+                  <div className={styles.flex}>
+                    <p className={styles.name2}>{meal.item_name}</p>
+                    <p>{convertCurrency(meal.item_price ? meal.item_price : 0)}</p>
+                  </div>
+                  <p className={styles.storeName}>Chop Chow Official Store</p>
+                  <div className={styles.flex}>
+                    <div>
+                      {Array(5)
+                        .fill("_")
+                        .map((_, idx) => (
+                          <GoStarFill
+                            key={idx + _}
+                            color={
+                              meal.average_rating > idx
+                                ? "#04D505"
+                                : "rgba(0,0,0,0.5)"
+                            }
+                            style={{ marginLeft: ".2rem" }}
+                          />
+                        ))}
+                    </div>
+                    <p className={styles.prep}> 0 mins </p>
+                  </div>
+                </div>
+              }
+            </div>
+          );
+        })}
         {!matches ? (
           <Mealmodal
             openList={openList}
             openModal={openModal}
             selectGrocery={selectGrocery}
             selectedItem={selectedItem}
+            selectedItemId={selectedItemId}
             setOpenList={setOpenList}
             setOpenModal={setOpenModal}
             show={show}
@@ -188,6 +349,9 @@ export const PopularMeals = () => {
             setQuantity={setQuantity}
             quantity={quantity}
             setShow={setShow}
+            addToCart={addItemToCart}
+            serve={serve}
+            setServe={setServe}
           />
         ) : (
           <IndividualModal
@@ -204,13 +368,19 @@ export const PopularMeals = () => {
             setItemAdd={setItemAdd}
             setQuantity={setQuantity}
             quantity={quantity}
+            selectedItemId={selectedItemId}
             setShow={setShow}
+            addToCart={addItemToCart}
+            serve={serve}
+            setServe={setServe}
           />
         )}
       </div>
-      <p className={styles.view} onClick={() => loadMore()}>
-        View More
-      </p>
+      {hasMoreData && (
+        <p className={styles.view} onClick={loadMore}>
+          View More
+        </p>
+      )}
       <div className={styles.border} />
     </div>
   );

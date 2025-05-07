@@ -1,65 +1,84 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import styles from "./transferToInventory.module.css";
 import styled from "styled-components";
-import Switch from "@mui/material/Switch";
+import Switch from "react-switch";
 import { useEffect, useState } from "react";
 import axios from "../../util/Api";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Image from "next/image";
 import { AiFillInfoCircle } from "react-icons/ai";
+import { useMediaQuery } from "../../hooks/usemediaquery";
+import Select from "react-select";
+import { toast } from "react-toastify";
 
+// const CustomSwitch = ({ checked, onChange }) => {
+//   return (
+//     <SwitchContainer onClick={() => onChange(!checked)}>
+//       <SwitchSlider checked={checked}>
+//         <SwitchBackground />
+//         <SwitchLabel checked={checked}>{checked ? "Yes" : "No"}</SwitchLabel>
+//       </SwitchSlider>
+//     </SwitchContainer>
+//   );
+// };
 const CustomSwitch = ({ checked, onChange }) => {
+  const handleClick = () => {
+    const newChecked = !checked;
+    onChange(newChecked);
+  };
+
   return (
-    <SwitchContainer onClick={() => onChange(!checked)}>
-      <SwitchSlider checked={checked} />
-      <SwitchLabel>{checked ? "Yes" : "No"}</SwitchLabel>
-    </SwitchContainer>
+    <div className={styles.switch} onClick={handleClick}>
+      <div className={styles.flexed}>
+        <p style={{ fontSize: "12px", marginLeft: "2px" }}>Yes</p>
+        <p style={{ fontSize: "12px", marginLeft: "2px" }}>No</p>
+      </div>
+      <div className={checked ? styles.roundSwitch : styles.roundSwitch2}>
+        <p>{checked ? "Yes" : "No"}</p>
+      </div>
+    </div>
   );
 };
 
 const SwitchContainer = styled.div`
-  display: inline-block;
   position: relative;
-  width: 70px;
-  height: 30px;
-  cursor: pointer;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  background-color: "#FFF"
+  box-shadow: "0px 4px 5px 0px #0000001A",
+
 `;
 
 const SwitchSlider = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: ${(props) => (props.checked ? "#04D505" : "#949494")};
-  border-radius: 20px;
-  transition: background-color 0.3s;
-  pointer-events: none;
-  &::before {
-    content: "";
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    left: ${(props) => (props.checked ? "calc(100% - 30px)" : "0")};
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: white;
-    border-radius: 50%;
-    transition: left 0.3s;
-  }
+  position: relative;
+  cursor: pointer;
+  width: 60px;
+  height: 34px;
+  background-color: ${(props) => (props.checked ? "#fff" : "#4CAF50")};
+  border-radius: 34px;
 `;
 
-const SwitchLabel = styled("span")`
+const SwitchBackground = styled.div`
+  position: absolute;
+  width: ${(props) => (props.checked ? "100%" : "0%")};
+  height: 100%;
+  background-color: #4caf50;
+  border-radius: 34px;
+  transition: width 0.2s ease;
+`;
+
+const SwitchLabel = styled.span`
+  color: black;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: ${(props) => (props.checked ? "5px" : "calc(100% - 25px)")};
   transform: translate(-50%, -50%);
-  color: white;
-  font-size: 14px;
+  transition: left 0.2s ease;
 `;
 
 export default function TransferToInventory(props) {
-  console.log(props.checked, "pppp");
+  const matches = useMediaQuery("(min-width: 700px)");
   const [restockOption, setRestockOption] = useState();
   const [restockTime, setRestockTime] = useState("1 day");
   const [message, setMessage] = useState({
@@ -75,119 +94,205 @@ export default function TransferToInventory(props) {
     estimated_preparation_time: 0,
     item_type: "Meal",
     in_stock: true,
+    meal_type: "non packaged",
+    storeId: [],
+    meal_prices: {},
+    meal_price: ""
   });
   const { reloadData } = props;
 
   const { ingredientsAvailable, item_type, in_stock } = formState;
-  console.log(props, "pp");
-  // useEffect(() => {
-  //   console.log( props.meal.ingredeints_in_item, 'propsss');
-  //   if (props.meal.item_type === "Meal" && props.meal.ingredeints_in_item) {
-  //     const ingredientsAvailable = props.meal.ingredeints_in_item;
 
-  //     const newIngredients = ingredientsAvailable?.map((ingredient) => ({
-  //       name: ingredient.item_name,
-  //       quantity: ingredient.quantity,
-  //       set_price: "",
-  //       product_available: true,
-  //     }));
-
-  //     console.log(newIngredients, 'new');
-
-  //     setFormState((prevState) => ({
-  //       ...prevState,
-  //       ingredientsAvailable: newIngredients,
-  //       item_type: props.type,
-  //     }));
+  // function handleChange(e) {
+  //   const { name, value } = e.target;
+  //   if (name === "meal_type") {
+  //     if (value === "packaged") {
+  //       setFormState({
+  //         ...formState,
+  //         [name]: value,
+  //         ["prepackagedMeal"]: true,
+  //       });
+  //     } else {
+  //       setFormState({
+  //         ...formState,
+  //         [name]: value,
+  //         ["prepackagedMeal"]: false,
+  //       });
+  //     }
+  //   } else {
+  //     setFormState({ ...formState, [name]: value });
   //   }
-  // }, [props.meal.item_type, props.meal.ingredeints_in_item]);
-
+  // }
   function handleChange(e) {
     const { name, value } = e.target;
+
     if (name === "meal_type") {
-      if (value === "packaged") {
-        setFormState({
-          ...formState,
-          [name]: value,
-          ["prepackagedMeal"]: true,
-        });
-      } else {
-        setFormState({
-          ...formState,
-          [name]: value,
-          ["prepackagedMeal"]: false,
-        });
-      }
-    } else {
-      setFormState({ ...formState, [name]: value });
+      setFormState((prev) => ({
+        ...prev,
+        [name]: value,
+        prepackagedMeal: value === "packaged",
+      }));
+      return;
     }
 
-    console.log(formState);
+    if (name.startsWith("price_")) {
+      const currencySymbol = name.split("price_")[1];
+      const parsed = parseFloat(value);
+
+      setFormState((prev) => {
+        const updatedPrices = {
+          ...prev.meal_prices,
+          [currencySymbol]: isNaN(parsed) ? "" : parsed,
+        };
+
+        const firstStore = allStores.find((s) => s._id === prev.storeId[0]);
+        const defaultCurrency = firstStore?.currency?.symbol || "$";
+        const defaultPrice = updatedPrices[defaultCurrency] ?? "";
+
+        return {
+          ...prev,
+          meal_prices: updatedPrices,
+          meal_price: defaultPrice,
+        };
+      });
+
+      return;
+    }
+
+    // Default handler
+    setFormState((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   }
 
-  // useEffect(() => {
-  //   if (props?.ingredeints_in_item) {
-  //     setFormState({
-  //       ...formState,
-  //       ingredientsAvailable: props.ingredeints_in_item,
-  //     });
-  //   }
-  // }, [props?.ingredeints_in_item]);
 
   function handleInStockChange(value) {
     setFormState({ ...formState, in_stock: value });
   }
 
-  function handleIngredientChange(e, id, key) {
-    const { value } = e.target;
-    console.log(e, id, key);
-    let ingredientsAvailable = formState.ingredientsAvailable;
-    ingredientsAvailable[id][key] = value;
-    console.log(ingredientsAvailable);
-    setFormState({
-      ...formState,
-      ["ingredientsAvailable"]: ingredientsAvailable,
+  const handleIngredientChange = (index, field, value) => {
+    console.log(`Updating index ${index}, field: ${field}, value: "${value}"`);
+
+    setFormState((prevState) => {
+      const updatedIngredients = [...prevState.ingredientsAvailable];
+      const ingredient = { ...updatedIngredients[index] };
+
+      if (field.startsWith("set_price_")) {
+        const currency = field.replace("set_price_", "");
+        const updatedSetPrices = ingredient.set_prices ? [...ingredient.set_prices] : [];
+
+        const priceIndex = updatedSetPrices.findIndex(p => p.currency === currency);
+
+        if (priceIndex > -1) {
+          updatedSetPrices[priceIndex].price = value !== "" ? Number(value) : 0;
+        } else {
+          updatedSetPrices.push({
+            store_id: prevState.storeId[0] ?? "", // Ensure correct store_id
+            currency,
+            price: value !== "" ? Number(value) : 0,
+          });
+        }
+
+        ingredient.set_prices = updatedSetPrices;
+        console.log("Updated set_prices:", updatedSetPrices); // Debugging
+      } else {
+        ingredient[field] = value;
+      }
+
+      updatedIngredients[index] = ingredient;
+      return { ...prevState, ingredientsAvailable: updatedIngredients };
     });
-  }
+  };
+
+
+
+
 
   function handleIngredientAvailabilityChange(value, id, key) {
-    console.log(value);
-    let ingredientsAvailable = formState.ingredientsAvailable;
-    ingredientsAvailable[id][key] = value;
+    // Create a shallow copy of the ingredientsAvailable array
+    const updatedIngredientsAvailable = [...formState.ingredientsAvailable];
+
+    // Update the availability of the ingredient at the specified index
+    updatedIngredientsAvailable[id] = {
+      ...updatedIngredientsAvailable[id],
+      [key]: value,
+    };
+
+    // Update the formState with the updated ingredientsAvailable array
     setFormState({
       ...formState,
-      ["ingredientsAvailable"]: ingredientsAvailable,
+      ingredientsAvailable: updatedIngredientsAvailable,
     });
   }
 
   function sendToInventory() {
-    let fields = formState;
+    const fields = { ...formState };
+
+    if (!prices || Object.keys(prices).length === 0) {
+      toast.error(`Meal price cannot be empty!`);
+      return;
+    }
+
+    const selectedStores = allStores.filter((store) =>
+      formState.storeId.includes(store._id)
+    );
+
+    const meal_price = selectedStores.map((store) => {
+      const symbol = store.currency?.symbol;
+      return {
+        store_id: store._id,
+        currency: symbol,
+        price: Number(prices[symbol]) || 0,
+      };
+    });
+
+    const hasEmptyPrice = meal_price.some((item) => item.price === 0);
+    if (hasEmptyPrice) {
+      toast.error("Meal price cannot be empty for selected stores!");
+      return;
+    }
+
+    const updatedIngredients = formState.ingredientsAvailable.map((ingredient) => {
+      const existingPrices = ingredient.set_prices || [];
+    
+      const updatedSetPrices = selectedStores.map((store) => {
+        const currency = store.currency?.symbol;
+        const existingPrice = existingPrices.find((p) => p.currency === currency);
+    
+        return {
+          store_id: store._id,
+          currency,
+          price: existingPrice ? existingPrice.price : 0, 
+        };
+      });
+    
+      return { ...ingredient, set_prices: updatedSetPrices };
+    });
+    
+    console.log("Set Prices Before Submitting:", updatedIngredients);
 
     delete fields.meal_type;
     fields["item"] = props.meal._id;
-    // fields["storeId"] = "63783f54088dda05688af4df";
-    fields.ingredients = formState.ingredientsAvailable;
-    delete formState.ingredientsAvailable;
+    fields.ingredients = updatedIngredients;
+    delete fields.ingredientsAvailable;
     fields.user = JSON.parse(localStorage.getItem("user"))?._id ?? "";
+
+    fields["meal_price"] = meal_price;
+
     axios
       .post("/inventory/create-inventory", fields)
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
-          // this.setState({ booleanOfDisplayOfDialogBoxConfirmation: true });
-          console.log(response);
-          console.log("Display Item submitted successfully");
           props.setTransferToInventoryState(false);
           setShow(true);
-          setTimeout(() => {
-            setShow(false);
-          }, 4000);
+          setTimeout(() => setShow(false), 4000);
           setMessage({
             response:
-              "Your request has been sent to the administrator; you will be notified when it is approved or rejected. It might take up to 2-3 hours, so please be patient.",
+              "Your request has been sent to the administrator; you will be notified when it is approved or rejected. It might take up to 2–3 hours, so please be patient.",
             success: true,
           });
           reloadData();
-          // window.location.href = "/SuggestMeal"
         } else {
           setMessage("Something wrong happened");
         }
@@ -195,9 +300,7 @@ export default function TransferToInventory(props) {
       .catch((error) => {
         props.setTransferToInventoryState(false);
         setShow(true);
-        setTimeout(() => {
-          setShow(false);
-        }, 4000);
+        setTimeout(() => setShow(false), 4000);
         setMessage({
           response:
             "Your request cannot be completed as Item is already in Inventory",
@@ -206,7 +309,6 @@ export default function TransferToInventory(props) {
         console.log(error);
       });
   }
-
   function handleRestockTimeChange(type) {
     setRestockTime(type);
     toggleRestockTimeOption();
@@ -215,7 +317,6 @@ export default function TransferToInventory(props) {
   function toggleRestockTimeOption() {
     setRestockOption(!restockOption);
   }
-  console.log(props, "ty");
 
   useEffect(() => {
     if (
@@ -226,7 +327,7 @@ export default function TransferToInventory(props) {
         return {
           item_name: element.item_name,
           item_quantity: element.item_quantity,
-          set_price: "",
+          set_prices: [],
           product_available: true,
         };
       });
@@ -234,13 +335,60 @@ export default function TransferToInventory(props) {
     }
   }, [props]);
   const [allStores, setAllStores] = useState([]);
+  const getSelectedStore = () => {
+    return allStores.find((store) => store._id === formState.storeId) || null;
+  };
+  const selectedStores = allStores.filter((store) =>
+    formState.storeId.includes(store._id)
+  );
   const getSelectedStoreCurrencySymbol = () => {
-    const selectedStoreObj = allStores.find(
-      (store) => store._id === formState.storeId
+    if (!formState.storeId?.length || !allStores.length) return "$";
+
+    const selectedStoreObj = allStores.find((store) =>
+      formState.storeId.includes(store._id)
     );
 
-    return selectedStoreObj?.currency?.symbol || "$"; // Default to '$' if not found
+    return selectedStoreObj?.currency?.symbol || "$";
   };
+  // const getSelectedStoreCurrencySymbol = () => {
+  //   if (!formState.storeId?.length || !allStores.length) return ["$"]; // Default
+
+  //   const selectedStores = allStores.filter((store) =>
+  //     formState.storeId.includes(store._id)
+  //   );
+
+  //   // Extract unique currency symbols
+  //   const uniqueCurrencies = [
+  //     ...new Set(selectedStores.map((store) => store.currency.symbol)),
+  //   ];
+
+  //   return uniqueCurrencies;
+  // };
+
+  const getUniqueCurrencies = () => {
+    if (!allStores.length || !formState.storeId.length) {
+      return [{ symbol: "$", name: "USD" }];
+    }
+
+    const selectedStores = allStores.filter((store) =>
+      formState.storeId.includes(store._id)
+    );
+    const currencyMap = new Map();
+
+    selectedStores.forEach((store) => {
+      if (store.currency?.symbol) {
+        currencyMap.set(store.currency.symbol, store.currency);
+      }
+    });
+
+    const uniqueCurrencies = Array.from(currencyMap.values());
+
+    return uniqueCurrencies.length ? uniqueCurrencies : [{ symbol: "$", name: "USD" }];
+  };
+
+
+  const [prices, setPrices] = useState({});
+
   const fetchOneUserStore = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"))?._id;
@@ -250,17 +398,39 @@ export default function TransferToInventory(props) {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data.data, "one store");
+      console.log(response.data.data, 'store pe')
       setAllStores(response.data.data);
       setCurrency(response.data.data);
     } catch (error) {
       console.log(error);
     }
   };
+  // useEffect(() => {
+  //   fetchOneUserStore();
+  // }, []);
+  // if (in_stock) {
+  // } else {
+  // }
   useEffect(() => {
     fetchOneUserStore();
   }, []);
-  console.log(formState.ingredientsAvailable, "avail");
+
+  const storeOptions = allStores?.map((elem) => ({
+    value: elem?._id,
+    label: elem?.store_name,
+  }));
+  console.log(allStores, 'alll')
+  // useEffect(() => {
+  //   const defaultCurrencies = getUniqueCurrencies();
+  //   const initialPrices = {};
+
+  //   defaultCurrencies.forEach((currency) => {
+  //     initialPrices[currency.symbol] = "";
+  //   });
+
+  //   setPrices(initialPrices);
+  // }, [formState.storeId]);
+
   return (
     <>
       {show && (
@@ -311,7 +481,7 @@ export default function TransferToInventory(props) {
         <div className={styles.transToIn_container}>
           <div className={styles.transToIn}>
             <div className={styles.transToIn_top}>
-              <h2>Transfer {" " + item_type + " "} to Inventory</h2>
+              <h2>Transfer {" " + props?.meal?.item_name + " "} to Inventory</h2>
 
               <div onClick={props.toggleTransferToInventory}>
                 <CancelIcon className={styles.transToIn_cancel_con} />
@@ -327,40 +497,51 @@ export default function TransferToInventory(props) {
                   borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                 }}
               >
-                <label htmlFor="mySelect" style={{ paddingBottom: "1rem" }}>
+                <label
+                  htmlFor="mySelect"
+                  style={{ paddingBottom: "1rem", fontSize: "14px" }}
+                >
                   Which store are you sending from?
                 </label>
-                <select
-                  style={{
-                    width: "25%",
-                    height: "34px",
-                    border: "1px solid #E6E6E6",
-                    outline: "none",
-                    borderRadius: "4px",
-                  }}
-                  onChange={(e) => {
-                    setFormState({
-                      ...formState,
-                      ["storeId"]: e.target.value,
-                    });
-                    setSelectedStore(e.target.value);
-                  }}
-                  name="storeId"
-                  value={formState.storeId}
-                >
-                  {allStores?.map((elem) => (
-                    <option key={elem?._id} value={elem?._id}>
-                      {elem?.store_name}
-                    </option>
-                  ))}
-                </select>
+
+                <div className={styles.dropdown}>
+                  {/* <button className={styles.dropdownButton}>Select Stores</button> */}
+                  <div>
+                    {allStores.map((store) => (
+                      <label key={store._id} style={{ marginLeft: "1rem" }}>
+                        <input
+                          style={{ marginRight: ".5rem" }}
+                          type="checkbox"
+                          value={store._id}
+                          checked={formState.storeId?.includes(store._id) || false}
+                          onChange={(e) => {
+                            const storeIds = formState.storeId || [];
+                            const selectedValues = e.target.checked
+                              ? [...storeIds, e.target.value] // Add store
+                              : storeIds.filter((id) => id !== e.target.value); // Remove store
+
+                            console.log(selectedValues, "selected stores");
+
+                            setFormState((prev) => ({
+                              ...prev,
+                              storeId: selectedValues,
+                            }));
+                          }}
+                        />
+                        {store.store_name}
+                      </label>
+                    ))}
+
+                  </div>
+                </div>
               </div>
               <div className={styles.transToIn_meal_types}>
-                <p>Choose Meal Type</p>
+                <p>Choose {props?.meal?.item_type} Type</p>
                 {props?.meal?.item_type === "Meal" ? (
                   <div className={styles.transToIn_meal_type}>
                     <div className={styles.transToIn_meal_type_option}>
                       <input
+                        defaultChecked
                         onChange={handleChange}
                         className={styles.transToIn_meal_type_radioInput}
                         type="radio"
@@ -461,13 +642,24 @@ export default function TransferToInventory(props) {
 
               <div className={styles.transToIn_details_col2}>
                 <div>
-                  <h3>Set {" " + item_type + " "} Price</h3>
-                  <div>
-                    <p>Enter {" " + item_type + " "} Price</p>
-                    <h4>{getSelectedStoreCurrencySymbol()}</h4>
+                  <h3>Set {props?.meal?.item_type} Price</h3>
+                  {getUniqueCurrencies().map((currency) => (
+                    <div key={currency.symbol} style={{ marginBottom: "1rem" }}>
+                      <label>
+                        Enter Price {currency.symbol}
+                      </label>
+                      <input
+                        value={prices[currency.symbol] || ""}
+                        onChange={(e) =>
+                          setPrices((prev) => ({
+                            ...prev,
+                            [currency.symbol]: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  ))}
 
-                    <input onChange={handleChange} name="meal_price" />
-                  </div>
                 </div>
                 <div>
                   <h3>Set Estimated preparation time</h3>
@@ -484,13 +676,15 @@ export default function TransferToInventory(props) {
               </div>
 
               <div className={styles.transToIn_details_col3}>
-                <div>
-                  <h3>Are the ingredients available in your store</h3>
-                  <CustomSwitch
-                    checked={in_stock}
-                    onChange={handleInStockChange}
-                  />
-                </div>
+                {props?.meal?.item_type === "Meal" &&
+                  <div>
+                    <h3>Are the ingredients available in your store</h3>
+                    <CustomSwitch
+                      checked={in_stock}
+                      onChange={handleInStockChange}
+                    />
+                  </div>
+                }
                 <div>
                   <h3>Out of Stock? How long before restock</h3>
                   <div className={styles.select_container}>
@@ -547,95 +741,102 @@ export default function TransferToInventory(props) {
                         style={{ height: "2px" }}
                       >
                         <thead>
-                          <div
-                            className={styles.request_tr1}
-                            style={{ backgroundColor: "transparent" }}
-                          >
-                            <th className={styles.request_th}>Items</th>
-                            <th
-                              className={
-                                styles.request_th + " " + styles.hideData
-                              }
+                          {matches ? (
+                            <div
+                              className={styles.request_tr1}
+                              style={{ backgroundColor: "transparent" }}
                             >
-                              Quantity
-                            </th>
-                            <th className={styles.request_th}>Set Price</th>
-                            <th className={styles.request_th}>
-                              Product Available
-                            </th>
-                          </div>
+                              <th className={styles.request_th}>Items</th>
+                              <th
+                                className={
+                                  styles.request_th + " " + styles.hideData
+                                }
+                              >
+                                Quantity
+                              </th>
+                              <th className={styles.request_th}>Set Price</th>
+                              <th className={styles.request_th}>
+                                Product Available
+                              </th>
+                            </div>
+                          ) : (
+                            <div
+                              className={styles.request_tr1}
+                              style={{ backgroundColor: "transparent" }}
+                            >
+                              <th className={styles.request_th}>Items</th>
+                              <th
+                                className={
+                                  styles.request_th + " " + styles.hideData
+                                }
+                              >
+                                Quantity
+                              </th>
+                              <th className={styles.request_th}>Set Price</th>
+                            </div>
+                          )}
                         </thead>
                         <tbody className={styles.tbody}>
-                          {formState.ingredientsAvailable?.map(
-                            (ingredient, index) => {
-                              return (
-                                <div
-                                  className={
-                                    styles.refId + " " + styles.request_tr
-                                  }
-                                >
-                                  <div className={styles.request_td}>
-                                    {ingredient.item_name}
-                                  </div>
-                                  <div
-                                    className={
-                                      styles.request_td + " " + styles.hideData
-                                    }
-                                  >
-                                    <input
-                                      value={
-                                        formState.ingredientsAvailable[index]
-                                          ?.item_quantity
-                                      }
-                                      onChange={(e) =>
-                                        handleIngredientChange(
-                                          e,
-                                          index,
-                                          "item_quantity"
-                                        )
-                                      }
-                                      name="meal_price"
-                                    />
-                                  </div>
-                                  <div className={styles.request_td}>
-                                    {getSelectedStoreCurrencySymbol()}
-                                    <input
-                                      value={
-                                        formState.ingredientsAvailable[index]
-                                          ?.set_price
-                                      }
-                                      onChange={(e) =>
-                                        handleIngredientChange(
-                                          e,
-                                          index,
-                                          "set_price"
-                                        )
-                                      }
-                                      name="meal_price"
-                                    />
-                                  </div>
-                                  <div className={styles.request_td}>
-                                    <CustomSwitch
-                                      checked={
-                                        formState.ingredientsAvailable[index]
-                                          ?.product_available
-                                      }
-                                      onChange={(e) =>
-                                        handleIngredientAvailabilityChange(
-                                          !ingredient.product_available,
-                                          index,
-                                          "product_available"
-                                        )
-                                      }
-                                      inputProps={{
-                                        "aria-label": "ant design",
-                                      }}
-                                    />
-                                  </div>
+                          {formState.ingredientsAvailable?.map((ingredient, index) => {
+                            const currencyGroups = {};
+                            selectedStores.forEach((store) => {
+                              const currency = store.currency?.symbol;
+
+                              if (!currencyGroups[currency]) {
+                                currencyGroups[currency] = {
+                                  store_ids: [],
+                                  price: ingredient.set_prices?.find((p) => p.currency === currency)?.price || "",
+                                };
+                              }
+
+                              currencyGroups[currency].store_ids.push(store._id);
+                            });
+
+                            return (
+                              <div key={index} className={styles.refId + " " + styles.request_tr}>
+                                <div className={styles.request_td}>{ingredient.item_name}</div>
+
+                                <div className={styles.request_td + " " + styles.hideData}>
+                                  <input
+                                    value={ingredient.item_quantity || ""}
+                                    onChange={(e) => handleIngredientChange(index, "item_quantity", e.target.value)}
+                                    name="item_quantity"
+                                  />
                                 </div>
-                              );
-                            }
-                          )}
+
+                                <div className={styles.request_td}>
+                                  {Object.entries(currencyGroups).map(([currency, data], priceIndex) => (
+                                    <div key={priceIndex} style={{ display: 'flex', gap: "0.5rem", marginBottom: "0.5rem", alignItems: 'center' }}>
+                                      {currency}
+                                      <div className={styles.request_td}>
+                                        <input
+                                          value={data.price || ""}
+                                          onChange={(e) => {
+                                            console.log(`Input change for ${currency}: ${e.target.value}`); // Debugging
+                                            handleIngredientChange(index, `set_price_${currency}`, e.target.value);
+                                          }}
+                                          name={`set_price_${currency}`}
+                                        />
+                                      </div>
+                                      <input type="hidden" name={`store_ids_${currency}`} value={data.store_ids.join(",")} />
+                                    </div>
+                                  ))}
+
+                                </div>
+
+                                <div className={styles.request_td}>
+                                  <CustomSwitch
+                                    checked={ingredient.product_available || false}
+                                    onChange={() =>
+                                      handleIngredientAvailabilityChange(!ingredient.product_available, index, "product_available")
+                                    }
+                                    inputProps={{ "aria-label": "ant design" }}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+
                         </tbody>
                       </table>
                     </div>
