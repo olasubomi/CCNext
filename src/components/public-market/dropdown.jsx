@@ -182,6 +182,8 @@ export const MealDropDown = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isShow]);
+
+  console.log(selectedStore?.inventory, 'my invet')
   return (
     <div className={styles.modalContainer}>
       <div className={styles.modalCard2} ref={dropdownRef}>
@@ -281,8 +283,12 @@ export const MealDropDown = ({
                         return <p>No matching stores found.</p>;
                       }
                       return filteredStores.map((elem) => (
-                        <p key={elem.storeId} className={styles.name2}>
-                          {convertCurrency(meal?.item.item_price ? meal?.item.item_price : 0)}
+                        <p>
+                          {
+                            meal.meal_price?.find(
+                              (ele) => ele.price === meal?.item?.item_price
+                            )?.currency || '$'
+                          }{meal?.item?.item_price ?meal?.item?.item_price : 0}
                         </p>
                       ));
                     })()

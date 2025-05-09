@@ -356,7 +356,13 @@ export const AllUtensils = () => {
                     />
                     <div className={styles.flex}>
                       <p className={styles.name2}>{utensil.item_name}</p>
-                      <p>{convertCurrency(utensil?.item_price ? utensil?.item_price : 0)}</p>
+                      <p>
+                      {
+                        utensil?.inventories?.[0]?.meal_price?.find(
+                          (ele) => ele.price === utensil.item_price
+                        )?.currency || '$'
+                      }{utensil.item_price ? utensil.item_price : 0}
+                    </p>
 
                     </div>
                     <p className={styles.storeName}>Chop Chow Official Store</p>

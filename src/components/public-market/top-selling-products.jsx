@@ -308,7 +308,13 @@ export const TopSellingProducts = () => {
                 />
                 <div className={styles.flex}>
                   <p className={styles.name2}>{product.item_name}</p>
-                  <p>{convertCurrency(product?.item_price ? product.item_price : "0.00")}</p>
+                  <p>
+                    {
+                      product?.inventories?.[0]?.meal_price?.find(
+                        (ele) => ele.price === product.item_price
+                      )?.currency || '$'
+                    }{product.item_price ? product.item_price : 0}
+                  </p>
                 </div>
                 <p className={styles.storeName}>Chop Chow Official Store</p>
                 <div className={styles.flex}>
