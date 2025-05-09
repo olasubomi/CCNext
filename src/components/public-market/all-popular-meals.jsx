@@ -326,7 +326,13 @@ export const AllPopularMeals = () => {
                       />
                       <div className={styles.flex}>
                         <p className={styles.name2}>{meal.item_name}</p>
-                        <p>{convertCurrency(meal.item_price ? meal.item_price : 0)}</p>
+                        <p>
+                          {
+                            meal?.inventories?.[0]?.meal_price?.find(
+                              (ele) => ele.price === meal.item_price
+                            )?.currency || '$'
+                          }{meal.item_price ? meal.item_price : 0}
+                        </p>
                       </div>
                       <p className={styles.storeName}>
                         Chop Chow Official Store

@@ -30,9 +30,11 @@ function MyApp({ Component, pageProps }) {
 
   const get_currency = useCallback(async () => {
     try {
-      const exchange_rates = await axios.get("https://api.currencyapi.com/v3/latest", {
-        headers: {
-          "apikey": "cur_live_QIzWoYONnBsFHsyitbrF0OoQX9GTGhBGN8awyTZX"
+      // const exchange_rates = await axios.get("https://api.currencyapi.com/v3/latest", {
+        const exchange_rates = await axios.get("https://api.freecurrencyapi.com/v1/latest?", {
+       
+        params: {
+        "apikey": "fca_live_1jGZuiDGEmMDwh1pthqOauSiKPMI6aIXOnTkkKKR"
         }
       })
       const res = await axios.get("https://ipapi.co/json/");
@@ -46,7 +48,7 @@ function MyApp({ Component, pageProps }) {
       localStorage.setItem("userCurrency", countries?.currency || "USD")
       localStorage.setItem("exchangeRates", JSON.stringify(Object.values(exchange_rates.data.data)))
     } catch (error) {
-      console.log(error)
+      console.log(error, 'helo')
     }
   }, [])
 
