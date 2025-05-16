@@ -25,7 +25,7 @@ export const PopularMeals = () => {
   const [quantity, setQuantity] = useState(0);
   const [serve, setServe] = useState(0);
   const dispatch = useDispatch();
-  const [saleType, setSaleType] = useState("Show all");
+  const [saleType, setSaleType] = useState("For sale");
   const ref = useRef(null);
   const saleTypeRef = useRef("For sale");
   const [isOpen, setIsOpen] = useState(false);
