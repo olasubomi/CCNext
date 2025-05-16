@@ -301,7 +301,7 @@
     height: 250px !important;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
     .user-blog-page-container .user-all-blog-posts {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     }
@@ -312,7 +312,7 @@
 }
 
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 1024px) {
 
     .blog-post-html img {
         height: 450px !important;

@@ -52,7 +52,6 @@ export default function Blog() {
         }
     }, []);
 
-
     useEffect(() => {
         handlegetAllBlogPost()
     }, [])
@@ -136,21 +135,22 @@ export default function Blog() {
                         <section className="user-all-blog-posts">
                             {
                                 Array.isArray(blogPost) ?
-                                    blogPost.map((ele) => (
-                                        <div
-                                            onClick={() => router.push(`/blog/${ele._id}`)}
-                                            key={ele?._id} className="recent-blog-2">
-                                            <img src={ele?.featured_image} />
-                                            <div className="user-feature-footer-3">
-                                                <p id="blog-post-title-2">{ele?.title}</p>
-                                                <p id="blog-id">By {ele?.author?.first_name} {ele?.author?.last_name}</p>
-                                                <div className="feature-footer">
-                                                    <p id="blog-id" >Updated on {new Date(ele?.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
-                                                    <p id="blog-id" >{ele?.category}</p>
+                                    [...blogPost]
+                                        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((ele) => (
+                                            <div
+                                                onClick={() => router.push(`/blog/${ele._id}`)}
+                                                key={ele?._id} className="recent-blog-2">
+                                                <img src={ele?.featured_image} />
+                                                <div className="user-feature-footer-3">
+                                                    <p id="blog-post-title-2">{ele?.title}</p>
+                                                    <p id="blog-id">By {ele?.author?.first_name} {ele?.author?.last_name}</p>
+                                                    <div className="feature-footer">
+                                                        <p id="blog-id" >Updated on {new Date(ele?.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                                                        { !ele?.category?.includes("undefined") && <p id="blog-id" >{ele.category}</p>}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )) : []
+                                        )) : []
                             }
                         </section>
                         <div className="user-blog-footer-col">
@@ -178,14 +178,14 @@ export default function Blog() {
                             </div>
                         </div>
                         <div className="blog-footer_">
-                        
+
                         </div>
                     </div>
                 </div>
 
             </div>
             <Footer />
-           
+
         </>
     )
 }
