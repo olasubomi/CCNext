@@ -164,7 +164,7 @@ export const TopSellingProducts = () => {
   }, [currentPage, saleType]);
 
   useEffect(() => {
-    fetchProducts();
+    fetchProducts(1, { item_price: 1 });
   }, []);
 
   const fetchGroceryList = async () => {

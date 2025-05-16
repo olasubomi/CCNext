@@ -160,7 +160,7 @@ export const PopularMeals = () => {
   }, [currentPage, saleType]);
 
   useEffect(() => {
-    fetchMeals();
+    fetchMeals(1, { item_price: 1 });
   }, []);
   const fetchGroceryList = async () => {
     try {
@@ -225,7 +225,7 @@ export const PopularMeals = () => {
               justifyContent: "center",
               alignItems: "center",
               gap: "10px",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
             onClick={() => setIsOpen(true)}
           >
