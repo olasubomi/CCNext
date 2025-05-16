@@ -22,7 +22,7 @@ export const TopSellingProducts = () => {
   const [show, setShow] = useState(false);
   const router = useRouter();
   const [quantity, setQuantity] = useState(0);
-  const [saleType, setSaleType] = useState("Show all");
+  const [saleType, setSaleType] = useState("For sale");
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
