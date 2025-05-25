@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -64,7 +64,8 @@ export const AllProducts = () => {
   const [quantity, setQuantity] = useState(0);
   const dispatch = useDispatch();
   const [showDropdown, setShowDropdown] = useState(true);
-
+  const [saleType, setSaleType] = useState("For sale");
+  const [isOpen, setIsOpen] = useState(false);
   //items to add
   const [itemToAdd, setItemAdd] = useState({
     listName: "",
@@ -135,52 +136,58 @@ export const AllProducts = () => {
     status: "",
   });
 
-  const fetchProducts = async (page, activeLetter) => {
-    setIsLoading(true);
-    const params = {};
-    if (activeLetter) {
-      params.startsWith = activeLetter;
-    }
+  const fetchProducts = async (page, other) => {
     try {
-      const response = await axios(
-        `/items/${page}?type=Product&status=Public&limit=10`,
-        {
-          method: "GET",
-          params: {
-            ...params,
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const allItems = response.data.data.items;
+      const response = await axios(`/items/${page ? page : currentPage}`, {
+        method: "GET",
+        params: {
+          type: "Product",
+          status: "Public",
+          limit: 8,
+          ...other,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const totalItems = response.data.data.count;
 
-      const filteredProducts = allItems.filter(
-        (product) => product.average_rating
-      );
+      const allItems = response.data.data.items;
 
-      const totalPages = Math.ceil(totalItems / 20);
+      setProducts((prev) => {
+        if (page === 1) {
+          return allItems;
+        } else {
+          return [...prev, ...allItems];
+        }
+      });
+      setCurrentPage((prev) => {
+        if (page === 1) {
+          return 1;
+        } else {
+          return prev + 1;
+        }
+      });
 
-      setProducts(filteredProducts);
-      setTotalPages(totalPages);
-      const lettersWithStores = filteredProducts.map((item) =>
-        item.item_name[0].toUpperCase()
-      );
-      setAvailableLetters([...new Set(lettersWithStores)]);
+      setHasMoreData(totalItems > currentPage * 8);
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchProducts(currentPage);
-  }, [currentPage, totalPages]);
+  const loadMore = useCallback(async () => {
+    const keys = {
+      item_price: saleType.includes("For sale") ? 1 : 0,
+    };
+    if (saleType === "Show all") {
+      delete keys.item_price;
+    }
+    await fetchProducts(currentPage + 1, keys);
+  }, [currentPage, saleType]);
 
-  console.log(products, "ressw");
+  useEffect(() => {
+    fetchProducts(1, { item_price: 1 });
+  }, []);
 
   const fetchGroceryList = async () => {
     try {
@@ -192,7 +199,7 @@ export const AllProducts = () => {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchGroceryList();
@@ -237,19 +244,71 @@ export const AllProducts = () => {
         </div>
         <div className={styles.topcontainer}>
           <p className={styles.marketplaceText}>
-            You no longer have to deal with the local stores running
-            out of stock of your favorite products when you can
-            find them here.
+            You no longer have to deal with the local stores running out of
+            stock of your favorite products when you can find them here.
           </p>
-          <div className={styles.flexItems}>
-            <div className={styles.filter}>
-              <p>Filter by: Price</p>
+          <div className={styles.filter}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10px",
+                cursor: "pointer",
+              }}
+              onClick={() => setIsOpen(true)}
+            >
+              <p>Filter by: {saleType.toString()}</p>
               <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
             </div>
-            <div className={styles.filter}>
-              <p>Sort: Name A-Z</p>
-              <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
-            </div>
+            {isOpen && (
+              <div ref={ref} className={styles.saleType}>
+                <div className={styles.flexer}>
+                  <input
+                    checked={saleType.includes("For sale")}
+                    type="radio"
+                    name="for_sale_product"
+                    onChange={() => handleAdd("For sale")}
+                    id="for_sale_product"
+                  />
+                  <label htmlFor="for_sale_product">For sale</label>
+                </div>
+                <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                  <input
+                    checked={saleType.includes("Not for sale")}
+                    id="for_not_sale_product"
+                    type="radio"
+                    name="for_not_sale_product"
+                    onChange={() => handleAdd("Not for sale")}
+                  />
+                  <label htmlFor="for_not_sale_product">Not for sale</label>
+                </div>
+                <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                  <input
+                    id="for_show_all_sale_product"
+                    onChange={() => handleAdd("Show all")}
+                    type="radio"
+                    name="for_show_all_sale_product"
+                    checked={saleType.includes("Show all")}
+                  />
+                  <label htmlFor="for_show_all_sale_product">Show all</label>
+                </div>
+                <button
+                  onClick={() => {
+                    const keys = {
+                      item_price: saleType.includes("For sale") ? 1 : 0,
+                    };
+                    if (saleType === "Show all") {
+                      delete keys.item_price;
+                    }
+                    fetchProducts(1, keys);
+                  }}
+                  className={styles.saleBtn}
+                >
+                  Apply filter
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.searchbar}>
@@ -391,7 +450,7 @@ export const AllProducts = () => {
                   ? styles.activepaginationButton
                   : styles.paginationButton2
               }
-              onClick={() => handlePageClick(pageNumber)}
+              onClick={() => fetchProducts(pageNumber, { item_price: 1 })}
             >
               {pageNumber}
             </div>

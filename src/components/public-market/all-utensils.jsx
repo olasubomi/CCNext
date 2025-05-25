@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { GoStarFill } from "react-icons/go";
@@ -55,6 +55,7 @@ export const AllUtensils = () => {
     setActiveLetter(id);
     fetchUtensils(currentPage, elem);
   };
+  const [meals, setMeals] = useState([]);
   const [utensils, setUtensils] = useState([]);
   const [visibleMeals, setVisibleMeals] = useState(8);
   const [selectedItem, setSelectedItem] = useState({});
@@ -64,6 +65,8 @@ export const AllUtensils = () => {
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const dispatch = useDispatch();
+  const [saleType, setSaleType] = useState(["For sale"]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
   const [itemToAdd, setItemAdd] = useState({
@@ -176,6 +179,68 @@ export const AllUtensils = () => {
       setIsLoading(false);
     }
   };
+  const fetchProducts = async (page, other) => {
+    try {
+      const response = await axios(`/items/${page ? page : currentPage}`, {
+        method: "GET",
+        params: {
+          type: "Utensil",
+          status: "Public",
+          limit: 8,
+          ...other,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const totalItems = response.data.data.count;
+      const allItems = response.data.data.items;
+
+      console.log({ allItems });
+
+      // const filteredItems = allItems.filter((meal) => meal.average_rating);
+
+      // const newItems = filteredItems.filter(
+      //   (item) => !uniqueItemIds.has(item._id)
+      // );
+
+      setMeals((prev) => {
+        if (page === 1) {
+          return allItems;
+        } else {
+          return [...prev, ...allItems];
+        }
+      });
+      // setCurrentPage((prev) => {
+      //   if (page === 1) {
+      //     return 1;
+      //   } else {
+      //     return prev + 1;
+      //   }
+      // });
+      // setUniqueItemIds(
+      //   new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
+      // );
+
+      // setHasMoreData(totalItems > currentPage * 8);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loadMore = useCallback(async () => {
+    const keys = {
+      item_price: saleType.includes("For sale") ? 1 : 0,
+    };
+    if (saleType === "Show all") {
+      delete keys.item_price;
+    }
+    await fetchProducts(currentPage + 1, keys);
+  }, [currentPage, saleType]);
+
+  useEffect(() => {
+    fetchProducts(1, { item_price: 1 });
+  }, []);
   useEffect(() => {
     fetchUtensils(currentPage);
   }, [currentPage]);
@@ -272,16 +337,70 @@ export const AllUtensils = () => {
             Choose from our wide collection of tools to make your job in the
             kitchen easier.
           </p>
-          <div className={styles.flexItems}>
-            <div className={styles.filter}>
-              <p>Filter by: Price</p>
-              <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
-            </div>
-            <div className={styles.filter}>
-              <p>Sort: Name A-Z</p>
-              <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
-            </div>
+          <div className={styles.filter}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              cursor: "pointer",
+            }}
+            onClick={() => setIsOpen(true)}
+          >
+            <p>Filter by: {saleType.toString()}</p>
+            <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
           </div>
+          {isOpen && (
+            <div ref={ref} className={styles.saleType}>
+              <div className={styles.flexer}>
+                <input
+                  checked={saleType.includes("For sale")}
+                  onChange={() => handleAdd("For sale")}
+                  id="for_sale"
+                  name="sale"
+                  type="radio"
+                />
+                <label htmlFor="for_sale">For sale</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  onChange={() => handleAdd("Not for sale")}
+                  checked={saleType.includes("Not for sale")}
+                  id="not_for_sale"
+                  name="sale"
+                  type="radio"
+                />
+                <label htmlFor="not_for_sale">Not for sale</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  onChange={() => {
+                    handleAdd("Show all");
+                  }}
+                  id="show_all"
+                  name="sale"
+                  type="radio"
+                />
+                <label htmlFor="show_all">Show all</label>
+              </div>
+              <button
+                onClick={() => {
+                  const keys = {
+                    item_price: saleType.includes("For sale") ? 1 : 0,
+                  };
+                  if (saleType === "Show all") {
+                    delete keys.item_price;
+                  }
+                  fetchProducts(1, keys);
+                }}
+                className={styles.saleBtn}
+              >
+                Apply filter
+              </button>
+            </div>
+          )}
+        </div>
         </div>
         <div className={styles.searchbar}>
           <UtensilSearchs setShowDropdown={setShowDropdown} />
@@ -335,7 +454,7 @@ export const AllUtensils = () => {
       </div>
       <div className={styles.mealContain}>
         <div className={styles.stores2}>
-          {utensils?.map((utensil, idx) => {
+          {meals?.map((utensil, idx) => {
             return (
               <div
                 className={styles.card1}
@@ -428,7 +547,7 @@ export const AllUtensils = () => {
                   ? styles.activepaginationButton
                   : styles.paginationButton2
               }
-              onClick={() => handlePageClick(pageNumber)}
+              onClick={() => fetchProducts(pageNumber, { item_price: 1 })}
             >
               {pageNumber}
             </div>
