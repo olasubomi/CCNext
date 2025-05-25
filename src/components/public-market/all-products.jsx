@@ -45,6 +45,7 @@ export const AllProducts = () => {
 
   const [activeLetter, setActiveLetter] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [hasMoreData, setHasMoreData] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -135,51 +136,49 @@ export const AllProducts = () => {
     id: "",
     status: "",
   });
-
-  const fetchProducts = async (page, activeLetter) => {
+  const fetchProducts = async (page = 1, other = {}) => {
     setIsLoading(true);
-    const params = {};
-    if (activeLetter) {
-      params.startsWith = activeLetter;
-    }
+    const limit = 8;
+
     try {
-      const response = await axios(
-        `/items/${page}?type=Product&status=Public&limit=10`,
-        {
-          method: "GET",
-          params: {
-            ...params,
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios(`/items/${page}`, {
+        method: "GET",
+        params: {
+          type: "Product",
+          status: "Public",
+          limit,
+          ...other,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
       const allItems = response.data.data.items;
       const totalItems = response.data.data.count;
-
-      const filteredProducts = allItems.filter(
-        (product) => product.average_rating
+      const calculatedTotalPages = Math.ceil(totalItems / limit);
+      const filteredItems = allItems.filter(
+        (item) => item.average_rating > 0
       );
+      if (filteredItems.length === 0 && page < totalPages) {
+      fetchProducts(page + 1);
+      return;
+    }
+      setProducts(filteredItems);
+      setTotalPages(calculatedTotalPages);
+      setCurrentPage(page);
 
-      const totalPages = Math.ceil(totalItems / 20);
-
-      setProducts(filteredProducts);
-      setTotalPages(totalPages);
-      const lettersWithStores = filteredProducts.map((item) =>
-        item.item_name[0].toUpperCase()
-      );
-      setAvailableLetters([...new Set(lettersWithStores)]);
     } catch (error) {
-      console.log(error);
+      console.error("Fetch error:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
+
   useEffect(() => {
-    fetchProducts(currentPage);
-  }, [currentPage, totalPages]);
+    fetchProducts(1);
+  }, []);
 
   console.log(products, "ressw");
 
@@ -214,21 +213,24 @@ export const AllProducts = () => {
     }
   }, []);
 
-  const handlePageClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
+  const handlePageClick = (page) => {
+    if (page !== currentPage) {
+      fetchProducts(page);
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      fetchProducts(currentPage - 1);
     }
   };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      fetchProducts(currentPage + 1);
+    }
+  };
+
 
   return (
     <>
@@ -378,35 +380,50 @@ export const AllProducts = () => {
           />
         </div>
         <div className={styles.paginationContainer}>
+          {/* Previous */}
           <div
-            onClick={handlePreviousPage}
-            disabled={currentPage === 1}
+            onClick={currentPage > 1 ? handlePreviousPage : null}
             className={
-              currentPage === 1 ? styles.disableButn : styles.paginationButton2
+              currentPage === 1
+                ? styles.disableButn
+                : styles.paginationButton2
             }
+            style={{ cursor: currentPage === 1 ? "not-allowed" : "pointer" }}
           >
-            <FaAngleLeft
-              size={17}
-              color={currentPage === 1 ? "#6D6D6D" : "#52575C"}
-            />
+            <FaAngleLeft size={17} />
           </div>
+
+          {/* Dynamic Page Numbers */}
           {[1, 2, 3].map((pageNumber) => (
             <div
               key={pageNumber}
+              onClick={() => handlePageClick(pageNumber)}
               className={
                 currentPage === pageNumber
                   ? styles.activepaginationButton
                   : styles.paginationButton2
               }
-              onClick={() => handlePageClick(pageNumber)}
             >
               {pageNumber}
             </div>
           ))}
-          <div onClick={handleNextPage} className={styles.paginationButton2}>
+
+
+          {/* Next */}
+          <div
+            onClick={currentPage < totalPages ? handleNextPage : null}
+            className={
+              currentPage === totalPages
+                ? styles.disableButn
+                : styles.paginationButton2
+            }
+            style={{ cursor: currentPage === totalPages ? "not-allowed" : "pointer" }}
+          >
             <FaAngleRight size={17} />
           </div>
         </div>
+
+
       </div>
     </>
   );

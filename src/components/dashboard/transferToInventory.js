@@ -229,11 +229,12 @@ export default function TransferToInventory(props) {
   function sendToInventory() {
     const fields = { ...formState };
 
-    if (!prices || Object.keys(prices).length === 0) {
-      toast.error(`Meal price cannot be empty!`);
-      return;
+    if (formState.meal_type !== "non packaged") {
+      if (!prices || Object.keys(prices).length === 0) {
+        toast.error(`Meal price cannot be empty!`);
+        return;
+      }
     }
-
     const selectedStores = allStores.filter((store) =>
       formState.storeId.includes(store._id)
     );
@@ -246,39 +247,47 @@ export default function TransferToInventory(props) {
         price: Number(prices[symbol]) || 0,
       };
     });
-
-    const hasEmptyPrice = meal_price.some((item) => item.price === 0);
-    if (hasEmptyPrice) {
-      toast.error("Meal price cannot be empty for selected stores!");
-      return;
+    if (formState.meal_type !== "non packaged") {
+      const hasEmptyPrice = meal_price.some((item) => item.price === 0);
+      if (hasEmptyPrice) {
+        toast.error("Meal price cannot be empty for selected stores!");
+        return;
+      }
     }
-
     const updatedIngredients = formState.ingredientsAvailable.map((ingredient) => {
       const existingPrices = ingredient.set_prices || [];
-    
+
       const updatedSetPrices = selectedStores.map((store) => {
         const currency = store.currency?.symbol;
         const existingPrice = existingPrices.find((p) => p.currency === currency);
-    
+
         return {
           store_id: store._id,
           currency,
-          price: existingPrice ? existingPrice.price : 0, 
+          price: existingPrice ? existingPrice.price : 0,
         };
       });
-    
+
       return { ...ingredient, set_prices: updatedSetPrices };
     });
-    
+
     console.log("Set Prices Before Submitting:", updatedIngredients);
 
-    delete fields.meal_type;
-    fields["item"] = props.meal._id;
+    // delete fields.meal_type;
+
     fields.ingredients = updatedIngredients;
     delete fields.ingredientsAvailable;
+    if (formState.meal_type === "non packaged") {
+      delete fields.meal_price;
+      delete fields.item;
+    }
     fields.user = JSON.parse(localStorage.getItem("user"))?._id ?? "";
 
-    fields["meal_price"] = meal_price;
+    if (formState.meal_type !== "non packaged") {
+      fields["meal_price"] = meal_price;
+      fields["item"] = props.meal._id;
+    }
+    fields["item_type"] = formState.meal_type;
 
     axios
       .post("/inventory/create-inventory", fields)
@@ -642,24 +651,27 @@ export default function TransferToInventory(props) {
 
               <div className={styles.transToIn_details_col2}>
                 <div>
-                  <h3>Set {props?.meal?.item_type} Price</h3>
-                  {getUniqueCurrencies().map((currency) => (
-                    <div key={currency.symbol} style={{ marginBottom: "1rem" }}>
-                      <label>
-                        Enter Price {currency.symbol}
-                      </label>
-                      <input
-                        value={prices[currency.symbol] || ""}
-                        onChange={(e) =>
-                          setPrices((prev) => ({
-                            ...prev,
-                            [currency.symbol]: e.target.value,
-                          }))
-                        }
-                      />
-                    </div>
-                  ))}
-
+                  {formState.meal_type !== "non packaged" && (
+                    <>
+                      <h3>Set {props?.meal?.item_type} Price</h3>
+                      {getUniqueCurrencies().map((currency) => (
+                        <div key={currency.symbol} style={{ marginBottom: "1rem" }}>
+                          <label>
+                            Enter Price {currency.symbol}
+                          </label>
+                          <input
+                            value={prices[currency.symbol] || ""}
+                            onChange={(e) =>
+                              setPrices((prev) => ({
+                                ...prev,
+                                [currency.symbol]: e.target.value,
+                              }))
+                            }
+                          />
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </div>
                 <div>
                   <h3>Set Estimated preparation time</h3>
