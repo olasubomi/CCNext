@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "../../util/Api";
 import styles from "./stores.module.css";
 import { MealDropDown } from "./dropdown";
@@ -8,6 +8,7 @@ import StorePics from "../../../public/assets/store_pics/store.jpeg";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { MobileSearch } from "../dropdown/mobile-search";
 import { StoreSearch } from "../dropdown/store-dropdown";
+import baseAxios from "axios";
 
 export const AllStores = () => {
   const alphabets = [
@@ -43,15 +44,18 @@ export const AllStores = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [country, setCountry] = useState("");
 
   const handleActiveLetter = (elem, id) => {
     setActiveLetter(id);
-    fetchStores(currentPage, elem)
+    fetchStores(currentPage, elem);
   };
   const [stores, setStores] = useState([]);
   const [isShow, setIsShow] = useState(false);
   const [selected, SetSelected] = useState(null);
   const [showDropdown, setShowDropdown] = useState(true);
+  const [saleType, setSaleType] = useState("My Location");
   const [storeInfo, setStoreInfo] = useState({
     id: 0,
     name: "",
@@ -85,31 +89,34 @@ export const AllStores = () => {
     }
   };
   console.log(stores, "one store");
-  const fetchStores = async (page = 1, activeLetter = '') => {
+  const fetchStores = async (page = 1, activeLetter = "") => {
     setIsLoading(true);
     const params = {};
-    if(activeLetter){
-      params.startsWith = activeLetter
+    if (activeLetter) {
+      params.startsWith = activeLetter;
     }
     try {
-      const response = await axios(`/stores/getallstores/${page}?limit=10&status=PUBLIC`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        params: {
-          ...params
+      const response = await axios(
+        `/stores/getallstores/${page}?limit=10&status=PUBLIC`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          params: {
+            ...params,
+          },
         }
-      });
+      );
       console.log(response.data.data.products, "resp");
       const allItems = response.data.data.products;
       const totalItems = response.data.data.count;
 
-      const filteredStores = allItems
+      const filteredStores = allItems;
 
       const totalPages = Math.ceil(totalItems / 20);
       setTotalPages(totalPages);
-      setStores(filteredStores)
+      setStores(filteredStores);
     } catch (error) {
       console.log(error);
     } finally {
@@ -118,7 +125,7 @@ export const AllStores = () => {
   };
 
   useEffect(() => {
-    fetchStores(currentPage);
+    // fetchStores(currentPage);
   }, [currentPage]);
   console.log(selectedStore, "storess");
   useEffect(() => {
@@ -149,8 +156,48 @@ export const AllStores = () => {
 
   const handlePreviousPage = () => {
     if (currentPage !== 0) {
-      setCurrentPage(currentPage -1);
+      setCurrentPage(currentPage - 1);
     }
+  };
+
+  const fetchInventories = useCallback(
+    async (saleType) => {
+      try {
+        let params = {};
+        if (saleType === "My Location") {
+          const res = await baseAxios.get("https://ipapi.co/json/");
+          setCountry(res.data?.country_name);
+          console.log(res.data?.country_name, "res.data?.country_name");
+          params.country = res.data?.country_name;
+        }
+        const response = await axios.get("/inventory/get-all-inentories/1", {
+          params,
+        });
+        setStores(response.data.data.inventory);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [country]
+  );
+
+  useEffect(() => {
+    fetchInventories("My Location");
+    // fetchStores(currentPage);
+  }, [currentPage]);
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
+  }, []);
+  const handleAdd = (type) => {
+    setSaleType(type);
   };
 
   return (
@@ -160,22 +207,61 @@ export const AllStores = () => {
       </div>
       <div className={styles.topcontainer}>
         <p className={styles.marketplaceText}>
-          Have a walk-in experience at your favourite stores from the comfort of your home.
+          Have a walk-in experience at your favourite stores from the comfort of
+          your home.
         </p>
-        <div className={styles.flexItems}>
-          <div className={styles.filter}>
-            <p>Filter by: Distance</p>
+        <div className={styles.filter}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              cursor: "pointer",
+            }}
+            onClick={() => setIsOpen(true)}
+          >
+            <p>Filter by: {saleType.toString()}</p>
             <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
           </div>
-          <div className={styles.filter}>
-            <p>Sort: Name A-Z</p>
-            <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
-          </div>
+          {isOpen && (
+            <div ref={ref} className={styles.saleType}>
+              <div className={styles.flexer}>
+                <input
+                  checked={saleType.includes("My Location")}
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("My Location")}
+                  id="My_Location"
+                />
+                <label htmlFor="My_Location">My Location</label>
+              </div>
+              <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                <input
+                  type="radio"
+                  name="sale"
+                  onChange={() => handleAdd("Show all")}
+                  checked={saleType.includes("Show all")}
+                  id="Show_all"
+                />
+                <label htmlFor="Show_all">Show all</label>
+              </div>
+
+              <button
+                onClick={() => {
+                  fetchInventories(saleType);
+                }}
+                className={styles.saleBtn}
+              >
+                Apply filter
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div className={styles.searchbar}>
-          <StoreSearch setShowDropdown={setShowDropdown} />
-        </div>
+        <StoreSearch setShowDropdown={setShowDropdown} />
+      </div>
       <div className={styles.alphabetContainer}>
         {alphabets.map((elem, index) => (
           <span
@@ -214,74 +300,73 @@ export const AllStores = () => {
         </div>
       </div>
       <div className={styles.stores}>
-        {stores
-          .map((store, id) => {
-            return (
-              <>
-                <div>
-                  <div key={id} className={styles.cardWrapper}>
-                    <div
-                      className={styles.card}
-                      onClick={() => {
-                        fetchOneStore(store._id);
-                        SetSelected(id);
-                        setStoreInfo({
-                          id: store._id,
-                          name: store?.store_name,
-                          image: store?.profile_picture,
-                          description: store?.description,
-                          address:
-                            store?.supplier_address?.address +
-                            ", " +
-                            store?.supplier_address?.city +
-                            " - " +
-                            store?.supplier_address?.country,
-                          rating: store?.average_rating,
-                        });
-                      }}
-                    >
-                      {
-                        <div>
-                          <Image
-                            src={
-                              store?.profile_picture
-                                ? store?.profile_picture
-                                : "/assets/store_pics/no-image-store.png"
-                            }
-                            className={styles.storeImg}
-                            width={200}
-                            height={200}
-                            objectFit="cover"
-                            objectPosition="center"
-                          />
-                          <p className={styles.name}>{store?.store_name}</p>
-                          <p
-                            className={styles.storeName}
-                            style={{ marginTop: ".4rem" }}
-                          >
-                            {store?.supplier_address
-                              ? store?.supplier_address?.city +
-                                " - " +
-                                store?.supplier_address?.country
-                              : ""}
-                          </p>
-                        </div>
-                      }
-                    </div>
+        {stores.map((store, id) => {
+          return (
+            <>
+              <div>
+                <div key={id} className={styles.cardWrapper}>
+                  <div
+                    className={styles.card}
+                    onClick={() => {
+                      fetchOneStore(store._id);
+                      SetSelected(id);
+                      setStoreInfo({
+                        id: store._id,
+                        name: store?.store_name,
+                        image: store?.profile_picture,
+                        description: store?.description,
+                        address:
+                          store?.supplier_address?.address +
+                          ", " +
+                          store?.supplier_address?.city +
+                          " - " +
+                          store?.supplier_address?.country,
+                        rating: store?.average_rating,
+                      });
+                    }}
+                  >
+                    {
+                      <div>
+                        <Image
+                          src={
+                            store?.profile_picture
+                              ? store?.profile_picture
+                              : "/assets/store_pics/no-image-store.png"
+                          }
+                          className={styles.storeImg}
+                          width={200}
+                          height={200}
+                          objectFit="cover"
+                          objectPosition="center"
+                        />
+                        <p className={styles.name}>{store?.store_name}</p>
+                        <p
+                          className={styles.storeName}
+                          style={{ marginTop: ".4rem" }}
+                        >
+                          {store?.supplier_address
+                            ? store?.supplier_address?.city +
+                              " - " +
+                              store?.supplier_address?.country
+                            : ""}
+                        </p>
+                      </div>
+                    }
                   </div>
-                  {isShow && selected === id && (
-                    <MealDropDown
-                      storeInfo={storeInfo}
-                      setIsShow={setIsShow}
-                      selectedStore={selectedStore}
-                      id={storeInfo?.id}
-                      name={storeInfo?.name}
-                    />
-                  )}
                 </div>
-              </>
-            );
-          })}
+                {isShow && selected === id && (
+                  <MealDropDown
+                    storeInfo={storeInfo}
+                    setIsShow={setIsShow}
+                    selectedStore={selectedStore}
+                    id={storeInfo?.id}
+                    name={storeInfo?.name}
+                  />
+                )}
+              </div>
+            </>
+          );
+        })}
       </div>
 
       <div className={styles.paginationContainer}>

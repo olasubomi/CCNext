@@ -60,13 +60,15 @@ export const AllPopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
   const [meals, setMeals] = useState([]);
   const [selectedItem, setSelectedItem] = useState({});
-  const [selectedItemId, setSelectedItemId] = useState(null)
+  const [selectedItemId, setSelectedItemId] = useState(null);
   const [selectGrocery, setSelectGrocery] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [show, setShow] = useState(false);
   const [openList, setOpenList] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [showDropdown, setShowDropdown] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [saleType, setSaleType] = useState("For sale");
 
   const ref = useRef(null);
   const [serve, setServe] = useState(0);
@@ -139,49 +141,48 @@ export const AllPopularMeals = () => {
     }
   };
 
-  const fetchMeals = async (page) => {
-    setIsLoading(true);
-    const params = {};
-    if (activeLetter) {
-      params.startsWith = activeLetter;
-    }
-    try {
-      const response = await axios(
-        `/items/${page}?type=Meal&status=Public&limit=20`,
-        {
-          method: "GET",
-          params: {
-            ...params,
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const totalItems = response.data.data.count;
+  // const fetchMeals = async (page) => {
+  //   setIsLoading(true);
+  //   const params = {};
+  //   if (activeLetter) {
+  //     params.startsWith = activeLetter;
+  //   }
+  //   try {
+  //     const response = await axios(
+  //       `/items/${page}?type=Meal&status=Public&limit=20`,
+  //       {
+  //         method: "GET",
+  //         params: {
+  //           ...params,
+  //         },
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     const totalItems = response.data.data.count;
 
-      const allItems = response.data.data.items;
+  //     const allItems = response.data.data.items;
 
-      const filteredItem = allItems.filter((product) => product.average_rating);
+  //     const filteredItem = allItems.filter((product) => product.average_rating);
 
-      const totalPages = Math.ceil(totalItems / 20);
+  //     const totalPages = Math.ceil(totalItems / 20);
 
-      setMeals(filteredItem);
-      setTotalPages(totalPages);
-      const lettersWithStores = filteredItem.map((item) =>
-        item.item_name[0].toUpperCase()
-      );
-      setAvailableLetters([...new Set(lettersWithStores)]);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     setMeals(filteredItem);
+  //     setTotalPages(totalPages);
+  //     const lettersWithStores = filteredItem.map((item) =>
+  //       item.item_name[0].toUpperCase()
+  //     );
+  //     setAvailableLetters([...new Set(lettersWithStores)]);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchMeals(currentPage);
-  }, [currentPage]);
+ console.log(meals, 'mealsmeals')
+
   const fetchGroceryList = async () => {
     try {
       const response = await axios(`/groceries/list`, {
@@ -192,11 +193,48 @@ export const AllPopularMeals = () => {
       });
       console.log(response.data.data.data, "groceries");
       setSelectGrocery(response.data.data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchGroceryList();
   }, []);
+
+  const fetchMeals = async (page = 1, other) => {
+    try {
+      const response = await axios(`/items/${page ? page : currentPage}`, {
+        method: "GET",
+        params: {
+          type: "Meal",
+          state: "Public",
+          limit: 4,
+          // average_rating: 1,
+          ...other,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const totalItems = response.data.data.count;
+      const allItems = response.data.data.items;
+
+      // const newItems = allItems.filter((item) => !uniqueItemIds.has(item._id));
+      setMeals(allItems);
+      setCurrentPage((prev) => {
+        if (page === 1) {
+          return 1;
+        } else {
+          return prev + 1;
+        }
+      });
+
+      // setUniqueItemIds(
+      //   new Set([...uniqueItemIds, ...newItems.map((item) => item._id)])
+      // );
+      // setHasMoreData(totalItems > page * 4);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -227,6 +265,27 @@ export const AllPopularMeals = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  const handleAdd = (type) => {
+    setSaleType(type);
+  };
+  useEffect(() => {
+    fetchMeals(1, { item_price: 1 });
+  }, []);
+  console.log(meals, "Mels")
+
+  useEffect(() => {
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (ref.current && !ref.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      },
+      true
+    );
+  }, []);
+
   return (
     <>
       <div className={styles.top}>
@@ -237,15 +296,68 @@ export const AllPopularMeals = () => {
           <p className={styles.marketplaceText}>
             Find and replicate recipes of meals from all over the world.
           </p>
-          <div className={styles.flexItems}>
-            <div className={styles.filter}>
-              <p>Filter by: Cook Time</p>
+          <div className={styles.filter}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10px",
+                cursor: "pointer",
+              }}
+              onClick={() => setIsOpen(true)}
+            >
+              <p>Filter by: {saleType.toString()}</p>
               <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
             </div>
-            <div className={styles.filter}>
-              <p>Sort: Name A-Z</p>
-              <BiSolidDownArrow color="rgba(109, 109, 109, 0.5)" size={15} />
-            </div>
+            {isOpen && (
+              <div ref={ref} className={styles.saleType}>
+                <div className={styles.flexer}>
+                  <input
+                    checked={saleType.includes("For sale")}
+                    type="radio"
+                    name="sale"
+                    onChange={() => handleAdd("For sale")}
+                    id="for_sale"
+                  />
+                  <label htmlFor="for_sale">For sale</label>
+                </div>
+                <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                  <input
+                    type="radio"
+                    name="sale"
+                    onChange={() => handleAdd("Not for sale")}
+                    checked={saleType.includes("Not for sale")}
+                    id="not_for_sale"
+                  />
+                  <label htmlFor="not_for_sale">Not for sale</label>
+                </div>
+                <div className={styles.flexer} style={{ paddingTop: "15px" }}>
+                  <input
+                    onChange={() => handleAdd("Show all")}
+                    type="radio"
+                    name="sale"
+                    id="show_all"
+                    checked={saleType.includes("Show all")}
+                  />
+                  <label htmlFor="show_all">Show all</label>
+                </div>
+                <button
+                  onClick={() => {
+                    const keys = {
+                      item_price: saleType === "For sale" ? 1 : 0,
+                    };
+                    if (saleType === "Show all") {
+                      delete keys.item_price;
+                    }
+                    fetchMeals(1, keys);
+                  }}
+                  className={styles.saleBtn}
+                >
+                  Apply filter
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.searchbar}>
@@ -310,7 +422,7 @@ export const AllPopularMeals = () => {
                   key={idx}
                   onClick={() => {
                     setSelectedItem(meal);
-                    setSelectedItemId(meal._id)
+                    setSelectedItemId(meal._id);
                     setOpenModal(true);
                   }}
                 >
@@ -426,7 +538,7 @@ export const AllPopularMeals = () => {
                   ? styles.activepaginationButton
                   : styles.paginationButton2
               }
-              onClick={() => handlePageClick(pageNumber)}
+              onClick={() => fetchMeals(pageNumber, { item_price: 1 })}
             >
               {pageNumber}
             </div>
