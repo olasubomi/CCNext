@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./product.module.css";
+import styles2 from "./meal.module.css";
+import modalStyles from "../public-market/stores.module.css";
 import { FaReddit } from "react-icons/fa";
 import Head from "next/head";
 import Image from "next/image";
@@ -18,12 +20,17 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
   RedditShareButton,
+  RedditIcon,
 } from "react-share";
 import { useSearchParams } from "next/navigation";
 import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { AiOutlineClose } from "react-icons/ai";
+import axios from "../../util/Api";
+import { Modal } from "../modal/popup-modal";
+import { RejectionModal } from "../modal/rejection-modal";
 
 function Product(props) {
   const [formatted_ingredients, set_formatted_ingredients] = useState([""]);
@@ -48,10 +55,55 @@ function Product(props) {
     }
   }, [props.product.formatted_ingredients]);
   console.log(props.product.item_images, "image");
+  const [openList, setOpenList] = useState(false);
+  const [show, setShow] = useState(false);
+  const [selectGrocery, setSelectGrocery] = useState([]);
+  const [user, setUser] = useState({});
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState({});
+  const [quantity, setQuantity] = useState(1);
+  const [details, setDetails] = useState({
+    listName: "",
+    description: "",
+    id: "",
+    status: "",
+  });
+
+  const [itemToAdd, setItemAdd] = useState({
+    listName: "",
+  });
+
+  const addItemToGrocery = async (listName) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const itemToUse = selectedItem._id ? selectedItem : props.product;
+    const payload = {
+      userId: user._id,
+      groceryList: {
+        listName: itemToAdd.listName || listName,
+        groceryItems: {
+          itemId: itemToUse._id,
+          quantity: quantity.toString(),
+        },
+      },
+    };
+
+    try {
+      const response = await axios(`/groceries`, {
+        method: "post",
+        data: payload,
+      });
+      toast.success("Item added successfully");
+      setOpenList(false);
+      setShow(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const addItemToCart = (item, qty) => {
     const user = JSON.parse(localStorage.getItem("user"));
     const canAddToCart = canItemBeAddedToCart(item);
+
 
     if (qty == 0) {
       toast.error("Pls add a quantity");
@@ -80,7 +132,26 @@ function Product(props) {
       }
     }
   };
+  const fetchGroceryList = async () => {
+    try {
+      const response = await axios(`/groceries/list`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data.data.data, "groceries");
+      setSelectGrocery(response.data.data.data);
+    } catch (error) { }
+  };
+  useEffect(() => {
+    fetchGroceryList();
+  }, []);
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user")) || {};
+    setUser(user);
+  }, []);
   return (
     <>
       <Head>
@@ -198,32 +269,32 @@ function Product(props) {
           </div>
         </div>
         <div className={styles.section_2_footer}>
-          <div>
+          <div className={styles.hide}>
             <p>
               <ShareIcon />
               Share this product:
             </p>
-            <div className={styles.footerdiv}>
-              <FacebookShareButton>
-                <FacebookEIcon
-                  quote={props.product.product_name}
-                  url={productURL}
-                />
-              </FacebookShareButton>
-              <TwitterShareButton
-                title={props.product.product_name}
-                via="ChopChowMarket"
-                url={productURL}
-              >
-                <TwitterEIcon />
-              </TwitterShareButton>
-              <WhatsappShareButton
-                title={props.product.product_name}
-                url={productURL}
-              >
-                <WhatsappEIcon />
-              </WhatsappShareButton>
-              <RedditShareButton
+            <FacebookShareButton
+              url={productURL}
+              quote={props.product.item_name}
+              hashtag={props.product.item_intro}
+            >
+              <FacebookEIcon />
+            </FacebookShareButton>
+            <TwitterShareButton
+              title={props.product.item_name}
+              via="ChopChowMarket"
+              url={productURL}
+            >
+              <TwitterEIcon />
+            </TwitterShareButton>
+            {/* <InstagramShareButton title={props.meal.item_name} url="https://www.instagram.com">
+                                    <InstaEIcon />
+                                </InstagramShareButton> */}
+            <WhatsappShareButton title={props.product.item_name} url={productURL}>
+              <WhatsappEIcon />
+            </WhatsappShareButton>
+           <RedditShareButton
                 title={props.product.product_name}
                 url={productURL}
               >
@@ -231,30 +302,31 @@ function Product(props) {
                   <FaReddit color="#FF4500" size={20} />
                 </div>
               </RedditShareButton>
-              <div
-                style={{ display: "flex", gap: ".4rem", alignItems: "center" }}
-              >
-                <p>Print Preview</p>
-                <PrintEIcon />
-              </div>
-            </div>
-
-            {/* <InstagramShareButton title={props.product.product_name} url={url + 'product/' + props.product._id}>
-                            <InstaEIcon />
-                        </InstagramShareButton> */}
           </div>
-
-          {props.product.publicly_available === "Public" && (
-            <div className={styles.btnGroup}>
-              <div className={styles.btnoutline}>Add to Grocery List</div>
-              <div
-                className={styles.btnfill}
-                onClick={() => addItemToCart(props.product, 1)}
-              >
-                Add to Cart
+          <div className={styles.hide} style={{marginLeft: '3px'}}>
+            <p>Print Preview</p>
+            <PrintEIcon />
+          </div>
+          {props.product.item_status?.find((ele) => ele.status === "Public") &&
+            props?.auth?.authUser?.user_type !== "admin" && (
+              <div className={styles.btnGroup}>
+                <div
+                  className={styles.btnoutline}
+                  onClick={() => {
+                    setOpenList(true);
+                    setSelectedItem(props?.product);
+                  }}
+                >
+                  Add to Grocery List
+                </div>
+                <div
+                  className={styles.btnfill}
+                  onClick={() => addItemToCart(props.product, 1)}
+                >
+                  Add to Cart
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
 
         {/* <div className={styles.productcard_row}>
@@ -324,8 +396,8 @@ function Product(props) {
           <h3>Product Description</h3>
           {props?.product?.item_description?.length
             ? props.product.item_description.map((ele, idx) => (
-                <div key={idx}>{ele?.formatted_string}</div>
-              ))
+              <div key={idx}>{ele?.formatted_string}</div>
+            ))
             : "No description available"}
         </div>
         <div id="review" className={styles.product_section_8}>
@@ -359,7 +431,7 @@ function Product(props) {
                         data.product_images.length > 0 &&
                         data.product_images[0].length > 0 &&
                         data.product_images[0] !==
-                          "[object HTMLImageElement]" && (
+                        "[object HTMLImageElement]" && (
                           <Image
                             priority
                             src={data.meal_images[0]}
@@ -400,6 +472,62 @@ function Product(props) {
             </div>
           </div>
         </div>
+        {openList && (
+          <div className={modalStyles.modalContainer}>
+            {console.log("Modal is being rendered, openList:", openList)}
+            <div className={modalStyles.modalCard3}>
+              <div className={modalStyles.flex3}>
+                <h4 className={modalStyles.addTitle}>Add Item to Grocery List</h4>
+                <div onClick={() => setOpenList(false)} className={modalStyles.round}>
+                  <AiOutlineClose />
+                </div>
+              </div>
+              <div>
+                {selectGrocery?.map((elem, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => setItemAdd({ listName: elem.listName })}
+                      className={modalStyles.list}
+                    >
+                      <input type="checkbox" />
+                      <p>{elem.listName}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className={modalStyles.flex} style={{ marginTop: "2rem" }}>
+                <button onClick={addItemToGrocery} className={modalStyles.btn}>
+                  Done
+                </button>
+                <button
+                  className={modalStyles.outlinebtn}
+                  onClick={() => {
+                    setOpenList(false);
+                    setShow(true);
+                  }}
+                >
+                  Add to New List
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {show && (
+          <Modal
+            addItemToGrocery={addItemToGrocery}
+            details={details}
+            setDetails={setDetails}
+            setShow={setShow}
+            show={show}
+          />
+        )}
+        {openModal && (
+          <RejectionModal
+            itemId={props?.product?._id ?? ""}
+            setOpenModal={setOpenModal}
+          />
+        )}
       </div>
     </>
   );

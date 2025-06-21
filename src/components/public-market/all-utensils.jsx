@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { UtensilSearchs } from "../dropdown/utensil-search";
 import { convertCurrency } from "../../actions/utils";
+import { addToCart } from "../../actions";
+
 
 export const AllUtensils = () => {
   const alphabets = [

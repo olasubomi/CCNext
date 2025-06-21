@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import { MobileSearch } from "../dropdown/mobile-search";
 import { ProductSearch } from "../dropdown/product-search";
 import { convertCurrency } from "../../actions/utils";
+import { addToCart } from "../../actions";
+
 
 export const AllProducts = () => {
   const alphabets = [
