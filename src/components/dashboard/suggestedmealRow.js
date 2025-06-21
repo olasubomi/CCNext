@@ -8,12 +8,18 @@ import {
   rejected,
   actionIcon,
 } from "./dashboard.module.css";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Select from "react-select";
 
 import ArrowDropUp from "@mui/icons-material/ArrowDropUp";
 import { ReceivedModal } from "../modal/received-rejection";
 import { useSelector } from "react-redux";
+import axios from "../../util/Api";
+import { toast } from "react-toastify";
+
+
+
+
 function SuggestedMealRow(props) {
   const [show, setShowState] = useState(false);
   const months = [
@@ -64,6 +70,11 @@ function SuggestedMealRow(props) {
       //   suggestion.item_available === undefined,
     },
     {
+      value: "makePrivate",
+      label: "Make Private",
+      // isDisabled: !(suggestion.item_status[0]?.status === "Public"),
+    },
+    {
       value: "sendToInventory",
       label: "Send to Inventory",
       // isDisabled: !(suggestion.item_status[0]?.status === "Public"),
@@ -76,6 +87,16 @@ function SuggestedMealRow(props) {
     }
 
   ];
+
+  const handleUpdateStatus = useCallback(async ({ id, is_private }) => {
+    try {
+      await axios.post(`/inventory/update-inventory/${id}`, { is_private: !is_private })
+      toast.success("Item successfully made private");
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
   const handleSelectChange = async (selectedOption) => {
     console.log("Selected option:", selectedOption);
     setSelectedAction(selectedOption);
@@ -91,6 +112,12 @@ function SuggestedMealRow(props) {
       suggestion.item_status[0]?.status === "Public"
     ) {
       props.toggleTransferToInventory(suggestion);
+    } else if (selectedOption.value === "makePrivate") {
+      const is_private = suggestion?.inventories?.[0]?.is_private
+      await handleUpdateStatus({
+        id: suggestion._id,
+        is_private:  Boolean(is_private)
+      })
     }
   };
 
@@ -101,7 +128,7 @@ function SuggestedMealRow(props) {
       width: "100%",
     }),
   };
-  console.log(suggestion, "suggested");
+  console.log(suggestion, "suggested___");
   return (
     <div key={suggestion._id} className={styles.request_tr_div}>
       <table
@@ -246,6 +273,7 @@ function SuggestedMealRow(props) {
                           if (option.value === "Draft") return true;
                           if (option.value === "availableInInventory") return hasPrice;
                           if (option.value === "sendToInventory") return !hasPrice;
+                          if (suggestion?.inventories?.length && (option.value === "makePrivate")) return true
                         }
                         return false;
                       })}
