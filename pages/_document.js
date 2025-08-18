@@ -23,11 +23,44 @@ export default function Document() {
                         rel="stylesheet"
                         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
                     /> */}
+
+
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag(){dataLayer.push(arguments);}
+                            gtag('js', new Date());
+                          
+                            gtag('config', 'G-937TLLF4H3'); `,
+                        }}
+                    />
+
+                    {/* <!-- Google Ad Sense --> */}
+                    <script
+                        async
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1235109639918263"
+                        crossorigin="anonymous"
+                    ></script>
+                    {/* <!-- Google Search Console verification  --> */}
+
+                    <meta
+                        name="google-site-verification"
+                        content="gSw3jQhBGdgewRLveIbM41Lu923ZEzTLJDTrCEQb4Fc"
+                    />
                     <title>Chop Chow</title>
                     <meta name="description" content="Adding convenience to cooking from home." />
                 </head>
             </Head>
             <body>
+                <noscript>
+                    <iframe
+                        src="https://www.googletagmanager.com/gtag/js?id=G-937TLLF4H3"
+                        height="0"
+                        width="0"
+                        style={{ display: "none", visibility: "hidden" }}
+                    ></iframe>
+                </noscript>
                 <Main />
                 <NextScript />
             </body>
