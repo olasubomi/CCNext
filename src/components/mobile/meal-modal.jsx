@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { Modal } from "../modal/popup-modal";
 import { addToCart } from "../../actions";
 import { useEffect, useRef } from "react";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const Mealmodal = ({
   openList,
@@ -79,7 +80,7 @@ export const Mealmodal = ({
             <div className={styles.flexed}>
               <div className={styles.images2}>
                 <img
-                  src={selectedItem?.itemImage0}
+                  src={migrateS3UrlToCloudinary(selectedItem?.itemImage0)}
                   alt=""
                   className={styles.modalImg}
                 />
@@ -87,7 +88,7 @@ export const Mealmodal = ({
                   {selectedItem.item_images?.slice(1, 4).map((image, idx) => {
                     return (
                       <div className={styles.img1} key={idx}>
-                        <img src={image} />
+                        <img src={migrateS3UrlToCloudinary(image)} />
                       </div>
                     );
                   })}
@@ -290,11 +291,11 @@ export const Mealmodal = ({
                       <div className={styles.recipes} key={index}>
                         {/\.(jpg|png|jpeg)$/i.test(elem.dataName) ? (
                           <img
-                            src={
+                            src={migrateS3UrlToCloudinary(
                               selectedItem[
                                 `meal_image_or_video_content${index + 1}`
                               ]
-                            }
+                        )}
                             className={styles.instruction_img}
                           />
                         ) : (
@@ -307,11 +308,12 @@ export const Mealmodal = ({
                                 width={70}
                               >
                                 <source
-                                  src={
+                                  src={migrateS3UrlToCloudinary(
                                     selectedItem[
                                       `meal_image_or_video_content${index + 1}`
-                                    ]
-                                  }
+                                    ],
+                                    'https://res.cloudinary.com/duqjwgsfe/video/upload'
+                            )}
                                   type="video/mp4"
                                 />
                                 Your browser does not support the video tag.

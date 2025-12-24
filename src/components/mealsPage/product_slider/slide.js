@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { migrateS3UrlToCloudinary } from '../../../common/migrateS3UrlToCloudinary';
 const Slider = ({image, width, height}) => {
     const backgroundImage =`${image}`;
     const styles = {
@@ -12,8 +13,8 @@ const Slider = ({image, width, height}) => {
     }
     return (
       <div className="slide" style={styles}>
-      {/* <img src={'/images/products/sugar.jpeg'} /> */}
-      <img src={image} style={{width:"100px", height:"100px"}} />
+      {/* <img src={migrateS3UrlToCloudinary('/images/products/sugar.jpeg'} /> */}
+      <img src={migrateS3UrlToCloudinary(image)} style={{width:"100px", height:"100px"}} />
 
       </div>
     )

@@ -7,6 +7,7 @@ import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, Twitter
 import Stores from "./stores";
 import Reviews from "./Reviews";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function Meal(props){
     const url = 'http://localhost:3000/'
@@ -41,7 +42,7 @@ function Meal(props){
                         <>
                         {(props.props.meal.meal_images[0].length > 0 && props.props.meal.meal_images[0] !== "[object HTMLImageElement]") ? 
                         <Image
-                            src={props.props.meal.meal_images[0]}
+                            src={migrateS3UrlToCloudinary(props.props.meal.meal_images[0])}
                             alt={props.props.meal.meal_name}
                             className={styles.meal_section_2_main_img}
                             height={500} width={500}
@@ -56,7 +57,7 @@ function Meal(props){
                                return(
                                 <React.Fragment key={index}>
                                 {image.length > 0 &&
-                                <Image key={index} alt={props.props.meal.meal_name} src={image}
+                                <Image key={index} alt={props.props.meal.meal_name} src={migrateS3UrlToCloudinary(image)}
                                 height={300} width={300}
                                 className={styles.meal_section_2_image} />
                                 }
@@ -274,7 +275,7 @@ function Meal(props){
                                         <Image
                                         width={300}
                                         height={300}
-                                            src={props.props.meal['image_or_video_content_'+index+1][0]}
+                                            src={migrateS3UrlToCloudinary(props.props.meal['image_or_video_content_'+index+1][0]}
                                             alt="home"
                                             className={styles.meal_section_5_row_1}
                                         />:
@@ -352,7 +353,7 @@ function Meal(props){
                                     {data.meal_images && data.meal_images.length > 0 && data.meal_images[0].length > 0 && data.meal_images[0] !== "[object HTMLImageElement]" &&
                                     <Image
                                         priority
-                                        src={data.meal_images[0]}
+                                        src={migrateS3UrlToCloudinary(data.meal_images[0])}
                                         alt="Related Meal"
                                         height={500} width={500}
                                         className={styles.productcard_productcard_img}

@@ -5,6 +5,7 @@ import Footer from "../../src/components/Footer/Footer";
 import { useCallback, useEffect, useState } from "react";
 import axios from "../../src/util/Api";
 import { useRouter } from "next/router";
+import { migrateS3UrlToCloudinary } from "../../src/common/migrateS3UrlToCloudinary";
 
 
 
@@ -92,7 +93,7 @@ export default function Blog() {
                                         className="user-blog-featured">
                                         <h3>Featured posts</h3>
                                         <div className="user-feature-box">
-                                            <img src={mostRecentPost[0]?.featured_image} />
+                                            <img src={migrateS3UrlToCloudinary(mostRecentPost[0]?.featured_image)} />
                                             <div className="user-feature-footer">
                                                 <p id="blog-post-title">{mostRecentPost[0]?.title}</p>
                                                 <p id="blog-id">By {mostRecentPost[0]?.author?.first_name} {mostRecentPost[0]?.author?.last_name}</p>
@@ -112,7 +113,7 @@ export default function Blog() {
                                                 <div
                                                     onClick={() => router.push(`/blog/${ele._id}`)}
                                                     key={ele._id} className="recent-blog">
-                                                    <img src={ele?.featured_image} />
+                                                    <img src={migrateS3UrlToCloudinary(ele?.featured_image)} />
                                                     <div className="user-feature-footer-3">
                                                         <p id="blog-post-title-2">{ele?.title}</p>
                                                         <p id="blog-id">By {ele?.author?.first_name} {ele?.author?.last_name}</p>
@@ -140,7 +141,7 @@ export default function Blog() {
                                             <div
                                                 onClick={() => router.push(`/blog/${ele._id}`)}
                                                 key={ele?._id} className="recent-blog-2">
-                                                <img src={ele?.featured_image} />
+                                                <img src={migrateS3UrlToCloudinary(ele?.featured_image)} />
                                                 <div className="user-feature-footer-3">
                                                     <p id="blog-post-title-2">{ele?.title}</p>
                                                     <p id="blog-id">By {ele?.author?.first_name} {ele?.author?.last_name}</p>

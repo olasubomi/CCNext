@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import cartStyles from "./Index.module.css";
 import { useMobileMedia } from "../../../../customhooks/useResponsive";
+import { migrateS3UrlToCloudinary } from "../../../../common/migrateS3UrlToCloudinary";
 
 function CartItem(props) {
   const mobileScreen = useMobileMedia();
@@ -12,7 +13,7 @@ function CartItem(props) {
         <React.Fragment>
           <div className={cartStyles.mobileCardLeft}>
             <div className={cartStyles.mobileImgDiv}>
-              <img src={props.picture} />
+              <img src={migrateS3UrlToCloudinary(props.picture)} />
               <div className={cartStyles.mobileListItems}>
                 <label>{props.name}</label>
                 <div className={cartStyles.supplierDiv}>
@@ -44,7 +45,7 @@ function CartItem(props) {
       ) : (
         <React.Fragment>
           <div className={cartStyles.cartProduct}>
-            <img src={props.picture} />
+            <img src={migrateS3UrlToCloudinary(props.picture)} />
             <label>{props.name}</label>
           </div>
           <div className={cartStyles.cartQuantity}>

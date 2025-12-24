@@ -10,6 +10,7 @@ import dashUsersIcon from "../public/assets/icons/dashusersIcon.png"
 import Image from 'next/image';
 import { CloseFillIcon } from '../src/components/icons';
 import Sidenav2 from '../src/components/Header/sidenav2';
+import { migrateS3UrlToCloudinary } from '../src/common/migrateS3UrlToCloudinary';
 // import { IgrDoughnutChart, IgrDoughnutChartModule, IgrItemLegendModule, IgrRingSeries, IgrRingSeriesModule } from 'igniteui-react-charts';
 
 // IgrDoughnutChartModule.register();
@@ -70,7 +71,7 @@ const Admin = (props) => {
                             <p className={styles.box_duration}>Today</p>
                         </div>
                         <div className={styles.value_con}>
-                            <Image alt='Requests' src={dashRequestsIcon} />
+                            <Image alt='Requests' src={migrateS3UrlToCloudinary(dashRequestsIcon)} />
                             <div>
                                 <h3 className={styles.box_name}>Requests</h3>
                                 <p className={styles.value}>0</p>
@@ -83,7 +84,7 @@ const Admin = (props) => {
                             <p className={styles.box_duration}>Monthly</p>
                         </div>
                         <div className={styles.value_con}>
-                            <Image alt='Users' src={dashUsersIcon} />
+                            <Image alt='Users' src={migrateS3UrlToCloudinary(dashUsersIcon)} />
                             <div>
                                 <h3 className={styles.box_name}>Total Users</h3>
                                 <p className={styles.value}>0</p>
@@ -96,7 +97,7 @@ const Admin = (props) => {
                             <p className={styles.box_duration}>Weekly</p>
                         </div>
                         <div className={styles.value_con}>
-                            <Image alt='Orders' src={dashOrdersIcon} />
+                            <Image alt='Orders' src={migrateS3UrlToCloudinary(dashOrdersIcon)} />
                             <div>
                                 <h3 className={styles.box_name}>Total Orders</h3>
                                 <p className={styles.value}>0</p>

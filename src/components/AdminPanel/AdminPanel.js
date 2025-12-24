@@ -6,6 +6,7 @@ import img_logo from "../../assets/images/logo2.png";
 import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { connect } from 'react-redux';
 import { withRouter } from "next/router";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 // import axios from '../../util/Api';
 
 //////////////////////////////////////////////////////////////////////
@@ -45,19 +46,19 @@ class AdminPanel extends React.Component {
             <Col md={4} className="admin-item-panel">
               <div className="item-card">
                 <div className="admin-item-title"><div style={{ width: "100%" }}>INVENTORY</div></div>
-                <img src={img_oil} className="admin-item-img" alt="" />
+                <img src={migrateS3UrlToCloudinary(img_oil)} className="admin-item-img" alt="" />
               </div>
             </Col>
             <Col md={4} className="admin-item-panel">
               <div className="item-card">
                 <div className="admin-item-title"><div style={{ width: "100%" }}>ORDERS</div></div>
-                <img src={img_oil} className="admin-item-img" alt="" />
+                <img src={migrateS3UrlToCloudinary(img_oil)} className="admin-item-img" alt="" />
               </div>
             </Col>
             <Col md={4} className="admin-item-panel">
               <div className="item-card" id="suggest_admin" onClick={() => this.handleOnClickItems("suggest", userRole)}>
                 <div className="admin-item-title"><div style={{ width: "100%" }}>MEAL SUGGESTIONS/SUPPORT</div></div>
-                <img src={img_logo} className="admin-item-img" alt="" />
+                <img src={migrateS3UrlToCloudinary(img_logo)} className="admin-item-img" alt="" />
               </div>
             </Col>
           </Row>

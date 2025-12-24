@@ -8,6 +8,7 @@ import { FacebookEIcon, InstaEIcon, LocationIcon, PrintEIcon, ShareIcon, StarIco
 import Stores from "./stores";
 import Reviews from "./Reviews";
 import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function Product(props){
     const url = 'http://localhost:3000/'
@@ -24,7 +25,7 @@ function Product(props){
                     <div className={styles.product_section_2_col_1}>
                         {props.product.product_images?.length > 0 ?
                             <Image
-                                src={props.product.product_images[0]}
+                                src={migrateS3UrlToCloudinary(props.product.product_images[0])}
                                 alt={props.product.product_name}
                                 className={styles.product_section_2_main_img}
                                 height={500} width={500}
@@ -35,7 +36,7 @@ function Product(props){
                             {props.product.product_images?.length > 1 &&
                                 <>
                                 {props.product.product_images.slice(1).map((image, index) => {
-                                    <Image key={index} alt={props.product.product_name} src={image}
+                                    <Image key={index} alt={props.product.product_name} src={migrateS3UrlToCloudinary(image)}
                                         height={200} width={200}
                                         className={styles.product_section_2_image} />
                                     })
@@ -120,7 +121,7 @@ function Product(props){
 
                                     <Image
                                         priority
-                                        src={img_logo}
+                                        src={migrateS3UrlToCloudinary(img_logo}
                                         alt="Store"
                                         className={styles.productcard_productcard_img}
                                     />
@@ -184,7 +185,7 @@ function Product(props){
                                     {data.product_images && data.product_images.length > 0 && data.product_images[0].length > 0 && data.product_images[0] !== "[object HTMLImageElement]" &&
                                     <Image
                                         priority
-                                        src={data.meal_images[0]}
+                                        src={migrateS3UrlToCloudinary(data.meal_images[0])}
                                         alt="Store"
                                         className={styles.productcard_productcard_img}
                                     />

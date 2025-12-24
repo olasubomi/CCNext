@@ -6,6 +6,7 @@ import axios from "../../util/Api";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import Frame from "../../../public/assets/logos/Frame.png";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const SuggestModal = ({
   isShow,
@@ -133,7 +134,7 @@ export const SuggestModal = ({
           <div>
             <div className={styles.img3}>
               <Image
-                src={itemImage.url ? itemImage.url : Frame}
+                src={migrateS3UrlToCloudinary(itemImage.url ? itemImage.url : Frame)}
                 width={100}
                 height={120}
                 objectFit="cover"

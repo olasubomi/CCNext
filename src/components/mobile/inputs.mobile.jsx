@@ -1,3 +1,4 @@
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 import styles from "../grocery/grocery.module.css";
 import { DropDownSelect } from "../select/select";
 import Image from "next/image";
@@ -62,7 +63,7 @@ export const MobileInputs = ({
               <div className={styles.flex3}>
                 {e?.image && (
                   <Image
-                    src={e?.image}
+                    src={migrateS3UrlToCloudinary(e?.image)}
                     width={40}
                     objectPosition="center"
                     objectFit="cover"

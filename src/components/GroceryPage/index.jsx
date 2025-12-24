@@ -445,7 +445,7 @@ class GroceryPage extends React.Component {
                           {/* check for private or public images (can be used for suggest meal) */}
                           {customer_grocery_product_item.product_image.startsWith('https://') ? (
                             <img
-                              src={customer_grocery_product_item.product_image}
+                              src={migrateS3UrlToCloudinary(customer_grocery_product_item.product_image}
                               alt="product_img "
                               className={styles.card_img}
                               onClick={() => this.handleProductClick(
@@ -455,7 +455,7 @@ class GroceryPage extends React.Component {
                             />
                           ) : (
                             <img
-                              src={`/images/products/${customer_grocery_product_item.product_image}`}
+                              src={migrateS3UrlToCloudinary(`/images/products/${customer_grocery_product_item.product_image}`}
                               alt="product_img "
                               className={styles.card_img}
                               onClick={() => this.handleProductClick(customer_grocery_product_item.product_image, customer_grocery_product_item.product_name, productID, true)}

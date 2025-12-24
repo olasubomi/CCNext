@@ -1,6 +1,7 @@
 import React from 'react';
 // import './ProductFullDetail.scss';
 import { Row, Col } from "react-bootstrap";
+import { migrateS3UrlToCloudinary } from '../../common/migrateS3UrlToCloudinary';
 
 class ProductFullDetail extends React.Component {
     constructor(props) {
@@ -77,17 +78,17 @@ class ProductFullDetail extends React.Component {
                             <Col md={2} style={{ textAlign: "center" }}>
                                 {
                                     this.state.productData &&
-                                    <img src={`/images/products/${this.state.productData.product_image}`} width="100%" className="productF-img1" alt="" />
+                                    <img src={migrateS3UrlToCloudinary(`/images/products/${this.state.productData.product_image}`)} width="100%" className="productF-img1" alt="" />
                                 }
                                 {
                                     this.state.productData &&
-                                    <img src={`/images/products/${this.state.productData.product_image}`} width="100%" className="productF-img1" alt="" />
+                                    <img src={migrateS3UrlToCloudinary(`/images/products/${this.state.productData.product_image}`)} width="100%" className="productF-img1" alt="" />
                                 }
                             </Col>
                             <Col md={5} style={{ textAlign: "center" }}>
                                 {
                                     this.state.productData &&
-                                    <img src={`/images/products/${this.state.productData.product_image}`} width="100%" className="productF-img" alt="" />
+                                    <img src={migrateS3UrlToCloudinary(`/images/products/${this.state.productData.product_image}`)} width="100%" className="productF-img" alt="" />
                                 }
                             </Col>
                             <Col md={5}>

@@ -6,6 +6,7 @@ import Footer from "../../src/components/Footer/Footer";
 import { useEffect, useState } from "react";
 import axios from "../../src/util/Api";
 import { FacebookShareButton, InstapaperShareButton, RedditShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import { migrateS3UrlToCloudinary } from "../../src/common/migrateS3UrlToCloudinary";
 
 
 export default function SingleBlog() {
@@ -97,7 +98,7 @@ export default function SingleBlog() {
 
                                 </div>
                             </div>
-                            <img className="post-image" src={post?.single?.featured_image} alt="post-image" />
+                            <img className="post-image" src={migrateS3UrlToCloudinary(post?.single?.featured_image)} alt="post-image" />
                             <div className="blog-post-html">
                             </div>
                         </div>
@@ -109,7 +110,7 @@ export default function SingleBlog() {
                                         <div
                                             onClick={() => router.push(`/blog/${entry._id}`)}
                                             className="recent-blog-2 single">
-                                            <img src={entry?.featured_image} />
+                                            <img src={migrateS3UrlToCloudinary(entry?.featured_image)} />
                                             <div className="user-feature-footer-3">
                                                 <p id="blog-post-title-2">{entry?.title}</p>
                                                 <p id="blog-id">By {entry?.author?.first_name} {entry?.author?.last_name}</p>

@@ -12,6 +12,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 // import "./Mymodal.scoped.scss";
 import "../../App.css";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 const content = [1, 2];
 class MyModal extends Component {
@@ -78,7 +79,7 @@ class MyModal extends Component {
                 <div className="detail-firstCol col-md-5 col-sm-12" >
                   <Carousel showThumbs={false} infiniteLoop={false} style={{ width: "96%" }}>
                     {content.map(index => (
-                      <img style={{ height: "250px" }} alt="pp" key={index} src={'https://chopchowserver.vercel.app/getOneMongoFileImage/' + value.mealImageName} />
+                      <img style={{ height: "250px" }} alt="pp" key={index} src={migrateS3UrlToCloudinary('https://chopchowserver.vercel.app/getOneMongoFileImage/' + value.mealImageName)} />
                     ))}
                   </Carousel>
                   <br />

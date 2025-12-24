@@ -9,6 +9,7 @@ import { forgotPassword } from '../../actions';
 import { connect } from 'react-redux';
 import {useRouter} from 'next/router';
 import ForgotPasswordVerifier from '../forgotpasswordverifier';
+import { migrateS3UrlToCloudinary } from '../../common/migrateS3UrlToCloudinary';
 
 function ForgetPassword(props){ 
   const [login, setLogin] = useState(false);
@@ -53,12 +54,12 @@ function ForgetPassword(props){
             <div className={styles.login_top} onClick={Logo}>
               
               <Image
-                  src={img_logo}
+                  src={migrateS3UrlToCloudinary(img_logo)}
                   alt="logo"
                   className={styles.login_main_logo_img}
                 />
                 <div onClick={closeForgetPassword} className={styles.login_cancel_con}>
-                <Image src={closeIcon} className={styles.login_cancel} />
+                <Image src={migrateS3UrlToCloudinary(closeIcon)} className={styles.login_cancel} />
               </div>
             </div>
             <h2>Forgot Password</h2>

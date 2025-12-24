@@ -17,6 +17,7 @@ import {
   FacebookIcon,
   TwitterShareButton,
 } from "react-share";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 class Popup2 extends Component {
   constructor(props) {
@@ -247,7 +248,7 @@ class Popup2 extends Component {
                   <div className={styles.img_col}>
                     {imagesData?.length !== 0 && (
                       <Image
-                        src={imagesData[0] || ""}
+                        src={migrateS3UrlToCloudinary(imagesData[0] || "")}
                         alt="pop up"
                         className={styles.popup2_main_img}
                         height={160}
@@ -260,7 +261,7 @@ class Popup2 extends Component {
                           <Image
                             key={index}
                             alt="pop up"
-                            src={data}
+                            src={migrateS3UrlToCloudinary(data)}
                             className={styles.popup2_image}
                             height={70}
                             width={100}
@@ -395,7 +396,7 @@ class Popup2 extends Component {
                         this.props[`instructionChunk${curIn}DataName`]
                       ) && this.props["chunk" + curIn + "Content"] ? (
                           <Image
-                            src={this.props["chunk" + curIn + "Content"]}
+                            src={migrateS3UrlToCloudinary(this.props["chunk" + curIn + "Content"])}
                             alt={this.props["instructionChunk" + curIn]?.title}
                             className={styles.popup2_step_img}
                             height={150}
@@ -411,7 +412,7 @@ class Popup2 extends Component {
                           className={styles.popup2_step_img}
                           height={150}
                           width={70}
-                          src={this.props[`chunk${curIn}Content`]}
+                          src={migrateS3UrlToCloudinary(this.props[`chunk${curIn}Content`], 'https://res.cloudinary.com/duqjwgsfe/video/upload')}
                           type="video/mp4"
                         />
                       ): null}

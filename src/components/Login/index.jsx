@@ -28,6 +28,7 @@ import {
   USER_TOKEN_SET,
 } from "../../constants/ActionTypes";
 import { setSelectedUserType } from "../../reducers/userSlice";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function Login(props) {
   const isverified = useSelector((state) => state.Auth.isVerified);
@@ -214,7 +215,7 @@ function Login(props) {
             </div>
             <Link href="/" legacyBehavior>
               <Image
-                src={img_logo}
+                src={migrateS3UrlToCloudinary(img_logo)}
                 alt="logo"
                 className={styles.login_main_logo_img}
               />

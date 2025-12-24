@@ -7,6 +7,7 @@ import { UserIcon } from "../icons";
 import { toast } from "react-toastify";
 import { AiOutlineClose } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const SubAdmins = ({ storeId, storeData, handleGetStore }) => {
   const dispatch = useDispatch();
@@ -108,7 +109,7 @@ export const SubAdmins = ({ storeId, storeData, handleGetStore }) => {
             <div className={styles.flexstart}>
               <div className={styles.user}>
                 {elem.profile_picture ? (
-                  <img src={elem?.profile_picture} alt="Sub Admin" />
+                  <img src={migrateS3UrlToCloudinary(elem?.profile_picture)} alt="Sub Admin" />
                 ) : (
                   <UserIcon />
                 )}

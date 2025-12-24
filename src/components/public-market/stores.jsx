@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Element } from "react-scroll";
 import baseAxios from "axios";
 import { BiSolidDownArrow } from "react-icons/bi";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const Stores = () => {
   const [stores, setStores] = useState([]);
@@ -200,10 +201,10 @@ export const Stores = () => {
                 }}
               >
                 <Image
-                  src={
+                  src={migrateS3UrlToCloudinary(
                     store?.profile_picture ||
                     "/assets/store_pics/no-image-store.png"
-                  }
+        )}
                   className={styles.storeImg}
                   width={200}
                   height={200}

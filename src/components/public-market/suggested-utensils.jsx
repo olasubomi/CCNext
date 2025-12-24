@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { convertCurrency } from "../../actions/utils";
 import { BiSolidDownArrow } from "react-icons/bi";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const SuggestedUtensils = () => {
   const [meals, setMeals] = useState([]);
@@ -305,11 +306,11 @@ export const SuggestedUtensils = () => {
               {
                 <div className={styles.box}>
                   <img
-                    src={
+                    src={migrateS3UrlToCloudinary(
                       utensil?.itemImage0
                         ? utensil?.itemImage0
                         : "/assets/store_pics/no-image-utensil.png"
-                    }
+          )}
                     className={styles.storeImg1}
                   />
                   <div className={styles.flex}>

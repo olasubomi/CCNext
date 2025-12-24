@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { MobileSearch } from "../dropdown/mobile-search";
 import { ProductSearch } from "../dropdown/product-search";
 import { convertCurrency } from "../../actions/utils";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const AllProducts = () => {
   const alphabets = [
@@ -378,11 +379,11 @@ export const AllProducts = () => {
               >
                 <div className={styles.box}>
                   <img
-                    src={
+                    src={migrateS3UrlToCloudinary(
                       product?.itemImage0
                         ? product?.itemImage0
                         : "/assets/store_pics/no-image-product.png"
-                    }
+            )}
                     className={styles.storeImg2}
                   />
                   <div className={styles.flex}>

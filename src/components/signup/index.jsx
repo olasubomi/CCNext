@@ -27,6 +27,7 @@ import OTP from "../OTP";
 import { jwtDecode } from "jwt-decode";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { useMobileMedia } from '../../customhooks/useResponsive';
+import { migrateS3UrlToCloudinary } from '../../common/migrateS3UrlToCloudinary';
 
 function SignUp(props) {
   const [openUserVerification, setOpenUserVerification] = React.useState(false);
@@ -242,7 +243,7 @@ function SignUp(props) {
             </div>
             <Link href="/" legacyBehavior>
               <Image
-                src={img_logo}
+                src={migrateS3UrlToCloudinary(img_logo)}
                 alt="logo"
                 className={styles.login_main_logo_img}
               />

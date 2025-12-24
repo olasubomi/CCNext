@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 //import {Typeahead} from 'react-bootstrap-typeahead';
 import Popup from "reactjs-popup";
+import { migrateS3UrlToCloudinary } from '../../common/migrateS3UrlToCloudinary';
 
 
 class RecipeContentSection extends Component {
@@ -13,10 +14,10 @@ class RecipeContentSection extends Component {
                 <div>                  
                     <div>{this.props.selectedMeal.label} </div>
                     <div> 
-                    {/* <img src={require('./images/Garri.jpg')}/> */}
-                    {/* <img src={this.props.selectedMeal.imageSrc} alt="alt"/> */}
-                    <img src={this.props.selectedMeal.imageSrc} alt='info' style={{width:'350px', height:'350px'}}/>
-                    {/* <img src={require('/images/Garri.jpg')} alt='info' style={{width:'13px', height:'13px'}}/> */}
+                    {/* <img src={migrateS3UrlToCloudinary(require('./images/Garri.jpg'))}/> */}
+                    {/* <img src={migrateS3UrlToCloudinary(this.props.selectedMeal.imageSrc)} alt="alt"/> */}
+                    <img src={migrateS3UrlToCloudinary(this.props.selectedMeal.imageSrc)} alt='info' style={{width:'350px', height:'350px'}}/>
+                    {/* <img src={migrateS3UrlToCloudinary(require('/images/Garri.jpg'))} alt='info' style={{width:'13px', height:'13px'}}/> */}
                     </div>
                     <div>{this.props.selectedMeal.readTime} </div>
                     <div> {this.props.selectedMeal.cookTime}</div>
@@ -27,7 +28,7 @@ class RecipeContentSection extends Component {
                                 <button href = "#" className="close" onClick={close}>&times;</button>
                                 <div className="container" style={containerStyle} id="bigContainer">
                                 <div className="row align-items-center">
-                                    <img src={this.props.selectedMeal.imageSrc} alt='info' style={{width:'35%', height:'35%'}}></img>
+                                    <img src={migrateS3UrlToCloudinary(this.props.selectedMeal.imageSrc)} alt='info' style={{width:'35%', height:'35%'}}></img>
                                     <div className="col-sm"><ol style={listStyle}>{mealPrep}</ol></div>
                                 </div>
                                     <div className="row" >

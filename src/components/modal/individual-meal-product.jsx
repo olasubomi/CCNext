@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { convertCurrency } from "../../actions/utils";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 export const IndividualModal = ({
   openList,
   openModal,
@@ -74,7 +75,7 @@ export const IndividualModal = ({
             <div className={styles.flexed2}>
               <div className={styles.images2}>
                 <img
-                  src={selectedItem?.itemImage0}
+                  src={migrateS3UrlToCloudinary(selectedItem?.itemImage0)}
                   alt=""
                   className={styles.modalImg}
                 />
@@ -82,7 +83,7 @@ export const IndividualModal = ({
                   {selectedItem?.item_images?.slice(1, 4).map((image, idx) => {
                     return (
                       <div className={styles.img1}>
-                        <img src={image} />
+                        <img src={migrateS3UrlToCloudinary(image)} />
                       </div>
                     );
                   })}
@@ -309,11 +310,11 @@ export const IndividualModal = ({
                           <div key={index}>
                             {/\.(jpg|png|jpeg)$/i.test(elem.dataName) ? (
                               <img
-                                src={
+                                src={migrateS3UrlToCloudinary(
                                   selectedItem[
                                   `meal_image_or_video_content${index + 1}`
                                   ]
-                                }
+                            )}
                                 className={styles.instruction_img}
                               />
                             ) : (
@@ -325,12 +326,13 @@ export const IndividualModal = ({
                                     height={150}
                                   >
                                     <source
-                                      src={
+                                      src={migrateS3UrlToCloudinary(
                                         selectedItem[
                                         `meal_image_or_video_content${index + 1
                                         }`
-                                        ]
-                                      }
+                                        ],
+                                        'https://res.cloudinary.com/duqjwgsfe/video/upload'
+                                )}
                                       type="video/mp4"
                                     />
                                     Your browser does not support the video tag.
@@ -479,7 +481,7 @@ export const ProductModal = ({
             <div className={styles.flexed}>
               <div className={styles.images}>
                 <img
-                  src={selectedItem?.itemImage0}
+                  src={migrateS3UrlToCloudinary(selectedItem?.itemImage0)}
                   alt=""
                   className={styles.modalImg}
                 />
@@ -487,7 +489,7 @@ export const ProductModal = ({
                   {selectedItem.item_images.slice(1, 3).map((image, idx) => {
                     return (
                       <div className={styles.img1}>
-                        <img src={image} />
+                        <img src={migrateS3UrlToCloudinary(image)} />
                       </div>
                     );
                   })}
@@ -713,7 +715,7 @@ export const UtensilModal = ({
               <div className={styles.flexed}>
                 <div className={styles.images}>
                   <img
-                    src={selectedItem?.itemImage0}
+                    src={migrateS3UrlToCloudinary(selectedItem?.itemImage0)}
                     alt=""
                     className={styles.modalImg}
                   />
@@ -721,7 +723,7 @@ export const UtensilModal = ({
                     {selectedItem.item_images.map((image, idx) => {
                       return (
                         <div className={styles.img1}>
-                          <img src={image} />
+                          <img src={migrateS3UrlToCloudinary(image)} />
                         </div>
                       );
                     })}

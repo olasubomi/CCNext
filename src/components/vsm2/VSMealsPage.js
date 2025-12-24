@@ -125,7 +125,7 @@ class VSMealsPage extends Component {
             <div className="meal-card" onClick={()=>this.onClickMealCard(i+j, this.state.col_count)}>
               <div style={containerStyle}>
                 <div style={{ textAlign:"center" }}>
-                  <img src={value.mealImage} className="images" style={{ width: "200px", height: "200px" }} alt="/"></img>
+                  <img src={migrateS3UrlToCloudinary(value.mealImage} className="images" style={{ width: "200px", height: "200px" }} alt="/"></img>
                 </div>
                 <div>
                   <span style={{ color: "orange" }} >{value.label}</span> <br></br>
@@ -184,7 +184,7 @@ class VSMealsPage extends Component {
                   <div style={containerStyle}>
                     <div style={{ textAlign:"center" }}>
                       <img
-                        src={value.mealImage}
+                        src={migrateS3UrlToCloudinary(value.mealImage}
                         className="images"
                         style={{ width: "200px", height: "200px" }}
                         alt="/"

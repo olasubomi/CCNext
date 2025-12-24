@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import no_mealImg from '../../../assets/images/no_meal_step_image.png';
+import { migrateS3UrlToCloudinary } from '../../../common/migrateS3UrlToCloudinary';
 // import "./WithScrollbar.scss";
 
 export default class WithScrollbar extends Component {
@@ -43,9 +44,9 @@ export default class WithScrollbar extends Component {
         >
           {this.props.products.map((ingredient, index) => (        
             <div key={index}>                    
-                <img src={ingredient.productImgPath!=="" && 
+                <img src={migrateS3UrlToCloudinary(ingredient.productImgPath!=="" && 
                 this.props.productsObj[ingredient.productName] != undefined ?
-                 this.props.productsObj[ingredient.productName]["image"] : no_mealImg} 
+                 this.props.productsObj[ingredient.productName]["image"] : no_mealImg)} 
                  alt={ingredient.ingredient} 
                  height="200px" 
                  width="auto"/>

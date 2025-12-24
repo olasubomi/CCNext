@@ -9,6 +9,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { MobileSearch } from "../dropdown/mobile-search";
 import { StoreSearch } from "../dropdown/store-dropdown";
 import baseAxios from "axios";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const AllStores = () => {
   const alphabets = [
@@ -328,11 +329,11 @@ export const AllStores = () => {
                     {
                       <div>
                         <Image
-                          src={
+                          src={migrateS3UrlToCloudinary(
                             store?.profile_picture
                               ? store?.profile_picture
                               : "/assets/store_pics/no-image-store.png"
-                          }
+          )}
                           className={styles.storeImg}
                           width={200}
                           height={200}

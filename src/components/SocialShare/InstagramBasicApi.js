@@ -1,6 +1,7 @@
 // pages/index.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { migrateS3UrlToCloudinary } from '../../common/migrateS3UrlToCloudinary';
 
 const InstagramBasicApi = ({ mediaData }) => {
     console.log(mediaData)
@@ -10,7 +11,7 @@ const InstagramBasicApi = ({ mediaData }) => {
       <ul>
         {mediaData && mediaData.map((media) => (
           <li key={media.id}>
-            <img src={media.media_url} alt={media.caption} />
+            <img src={migrateS3UrlToCloudinary(media.media_url)} alt={media.caption} />
           </li>
         ))}
       </ul>

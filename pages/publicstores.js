@@ -5,6 +5,7 @@ import Header, { Header2 } from '../src/components/Header/Header';
 import Footer from '../src/components/Footer/Footer';
 import { ArrowLeftFillIcon } from '../src/components/icons';
 import { useState } from 'react';
+import { migrateS3UrlToCloudinary } from '../src/common/migrateS3UrlToCloudinary';
 
 const PublicStore = () => {
     const [storeSummary, setStoreSummary] = useState(false)
@@ -30,7 +31,7 @@ const PublicStore = () => {
 
                                 <Image
                                     priority
-                                    src={shopImage}
+                                    src={migrateS3UrlToCloudinary(shopImage)}
                                     alt="Store"
                                     className={styles.publicstore_storecard_img}
                                 />
@@ -63,7 +64,7 @@ const PublicStore = () => {
 
                                     <Image
                                         priority
-                                        src={shopImage}
+                                        src={migrateS3UrlToCloudinary(shopImage)}
                                         alt="Store"
                                         className={styles.publicstore_storecard_summary_img}
                                     />
@@ -97,7 +98,7 @@ const PublicStore = () => {
 
                                 <Image
                                     priority
-                                    src={shopImage}
+                                    src={migrateS3UrlToCloudinary(shopImage)}
                                     alt="Store"
                                     className={styles.publicstore_productcard_img}
                                 />

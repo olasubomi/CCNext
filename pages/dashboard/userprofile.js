@@ -45,6 +45,7 @@ import {
   suggestion_form_label,
 } from "../../src/components/suggestionPages/suggestion.module.css";
 import { toast } from "react-toastify";
+import { migrateS3UrlToCloudinary } from "../../src/common/migrateS3UrlToCloudinary";
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 58,
@@ -697,7 +698,7 @@ const UserProfile = (props) => {
 
                         {(profileImageData === '' && props.auth.authUser?.profile_picture === undefined) && <UserIcon />}
                         {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) &&
-                          <Image width={200} height={200} src={props.auth.authUser.profile_picture}
+                          <Image width={200} height={200} src={migrateS3UrlToCloudinary(props.auth.authUser.profile_picture)}
                             className={styles.profile_image}
                             alt="profile_picture" />
                         }
@@ -978,7 +979,7 @@ const UserProfile = (props) => {
                                 <Image
                                   width={300}
                                   height={300}
-                                  src={driver_car_picture.carContentURL}
+                                  src={migrateS3UrlToCloudinary(driver_car_picture.carContentURL)}
                                   alt="driver_car_picture_carContentURL"
                                 />
                               </div>
@@ -1082,13 +1083,13 @@ const UserProfile = (props) => {
                   <div className={styles.profile_basic_info}>
                     <div className={styles.profile_payment_methods}>
                       <div className={styles.profile_payment_method}>
-                        <Image src={cardImage} alt="cardImage" />
+                        <Image src={migrateS3UrlToCloudinary(cardImage)} alt="cardImage" />
                       </div>
                       <div className={styles.profile_payment_method}>
-                        <Image src={paypal} alt="paypal" />
+                        <Image src={migrateS3UrlToCloudinary(paypal)} alt="paypal" />
                       </div>
                       <div className={styles.profile_payment_method}>
-                        <Image src={sezzle} alt="sezzle" />
+                        <Image src={migrateS3UrlToCloudinary(sezzle)} alt="sezzle" />
                       </div>
                     </div>
                     <div className={styles.profile_card_type_con}>
@@ -1111,7 +1112,7 @@ const UserProfile = (props) => {
                               htmlFor="mastercard"
                               className={styles.profile_card_type_radioLabel}
                             >
-                              <Image src={mastercard} />
+                              <Image src={migrateS3UrlToCloudinary(mastercard)} />
                             </label>
                           </div>
                           <div className={styles.profile_card_type_option}>
@@ -1130,7 +1131,7 @@ const UserProfile = (props) => {
                               htmlFor="visa"
                               className={styles.profile_card_type_radioLabel}
                             >
-                              <Image src={visa} alt="Visa" />
+                              <Image src={migrateS3UrlToCloudinary(visa)} alt="Visa" />
                             </label>
                           </div>
                           <div className={styles.profile_card_type_option}>
@@ -1149,7 +1150,7 @@ const UserProfile = (props) => {
                               htmlFor="american"
                               className={styles.profile_card_type_radioLabel}
                             >
-                              <Image src={american} alt="american" />
+                              <Image src={migrateS3UrlToCloudinary(american)} alt="american" />
                             </label>
                           </div>
                         </div>

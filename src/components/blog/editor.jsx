@@ -35,6 +35,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import { useRouter } from "next/router";
 import { $getRoot } from "lexical";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const editorConfig = {
   namespace: "ChopChowEditor",
@@ -242,7 +243,7 @@ export const Editor = forwardRef((props, ref) => {
         ) : (
           <>
             <div className="selected_image">
-              <img className="f_image" src={form.uri} />
+              <img className="f_image" src={migrateS3UrlToCloudinary(form.uri)} />
             </div>
             <div className="selected_image_options">
               <button onClick={() => inputRef.current?.click()}>

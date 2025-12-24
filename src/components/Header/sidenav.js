@@ -8,6 +8,7 @@ import Link from "next/link";
 import Sidenav2 from "./sidenav2";
 import { connect, useSelector } from "react-redux";
 import { UserIcon } from "../icons";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function SideNav(props) {
   function openSidenav(e) {
@@ -50,7 +51,7 @@ function SideNav(props) {
             <div>
               <Link href="/" className={styles.social_link}>
                 <Image
-                  src={img_logo}
+                  src={migrateS3UrlToCloudinary(img_logo)}
                   alt="logo"
                   className={styles.sidenav_logo}
                 />
@@ -63,7 +64,7 @@ function SideNav(props) {
               <Image
                 width={100}
                 height={100}
-                src={props?.auth?.authUser?.profile_picture}
+                src={migrateS3UrlToCloudinary(props?.auth?.authUser?.profile_picture)}
                 alt={props?.auth?.authUser?.first_name}
                 className={styles.sidenav_top_row_2_img}
               />

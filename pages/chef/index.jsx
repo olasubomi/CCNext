@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import axios from "../../src/util/Api";
 import { UserIcon } from "../../src/components/icons";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { migrateS3UrlToCloudinary } from "../../src/common/migrateS3UrlToCloudinary";
 
 const AllChefsPage = () => {
   const alphabets = [
@@ -177,7 +178,7 @@ const AllChefsPage = () => {
                     <div className={styles.topPickImg}>
                       {elem?.profile_picture ? (
                         <img
-                          src={elem?.profile_picture}
+                          src={migrateS3UrlToCloudinary(elem?.profile_picture)}
                           style={{ width: "100%", height: "100%" }}
                         />
                       ) : (
@@ -235,7 +236,7 @@ const AllChefsPage = () => {
                   <div className={styles.topPickImg}>
                     {elem?.user?.profile_picture ? (
                       <img
-                        src={elem?.user?.profile_picture}
+                        src={migrateS3UrlToCloudinary(elem?.user?.profile_picture)}
                         style={{ width: "100%", height: "100%" }}
                       />
                     ) : (

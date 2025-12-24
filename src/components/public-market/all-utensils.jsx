@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { UtensilSearchs } from "../dropdown/utensil-search";
 import { convertCurrency } from "../../actions/utils";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const AllUtensils = () => {
   const alphabets = [
@@ -466,11 +467,11 @@ export const AllUtensils = () => {
                 {
                   <div className={styles.box}>
                     <img
-                      src={
+                      src={migrateS3UrlToCloudinary(
                         utensil?.itemImage0
                           ? utensil?.itemImage0
                           : "/assets/store_pics/no-image-utensil.png"
-                      }
+            )}
                       className={styles.storeImg1}
                     />
                     <div className={styles.flex}>

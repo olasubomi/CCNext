@@ -35,6 +35,7 @@ import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function Meal(props) {
   //const url = 'http://localhost:3000/'
@@ -197,7 +198,7 @@ function Meal(props) {
                   {props.meal.itemImage0?.length > 0 &&
                   props.meal.itemImage0 !== "[object HTMLImageElement]" ? (
                     <Image
-                      src={props.meal.itemImage0}
+                      src={migrateS3UrlToCloudinary(props.meal.itemImage0)}
                       alt={props.meal.item_name}
                       className={styles.meal_section_2_main_img}
                       height={500}
@@ -218,7 +219,7 @@ function Meal(props) {
                             <Image
                               key={index}
                               alt={props.meal.item_name}
-                              src={image}
+                              src={migrateS3UrlToCloudinary(image)}
                               height={300}
                               width={300}
                               className={styles.meal_section_2_image}
@@ -548,13 +549,14 @@ function Meal(props) {
                                   }}
                                 >
                                   <source
-                                    src={
+                                    src={migrateS3UrlToCloudinary(
                                       props?.meal[
                                         `meal_image_or_video_content${
                                           index + 1
                                         }`
-                                      ]
-                                    }
+                                      ],
+                                      'https://res.cloudinary.com/duqjwgsfe/video/upload'
+                            )}
                                     type="video/mp4"
                                   />
                                   Your browser does not support the video tag.
@@ -568,11 +570,11 @@ function Meal(props) {
                                     height: "100%",
                                     objectFit: "cover",
                                   }}
-                                  src={
+                                  src={migrateS3UrlToCloudinary(
                                     props?.meal[
                                       `meal_image_or_video_content${index + 1}`
                                     ]
-                                  }
+                            )}
                                 />
                               </div>
                             )}
@@ -658,11 +660,12 @@ function Meal(props) {
                                 }}
                               >
                                 <source
-                                  src={
+                                  src={migrateS3UrlToCloudinary(
                                     props?.meal[
                                       `meal_image_or_video_content${index + 1}`
-                                    ]
-                                  }
+                                    ],
+                                    'https://res.cloudinary.com/duqjwgsfe/video/upload'
+                            )}
                                   type="video/mp4"
                                 />
                                 Your browser does not support the video tag.
@@ -675,11 +678,11 @@ function Meal(props) {
                                   height: "196px",
                                   objectFit: "cover",
                                 }}
-                                src={
+                                src={migrateS3UrlToCloudinary(
                                   props?.meal[
                                     `meal_image_or_video_content${index + 1}`
                                   ]
-                                }
+                            )}
                               />
                             )}
 
@@ -827,7 +830,7 @@ function Meal(props) {
                                     {data.meal_images && data.meal_images.length > 0 && data.meal_images[0].length > 0 && data.meal_images[0] !== "[object HTMLImageElement]" &&
                                     <Image
                                         priority
-                                        src={data.meal_images[0]}
+                                        src={migrateS3UrlToCloudinary(data.meal_images[0]}
                                         alt="Related Meal"
                                         height={500} width={500}
                                         className={styles.productcard_productcard_img}

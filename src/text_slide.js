@@ -5,6 +5,7 @@ import "./text_slider.css";
 import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
 import no_mealImg from '../src/assets/images/no_meal_step_image.png';
+import { migrateS3UrlToCloudinary } from "./common/migrateS3UrlToCloudinary";
 
 class TextSlider extends Component {
   constructor(props) {
@@ -73,7 +74,7 @@ class TextSlider extends Component {
                 <p/>
                  <img
                   className="img-responsive imageHeighgt"
-                  src={instructionData[i].dataName !==null? instructionData[i].dataName: no_mealImg}
+                  src={migrateS3UrlToCloudinary(instructionData[i].dataName !==null? instructionData[i].dataName: no_mealImg)}
                   alt="First slide"
                   style ={{height:"auto", width:"80%", marginLeft:"10%"}}
                 />

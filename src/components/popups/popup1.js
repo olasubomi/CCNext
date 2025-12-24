@@ -2,6 +2,7 @@ import React, { Component, createRef } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import styles from "./popup.module.css";
 import Image from "next/image";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 class Popup1 extends Component {
   constructor(props) {
@@ -145,7 +146,7 @@ class Popup1 extends Component {
               <div className={styles.popup_col_1}>
                 <div>
                   <Image
-                    src={Array.isArray(imageData) ? imageData[0] : imageData}
+                    src={migrateS3UrlToCloudinary(Array.isArray(imageData) ? imageData[0] : imageData)}
                     className={styles.popup_main_img}
                     alt="pop up"
                     height={250}
@@ -166,7 +167,7 @@ class Popup1 extends Component {
                       <Image
                         key={index}
                         alt="pop up"
-                        src={data}
+                        src={migrateS3UrlToCloudinary(data)}
                         height={100}
                         width={100}
                         className={styles.popup_image}

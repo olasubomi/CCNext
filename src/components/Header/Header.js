@@ -35,6 +35,7 @@ import { MobileSearch } from "../dropdown/mobile-search";
 import axios from "../../util/Api";
 import { matches } from "lodash";
 import NavLink from "../../hooks/navlink";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function Header(props) {
   // const [isAuthenticated, setIsAuthenticatedState] = useState(false);
@@ -209,7 +210,7 @@ function Header(props) {
               <Link href="/">
                 <Image
                   className={styles.navbar_top_logo_img}
-                  src={img_logo}
+                  src={migrateS3UrlToCloudinary(img_logo)}
                   alt="logo"
                 />
               </Link>
@@ -235,7 +236,7 @@ function Header(props) {
                         id="userImg"
                         width={34}
                         height={34}
-                        src={authUser?.profile_picture}
+                        src={migrateS3UrlToCloudinary(authUser?.profile_picture)}
                         alt={props?.auth?.authUser?.username}
                         className={styles.navbar_user_img}
                       />
@@ -299,7 +300,7 @@ function Header(props) {
                           }
                           style={{ marginTop: "-1rem", alignItems: "center" }}
                         >
-                          {/* <Image src={openIcon} alt="profile" /> */}
+                          {/* <Image src={migrateS3UrlToCloudinary(openIcon)} alt="profile" /> */}
                           <div className={styles.navbar_main_link_icon}>
                             <img src="/assets/icons/fastfood.svg" />
                           </div>

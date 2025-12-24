@@ -34,6 +34,7 @@ import { FormModal } from "../../src/components/modal/form-modal";
 import { SuccessModal } from "../../src/components/suggest-store/success-modal";
 import { getAllISOCodes } from "iso-country-currency";
 import { SubAdmins } from "../../src/components/management";
+import { migrateS3UrlToCloudinary } from "../../src/common/migrateS3UrlToCloudinary";
 
 const List = [
   {
@@ -1181,7 +1182,7 @@ const Management = () => {
                               >
                                 <input type="checkbox" />
                                 <Image
-                                  src={ele.image}
+                                  src={migrateS3UrlToCloudinary(ele.image)}
                                   width={40}
                                   height={40}
                                   objectFit="contain"
@@ -1242,7 +1243,7 @@ const Management = () => {
                                   >
                                     <input type="checkbox" />
                                     <Image
-                                      src={ele.image}
+                                      src={migrateS3UrlToCloudinary(ele.image)}
                                       width={40}
                                       height={40}
                                       objectFit="contain"

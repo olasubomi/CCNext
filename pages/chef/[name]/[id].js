@@ -21,6 +21,7 @@ import {
   UserIcon,
 } from "../../../src/components/icons";
 import InstagramBasicApi from "../../../src/components/SocialShare/InstagramBasicApi";
+import { migrateS3UrlToCloudinary } from "../../../src/common/migrateS3UrlToCloudinary";
 
 const ChefPage = () => {
   const [activeKey, setActiveKey] = useState("2");
@@ -87,7 +88,7 @@ const ChefPage = () => {
             <GoBack />
             {user?.profile_picture ? (
               <Image
-                src={user?.profile_picture}
+                src={migrateS3UrlToCloudinary(user?.profile_picture)}
                 className={styles.chefImg}
                 width={200}
                 height={200}

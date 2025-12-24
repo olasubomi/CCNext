@@ -3,6 +3,7 @@ import itemStyle from "./Index.module.css";
 import CartContext from "../../../../../pages/store/cart-context";
 import { useMobileMedia } from "../../../../customhooks/useResponsive";
 import { canItemBeAddedToCart } from "../../../../util/canAddToCart";
+import { migrateS3UrlToCloudinary } from "../../../../common/migrateS3UrlToCloudinary";
 
 function ListItem(props) {
   const [checked, setChecked] = useState(false);
@@ -50,7 +51,7 @@ function ListItem(props) {
                   />
                 )}
               </div>
-              <img src={props.picture} alt="product" />
+              <img src={migrateS3UrlToCloudinary(props.picture)} alt="product" />
             </div>
             <div className={itemStyle.mobileListItems}>
               <label>{props.name}</label>
@@ -92,7 +93,7 @@ function ListItem(props) {
               )}
             </div>
             <div className={itemStyle.productImageDiv}>
-              <img src={props.picture} alt="product" />
+              <img src={migrateS3UrlToCloudinary(props.picture)} alt="product" />
             </div>
           </div>
           <div className={itemStyle.listItems}>

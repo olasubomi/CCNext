@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import styles from "../../../src/components/Checkout/style.module.css";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 const PaymentMethod = ({ data, setData, handleChange, cardErrors }) => {
   const changePaymentMethod = (method) => {
@@ -60,7 +61,7 @@ const PaymentMethod = ({ data, setData, handleChange, cardErrors }) => {
                     value={type}
                   />
                   <span>
-                    <img src={`/assets/logos/${type}.png`} />
+                    <img src={migrateS3UrlToCloudinary(`/assets/logos/${type}.png`)} />
                   </span>
                 </label>
               ))}

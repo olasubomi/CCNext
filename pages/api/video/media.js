@@ -3,9 +3,10 @@ import path from "path";
 import ytdl from "@distube/ytdl-core";
 // import youtubedl from 'youtube-dl-exec';
 import axios from "axios";
-import instagramDl from "@sasmeee/igdl";
+// import instagramDl from "@sasmeee/igdl";
 
 const { URL } = require("url");
+const instagramDl = require("@sasmeee/igdl");
 
 const TEMP_DIR = path.join(__dirname, "temp");
 

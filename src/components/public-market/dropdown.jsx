@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../actions";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { convertCurrency } from "../../actions/utils";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 const responsive = {
   superLargeDesktop: {
@@ -195,11 +196,11 @@ export const MealDropDown = ({
         <div className={styles.store_flex}>
           <div className={styles.profile_picture}>
             <img
-              src={
+              src={migrateS3UrlToCloudinary(
                 storeInfo?.image
                   ? storeInfo?.image
                   : "/assets/store_pics/no-image-store.png"
-              }
+  )}
             />
           </div>
           <div className={styles.rightside}>
@@ -253,7 +254,7 @@ export const MealDropDown = ({
                 }}
               >
                 <img
-                  src={
+                  src={migrateS3UrlToCloudinary(
                     meal?.item?.itemImage0
                       ? meal.item.itemImage0
                       : !meal?.item?.itemImage0 &&
@@ -266,7 +267,7 @@ export const MealDropDown = ({
                             meal?.item?.item_type === "Utensil"
                             ? "/assets/store_pics/no-image-utensil.png"
                             : ""
-                  }
+            )}
                   alt=""
                   className={styles.img}
                 />

@@ -2,7 +2,7 @@ import {
   DecoratorNode,
 } from "lexical";
 import { Suspense } from "react";
-
+import { migrateS3UrlToCloudinary } from "../../../common/migrateS3UrlToCloudinary";
 
 
 export class ImageNode extends DecoratorNode {
@@ -39,7 +39,7 @@ export class ImageNode extends DecoratorNode {
     return (
       <Suspense fallback={<span>Loading...</span>}>
         <img
-          src={this.src}
+          src={migrateS3UrlToCloudinary(this.src)}
           alt={this.altText}
           style={{
             width: "100%",

@@ -1,13 +1,14 @@
 import React from "react";
 import * as BsIcons from "react-icons/bs";
 import suggestStyles from "./index.module.css";
+import { migrateS3UrlToCloudinary } from "../../../../common/migrateS3UrlToCloudinary";
 
 const styleStar = { color: "#04D505" };
 
 function SuggestedMealCard(props) {
   return (
     <div className={suggestStyles.mealCard}>
-      <img id="suggestedMeal" src={props.picture} alt="suggested meal" />
+      <img id="suggestedMeal" src={migrateS3UrlToCloudinary(props.picture)} alt="suggested meal" />
       <div className={suggestStyles.mealName}>
         <label>{props.name}</label>
         <p>{props.driveTime}</p>

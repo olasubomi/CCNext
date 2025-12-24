@@ -78,7 +78,7 @@ class MyModal extends Component {
                 <div className="detail-firstCol col-md-5 col-sm-12" >
                   <Carousel showThumbs={false} infiniteLoop={false} style={{width:"96%" }}>
                     {content.map(index => (
-                      <img style={{ height: "250px" }} alt="pp" key={index} src={value.mealImage} />
+                      <img style={{ height: "250px" }} alt="pp" key={index} src={migrateS3UrlToCloudinary(value.mealImage} />
                     ))}                    
                   </Carousel>
                   <br />

@@ -10,6 +10,7 @@ import { Modal } from "react-bootstrap";
 // import TextSlider from "../../text_slide";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import { migrateS3UrlToCloudinary } from "../common/migrateS3UrlToCloudinary";
 // import "./Mymodal.scoped.scss";
 // import "../../App.css";
 
@@ -79,7 +80,7 @@ class ProductsPageModal extends Component {
                   <Carousel showThumbs={false} infiniteLoop={false} style={{width:"96%" }}>
                     {content.map(index => (
                       
-                      <img style={{ height: "250px" }} alt="pp" key={index} src={value.productImgData} />
+                      <img style={{ height: "250px" }} alt="pp" key={index} src={migrateS3UrlToCloudinary(value.productImgData)} />
                     ))}                    
                   </Carousel>
                   <br />

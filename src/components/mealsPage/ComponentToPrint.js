@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './componentToPrint.module.css'
 import img_logo from "../../../public/assets/logos/logo2.png"
+import { migrateS3UrlToCloudinary } from '../../common/migrateS3UrlToCloudinary';
 
 class ComponentToPrint extends React.Component {
 
@@ -83,7 +84,7 @@ class ComponentToPrint extends React.Component {
         <div className={styles.print}>
           <div className={styles.print_page_1}>
             <div className={styles.print_page_1_row_1}>
-              <img className={styles.print_main_logo_img1} alt="print_main_logo_image" src={Array.isArray(this.props.allImagesData) ? this.props.allImagesData[0] : this.props.mealImage} />
+              <img className={styles.print_main_logo_img1} alt="print_main_logo_image" src={migrateS3UrlToCloudinary(Array.isArray(this.props.allImagesData) ? this.props.allImagesData[0] : this.props.mealImage)} />
             </div>
             <div className={styles.print_page_1_row_2}>
               <div className={styles.print_page_1_col_1}>
@@ -175,13 +176,13 @@ class ComponentToPrint extends React.Component {
                         {/* <h4>1</h4> */}
                         {(this.props.chunk1Content !== '') &&
                           <img
-                            src={this.props.chunk1Content}
+                            src={migrateS3UrlToCloudinary(this.props.chunk1Content)}
                             alt={this.props.instructionChunk1}
                             className={styles.instruction_img} />
                         }
 
                         {(allowedVideoExtensions.exec(this.props.chunk1Content) && this.props.chunk1Content !== '') && (
-                          <video className={styles.instruction_img} src={this.props.chunk1Content} controls>
+                          <video className={styles.instruction_img} src={migrateS3UrlToCloudinary(this.props.chunk1Content, 'https://res.cloudinary.com/duqjwgsfe/video/upload')} controls>
                             Your browser does not support the video tag.
                           </video>
                         )}
@@ -210,13 +211,13 @@ class ComponentToPrint extends React.Component {
                         {/* <h4>2</h4> */}
                         {(this.props.chunk2Content !== '') &&
                           <img
-                            src={this.props.chunk2Content}
+                            src={migrateS3UrlToCloudinary(this.props.chunk2Content)}
                             alt={this.props.instructionChunk2}
                             className={styles.instruction_img} />
                         }
 
                         {(allowedVideoExtensions.exec(this.props.instructionChunk2?.dataName) && this.props.chunk2Content !== '') &&
-                          <video className={styles.instruction_img} src={this.props.chunk2Content}>
+                          <video className={styles.instruction_img} src={migrateS3UrlToCloudinary(this.props.chunk2Content, 'https://res.cloudinary.com/duqjwgsfe/video/upload')}>
                             Your browser does not support the video tag.
                           </video>
                         }
@@ -245,13 +246,13 @@ class ComponentToPrint extends React.Component {
                         {/* <h4>3</h4> */}
                         {(this.props.chunk3Content !== '') &&
                           <img
-                            src={this.props.chunk3Content}
+                            src={migrateS3UrlToCloudinary(this.props.chunk3Content)}
                             alt={this.props.instructionChunk3?.title}
                             className={styles.instruction_img} />
                         }
 
                         {(allowedVideoExtensions.exec(this.props.instructionChunk3?.dataName) && this.props.chunk3Content !== '') &&
-                          <video className={styles.instruction_img} src={this.props.chunk3Content}>
+                          <video className={styles.instruction_img} src={migrateS3UrlToCloudinary(this.props.chunk3Content, 'https://res.cloudinary.com/duqjwgsfe/video/upload')}>
                             Your browser does not support the video tag.
                           </video>
                         }
@@ -282,13 +283,13 @@ class ComponentToPrint extends React.Component {
                         {/* <h4>4</h4> */}
                         {(this.props.chunk4Content !== '') &&
                           <img
-                            src={this.props.chunk4Content}
+                            src={migrateS3UrlToCloudinary(this.props.chunk4Content)}
                             alt={this.props.instructionChunk4?.title}
                             className={styles.instruction_img} />
                         }
 
                         {(allowedVideoExtensions.exec(this.props.instructionChunk4?.dataName) && this.props.chunk4Content !== '') &&
-                          <video className={styles.instruction_img} src={this.props.chunk4Content}>
+                          <video className={styles.instruction_img} src={migrateS3UrlToCloudinary(this.props.chunk4Content, 'https://res.cloudinary.com/duqjwgsfe/video/upload')}>
                             Your browser does not support the video tag.
                           </video>
                         }
@@ -317,13 +318,13 @@ class ComponentToPrint extends React.Component {
                         {/* <h4>5</h4> */}
                         {(this.props.chunk5Content !== '') &&
                           <img
-                            src={this.props.chunk5Content}
+                            src={migrateS3UrlToCloudinary(this.props.chunk5Content)}
                             alt={this.props.instructionChunk5?.title}
                             className={styles.instruction_img} />
                         }
 
                         {(allowedVideoExtensions.exec(this.props.instructionChunk5?.dataName) && this.props.chunk5Content !== '') &&
-                          <video className={styles.instruction_img} src={this.props.chunk5Content}>
+                          <video className={styles.instruction_img} src={migrateS3UrlToCloudinary(this.props.chunk5Content, 'https://res.cloudinary.com/duqjwgsfe/video/upload')}>
                             Your browser does not support the video tag.
                           </video>
                         }
@@ -355,13 +356,13 @@ class ComponentToPrint extends React.Component {
                         {/* <h4>6</h4> */}
                         {(this.props.chunk6Content !== '') &&
                           <img
-                            src={this.props.chunk6Content}
+                            src={migrateS3UrlToCloudinary(this.props.chunk6Content)}
                             alt={this.props.instructionChunk6?.title}
                             className={styles.instruction_img} />
                         }
 
                         {(allowedVideoExtensions.exec(this.props.instructionChunk6?.dataName) && this.props.chunk6Content !== '') &&
-                          <video className={styles.instruction_img} src={this.props.chunk6Content}>
+                          <video className={styles.instruction_img} src={migrateS3UrlToCloudinary(this.props.chunk6Content, 'https://res.cloudinary.com/duqjwgsfe/video/upload')}>
                             Your browser does not support the video tag.
                           </video>
                         }

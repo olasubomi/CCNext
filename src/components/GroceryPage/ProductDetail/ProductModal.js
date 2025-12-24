@@ -1,6 +1,7 @@
 import React from 'react';
 // import './ProductModal.scss';
 import { Row, Col } from "react-bootstrap";
+import { migrateS3UrlToCloudinary } from '../../../common/migrateS3UrlToCloudinary';
 
 class ProductModal extends React.Component {
     gotoViewPage = (customerId, productID) => {
@@ -27,7 +28,7 @@ class ProductModal extends React.Component {
                             </div>
                             <Row>
                                 <Col md={6} style={{ textAlign: "center" }}>
-                                    <img src={product_img} width="100%" className="product-img" alt="" />
+                                    <img src={migrateS3UrlToCloudinary(product_img)} width="100%" className="product-img" alt="" />
                                 </Col>
                                 <Col md={6}>
                                     <div className="detail-info-panel" style={{ marginLeft: "10px", marginRight: "20px" }}>

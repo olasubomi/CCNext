@@ -14,7 +14,7 @@ export default function Custom404() {
         className={styles.container}
       >
         <div className={styles.img}>
-          <img src={"/assets/homepage/404.png"} />
+          <img src={migrateS3UrlToCloudinary("/assets/homepage/404.png")} />
         </div>
         <h1 className={styles.Custom404}>404</h1>
         <p className={styles.page}>Ooops... Page not Found</p>

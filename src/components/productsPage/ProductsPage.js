@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Popup from "reactjs-popup";
+import { migrateS3UrlToCloudinary } from '../../common/migrateS3UrlToCloudinary';
 
 class ProductSection extends Component {
     storeCollection = []
@@ -60,7 +61,7 @@ class ProductSection extends Component {
                             <div style={containerStyle}>
                                 <Popup trigger={
                                     <div id={productValue.id} style={containerStyle}>
-                                        <img src={productValue.product_image} className="images" style={{ width: "100%" }} alt={productValue.id}></img>
+                                        <img src={migrateS3UrlToCloudinary(productValue.product_image)} className="images" style={{ width: "100%" }} alt={productValue.id}></img>
                                         <div id="textbox">
                                             <p className="alignleft">{productValue.product_name}</p>
                                             <p className="alignright" style={{ color: "green" }}>${productValue.product_price}</p>
@@ -77,7 +78,7 @@ class ProductSection extends Component {
                                     <div className="container">
                                         <div className="row">
                                             <div className="col-sm-6"><b>
-                                                <img src={productValue.product_image} alt='info' style={{ width: "100%", height: "100%", align: "center" }}></img>
+                                                <img src={migrateS3UrlToCloudinary(productValue.product_image)} alt='info' style={{ width: "100%", height: "100%", align: "center" }}></img>
 
                                             </b>
                                             </div>
@@ -103,7 +104,7 @@ class ProductSection extends Component {
             store_products.push(
                 <div key={value.store_name}>
                     <hr></hr>
-                    <img src={value.store_image} className="images" style={{ width: "10%" }} alt={value.id}></img>
+                    <img src={migrateS3UrlToCloudinary(value.store_image)} className="images" style={{ width: "10%" }} alt={value.id}></img>
                     <b>{value.store_name}</b>
 
                     <br></br>

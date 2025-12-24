@@ -22,6 +22,7 @@ import { getLocalGroceryList } from "../src/util";
 import { useSelector } from "react-redux";
 import { UserIcon } from "../src/components/icons";
 import { PiEyeFill } from "react-icons/pi";
+import { migrateS3UrlToCloudinary } from "../src/common/migrateS3UrlToCloudinary";
 
 const Grocery = () => {
   const [show, setShow] = useState(false);
@@ -284,7 +285,7 @@ const Grocery = () => {
                             <div className={styles.oneImage}>
                               {elem.item?.itemImage0 ? (
                                 <Image
-                                  src={elem?.item?.itemImage0}
+                                  src={migrateS3UrlToCloudinary(elem?.item?.itemImage0)}
                                   width={95}
                                   height={100}
                                   className={styles.imgs}
@@ -370,7 +371,7 @@ const Grocery = () => {
                       height={50}
                       style={{ borderRadius: 30 }}
                       alt={ele.user.first_name}
-                      src={authUser?.profile_picture}
+                      src={migrateS3UrlToCloudinary(authUser?.profile_picture)}
                       className={styles.user_img}
                     />
                   ) : (
@@ -407,7 +408,7 @@ const Grocery = () => {
       ) : (
         <div className={styles.card}>
           <Image
-            src={noteGif}
+            src={migrateS3UrlToCloudinary(noteGif)}
             height={200}
             width={250}
             objectFit="contain"

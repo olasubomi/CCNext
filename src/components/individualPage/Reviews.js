@@ -17,6 +17,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
 import { MdShare } from "react-icons/md";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function Reviews({ itemId, callback }) {
   const [comments, setComments] = useState([]);
@@ -173,7 +174,7 @@ function Reviews({ itemId, callback }) {
                 <img
                   style={{ borderRadius: 30 }}
                   alt={username}
-                  src={profileImage}
+                  src={migrateS3UrlToCloudinary(profileImage)}
                   className={styles.user_img}
                 />
               ) : (
@@ -248,7 +249,7 @@ function Reviews({ itemId, callback }) {
                     id="userImg"
                     width={60}
                     height={60}
-                    src={comment?.created_by?.profile_picture}
+                    src={migrateS3UrlToCloudinary(comment?.created_by?.profile_picture)}
                     alt="User"
                     className={styles.user_img}
                   />
@@ -518,7 +519,7 @@ function Reviews({ itemId, callback }) {
                 <img
                   style={{ borderRadius: 30 }}
                   alt={username}
-                  src={profileImage}
+                  src={migrateS3UrlToCloudinary(profileImage}
                   className={styles.user_img}
                 />
               ) : (
@@ -593,7 +594,7 @@ function Reviews({ itemId, callback }) {
                       id="userImg"
                       width={60}
                       height={60}
-                      src={comment?.created_by?.profile_picture}
+                      src={migrateS3UrlToCloudinary(comment?.created_by?.profile_picture)}
                       alt="User"
                       className={styles.user_img}
                     />

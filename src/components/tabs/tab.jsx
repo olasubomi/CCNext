@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { UserIcon } from "../icons";
 import { FaUser } from "react-icons/fa6";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -221,14 +222,14 @@ const MyTabs = ({ id }) => {
                               <div className={styles.oneImage}>
                                 {elem.item?.itemImage0 ? (
                                   <Image
-                                    src={elem?.item?.itemImage0}
+                                    src={migrateS3UrlToCloudinary(elem?.item?.itemImage0)}
                                     width={95}
                                     height={100}
                                     className={styles.imgs}
                                   />
                                 ) : (
                                   <Image
-                                    src={Frame}
+                                    src={migrateS3UrlToCloudinary(Frame)}
                                     width={95}
                                     height={100}
                                     objectFit="cover"
@@ -248,7 +249,7 @@ const MyTabs = ({ id }) => {
                             >
                               <div className={styles.oneImage}>
                                 <Image
-                                  src={Frame}
+                                  src={migrateS3UrlToCloudinary(Frame)}
                                   width={95}
                                   height={100}
                                   objectFit="cover"
@@ -273,7 +274,7 @@ const MyTabs = ({ id }) => {
                   style={{ marginBottom: "1rem", marginTop: "1rem" }}
                 >
                   <div className={styles.flex}>
-                    {/* <Image src={authUser !== null && authUser !==undefined ? authUser.profile_picture: girl} width={40} height={40} className={styles.person} /> */}
+                    {/* <Image src={migrateS3UrlToCloudinary(authUser !== null && authUser !==undefined ? authUser.profile_picture: girl} width={40} height={40} className={styles.person} /> */}
                     {authUser?.profile_picture !== "" &&
                     authUser?.profile_picture !== undefined ? (
                       <Image
@@ -281,7 +282,7 @@ const MyTabs = ({ id }) => {
                         height={50}
                         style={{ borderRadius: 30 }}
                         alt={ele.user.first_name}
-                        src={authUser?.profile_picture}
+                        src={migrateS3UrlToCloudinary(authUser?.profile_picture)}
                         className={styles.user_img}
                       />
                     ) : (
@@ -326,7 +327,7 @@ const MyTabs = ({ id }) => {
                   }}
                   key={id}
                 >
-                  <img src={item.itemImage0} />
+                  <img src={migrateS3UrlToCloudinary(item.itemImage0)} />
                   <div className={styles.flexed}>
                     <p>{item.item_name}</p>
                     <p>{item.item_price ? `$${item.item_price}` : "N/A"}</p>

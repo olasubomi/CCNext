@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import no_mealImg from '../../../assets/images/no_meal_step_image.png';
+import { migrateS3UrlToCloudinary } from '../../../common/migrateS3UrlToCloudinary';
 // import "./WithScrollbar.scss";
 
 export default class WithScrollbar extends Component {
@@ -30,7 +31,7 @@ export default class WithScrollbar extends Component {
         <Carousel className="withScroll_slider" showThumbs={false} infiniteLoop={false} selectedItem = { parseInt(this.props.products.length /2) } centerMode={true} centerSlidePercentage={100 / (1.4*col_count)}>
           {this.props.products.map((ingredient, index) => (
             <div key={index}>                    
-                <img src={ingredient.image!==""? ingredient.image: no_mealImg} alt={ingredient.ingredient} height="200px" width="auto"/>
+                <img src={migrateS3UrlToCloudinary(ingredient.image!==""? ingredient.image: no_mealImg)} alt={ingredient.ingredient} height="200px" width="auto"/>
                 <p style={{fontSize:"20px"}}>{ingredient.ingredient}</p>
             </div>
           ))}

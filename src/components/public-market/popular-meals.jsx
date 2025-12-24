@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { convertCurrency } from "../../actions/utils";
 import { BiSolidDownArrow } from "react-icons/bi";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const PopularMeals = () => {
   const matches = useMediaQuery("(min-width: 920px)");
@@ -297,11 +298,11 @@ export const PopularMeals = () => {
               {
                 <div className={styles.box}>
                   <img
-                    src={
+                    src={migrateS3UrlToCloudinary(
                       meal?.itemImage0
                         ? meal?.itemImage0
                         : "/assets/store_pics/no-image-meal.png"
-                    }
+          )}
                     className={styles.storeImg1}
                   />
                   <div className={styles.flex}>

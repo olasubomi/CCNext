@@ -16,6 +16,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Image from "next/image";
 import Head from "next/head";
+import { migrateS3UrlToCloudinary } from "../src/common/migrateS3UrlToCloudinary";
 
 class LandingPage extends Component {
   constructor(props) {
@@ -123,7 +124,7 @@ class LandingPage extends Component {
                   Shop Now
                 </a>
               </div>
-              {/* <Image src={banner1} className={styles.slide_image} /> */}
+              {/* <Image src={migrateS3UrlToCloudinary(banner1} className={styles.slide_image} /> */}
               <div
                 className={styles.slide_image}
                 style={{
@@ -146,7 +147,7 @@ class LandingPage extends Component {
                   backgroundImage: `url(/assets/homepage/grocery_bag.jpg)`,
                 }}
               ></div>
-              {/* <Image src={background} className={styles.slide_image} /> */}
+              {/* <Image src={migrateS3UrlToCloudinary(background} className={styles.slide_image} /> */}
             </div>
 
             <div className={styles.mySlides}>
@@ -163,7 +164,7 @@ class LandingPage extends Component {
                   backgroundImage: `url(/assets/homepage/banner-2.png)`,
                 }}
               ></div>
-              {/* <Image src={banner2} className={styles.slide_image} /> */}
+              {/* <Image src={migrateS3UrlToCloudinary(banner2} className={styles.slide_image} /> */}
             </div>
 
             {/* Next and previous buttons */}
@@ -203,7 +204,7 @@ class LandingPage extends Component {
               </div>
 
               <Image
-                src={shoppingImage}
+                src={migrateS3UrlToCloudinary(shoppingImage)}
                 alt="feature"
                 className={styles.feature_img}
               />
@@ -219,7 +220,7 @@ class LandingPage extends Component {
                 <p>2</p>
               </div>
               <Image
-                src={supplierImage}
+                src={migrateS3UrlToCloudinary(supplierImage)}
                 alt="feature"
                 className={styles.feature_img}
               />
@@ -236,7 +237,7 @@ class LandingPage extends Component {
                 <p>3</p>
               </div>
               <Image
-                src={chefImage}
+                src={migrateS3UrlToCloudinary(chefImage)}
                 alt="feature"
                 className={styles.feature_img}
               />
@@ -254,7 +255,7 @@ class LandingPage extends Component {
           <div className={styles.home_section_3_row}>
             <div className={styles.home_section_3_row_1}>
               <Image
-                src={shopImage}
+                src={migrateS3UrlToCloudinary(shopImage)}
                 alt="home"
                 className={styles.home_section_3_row_1}
               />
@@ -280,7 +281,7 @@ class LandingPage extends Component {
               className={`${styles.home_section_3_row_1} ${styles.row_reverse}`}
             >
               <Image
-                src={utensilImage}
+                src={migrateS3UrlToCloudinary(utensilImage)}
                 alt="about us"
                 className={styles.home_section_3_row_1}
               />
@@ -309,7 +310,7 @@ class LandingPage extends Component {
           <div className={styles.home_section_3_row}>
             <div className={styles.home_section_3_row_1}>
               <Image
-                src={foodImage}
+                src={migrateS3UrlToCloudinary(foodImage)}
                 alt="about us"
                 className={styles.home_section_3_row_1}
               />

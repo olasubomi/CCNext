@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { base_url } from "../../util/Api";
 import ScannerImg from "../../../public/assets/home/scanner.svg"
 import { IoIosCloseCircle } from "react-icons/io";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 class SuggestProductForm extends Component {
   allProductNames = [];
@@ -1444,7 +1445,7 @@ class SuggestProductForm extends Component {
                 <Col md={12} style={{ marginTop: "20px" }}>
                   <p>
                     <Image
-                      src={data}
+                      src={migrateS3UrlToCloudinary(data)}
                       width={100}
                       height={100}
                       alt="main_product_Images"

@@ -52,6 +52,7 @@ import SuggestedStores from "../../src/components/dashboard/suggestedStores";
 import Store from "../../src/components/individualPage/Store";
 import { RejectionModal } from "../../src/components/modal/rejection-modal";
 import { debounce } from "lodash";
+import { migrateS3UrlToCloudinary } from "../../src/common/migrateS3UrlToCloudinary";
 
 const SuggestedMeals = (props) => {
   const router = useRouter();
@@ -2096,7 +2097,7 @@ const SuggestedMeals = (props) => {
                         key={index}
                         width={300}
                         height={300}
-                        src={images}
+                        src={migrateS3UrlToCloudinary(images)}
                         alt="background"
                       />;
                     })}
@@ -2146,7 +2147,7 @@ const SuggestedMeals = (props) => {
                         key={index}
                         width={300}
                         height={300}
-                        src={images}
+                        src={migrateS3UrlToCloudinary(images)}
                         alt="background"
                       />;
                     })}

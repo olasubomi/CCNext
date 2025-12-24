@@ -24,6 +24,7 @@ import { addToCart } from "../../actions";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function Product(props) {
   const [formatted_ingredients, set_formatted_ingredients] = useState([""]);
@@ -106,7 +107,7 @@ function Product(props) {
           <div className={styles.product_section_2_col_1}>
             <div className={styles.product_section_2_main_img}>
               <img
-                src={props.product.itemImage0}
+                src={migrateS3UrlToCloudinary(props.product.itemImage0)}
                 alt={props.product.item_name}
                 style={{ width: "100%", height: "100%" }}
               />
@@ -117,7 +118,7 @@ function Product(props) {
                 <>
                   {props.product.item_images.map((image, index) => (
                     <div className={styles.product_section_2_image}>
-                      <img key={index} src={image} />
+                      <img key={index} src={migrateS3UrlToCloudinary(image)} />
                     </div>
                   ))}
                 </>
@@ -270,7 +271,7 @@ function Product(props) {
 
                                     <Image
                                         priority
-                                        src={img_logo}
+                                        src={migrateS3UrlToCloudinary(img_logo}
                                         alt="Store"
                                         className={styles.productcard_productcard_img}
                                     />
@@ -362,7 +363,7 @@ function Product(props) {
                           "[object HTMLImageElement]" && (
                           <Image
                             priority
-                            src={data.meal_images[0]}
+                            src={migrateS3UrlToCloudinary(data.meal_images[0])}
                             alt="Store"
                             className={styles.productcard_productcard_img}
                           />

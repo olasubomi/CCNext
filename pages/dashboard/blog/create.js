@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "../../../src/util/Api";
 import { toast } from 'react-toastify'
+import { migrateS3UrlToCloudinary } from "../../../src/common/migrateS3UrlToCloudinary";
 
 export default function ManageBlog() {
     const router = useRouter();
@@ -184,7 +185,7 @@ export default function ManageBlog() {
                                         <td>
                                             <div className="blog-list-flexer">
                                                 <img
-                                                    src={data?.featured_image}
+                                                    src={migrateS3UrlToCloudinary(data?.featured_image)}
                                                     height={"34px"}
                                                     width={"44px"}
                                                 />

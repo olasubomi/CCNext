@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { MobileSearch } from "../dropdown/mobile-search";
 import { MealSearch } from "../dropdown/meal-search";
 import { convertCurrency } from "../../actions/utils";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const AllPopularMeals = () => {
   const alphabets = [
@@ -429,11 +430,11 @@ export const AllPopularMeals = () => {
                   {
                     <div className={styles.box}>
                       <img
-                        src={
+                        src={migrateS3UrlToCloudinary(
                           meal?.itemImage0
                             ? meal?.itemImage0
                             : "/assets/store_pics/no-image-meal.png"
-                        }
+              )}
                         className={styles.storeImg1}
                       />
                       <div className={styles.flex}>

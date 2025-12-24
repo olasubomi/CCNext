@@ -4,6 +4,7 @@ import styles from "../grocery/grocery.module.css";
 import { CardDropdown } from "../dropdown/dropdown";
 import { useMediaQuery } from "../../hooks/usemediaquery";
 import Frame from "../../../public/assets/logos/Frame.png";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const MobileTable = ({
   itemList,
@@ -35,7 +36,7 @@ export const MobileTable = ({
                 >
                   <div style={{ width: "30%",}}>
                     <Image
-                      src={Frame}
+                      src={migrateS3UrlToCloudinary(Frame)}
                       height={45}
                       width={45}
                       style={{ borderRadius: "4px" }}
@@ -77,11 +78,11 @@ export const MobileTable = ({
                 >
                   <div style={{ width: "30%" }}>
                     <Image
-                      src={
+                      src={migrateS3UrlToCloudinary(
                         element?.other?.item_image
                           ? element?.other?.item_image
                           : Frame
-                      }
+            )}
                       height={45}
                       width={45}
                       style={{borderRadius: '4px'}}
@@ -134,7 +135,7 @@ export const MobileTable = ({
                   <div style={{ width: "30%" }}>
                   {element?.item?.itemImage0 ? (
                               <Image
-                                src={element?.item?.itemImage0}
+                                src={migrateS3UrlToCloudinary(element?.item?.itemImage0)}
                                 height={45}
                                 width={45}
                                 style={{ borderRadius: "4px" }}

@@ -4,6 +4,7 @@ import WithScrollbar from "./product_slider/WithScrollbar";
 // import "./MealsPage.scoped.scss";
 import { Row } from 'react-bootstrap'
 import axios from '../../util/Api';
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 class MealsPage extends Component {
   // Mongo
@@ -120,7 +121,7 @@ class MealsPage extends Component {
                 onClick={() => this.onClickMealCard(i + j, this.state.col_count)}>
                 <div style={containerStyle}>
                   <div style={{ textAlign: "center" }}>
-                    <img src={'https://chopchowserver.vercel.app/getOneMongoFileImage/' + value.mealImageName} className="images"
+                    <img src={migrateS3UrlToCloudinary('https://chopchowserver.vercel.app/getOneMongoFileImage/' + value.mealImageName)} className="images"
                       style={{ width: "200px", height: "200px" }} alt="/">
                     </img>
                   </div>
@@ -186,7 +187,7 @@ class MealsPage extends Component {
                 <div style={containerStyle}>
                   <div style={{ textAlign: "center" }}>
                     <img
-                      src={value.mealImage}
+                      src={migrateS3UrlToCloudinary(value.mealImage)}
                       className="images"
                       style={{ width: "200px", height: "200px" }}
                       alt="/"

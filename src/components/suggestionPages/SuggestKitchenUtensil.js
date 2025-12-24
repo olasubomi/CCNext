@@ -18,6 +18,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { base_url } from "../../util/Api";
 import { withRouter } from "next/router";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 const initialState = {
   utensilName: "",
@@ -755,7 +756,7 @@ class SuggestKitchenUtensilForm extends Component {
                   <p>
                     <Image
                       id="UtensilsMainImages"
-                      src={data}
+                      src={migrateS3UrlToCloudinary(data)}
                       width={100}
                       height={100}
                       alt="main_Utensil_Image"

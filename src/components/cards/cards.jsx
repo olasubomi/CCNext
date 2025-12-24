@@ -1,6 +1,7 @@
 import styles from "../grocery/grocery.module.css";
 import Image from "next/image";
 import { AiFillStar } from "react-icons/ai";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 export const Cards = ({ similar }) => {
   return (
     <div className={styles.sugImages}>
@@ -8,7 +9,7 @@ export const Cards = ({ similar }) => {
         <div style={{ width: "100%" }}>
           <div style={{ width: "100%" }}>
             <img
-              src={elem.itemImage0}
+              src={migrateS3UrlToCloudinary(elem.itemImage0)}
               layout="responsive"
               style={{
                 boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",

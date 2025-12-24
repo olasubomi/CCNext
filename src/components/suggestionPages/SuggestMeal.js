@@ -1933,7 +1933,7 @@ class SuggestMealForm extends Component {
                         <video
                           className={styles.video_url}
                           controls
-                          src={this.state.videoData.videoUrl}
+                          src={migrateS3UrlToCloudinary(this.state.videoData.videoUrl, 'https://res.cloudinary.com/duqjwgsfe/video/upload')}
                         >
                           Your browser does not support the video tag.
                         </video>
@@ -2134,7 +2134,7 @@ class SuggestMealForm extends Component {
                 <Col md={12} style={{ marginTop: "20px", width: "100%" }}>
                   <p className={styles.mealImg}>
                     <Image
-                      src={data}
+                      src={migrateS3UrlToCloudinary(data)}
                       id={"itemmealImage" + { index }}
                       width={100}
                       height={100}
@@ -2579,7 +2579,7 @@ class SuggestMealForm extends Component {
 
                     <>
                       <img
-                        src={"chunk" + id + "Content"}
+                        src={migrateS3UrlToCloudinary("chunk" + id + "Content")}
                         id={"chunk" + id + "Image"}
                         height="100%"
                         width="100%"

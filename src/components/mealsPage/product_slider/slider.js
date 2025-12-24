@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Slide from './slide.js'
+import { migrateS3UrlToCloudinary } from '../../../common/migrateS3UrlToCloudinary.js';
 
 export default class Slider extends Component {
   constructor(props) {
@@ -29,10 +30,10 @@ export default class Slider extends Component {
     return (
       <div className="slider-arrows">
     <a className="arrow left" onClick={() => this.slideLeft()}>
-      <img src={'/images/Arrow.png'} style={{"width":"50px"}}/> 
+      <img src={migrateS3UrlToCloudinary('/images/Arrow.png')} style={{"width":"50px"}}/> 
     </a>
     <a className="arrow right" onClick={() => this.slideRight()}>
-      <img src={'/images/Arrow.png'} style={{"width":"50px"}}/>
+      <img src={migrateS3UrlToCloudinary('/images/Arrow.png')} style={{"width":"50px"}}/>
     </a>
     </div>
     )

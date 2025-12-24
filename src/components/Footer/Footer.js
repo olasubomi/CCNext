@@ -7,6 +7,7 @@ import facebookImg from "../../../public/assets/icons/Facebook+Icon+Black 1.png"
 import instagramImg from "../../../public/assets/icons/instagram-icon-free-7 1.png";
 import axios from "../../util/Api";
 import { toast } from "react-toastify";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 
 const Footer = ({
@@ -155,7 +156,7 @@ const Footer = ({
         <div className={styles.footer_row_2_details}>
           <div className={styles.footer_main_logo}>
             <Image
-              src={img_logo}
+              src={migrateS3UrlToCloudinary(img_logo)}
               alt="chop chow"
               className={styles.footer_main_logo_img + " " + styles.lazyload}
             />
@@ -170,7 +171,7 @@ const Footer = ({
               target="_blank"
             >
 
-              <Image className={styles.footer_top_social_link_logo} src={instagramImg} alt='instagram' />
+              <Image className={styles.footer_top_social_link_logo} src={migrateS3UrlToCloudinary(instagramImg)} alt='instagram' />
             </Link>
             <Link
               href="https://www.facebook.com/profile.php?id=100063699115096"
@@ -178,7 +179,7 @@ const Footer = ({
               target="_blank"
             >
 
-              <Image className={styles.footer_top_social_link_logo} src={facebookImg} alt='instagram' />
+              <Image className={styles.footer_top_social_link_logo} src={migrateS3UrlToCloudinary(facebookImg)} alt='instagram' />
             </Link>
           </div>
           <h3 className={styles.footer_row_2_h3}>

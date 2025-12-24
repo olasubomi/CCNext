@@ -35,6 +35,7 @@ import { LoginPrompt } from "../../src/components/modal/login-prompt";
 import { UserIcon } from "../../src/components/icons";
 import { useSelector } from "react-redux";
 import { addMultipleItemsToCart } from "../../src/actions/Cart";
+import { migrateS3UrlToCloudinary } from "../../src/common/migrateS3UrlToCloudinary";
 
 const GroceryPage = () => {
   const customStyles = {
@@ -502,7 +503,7 @@ const GroceryPage = () => {
               height={50}
               style={{ borderRadius: 30 }}
               alt={itemList.user?.first_name}
-              src={authUser?.profile_picture}
+              src={migrateS3UrlToCloudinary(authUser?.profile_picture)}
               className={styles.user_img}
             />
           ) : (
@@ -580,7 +581,7 @@ const GroceryPage = () => {
                       <div className={styles.flex3}>
                         {e.image ? (
                           <Image
-                            src={e.image}
+                            src={migrateS3UrlToCloudinary(e.image)}
                             width={40}
                             objectPosition="center"
                             objectFit="cover"
@@ -677,7 +678,7 @@ const GroceryPage = () => {
           <>
             <div className={styles.card} style={{ width: "100%" }}>
               <Image
-                src={noteGif}
+                src={migrateS3UrlToCloudinary(noteGif)}
                 height={200}
                 width={250}
                 className={styles.image}
@@ -791,7 +792,7 @@ const GroceryPage = () => {
                                 }}
                               />
                               <Image
-                                src={element?.other?.item_image}
+                                src={migrateS3UrlToCloudinary(element?.other?.item_image)}
                                 height={50}
                                 width={55}
                                 style={{ borderRadius: "5px" }}
@@ -844,7 +845,7 @@ const GroceryPage = () => {
                               />
                               {element?.item?.itemImage0 ? (
                                 <Image
-                                  src={element?.item?.itemImage0}
+                                  src={migrateS3UrlToCloudinary(element?.item?.itemImage0)}
                                   height={50}
                                   width={55}
                                   style={{ borderRadius: "4px" }}

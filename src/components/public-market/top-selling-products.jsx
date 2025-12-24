@@ -11,6 +11,7 @@ import { addToCart } from "../../actions";
 import { canItemBeAddedToCart } from "../../util/canAddToCart";
 import { convertCurrency } from "../../actions/utils";
 import { BiSolidDownArrow } from "react-icons/bi";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 export const TopSellingProducts = () => {
   const [products, setProducts] = useState([]);
@@ -299,11 +300,11 @@ export const TopSellingProducts = () => {
             >
               <div className={styles.box}>
                 <img
-                  src={
+                  src={migrateS3UrlToCloudinary(
                     product?.itemImage0
                       ? product?.itemImage0
                       : "assets/store_pics/no-image-product.png"
-                  }
+          )}
                   className={styles.storeImg2}
                 />
                 <div className={styles.flex}>

@@ -1,6 +1,7 @@
 import styles from "./stores.module.css";
 import mapImage from "../../../public/assets/logos/map.png"
 import Image from "next/image";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function Stores(){
     
@@ -8,7 +9,7 @@ function Stores(){
 
         <div className={styles.stores_con}>
             <div className={styles.store_map}>
-                <Image src={mapImage} />
+                <Image src={migrateS3UrlToCloudinary(mapImage)} />
             </div>
             <div className={styles.stores}>
                 <h4>Availalble at (4) stores around you</h4>

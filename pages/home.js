@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 import { debounce } from "lodash";
 import Link from "next/link";
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { migrateS3UrlToCloudinary } from "../src/common/migrateS3UrlToCloudinary";
 
 
 const responsive = {
@@ -211,7 +212,7 @@ export default function HomePage() {
                       },
                     ].map((element) => (
                       <div key={element.title} className="section-list-box">
-                        <Image src={element.image} />
+                        <Image src={migrateS3UrlToCloudinary(element.image)} />
                         <p>{element.title}</p>
                       </div>
                     ))
@@ -381,7 +382,7 @@ export default function HomePage() {
                     },
                   ].map((element) => (
                     <div key={element.title} className="section-list-box">
-                      <Image src={element.image} />
+                      <Image src={migrateS3UrlToCloudinary(element.image} />
                       <p>{element.title}</p>
                     </div>
                   ))

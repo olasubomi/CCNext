@@ -18,6 +18,7 @@ import { FormModal } from "../modal/form-modal";
 import { SuccessModal } from "../suggest-store/success-modal";
 import { useRouter } from "next/navigation";
 import axios from "../../util/Api";
+import { migrateS3UrlToCloudinary } from "../../common/migrateS3UrlToCloudinary";
 
 function Store(props) {
   const [openModal, setOpenModal] = useState(false);
@@ -110,11 +111,11 @@ function Store(props) {
         <div className={styles.product_section_2}>
           <div className={styles.product_section_2_col_1}>
             <Image
-              src={
+              src={migrateS3UrlToCloudinary(
                 props.store?.profile_picture
                   ? props.store?.profile_picture
                   : "/assets/store_pics/no-image-store.png"
-              }
+  )}
               alt="pop up"
               className={styles.product_section_2_main_img}
               height={350}
@@ -236,7 +237,7 @@ function Store(props) {
                           styles.productcard_productcard_img_container
                         }>
                           <img
-                            src={
+                            src={migrateS3UrlToCloudinary(
                               meal?.item?.itemImage0
                                 ? meal.item.itemImage0
                                 : !meal?.item?.itemImage0 &&
@@ -247,7 +248,7 @@ function Store(props) {
                                     : !meal?.item?.itemImage0 && meal?.item?.item_type === "Utensil"
                                       ? "/assets/store_pics/no-image-utensil.png"
                                       : ""
-                            }
+                    )}
                             alt=""
                             className={styles.productcard_productcard_img}
                           />
@@ -307,7 +308,7 @@ function Store(props) {
                           styles.productcard_productcard_img_container
                         }>
                           <img
-                            src={
+                            src={migrateS3UrlToCloudinary(
                               meal?.item?.itemImage0
                                 ? meal.item.itemImage0
                                 : !meal?.item?.itemImage0 &&
@@ -318,7 +319,7 @@ function Store(props) {
                                     : !meal?.item?.itemImage0 && meal?.item?.item_type === "Utensil"
                                       ? "/assets/store_pics/no-image-utensil.png"
                                       : ""
-                            }
+                    )}
                             alt=""
                             className={styles.productcard_productcard_img}
                           />

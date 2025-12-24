@@ -15,6 +15,7 @@ import {
   center,
 } from "../../../src/components/dashboard/dashboard.module.css";
 import moment from "moment";
+import { migrateS3UrlToCloudinary } from "../../../src/common/migrateS3UrlToCloudinary";
 
 const ManageStores = () => {
   const [allStores, setAllStores] = useState([]);
@@ -72,11 +73,11 @@ const ManageStores = () => {
                 }
               >
                 <img
-                  src={
+                  src={migrateS3UrlToCloudinary(
                     elem.background_picture
                       ? elem.background_picture
                       : "/assets/store_pics/no-image-store.png"
-                  }
+            )}
                 />
                 <p className={styles.storeName}>{elem?.store_name}</p>
                 <p className={styles.createdAt}>
