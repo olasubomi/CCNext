@@ -1,14 +1,19 @@
-import NextAuth from "next-auth"
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-
-export default NextAuth({
-    // Configure one or more authentication providers
-    providers: [
+// Keep provider credentials on the server. The Google OAuth integration is
+// disabled until its server-side identity verification and account linking
+// flow is reviewed. Do not hardcode client secrets in source control.
+const providers =
+  process.env.ENABLE_VERIFIED_GOOGLE_AUTH === "true" &&
+  process.env.GOOGLE_CLIENT_ID &&
+  process.env.GOOGLE_CLIENT_SECRET
+    ? [
         GoogleProvider({
-            clientId: "165606613965-tqs2kpvpf4feni7i6mugs1naa40c59r4.apps.googleusercontent.com",
-            clientSecret: "tMk07jkNWHycFR4y85QH8yEy",
+          clientId: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }),
-        // ...add more providers here
-    ],
-})
+      ]
+    : [];
+
+export default NextAuth({ providers });
