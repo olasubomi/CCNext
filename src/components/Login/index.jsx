@@ -12,14 +12,12 @@ import SignUp from "../signup";
 import { EyeSIcon } from "../icons";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Loader, SimpleSnackbar } from "../../common";
-import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/auth.context";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as Crypto from "crypto-hash";
 import { unHash } from "../../actions/utils";
-import { jwtDecode } from "jwt-decode";
 import axios from "../../util/Api";
 import {
   IS_AUTHENTICATED,
@@ -135,36 +133,6 @@ function Login(props) {
   }
   console.log("useeffect isverified", isverified);
 
-  async function handleSocialLogin(credentialResponse) {
-    console.log(credentialResponse, "credentialResponse");
-    const decoded = jwtDecode(credentialResponse.credential);
-    try {
-      const decoded = jwtDecode(credentialResponse.credential);
-      console.log(decoded, "decoded");
-      await props.login(
-        decoded?.email,
-        null,
-        false,
-        () => {
-          console.log("calling callback");
-          setLoginLoading(false);
-        },
-        true
-      );
-    } catch (error) {
-      toast.error(
-        error?.response?.data?.message?.message || "An error occured"
-      );
-      console.log(error, "error");
-    }
-    // setLoginLoading(true);
-    // await props.socialLogin(credentialResponse.credential);
-    // if (props.auth.isAuthenticated) {
-    //   setLoginLoading(false);
-    // } else {
-    //   setLoginLoading(false);
-    // }
-  }
 
   function togglePass() {
     setShowPassState(!showPass);
@@ -303,33 +271,10 @@ function Login(props) {
               </Link>{" "}
             </h3>
 
-            <div className={styles.login_options}>
-              <h3>Login with social media</h3>
-
-              <div className={styles.flex}>
-                <div>
-                  {showFacebook && null}
-                  {!showFacebook && (
-                    <button
-                      className={styles.blue}
-                      onClick={() => setShowFacebook(true)}
-                    >
-                      Login with Facebook
-                    </button>
-                  )}
-                </div>
-                <div>
-                  <GoogleLogin
-                    onSuccess={async (credentialResponse) =>
-                      handleSocialLogin(credentialResponse)
-                    }
-                    onError={() => {
-                      console.log("Login Failed");
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
+            <p className={styles.login_options}>
+              Google and Facebook sign-in will return after secure identity verification is enabled.
+              Please sign in using your email and password.
+            </p>
           </div>
         </div>
         <div className={styles.login_col_1}>
