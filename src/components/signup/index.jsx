@@ -17,14 +17,12 @@ import {
   verifynumber,
   confirmAccount,
 } from "../../actions";
-import { GoogleLogin } from "@react-oauth/google";
 import axios, { base_url } from "../../util/Api";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import UserVerification from "../UserVerification";
 import UserVerificationSuccess from "../UserVerificationSuccess";
 import OTP from "../OTP";
-import { jwtDecode } from "jwt-decode";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { useMobileMedia } from '../../customhooks/useResponsive';
 
@@ -458,94 +456,10 @@ function SignUp(props) {
               <button onClick={formSubmit} className={styles.login_button}>
                 Register
               </button>
-              <div className={styles.login_options}>
-                <h3>Sign up with social media</h3>
-
-                <div className={styles.flex}>
-                  <div>
-                    
-                  </div>
-                  <div>
-                    <GoogleLogin
-                      onSuccess={async (credentialResponse) => {
-                        try {
-                          const decoded = jwtDecode(
-                            credentialResponse.credential
-                          );
-                          // const s3Client = new S3Client({
-                          //   region: process.env.NEXT_PUBLIC_S3_REGION,
-                          //   credentials: {
-                          //     accessKeyId:
-                          //       process.env
-                          //         .NEXT_PUBLIC_CHOPCHOWAPP_USER_AWS_KEY,
-                          //     secretAccessKey:
-                          //       process.env
-                          //         .NEXT_PUBLIC_CHOPCHOWAPP_USER_AWS_SECRET,
-                          //   },
-                          // });
-                          // console.log(decoded, "decoded");
-                          // const resp = await fetch(decoded.picture);
-                          // const blob = await resp.blob();
-                          // const fileName = `images/${Date.now()}-${decoded.picture
-                          //   .split("/")
-                          //   .pop()}`;
-
-                          // const params = {
-                          //   Bucket: process.env.NEXT_PUBLIC_S3_BUCKET,
-                          //   Key: fileName,
-                          //   Body: blob,
-                          //   ContentType: blob.type,
-                          //   ACL: "public-read",
-                          // };
-                          // console.log(params, 'params')
-
-                          // const command = new PutObjectCommand(params);
-                          // const uploadResult = await s3Client.send(command);
-                          // console.log("Upload successful:", uploadResult);
-
-                          // const s3Url = `https://${process.env.NEXT_PUBLIC_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_S3_REGION}.amazonaws.com/${fileName}`;
-                          // console.log(s3Url, 's3Url')
-                          const payload = {
-                            first_name: decoded?.given_name,
-                            last_name: decoded?.family_name,
-                            email: decoded?.email,
-                            username: decoded?.given_name,
-                            password: Math.floor(
-                              Math.random() * 100000000
-                            ).toString(),
-                            email_notifications: false,
-                            profile_picture: decoded.picture
-
-                          };
-                          const form = new FormData();
-                          for (let entry in payload) {
-                            form.append(entry, payload[entry]);
-                          }
-                          // form.append("profile_picture", blob);
-                          const response = await axios("/user/signup", {
-                            method: "post",
-                            // headers: {
-                            //   "Content-Type": "multipart/form-data",
-                            // },
-                            data: payload,
-                          });
-                          toast.success("Registration was successful");
-                          router.push("/login");
-                        } catch (error) {
-                          toast.error(
-                            error?.response?.data?.message?.message ||
-                            "An error occured"
-                          );
-                          console.log(error, "error");
-                        }
-                      }}
-                      onError={() => {
-                        console.log("Login Failed");
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
+              <p className={styles.login_options}>
+                Google and Facebook registration will return after secure identity verification is enabled.
+                Please register using your email and password.
+              </p>
               <h3 className={styles.login_new}>
                 Already have an account?{" "}
                 {props.closeSignUp ? (
