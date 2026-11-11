@@ -76,30 +76,19 @@ export const userSignUp = (form) => async (dispatch) => {
   }
 };
 
-export const userSignIn = (email, password, remember, callback, withAuth) => {
+export const userSignIn = (email, password, remember, callback) => {
   const customId = "custom-id-yes";
 
-  console.log("withAuth", withAuth);
   return (dispatch) => {
     dispatch({ type: FETCH_START });
     dispatch({ type: OPEN_VERIFICATION, payload: false });
     dispatch({ type: LOGIN_ON_VERIFICATION, payload: false });
     dispatch({ type: USER_TOKEN_SET, payload: null });
     dispatch({ type: USER_DATA, payload: null });
-    const withAuth_ = {
-      password,
-      email: email,
-    };
-    const no_withAuth_ = {
-      withAuth: false,
-      email: email,
-    };
 
     axios
-      .post("/user/signin", withAuth ? withAuth_ : no_withAuth_)
+      .post("/user/signin", { email, password })
       .then(({ data }) => {
-        console.log(" ___ userSignIn RESPONSE ___ ", data);
-        console.log(" ___ userSignIn RESPONSE ___ ", data.data.token);
         axios.defaults.headers.common["Authorization"] =
           "Bearer " + data.data.token;
 
