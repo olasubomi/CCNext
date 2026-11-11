@@ -3,7 +3,6 @@ import path from "path";
 import ytdl from "@distube/ytdl-core";
 // import youtubedl from 'youtube-dl-exec';
 import axios from "axios";
-import instagramDl from "@sasmeee/igdl";
 
 const { URL } = require("url");
 
@@ -42,11 +41,9 @@ export default async (req, res) => {
           return res.status(400).json({ error: "Invalid YouTube URL" });
         }
       } else if (videoURL.hostname.includes("instagram.com")) {
-        const dataList = await instagramDl(url);
-        await downloadVideo(dataList[0]?.download_link, file_name);
-        const videoFile = fs.readFileSync(filePath);
-        buffer = videoFile;
-        fs.unlinkSync(filePath);
+        // This dependency is no longer available from npm; do not attempt
+        // an unsupported download or silently substitute a different service.
+        return res.status(503).json({ error: "Instagram video import temporarily unavailable" });
       } else {
         return res.status(400).json({ error: "Unsupported video platform" });
       }
