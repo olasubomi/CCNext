@@ -98,6 +98,7 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 const UserProfile = (props) => {
   const router = useRouter();
   const [status, setStatusState] = useState("");
+  const [googleLinkPassword, setGoogleLinkPassword] = useState("");
   const [message, setMessageState] = useState("");
   const { authUser } = useSelector((state) => state.Auth);
   console.log(authUser, 'authuser')
@@ -1533,20 +1534,35 @@ const UserProfile = (props) => {
                     <div className={styles.profile_basic_info}>
                       <p>Link a Google account with the same verified email as your Chop Chow account.
                         Your store permissions and profile will stay on this account.</p>
-                      <GoogleLogin
-                        onSuccess={async (response) => {
-                          if (!response?.credential) return toast.error("Google identity was not provided");
-                          try {
-                            const result = await axios.post("/user/google/link", {
-                              credential: response.credential
-                            });
-                            toast.success(result.data?.message || "Google sign-in linked");
-                          } catch (error) {
-                            toast.error(error?.response?.data?.message || "Unable to link Google sign-in");
-                          }
-                        }}
-                        onError={() => toast.error("Google linking was canceled or failed")}
+                      <TextField
+                        type="password"
+                        label="Confirm Chop Chow password"
+                        value={googleLinkPassword}
+                        onChange={(event) => setGoogleLinkPassword(event.target.value)}
+                        autoComplete="current-password"
+                        size="small"
+                        fullWidth
                       />
+                      {googleLinkPassword.trim() ? (
+                        <GoogleLogin
+                          onSuccess={async (response) => {
+                            if (!response?.credential) return toast.error("Google identity was not provided");
+                            try {
+                              const result = await axios.post("/user/google/link", {
+                                credential: response.credential,
+                                password: googleLinkPassword
+                              });
+                              setGoogleLinkPassword("");
+                              toast.success(result.data?.message || "Google sign-in linked");
+                            } catch (error) {
+                              toast.error(error?.response?.data?.message || "Unable to link Google sign-in");
+                            }
+                          }}
+                          onError={() => toast.error("Google linking was canceled or failed")}
+                        />
+                      ) : (
+                        <p>Enter your password to enable Google account linking.</p>
+                      )}
                     </div>
                   </div>
                 )}
