@@ -288,7 +288,7 @@ function Login(props) {
               <p className={styles.login_options}>
                 Google sign-in will be available after secure setup. Please use email and password.
               </p>
-            )>
+            )}
           </div>
         </div>
         <div className={styles.login_col_1}>
