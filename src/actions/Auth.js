@@ -154,6 +154,39 @@ export const userSignIn = (email, password, remember, callback) => {
   };
 };
 
+// Google login is allowed only for accounts explicitly linked after password login.
+// The backend verifies the signed Google ID token and returns a Chop Chow session.
+export const googleSignIn = (credential, callback = () => {}) => async (dispatch) => {
+  dispatch({ type: FETCH_START });
+  try {
+    const { data } = await axios.post("/user/google/signin", { credential });
+    const session = data.data;
+    if (!session?.token || !session?.user) throw new Error("Invalid sign-in response");
+    axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+    localStorage.setItem("x-auth-token", session.token);
+    localStorage.setItem("x-auth-refresh-token", session.refreshToken);
+    localStorage.setItem("in", Date.now());
+    localStorage.setItem("user", JSON.stringify(session.user));
+    dispatch({ type: FETCH_SUCCESS });
+    dispatch({ type: USER_TOKEN_SET, payload: session.token });
+    dispatch({ type: USER_DATA, payload: session.user });
+    dispatch({ type: USER_ROLE, payload: session.user.user_type });
+    dispatch({ type: IS_VERIFIED, payload: Boolean(session.isVerified) });
+    dispatch({ type: IS_AUTHENTICATED, payload: true });
+    toast.success("Google sign-in successful");
+    return true;
+  } catch (error) {
+    const message = error?.response?.data?.message ||
+      "Google sign-in failed. Sign in with your password first, then link Google in your profile.";
+    toast.error(message);
+    dispatch({ type: IS_AUTHENTICATED, payload: false });
+    dispatch({ type: FETCH_ERROR, payload: message });
+    return false;
+  } finally {
+    callback();
+  }
+};
+
 export const getUser = (id) => {
   return (dispatch) => {
     dispatch({ type: FETCH_START });
