@@ -45,6 +45,7 @@ import {
   suggestion_form_label,
 } from "../../src/components/suggestionPages/suggestion.module.css";
 import { toast } from "react-toastify";
+import { GoogleLogin } from "@react-oauth/google";
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 58,
@@ -97,6 +98,7 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 const UserProfile = (props) => {
   const router = useRouter();
   const [status, setStatusState] = useState("");
+  const [googleLinkPassword, setGoogleLinkPassword] = useState("");
   const [message, setMessageState] = useState("");
   const { authUser } = useSelector((state) => state.Auth);
   console.log(authUser, 'authuser')
@@ -1525,6 +1527,45 @@ const UserProfile = (props) => {
                     <h3>{selectedUserType}</h3>
                   </div>
                 </div>
+
+                {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
+                  <div id="linked-signin" className={styles.profile_basic_info_con}>
+                    <h3>Connected sign-in methods</h3>
+                    <div className={styles.profile_basic_info}>
+                      <p>Link a Google account with the same verified email as your Chop Chow account.
+                        Your store permissions and profile will stay on this account.</p>
+                      <TextField
+                        type="password"
+                        label="Confirm Chop Chow password"
+                        value={googleLinkPassword}
+                        onChange={(event) => setGoogleLinkPassword(event.target.value)}
+                        autoComplete="current-password"
+                        size="small"
+                        fullWidth
+                      />
+                      {googleLinkPassword.trim() ? (
+                        <GoogleLogin
+                          onSuccess={async (response) => {
+                            if (!response?.credential) return toast.error("Google identity was not provided");
+                            try {
+                              const result = await axios.post("/user/google/link", {
+                                credential: response.credential,
+                                password: googleLinkPassword
+                              });
+                              setGoogleLinkPassword("");
+                              toast.success(result.data?.message || "Google sign-in linked");
+                            } catch (error) {
+                              toast.error(error?.response?.data?.message || "Unable to link Google sign-in");
+                            }
+                          }}
+                          onError={() => toast.error("Google linking was canceled or failed")}
+                        />
+                      ) : (
+                        <p>Enter your password to enable Google account linking.</p>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {(props.auth.authUser.user_type === "driver" ||
                   props.auth.authUser.user_type === "customer") && (

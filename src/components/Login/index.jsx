@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.css";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { userSignIn, socialSignIn, verifyEmail } from "../../actions";
+import { userSignIn, googleSignIn, verifyEmail } from "../../actions";
+import { GoogleLogin } from "@react-oauth/google";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
 import facebook from "../../../public/assets/logos/facebook.png";
 import closeIcon from "../../../public/assets/icons/eva_menu-close.png";
@@ -271,10 +272,23 @@ function Login(props) {
               </Link>{" "}
             </h3>
 
-            <p className={styles.login_options}>
-              Google and Facebook sign-in will return after secure identity verification is enabled.
-              Please sign in using your email and password.
-            </p>
+            {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? (
+              <div className={styles.login_options}>
+                <GoogleLogin
+                  onSuccess={(response) => {
+                    if (!response?.credential) return toast.error("Google sign-in failed");
+                    setLoginLoading(true);
+                    props.googleLogin(response.credential, () => setLoginLoading(false));
+                  }}
+                  onError={() => toast.error("Google sign-in was canceled or failed")}
+                />
+                <p>Already have a Chop Chow account? Sign in with your password first and link Google in your profile.</p>
+              </div>
+            ) : (
+              <p className={styles.login_options}>
+                Google sign-in will be available after secure setup. Please use email and password.
+              </p>
+            )}
           </div>
         </div>
         <div className={styles.login_col_1}>
@@ -344,7 +358,7 @@ function mapDispatchToProps(dispatch) {
   return {
     login: (email, password, rememberPassword, callback) =>
       dispatch(userSignIn(email, password, rememberPassword, callback)),
-    socialLogin: (code) => dispatch(socialSignIn(code)),
+    googleLogin: (credential, callback) => dispatch(googleSignIn(credential, callback)),
     verifyEmail: (userid, token) => dispatch(verifyEmail(userid, token)),
   };
 }
