@@ -23,7 +23,12 @@ const setupAxiosInterceptors = () => {
   axios.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("x-auth-token");
-      config.headers.Authorization = `Bearer ${token}`;
+      const publicAuthRoute = /^\/user\/(signin|signup|forgotpassword|resetpassword|google\/signin)(\?|$)/.test(config.url || "");
+      if (token && !publicAuthRoute) {
+        config.headers.Authorization = `Bearer ${token}`;
+      } else {
+        delete config.headers.Authorization;
+      }
       return config;
     },
     (error) => {
@@ -35,14 +40,18 @@ const setupAxiosInterceptors = () => {
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
+      const publicAuthRoute = /^\/user\/(signin|signup|forgotpassword|resetpassword|google\/signin)(\?|$)/.test(originalRequest?.url || "");
+      const refreshToken = localStorage.getItem("x-auth-refresh-token");
       if (
-        (error.response?.status === 401 || error.response?.status === 500) &&
-        !originalRequest._retry
+        error.response?.status === 401 &&
+        originalRequest &&
+        !publicAuthRoute &&
+        !originalRequest._retry &&
+        refreshToken
       ) {
         originalRequest._retry = true;
 
         try {
-          const refreshToken = localStorage.getItem("x-auth-refresh-token");
           const fetchResp = await fetch(`${base_url}/user/refresh-token`, {
             method: "get",
             headers: {
