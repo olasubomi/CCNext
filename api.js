@@ -1,3 +1,4 @@
-// Isolated CCD-490 staging frontend: never call the production backend.
-export const BASE_URL_LIVE = "https://chopchowserver2.onrender.com/api";
-export const BASE_URL_DEV = "https://chopchowserver2.onrender.com/api";
+// API endpoints are injected by the deployment environment at build time.
+// Never fall back to the production API for a non-production deployment.
+export const BASE_URL_LIVE = process.env.NEXT_PUBLIC_API_URL;
+export const BASE_URL_DEV = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
