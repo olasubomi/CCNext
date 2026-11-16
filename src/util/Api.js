@@ -2,12 +2,9 @@ import Axios from "axios";
 import { BASE_URL_LIVE, BASE_URL_DEV } from "../../api";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 
-let base_url = `http://localhost:5000/api`;
-
-if (process.env.NODE_ENV !== "development") {
-  base_url = BASE_URL_LIVE;
-} else {
-  base_url = BASE_URL_DEV;
+const base_url = process.env.NODE_ENV === "development" ? BASE_URL_DEV : BASE_URL_LIVE;
+if (!base_url) {
+  throw new Error("NEXT_PUBLIC_API_URL must be set for deployed environments");
 }
 
 let axios = Axios.create({
