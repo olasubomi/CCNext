@@ -96,13 +96,15 @@ function Header(props) {
     e.stopPropagation();
   }
 
-  document.addEventListener("click", () => {
-    const notification = document.getElementById("notification");
-
-    if (notification) {
-      notification.style.display = "none";
-    }
-  });
+  // Browser event listeners must be registered in an effect, not during render.
+  useEffect(() => {
+    const closeNotification = () => {
+      const notification = document.getElementById("notification");
+      if (notification) notification.style.display = "none";
+    };
+    document.addEventListener("click", closeNotification);
+    return () => document.removeEventListener("click", closeNotification);
+  }, []);
 
   const getOneItemById = async (id, commentId) => {
     try {
