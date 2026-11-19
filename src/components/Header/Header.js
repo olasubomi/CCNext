@@ -170,7 +170,7 @@ function Header(props) {
     props.logout();
     router.push("/");
   }
-  const unreadMessages = notifications.filter((message) => !message.read);
+  const unreadMessages = (Array.isArray(notifications) ? notifications : []).filter((message) => !message.read);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user" || "{}"));
     setUser(user);
@@ -179,7 +179,7 @@ function Header(props) {
   const getAllNotifications = async () => {
     try {
       const response = await axios.get(`/user/notifications`);
-      setNotifications(response.data.data);
+      setNotifications(Array.isArray(response?.data?.data) ? response.data.data : []);
     } catch (err) {
       console.log(err);
     }
@@ -476,7 +476,7 @@ function Header(props) {
                     </div>
                     <div className={styles.summary_min_notifications}>
                       <div className={styles.not}>
-                        {[...notifications]
+                        {[...(Array.isArray(notifications) ? notifications : [])]
                           ?.sort(
                             (a, b) =>
                               new Date(b.createdAt).getTime() -
