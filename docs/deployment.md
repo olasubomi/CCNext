@@ -27,3 +27,14 @@
 ## References
 
 [Jira CCD board](https://awowebops.atlassian.net/jira/software/projects/CCD/boards) · [Security hotfix CCD-486](https://awowebops.atlassian.net/browse/CCD-486) · [User endpoints CCD-489](https://awowebops.atlassian.net/browse/CCD-489) · [Gmail API CCD-490](https://awowebops.atlassian.net/browse/CCD-490).
+
+## Branch naming and service ownership
+
+**Current deployment branches (verified on Render, 2026-11-21):**
+
+| Render service | Current deployment branch | Intended role | Proposed long-lived branch (not created) |
+|---|---|---|---|
+| `chopchowsd` | `master` | Production candidate | `deploy/render-chopchowsd-production` |
+| `chopchowserver2` | `staging/ccd-490-password-reset` | Staging candidate | `deploy/render-chopchowserver2-staging` |
+
+The proposed names identify **provider, exact service, and environment**. Do not interpret them as active branches. Keep feature work separate (for example, `fix/ccd-490-password-reset`) and merge through reviewed PRs into the appropriate long-lived deployment branch. Before renaming or switching any Render branch, confirm live API routing, branch protections, database isolation and auto-deploy configuration; update Render and these docs together. Frontend Vercel production/preview branches are a separate mapping that still needs verification.
