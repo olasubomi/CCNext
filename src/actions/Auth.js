@@ -86,7 +86,7 @@ export const userSignIn = (email, password, remember, callback) => {
     dispatch({ type: USER_TOKEN_SET, payload: null });
     dispatch({ type: USER_DATA, payload: null });
 
-    axios
+    return axios
       .post("/user/signin", { email, password })
       .then(({ data }) => {
         axios.defaults.headers.common["Authorization"] =
@@ -133,7 +133,7 @@ export const userSignIn = (email, password, remember, callback) => {
           "xxx userSignIn Request ERROR xxx",
           err?.response?.data?.message?.message
         );
-        toast.error(err?.response?.data?.message?.message, {
+        toast.error(err?.response?.data?.message?.message || err?.response?.data?.message || "Unable to sign in. Please check your credentials.", {
           toastId: customId,
         });
         callback();
@@ -306,23 +306,17 @@ export const changePassword = (payload) => {
   };
 };
 
-export const forgotPassword = (email) => {
-  return (dispatch) => {
-    dispatch({ type: FETCH_START });
-    axios
-      .post("/user/forgotpassword", { email: email })
-      .then(({ data }) => {
-        console.log(" email sent: ", data);
-        dispatch({ type: FETCH_SUCCESS, payload: data.message });
-      })
-      .catch((err) => {
-        console.error("xxx forgotPassword Request ERROR xxx", err);
-        dispatch({
-          type: FETCH_ERROR,
-          payload: "Error during request to resend email",
-        });
-      });
-  };
+export const forgotPassword = (email) => async (dispatch) => {
+  dispatch({ type: FETCH_START });
+  try {
+    await axios.post("/user/forgotpassword", { email });
+    dispatch({ type: FETCH_SUCCESS, payload: "Reset email requested" });
+    return { ok: true, message: "A password reset link has been sent. Please check your inbox and spam folder." };
+  } catch (err) {
+    const message = "Unable to send the reset email right now. Please try again later.";
+    dispatch({ type: FETCH_ERROR, payload: message });
+    return { ok: false, message };
+  }
 };
 
 export const cancelSubscription = () => {
