@@ -98,8 +98,8 @@ const UserProfile = (props) => {
   const router = useRouter();
   const [status, setStatusState] = useState("");
   const [message, setMessageState] = useState("");
+  const [changingPassword, setChangingPassword] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
-  console.log(authUser, 'authuser')
   const selectedUserType = useSelector(
     (state) => state.userType.selectedUserType
   );
@@ -294,7 +294,7 @@ const UserProfile = (props) => {
         },
       });
 
-      if (props.auth.authUser.driver_hours.length > 0) {
+      if (Array.isArray(props.auth.authUser.driver_hours) && props.auth.authUser.driver_hours.length > 0) {
         setTimes(props.auth.authUser.driver_hours[0]);
       }
     }
@@ -302,6 +302,28 @@ const UserProfile = (props) => {
 
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
+  }
+
+  async function handleChangePassword(e) {
+    e.preventDefault();
+    if (changingPassword) return;
+    if (!password || new_password.length < 8 || new_password.length > 128) {
+      setStatusState("error");
+      setMessageState("Enter your current password and a new password of 8–128 characters.");
+      return;
+    }
+    setChangingPassword(true);
+    try {
+      await axios.post("/user/changepassword", { currentPassword: password, newPassword: new_password });
+      setFormState((prev) => ({ ...prev, password: "", new_password: "" }));
+      setStatusState("success");
+      setMessageState("Password changed successfully.");
+    } catch (error) {
+      setStatusState("error");
+      setMessageState(error.response?.data?.message || "Unable to change password. Please try again.");
+    } finally {
+      setChangingPassword(false);
+    }
   }
 
   function handlePhoneChange(e) {
@@ -334,7 +356,7 @@ const UserProfile = (props) => {
         newsletter_subscription: !toggleSwitch
       });
       toast.success(`Notification ${!toggleSwitch ? "enabled" : "disabled"} successfully`);
-      localStorage.setItem("user", JSON.parse({
+      localStorage.setItem("user", JSON.stringify({
         ...user,
         newsletter_subscription: !toggleSwitch
       }))
@@ -515,10 +537,10 @@ const UserProfile = (props) => {
   }
 
   const getStoreInformation = async () => {
-    const userId = JSON.parse(localStorage.getItem("user"))?._id;
+    const userId = JSON.parse(localStorage.getItem("user") || "{}")?._id;
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/stores/getstore/user?userId=${userId}`
+        `/stores/getstore/user?userId=${userId}`
       );
       const data = response.data?.data?.supplier || {};
       if (
@@ -547,7 +569,7 @@ const UserProfile = (props) => {
 
     try {
       const response = await axios(
-        `http://localhost:5000/api/stores/updatestore/${formState.store_id}`,
+        `/stores/updatestore/${formState.store_id}`,
         {
           method: "put",
           headers: {
@@ -816,8 +838,10 @@ const UserProfile = (props) => {
                           Old Password
                         </label>
                         <input
-                          type="text"
-                          name="old_password"
+                          type="password"
+                          name="password"
+                          id="old_password"
+                          autoComplete="current-password"
                           value={password}
                           placeholder="Password"
                           onChange={handleChange}
@@ -832,8 +856,12 @@ const UserProfile = (props) => {
                           New Password
                         </label>
                         <input
-                          type="tel"
+                          type="password"
                           name="new_password"
+                          id="new_password"
+                          autoComplete="new-password"
+                          minLength={8}
+                          maxLength={128}
                           value={new_password}
                           placeholder="Your New Password"
                           onChange={handleChange}
@@ -845,9 +873,10 @@ const UserProfile = (props) => {
 
                   <button
                     className={styles.profile_button}
-                    onClick={saveChanges}
+                    onClick={handleChangePassword}
+                    disabled={changingPassword}
                   >
-                    Save Changes
+                    {changingPassword ? "Changing Password..." : "Change Password"}
                   </button>
                 </div>
 
