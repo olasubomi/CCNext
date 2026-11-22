@@ -180,6 +180,10 @@ function Header(props) {
   }, []);
 
   const getAllNotifications = async () => {
+    if (!localStorage.getItem("x-auth-token")) {
+      setNotifications([]);
+      return;
+    }
     try {
       const response = await axios.get(`/user/notifications`);
       setNotifications(Array.isArray(response.data?.data) ? response.data.data : []);
