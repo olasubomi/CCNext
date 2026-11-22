@@ -13,6 +13,7 @@ import ForgotPasswordVerifier from '../forgotpasswordverifier';
 function ForgetPassword(props){ 
   const [login, setLogin] = useState(false);
   const [open, setOpen] = useState(false)
+  const [sending, setSending] = useState(false)
   //const [forgotPasswordVerifier, setForgotPasswordVerifier] = useState(false);
   const [status, setStatusState] = useState(null);
  const [message, setMessageState] = useState(null);
@@ -27,12 +28,18 @@ function ForgetPassword(props){
     setFormState({ ...formState, [e.target.name]: e.target.value });
   }
 
-  function formSubmit(e){
+  async function formSubmit(e) {
     e.preventDefault();
-    props.forgotpassword(email)
-    setTimeout(() => {
+    if (sending || !email.trim()) return;
+    setSending(true);
+    try {
+      const result = await props.forgotpassword(email.trim());
+      setStatusState(result.ok ? "success" : "error");
+      setMessageState(result.message);
       setOpen(true);
-    }, 1000)
+    } finally {
+      setSending(false);
+    }
   };
 
   function Login(){
@@ -82,13 +89,13 @@ function ForgetPassword(props){
             <p className="msg-success">{message}</p>:
             <p className="msg-err">{message}</p>}
   
-            <button onClick={formSubmit} className={styles.login_button}>Send reset link</button>
+            <button onClick={formSubmit} disabled={sending || !email.trim()} className={styles.login_button}>{sending ? "Sending..." : "Send reset link"}</button>
   
             <h3  className={styles.login_new}>I remember my password</h3>
             <button onClick={Login}  className={styles.login_button1}>Log In</button>
   
             
-            {open && <ForgotPasswordVerifier message={message} open={open} setOpen={setOpen}/>}
+            {open && <ForgotPasswordVerifier message={message} status={status} open={open} setOpen={setOpen}/>}
 
         </div>
     )
