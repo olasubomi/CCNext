@@ -42,7 +42,7 @@ console.log(title)
  
 
 <div className='otp-options'> 
- <button className='verification-button bigger' onClick={next()}>Login Now</button>
+ <button className='verification-button bigger' onClick={next}>Login Now</button>
  </div>
 </div>
  
