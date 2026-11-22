@@ -11,7 +11,7 @@ Tracking: [CCD-496](https://awowebops.atlassian.net/browse/CCD-496)
 | Staging service | https://staging.chopchow.app (Vercel `cc-next-dev`) | https://chopchowserver2.onrender.com (Render `chopchowserver2`) |
 | Production frontend | https://www.chopchow.app | Production Render service |
 
-Staging frontend uses `NEXT_PUBLIC_API_URL=https://chopchowserver2.onrender.com/api`.
+Staging frontend and Vercel pull-request previews use `NEXT_PUBLIC_API_URL=https://chopchowserver2.onrender.com/api`.
 Staging backend uses `APP_URL=https://staging.chopchow.app` for password-reset links and CORS.
 Secrets must stay in deployment settings, never in the repository.
 
