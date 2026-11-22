@@ -96,13 +96,14 @@ function Header(props) {
     e.stopPropagation();
   }
 
-  document.addEventListener("click", () => {
-    const notification = document.getElementById("notification");
-
-    if (notification) {
-      notification.style.display = "none";
-    }
-  });
+  useEffect(() => {
+    const dismissNotification = () => {
+      const notification = document.getElementById("notification");
+      if (notification) notification.style.display = "none";
+    };
+    document.addEventListener("click", dismissNotification);
+    return () => document.removeEventListener("click", dismissNotification);
+  }, []);
 
   const getOneItemById = async (id, commentId) => {
     try {
@@ -168,17 +169,22 @@ function Header(props) {
     props.logout();
     router.push("/");
   }
-  const unreadMessages = notifications.filter((message) => !message.read);
+  const unreadMessages = (Array.isArray(notifications) ? notifications : []).filter((message) => message && !message.read);
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user" || "{}"));
-    setUser(user);
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      setUser(user && typeof user === "object" ? user : {});
+    } catch {
+      setUser({});
+    }
   }, []);
 
   const getAllNotifications = async () => {
     try {
       const response = await axios.get(`/user/notifications`);
-      setNotifications(response.data.data);
+      setNotifications(Array.isArray(response.data?.data) ? response.data.data : []);
     } catch (err) {
+      setNotifications([]);
       console.log(err);
     }
   };
