@@ -6,7 +6,6 @@ import Modal from '@mui/material/Modal';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
-import { useSelector } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -18,9 +17,8 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: '8px',
 };
-export default function ForgotPasswordVerifier({open, setOpen }) {
+export default function ForgotPasswordVerifier({open, setOpen, status, message }) {
   
-  const { message, status} = useSelector(state => state.Common)
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleOption = (title) => {
@@ -37,8 +35,8 @@ console.log(title)
       >
         <Box  sx={style}>
           <div className='verification'>
-          <div className='withbg' >  {status ? <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" /> : <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" style={{color: 'red'}} /> }  </div>
-            <h3>{status ? 'Reset Link Sent' : "An error Occured while sending mail"}</h3>
+          <div className='withbg' >  {status === 'success' ? <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" /> : <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" style={{color: 'red'}} /> }  </div>
+            <h3>{status === 'success' ? 'Reset Link Sent' : 'Unable to Send Reset Email'}</h3>
             <p>{message } </p>
            
  
