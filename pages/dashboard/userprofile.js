@@ -98,6 +98,14 @@ const UserProfile = (props) => {
   const router = useRouter();
   const [status, setStatusState] = useState("");
   const [message, setMessageState] = useState("");
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [passwordBusy, setPasswordBusy] = useState(false);
+  const [passwordFeedback, setPasswordFeedback] = useState(null);
+
   const { authUser } = useSelector((state) => state.Auth);
   console.log(authUser, 'authuser')
   const selectedUserType = useSelector(
@@ -381,6 +389,49 @@ const UserProfile = (props) => {
         console.log(res.data);
         props.getUser(props.auth.authUser._id);
       });
+  }
+
+  async function submitPasswordChange(e) {
+    e.preventDefault();
+    if (passwordBusy) return;
+    setPasswordFeedback(null);
+
+    const { currentPassword, newPassword, confirmPassword } = passwordForm;
+    if (!currentPassword) {
+      setPasswordFeedback({ type: "error", message: "Enter your current password." });
+      return;
+    }
+    if (newPassword.length < 8 || newPassword.length > 128) {
+      setPasswordFeedback({ type: "error", message: "The new password must be 8–128 characters." });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordFeedback({ type: "error", message: "New passwords do not match." });
+      return;
+    }
+    if (newPassword === currentPassword) {
+      setPasswordFeedback({ type: "error", message: "Choose a different password." });
+      return;
+    }
+
+    setPasswordBusy(true);
+    try {
+      await axios.post("/user/changepassword", { currentPassword, newPassword });
+      setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      setPasswordFeedback({ type: "success", message: "Password changed successfully." });
+      toast.success("Password changed successfully.");
+    } catch (error) {
+      const detail = error?.response?.data?.message;
+      const message = typeof detail === "string" ? detail
+        : error?.response?.status === 401
+          ? "Current password is incorrect or your session expired."
+          : error?.response?.status === 400
+            ? "Please check the password requirements."
+            : "Unable to change your password. Please try again.";
+      setPasswordFeedback({ type: "error", message });
+    } finally {
+      setPasswordBusy(false);
+    }
   }
 
   function saveChanges(e) {
@@ -806,49 +857,79 @@ const UserProfile = (props) => {
                   className={styles.profile_basic_info_con}
                 >
                   <h3>Change Password</h3>
-                  <div className={styles.profile_basic_info}>
-                    <div className={styles.profile_form}>
-                      <div className={styles.profile_form_group}>
-                        <label
-                          htmlFor="old_password"
-                          className={styles.profile_form_label}
-                        >
-                          Old Password
-                        </label>
-                        <input
-                          type="text"
-                          name="old_password"
-                          value={password}
-                          placeholder="Password"
-                          onChange={handleChange}
-                          className={styles.profile_form_input}
-                        />
-                      </div>
-                      <div className={styles.profile_form_group}>
-                        <label
-                          htmlFor="new_password"
-                          className={styles.profile_form_label}
-                        >
-                          New Password
-                        </label>
-                        <input
-                          type="tel"
-                          name="new_password"
-                          value={new_password}
-                          placeholder="Your New Password"
-                          onChange={handleChange}
-                          className={styles.profile_form_input}
-                        />
+                  <form onSubmit={submitPasswordChange}>
+                    <div className={styles.profile_basic_info}>
+                      <div className={styles.profile_form}>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="currentPassword" className={styles.profile_form_label}>
+                            Current Password
+                          </label>
+                          <input
+                            id="currentPassword"
+                            type="password"
+                            name="currentPassword"
+                            autoComplete="current-password"
+                            value={passwordForm.currentPassword}
+                            onChange={(e) => {
+                              setPasswordForm((prev) => ({ ...prev, currentPassword: e.target.value }));
+                              setPasswordFeedback(null);
+                            }}
+                            className={styles.profile_form_input}
+                            required
+                          />
+                        </div>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="newPassword" className={styles.profile_form_label}>
+                            New Password
+                          </label>
+                          <input
+                            id="newPassword"
+                            type="password"
+                            name="newPassword"
+                            autoComplete="new-password"
+                            minLength={8}
+                            maxLength={128}
+                            value={passwordForm.newPassword}
+                            onChange={(e) => {
+                              setPasswordForm((prev) => ({ ...prev, newPassword: e.target.value }));
+                              setPasswordFeedback(null);
+                            }}
+                            className={styles.profile_form_input}
+                            required
+                          />
+                        </div>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="confirmNewPassword" className={styles.profile_form_label}>
+                            Confirm New Password
+                          </label>
+                          <input
+                            id="confirmNewPassword"
+                            type="password"
+                            name="confirmNewPassword"
+                            autoComplete="new-password"
+                            value={passwordForm.confirmPassword}
+                            onChange={(e) => {
+                              setPasswordForm((prev) => ({ ...prev, confirmPassword: e.target.value }));
+                              setPasswordFeedback(null);
+                            }}
+                            className={styles.profile_form_input}
+                            required
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  <button
-                    className={styles.profile_button}
-                    onClick={saveChanges}
-                  >
-                    Save Changes
-                  </button>
+                    {passwordFeedback && (
+                      <div
+                        role={passwordFeedback.type === "error" ? "alert" : "status"}
+                        style={{ marginTop: "12px", marginBottom: "12px" }}
+                      >
+                        {passwordFeedback.message}
+                      </div>
+                    )}
+                    <button className={styles.profile_button} type="submit" disabled={passwordBusy}>
+                      {passwordBusy ? "Changing Password..." : "Change Password"}
+                    </button>
+                  </form>
                 </div>
 
                 <div
