@@ -133,7 +133,21 @@ export const userSignIn = (email, password, remember, callback) => {
           "xxx userSignIn Request ERROR xxx",
           err?.response?.data?.message?.message
         );
-        toast.error(err?.response?.data?.message?.message || err?.response?.data?.message || "Unable to sign in. Please check your credentials.", {
+        const status = err?.response?.status;
+        const backendMessage = err?.response?.data?.message;
+        const responseMessage =
+          typeof backendMessage === "string" ? backendMessage :
+          typeof backendMessage?.message === "string" ? backendMessage.message : null;
+        const loginErrorMessage = !err?.response
+          ? "Cannot connect to the login service. Please try again later."
+          : status === 400 || status === 401
+            ? "Unable to sign in. Check your email and password."
+            : status === 429
+              ? "Too many login attempts. Please try again later."
+              : status >= 500
+                ? "Login service is temporarily unavailable. Please try again later."
+                : responseMessage || "Unable to sign in. Please try again.";
+        toast.error(loginErrorMessage, {
           toastId: customId,
         });
         callback();

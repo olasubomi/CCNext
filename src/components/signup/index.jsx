@@ -111,6 +111,7 @@ function SignUp(props) {
 
 
   function handleChange(e) {
+    setMessageState(null);
     setFormState({ ...formState, [e.target.name]: e.target.value });
     validateInput(e);
   }
@@ -168,20 +169,27 @@ function SignUp(props) {
     e.preventDefault();
 
 
-    // Run validation logic
-    const validationErrors = validateInput(e) ?? {};
-
-    // Check if there are any validation errors
-    if (Object.values(validationErrors).some((error) => error !== '')) {
-      setError(validationErrors);
-      console.error('Form validation failed:', validationErrors);
+    setMessageState(null);
+    const validationErrors = {
+      username: username.trim() ? '' : 'Please enter Username.',
+      password: password ? '' : 'Please enter Password.',
+      confirm_password: !confirm_password
+        ? 'Please enter Confirm Password.'
+        : password !== confirm_password
+          ? 'Password and Confirm Password does not match.'
+          : '',
+    };
+    setError(prev => ({ ...prev, ...validationErrors }));
+    if (Object.values(validationErrors).some(Boolean)) {
+      setStatusState('error');
+      setMessageState('Please correct the highlighted fields before registering.');
       return;
     }
 
-    // Check if the user has agreed to terms and conditions
     if (!isAgreed) {
-      setError((prev) => ({ ...prev, isAgreed: 'Please agree to terms and conditions' }));
-      console.error('Please agree to the terms and conditions.');
+      setError(prev => ({ ...prev, isAgreed: 'Please agree to terms and conditions' }));
+      setStatusState('error');
+      setMessageState('Please agree to the terms and conditions to continue.');
       return;
     }
 
@@ -195,7 +203,14 @@ function SignUp(props) {
       isSubscribed
     })
     console.log("result", result)
+    if (!result) {
+      setStatusState('error');
+      setMessageState('Unable to complete registration. Please review your details and try again.');
+      return;
+    }
     if (result) {
+      setStatusState(null);
+      setMessageState(null);
       localStorage.setItem("formState", JSON.stringify(formState));
       setOpenUserVerification(true)
     }
@@ -447,10 +462,10 @@ function SignUp(props) {
                 </label>
               </div>
 
-              {status === "success" ? (
-                <p className="msg-success">{message}</p>
-              ) : (
-                <p className="msg-err">{message}</p>
+              {message && (
+                <p role={status === 'error' ? 'alert' : 'status'} className={status === 'success' ? 'msg-success' : 'msg-err'}>
+                  {message}
+                </p>
               )}
 
               <button onClick={formSubmit} className={styles.login_button}>

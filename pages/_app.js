@@ -84,16 +84,18 @@ function MyApp({ Component, pageProps }) {
             </AuthProvider>
             <ToastContainer
               position="top-center"
-              autoClose={2000}
+              autoClose={4000}
               hideProgressBar={true}
               newestOnTop={false}
               closeOnClick
               rtl={false}
-              pauseOnFocusLoss
+              pauseOnFocusLoss={false}
               draggable
-              pauseOnHover
+              pauseOnHover={false}
               theme="colored"
-              style={{ width: "100%", height: "20rem" }} />
+              closeButton
+              limit={3}
+              style={{ maxWidth: "min(420px, calc(100vw - 24px))" }} />
           </PersistGate>
         </Provider>
       </GoogleOAuthProvider>
