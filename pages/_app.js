@@ -16,7 +16,7 @@ import useInactivityLogout from "../src/util/useinactivity";
 import Hotjar from '@hotjar/browser';
 import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
 import Script from "next/script";
-import { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import axios from "axios";
 import { getAllISOCodes } from "iso-country-currency";
 
@@ -25,6 +25,26 @@ const siteId = process.env.NEXT_PUBLIC_siteId;
 const hotjarVersion = 6;
 
 Hotjar.init(siteId, hotjarVersion);
+
+class ClientDebugBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { error: null, stack: '' }; }
+  static getDerivedStateFromError(error) { return { error }; }
+  componentDidCatch(error, info) {
+    this.setState({ stack: info?.componentStack || '' });
+    if (typeof window !== 'undefined' && window.__ccDebugError) {
+      window.__ccDebugError('React render error', error?.message || error, error?.stack || info?.componentStack, 'React component');
+    }
+  }
+  render() {
+    if (!this.state.error) return this.props.children;
+    const error = this.state.error;
+    return <div style={{padding:20,background:'#10131b',color:'white',minHeight:'100vh',fontFamily:'monospace',whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>
+      <strong>Chop Chow preview: React error</strong>
+      <pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{String(error.message || error)}{'\n'}{String(error.stack || '')}{'\n'}{this.state.stack}</pre>
+      <p>Screenshot this message; do not include passwords or tokens.</p>
+    </div>;
+  }
+}
 
 function MyApp({ Component, pageProps }) {
 
@@ -79,7 +99,7 @@ function MyApp({ Component, pageProps }) {
           <PersistGate loading={null} persistor={persistor}>
             <AuthProvider>
               <CartProvider>
-                <Component {...pageProps} />
+                <ClientDebugBoundary><Component {...pageProps} /></ClientDebugBoundary>
               </CartProvider>
             </AuthProvider>
             <ToastContainer
