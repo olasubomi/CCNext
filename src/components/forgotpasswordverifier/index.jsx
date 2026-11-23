@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
@@ -33,7 +35,10 @@ console.log(title)
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box  sx={style}>
+        <Box sx={style}>
+          <IconButton aria-label="Close reset link confirmation" onClick={handleClose} sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}>
+            <CloseIcon />
+          </IconButton>
           <div className='verification'>
           <div className='withbg' >  {status === 'success' ? <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" /> : <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" style={{color: 'red'}} /> }  </div>
             <h3>{status === 'success' ? 'Reset Link Sent' : 'Unable to Send Reset Email'}</h3>
