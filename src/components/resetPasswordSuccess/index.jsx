@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
@@ -33,16 +35,19 @@ console.log(title)
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box  sx={style}>
+        <Box sx={style}>
+          <IconButton aria-label="Close password reset confirmation" onClick={handleClose} sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}>
+            <CloseIcon />
+          </IconButton>
           <div className='verification'>
           <div className='withbg' >   <img className='success-img' src="/assets/signup/15179-confirm-popup 1.svg" alt="Signup" /> </div>
             <h3>Password Reset</h3>
-            <p>Login with you new password</p>
+            <p>Log in with your new password</p>
            
  
 
 <div className='otp-options'> 
- <button className='verification-button bigger' onClick={next}>Login Now</button>
+ <button className='verification-button bigger' onClick={() => { handleClose(); next(); }}>Login Now</button>
  </div>
 </div>
  
