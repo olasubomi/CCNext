@@ -40,12 +40,23 @@ export default function Document() {
 
                     {/* Only active when ?ccdebug=1; no data is transmitted. */}
                     <script dangerouslySetInnerHTML={{ __html: productionDiagnosticScript }} />
-                    {/* <!-- Google Ad Sense --> */}
+                    {/* <!-- Google Ad Sense: opt-in ad-free diagnostic on ?ccdebug=1&ccnoads=1 --> */}
                     <script
-                        async
-                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1235109639918263"
-                        crossorigin="anonymous"
-                    ></script>
+                        dangerouslySetInnerHTML={{
+                            __html: `(function () {
+                                var query = new URLSearchParams(window.location.search);
+                                if (query.get('ccdebug') === '1' && query.get('ccnoads') === '1') {
+                                    document.documentElement.setAttribute('data-cc-ad-isolation', 'disabled');
+                                    return;
+                                }
+                                var script = document.createElement('script');
+                                script.async = true;
+                                script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1235109639918263';
+                                script.crossOrigin = 'anonymous';
+                                (document.head || document.documentElement).appendChild(script);
+                            })();`,
+                        }}
+                    />
                     {/* <!-- Google Search Console verification  --> */}
 
                     <meta
