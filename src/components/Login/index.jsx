@@ -42,6 +42,7 @@ function Login(props) {
     rememberPassword: false,
   });
   const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const { email, password, rememberPassword } = formState;
   const dispatch = useDispatch();
   const [showFacebook, setShowFacebook] = useState(false);
@@ -77,6 +78,7 @@ function Login(props) {
   }
 
   function onChange(e) {
+    setLoginError("");
     setFormState({ ...formState, [e.target.name]: e.target.value });
   }
   const responseFacebook = (response) => {
@@ -104,9 +106,10 @@ function Login(props) {
     // check redux
     // props.toggleLogin() // then redirect to dashboard
 
+    setLoginError("");
     setLoginLoading(true);
 
-    await props.login(email, password, rememberPassword, () => {
+    const signedIn = await props.login(email, password, rememberPassword, () => {
       console.log("calling callback");
       setLoginLoading(false);
       dispatch(
@@ -117,6 +120,10 @@ function Login(props) {
         )
       );
     });
+
+    if (!signedIn) {
+      setLoginError("Unable to sign in. Please check your email and password.");
+    }
 
     // setTimeout(() => {
     //   setLoginLoading(false)
@@ -257,6 +264,8 @@ function Login(props) {
                   "Login"
                 )}
               </button>
+
+              {loginError && <p role="alert" style={{ color: "#B42318", marginTop: "0.75rem", textAlign: "left" }}>{loginError}</p>}
 
               {/* <h3 className={styles.login_new}>
               Don't have an account yet?{" "}
