@@ -99,6 +99,10 @@ const UserProfile = (props) => {
   const [status, setStatusState] = useState("");
   const [message, setMessageState] = useState("");
   const [changingPassword, setChangingPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordVisibility, setPasswordVisibility] = useState({ current: false, next: false, confirm: false });
+  const [passwordError, setPasswordError] = useState("");
+  const [profileImageFailed, setProfileImageFailed] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
   const selectedUserType = useSelector(
     (state) => state.userType.selectedUserType
@@ -307,20 +311,34 @@ const UserProfile = (props) => {
   async function handleChangePassword(e) {
     e.preventDefault();
     if (changingPassword) return;
+    setPasswordError("");
     if (!password || new_password.length < 8 || new_password.length > 128) {
-      setStatusState("error");
-      setMessageState("Enter your current password and a new password of 8–128 characters.");
+      setPasswordError("Enter your current password and a new password of 8–128 characters.");
+      return;
+    }
+    if (new_password !== confirmPassword) {
+      setPasswordError("New passwords do not match.");
+      return;
+    }
+    if (password === new_password) {
+      setPasswordError("Choose a new password different from your current password.");
       return;
     }
     setChangingPassword(true);
     try {
-      await axios.post("/user/changepassword", { currentPassword: password, newPassword: new_password });
+      await axios.post("/user/changepassword", {
+        currentPassword: password,
+        newPassword: new_password
+      });
       setFormState((prev) => ({ ...prev, password: "", new_password: "" }));
-      setStatusState("success");
-      setMessageState("Password changed successfully.");
+      setConfirmPassword("");
+      setPasswordVisibility({ current: false, next: false, confirm: false });
+      toast.success("Password changed successfully.");
     } catch (error) {
-      setStatusState("error");
-      setMessageState(error.response?.data?.message || "Unable to change password. Please try again.");
+      const backendMessage = error?.response?.data?.message;
+      setPasswordError(typeof backendMessage === "string"
+        ? backendMessage
+        : "Unable to change password. Please try again.");
     } finally {
       setChangingPassword(false);
     }
@@ -615,10 +633,7 @@ const UserProfile = (props) => {
 
   return (
     <div className={container + " " + col2}>
-      <div className="alert">
-        {status === "error" && <div className="alert-danger">{message}</div>}
-        {status === "success" && <div className="alert-success">{message}</div>}
-      </div>
+      {status === "error" && <div role="alert" className={styles.password_error}>{message}</div>}
       <Alert show={showAlert} key={1} variant={variant}>
         {messageAlert}
       </Alert>
@@ -717,11 +732,12 @@ const UserProfile = (props) => {
                     <div className={styles.profile_image_con}>
                       <div className={styles.profile_image}>
 
-                        {(profileImageData === '' && props.auth.authUser?.profile_picture === undefined) && <UserIcon />}
-                        {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) &&
+                        {(profileImageData === '' && (!props.auth.authUser?.profile_picture || profileImageFailed)) && <UserIcon />}
+                        {(profileImageData === '' && props.auth.authUser?.profile_picture && !profileImageFailed) &&
                           <Image width={200} height={200} src={props.auth.authUser.profile_picture}
                             className={styles.profile_image}
-                            alt="profile_picture" />
+                            alt="profile picture"
+                            onError={() => setProfileImageFailed(true)} />
                         }
                         <img id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
                       </div>
@@ -828,56 +844,82 @@ const UserProfile = (props) => {
                   className={styles.profile_basic_info_con}
                 >
                   <h3>Change Password</h3>
-                  <div className={styles.profile_basic_info}>
-                    <div className={styles.profile_form}>
-                      <div className={styles.profile_form_group}>
-                        <label
-                          htmlFor="old_password"
-                          className={styles.profile_form_label}
-                        >
-                          Old Password
-                        </label>
-                        <input
-                          type="password"
-                          name="password"
-                          id="old_password"
-                          autoComplete="current-password"
-                          value={password}
-                          placeholder="Password"
-                          onChange={handleChange}
-                          className={styles.profile_form_input}
-                        />
-                      </div>
-                      <div className={styles.profile_form_group}>
-                        <label
-                          htmlFor="new_password"
-                          className={styles.profile_form_label}
-                        >
-                          New Password
-                        </label>
-                        <input
-                          type="password"
-                          name="new_password"
-                          id="new_password"
-                          autoComplete="new-password"
-                          minLength={8}
-                          maxLength={128}
-                          value={new_password}
-                          placeholder="Your New Password"
-                          onChange={handleChange}
-                          className={styles.profile_form_input}
-                        />
+                  <form onSubmit={handleChangePassword}>
+                    <div className={styles.profile_basic_info}>
+                      <div className={styles.profile_form}>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="old_password" className={styles.profile_form_label}>Current Password</label>
+                          <div className={styles.password_input_row}>
+                            <input
+                              id="old_password"
+                              type={passwordVisibility.current ? "text" : "password"}
+                              autoComplete="current-password"
+                              value={password}
+                              onChange={(e) => { handleChange(e); setPasswordError(""); }}
+                              className={styles.profile_form_input}
+                              
+                              required
+                            />
+                            <button
+                              type="button"
+                              aria-label={passwordVisibility.current ? "Hide current password" : "Show current password"}
+                              aria-pressed={passwordVisibility.current}
+                              className={styles.password_visibility_button}
+                              onClick={() => setPasswordVisibility(prev => ({ ...prev, current: !prev.current }))}
+                            >{passwordVisibility.current ? "Hide" : "Show"}</button>
+                          </div>
+                        </div>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="new_password" className={styles.profile_form_label}>New Password</label>
+                          <div className={styles.password_input_row}>
+                            <input
+                              id="new_password"
+                              type={passwordVisibility.next ? "text" : "password"}
+                              autoComplete="new-password"
+                              value={new_password}
+                              onChange={(e) => { handleChange(e); setPasswordError(""); }}
+                              className={styles.profile_form_input}
+                              minLength={8} maxLength={128}
+                              required
+                            />
+                            <button
+                              type="button"
+                              aria-label={passwordVisibility.next ? "Hide new password" : "Show new password"}
+                              aria-pressed={passwordVisibility.next}
+                              className={styles.password_visibility_button}
+                              onClick={() => setPasswordVisibility(prev => ({ ...prev, next: !prev.next }))}
+                            >{passwordVisibility.next ? "Hide" : "Show"}</button>
+                          </div>
+                        </div>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="confirm_new_password" className={styles.profile_form_label}>Confirm New Password</label>
+                          <div className={styles.password_input_row}>
+                            <input
+                              id="confirm_new_password"
+                              type={passwordVisibility.confirm ? "text" : "password"}
+                              autoComplete="new-password"
+                              value={confirmPassword}
+                              onChange={(e) => { setConfirmPassword(e.target.value); setPasswordError(""); }}
+                              className={styles.profile_form_input}
+                              
+                              required
+                            />
+                            <button
+                              type="button"
+                              aria-label={passwordVisibility.confirm ? "Hide confirm new password" : "Show confirm new password"}
+                              aria-pressed={passwordVisibility.confirm}
+                              className={styles.password_visibility_button}
+                              onClick={() => setPasswordVisibility(prev => ({ ...prev, confirm: !prev.confirm }))}
+                            >{passwordVisibility.confirm ? "Hide" : "Show"}</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  <button
-                    className={styles.profile_button}
-                    onClick={handleChangePassword}
-                    disabled={changingPassword}
-                  >
-                    {changingPassword ? "Changing Password..." : "Change Password"}
-                  </button>
+                    {passwordError && <p role="alert" className={styles.password_error}>{passwordError}</p>}
+                    <button className={styles.profile_button} type="submit" disabled={changingPassword}>
+                      {changingPassword ? "Changing Password..." : "Change Password"}
+                    </button>
+                  </form>
                 </div>
 
                 <div
