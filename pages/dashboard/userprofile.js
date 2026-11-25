@@ -10,6 +10,8 @@ import {
   center,
 } from "../../src/components/dashboard/dashboard.module.css";
 import styles from "../../src/components/dashboard/profile.module.css";
+import loginStyles from "../../src/components/Login/style.module.css";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Header from "../../src/components/Header/Header";
 import SideNav from "../../src/components/Header/sidenav";
 import cardImage from "../../public/assets/logos/cardImage.png";
@@ -305,7 +307,7 @@ const UserProfile = (props) => {
   }, [props.auth.authUser]);
 
   function handleChange(e) {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
+    setFormState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
   async function handleChangePassword(e) {
@@ -841,6 +843,7 @@ const UserProfile = (props) => {
                           <div className={styles.password_input_row}>
                             <input
                               id="old_password"
+                              name="password"
                               type={passwordVisibility.current ? "text" : "password"}
                               autoComplete="current-password"
                               value={password}
@@ -853,9 +856,9 @@ const UserProfile = (props) => {
                               type="button"
                               aria-label={passwordVisibility.current ? "Hide current password" : "Show current password"}
                               aria-pressed={passwordVisibility.current}
-                              className={styles.password_visibility_button}
+                              className={`${loginStyles.secureEye} ${styles.profile_password_eye}`}
                               onClick={() => setPasswordVisibility(prev => ({ ...prev, current: !prev.current }))}
-                            >{passwordVisibility.current ? "Hide" : "Show"}</button>
+                            >{passwordVisibility.current ? <VisibilityOff /> : <Visibility />}</button>
                           </div>
                         </div>
                         <div className={styles.profile_form_group}>
@@ -863,6 +866,7 @@ const UserProfile = (props) => {
                           <div className={styles.password_input_row}>
                             <input
                               id="new_password"
+                              name="new_password"
                               type={passwordVisibility.next ? "text" : "password"}
                               autoComplete="new-password"
                               value={new_password}
@@ -875,9 +879,9 @@ const UserProfile = (props) => {
                               type="button"
                               aria-label={passwordVisibility.next ? "Hide new password" : "Show new password"}
                               aria-pressed={passwordVisibility.next}
-                              className={styles.password_visibility_button}
+                              className={`${loginStyles.secureEye} ${styles.profile_password_eye}`}
                               onClick={() => setPasswordVisibility(prev => ({ ...prev, next: !prev.next }))}
-                            >{passwordVisibility.next ? "Hide" : "Show"}</button>
+                            >{passwordVisibility.next ? <VisibilityOff /> : <Visibility />}</button>
                           </div>
                         </div>
                         <div className={styles.profile_form_group}>
@@ -885,6 +889,7 @@ const UserProfile = (props) => {
                           <div className={styles.password_input_row}>
                             <input
                               id="confirm_new_password"
+                              name="confirm_password"
                               type={passwordVisibility.confirm ? "text" : "password"}
                               autoComplete="new-password"
                               value={confirmPassword}
@@ -897,9 +902,9 @@ const UserProfile = (props) => {
                               type="button"
                               aria-label={passwordVisibility.confirm ? "Hide confirm new password" : "Show confirm new password"}
                               aria-pressed={passwordVisibility.confirm}
-                              className={styles.password_visibility_button}
+                              className={`${loginStyles.secureEye} ${styles.profile_password_eye}`}
                               onClick={() => setPasswordVisibility(prev => ({ ...prev, confirm: !prev.confirm }))}
-                            >{passwordVisibility.confirm ? "Hide" : "Show"}</button>
+                            >{passwordVisibility.confirm ? <VisibilityOff /> : <Visibility />}</button>
                           </div>
                         </div>
                       </div>
