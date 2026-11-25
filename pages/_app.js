@@ -83,7 +83,7 @@ function MyApp({ Component, pageProps }) {
               </CartProvider>
             </AuthProvider>
             <ToastContainer
-              position="top-center"
+              position="bottom-right"
               autoClose={4000}
               hideProgressBar={true}
               newestOnTop={false}
