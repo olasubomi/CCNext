@@ -850,29 +850,31 @@
 }
 /* Password visibility controls and inline errors for mobile and desktop. */
 .password_input_row {
-  display: flex;
+  position: relative;
   width: 100%;
   min-width: 0;
-  align-items: stretch;
-  gap: 8px;
 }
 .password_input_row > input {
-  min-width: 0;
-  flex: 1 1 auto;
+  width: 100%;
+  padding-right: 46px;
 }
-.password_visibility_button {
-  flex: 0 0 auto;
-  padding: 0 12px;
-  border: 1px solid #9ca3af;
-  border-radius: 4px;
-  background: #fff;
-  color: #333;
+.profile_password_eye {
+  /* Reuse the existing login/signup eye icon style with profile-specific alignment. */
+  top: 50%;
+  right: 8px;
+  margin-top: 0;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: none;
   cursor: pointer;
-  font-size: 14px;
+  color: #6D6D6D;
 }
-.password_visibility_button:focus-visible {
+.profile_password_eye:focus-visible {
   outline: 2px solid #006bcd;
-  outline-offset: 2px;
+  border-radius: 4px;
 }
 .password_error {
   margin-top: 10px;
