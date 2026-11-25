@@ -1112,7 +1112,7 @@ input[type="checkbox"]:checked {
 
 /* Keep temporary feedback in view while mobile forms are scrolled. */
 @media screen and (max-width: 600px) {
-  .Toastify__toast-container.Toastify__toast-container--top-center {
+  .Toastify__toast-container.Toastify__toast-container--bottom-right {
     position: fixed !important;
     top: auto !important;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
