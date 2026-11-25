@@ -1137,3 +1137,12 @@ input[type="checkbox"]:checked {
     overflow-wrap: anywhere;
   }
 }
+
+/* Prevent iOS Safari input-focus auto-zoom on mobile forms (text below 16px). */
+@media screen and (max-width: 600px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
