@@ -464,22 +464,12 @@ const UserProfile = (props) => {
       .put("/user/updateuserprofile/" + authUser._id, formData)
       .then(async (res) => {
         console.log(res.data);
-        setStatusState("success");
-        setMessageState("User updated");
-        setTimeout(() => {
-          setStatusState("");
-          setMessageState("");
-        }, 5000);
+        toast.success("User updated");
         const updatedUser = await props.getUser(authUser._id);
         console.log("Updated user data:", updatedUser);
       })
       .catch(() => {
-        setStatusState("error");
-        setMessageState("Error updating user");
-        setTimeout(() => {
-          setStatusState("");
-          setMessageState("");
-        }, 5000);
+        toast.error("Error updating user");
       });
   }
 
@@ -633,7 +623,6 @@ const UserProfile = (props) => {
 
   return (
     <div className={container + " " + col2}>
-      {status === "error" && <div role="alert" className={styles.password_error}>{message}</div>}
       <Alert show={showAlert} key={1} variant={variant}>
         {messageAlert}
       </Alert>
