@@ -48,9 +48,10 @@ export function SimpleSnackbar(props) {
           },
         }}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "right",
         }}
+        sx={{ "@media (max-width: 600px)": { left: "12px", right: "12px", bottom: "calc(80px + env(safe-area-inset-bottom, 0px))" } }}
       />
     </div>
   );
