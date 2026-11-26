@@ -1,3 +1,4 @@
+import Sidenav from "../../src/components/Header/sidenav";
 import { useParams, useRouter } from "next/navigation";
 import Header, { Header2 } from "../../src/components/Header/Header";
 import { ShareOutlined } from "@mui/icons-material";
@@ -40,6 +41,7 @@ export default function SingleBlog() {
         <div>
             <Header />
             <Header2 />
+      <Sidenav />
             <div className="single-blog-user">
                 <div className="single-container">
                     <div className="single-blog-view">
