@@ -10,8 +10,7 @@ import {
   center,
 } from "../../src/components/dashboard/dashboard.module.css";
 import styles from "../../src/components/dashboard/profile.module.css";
-import loginStyles from "../../src/components/Login/style.module.css";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import PasswordField from "../../src/components/common/PasswordField";
 import Header from "../../src/components/Header/Header";
 import SideNav from "../../src/components/Header/sidenav";
 import cardImage from "../../public/assets/logos/cardImage.png";
@@ -102,7 +101,6 @@ const UserProfile = (props) => {
   const [message, setMessageState] = useState("");
   const [changingPassword, setChangingPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordVisibility, setPasswordVisibility] = useState({ current: false, next: false, confirm: false });
   const [passwordError, setPasswordError] = useState("");
   const [profileImageFailed, setProfileImageFailed] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
@@ -334,7 +332,6 @@ const UserProfile = (props) => {
       });
       setFormState((prev) => ({ ...prev, password: "", new_password: "" }));
       setConfirmPassword("");
-      setPasswordVisibility({ current: false, next: false, confirm: false });
       toast.success("Password changed successfully.");
     } catch (error) {
       const backendMessage = error?.response?.data?.message;
@@ -840,72 +837,44 @@ const UserProfile = (props) => {
                       <div className={styles.profile_form}>
                         <div className={styles.profile_form_group}>
                           <label htmlFor="old_password" className={styles.profile_form_label}>Current Password</label>
-                          <div className={styles.password_input_row}>
-                            <input
-                              id="old_password"
-                              name="password"
-                              type={passwordVisibility.current ? "text" : "password"}
-                              autoComplete="current-password"
-                              value={password}
-                              onChange={(e) => { handleChange(e); setPasswordError(""); }}
-                              className={styles.profile_form_input}
-                              
-                              required
-                            />
-                            <button
-                              type="button"
-                              aria-label={passwordVisibility.current ? "Hide current password" : "Show current password"}
-                              aria-pressed={passwordVisibility.current}
-                              className={`${loginStyles.secureEye} ${styles.profile_password_eye}`}
-                              onClick={() => setPasswordVisibility(prev => ({ ...prev, current: !prev.current }))}
-                            >{passwordVisibility.current ? <VisibilityOff /> : <Visibility />}</button>
-                          </div>
+                          <PasswordField
+                            id="old_password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => { handleChange(e); setPasswordError(""); }}
+                            className={styles.profile_form_input}
+                            autoComplete="current-password"
+                            visibilityLabel="current password"
+                            required
+                          />
                         </div>
                         <div className={styles.profile_form_group}>
                           <label htmlFor="new_password" className={styles.profile_form_label}>New Password</label>
-                          <div className={styles.password_input_row}>
-                            <input
-                              id="new_password"
-                              name="new_password"
-                              type={passwordVisibility.next ? "text" : "password"}
-                              autoComplete="new-password"
-                              value={new_password}
-                              onChange={(e) => { handleChange(e); setPasswordError(""); }}
-                              className={styles.profile_form_input}
-                              minLength={8} maxLength={128}
-                              required
-                            />
-                            <button
-                              type="button"
-                              aria-label={passwordVisibility.next ? "Hide new password" : "Show new password"}
-                              aria-pressed={passwordVisibility.next}
-                              className={`${loginStyles.secureEye} ${styles.profile_password_eye}`}
-                              onClick={() => setPasswordVisibility(prev => ({ ...prev, next: !prev.next }))}
-                            >{passwordVisibility.next ? <VisibilityOff /> : <Visibility />}</button>
-                          </div>
+                          <PasswordField
+                            id="new_password"
+                            name="new_password"
+                            value={new_password}
+                            onChange={(e) => { handleChange(e); setPasswordError(""); }}
+                            className={styles.profile_form_input}
+                            autoComplete="new-password"
+                            visibilityLabel="new password"
+                            minLength={8}
+                            maxLength={128}
+                            required
+                          />
                         </div>
                         <div className={styles.profile_form_group}>
                           <label htmlFor="confirm_new_password" className={styles.profile_form_label}>Confirm New Password</label>
-                          <div className={styles.password_input_row}>
-                            <input
-                              id="confirm_new_password"
-                              name="confirm_password"
-                              type={passwordVisibility.confirm ? "text" : "password"}
-                              autoComplete="new-password"
-                              value={confirmPassword}
-                              onChange={(e) => { setConfirmPassword(e.target.value); setPasswordError(""); }}
-                              className={styles.profile_form_input}
-                              
-                              required
-                            />
-                            <button
-                              type="button"
-                              aria-label={passwordVisibility.confirm ? "Hide confirm new password" : "Show confirm new password"}
-                              aria-pressed={passwordVisibility.confirm}
-                              className={`${loginStyles.secureEye} ${styles.profile_password_eye}`}
-                              onClick={() => setPasswordVisibility(prev => ({ ...prev, confirm: !prev.confirm }))}
-                            >{passwordVisibility.confirm ? <VisibilityOff /> : <Visibility />}</button>
-                          </div>
+                          <PasswordField
+                            id="confirm_new_password"
+                            name="confirm_password"
+                            value={confirmPassword}
+                            onChange={(e) => { setConfirmPassword(e.target.value); setPasswordError(""); }}
+                            className={styles.profile_form_input}
+                            autoComplete="new-password"
+                            visibilityLabel="confirm new password"
+                            required
+                          />
                         </div>
                       </div>
                     </div>
