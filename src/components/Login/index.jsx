@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.css";
+import PasswordField from "../common/PasswordField";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { userSignIn, socialSignIn, verifyEmail } from "../../actions";
 import img_logo from "../../../public/assets/logos/CC_Logo_no_bg.png";
@@ -34,7 +35,6 @@ function Login(props) {
   const [signUp, setSignUpState] = useState(false);
   const [status, setStatusState] = useState(null);
   const [message, setMessageState] = useState(null);
-  const [showPass, setShowPassState] = useState(null);
   const { isOpen, setIsOpen } = useAuth();
   const [formState, setFormState] = useState({
     email: "",
@@ -134,10 +134,6 @@ function Login(props) {
   console.log("useeffect isverified", isverified);
 
 
-  function togglePass() {
-    setShowPassState(!showPass);
-  }
-
   useEffect(() => {
     (async () => {
       const hash = await unHash();
@@ -212,18 +208,16 @@ function Login(props) {
                 <label htmlFor="password" className={styles.login_form_label}>
                   Password
                 </label>
-                <input
-                  type={showPass ? "text" : "password"}
+                <PasswordField
                   id="password"
                   name="password"
                   value={password}
                   placeholder="Your password"
                   onChange={onChange}
+                  autoComplete="current-password"
                   className={styles.login_form_input}
+                  visibilityLabel="password"
                 />
-                <div onClick={togglePass} className={styles.secureEye}>
-                  {showPass ? <VisibilityOff /> : <Visibility />}
-                </div>
               </div>
 
               <div
