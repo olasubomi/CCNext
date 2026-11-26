@@ -124,11 +124,10 @@ function Header(props) {
   };
 
   const dropdownRef = useRef(null);
-  const toggleUserDetails = () => {
-    if (!openUserDetails || dropdownRef.current === event.target) {
-      setOpenUserDetails(!openUserDetails);
-    }
-  };
+  const [avatarFailed, setAvatarFailed] = useState(false);
+  useEffect(() => setAvatarFailed(false), [authUser?.profile_picture]);
+  useEffect(() => setOpenUserDetails(false), [pathname]);
+  const toggleUserDetails = () => setOpenUserDetails((open) => !open);
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -229,8 +228,7 @@ function Header(props) {
                 </Link>
               ) : (
                 <div className={styles.navbar_user_info} ref={dropdownRef}>
-                  {authUser?.profile_picture !== "" &&
-                    authUser?.profile_picture !== undefined ? (
+                  {authUser?.profile_picture && !avatarFailed ? (
                     <div onClick={toggleUserDetails}>
                       {" "}
                       <Image
@@ -238,6 +236,7 @@ function Header(props) {
                         width={34}
                         height={34}
                         src={authUser?.profile_picture}
+                        onError={() => setAvatarFailed(true)}
                         alt={props?.auth?.authUser?.username}
                         className={styles.navbar_user_img}
                       />
@@ -266,7 +265,7 @@ function Header(props) {
                   </div>
 
                   {openUserDetails && (
-                    <div className={styles.userdetails}>
+                    <div className={styles.userdetails} onClick={(e) => { if (e.target.closest("a")) setOpenUserDetails(false); }}>
                       <Link href="/dashboard">
                         <div
                           className={
