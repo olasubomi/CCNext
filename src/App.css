@@ -1109,3 +1109,40 @@ input[type="checkbox"]:checked {
   align-items: center;
   display: flex;
 }
+
+/* Keep temporary feedback in view while mobile forms are scrolled. */
+@media screen and (max-width: 600px) {
+  .Toastify__toast-container.Toastify__toast-container--bottom-right {
+    position: fixed !important;
+    top: auto !important;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 0;
+    margin: 0;
+    transform: none !important;
+    pointer-events: none;
+  }
+
+  .Toastify__toast-container .Toastify__toast {
+    border-radius: 10px;
+    min-height: 52px;
+    margin-bottom: 0;
+    pointer-events: auto;
+  }
+
+  .Toastify__toast-container .Toastify__toast-body {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Prevent iOS Safari input-focus auto-zoom on mobile forms (text below 16px). */
+@media screen and (max-width: 600px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}

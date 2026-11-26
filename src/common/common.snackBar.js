@@ -6,14 +6,12 @@ import { connect } from "react-redux";
 import { triggerAlert } from "../actions/Common";
 
 export function SimpleSnackbar(props) {
-  const [open, setOpen] = React.useState();
+  const [open, setOpen] = React.useState(false);
 
   const handleClose = (event, reason) => {
-    props.resetSnack(false);
-    if (reason === "clickaway") {
-      return;
-    }
+    if (reason === "clickaway") return;
     setOpen(false);
+    props.resetSnack(false);
   };
 
   React.useEffect(() => {
@@ -37,10 +35,10 @@ export function SimpleSnackbar(props) {
     <div>
       <Snackbar
         open={open}
-        autoHideDuration={1000}
+        autoHideDuration={4000}
         onClose={handleClose}
         message={props.message}
-        onBlur={handleClose}
+        action={action}
         ContentProps={{
           sx: {
             background: "red",
@@ -50,9 +48,10 @@ export function SimpleSnackbar(props) {
           },
         }}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "right",
         }}
+        sx={{ "@media (max-width: 600px)": { left: "12px", right: "12px", bottom: "calc(80px + env(safe-area-inset-bottom, 0px))" } }}
       />
     </div>
   );

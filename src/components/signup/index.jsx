@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../Login/style.module.css';
+import PasswordField from '../common/PasswordField';
 // import { Form, Button, Container, Modal, Row, Col, ButtonToolbar } from 'react-bootstrap';
 import { EyeSIcon } from "../icons";
 import Link from 'next/link';
@@ -38,7 +39,6 @@ function SignUp(props) {
   const [status, setStatusState] = useState(null);
   const [isAgreed, setIsAgreed] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(true);
-  const [showPass, setShowPassState] = useState(null);
   const [formState, setFormState] = useState({
     username: "",
     email: "",
@@ -113,10 +113,6 @@ function SignUp(props) {
   function handleChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
     validateInput(e);
-  }
-
-  function togglePass() {
-    setShowPassState(!showPass);
   }
 
   function handlePhoneChange(e) {
@@ -336,48 +332,34 @@ function SignUp(props) {
                 <label htmlFor="password" id='password' className={styles.login_form_label}>
                   Password
                 </label>
-                <input
-                  type={showPass ? "text" : "password"}
-                  name="password"
+                <PasswordField
                   id="password"
+                  name="password"
                   value={password}
                   placeholder="Create a Password"
                   onChange={handleChange}
                   onBlur={validateInput}
+                  autoComplete="new-password"
                   className={styles.login_form_input}
+                  visibilityLabel="password"
                 />
-
-                <div onClick={togglePass} className={styles.secureEye}>
-                  {showPass ?
-                    <VisibilityOff />
-                    :
-                    <Visibility />
-                  }
-                </div>
                 {error.password && <span style={{ color: "#FF0000", fontSize: 14 }}>{error.password}</span>}
               </div>
               <div className={styles.login_form_group}>
-                <label htmlFor="password" id="confirm_password" className={styles.login_form_label}>
+                <label htmlFor="confirm_password" className={styles.login_form_label}>
                   Confirm Password
                 </label>
-                <input
-                  type={showPass ? "text" : "password"}
+                <PasswordField
                   id="confirm_password"
                   name="confirm_password"
                   value={confirm_password}
                   placeholder="Confirm Password"
                   onChange={handleChange}
                   onBlur={validateInput}
+                  autoComplete="new-password"
                   className={styles.login_form_input}
+                  visibilityLabel="confirm password"
                 />
-
-                <div onClick={togglePass} className={styles.secureEye}>
-                  {showPass ?
-                    <VisibilityOff />
-                    :
-                    <Visibility />
-                  }
-                </div>
                 {error.confirm_password && <span style={{ color: "#FF0000", fontSize: 14 }} >{error.confirm_password}</span>}
               </div>
 

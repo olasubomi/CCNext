@@ -10,6 +10,7 @@ import {
   center,
 } from "../../src/components/dashboard/dashboard.module.css";
 import styles from "../../src/components/dashboard/profile.module.css";
+import PasswordField from "../../src/components/common/PasswordField";
 import Header from "../../src/components/Header/Header";
 import SideNav from "../../src/components/Header/sidenav";
 import cardImage from "../../public/assets/logos/cardImage.png";
@@ -98,8 +99,11 @@ const UserProfile = (props) => {
   const router = useRouter();
   const [status, setStatusState] = useState("");
   const [message, setMessageState] = useState("");
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [profileImageFailed, setProfileImageFailed] = useState(false);
   const { authUser } = useSelector((state) => state.Auth);
-  console.log(authUser, 'authuser')
   const selectedUserType = useSelector(
     (state) => state.userType.selectedUserType
   );
@@ -294,14 +298,49 @@ const UserProfile = (props) => {
         },
       });
 
-      if (props.auth.authUser.driver_hours.length > 0) {
+      if (Array.isArray(props.auth.authUser.driver_hours) && props.auth.authUser.driver_hours.length > 0) {
         setTimes(props.auth.authUser.driver_hours[0]);
       }
     }
   }, [props.auth.authUser]);
 
   function handleChange(e) {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
+    setFormState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function handleChangePassword(e) {
+    e.preventDefault();
+    if (changingPassword) return;
+    setPasswordError("");
+    if (!password || new_password.length < 8 || new_password.length > 128) {
+      setPasswordError("Enter your current password and a new password of 8–128 characters.");
+      return;
+    }
+    if (new_password !== confirmPassword) {
+      setPasswordError("New passwords do not match.");
+      return;
+    }
+    if (password === new_password) {
+      setPasswordError("Choose a new password different from your current password.");
+      return;
+    }
+    setChangingPassword(true);
+    try {
+      await axios.post("/user/changepassword", {
+        currentPassword: password,
+        newPassword: new_password
+      });
+      setFormState((prev) => ({ ...prev, password: "", new_password: "" }));
+      setConfirmPassword("");
+      toast.success("Password changed successfully.");
+    } catch (error) {
+      const backendMessage = error?.response?.data?.message;
+      setPasswordError(typeof backendMessage === "string"
+        ? backendMessage
+        : "Unable to change password. Please try again.");
+    } finally {
+      setChangingPassword(false);
+    }
   }
 
   function handlePhoneChange(e) {
@@ -334,7 +373,7 @@ const UserProfile = (props) => {
         newsletter_subscription: !toggleSwitch
       });
       toast.success(`Notification ${!toggleSwitch ? "enabled" : "disabled"} successfully`);
-      localStorage.setItem("user", JSON.parse({
+      localStorage.setItem("user", JSON.stringify({
         ...user,
         newsletter_subscription: !toggleSwitch
       }))
@@ -424,22 +463,12 @@ const UserProfile = (props) => {
       .put("/user/updateuserprofile/" + authUser._id, formData)
       .then(async (res) => {
         console.log(res.data);
-        setStatusState("success");
-        setMessageState("User updated");
-        setTimeout(() => {
-          setStatusState("");
-          setMessageState("");
-        }, 5000);
+        toast.success("User updated");
         const updatedUser = await props.getUser(authUser._id);
         console.log("Updated user data:", updatedUser);
       })
       .catch(() => {
-        setStatusState("error");
-        setMessageState("Error updating user");
-        setTimeout(() => {
-          setStatusState("");
-          setMessageState("");
-        }, 5000);
+        toast.error("Error updating user");
       });
   }
 
@@ -515,10 +544,10 @@ const UserProfile = (props) => {
   }
 
   const getStoreInformation = async () => {
-    const userId = JSON.parse(localStorage.getItem("user"))?._id;
+    const userId = JSON.parse(localStorage.getItem("user") || "{}")?._id;
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/stores/getstore/user?userId=${userId}`
+        `/stores/getstore/user?userId=${userId}`
       );
       const data = response.data?.data?.supplier || {};
       if (
@@ -547,7 +576,7 @@ const UserProfile = (props) => {
 
     try {
       const response = await axios(
-        `http://localhost:5000/api/stores/updatestore/${formState.store_id}`,
+        `/stores/updatestore/${formState.store_id}`,
         {
           method: "put",
           headers: {
@@ -593,10 +622,6 @@ const UserProfile = (props) => {
 
   return (
     <div className={container + " " + col2}>
-      <div className="alert">
-        {status === "error" && <div className="alert-danger">{message}</div>}
-        {status === "success" && <div className="alert-success">{message}</div>}
-      </div>
       <Alert show={showAlert} key={1} variant={variant}>
         {messageAlert}
       </Alert>
@@ -695,11 +720,12 @@ const UserProfile = (props) => {
                     <div className={styles.profile_image_con}>
                       <div className={styles.profile_image}>
 
-                        {(profileImageData === '' && props.auth.authUser?.profile_picture === undefined) && <UserIcon />}
-                        {(profileImageData === '' && props.auth.authUser.profile_picture !== undefined) &&
+                        {(profileImageData === '' && (!props.auth.authUser?.profile_picture || profileImageFailed)) && <UserIcon />}
+                        {(profileImageData === '' && props.auth.authUser?.profile_picture && !profileImageFailed) &&
                           <Image width={200} height={200} src={props.auth.authUser.profile_picture}
                             className={styles.profile_image}
-                            alt="profile_picture" />
+                            alt="profile picture"
+                            onError={() => setProfileImageFailed(true)} />
                         }
                         <img id="profile_image" width='100%' alt="profile" style={{ display: "none" }} />
                       </div>
@@ -806,49 +832,57 @@ const UserProfile = (props) => {
                   className={styles.profile_basic_info_con}
                 >
                   <h3>Change Password</h3>
-                  <div className={styles.profile_basic_info}>
-                    <div className={styles.profile_form}>
-                      <div className={styles.profile_form_group}>
-                        <label
-                          htmlFor="old_password"
-                          className={styles.profile_form_label}
-                        >
-                          Old Password
-                        </label>
-                        <input
-                          type="text"
-                          name="old_password"
-                          value={password}
-                          placeholder="Password"
-                          onChange={handleChange}
-                          className={styles.profile_form_input}
-                        />
-                      </div>
-                      <div className={styles.profile_form_group}>
-                        <label
-                          htmlFor="new_password"
-                          className={styles.profile_form_label}
-                        >
-                          New Password
-                        </label>
-                        <input
-                          type="tel"
-                          name="new_password"
-                          value={new_password}
-                          placeholder="Your New Password"
-                          onChange={handleChange}
-                          className={styles.profile_form_input}
-                        />
+                  <form onSubmit={handleChangePassword}>
+                    <div className={styles.profile_basic_info}>
+                      <div className={styles.profile_form}>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="old_password" className={styles.profile_form_label}>Current Password</label>
+                          <PasswordField
+                            id="old_password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => { handleChange(e); setPasswordError(""); }}
+                            className={styles.profile_form_input}
+                            autoComplete="current-password"
+                            visibilityLabel="current password"
+                            required
+                          />
+                        </div>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="new_password" className={styles.profile_form_label}>New Password</label>
+                          <PasswordField
+                            id="new_password"
+                            name="new_password"
+                            value={new_password}
+                            onChange={(e) => { handleChange(e); setPasswordError(""); }}
+                            className={styles.profile_form_input}
+                            autoComplete="new-password"
+                            visibilityLabel="new password"
+                            minLength={8}
+                            maxLength={128}
+                            required
+                          />
+                        </div>
+                        <div className={styles.profile_form_group}>
+                          <label htmlFor="confirm_new_password" className={styles.profile_form_label}>Confirm New Password</label>
+                          <PasswordField
+                            id="confirm_new_password"
+                            name="confirm_password"
+                            value={confirmPassword}
+                            onChange={(e) => { setConfirmPassword(e.target.value); setPasswordError(""); }}
+                            className={styles.profile_form_input}
+                            autoComplete="new-password"
+                            visibilityLabel="confirm new password"
+                            required
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  <button
-                    className={styles.profile_button}
-                    onClick={saveChanges}
-                  >
-                    Save Changes
-                  </button>
+                    {passwordError && <p role="alert" className={styles.password_error}>{passwordError}</p>}
+                    <button className={styles.profile_button} type="submit" disabled={changingPassword}>
+                      {changingPassword ? "Changing Password..." : "Change Password"}
+                    </button>
+                  </form>
                 </div>
 
                 <div
