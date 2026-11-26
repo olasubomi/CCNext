@@ -1,3 +1,4 @@
+import Sidenav from "../../src/components/Header/sidenav";
 import Head from "next/head";
 import Header, { Header2 } from "../../src/components/Header/Header";
 import Footer from "../../src/components/Footer/Footer";
@@ -148,6 +149,7 @@ const AllChefsPage = () => {
       </Head>
       <Header />
       <Header2 />
+      <Sidenav />
       <div className={styles.container}>
         <div className={styles.title}>
           <h1>Chefs</h1>
