@@ -418,7 +418,7 @@ const DashboardHomePage = (props) => {
                   <h3>Categories</h3>
                   <div className={styles.chart}>
                     <div className={styles.chart_circle}>
-                      <Doughnut data={requestChart} width={400} height={400} />
+                      <Doughnut data={requestChart} />
 
                       <div className={styles.chart_circle_total}>
                         <p>Total</p>
@@ -515,7 +515,7 @@ const DashboardHomePage = (props) => {
                   <h3>User Stats</h3>
                   <div className={styles.chart}>
                     <div className={styles.chart_circle}>
-                      <Doughnut data={userChart} width={400} height={400} />
+                      <Doughnut data={userChart} />
 
                       <div className={styles.chart_circle_total}>
                         <p>Total</p>
@@ -1094,8 +1094,6 @@ const DashboardHomePage = (props) => {
                       <div className={styles.chart_circle}>
                         <Doughnut
                           data={requestChart}
-                          width={400}
-                          height={400}
                         />
 
                         <div className={styles.chart_circle_total}>
@@ -1193,7 +1191,7 @@ const DashboardHomePage = (props) => {
                     <h3>User Stats</h3>
                     <div className={styles.chart}>
                       <div className={styles.chart_circle}>
-                        <Doughnut data={userChart} width={400} height={400} />
+                        <Doughnut data={userChart} />
 
                         <div className={styles.chart_circle_total}>
                           <p>Total</p>

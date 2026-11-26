@@ -5,12 +5,7 @@ export default function Document() {
     return (
         <Html>
             <Head>
-                <head>
                     <meta charSet="utf-8" />
-                    <meta
-                        name="viewport"
-                        content="width=device-width, initial-scale=1, shrink-to-fit=no"
-                    />
                     <meta name="theme-color" content="#000000" />
                     {/* <!--
                     manifest.json provides metadata used when your web app is added to the
@@ -50,7 +45,6 @@ export default function Document() {
                     />
                     <title>Chop Chow</title>
                     <meta name="description" content="Adding convenience to cooking from home." />
-                </head>
             </Head>
             <body>
                 <noscript>

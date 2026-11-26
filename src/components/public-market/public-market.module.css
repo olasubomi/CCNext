@@ -1252,3 +1252,30 @@
     top: 30%;
   }
 } */
+/* Allow marketplace controls and dialogs to shrink with the viewport. */
+.container, .marketplace, .searchbar2, .searchflex, .searchboxfield,
+.searchboxfield input, .search input, .searchfield input, .modalCard {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.searchboxfield { flex: 1 1 0; }
+.cats, .searchbtn { flex-shrink: 0; }
+.modalCard { max-height: 90vh; overflow-y: auto; }
+@media only screen and (max-width: 768px) {
+  .marketplace { padding-inline: 4%; }
+  .searchbar2 { width: 100%; margin-inline: 0; }
+  .searchflex { width: 100%; }
+  .searchboxfield input, .search input, .searchfield input, .searchbar { font-size: 16px; }
+  .two { margin-left: 0; }
+  .dropdownContainer { width: 94%; height: auto; max-height: 65vh; overflow-y: auto; }
+  .dropdown { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .modalCard { width: 94%; }
+  .flexed { flex-direction: column; padding: 1.5rem; gap: 1rem; }
+  .images, .right { width: 100%; min-width: 0; }
+  .modalImg { width: 100%; max-height: 240px; }
+  .images1 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+  .img1 { width: 100%; height: auto; aspect-ratio: 1; }
+  .buttons { flex-wrap: wrap; padding: 1rem; gap: 1rem; }
+  .itemName { overflow-wrap: anywhere; }
+}
