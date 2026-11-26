@@ -1,3 +1,4 @@
+import Sidenav from "../../../src/components/Header/sidenav";
 import Head from "next/head";
 import Header, { Header2 } from "../../../src/components/Header/Header";
 import GoBack from "../../../src/components/CommonComponents/goBack";
@@ -81,6 +82,7 @@ const ChefPage = () => {
       </Head>
       <Header />
       <Header2 />
+      <Sidenav />
       <div className={styles.chefBg}>
         <div className={styles.bgAlign}>
           <div className={styles.flex}>
