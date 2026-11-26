@@ -94,3 +94,12 @@
   /* identical to box height */
   color: #f47900;
 }
+
+.container { width: 100%; max-width: 960px; margin: 100px auto 0; padding: 2rem; min-height: 65vh; box-sizing: border-box; }
+.not { min-width: 0; }
+.summary_notification, .summary_notification2 { grid-template-columns: max-content minmax(0, 1fr); border-bottom: 1px solid #e7e7e7; }
+.summary_notification_Details { min-width: 0; overflow-wrap: anywhere; }
+.empty { padding: 2rem; color: #6d6d6d; }
+@media (max-width: 768px) {
+  .container { margin-top: 70px; padding: 1rem 1rem 7rem; }
+}

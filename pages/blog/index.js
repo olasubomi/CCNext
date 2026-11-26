@@ -1,3 +1,4 @@
+import Sidenav from "../../src/components/Header/sidenav";
 import { Search } from "@mui/icons-material";
 import Header, { Header2 } from "../../src/components/Header/Header";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
@@ -61,6 +62,7 @@ export default function Blog() {
             <div>
                 <Header />
                 <Header2 />
+      <Sidenav />
                 <div className="user-blog-page-container">
                     <div className="blog-container">
                         {/* Blog Header */}

@@ -1,3 +1,6 @@
+import Header from "../../src/components/Header/Header";
+import Sidenav from "../../src/components/Header/sidenav";
+import Footer from "../../src/components/Footer/Footer";
 import { useEffect, useState } from "react";
 import styles from "../../src/components/mobile/notification.module.css";
 import { IoIosArrowRoundBack } from "react-icons/io";
@@ -14,7 +17,7 @@ const Notification = () => {
   const getAllNotifications = async () => {
     try {
       const response = await axios.get(`/user/notifications`);
-      setNotifications(response.data.data);
+      setNotifications(Array.isArray(response.data?.data) ? response.data.data : []);
       console.log(response.data.data, "noti");
     } catch (err) {
       console.log(err);
@@ -53,7 +56,10 @@ const Notification = () => {
     getAllNotifications();
   }, []);
   return (
-    <div className={styles.container}>
+    <>
+    <Header />
+    <Sidenav />
+    <main className={styles.container}>
       <div className={styles.header}>
         <div
           style={{ width: "20px", height: "20px" }}
@@ -64,10 +70,11 @@ const Notification = () => {
         <h1 className={styles.title}>Notifications</h1>
       </div>
       <div className={styles.not}>
-        {notifications
-          ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        {notifications.length === 0 && <p className={styles.empty}>No notifications to display.</p>}
+        {[...notifications]
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .map((elem) => (
-            <div
+            <div key={elem._id}
               className={
                 elem.read === false
                   ? styles.summary_notification
@@ -117,7 +124,9 @@ const Notification = () => {
             </div>
           ))}
       </div>
-    </div>
+    </main>
+    <Footer />
+    </>
   );
 };
 export default Notification;
