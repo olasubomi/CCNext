@@ -1,16 +1,16 @@
 .container {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: 100vh;
   display: grid;
   grid-auto-flow: column;
 }
 
 .col2 {
-  grid-template-columns: 259px 1fr;
+  grid-template-columns: 259px minmax(0, 1fr);
 }
 
 .col3 {
-  grid-template-columns: 259px 1fr 471px;
+  grid-template-columns: 259px minmax(0, 1fr) 471px;
 }
 
 /* .left{
@@ -915,7 +915,7 @@
 
 @media screen and (max-width: 1350px) {
   .col3 {
-    grid-template-columns: 259px 1fr;
+    grid-template-columns: 259px minmax(0, 1fr);
   }
 
   .show {
@@ -1054,4 +1054,37 @@
   .showData {
     display: block;
   }
+}
+
+/* Keep the dashboard grid within its available content width. */
+.center, .center_min, .overview_con, .chart_col, .dashboard_container, .dashboard {
+  min-width: 0;
+  max-width: 100%;
+}
+.center, .center_min { grid-template-columns: minmax(0, 1fr); }
+.overview { gap: clamp(1rem, 2vw, 4rem); }
+.box, .box2 { min-width: 0; box-sizing: border-box; }
+.chart_con, .chart_con2 { gap: clamp(1rem, 2vw, 4rem); }
+.chart_col { flex: 1 1 280px; }
+.chart { box-sizing: border-box; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1rem; height: auto; min-height: 245px; }
+.chart_circle { max-width: 100%; height: auto; aspect-ratio: 1; }
+.chart_breakdown_details > p { width: auto; overflow-wrap: anywhere; }
+.dashboard { overflow-x: auto; }
+.request_tr { gap: clamp(1rem, 2vw, 4rem); }
+@media screen and (max-width: 768px) {
+  .container { grid-auto-flow: row; }
+  .col2, .col3 { grid-template-columns: minmax(0, 1fr); }
+  .center { padding: 1.5rem; gap: 2rem; }
+  .center_min { gap: 2rem; }
+  .dashboard_header { grid-auto-flow: row; gap: 1rem; }
+  .overview { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .box, .box2 { width: 100%; }
+  .request_tr { gap: 1rem; padding: 1rem; }
+  .dashboard_pagination { padding: 1rem; }
+}
+@media screen and (max-width: 485px) {
+  .overview { grid-template-columns: minmax(0, 1fr); }
+  .chart { padding: 1rem; grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .chart_breakdown_con { width: 100%; }
+  .request_tr { grid-auto-columns: minmax(0, 1fr); }
 }
