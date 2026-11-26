@@ -848,34 +848,6 @@
         padding: 3px;
     }
 }
-/* Password visibility controls and inline errors for mobile and desktop. */
-.password_input_row {
-  position: relative;
-  width: 100%;
-  min-width: 0;
-}
-.password_input_row > input {
-  width: 100%;
-  padding-right: 46px;
-}
-.profile_password_eye {
-  /* Reuse the existing login/signup eye icon style with profile-specific alignment. */
-  top: 50%;
-  right: 8px;
-  margin-top: 0;
-  transform: translateY(-50%);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  color: #6D6D6D;
-}
-.profile_password_eye:focus-visible {
-  outline: 2px solid #006bcd;
-  border-radius: 4px;
-}
 .password_error {
   margin-top: 10px;
   margin-bottom: 10px;
